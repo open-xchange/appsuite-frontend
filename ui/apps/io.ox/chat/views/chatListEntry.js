@@ -21,9 +21,9 @@ define('io.ox/chat/views/chatListEntry', [
     'settings!io.ox/chat'
 ], function (ChatAvatar, data, events, strings, util, presence, settings) {
 
-    var density = settings.get('density', 'default');
+    var densitySetting = settings.get('density', 'default');
     settings.on('change:density', function (value) {
-        density = value;
+        densitySetting = value;
     });
 
     var ChatListEntryView = Backbone.View.extend({
@@ -50,42 +50,55 @@ define('io.ox/chat/views/chatListEntry', [
             };
         },
 
-        initialize: function () {
+        initialize: function (options) {
+
+            options = _.extend({ showTyping: true }, options);
+            // this might be defined to overrule the user setting, e.g. during search
+            if (options.density) this.getDensity = _.constant(options.density);
+
             this.lastMessage = this.getLastMessage();
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:unreadCount': this.onChangeUnreadCount,
                 'change:lastMessage': this.onChangeLastMessage
             });
-            this.listenTo(settings, 'change:density', this.applyDensity);
+
             this.applyDensity();
-            this.listenTo(events, 'typing:' + this.model.id + ':summary', function (summary) {
-                switch (density) {
-                    case 'compact':
-                    case 'default':
-                        if (this.model.isPrivate()) {
-                            this.$('.title').text(summary.text || this.model.getTitle());
-                        } else {
-                            this.$('.title').empty().append(
-                                this.model.getTitle(),
-                                $('<span class="typing">').text(summary.text)
+            this.listenTo(settings, 'change:density', this.applyDensity);
+
+            if (options.showTyping !== false) {
+                this.listenTo(events, 'typing:' + this.model.id + ':summary', function (summary) {
+                    switch (this.getDensity()) {
+                        case 'compact':
+                        case 'default':
+                            if (this.model.isPrivate()) {
+                                this.$('.title').text(summary.text || this.model.getTitle());
+                            } else {
+                                this.$('.title').empty().append(
+                                    this.model.getTitle(),
+                                    $('<span class="typing">').text(summary.text)
+                                );
+                            }
+                            break;
+                        case 'detailed':
+                            this.$('.last-message').empty().text(
+                                summary.text ? summary.text : this.model.getLastMessageText()
                             );
-                        }
-                        break;
-                    case 'detailed':
-                        this.$('.last-message').empty().text(
-                            summary.text ? summary.text : this.model.getLastMessageText()
-                        );
-                        break;
-                    // no default
-                }
-            });
+                            break;
+                        // no default
+                    }
+                });
+            }
+        },
+
+        getDensity: function () {
+            return densitySetting;
         },
 
         applyDensity: function () {
             this.$el
                 .removeClass('density-compact density-detailed density-default')
-                .addClass('density-' + density);
+                .addClass('density-' + this.getDensity());
             this.render();
         },
 
@@ -95,7 +108,7 @@ define('io.ox/chat/views/chatListEntry', [
 
         render: function () {
             this.$el.empty().toggleClass('unseen', this.model.get('unreadCount') > 0);
-            switch (density) {
+            switch (this.getDensity()) {
                 case 'compact': this.renderCompact(); break;
                 case 'detailed': this.renderDetailed(); break;
                 default: this.renderDefault(); break;

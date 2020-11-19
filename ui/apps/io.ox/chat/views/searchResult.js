@@ -44,7 +44,7 @@ define('io.ox/chat/views/searchResult', [
         render: function () {
             this.$el.parent().toggleClass('show-search', !!this.query);
             var nodes = this.collection.map(function (model) {
-                return new ChatListEntryView({ model: model }).$el;
+                return new ChatListEntryView({ model: model, density: 'detailed', showTyping: false }).$el;
             });
             this.$el.empty().append(nodes);
             if (this.collection.length === 0) {
@@ -74,7 +74,7 @@ define('io.ox/chat/views/searchResult', [
         },
 
         searchTitles: function (query) {
-            var regexQuery = new RegExp('(\\b' + escape(query) + ')', 'i');
+            var regexQuery = new RegExp('(\\b' + _.escapeRegExp(query) + ')', 'i');
             var collection = data.chats
                 .filter(function (model) { return regexQuery.test(model.get('title')); })
                 .map(function (model) { return model.clone(); });
@@ -132,11 +132,6 @@ define('io.ox/chat/views/searchResult', [
             }.bind(this));
         }
     });
-
-    // escape words for regex
-    function escape(str) {
-        return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }
 
     return SearchResultView;
 });
