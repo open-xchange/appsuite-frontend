@@ -1383,14 +1383,15 @@ Scenario('[C7447] Private appointment with participants', async (I, users, calen
         );
     }));
 });
-
-Scenario('[C7448] Cannot create private appointment', async function (I, users, calendar) {
+// can't change to shared folder
+Scenario.skip('[C7448] Cannot create private appointment', async function (I, users, calendar) {
     const title = 'C7448';
+    const [user1, user2] = users;
     await I.haveFolder({
         title,
         permissions: [
-            { entity: users[0].userdata.id, bits: 403710016, group: false },
-            { user: users[1], access: 'author' }
+            { entity: user1.userdata.id, bits: 403710016, group: false },
+            { user: user2, access: 'author' }
         ],
         module: 'event',
         parent: await calendar.defaultFolder()
@@ -1408,10 +1409,10 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users, 
 
     I.say('Select shared calendar');
     I.waitForText('Shared calendars');
-    I.selectFolder(title);
+    I.selectFolder(`${user1.get('sur_name')}, ${user1.get('given_name')}: ${title}`);
 
     I.say('Create appointment');
-    I.clickToolbar('New appointment');
+    calendar.newAppointment();
     I.waitForText('Appointments in shared calendars');
     I.click('On behalf of the owner');
     I.waitForElement('.io-ox-calendar-edit [name="summary"]');

@@ -99,6 +99,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
 });
 
 Scenario('[C45022] Generate simple link for sharing with password', async function (I, drive, dialogs) {
+    await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
@@ -106,20 +107,27 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.selectFolder('Music');
 
     I.say('Create sharing link wiht password');
-    drive.shareItem('Create sharing link');
-    I.click('Password required');
-    I.waitForFocus('.share-wizard input[type="password"]');
-    I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
-    I.seeCheckboxIsChecked('Password required');
-    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
-    url = Array.isArray(url) ? url[0] : url;
-    dialogs.clickButton('Close');
+
+    I.clickToolbar('Share');
+    dialogs.waitForVisible();
+    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.click('.settings-button');
+    dialogs.waitForVisible();
+    I.fillField('Password', 'CorrectHorseBatteryStaple');
+    dialogs.clickButton('Save');
+
+    I.waitForText('Copy link');
+    I.click('Copy link');
+    I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
+    const link = await I.executeScript(function () {
+        return navigator.clipboard.readText();
+    });
+    dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
-    I.triggerRefresh();
     I.logout();
 
     I.say('Check sharing link');
-    I.amOnPage(Array.isArray(url) ? url[0] : url);
+    I.amOnPage(link);
     I.waitForFocus('input[name="password"]');
     I.fillField('Password', 'CorrectHorseBatteryStaple');
     I.click('Sign in');
@@ -444,38 +452,35 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
             dialog: locate({ css: '.modal-dialog' })
         };
 
-    await session('Alice', async () => {
-        const folder = await I.grabDefaultFolder('infostore');
-        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
-        I.login('app=io.ox/files');
-        drive.waitForApp();
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.allowClipboardRead();
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files');
+    drive.waitForApp();
 
-        I.click(locators.textFile);
-        I.waitForText('Share', locators.toolbar);
-        I.clickToolbar('Share');
-        I.waitForVisible('.dropdown.open .dropdown-header');
-        I.seeNumberOfVisibleElements('.dropdown.open .dropdown-header', 2);
-        I.clickDropdown('Create sharing link');
+    I.click(locators.textFile);
+    I.waitForText('Share', locators.toolbar);
+    I.clickToolbar('Share');
+    dialogs.waitForVisible();
+    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.click('.settings-button');
+    dialogs.waitForVisible();
+    I.selectOption('Expiration', 'One week');
+    dialogs.clickButton('Save');
 
-        dialogs.waitForVisible();
-        await within(locators.dialog, async () => {
-            I.waitForText('Sharing link created for file "document.txt"');
-            I.waitForVisible('.apptitle[aria-label="Refresh"]');
-            link = await I.grabValueFrom({ css: '.link-group > input[type="text"]' });
-            I.waitForText('one month', '.form-group.expiresgroup');
-            I.click('one month', '.form-group.expiresgroup');
-        });
-        I.clickDropdown('one week');
-        I.waitForDetached('.dropdown.open');
-        dialogs.clickButton('Close', locators.dialog);
-        I.waitForDetached(locators.dialog);
+    I.waitForText('Copy link');
+    I.click('Copy link');
+    I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
+    link = await I.executeScript(function () {
+        return navigator.clipboard.readText();
     });
 
-    await session('Bob', () => {
-        I.amOnPage(link);
-        I.waitForText('document.txt', 15, '.viewer-toolbar-filename');
+    dialogs.clickButton('Share', locators.dialog);
+    I.waitForDetached(locators.dialog);
+    I.logout();
 
-    });
+    I.amOnPage(link);
+    I.waitForText('document.txt', 15, '.viewer-toolbar-filename');
 });
 
 Scenario('[C110280] Personalized no-reply share mails', async function (I, users, drive, mail, dialogs) {
@@ -485,10 +490,9 @@ Scenario('[C110280] Personalized no-reply share mails', async function (I, users
         I.login('app=io.ox/files');
         drive.waitForApp();
         I.clickToolbar('Share');
-        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
-        I.waitForElement(locate('input').withAttr({ 'placeholder': 'Add people' }), '.modal-dialog');
-        I.fillField(locate('input').withAttr({ 'placeholder': 'Add people' }), users[1].userdata.primaryEmail);
+        I.waitForElement(locate('input').withAttr({ 'placeholder': 'Name or email address' }), '.modal-dialog');
+        I.fillField(locate('input').withAttr({ 'placeholder': 'Name or email address' }), users[1].userdata.primaryEmail);
         I.pressKey('Enter');
         I.waitForText(users[1].userdata.sur_name, 5, '.modal-dialog .permissions-view');
         dialogs.clickButton('Share');
