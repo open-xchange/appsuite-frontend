@@ -689,17 +689,15 @@ define('io.ox/chat/views/chat', [
         },
 
         onToggleEmoji: function () {
-            if (this.emojiView) {
-                this.emojiView.toggle();
-            } else {
-                if (this.emojiView === false) return;
-                this.emojiView = false;
-                require(['io.ox/core/emoji/view'], function (EmojiView) {
-                    this.emojiView = new EmojiView({});
-                    this.listenTo(this.emojiView, 'insert', this.insertEmoji);
-                    this.$el.append(this.emojiView.render().$el);
-                }.bind(this));
-            }
+            if (this.emojiView) return this.emojiView.toggle();
+            if (this.emojiView === false) return;
+            this.emojiView = false;
+            require(['io.ox/core/emoji/view'], function (EmojiView) {
+                this.emojiView = new EmojiView({ closeOnInsert: true, closeOnFocusLoss: true });
+                this.listenTo(this.emojiView, 'insert', this.insertEmoji);
+                this.$el.append(this.emojiView.$el);
+                this.emojiView.render();
+            }.bind(this));
         },
 
         insertEmoji: function (unicode) {

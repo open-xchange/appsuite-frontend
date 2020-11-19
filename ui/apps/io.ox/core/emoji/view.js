@@ -13,11 +13,12 @@
  */
 
 define('io.ox/core/emoji/view', [
+    'io.ox/backbone/views/disposable',
     'raw!io.ox/emoji/unified.json',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/emoji/emoji'
-], function (unified, settings, gt) {
+], function (DisposableView, unified, settings, gt) {
 
     'use strict';
 
@@ -27,9 +28,8 @@ define('io.ox/core/emoji/view', [
     // View. One per editor instance.
     //
 
-    var EmojiView = Backbone.View.extend({
+    var EmojiView = DisposableView.extend({
 
-        tagName: 'div',
         className: 'emoji-picker',
 
         events: {
@@ -45,8 +45,12 @@ define('io.ox/core/emoji/view', [
             if (e.isDefaultPrevented()) return;
             var unicode = $(e.target).text();
             util.addRecent(unicode);
-            if (this.editor) this.editor.execCommand('mceInsertContent', false, unicode);
+            if (this.options.editor) this.options.editor.execCommand('mceInsertContent', false, unicode);
             this.trigger('insert', unicode);
+            if (this.options.closeOnInsert && !(e.shiftKey || e.altKey)) {
+                if (this.previousActiveElement) this.previousActiveElement.focus();
+                this.hide();
+            }
         },
 
         // when user clicks on emoji category
@@ -64,14 +68,21 @@ define('io.ox/core/emoji/view', [
         },
 
         initialize: function (options) {
-            this.editor = options.editor;
-            this.subject = options.subject || false;
+            this.options = _.extend({ closeOnInsert: false, closeOnFocusLoss: false }, options);
             this.isRendered = false;
             this.isOpen = false;
             this.currentCategory = '';
-            if (this.editor) this.$el.addClass('mceEmojiPane');
-            // for optional run-time access
-            this.$el.data('view', this);
+            if (this.options.editor) this.$el.addClass('mceEmojiPane');
+            if (this.options.closeOnFocusLoss) {
+                this.$el.on('focusout', function () {
+                    setTimeout(function () {
+                        // we don't close if the focus is on the "opener" (as it usually works as a toggle)
+                        if (document.activeElement === this.previousActiveElement) return;
+                        var inside = $.contains(this.el, document.activeElement);
+                        if (!inside) this.hide();
+                    }.bind(this), 10);
+                }.bind(this));
+            }
         },
 
         render: function () {
@@ -87,7 +98,7 @@ define('io.ox/core/emoji/view', [
             this.drawCategories();
             this.setCategory();
             this.isRendered = true;
-            this.isOpen = true;
+            this.toggle(true);
 
             return this;
         },
@@ -147,11 +158,21 @@ define('io.ox/core/emoji/view', [
         },
 
         // hide/show view
-        toggle: function () {
-            if (!this.isRendered) return this.render();
-            this.$el.toggle();
-            this.isOpen = !this.isOpen;
+        toggle: function (state) {
+            this.isOpen = state === undefined ? !this.isOpen : state;
+            if (this.isOpen) {
+                if (!this.isRendered) this.render();
+                this.previousActiveElement = document.activeElement;
+                this.$el.show();
+                this.$('button:first').focus();
+            } else {
+                this.$el.hide();
+            }
             this.trigger('toggle', this.isOpen);
+        },
+
+        hide: function () {
+            this.toggle(false);
         }
     });
 
