@@ -40,6 +40,7 @@ define('io.ox/chat/views/message', [
         initialize: function (options) {
             this.options = _.extend({ isChannel: false, showDate: true }, options);
             this.listenTo(this.model, 'change:deleted change:deliveryState change:uploading', this.onChangeState);
+            this.listenTo(this.model, 'change:uploading', this.onChangeUploading);
         },
 
         render: function () {
@@ -121,6 +122,11 @@ define('io.ox/chat/views/message', [
             var deliveryState = this.model.getDeliveryState();
             if (!deliveryState) return;
             this.$('.delivery').removeClass('server received seen').addClass(deliveryState);
+        },
+
+        // after files are uploaded add correct classes
+        onChangeUploading: function () {
+            this.$el.toggleClass('editable', this.model.isEditable());
         },
 
         renderUploadMessage: function () {

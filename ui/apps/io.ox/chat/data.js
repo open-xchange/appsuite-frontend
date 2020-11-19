@@ -714,7 +714,7 @@ define('io.ox/chat/data', [
             attr.roomId = this.get('roomId');
 
             var formData = util.makeFormData(_.extend({}, attr, { files: file }));
-            if (file) attr = _.extend({ uploading: true, blob: file }, attr);
+            if (file) attr = _.extend({ uploading: true, blob: file, type: 'file' }, attr);
             var model = this.messages.add(attr, { merge: true, parse: true });
 
             // for debugging; you need this very often when working on pre-post message appearance

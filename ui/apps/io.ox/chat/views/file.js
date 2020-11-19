@@ -34,7 +34,9 @@ define('io.ox/chat/views/file', [
             this.inEditor = this.options.inEditor;
             this.listenTo(this.model, {
                 'change:files': this.onChangeBody,
-                'progress': this.renderUploadProgress
+                'progress': this.renderUploadProgress,
+                // if upload is done switch preview to actual fileview
+                'change:uploading': this.render
             });
         },
 
