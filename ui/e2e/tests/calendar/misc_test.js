@@ -545,7 +545,7 @@ Scenario('Manage public Calendars', async function (I, users, calendar, dialogs)
     I.waitForText(publicCalendarName);
     I.rightClick({ css: '[aria-label^="' + publicCalendarName + '"]' });
     I.wait(0.2);
-    I.clickDropdown('Permissions / Invite people');
+    I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
     I.waitForElement('.form-control.tt-input', 5, dialogs.locators.header);
 
