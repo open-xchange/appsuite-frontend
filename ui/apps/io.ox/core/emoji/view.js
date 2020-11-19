@@ -33,14 +33,16 @@ define('io.ox/core/emoji/view', [
         className: 'emoji-picker',
 
         events: {
+            'click .reset-recents': 'onResetRecents',
             'click .emoji-icons button': 'onInsertEmoji',
             'click .emoji-footer button': 'onSelectCategory',
-            'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection',
-            'click .reset-recents': 'onResetRecents'
+            'click .emoji-option, .emoji-tab': 'onSelectEmojiCollection'
         },
 
         // when user clicks on emoji. inserts emoji into editor
         onInsertEmoji: function (e) {
+            // this happens if user click on "reset-recents"
+            if (e.isDefaultPrevented()) return;
             var unicode = $(e.target).text();
             util.addRecent(unicode);
             if (this.editor) this.editor.execCommand('mceInsertContent', false, unicode);
