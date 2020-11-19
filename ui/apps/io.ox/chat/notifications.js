@@ -141,11 +141,16 @@ define('io.ox/chat/notifications', [
 
             getIcon(model, opt).always(function (iconUrl) {
                 var title = opt.isMultiple ? model.get('title') : opt.originator,
-                    notification = {
+                    options = {
                         body: getBody(opt),
                         icon: iconUrl
                     };
-                return new Notification(title, notification);
+                var notification = new Notification(title, options);
+                notification.onclick = function () {
+                    window.focus();
+                    events.trigger('cmd', { cmd: 'show-chat', id: model.get('roomId') });
+                };
+                return notification;
             });
         }, 600);
     }());
