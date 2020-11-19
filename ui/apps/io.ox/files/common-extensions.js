@@ -175,7 +175,13 @@ define('io.ox/files/common-extensions', [
 
         fileTypeClass: function (baton) {
             var type = baton.model.getFileType();
-            if (type) this.closest('.list-item').addClass('file-type-' + type);
+            if (type) {
+                var listItem = this.closest('.list-item');
+                if (listItem[0]) {
+                    listItem[0].className = listItem[0].className.replace(/file-type-\w*/gi, '');
+                }
+                listItem.addClass('file-type-' + type);
+            }
         },
 
         //

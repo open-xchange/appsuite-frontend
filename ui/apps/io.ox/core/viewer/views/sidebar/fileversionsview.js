@@ -186,6 +186,11 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var isCurrentVersion = baton.data.current_version !== false;
             var versionPoint = isCurrentVersion ? 'io.ox/files/versions/links/inline/current' : 'io.ox/files/versions/links/inline/older';
 
+            if (isCurrentVersion) {
+                // fix for the files action edit it needs the model
+                baton.models = [FilesAPI.pool.get('detail').get(_.cid(baton.data))];
+            }
+
             var dropdown = new ActionDropdownView({ point: versionPoint });
 
             dropdown.once('rendered', function () {
@@ -196,7 +201,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 
-            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion', 'standalone'));
+            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion', 'standalone', 'models'));
 
             this.append(
                 $('<td class="version-content">').append(dropdown.$el)
