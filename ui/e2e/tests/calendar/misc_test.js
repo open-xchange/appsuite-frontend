@@ -554,7 +554,7 @@ Scenario('Manage public Calendars', async function (I, users, calendar, dialogs)
         I.fillField('.tt-input[placeholder="Name or email address"]', 'All users');
         I.waitForVisible(locate('.tt-dropdown-menu').withText('All users'));
         I.pressKey('Enter');
-        I.waitForVisible(locate('.permissions-view .row').at(2).withText('All users'));
+        I.waitForVisible(locate('.permissions-view .row').withText('All users'));
     });
 
     dialogs.clickButton('Save');

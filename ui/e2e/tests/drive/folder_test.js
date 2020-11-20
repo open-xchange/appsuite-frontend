@@ -97,11 +97,14 @@ Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
     I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
-Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
+Scenario('[C8377] Invite a person', async (I, users, drive, dialogs) => {
     function share() {
         I.clickToolbar('Share');
         dialogs.waitForVisible();
         I.waitForText('Share folder');
+        I.waitForText('Author', 5, '.permission-pre-selection');
+        I.click('.permission-pre-selection .btn');
+        I.clickDropdown('Viewer');
         I.click('~Select contacts');
         dialogs.waitForVisible();
         I.waitForElement('.modal-body .list-view.address-picker li.list-item'); // check if list items are loaded
@@ -115,21 +118,15 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
-        I.click('Author', '.share-pane');
-        I.clickDropdown('Viewer');
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
     }
-    session('Alice', () => {
+    await session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
 
-        I.selectFolder('My shares');
-        // sometimes this is not fast enough and there are 4 objects
-        I.retry(3).seeNumberOfElements('.list-view li.list-item', 0);
-        I.waitForText('My files', 5, '.folder-tree');
-        //I.shareFolder('Music');
-        I.click('My files', '.folder-tree');
+        I.selectFolder('My files');
+        I.waitForText('Music');
         I.selectFolder('Music');
         share();
         drive.waitForApp();
@@ -138,7 +135,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         I.seeNumberOfElements('.list-view li.list-item', 1);
     });
 
-    session('Bob', () => {
+    await session('Bob', () => {
         I.login('app=io.ox/files', { user: users[1] });
         drive.waitForApp();
 
@@ -156,7 +153,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
 
     // Repeat for Public Folder
     const publicFolderName = 'C8377-' + new Date().getTime();
-    session('Alice', () => {
+    await session('Alice', () => {
         // Add public folder
         I.waitForText('Public files', 5, '.folder-tree');
         I.selectFolder('Public files');
@@ -174,7 +171,7 @@ Scenario('[C8377] Invite a person', (I, users, drive, dialogs) => {
         share();
     });
 
-    session('Bob', () => {
+    await session('Bob', () => {
         I.waitForText('Public files', 5, '.folder-tree');
         I.selectFolder('Public files');
         I.waitForText(publicFolderName, 5, '.list-view');

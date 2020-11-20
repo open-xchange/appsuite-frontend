@@ -49,8 +49,10 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Share / Permissions');
-
         dialogs.waitForVisible();
+        I.waitForText('Author', 5, '.permission-pre-selection');
+        I.click('.permission-pre-selection .btn');
+        I.clickDropdown('Viewer');
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -60,9 +62,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.waitForText('Author', 10, '.permissions-view');
-        I.click('Author', '.share-pane');
-        I.clickDropdown('Viewer');
+        I.waitForText('Viewer', 10, '.permissions-view');
         I.waitForText('Invited people only');
         I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
@@ -99,21 +99,24 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
             I.click('View calendar');
         });
         I.waitForElement('.io-ox-calendar-main');
+        calendar.waitForApp();
         checkSharedCalendarFolder();
     });
 
     I.say('Eve uses external link to shared folder');
-    session('Eve', () => {
+    await session('Eve', () => {
         I.haveSetting('io.ox/calendar//viewView', 'week:week');
         I.amOnPage(url);
         I.waitForElement('.io-ox-calendar-main', 30);
         calendar.switchView('Week');
         I.waitForVisible({ css: '[data-page-id="io.ox/calendar/week:week"]' });
+        calendar.waitForApp();
         checkSharedCalendarFolder();
+        I.logout();
     });
 
     I.say('Alice revoces access');
-    session('Alice', () => {
+    await session('Alice', () => {
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
@@ -131,11 +134,10 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         dialogs.clickButton('Unshare');
         dialogs.waitForVisible();
         dialogs.clickButton('OK');
-        I.waitForDetached('.modal-dialog');
     });
 
     I.say('Bob has no access');
-    session('Bob', () => {
+    await session('Bob', () => {
         I.refreshPage();
         calendar.waitForApp();
         I.retry(5).seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
@@ -143,7 +145,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.dontSee('simple appointment 2', '.io-ox-calendar-main');
     });
     I.say('Eve has no access');
-    session('Eve', () => {
+    await session('Eve', () => {
         I.amOnPage(url);
         I.waitForText('The share you are looking for does not exist.');
     });
