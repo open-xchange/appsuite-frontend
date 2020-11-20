@@ -661,6 +661,7 @@
 
         > .content {
             position: relative;
+            width: 100%;
         }
 
         &:focus-within, &:hover {
@@ -957,7 +958,7 @@
         padding: 16px 56px 16px 56px;
         font-size: 13px;
         line-height: 16px;
-        min-width: 320px;
+        width: 100%;
         .icon {
             position: absolute;
             top: 16px;
@@ -987,6 +988,13 @@
         }
     }
 
+    .reference-container {
+        .message-file-container {
+            padding-right: 4px;
+            padding-left: 52px;
+        }
+    }
+
     .message-quote {
         color: #707070;
         padding: 8px;
@@ -999,6 +1007,8 @@
             font-size: 12px;
             font-weight: 500;
             margin: 0 0 4px 0;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
         .content {
             width: 100%;
