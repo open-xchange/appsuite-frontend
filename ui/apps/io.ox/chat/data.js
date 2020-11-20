@@ -736,6 +736,16 @@ define('io.ox/chat/data', [
                     model.setInitialDeliveryState();
                     model.set('uploading', false);
                     this.set('active', true);
+
+                    if (model.get('type') === 'file') {
+                        $('[data-cid="' + model.cid + '"]').find('.file')
+                        .addClass('cursor-zoom-in').attr({
+                            'data-cmd': 'show-message-file',
+                            'data-room-id': model.get('roomId'),
+                            'data-file-id': model.get('files')[0].fileId,
+                            'data-message-id': model.get('messageId')
+                        });
+                    }
                 }.bind(this),
                 function fail(response) {
                     // ignore "abort" by the user
