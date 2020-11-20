@@ -217,7 +217,7 @@ define('io.ox/chat/extensions/register', [
                 title: baton.model.get('summary'),
                 description: baton.model.get('description'),
                 members: _(baton.model.get('attendees')).pluck('email'),
-                reference: { type: 'appointment', id: baton.model.get('id') }
+                pimReference: { type: 'appointment', id: baton.model.get('id') }
             });
         }
     });
@@ -287,16 +287,16 @@ define('io.ox/chat/extensions/register', [
     }
 
     function startGroupChat(opt) {
-        var def = opt.reference && data.chats.findByReference(opt.reference.type, opt.reference.id) || $.Deferred().reject();
-        def.then(function (room) {
+        var room = opt.pimReference && data.chats.findByReference(opt.pimReference.type, opt.pimReference.id);
+        if (room) {
             return require(['io.ox/chat/events']).then(function (events) {
                 events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
             });
-        }).catch(function () {
-            return require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events']).then(function (openGroupDialog, events) {
-                openGroupDialog(opt).then(function (id) {
-                    events.trigger('cmd', { cmd: 'show-chat', id: id });
-                });
+        }
+
+        return require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events']).then(function (openGroupDialog, events) {
+            openGroupDialog(opt).then(function (id) {
+                events.trigger('cmd', { cmd: 'show-chat', id: id });
             });
         });
     }

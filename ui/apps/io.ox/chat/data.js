@@ -785,7 +785,7 @@ define('io.ox/chat/data', [
 
         sync: function (method, model, options) {
             if (method === 'create' || method === 'update') {
-                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'reference');
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference');
                 options.data = util.makeFormData(_.extend(data, options.hiddenAttr));
                 options.processData = false;
                 options.contentType = false;
@@ -906,11 +906,11 @@ define('io.ox/chat/data', [
 
         findByReference: function (type, id) {
             return this.find(function (room) {
-                var reference = room.get('reference');
+                var reference = room.get('pimReference');
                 if (!reference) return;
                 if (reference.type !== type) return;
                 if (reference.id !== id) return;
-                return false;
+                return true;
             });
         }
     });
@@ -1128,6 +1128,7 @@ define('io.ox/chat/data', [
         getUserId: function () {
             return api.getUserId().then(function (chatUser) {
                 data.user = chatUser;
+                data.user.email = data.user.email || data.user.userId;
                 data.userSettings = new UserSettings(chatUser.settings);
                 data.serverConfig = chatUser.config || {};
                 this.set('userId', chatUser.id);
