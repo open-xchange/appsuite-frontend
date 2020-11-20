@@ -76,14 +76,6 @@ define('io.ox/mail/invitations/register', [
         'infostore': 'deep-link-files'
     };
 
-    function parsePassword(mailModel) {
-        var $content = $(mailModel.get('attachments')[0].content),
-            block = $content.get(5).textContent.trim();
-        if (block.indexOf('This link is password protected') === -1) return '';
-        var pw = block.split(':')[1].trim();
-        return pw;
-    }
-
     var DetailView = DisposableView.extend({
 
         className: 'item',
@@ -223,7 +215,7 @@ define('io.ox/mail/invitations/register', [
             this.$el.find('.password').append(
                 common.getInputWithLabel('input-password', gt('Password'), this.model)
             );
-            this.$('[name="input-password"]').val(parsePassword(this.mailModel)).attr({
+            this.$('[name="input-password"]').attr({
                 type: 'password',
                 autocorrect: 'off',
                 autocomplete: 'new-password',
