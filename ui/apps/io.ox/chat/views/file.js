@@ -57,25 +57,19 @@ define('io.ox/chat/views/file', [
                 $('<div class="name">').text(file.name)
             );
 
-            // we start with a dummy GIF to avoid mixed-content warning
-            var $img = $('<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">');
+            var $img = $('<img>');
             var $thumbnail = $('<div class="message-thumbnail">').append($img);
 
             if (file.isBlob) {
-                if (file.isImage) {
-                    $img.attr('src', URL.createObjectURL(file.blob)).on('dispose', function () {
-                        URL.revokeObjectURL(this.src);
-                    });
-                }
+                $img.attr('src', URL.createObjectURL(file.blob)).on('dispose', function () {
+                    URL.revokeObjectURL(this.src);
+                });
                 this.$el.append($thumbnail.append(this.getCancelUploadButton(), this.getProgressBar()));
                 return;
             }
 
             var preview = file.preview;
-            if (preview) {
-                // we just need the height to fill the viewport properly
-                $img.attr({ width: preview.width, height: preview.height });
-            }
+            $img.attr('src', preview ? getSVG(preview.width, preview.height) : getSVG(1, 1));
 
             this.$el.append(
                 $thumbnail.append(
@@ -150,6 +144,10 @@ define('io.ox/chat/views/file', [
             this.render();
         }
     });
+
+    function getSVG(width, height) {
+        return 'data:image/svg+xml;utf8,<svg version="1.1" width="' + width + '" height="' + height + '" xmlns="http://www.w3.org/2000/svg"></svg>';
+    }
 
     return FileView;
 });

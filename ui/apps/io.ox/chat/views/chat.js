@@ -456,7 +456,7 @@ define('io.ox/chat/views/chat', [
         },
 
         scrollToBottom: function () {
-            var position = 0xFFFF,
+            var position = 0xFFFFFF,
                 scrollpane = this.$scrollpane;
             if (this.messageId) {
                 var model = this.model.messages.get(this.messageId);
@@ -467,7 +467,10 @@ define('io.ox/chat/views/chat', [
                     delete this.messageId;
                 }
             }
+            // the first line is to set the scroll position immediately to avoid flicker
             scrollpane.scrollTop(position);
+            // the second line sets the position again a few ticks later so that cached images are covered
+            setTimeout(function (pos) { scrollpane.scrollTop(pos); }, 10, position);
         },
 
         toggleAutoScroll: function (autoScroll) {
