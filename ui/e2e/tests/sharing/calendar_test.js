@@ -126,9 +126,12 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Create sharing link');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        I.click('Remove link');
+        I.clickDropdown('Share / Permissions');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Unshare');
+        dialogs.waitForVisible();
+        dialogs.clickButton('OK');
+        I.waitForDetached('.modal-dialog');
     });
 
     I.say('Bob has no access');

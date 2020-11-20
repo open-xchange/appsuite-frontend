@@ -14,11 +14,9 @@ module.exports = {
     waitForViewer() {
         I.waitForText('Details', 10, '.io-ox-viewer .sidebar-panel-title');
     },
-    shareItem(type) {
+    shareItem() {
         I.clickToolbar('Share');
-        I.clickDropdown(type);
-        I.waitForDetached('.dropdown.open');
         dialogs.waitForVisible();
-        I.waitForFocus('.modal-dialog input[type="text"][id^="form-control-label"]');
+        I.waitForText('Who can access this folder?');
     }
 };

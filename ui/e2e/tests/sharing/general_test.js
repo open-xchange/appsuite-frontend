@@ -99,7 +99,6 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
 });
 
 Scenario('[C45022] Generate simple link for sharing with password', async function (I, drive, dialogs) {
-    await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
@@ -119,15 +118,15 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.waitForText('Copy link');
     I.click('Copy link');
     I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
-    const link = await I.executeScript(function () {
-        return navigator.clipboard.readText();
-    });
+    let link = await I.grabValueFrom('.public-link-url-input');
+    link = Array.isArray(link) ? link[0] : link;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
 
     I.say('Check sharing link');
     I.amOnPage(link);
+    I.waitForVisible('input[name="password"]');
     I.waitForFocus('input[name="password"]');
     I.fillField('Password', 'CorrectHorseBatteryStaple');
     I.click('Sign in');
@@ -165,8 +164,10 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive,
 Scenario('[C85625] My Shares default sort order', async function (I, drive, dialogs) {
     function share(item) {
         I.retry(5).click(locate('li.list-item').withText(item));
-        drive.shareItem('Create sharing link');
-        dialogs.clickButton('Close');
+        drive.shareItem();
+        dialogs.waitForVisible();
+        I.selectOption('.form-group select', 'Anyone with the link and invited people');
+        dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
     }
     function selectAndWait(folder) {
@@ -445,15 +446,13 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
 });
 
 Scenario('[C83277] Create shared object with expiration date', async function (I, users, drive, dialogs) {
-    let link,
-        locators = {
-            toolbar: locate({ css: '.window-body.classic-toolbar-visible' }),
-            textFile: locate({ css: '.list-item.selectable.file-type-txt' }),
-            dialog: locate({ css: '.modal-dialog' })
-        };
+    let locators = {
+        toolbar: locate({ css: '.window-body.classic-toolbar-visible' }),
+        textFile: locate({ css: '.list-item.selectable.file-type-txt' }),
+        dialog: locate({ css: '.modal-dialog' })
+    };
 
     const folder = await I.grabDefaultFolder('infostore');
-    await I.allowClipboardRead();
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -471,9 +470,8 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     I.waitForText('Copy link');
     I.click('Copy link');
     I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
-    link = await I.executeScript(function () {
-        return navigator.clipboard.readText();
-    });
+    let link = await I.grabValueFrom('.public-link-url-input');
+    link = Array.isArray(link) ? link[0] : link;
 
     dialogs.clickButton('Share', locators.dialog);
     I.waitForDetached(locators.dialog);
