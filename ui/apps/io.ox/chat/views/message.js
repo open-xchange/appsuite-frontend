@@ -90,7 +90,7 @@ define('io.ox/chat/views/message', [
         renderContent: function () {
             try {
                 var json = this.model.isSystem() && JSON.parse(this.model.get('content'));
-                var render = json && commands.getRender(json.command || 'zoom');
+                var render = json && commands.getRender(json.command);
                 return render ?
                     render({ model: this.model, json: json }) :
                     new ContentView({ model: this.model }).render().$el;
