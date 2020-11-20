@@ -86,10 +86,10 @@ define('io.ox/mail/invitations/register', [
 
     var DetailView = DisposableView.extend({
 
-        className: 'itip-item',
+        className: 'item',
 
         events: {
-            'click .itip-actions button': 'onAction',
+            'click .actions button': 'onAction',
             'keydown': 'onKeydown'
         },
 
@@ -194,9 +194,6 @@ define('io.ox/mail/invitations/register', [
         },
 
         renderSummary: function () {
-            // this.$el.find('.itip-actions').prepend(
-            //     this.renderDeepLink()
-            // );
             this.$el.find('.details').append(
                 this.renderStateDescription()
             );
@@ -255,7 +252,7 @@ define('io.ox/mail/invitations/register', [
             if (actions.length === 1 && actions[0] === 'ignore') return this;
 
             this.$el.find('.controls').append(
-                $('<div class="itip-actions">').append(
+                $('<div class="actions">').append(
                     this.renderDeepLink(),
                     buttons
                 )

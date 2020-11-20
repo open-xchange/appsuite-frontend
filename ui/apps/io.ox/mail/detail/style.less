@@ -112,12 +112,26 @@
 .notifications .federated-sharing {
     // same color as .well
     background-color: #F5F5F5;
-    & > * { max-width: 700px; }
+    & > * {
+        // align with 700px max size of simple-mail
+        max-width: 756px;
+        min-height: 72px;
+        padding: 16px;
+    }
     .password { max-width: 370px; }
     .details { margin: 16px 0; }
     .controls {
         text-align: right;
         margin-top: 16px;
         min-height: 32px;
+    }
+    .actions {
+        text-align: right;
+        margin: 8px 0 0 0;
+        display: inline-block;
+        .btn {
+            margin-left: 8px;
+            margin-top: 8px;
+        }
     }
 }
