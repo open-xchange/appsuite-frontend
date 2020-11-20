@@ -80,6 +80,7 @@ define('io.ox/backbone/views/window', [
     var taskbar = new TaskbarView().render();
 
     var WindowModel = Backbone.Model.extend({
+
         defaults: {
             minimized: false,
             active: true,
@@ -90,7 +91,7 @@ define('io.ox/backbone/views/window', [
             showInTaskbar: true,
             size: 'width-md', // -xs, -sm, -md, -lg,
             wasMoved: false,
-
+            quitOnEscape: true,
             stickable: false,
             resizable: true,
             closable: false
@@ -120,12 +121,13 @@ define('io.ox/backbone/views/window', [
         },
 
         initialize: function (options) {
+
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable', 'resizable')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable', 'resizable', 'quitOnEscape')
                 );
             }
 
@@ -325,6 +327,7 @@ define('io.ox/backbone/views/window', [
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
+            if (!this.model.get('quitOnEscape')) return;
             if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
             this.onQuit();
         },

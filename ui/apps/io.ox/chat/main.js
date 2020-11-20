@@ -691,7 +691,8 @@ define('io.ox/chat/main', [
         stickable: true,
         resizable: false,
         closable: true,
-        size: 'width-lg'
+        size: 'width-lg',
+        quitOnEscape: false
     }).render().open();
 
     settings.set('hidden', false);
