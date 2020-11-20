@@ -449,6 +449,7 @@ define('io.ox/chat/views/chat', [
                 $('<div class="sender">').text(user.getName()),
                 new ContentView({ model: model, inEditor: true }).render().$el
             );
+            this.$messageReference.find('button').remove();
 
             this.$('.controls').addClass('reply-mode');
             this.$('.reference-container').empty().append(this.$messageReference);
