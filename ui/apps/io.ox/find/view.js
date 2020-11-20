@@ -93,7 +93,8 @@ define('io.ox/find/view', [
                 searchbox: undefined,
                 facets: undefined,
                 field: this.$el.find('.search-field'),
-                action: this.$el.find('.action-show')
+                action: this.$el.find('.action-show'),
+                chat: $('.chat-leftside')
             };
 
             // shortcuts
@@ -164,6 +165,7 @@ define('io.ox/find/view', [
             this.ui.body.css('top', this.css.body.open);
             // css switch-class
             this.ui.container.addClass(this.classes.active);
+            this.ui.chat.addClass(this.classes.active);
             // bubble
             this.ui.searchbox.show();
             this.ui.facets.show();
@@ -181,6 +183,7 @@ define('io.ox/find/view', [
             this.$el.css('top', this.css.el.closed);
             // css switch-class
             this.ui.container.removeClass(this.classes.active);
+            this.ui.chat.removeClass(this.classes.active);
             // bubble
             this.ui.searchbox.hide();
             this.ui.facets.hide();
