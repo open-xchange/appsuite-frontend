@@ -15,73 +15,77 @@ define('io.ox/mail/invitations/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/backbone/mini-views/common',
-    'io.ox/core/capabilities',
-    'io.ox/core/notifications',
+    'io.ox/core/folder/api',
+    'io.ox/core/yell',
+    'io.ox/mail/util',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/style'
-], function (DisposableView, ext, http, common, capabilities, notifications, gt) {
+], function (DisposableView, ext, http, common, folderAPI, yell, util, gt) {
 
     'use strict';
 
-    var i18n = {
-        'subscribe': gt('Subscribe'),
-        'unsubscribe': gt('Unsubscribe'),
-        'resubscribe': gt('Subscribe'),
-        'ignore': gt('Ignore')
-    };
+    // hide detail view for some states
+    var reIgnoredStates = /^(unsupported)$/;
 
-    var buttonClasses = {
-        'subscribe': 'accept',
-        'resubscribe': 'accept',
-        'unsubscribe': '',
-        'ignore': ''
-    };
-
-    var success = {
-        'subscribe': gt('You subscribed to this folder'),
-        'resubscribe': gt('You subscribed to this folder'),
-        'unsubscribe': gt('You unsubscribed from this folder')
+    var labels = {
+        // apps
+        'tasks': gt.pgettext('app', 'Tasks'),
+        'calendar': gt.pgettext('app', 'Calendar'),
+        'contacts': gt.pgettext('app', 'Address Book'),
+        'infostore': gt.pgettext('app', 'Drive')
     };
 
     var messages = {
-        'subscribed': '',
-        'addable': '',
-        'unsubscribed': '',
-        'addable_with_password': gt('Please enter the password to subscribe.'),
-        'inaccessible': gt('The folder cannot be subscribed to as it is currently unavailable.'),
-        'unresolvable': gt('The folder cannot be subscribed because the link is invalid.'),
-        'unsupported': gt('The link to this folder is unsupported and can\'t be subscribed.'),
-        'forbidden': gt('Your are not allowed to subscribe to this folder.'),
-        'removed': gt('The shared folder was removed by the owner.'),
-        'credentials_refresh': gt('The password was changed recently. Please enter the new password.')
+        // status messages
+        'addable_with_password': gt('Please enter the password.'),
+        'credentials_refresh': gt('The password was changed recently. Please enter the new password.'),
+        'removed': gt('The folder cannot be added because it was removed by the owner.'),
+        'inaccessible': gt('The folder is currently unavailable and cannot be added. Please try again later.'),
+        'unresolvable': gt('The folder cannot be added because the link is invalid.'),
+        'unsupported': gt('This type of link and is unsupported and can\'t be added.'),
+        'forbidden': gt('This folder was shared to another user. You are not allowed to add this folder.'),
+        // success messages
+        'subscribe': gt('The folder was added successfully.'),
+        'resubscribe': gt('The folder was added successfully.'),
+        'unsubscribe': gt('The folder was removed successfully.')
     };
 
-    var actions = {
+    var mappings = {
+        // available actions for state
         'subscribed': ['unsubscribe'],
         'addable': ['subscribe'],
         'unsubscribed': ['subscribe'],
         'addable_with_password': ['subscribe'],
-        'inaccessible': [],
-        'unsupported': [],
-        'unresolvable': [],
-        'removed': [],
-        'forbidden': [],
-        'credentials_refresh': ['resubscribe']
-    };
-
-    var modules = {
+        // TODO: add 'unsubscribe' when https://jira.open-xchange.com/browse/MWB-730 was fixed
+        'credentials_refresh': ['resubscribe'],
+        // deep link classes
         'tasks': 'deep-link-tasks',
         'calendar': 'deep-link-calendar',
         'contacts': 'deep-link-contacts',
         'infostore': 'deep-link-files'
     };
 
+    function refreshFolder(module) {
+        switch (module) {
+            case 'infostore':
+                // parent folder of "Shared files"
+                folderAPI.pool.unfetch(9);
+                return folderAPI.refresh(9);
+            case 'calendar':
+                folderAPI.getFlatCollection('event', 'shared').expired = true;
+                return folderAPI.flat({ module: 'calendar', all: true, cache: false });
+            default:
+                ox.trigger('refresh^');
+                break;
+        }
+    }
+
     var DetailView = DisposableView.extend({
 
         className: 'item',
 
         events: {
-            'click .actions button': 'onAction',
+            'click .controls button': 'onAction',
             'keydown': 'onKeydown'
         },
 
@@ -90,7 +94,6 @@ define('io.ox/mail/invitations/register', [
             this.module = options.module;
             this.mailModel = options.mailModel;
             this.container = options.container;
-            this.showDeeplinks = options.showDeeplinks;
 
             this.listenTo(this.model, 'change:flags change:participants', this.render);
             if (ox.debug) this.listenTo(this.model, 'change', function () { console.log(this.model.toJSON()); });
@@ -104,27 +107,18 @@ define('io.ox/mail/invitations/register', [
         onAction: function (e) {
             e.preventDefault();
 
-            var action = $(e.currentTarget).attr('data-action'),
-                data = { link: this.container.getLink() },
-                self = this;
+            var action = $(e.currentTarget).attr('data-action');
+            if (!/^(subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknown action' });
 
-            switch (this.model.get('state')) {
-                case 'ADDABLE':
-                case 'INACCESSIBLE':
-                case 'UNRESOLVABLE':
-                case 'UNSUBSCRIBED':
-                case 'FORBIDDEN':
-                    break;
-                case 'ADDABLE_WITH_PASSWORD':
-                case 'CREDENTIALS_REFRESH':
-                    data.password = this.model.get('input-password');
-                    break;
-                default:
+            var self = this, data = { link: this.container.getLink() };
+            // add password input
+            if (this.model.matches(['addable_with_password', 'credentials_refresh'])) {
+                data.password = this.model.get('input-password');
+                if (!data.password) return yell('error', gt('Please enter password.'));
             }
 
             // remove undefined
             data = _.pick(data, _.identity);
-            if (!/^(analyze|subscribe|unsubscribe|resubscribe)$/.test(action)) return $.Deferred().reject({ error: 'unknown action' });
 
             return http.PUT({
                 module: 'share/management',
@@ -133,19 +127,16 @@ define('io.ox/mail/invitations/register', [
             }).then(
                 function done(result) {
                     // add/remove new accounts in the filestorage cache
-                    if (action !== 'analyze' && result && result.account !== undefined) {
-                        require(['io.ox/core/api/filestorage'], function (filestorageApi) {
-                            filestorageApi.getAllAccounts(false);
+                    if (result && result.account !== undefined) {
+                        require(['io.ox/core/api/filestorage'], function (filestorageAPI) {
+                            filestorageAPI.getAllAccounts(false)
+                                .then(refreshFolder.bind(self, self.model.get('module')));
                         });
                     }
-                    // api refresh
-                    var yell = self.options.yell;
-                    if (yell !== false) {
-                        notifications.yell('success', success[action]);
-                    }
+                    if (self.options.yell !== false) yell('success', messages[action]);
                 },
                 function failed(e) {
-                    notifications.yell(e);
+                    yell(e);
                 }
             ).always(function () {
                 self.repaint();
@@ -154,73 +145,73 @@ define('io.ox/mail/invitations/register', [
 
         renderScaffold: function () {
             return this.$el.append(
-                $('<div class="headline">').append(
-                    $('<span>').text(gt('This email contains a sharing link')), $.txt('. '), $.txt(
-                        /^(subscribed)$/.test(this.model.get('state').toLowerCase()) ?
-                            gt('You are currently subscribed.') :
-                            gt('You are currently not subscribed.')
-                    )
-                ),
-                $('<div class="details">'),
+                $('<div class="headline">'),
                 $('<div class="password">'),
                 $('<div class="controls">')
             );
         },
 
-        renderStateDescription: function () {
-            var state = this.model.get('state'),
-                message = messages[state.toLowerCase()];
-            return message ? $.txt(message) : $();
+        // unused in current layout
+        getGuestLink: function () {
+            return $('<a target="_blank" role="button" class="guest btn btn-default">')
+                .addClass(this.model.is('subscribed') ? '' : 'btn-primary')
+                .attr('href', this.model.get('link'))
+                .text(gt('View folder'));
         },
 
-        renderDeepLink: function () {
+        getDeepLink: function () {
             var folder = this.model.get('folder') || '',
-                module = this.model.get('module') || '';
-            if (!/^(SUBSCRIBED)$/.test(this.model.get('state'))) return $();
-            if (!modules[module]) return $();
+                module = this.model.get('module') || '',
+                classname = mappings[module];
+            if (!this.model.is('subscribed') || !classname) return $();
+
             return $('<a target="_blank" role="button" class="deep-link btn btn-primary">')
-                .addClass(modules[module])
+                .addClass(classname)
                 .attr('href', '/appsuite/ui#!!&app=io.ox/files&folder=' + folder)
-                .text(gt('View folder'))
+                //#. %1$s is a app name like calendar or drive (product name; might be customized)
+                .text(labels[module] ? gt('Open in %1$s', labels[module]) : gt('View folder'))
                 .data('folder', folder);
         },
 
-        renderSummary: function () {
-            this.$el.find('.details').append(
-                this.renderStateDescription()
-            );
-        },
+        getButtons: function () {
+            var actions = [].concat(mappings[this.model.get('state')] || []),
+                module = this.model.get('module');
 
-        getTitle: function () {
-            return this.model.get('state');
-        },
-
-        getActions: function () {
-            var state = this.model.get('state');
-            return [].concat(actions[state.toLowerCase()] || []);
-        },
-
-        getButtons: function (actions) {
+            // show for subscribed and error-cases (as disabled)
             return _.map(actions, function (action) {
+                var isAdd = action === 'subscribe' || action === 'resubscribe';
                 return $('<button type="button" class="btn btn-default">')
                     .attr('data-action', action)
-                    .addClass(buttonClasses[action])
-                    .text(i18n[action]);
+                    //#. %1$s is a app name like calendar or drive (product name; might be customized)
+                    .text(isAdd ? gt('Add to %1$s', labels[module]) : gt('Remove from %1$s', labels[module]))
+                    .addClass(isAdd ? 'btn-primary' : '');
             });
         },
 
-        renderPasswordField: function () {
-            if (!/^(ADDABLE_WITH_PASSWORD|CREDENTIALS_REFRESH)$/.test(this.model.get('state'))) return;
+        renderHeadline: function () {
+            var sender = (this.mailModel.get('from') || [])[0],
+                message = messages[this.model.get('state')];
+            //#. %1$s is a app name like calendar or drive (product name; might be customized)
+            this.$('.headline').append(
+                $.txt(gt('%1$s shared a folder with you', util.getDisplayName(sender))),
+                $.txt('. '),
+                message ? $.txt(message) : $()
+            );
+        },
 
-            this.$el.find('.password').append(
+        renderPasswordField: function () {
+            if (!this.model.matches(['addable_with_password', 'credentials_refresh'])) return;
+
+            this.$('.password').append(
                 common.getInputWithLabel('input-password', gt('Password'), this.model)
             );
+
             this.$('[name="input-password"]').attr({
-                type: 'password',
-                autocorrect: 'off',
-                autocomplete: 'new-password',
-                required: true,
-                placeholder:  gt('required')
+                'type': 'password',
+                'autocorrect': 'off',
+                'autocomplete': 'off',
+                'required': true,
+                'aria-required': true
             });
         },
 
@@ -230,26 +221,12 @@ define('io.ox/mail/invitations/register', [
 
             this.$el.empty();
             if (this.$el.is(':hidden')) this.$el.fadeIn(300);
-
-            var actions, buttons;
-
             this.renderScaffold();
-            this.renderSummary();
-
-            // get standard buttons
-            actions = this.getActions();
-            buttons = this.getButtons(actions);
-            if (buttons.length === 0) return this;
-            // use doesn't need any controls to "ignore" the message
-            if (actions.length === 1 && actions[0] === 'ignore') return this;
-
+            this.renderHeadline();
             this.$el.find('.controls').append(
-                $('<div class="actions">').append(
-                    this.renderDeepLink(),
-                    buttons
-                )
+                this.getDeepLink(),
+                this.getButtons()
             );
-
             this.renderPasswordField();
 
             return this;
@@ -263,6 +240,16 @@ define('io.ox/mail/invitations/register', [
                 }.bind(this));
         }
 
+    });
+
+    var SharingModel = Backbone.Model.extend({
+        is: function (state) {
+            return state.toLowerCase() === this.get('state').toLowerCase();
+        },
+
+        matches: function (states) {
+            return _.some(states, this.is.bind(this));
+        }
     });
 
     var SharingView = DisposableView.extend({
@@ -285,6 +272,10 @@ define('io.ox/mail/invitations/register', [
                 module: 'share/management',
                 params: { action: 'analyze' },
                 data: { link: this.getLink() }
+            }).then(function (data) {
+                // let's use lower case here
+                data.state = (data.state || '').toLowerCase();
+                return data;
             });
         },
 
@@ -311,9 +302,11 @@ define('io.ox/mail/invitations/register', [
                     type: this.getType()
                 }, data);
                 this.model.set('sharingMail', true);
-                //var extView = new ExternalView({
+                // do not show detailview for some states
+                if (reIgnoredStates.test(data.state)) return;
+
                 var extView = new DetailView({
-                    model: new Backbone.Model(data),
+                    model: new SharingModel(data),
                     mailModel: this.model,
                     container: this,
                     yell: this.options && this.options.yell
@@ -323,7 +316,7 @@ define('io.ox/mail/invitations/register', [
                 );
                 // trigger event so width can be calculated
                 extView.trigger('appended');
-            }.bind(this)).fail(notifications.yell.bind(notifications.yell));
+            }.bind(this)).fail(yell.bind(yell));
         }
     });
 
