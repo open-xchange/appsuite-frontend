@@ -69,7 +69,8 @@ define('io.ox/settings/accounts/views', [
             getTitle: function () {
                 // mail accounts are special, displayName might be different from account name, want account name, here
                 var titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
-                if (/xox\d+|xctx\d+/.test(this.model.get('filestorageService'))) titleAttribute = 'qualifiedId';
+                // no translation needed, this is only a dev feature, for convenience. Those accounts are only displayed when ox.debug is set to true
+                if (/xox\d+|xctx\d+/.test(this.model.get('filestorageService'))) return 'Shared folders from ' + this.model.get(titleAttribute);
                 return this.model.get(titleAttribute);
             },
 
