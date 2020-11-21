@@ -26,6 +26,7 @@ define('io.ox/chat/views/message', [
 ], function (DisposableView, ContentView, data, Avatar, events, util, commands, Dropdown, ext, settings, gt) {
 
     'use strict';
+
     // maybe move this to a own file when more icons are introduced
     /*eslint no-multi-str: 0*/
     var deliveryIcon = '<svg version="1.1" viewBox="0 0 13 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">\
@@ -47,13 +48,15 @@ define('io.ox/chat/views/message', [
 
             var model = this.model,
                 messageId = model.get('messageId'),
-                isChannel = (data.chats.get(this.model.get('roomId')) || data.channels.get(this.model.get('roomId'))).isChannel();
+                roomId = this.model.get('roomId'),
+                isChannel = (data.chats.get(roomId) || data.channels.get(roomId)).isChannel();
 
             // here we use cid instead of id, since the id might be unknown
             this.$el.attr('data-cid', model.cid)
-                .addClass(model.getType())
+                .toggleClass('system', model.isSystem())
                 .toggleClass('user', model.isUser())
-                .toggleClass('myself', !model.isSystem() && model.isMyself())
+                .toggleClass('myself', model.isMyself())
+                .toggleClass('command', model.isCommand())
                 .toggleClass('highlight', !!messageId && messageId === this.options.messageId)
                 .toggleClass('editable', model.isEditable())
                 .append(
@@ -74,7 +77,7 @@ define('io.ox/chat/views/message', [
         },
 
         renderSender: function () {
-            if (this.model.isSystem()) return $();
+            if (!this.model.isUser()) return $();
             if (this.model.hasSameSender(this.options.limit)) return $();
             var user = data.users.getByMail(this.model.get('sender'));
             return [
@@ -89,8 +92,9 @@ define('io.ox/chat/views/message', [
 
         renderContent: function () {
             try {
-                var json = this.model.isSystem() && JSON.parse(this.model.get('data'));
-                var render = json && this.model.isCommand() && commands.getRender(json.type);
+                var json = this.model.isCommand() && JSON.parse(this.model.get('data'));
+                var render = json && commands.getRender(json.type);
+                console.log('Soooo', this.model.isCommand(), this.model.get('data'), json, json.type, render);
                 return render ?
                     render({ model: this.model, json: json }) :
                     new ContentView({ model: this.model }).render().$el;

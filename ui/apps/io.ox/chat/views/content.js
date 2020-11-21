@@ -92,7 +92,7 @@ define('io.ox/chat/views/content', [
             } else if (model.isSystem()) {
                 this.$body.append(model.getSystemMessage());
             } else {
-                var content = model.get('content');
+                var content = model.getContent();
                 // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
                 if (model.isSystem() || content.length <= (this.chunkSize + 350)) {
                     this.setBodyContent(content);

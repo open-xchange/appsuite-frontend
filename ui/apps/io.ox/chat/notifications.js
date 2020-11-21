@@ -123,7 +123,7 @@ define('io.ox/chat/notifications', [
                         break;
                 }
             }
-            body = fileContent ? fileContent : opt.message.get('content');
+            body = fileContent ? fileContent : opt.message.getContent();
             if (opt.isMultiple) body = opt.originator + ': ' + body; // prepend name to body if from group
             if (body.length > previewLength) body = body.slice(0, previewLength) + '...';
 

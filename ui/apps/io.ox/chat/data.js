@@ -220,14 +220,49 @@ define('io.ox/chat/data', [
 
     var MessageModel = BaseModel.extend({
 
-        defaults: function () {
-            return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
-        },
-
         idAttribute: 'messageId',
 
         urlRoot: function () {
             return api.url + '/rooms/' + this.get('roomId') + '/messages';
+        },
+
+        defaults: function () {
+            return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
+        },
+
+        initialize: function () {
+            var type = this.get('type');
+            // using constants for immutable attributes
+            this.isText = _.constant(type === 'text');
+            this.isSystem = _.constant(type === 'system');
+            this.isCommand = _.constant(type === 'command');
+            this.isUser = _.constant(type === 'text' || type === 'command');
+            this.isMyself = _.constant(type !== 'system' && this.get('sender') === data.user.email);
+        },
+
+        isDeleted: function () {
+            return !!this.get('deleted');
+        },
+
+        isEdited: function () {
+            return !!this.get('edited');
+        },
+
+        isEditable: function () {
+            // currently, just "text", i.e. not system, not commands
+            return this.isText() && !this.isDeleted() && !this.isUploading();
+        },
+
+        isUploading: function () {
+            return !!this.get('uploading');
+        },
+
+        isFailed: function () {
+            return this.get('deliveryState') === 'failed';
+        },
+
+        getContent: function () {
+            return String(this.get('content') || '');
         },
 
         getSystemMessage: function () {
@@ -243,49 +278,6 @@ define('io.ox/chat/data', [
         getTime: function () {
             // use time when this message was last changed or when it was created
             return moment(this.get('edited') || this.get('date')).format('LT');
-        },
-
-        isSystem: function () {
-            return this.get('type') === 'system' || this.get('type') === 'command';
-        },
-
-        isCommand: function () {
-            return this.get('type') === 'command';
-        },
-
-        isMyself: function () {
-            return this.get('sender') === data.user.email;
-        },
-
-        isDeleted: function () {
-            return !!this.get('deleted');
-        },
-
-        isEdited: function () {
-            return !!this.get('edited');
-        },
-
-        isEditable: function () {
-            return !this.isSystem() && !this.isDeleted() && !this.isUploading();
-        },
-
-        isUploading: function () {
-            return !!this.get('uploading');
-        },
-
-        isFailed: function () {
-            return this.get('deliveryState') === 'failed';
-        },
-
-        isUser: function () {
-            return !this.isSystem();
-        },
-
-        getType: function () {
-            // always treat deleted messages as text
-            if (this.get('deleted')) return 'text';
-            if (this.isSystem()) return 'system';
-            return 'text';
         },
 
         // returns either an uploaded file or a blob object that is currently uploaded
@@ -691,9 +683,9 @@ define('io.ox/chat/data', [
         },
 
         // just locally; not posting the message
-        addSystemMessage: function (data) {
-            var json = _.isString(data) ? data : JSON.stringify(data);
-            this.messages.add({ type: 'system', content: json }, { merge: true, parse: true });
+        addLocalMessage: function (type, content, data) {
+            data = _.isString(data) ? data : JSON.stringify(data || {});
+            this.messages.add({ type: type || 'system', content: content || '', data: data }, { merge: true, parse: true });
         },
 
         postMessage: (function () {

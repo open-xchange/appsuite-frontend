@@ -33,7 +33,7 @@ define('io.ox/chat/commands', [
     events.on('message:command', function (e) {
         e.consume();
         var command = commands[e.command];
-        if (!command) return e.room.addSystemMessage({ command: e.command, type: 'text', message: gt('Unknown command: %1$s', e.command) });
+        if (!command) return e.room.addLocalMessage('system', gt('Unknown command: %1$s', e.command));
         var payload = { room: e.room, consume: e.consume };
         command.callback(payload);
         events.trigger('message:command:' + e.command, payload);
@@ -53,18 +53,23 @@ define('io.ox/chat/commands', [
 
     register({
         command: 'commands',
+        description: gt('List all commands'),
         callback: function (e) {
+            e.room.addLocalMessage('command', '', { type: 'commands' });
+        },
+        render: function () {
             var list = _(commands)
                 .chain()
                 .values()
                 .sortBy('command')
                 .map(function (data) {
-                    return '\n<b>/' + data.command + '</b> ' + _.escape(data.description || '');
+                    return '<b>/' + data.command + '</b> ' + _.escape(data.description || '');
                 })
                 .value();
-            e.room.addSystemMessage({ command: 'commands', type: 'text', message: gt('Supported commands: %1$s', list) });
-        },
-        description: gt('List all commands')
+            return $('<div class="content">').append(
+                $('<pre>').html(list.join('\n'))
+            );
+        }
     });
 
     // register({
@@ -79,23 +84,28 @@ define('io.ox/chat/commands', [
 
     register({
         command: 'version',
+        description: gt('Show server version'),
         callback: function (e) {
-            e.room.addSystemMessage({ command: 'version', type: 'text', message: gt('Server version: %1$s', data.serverConfig.version) });
+            e.room.addLocalMessage('command', '', { type: 'version' });
         },
-        description: gt('Show server version')
+        render: function () {
+            return $('<div class="content">').append(
+                $('<pre>').text(gt('Server version: %1$s', data.serverConfig.version))
+            );
+        }
     });
 
     register({
         command: 'zoom',
-        callback: startCall.bind(null, 'zoom'),
         description: gt('Start a Zoom meeting'),
+        callback: startCall.bind(null, 'zoom'),
         render: renderCall
     });
 
     register({
         command: 'jitsi',
-        callback: startCall.bind(null, 'jitsi'),
         description: gt('Start a Jitsi meeting'),
+        callback: startCall.bind(null, 'jitsi'),
         render: renderCall
     });
 
