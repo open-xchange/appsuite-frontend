@@ -16,10 +16,11 @@ define('io.ox/chat/views/content', [
     'io.ox/chat/views/file',
     'io.ox/chat/data',
     'io.ox/chat/util',
+    'io.ox/chat/system-message',
     'io.ox/chat/formatting',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (DisposableView, FileView, data, util, formatting, settings, gt) {
+], function (DisposableView, FileView, data, util, systemMessage, formatting, settings, gt) {
 
     'use strict';
 
@@ -90,7 +91,7 @@ define('io.ox/chat/views/content', [
             } else if (model.isDeleted()) {
                 this.$body.text(gt('This message was deleted'));
             } else if (model.isSystem()) {
-                this.$body.append(model.getSystemMessage());
+                this.$body.append(systemMessage.render(model));
             } else {
                 var content = model.getContent();
                 // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10

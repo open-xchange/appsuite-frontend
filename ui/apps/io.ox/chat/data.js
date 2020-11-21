@@ -265,10 +265,6 @@ define('io.ox/chat/data', [
             return String(this.get('content') || '');
         },
 
-        getSystemMessage: function () {
-            return systemMessage.render(this, data);
-        },
-
         getFileUrl: function (file) {
             var room = data.chats.get(this.get('roomId'));
             if (room && room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
@@ -567,7 +563,7 @@ define('io.ox/chat/data', [
             var last = this.get('lastMessage');
             if (!last) return '\u00a0';
             var message = new MessageModel(_.extend({ roomId: this.get('roomId') }, last));
-            if (message.isSystem()) return _.stripTags(message.getSystemMessage());
+            if (message.isSystem()) return _.stripTags(systemMessage.render(message));
             var file = message.getFile();
             if (file) return (file.isImage ? '📷' : '📄') + ' ' + file.name;
             var showSender = !message.isMyself() && !this.isPrivate() && !message.isSystem();
