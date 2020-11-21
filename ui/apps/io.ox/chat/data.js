@@ -301,7 +301,7 @@ define('io.ox/chat/data', [
             }
 
             var file, url;
-            if (this.get('files') && (file = this.get('files')[0])) {
+            if (this.get('file') && (file = this.get('file'))) {
                 url = api.url + '/files/' + file.fileId;
                 return {
                     id: file.fileId,
@@ -318,7 +318,7 @@ define('io.ox/chat/data', [
         },
 
         isFile: function () {
-            return !!(this.get('files') && this.get('files')[0]);
+            return !!this.get('file');
         },
 
         // checks if previous message is from a) same sender b) same date
@@ -713,7 +713,7 @@ define('io.ox/chat/data', [
             if (this.isNew()) return this.storeFirstMessage(attr, file);
             attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { files: file }));
+            var formData = util.makeFormData(_.extend({}, attr, { file: file }));
             if (file) attr = _.extend({ uploading: true, blob: file, type: 'file' }, attr);
             var model = this.messages.add(attr, { merge: true, parse: true });
 
@@ -747,8 +747,8 @@ define('io.ox/chat/data', [
             );
         },
 
-        storeFirstMessage: function (attr, files) {
-            var hiddenAttr = { message: attr.content, files: files, members: this.get('members') };
+        storeFirstMessage: function (attr, file) {
+            var hiddenAttr = { message: attr.content, file: file, members: this.get('members') };
             delete attr.content;
             delete attr.members;
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
@@ -941,7 +941,7 @@ define('io.ox/chat/data', [
         },
 
         isImage: function () {
-            return this.get('files') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('files')[0].mimetype) : /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
+            return this.get('file') ? /(jpg|jpeg|gif|bmp|png)/i.test(this.get('file').mimetype) : /(jpg|jpeg|gif|bmp|png)/i.test(this.get('mimetype'));
         }
     });
 

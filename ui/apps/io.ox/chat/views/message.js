@@ -135,7 +135,7 @@ define('io.ox/chat/views/message', [
                 isMyself = this.model.isMyself();
             //#. %1$s: User name of the person that uploaded files
             if (!isMyself && isMultiple) this.$('.upload').last().text(gt('%1$s uploaded files', user.getName()));
-            if (isMyself || isMultiple || !this.model.get('files')) return $();
+            if (isMyself || isMultiple || !this.model.get('file')) return $();
             //#. %1$s: User name of the person that uploaded a file
             return $('<div class="upload">').text(gt('%1$s uploaded a file', user.getName()));
         },
@@ -147,7 +147,7 @@ define('io.ox/chat/views/message', [
             if (index <= limit) return false;
             var prev = collection.at(index - 1);
             return prev.get('sender') === this.model.get('sender') &&
-                prev.get('files') && this.model.get('files');
+                prev.get('file') && this.model.get('file');
         }
     });
 

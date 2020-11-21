@@ -114,12 +114,12 @@ define('io.ox/chat/notifications', [
 
             // decide which file emoticon to use depending on mimetype
             if (opt.message.get('type') === 'file') {
-                switch (util.getClassFromMimetype(opt.message.get('files')[0].mimetype)) {
+                switch (util.getClassFromMimetype(opt.message.get('file').mimetype)) {
                     case 'image':
                         fileContent = '📷 ' + gt('Picture');
                         break;
                     default:
-                        fileContent = '📄 ' + opt.message.get('files')[0].name;
+                        fileContent = '📄 ' + opt.message.get('file').name;
                         break;
                 }
             }
