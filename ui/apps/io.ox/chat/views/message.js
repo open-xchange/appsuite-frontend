@@ -94,7 +94,6 @@ define('io.ox/chat/views/message', [
             try {
                 var json = this.model.isCommand() && JSON.parse(this.model.get('data'));
                 var render = json && commands.getRender(json.type);
-                console.log('Soooo', this.model.isCommand(), this.model.get('data'), json, json.type, render);
                 return render ?
                     render({ model: this.model, json: json }) :
                     new ContentView({ model: this.model }).render().$el;
