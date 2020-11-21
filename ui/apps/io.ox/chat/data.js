@@ -246,7 +246,11 @@ define('io.ox/chat/data', [
         },
 
         isSystem: function () {
-            return this.get('type') === 'system';
+            return this.get('type') === 'system' || this.get('type') === 'command';
+        },
+
+        isCommand: function () {
+            return this.get('type') === 'command';
         },
 
         isMyself: function () {
@@ -613,7 +617,7 @@ define('io.ox/chat/data', [
         },
 
         parseSystemMessage: function (message, roomId) {
-            var update = JSON.parse(message.content),
+            var update = JSON.parse(message.data),
                 chat = data.chats.get(roomId),
                 members;
 
@@ -748,9 +752,19 @@ define('io.ox/chat/data', [
         },
 
         storeFirstMessage: function (attr, file) {
-            var hiddenAttr = { message: attr.content, file: file, members: this.get('members') };
+            var hiddenAttr = {
+                message: attr.content,
+                file: file,
+                members: this.get('members'),
+                command: attr.command,
+                messageData: attr.data
+            };
+
             delete attr.content;
             delete attr.members;
+            delete attr.command;
+            delete attr.data;
+
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 data.chats.add(this, { at: 0 });
                 events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });

@@ -113,7 +113,7 @@ define('io.ox/chat/commands', [
                         + ' \uD83D\uDCDE\n'
                         //#. %1$s is a link
                         + gt('Please click the following link to join: %1$s', url);
-                    e.room.postMessage({ command: type, content: JSON.stringify({ link: url, text: content }) });
+                    e.room.postMessage({ command: type, content: content, data: JSON.stringify({ link: url }) });
                 });
             });
         });

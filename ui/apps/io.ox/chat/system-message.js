@@ -19,7 +19,7 @@ define('io.ox/chat/system-message', ['gettext!io.ox/chat'], function (gt) {
 
     function render(model) {
 
-        var content = model.get('content');
+        var content = model.get('data');
         var json;
 
         try {
@@ -90,7 +90,7 @@ define('io.ox/chat/system-message', ['gettext!io.ox/chat'], function (gt) {
                 //#. If it fails to load and decrypt a chat message a system message will be shown
                 return gt('Message could not be loaded');
             default:
-                if (json.text) return json.text;
+                if (model.get('content')) return model.get('content');
                 //#. %1$s: messagetext
                 return gt('Unknown system message: %1$s', json.type);
         }
