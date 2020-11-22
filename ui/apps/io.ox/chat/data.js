@@ -604,6 +604,13 @@ define('io.ox/chat/data', [
             return this.get('members') ? !!this.get('members')[email] : false;
         },
 
+        getUnreadCount: function () {
+            var count = this.get('unreadCount'),
+                max = data.serverConfig.maxUnreadCount;
+            if (count >= max) return (max - 1) + '+';
+            return count;
+        },
+
         parseSystemMessage: function (message, roomId) {
             var update = JSON.parse(message.data),
                 chat = data.chats.get(roomId),

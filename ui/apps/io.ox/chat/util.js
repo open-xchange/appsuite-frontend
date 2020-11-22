@@ -110,6 +110,8 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
 
         strings: {
             compare: function (a, b) {
+                if (!a) return -1;
+                if (!b) return 1;
                 if (a.length < b.length) return -1;
                 if (a.length > b.length) return 1;
                 if (a < b) return -1;

@@ -177,7 +177,7 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         renderUnread: function () {
-            return $('<div class="unread-count">').text(this.model.get('unreadCount'));
+            return $('<div class="unread-count">').text(this.model.getUnreadCount());
         },
 
         onChangeTitle: function () {
@@ -185,7 +185,7 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         onChangeUnreadCount: function () {
-            var count = this.model.get('unreadCount');
+            var count = this.model.getUnreadCount();
             this.$el.toggleClass('unseen', count > 0).find('.unread-count').text(count);
         },
 
