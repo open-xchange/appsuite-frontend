@@ -14,13 +14,16 @@
 define('io.ox/chat/views/typing', [
     'io.ox/chat/events',
     'io.ox/chat/data',
+    'io.ox/chat/api',
     'io.ox/backbone/views/disposable',
     'gettext!io.ox/chat'
-], function (events, data, DisposableView, gt) {
+], function (events, data, api, DisposableView, gt) {
 
     'use strict';
 
     var instances = {};
+    var THROTTLE = 5000;
+    var TIMEOUT = THROTTLE * 2;
 
     function TypingTracker(roomId) {
         this.roomId = roomId;
@@ -38,7 +41,7 @@ define('io.ox/chat/views/typing', [
             timeout: setTimeout(function () {
                 if (this.disposed) return;
                 this.hide(email);
-            }.bind(this), 5000)
+            }.bind(this), TIMEOUT)
         };
         this.render();
     };
@@ -89,6 +92,15 @@ define('io.ox/chat/views/typing', [
         tracker.toggle(event.userId, event.state);
     });
 
+    var propagate = (function () {
+        var throttles = {};
+        return function (roomId) {
+            var fn = throttles[roomId];
+            if (!fn) fn = throttles[roomId] = _.throttle(api.typing.bind(api, roomId, true), THROTTLE, { trailing: false });
+            fn(roomId);
+        };
+    }());
+
     var View = DisposableView.extend({
         className: 'typing',
         initialize: function (options) {
@@ -110,6 +122,7 @@ define('io.ox/chat/views/typing', [
 
     return {
         getTracker: getTracker,
+        propagate: propagate,
         View: View
     };
 });

@@ -508,13 +508,8 @@ define('io.ox/chat/views/chat', [
             textarea.style.height = 'auto';
             var scrollHeight = textarea.scrollHeight;
             textarea.style.height = (scrollHeight) + 'px';
-            if (value) this.onTyping();
+            if (value) typing.propagate(this.model.id);
         },
-
-        onTyping: _.throttle(function () {
-            if (!this.model.id) return;
-            api.typing(this.model.id, true);
-        }, 2500, { trailing: false }),
 
         onTriggerFileupload: function () {
             this.$('.file-upload-input').trigger('click');
