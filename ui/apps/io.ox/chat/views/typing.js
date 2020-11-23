@@ -59,8 +59,8 @@ define('io.ox/chat/views/typing', [
     };
 
     TypingTracker.prototype.render = function () {
-        var namesText = _(this.hash).pluck('nameText');
-        var namesHTML = _(this.hash).pluck('nameHTML');
+        var namesText = _(this.hash).pluck('nameText').sort();
+        var namesHTML = _(this.hash).pluck('nameHTML').sort();
         events.trigger('typing:' + this.roomId + ':summary', {
             text: this.getSummary(namesText),
             html: this.getSummary(namesHTML)
