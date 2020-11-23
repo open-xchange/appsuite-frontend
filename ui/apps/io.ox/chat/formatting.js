@@ -87,7 +87,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     }
 
     function mapReplace(all, whiteSpace, hit) {
-        return whiteSpace + (this[hit] || hit);
+        return whiteSpace + (this[hit] || all);
     }
 
     function onlyEmoji(str) {
