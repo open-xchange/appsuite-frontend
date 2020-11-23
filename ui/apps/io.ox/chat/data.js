@@ -294,7 +294,12 @@ define('io.ox/chat/data', [
 
             var file, url;
             if (this.get('file') && (file = this.get('file'))) {
-                url = api.url + '/files/' + file.fileId;
+                if (data.chats.get(this.get('roomId')).isChannel()) {
+                    url = api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+                } else {
+                    url = api.url + '/files/' + file.fileId;
+                }
+
                 return {
                     id: file.fileId,
                     isBlob: false,
