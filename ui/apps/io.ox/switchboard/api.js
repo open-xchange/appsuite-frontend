@@ -147,7 +147,8 @@ define.async('io.ox/switchboard/api', [
                 .on('reconnect_failed', function () {
                     console.log('Switchboard: Reconnect failed. Giving up.');
                 })
-                .on('error', function () {
+                .on('error', function (err) {
+                    if (ox.debug) console.error('Socket error:', err);
                     api.socket.close();
                     // in case acquireToken call fails (50x) stop here (see OXUIB-525)
                     if (!this.token) return;
@@ -161,7 +162,6 @@ define.async('io.ox/switchboard/api', [
             return def;
         }
     };
-
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
         // create a simple heuristic based on domain
@@ -175,4 +175,5 @@ define.async('io.ox/switchboard/api', [
             return api;
         });
     });
+
 });

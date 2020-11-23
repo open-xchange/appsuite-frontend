@@ -19,7 +19,7 @@ define('io.ox/switchboard/presence', [
 
     'use strict';
 
-    var users = {};
+    var users = {}, reconnect = false;
 
     var exports = {
 
@@ -142,6 +142,15 @@ define('io.ox/switchboard/presence', [
         return tmpl.clone().addClass(className).children('.icon').attr('title', names[availability]).end();
     }
 
+    function updateUserPresences() {
+        for (var userId in users) {
+            if (ox.debug) console.log('Update presence for user:', userId);
+            if (api.isMyself(userId)) continue;
+            delete users[userId];
+            exports.getPresence(userId);
+        }
+    }
+
     // respond to events
     api.socket.on('presence-change', function (userId, presence) {
         exports.changePresence(userId, presence);
@@ -150,25 +159,28 @@ define('io.ox/switchboard/presence', [
     api.socket.on('connect', function () {
         // emit own presence from user settings on connect
         exports.changeOwnAvailability(exports.getMyAvailability());
+        // we will do all updates here and not in the reconnect handler (which fires too early)
+        updateUserPresences();
+        if (reconnect) {
+            ox.trigger('refresh^');
+            ox.trigger('switchboard:reconnect');
+        }
     });
 
     api.socket.on('reconnect', function () {
-        for (var userId in users) {
-            if (api.isMyself(userId)) continue;
-            delete users[userId];
-            exports.getPresence(userId);
-        }
-        ox.trigger('refresh^');
-        ox.trigger('switchboard:reconnect');
+        // all updates after a reconnect have to be done in the connect handler
+        // as the reconnect event fires too early to update i.e. the user presence.
+        // We only track the state of the reconnect here
+        // Order of events is: disconnect, reconnect_attempt, reconnect, connect
+        reconnect = true;
     });
 
     api.socket.on('disconnect', function () {
         for (var userId in users) {
-            if (api.isMyself(userId)) continue;
-            delete users[userId];
+            users[userId].availability = 'offline';
         }
         // update all DOM nodes for this user
-        var $el = $('.presence[data-id!="' + $.escape(api.userId) + '"]:not(a[data-name="availability"] .presence)')
+        var $el = $('.presence:not(a[data-name="availability"] .presence)')
             .removeClass('online absent busy offline')
             .addClass('offline');
         var title = gt('Offline');
@@ -179,7 +191,6 @@ define('io.ox/switchboard/presence', [
 
     exports.addUser(api.userId, exports.getMyAvailability(), _.now());
     api.socket.emit('presence-get', api.userId, $.noop);
-
     // add an event hub. we need this to publish presence state changes
     _.extend(exports, Backbone.Events);
 
