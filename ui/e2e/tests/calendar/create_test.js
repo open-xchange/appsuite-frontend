@@ -1692,6 +1692,8 @@ Scenario('[C7427] Create appointment with external participants', async function
 
     function checkViews() {
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            I.waitForElement('.page.current .appointment', 5);
+            I.scrollTo('.page.current .appointment');
             I.waitForText(subject, 5, '.page.current .appointment');
         }));
     }
