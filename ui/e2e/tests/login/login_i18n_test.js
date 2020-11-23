@@ -27,18 +27,28 @@ Scenario('[OXUI-700] for guest users with password', async (I, users, dialogs) =
     I.waitForElement(myfiles);
     I.selectFolder('Music');
     I.clickToolbar('Share');
-    I.click('Create sharing link');
+
     dialogs.waitForVisible();
-    I.waitForText('Sharing link created for folder');
-    I.click('Password required');
-    I.seeCheckboxIsChecked('Password required');
-    I.fillField('Enter Password', 'CorrectHorseBatteryStaple');
-    let url = await I.grabValueFrom('.share-wizard input[type="text"]');
-    url = Array.isArray(url) ? url[0] : url;
-    dialogs.clickButton('Close');
+    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.waitForText('Anyone with the link and invited people');
+    I.waitForText('Copy link');
+    I.wait(0.2);
+    I.waitForEnabled('.settings-button');
+    I.click('.settings-button');
+    dialogs.waitForVisible();
+    I.fillField('Password', 'CorrectHorseBatteryStaple');
+    dialogs.clickButton('Save');
+
+    I.waitForText('Copy link');
+    I.click('Copy link');
+    I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
+    let link = await I.grabValueFrom('.public-link-url-input');
+    link = Array.isArray(link) ? link[0] : link;
+    dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
-    I.amOnPage(url.replace(/^https?:\/\/[^/]+\//, '../'));
+
+    I.amOnPage(link.replace(/^https?:\/\/[^/]+\//, '../'));
     I.waitForFocus('#io-ox-login-password');
     I.click('#io-ox-languages .dropdown > a');
     I.click('Deutsch (Deutschland)');
