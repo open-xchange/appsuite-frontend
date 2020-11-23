@@ -23,10 +23,10 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Checks when adding/removeind attachments', async (I, mail) => {
+Scenario('Checks when adding/removing attachments', async (I, mail) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
-        message = locate({ css: '.io-ox-alert' }).as('Yell: warninig');
+        message = locate({ css: '.io-ox-alert' }).as('Yell: warning');
 
     //await I.haveSetting('attachments/layout/compose/large', 'list');
     I.login('app=io.ox/mail');
@@ -57,7 +57,7 @@ Scenario('Checks when adding/removeind attachments', async (I, mail) => {
     // attach another image (2387)
     I.say('threshold: exceeded');
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-mango.png');
-    I.waitForVisible(message);
+    I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
 
 
