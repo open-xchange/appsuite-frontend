@@ -413,17 +413,17 @@ define('io.ox/core/folder/extensions', [
         manageSubscriptions: function () {
             this.append(
                 $('<li role="presentation">').append(
-                    $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Subscriptions')).on('click', function () {
+                    //#. opens a dialog to manage shared or public folders
+                    $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Shares')).on('click', function () {
                         require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
-                            // TODO helppage: 'ox.appsuite.user.sect.files.folder.displayshared.html' use product name here?
                             subscribe.open({
                                 module: 'infostore',
                                 help: 'ox.appsuite.user.sect.files.folder.displayshared.html',
-                                title: gt('Shared drive folders'),
+                                title: gt('Shared folders'),
                                 point: 'io.ox/core/folder/subscribe-shared-files-folders',
                                 sections: {
-                                    public: gt('Public drive folders'),
-                                    shared: gt('Shared drive folders')
+                                    public: gt('Public folders'),
+                                    shared: gt('Shared folders')
                                 },
                                 refreshFolders: true,
                                 tooltip: gt('subscribe folder'),

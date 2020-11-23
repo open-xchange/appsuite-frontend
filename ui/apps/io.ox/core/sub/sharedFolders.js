@@ -92,11 +92,13 @@ define('io.ox/core/sub/sharedFolders', [
     }
 
     function openDialog(data) {
-        var updateSubscriptions = function (ignoreWarning) {
+
+        data.dialog.on('subscribe', function () {
+            data.dialog.close();
             http.pause();
 
             _.each(data.hash, function (obj, id) {
-                api.update(id, obj, ignoreWarning);
+                api.update(id, obj);
             });
 
             http.resume().done(function () {
@@ -110,16 +112,13 @@ define('io.ox/core/sub/sharedFolders', [
                         center: false,
                         async: false
                     })
-                    .addCancelButton()
-                    .addButton({ label: gt('OK'), action: 'confirm' })
+                    .addButton({ label: gt('OK'), action: 'ok' })
                     .build(function () {
+                        // we may need to use this as a for each if multiple domains are affected
+
                         //#. confirmation when the last folder associated with a domain is unsubscribed
-                        //#. %1$s folder that was unsubscribed
-                        //#. %2$s domain like google.com etc
-                        this.$body.append(gt('After unsubscribing from "%1$s", all folders from the domain "%2$s" will be removed. You can subscribe again by using the invitation mail.', 'testfolder', 'testdomain'));
-                    })
-                    .on('confirm', function () {
-                        updateSubscriptions(true);
+                        //#. %1$s domain like google.com etc, may also be a list of domains
+                        this.$body.append(gt('You unsubscribed all shares from "%1$s". They will be removed after 30 days', 'testdomain'));
                     })
                     .open();
                     return;
@@ -127,11 +126,6 @@ define('io.ox/core/sub/sharedFolders', [
 
                 if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
             });
-        };
-
-        data.dialog.on('subscribe', function () {
-            data.dialog.close();
-            updateSubscriptions();
         });
 
         ext.point(options.point).invoke('render', data.dialog);
