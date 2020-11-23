@@ -154,10 +154,9 @@ define('io.ox/files/share/public-link', [
                     // refresh the guest group (id = int max value)
                     groupApi.refreshGroup(2147483647);
                 })
-                .done(
-                    this.model.set('url', null)
-                    //model.destroy.bind(model)
-                );
+                .done(function () {
+                    model.set('url', null);
+                });
         },
 
         hide: function () {
