@@ -63,10 +63,10 @@ Scenario('Add an existing distribution list', async function (I, contacts, dialo
     // search in address book for distribution list one
     I.click('~Select contacts');
     dialogs.waitForVisible();
-    I.waitForVisible('input.search-field', 5, dialogs.locators.header);
-    I.waitForEnabled('input.search-field', 5, dialogs.locators.header); // search field disabled until list is loaded
+    I.waitForVisible({ css: '.modal-dialog .modal-header input.search-field' }, 5);
+    I.waitForEnabled({ css: '.modal-dialog .modal-header input.search-field' }, 5); // search field disabled until list is loaded
     I.waitForFocus('.modal-header input.search-field'); // search field must be focused, otherwise marked string might be deleted
-    I.fillField('~Search', title);
+    I.fillField({ css: '.modal-dialog .modal-header input.search-field' }, title);
     I.waitForText(title, 5, '.modal li.list-item');
     I.click(title, '.modal li.list-item');
     I.waitForText('4 addresses selected', 5);
