@@ -1685,7 +1685,7 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
     });
 });
 
-Scenario('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar, mail) {
+Scenario.skip('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar, mail) {
     const subject = 'Meetup XY',
         ctx = await contexts.create(),
         extUser = await users.create(users.getRandom(), ctx);

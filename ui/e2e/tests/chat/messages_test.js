@@ -26,7 +26,7 @@ After(async (users) => {
     ]);
 });
 
-Scenario.skip('Start a new chat', async (I, users) => {
+Scenario('Start a new chat', async (I, users) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         I.waitForText('New Chat', 30);
