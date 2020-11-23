@@ -30,17 +30,8 @@ define('io.ox/chat/api', [
         origin: url.origin
     };
 
-    function failHandler(response) {
-        if (response.status === 401) console.error('Chat authentication error: JWT invalid');
-    }
-
-    function getJwtFromSwitchboard() {
-        var def = $.Deferred();
-        var jwt = ox.switchboardJwt;
-        if (jwt) {
-            var currentTime = Math.floor(Date.now() / 1000);
-            if (window.jwt_decode(jwt).exp > currentTime - 120) return def.resolve(ox.switchboardJwt);
-        }
+    function refreshJWT() {
+        var def = new $.Deferred();
         switchboardApi.socket.emit('jwt-sign', {}, function (jwt) {
             ox.switchboardJwt = jwt;
             def.resolve(jwt);
@@ -48,10 +39,28 @@ define('io.ox/chat/api', [
         return def;
     }
 
+    function getJwtFromSwitchboard() {
+        var jwt = ox.switchboardJwt;
+        if (jwt) {
+            try {
+                var currentTime = Math.floor(Date.now() / 1000);
+                if (window.jwt_decode(jwt).exp > currentTime - 120) return $.when(ox.switchboardJwt);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        return refreshJWT();
+    }
+
     function request(opt) {
         return getJwtFromSwitchboard().then(function (jwt) {
             opt = Object.assign({ headers: { 'Authorization': 'Bearer ' + jwt } }, opt);
-            return $.ajax(opt).fail(failHandler);
+            return $.ajax(opt);
+        }).catch(function (res) {
+            if (res.status !== 401) throw res;
+            console.error('Chat authentication error: JWT invalid');
+            // try to refresh the jwt once
+            return refreshJWT().then($.ajax.bind($, opt));
         });
     }
 
