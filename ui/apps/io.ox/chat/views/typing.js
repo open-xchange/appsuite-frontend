@@ -86,7 +86,7 @@ define('io.ox/chat/views/typing', [
 
     events.on('typing', function (event) {
         var tracker = getTracker(event.roomId);
-        tracker.toggle(event.email, event.state);
+        tracker.toggle(event.userId, event.state);
     });
 
     var View = DisposableView.extend({
