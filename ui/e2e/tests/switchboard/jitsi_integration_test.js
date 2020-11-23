@@ -42,7 +42,7 @@ const waitAndSwitchTab = () => {
     I.switchToNextTab();
 };
 
-Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dialogs) => {
+Scenario.skip('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dialogs) => {
     const [user1, user2] = users;
     let meetingURL;
 

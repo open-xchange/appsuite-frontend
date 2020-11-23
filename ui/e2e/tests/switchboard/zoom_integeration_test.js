@@ -53,7 +53,7 @@ Scenario('User can connect zoom account through appointments', (I, calendar) => 
     I.dontSee('Connect with Zoom');
 });
 
-Scenario('User can connect zoom account through addressbook', (I, users, contacts, dialogs) => {
+Scenario.skip('User can connect zoom account through addressbook', (I, users, contacts, dialogs) => {
 
     const [user1, user2] = users;
 
