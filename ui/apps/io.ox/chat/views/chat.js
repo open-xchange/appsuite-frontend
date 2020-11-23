@@ -416,7 +416,7 @@ define('io.ox/chat/views/chat', [
             this.$('.controls').removeClass('edit-mode reply-mode system text preview emoji');
             this.specialMode = false;
             this.messageReference = null;
-            _.defer(function () { this.$editor.focus(); }.bind(this));
+            _.defer(function () { this.$editor.focus().trigger('input'); }.bind(this));
         },
 
         onMessageEdit: function (model) {
@@ -427,10 +427,10 @@ define('io.ox/chat/views/chat', [
             if (messageNode) {
                 this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
             }
-            this.$editor.val(model.get('content')).focus();
-            this.$('.controls').addClass('edit-mode');
             this.specialMode = 'edit';
             this.messageReference = model;
+            this.$('.controls').addClass('edit-mode');
+            this.$editor.val(model.get('content')).focus().trigger('input');
         },
 
         onMessageReply: function (model) {
@@ -713,6 +713,7 @@ define('io.ox/chat/views/chat', [
             } else {
                 editor.value += unicode;
             }
+            this.$editor.trigger('input');
         }
     });
 
