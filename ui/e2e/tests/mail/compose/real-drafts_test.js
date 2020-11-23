@@ -101,7 +101,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.waitForFunction(() => window.$('.io-ox-mail-compose-window').length === 1);
 });
 
-Scenario('[RD003: Handle deleted spaces', async function (I, mail) {
+Scenario('[RD003: Handle deleted spaces', async function (I, mail, dialogs) {
     await I.haveSetting('io.ox/mail//autoSaveAfter', 1000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -144,9 +144,17 @@ Scenario('[RD003: Handle deleted spaces', async function (I, mail) {
     mail.selectMail('first space');
     I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
     I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    // confirm dialog (this also deletes the draft)
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
     mail.selectMail('second space');
     I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
     I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    // confirm dialog (this also deletes the draft)
+    dialogs.waitForVisible();
+    dialogs.clickButton('Delete');
+    I.waitForDetached('.modal-dialog');
 
     // see error message
     I.say('5. see error message');
