@@ -339,6 +339,11 @@ define('io.ox/backbone/views/window', [
 
         open: function () {
             var isSticky = this.model.get('sticky') === true;
+            // special case: no app started yet
+            if (!ox.ui.windowManager.getWindows().length) {
+                $('#io-ox-windowmanager').toggle(isSticky);
+                $('#io-ox-desktop').toggle(!isSticky);
+            }
             if (isSticky) {
                 $('#io-ox-windowmanager').append(
                     $('<div class="io-ox-windowmanager-sticky-panel border-left" role="region">').append(this.$body)
