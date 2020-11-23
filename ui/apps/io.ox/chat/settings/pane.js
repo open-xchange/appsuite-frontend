@@ -78,21 +78,7 @@ define('io.ox/chat/settings/pane', [
             }
         },
         {
-            id: 'email-notifications',
-            index: INDEX += 100,
-            render: function () {
-                if (!data.serverConfig.smtpEnabled) return;
-                this.$el.append(
-                    util.compactSelect('emailNotification', gt('Receive email notifications'), settings, [
-                        { label: gt('Never'), value: 'never' },
-                        { label: gt('Private chats only'), value: 'private' },
-                        { label: gt('Always'), value: 'always' }
-                    ])
-                );
-            }
-        },
-        {
-            id: 'sound-notifications',
+            id: 'notifications',
             index: INDEX += 100,
             render: function () {
                 var soundList = [
@@ -112,13 +98,27 @@ define('io.ox/chat/settings/pane', [
                         util.checkbox('sounds/enabled', gt('Play notification sound for new messages'), settings),
                         util.compactSelect('sounds/file', gt('Sound'), settings, soundList),
                         util.compactSelect('sounds/playWhen', gt('Behavior'), settings, playWhenOptions)
-                    )
+                    ).addClass('fieldset-notifications')
                 );
                 function toggle(value) {
                     this.$('[name="sounds/file"],[name="sounds/playWhen"]').prop('disabled', !value ? 'disabled' : '');
                 }
                 toggle.call(this, settings.get('sounds/enabled'));
                 this.listenTo(settings, 'change:sounds/enabled', toggle.bind(this));
+            }
+        },
+        {
+            id: 'email-notification',
+            index: INDEX += 100,
+            render: function () {
+                if (!data.serverConfig.smtpEnabled) return;
+                this.$el.find('.fieldset-notifications').append(
+                    util.compactSelect('emailNotification', gt('Offline email notifications'), settings, [
+                        { label: gt('Do not send any email notifications'), value: 'never' },
+                        { label: gt('Send email notifications for my private chats'), value: 'private' },
+                        { label: gt('Send email notifications for all chats and channels'), value: 'always' }
+                    ])
+                );
             }
         }
     );
