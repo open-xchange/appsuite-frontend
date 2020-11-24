@@ -564,6 +564,7 @@ define('io.ox/chat/main', [
                 // by type
                 $el.append(
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isPrivate(); }, header: gt('Private chats') }).render().$el,
+                    //#. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isGroup(); }, header: gt('Group chats') }).render().$el,
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isChannel(); }, header: gt('Channels') }).render().$el
                 );
