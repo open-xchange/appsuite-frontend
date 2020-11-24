@@ -341,7 +341,12 @@ define('io.ox/files/api', [
         getAccountDisplayNameSync: function () {
             var folderModel = this.getClosestFolderModelSync();
             return folderModel && folderModel.getAccountDisplayName();
+        },
+
+        getAccountError: function () {
+            return this.get('com.openexchange.folderstorage.accountError');
         }
+
     });
 
     // collection using custom models

@@ -215,6 +215,14 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                         )
                     );
                 }
+
+                if (model.isSharedFederatedSync() && model.getAccountError()) {
+                    var errorString = model.getAccountError().error || '';
+                    dl.append(
+                        $('<dt>').text(gt('Error')),
+                        $('<dd class="host-name">').text(errorString)
+                    );
+                }
             } else {
                 // All Attachment View
                 var mail = model.get('com.openexchange.file.storage.mail.mailMetadata');

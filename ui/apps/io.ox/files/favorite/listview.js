@@ -191,10 +191,16 @@ define('io.ox/files/favorite/listview', [
             draw: function (baton) {
                 if (baton && baton.model) {
                     var filetype = baton.model.getFileType ? baton.model.getFileType() : false;
-                    this.closest('.list-item')
+                    var listItem = this.closest('.list-item');
+                    listItem
                         .addClass('file-type-' + filetype)
                         .attr('data-is-favorite-view', true)
                         .attr('data-is-file', filetype !== 'folder');
+
+                    // show erros in listView
+                    if (filetype === 'folder' && baton.model.getAccountError()) {
+                        listItem.addClass('file-type-error');
+                    }
                 }
             }
         },

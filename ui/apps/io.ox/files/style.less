@@ -115,6 +115,7 @@
     .file-type-txt    &:before { content: '\f0f6'; }                  // fa-edit
     .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
     .file-type-folder &:before { content: '\f07b'; color: #808080; }  // fa-folder - 4% reduced luminance compared to the file-type-icon to compensate the percived grey value (filled vs. outline) a bit
+    .file-type-error  &:before { content: '\f071'; color: #000000; }
 }
 
 .file-list-view, .myshares-list, .myfavorites-list {
@@ -572,7 +573,6 @@
                 .folder-name {
                     width: 100%;
                     text-overflow: ellipsis;
-                    white-space: nowrap;
                     overflow: hidden;
                     padding: 10px;
                 }

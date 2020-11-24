@@ -21,6 +21,16 @@ define('io.ox/files/common-extensions', [
 
     'use strict';
 
+    function topFolderInPublicAndSharedFiles(baton) {
+        var parentFolder = baton.model.get('folder_id');
+        return (parentFolder === '10' || parentFolder === '15') &&  // is folder below My shares or Public files
+        _.isFunction(baton.model.isFolder) && baton.model.isFolder();
+    }
+
+    function isSharedFederated(baton) {
+        return baton && _.isFunction(baton.model.isSharedFederatedSync) && baton.model.isSharedFederatedSync();
+    }
+
     var extensions = {
 
         ariaLabel: function (baton) {
@@ -55,10 +65,11 @@ define('io.ox/files/common-extensions', [
             extensions.date.call(this, baton, { fulldate: false, smart: false });
         },
 
-        filename: function (baton, ellipsis) {
+        getFilename: function (baton, ellipsis) {
             var
-                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '',
-                isWrapFilename = false;
+                filename = baton.model.getDisplayName(),
+                isWrapFilename = false,
+                hostNameSuffix;
 
             // add suffix for locked files
             if (baton.model && _.isFunction(baton.model.isLocked) && baton.model.isLocked()) {
@@ -67,18 +78,15 @@ define('io.ox/files/common-extensions', [
             }
 
             // hostname suffix for federated share
-            var parentFolder = baton.model.get('folder_id');
-            if (
-                (parentFolder === '10' || parentFolder === '15') &&  // is folder below My shares or Public files
-                _.isFunction(baton.model.isFolder) && baton.model.isFolder() &&
-                _.isFunction(baton.model.isSharedFederatedSync) && baton.model.isSharedFederatedSync()
-            ) {
-                var suffix = baton.model.getAccountDisplayNameSync();
-                filename = suffix ? filename + ' (' + suffix + ')' : filename;
+            if (topFolderInPublicAndSharedFiles(baton) && isSharedFederated(baton)) {
+                hostNameSuffix = baton.model.getAccountDisplayNameSync();
+                filename = hostNameSuffix ? filename + ' (' + hostNameSuffix + ')' : filename;
             }
 
-            // fix long names
+            // fix long names, but never suppress the extension when a hostName is used or it will look wrong
             if (ellipsis) {
+                // entries with host name need a different ellipses config to work well
+                if (hostNameSuffix) { _.extend(ellipsis, { suppressExtension: false, optimizeWordbreak: false }); }
 
                 filename = _.ellipsis(filename, ellipsis);
 
@@ -93,14 +101,24 @@ define('io.ox/files/common-extensions', [
                 // make underscore wrap as well
                 filename = filename.replace(/_/g, '_\u200B');
             }
+            return filename;
+        },
+
+        filename: function (baton, ellipsis) {
             this.append(
-                $('<div class="filename">').text(filename)
+                $('<div class="filename">').text(extensions.getFilename(baton, ellipsis))
             );
         },
         filenameTooltip: function (baton) {
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
             var parent = this.parent();
             var title = _.breakWord(filename);
+
+            // hostname suffix for federated share
+            if (topFolderInPublicAndSharedFiles(baton) && isSharedFederated(baton)) {
+                var hostNameSuffix = baton.model.getAccountDisplayNameSync();
+                title = hostNameSuffix ? title + ' (' + hostNameSuffix + ')' : title;
+            }
 
             /*
              * The Tooltip object uses the value provided through the options or the data-original-title attribute value.
@@ -181,6 +199,11 @@ define('io.ox/files/common-extensions', [
                     listItem[0].className = listItem[0].className.replace(/file-type-\w*/gi, '');
                 }
                 listItem.addClass('file-type-' + type);
+
+                // show erros in listView
+                if (type === 'folder' && baton.model.getAccountError()) {
+                    listItem.addClass('file-type-error');
+                }
             }
         },
 
@@ -231,9 +254,10 @@ define('io.ox/files/common-extensions', [
                 // Folder
                 //
                 if (baton.model.isFolder()) {
+                    var folderName = extensions.getFilename(baton, { max: 36, charpos: 'middle' });
                     return this.append(
                         $('<div class="icon-thumbnail default-icon">').append(
-                            $('<span class="folder-name">').text(baton.model.getDisplayName()),
+                            $('<span class="folder-name">').text(folderName),
                             $('<span class="folder-icon"><i class="fa file-type-icon" aria-hidden="true"></i></span>')
                         )
                     );
