@@ -1685,12 +1685,17 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
     });
 });
 
-Scenario.skip('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar, mail) {
+Scenario('[C7427] Create appointment with external participants', async function (I, users, contexts, dialogs, calendar, mail) {
     const subject = 'Meetup XY',
         ctx = await contexts.create(),
-        extUser = await users.create(users.getRandom(), ctx);
+        extUser = await users.create(users.getRandom(), ctx),
+        day = moment().add(1, 'month').startOf('month').add(1, 'week').isoWeekday(2).format('M/D/YYYY'),
+        calendarDay = `//td[contains(@aria-label, "${day}")]`;
 
     function checkViews() {
+        I.waitForElement('~Go to next month', calendar.locators.mini);
+        I.retry(5).click('~Go to next month', calendar.locators.mini);
+        I.retry(5).click(calendarDay, calendar.locators.mini);
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
             I.waitForElement('.page.current .appointment', 5);
             I.scrollTo('.page.current .appointment');
@@ -1706,7 +1711,11 @@ Scenario.skip('[C7427] Create appointment with external participants', async fun
         await within('.io-ox-calendar-edit-window', async () => {
             I.fillField('Subject', subject);
             I.fillField('Location', 'Conference Room 123');
+            I.fillField(calendar.locators.startdate, day);
+            I.pressKey('Enter');
+            I.clearField(calendar.locators.starttime);
             I.fillField(calendar.locators.starttime, '01:00 PM');
+            I.pressKey('Enter');
             await calendar.addParticipant(extUser.userdata.primaryEmail, false);
             I.click('Create');
         });
