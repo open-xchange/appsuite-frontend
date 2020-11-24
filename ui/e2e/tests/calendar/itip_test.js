@@ -37,8 +37,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     const ctx = await contexts.create();
     const externalUser = await users.create(users.getRandom(), ctx);
     await Promise.all([
-        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: users[0]}),
-        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: externalUser})
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: users[0] }),
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: externalUser })
     ]);
 
     // 1.) User#A: Create an appointment with User#B
