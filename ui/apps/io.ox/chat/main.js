@@ -700,6 +700,7 @@ define('io.ox/chat/main', [
     win.$body.parent().busy();
 
     data.fetchUsers()
+        .catch($.noop)
         .then(function () {
             return data.session.getUserId();
         })

@@ -125,11 +125,11 @@ define('io.ox/chat/data', [
         getName: function () {
             var first = this.get('first_name'), last = this.get('last_name');
             if (first && last) return first + ' ' + last;
-            return first || last || this.get('email') || '\u00a0';
+            return first || last || this.getEmail() || '\u00a0';
         },
 
         getEmail: function () {
-            return this.get('email1') || this.get('email2') || this.get('email3');
+            return this.get('email') || this.get('email1') || this.get('email2') || this.get('email3');
         }
     });
 
@@ -146,10 +146,14 @@ define('io.ox/chat/data', [
         getByMail: (function () {
             var cache = [];
             return function (email) {
-                if (cache[email]) return cache[email];
-                cache[email] = this.find(function (model) {
-                    return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
-                });
+                if (!cache[email]) {
+                    cache[email] = this.find(function (model) {
+                        return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
+                    });
+                }
+                if (!cache[email]) {
+                    cache[email] = new UserModel({ email1: email });
+                }
                 return cache[email];
             };
         }()),
@@ -181,10 +185,8 @@ define('io.ox/chat/data', [
                 }, _(item).pick('email1', 'email2', 'email3'));
             });
             return data.users.reset(result);
-        }).fail(function () {
-            require(['io.ox/core/yell'], function (yell) {
-                yell('error', gt('There was an error during authentication.'));
-            });
+        }).fail(function (err) {
+            if (ox.debug) console.error(err);
         });
     };
 
