@@ -35,12 +35,17 @@ After(async (users) => {
 
 Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current, contexts) {
     const ctx = await contexts.create();
-    await users.create(users.getRandom(), ctx);
+    const externalUser = await users.create(users.getRandom(), ctx);
+    await Promise.all([
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: users[0]}),
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: externalUser})
+    ]);
+
     // 1.) User#A: Create an appointment with User#B
-    const startDate = moment().startOf('day').add(8, 'hour');
-    const endDate = moment().startOf('day').add(11, 'hour');
+    const startDate = moment().add(1, 'week').startOf('day').add(8, 'hour');
+    const endDate = moment().add(1, 'week').startOf('day').add(11, 'hour');
     await session('Alice', async () => {
-        I.login('app=io.ox/calendar');
+        I.login('app=io.ox/calendar&perspective=week:week');
         calendar.waitForApp();
         calendar.newAppointment();
         I.fillField('Subject', 'MySubject');
@@ -69,7 +74,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         // 4.) User#B: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
-        calendar.switchView('Week');
+        I.waitForVisible('~Next Week');
+        I.click('~Next Week');
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
@@ -99,7 +105,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         // 7.) User#A: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
-        calendar.switchView('Week');
+        I.click('~Next Week');
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
