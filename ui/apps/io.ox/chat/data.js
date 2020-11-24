@@ -1027,6 +1027,9 @@ define('io.ox/chat/data', [
 
         initialize: function () {
             this.initialized = new $.Deferred();
+
+            if (switchboardApi.socket) this.connectSocket(switchboardApi.socket);
+            this.listenTo(switchboardApi, 'reconnect', this.connectSocket);
         },
 
         refresh: function () {
@@ -1057,8 +1060,9 @@ define('io.ox/chat/data', [
             });
         },
 
-        connectSocket: function () {
-            var socket = data.socket = switchboardApi.socket;
+        connectSocket: function (socket) {
+            if (this.socket) this.refresh();
+            this.socket = socket;
 
             socket.on('reconnect', this.refresh);
 

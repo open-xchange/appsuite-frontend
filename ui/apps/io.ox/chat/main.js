@@ -477,8 +477,6 @@ define('io.ox/chat/main', [
             var user = data.users.getByMail(data.user.email),
                 mode = settings.get('mode') || 'sticky';
 
-            data.session.connectSocket();
-
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 this.getResizeBar(),

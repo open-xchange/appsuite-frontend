@@ -158,10 +158,14 @@ define.async('io.ox/switchboard/api', [
                     }, 1000 * (10 + Math.floor(Math.random() * 10)));
                 }.bind(this));
                 def.resolve(api.socket);
+                this.trigger('reconnect', api.socket);
             }.bind(this));
             return def;
         }
     };
+
+    _.extend(api, Backbone.Events);
+
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
         // create a simple heuristic based on domain
