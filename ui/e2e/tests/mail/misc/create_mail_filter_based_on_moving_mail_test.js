@@ -82,7 +82,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users, ma
 
     I.seeInField('#rulename', 'Move mails from ' + users[1].get('primaryEmail') + ' into folder Trash');
 
-    I.see('Address', '.tests');
+    I.see('Email address', '.tests');
     I.see('Is exactly', '.tests');
     I.seeInField({ css: '[id*="address"]' }, users[1].get('primaryEmail'));
 

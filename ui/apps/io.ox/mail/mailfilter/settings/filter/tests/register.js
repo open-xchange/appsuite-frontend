@@ -1029,7 +1029,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     };
                     _.extend(opt.defaults.tests, defaults);
                     _.extend(opt.conditionsTranslation, {
-                        'address': gt('Address')
+                        'address': gt('Email address')
                     });
 
                     _.extend(opt.conditionsMapping, { 'address': ['address'] });
