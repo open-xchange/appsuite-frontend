@@ -38,7 +38,7 @@ After(async (users) => {
 
 const waitAndSwitchTab = () => {
     const { I } = inject();
-    I.wait(0.2);
+    I.wait(0.3);
     I.switchToNextTab();
 };
 
@@ -161,7 +161,7 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     });
 });
 
-Scenario('Create call from call history and check call history after hang up for jitsi', async (I, users, dialogs) => {
+Scenario('[J2] Create call from call history and check call history after hang up for jitsi', async (I, users, dialogs) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
 
@@ -189,13 +189,19 @@ Scenario('Create call from call history and check call history after hang up for
 
     await session('userB', () => {
         dialogs.waitForVisible();
+        I.waitForText('Incoming call');
+        I.waitForText('Answer');
     });
 
     await session('userA', () => {
+        waitAndSwitchTab();
+        I.closeCurrentTab();
+        I.wait(0.2);
+        I.waitForText('Hang up');
         dialogs.clickButton('Hang up');
         I.waitForDetached('.modal');
         I.waitForVisible('~Call history');
-        I.wait(0.2);
+        I.waitForEnabled('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
@@ -206,6 +212,7 @@ Scenario('Create call from call history and check call history after hang up for
 
     await session('userB', () => {
         I.waitForVisible('~Call history');
+        I.waitForEnabled('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
