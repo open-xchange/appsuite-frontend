@@ -601,7 +601,7 @@ define('io.ox/chat/views/chat', [
         onChangeMembers: function () {
             if (this.model.get('lastMessage').type !== 'system') return;
 
-            var event = JSON.parse(this.model.get('lastMessage').content),
+            var event = JSON.parse(this.model.get('lastMessage').data),
                 members = event.members;
 
             if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
