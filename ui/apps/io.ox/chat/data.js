@@ -268,7 +268,7 @@ define('io.ox/chat/data', [
         },
 
         getFileUrl: function (file) {
-            var room = data.chats.get(this.get('roomId'));
+            var room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
             if (room && room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
             return api.url + '/files/' + file.fileId;
         },
@@ -296,7 +296,8 @@ define('io.ox/chat/data', [
 
             var file, url;
             if (this.get('file') && (file = this.get('file'))) {
-                if (data.chats.get(this.get('roomId')).isChannel()) {
+                var room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
+                if (room && room.isChannel()) {
                     url = api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
                 } else {
                     url = api.url + '/files/' + file.fileId;
@@ -982,14 +983,16 @@ define('io.ox/chat/data', [
     var RoomFile = FileModel.extend({
         getThumbnailUrl: function () {
             var roomId = this.collection.roomId,
-                isChannel = roomId && data.chats.get(roomId).isChannel();
+                room = data.chats.get(roomId) || data.channels.get(roomId),
+                isChannel = room && room.isChannel();
             if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
             return api.url + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
         getFileUrl: function () {
             var roomId = this.collection.roomId,
-                isChannel = roomId && data.chats.get(roomId).isChannel();
+                room = data.chats.get(roomId) || data.channels.get(roomId),
+                isChannel = room && room.isChannel();
             if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId');
             return api.url + '/files/' + this.get('fileId');
         }
@@ -1006,7 +1009,8 @@ define('io.ox/chat/data', [
         },
 
         url: function () {
-            var isChannel = data.chats.get(this.roomId).isChannel();
+            var room = data.chats.get(this.roomId) || data.channels.get(this.roomId),
+                isChannel = room && room.isChannel();
             if (isChannel) return api.url + '/channels/' + this.roomId + '/files';
             return api.url + '/rooms/' + this.roomId + '/files';
         }
