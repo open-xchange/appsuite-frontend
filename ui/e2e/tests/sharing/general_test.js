@@ -167,6 +167,7 @@ Scenario('[C85625] My Shares default sort order', async function (I, drive, dial
         drive.shareItem();
         dialogs.waitForVisible();
         I.selectOption('.form-group select', 'Anyone with the link and invited people');
+        I.waitForNetworkTraffic();
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
     }
