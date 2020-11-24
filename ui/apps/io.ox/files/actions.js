@@ -200,9 +200,7 @@ define('io.ox/files/actions', [
             return util.canEditDocFederated(model);
         },
         action: function (baton) {
-            var model = baton.models[0];
-            var link = filestorageApi.getAccountUrl(model.getItemAccountSync());
-            var guestLink = shareAPI.getFederatedSharingRedirectUrl(link, baton.first());
+            var guestLink = shareAPI.getFederatedSharingRedirectUrl(baton.first());
             /* global blankshield */
             blankshield.open(guestLink, '_blank');
         }

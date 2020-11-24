@@ -393,20 +393,18 @@ define('io.ox/files/share/api', [
 
         /**
          * get a link to open a federated share as guest user
-         * @param  { string }   link
          * @return { object }   a file descriptor
          */
-        getFederatedSharingRedirectUrl: function (link, item) {
+        getFederatedSharingRedirectUrl: function (item) {
 
             var baseUrl = window.ox.abs + window.ox.root;
-            var apiUrl = '/api/share/management?action=backwardLink';
+            var apiUrl = '/api/files?action=backwardLink';
             var sessionParam = '&session=' + encodeURIComponent(ox.session);
             var redirectParam = '&redirect=true';
-            var shareLinkParam = '&link=' + encodeURIComponent(link);
             var folderParam = '&folder=' + encodeURIComponent(item.folder_id);
             var itemParam =  '&item=' + encodeURIComponent(item.id);
 
-            return baseUrl + apiUrl + sessionParam + redirectParam + shareLinkParam + folderParam + itemParam;
+            return baseUrl + apiUrl + sessionParam + redirectParam + folderParam + itemParam;
         }
     };
 
