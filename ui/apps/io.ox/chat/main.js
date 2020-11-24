@@ -469,6 +469,7 @@ define('io.ox/chat/main', [
 
         showApp: function () {
             settings.set('hidden', false);
+            this.open();
             this.$el.show();
             this.$body.show();
         },
@@ -682,9 +683,10 @@ define('io.ox/chat/main', [
         }
     });
 
-    var mode = settings.get('mode') || 'sticky';
+    var mode = settings.get('mode') || 'sticky',
+        autostart = settings.get('autostart');
 
-    win = new Window({
+    win = window.foo = new Window({
         title: 'OX Chat',
         floating: mode === 'floating',
         sticky: mode === 'sticky',
@@ -693,11 +695,16 @@ define('io.ox/chat/main', [
         closable: true,
         size: 'width-lg',
         quitOnEscape: false
-    }).render().open();
+    }).render();
 
-    settings.set('hidden', false);
-
-    win.$body.parent().busy();
+    // if autostart is false, just do not open the window during
+    // load. showApp will finally open the window if needed.
+    // Chat should run "in the background"
+    if (autostart) {
+        win.open();
+        win.$body.parent().busy();
+        settings.set('hidden', false);
+    }
 
     data.fetchUsers()
         .catch($.noop)

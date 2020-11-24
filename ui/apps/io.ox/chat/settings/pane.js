@@ -54,6 +54,19 @@ define('io.ox/chat/settings/pane', [
             }
         },
         {
+            id: 'general',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('General'),
+                        //#. Option to control wether the chat application opens/start automatically on startup
+                        util.checkbox('autostart', gt('Open Chat on startup'), settings)
+                    )
+                );
+            }
+        },
+        {
             id: 'view-options',
             index: INDEX += 100,
             render: function () {
@@ -61,6 +74,7 @@ define('io.ox/chat/settings/pane', [
                     util.fieldset(
                         gt('View options'),
                         util.checkbox('selectLastRoom', gt('Select last chat on start'), settings),
+                        //#. It's a setting, aka. show all chats grouped by type. (the verb group)
                         util.checkbox('groupByType', gt('Group chats by type'), settings),
                         //#. Sort chats by ... (alphabetical|last activity)
                         util.radio('sortBy', gt('Sort chats by'), settings, [
