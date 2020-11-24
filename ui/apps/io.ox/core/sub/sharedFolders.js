@@ -118,7 +118,7 @@ define('io.ox/core/sub/sharedFolders', [
 
                         //#. confirmation when the last folder associated with a domain is unsubscribed
                         //#. %1$s domain like google.com etc, may also be a list of domains
-                        this.$body.append(gt('You unsubscribed all shares from "%1$s". They will be removed after 30 days', 'testdomain'));
+                        this.$body.append(gt('You unsubscribed from all folders of "%1$s". They will be removed after 30 days', 'testdomain'));
                     })
                     .open();
                     return;

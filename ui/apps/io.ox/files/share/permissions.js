@@ -1280,7 +1280,7 @@ define('io.ox/files/share/permissions', [
                             id: guid,
                             rows: 3,
                             //#. placeholder text in share dialog
-                            placeholder: gt('Message will be send to all newly invited people')
+                            placeholder: gt('Message will be sent to all newly invited people')
                         })
                     )
                 );
