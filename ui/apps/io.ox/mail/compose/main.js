@@ -324,8 +324,16 @@ define('io.ox/mail/compose/main', [
             win.busy(undefined, undefined, function () {
                 // prevents busy spinner
                 this.idle();
-                this.find('.footer').addClass('message')
-                    .text(error.message || error.error);
+                this.find('.footer')
+                    .append($('<div class="message">').text(error.message || error.error));
+
+                // add extra close button for mobile
+                if (!_.device('smartphone')) return;
+                this.find('.footer').append(
+                    $('<button type="button" class="btn btn-default btn-primary">')
+                        .text(gt('Close'))
+                        .on('click', function () { app.quit(); })
+                );
             });
         };
 
