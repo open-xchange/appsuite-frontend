@@ -33,7 +33,7 @@ define('io.ox/calendar/month/print', [
     }
 
     function sortBy(event) {
-        return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
+        return util.isAllday(event) ? -1 : util.getMomentInLocalTimezone(event.get('startDate')).valueOf();
     }
 
     function map(event) {
@@ -42,7 +42,7 @@ define('io.ox/calendar/month/print', [
             color = util.getAppointmentColor(folder.attributes, event) || '#e8e8e8';
 
         return {
-            time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
+            time: util.isAllday(event) ? undefined : util.getMomentInLocalTimezone(event.get('startDate')).format('LT'),
             title: event.get('summary'),
             color: util.getForegroundColor(color),
             backgroundColor: color
