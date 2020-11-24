@@ -37,8 +37,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     const ctx = await contexts.create();
     await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with User#B
-    const startDate = moment().startOf('hour').add(1, 'hour');
-    const endDate = moment().startOf('hour').add(3, 'hour');
+    const startDate = moment().startOf('day').add(8, 'hour');
+    const endDate = moment().startOf('day').add(11, 'hour');
     await session('Alice', async () => {
         I.login('app=io.ox/calendar');
         calendar.waitForApp();
@@ -46,9 +46,9 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.fillField('Subject', 'MySubject');
         await calendar.setDate('startDate', startDate);
         await calendar.setDate('endDate', endDate);
-        I.fillField(calendar.locators.starttime, startDate.format('h:MM A'));
+        I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
         I.clearField(calendar.locators.endtime);
-        I.fillField(calendar.locators.endtime, endDate.format('h:MM A'));
+        I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
         await calendar.addParticipant(users[1].userdata.primaryEmail, false);
         I.click('Create');
         I.waitForDetached('.io-ox-calendar-edit-window');
@@ -62,7 +62,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForText('Accept');
         I.waitForText('Tentative');
         I.waitForText('Decline');
-        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
         // 3.) User#B: Accept the appointment
         I.click(current.buttonText);
         I.waitForText(`You have ${current.emailTitle} the appointment`);
@@ -73,6 +73,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
+        I.waitForEnabled('.page.current .week .appointment .title');
         I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
@@ -102,6 +103,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
+        I.waitForEnabled('.page.current .week .appointment .title');
         I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
@@ -132,7 +134,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForText('Appointment canceled: MySubject');
         mail.selectMail('Appointment canceled: MySubject');
         I.waitForElement('.mail-detail-frame');
-        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
         I.waitForText(current.itipStatus);
         I.waitForText('MyComment');
         // 12.) User#B: Delete
