@@ -30,9 +30,9 @@ define('io.ox/chat/api', [
         origin: url.origin
     };
 
-    function refreshJWT() {
+    function refreshJWT(payload) {
         var def = new $.Deferred();
-        switchboardApi.socket.emit('jwt-sign', {}, function (jwt) {
+        switchboardApi.socket.emit('jwt-sign', payload || {}, function (jwt) {
             ox.switchboardJwt = jwt;
             def.resolve(jwt);
         });
@@ -60,7 +60,7 @@ define('io.ox/chat/api', [
             if (res.status !== 401) throw res;
             console.error('Chat authentication error: JWT invalid');
             // try to refresh the jwt once
-            return refreshJWT().then($.ajax.bind($, opt));
+            return refreshJWT({ error: { status: res.status, responseText: res.responseText } }).then($.ajax.bind($, opt));
         });
     }
 
