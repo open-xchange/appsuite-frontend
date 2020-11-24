@@ -41,6 +41,7 @@
     "grunt-newer": "1.3.0",
     "grunt-require-gettext": "^0.8.1",
     "grunt-retire": "^1.0.9",
+    "husky": ">=4",
     "karma": "^5.1.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.0.0",
@@ -49,6 +50,7 @@
     "karma-ox-ui": "^0.3.0",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.32",
+    "lint-staged": ">=10",
     "mocha": "^6",
     "moment-range": "^4.0.2",
     "otpauth": "^6.0.4",
@@ -95,5 +97,13 @@
     "underscore": "1.9.1",
     "unorm": "1.4.1",
     "velocity-animate": "1.5.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js(on)?": "eslint --cache --fix"
   }
 }
