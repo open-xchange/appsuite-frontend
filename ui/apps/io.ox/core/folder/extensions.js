@@ -239,7 +239,7 @@ define('io.ox/core/folder/extensions', [
                 module: module,
                 help: isContact ? 'ox.appsuite.user.sect.contacts.folder.displayshared.html' : 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
-                tooltip: isContact ? gt('subscribe address book') : gt('subscribe task folder'),
+                tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
@@ -426,7 +426,7 @@ define('io.ox/core/folder/extensions', [
                                     shared: gt('Shared folders')
                                 },
                                 refreshFolders: true,
-                                tooltip: gt('subscribe folder'),
+                                tooltip: gt('Subscribe to folder'),
                                 noSync: true,
                                 // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
                                 // no cache or we would overwrite folder collections with unsubscribed folders
@@ -450,7 +450,7 @@ define('io.ox/core/folder/extensions', [
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var self = this;
 
-            this.link('subscribe', gt('Subscribe address book'), function (e) {
+            this.link('subscribe', gt('Subscribe to address book'), function (e) {
                 e.data = { baton: baton };
                 openSubscriptionDialog(e);
             });
@@ -468,7 +468,7 @@ define('io.ox/core/folder/extensions', [
             var self = this;
 
             if (baton.module === 'contacts') {
-                self.link('subscribeShared', gt('Subscribe shared address book'), function (e) {
+                self.link('subscribeShared', gt('Subscribe to shared address book'), function (e) {
                     e.data = { baton: baton };
                     openSubscriptionForSharedDialog(e);
                 });
@@ -991,7 +991,7 @@ define('io.ox/core/folder/extensions', [
                     // guests might have no default folder
                     if (!folder) return;
 
-                    this.link('shared', gt('Subscribe shared folder'), function (e) {
+                    this.link('shared', gt('Subscribe to shared folder'), function (e) {
                         e.data = { baton: baton };
                         openSubscriptionForSharedDialog(e);
                     });
@@ -1091,12 +1091,12 @@ define('io.ox/core/folder/extensions', [
         id: 'shared',
         index: 500,
         draw: function () {
-            this.link('shared', gt('Subscribe shared Calendar'), function () {
+            this.link('shared', gt('Subscribe to shared calendar'), function () {
                 require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                     subscribe.open({
                         module: 'calendar',
                         help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
-                        title: gt('Subscribe shared calendars'),
+                        title: gt('Subscribe to shared calendars'),
                         point: 'io.ox/core/folder/subscribe-shared-calendar',
                         sections: {
                             public: gt('Public calendars'),

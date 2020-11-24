@@ -315,7 +315,7 @@ define('io.ox/calendar/settings/pane', [
                         subscribe.open({
                             module: 'calendar',
                             help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
-                            title: gt('Subscribe shared calendars'),
+                            title: gt('Subscribe to shared calendars'),
                             point: 'io.ox/core/folder/subscribe-shared-calendar',
                             sections: {
                                 public: gt('Public calendars'),
@@ -330,7 +330,7 @@ define('io.ox/calendar/settings/pane', [
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="subscribe-shared-calendars">')
                     .append(
-                        $.txt(gt('Subscribe shared calendars'))
+                        $.txt(gt('Subscribe to shared calendars'))
                     )
                     .on('click', openDialog)
                 );
