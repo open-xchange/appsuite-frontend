@@ -54,7 +54,7 @@
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">In der Titelleiste: Symbol <span class="guibutton"><strong>Rechts verankern</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.attach"><img src="../../images/appsuite_user_icon_chat_attach.png"></span>. Verankert das Chat-Fenster am rechten Rand.</p></li>
-<li class="listitem"><p role="presentation">Ihr Profilfoto, Ihr Anzeigename</p></li>
+<li class="listitem"><p role="presentation">Ihr Profilfoto, Ihr Anzeigename, Ihr Anwesenheitsstatus</p></li>
 <li class="listitem">
 <p role="presentation">Symbol <span class="guibutton"><strong>Neu</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.start"><img src="../../images/appsuite_user_icon_chat_start.png"></span>. 
@@ -82,8 +82,18 @@
 <p role="presentation">
           </p>
 </li>
-<li class="listitem"><p role="presentation">Die Liste der offenen Chats mit Datum oder Uhrzeit und dem Anfang der letzten Nachricht. Anklicken eines Chats zeigt 
-            im Chat-Feld die gesendeten und empfangenen Nachrichten dieses Chats.</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Chats</strong></span>. Enthält die Chat-Liste der offenen Chats. In den Chat-Einstellungen können Sie bestimmen, 
+            ob die Chats gruppiert werden in <span class="guibutton"><strong>Private Chats</strong></span>, <span class="guibutton"><strong>Gruppenchats</strong></span> und <span class="guibutton"><strong>Kanäle</strong></span>.
+            </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Bei privaten Chats wird der Anwesenheitsstatus des Chat-Kontakts angezeigt.</p></li>
+<li class="listitem"><p role="presentation">Anklicken eines Chats zeigt im Chat-Feld die gesendeten und empfangenen Nachrichten dieses Chats.</p></li>
+<li class="listitem"><p role="presentation">Die Darstellung der Chat-Liste kann in den Chat-Einstellungen angepasst werden.</p></li>
+</ul>
+<p role="presentation">
+          </p>
+</li>
 <li class="listitem">
 <p role="presentation">Unterhalb der Chat-Liste sind Funktionen verfügbar, um im Chat-Feld bestimmte Objekte anzuzeigen:
             </p>
@@ -106,8 +116,9 @@
             </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
-<p role="presentation">Zeigt den Namen des Kontakts, der Gruppe oder des Kanals, der in der Chat-Liste gewählt ist. Bei einer Gruppe oder bei einem
-                  Kanal werden die Namen der Mitglieder angezeigt.</p>
+<p role="presentation">Zeigt den Namen des Kontakts, der Gruppe oder des Kanals, der in der Chat-Liste gewählt ist.</p>
+<p role="presentation">Bei privaten Chats wird der Anwesenheitsstatus des Chat-Kontakts angezeigt.</p>
+<p role="presentation">Bei einer Gruppe oder bei einem Kanal werden die Namen der Mitglieder angezeigt.</p>
 <p role="presentation">Das Symbol <span class="guibutton"><strong>Weitere Aktionen</strong></span>
                   <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.chatmenu"><img src="../../images/appsuite_user_icon_actions.png"></span> öffnet ein Menü mit diesen Funktionen:
                   </p>
@@ -151,12 +162,21 @@
           </p>
 </li>
 <li class="listitem">
-<p role="presentation">Das Symbol <span class="guibutton"><strong>Datei hochladen</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.upload"><img src="../../images/appsuite_user_icon_clip.png"></span> zum Hinzufügen von Dateien zu diesem Chat
-          </p>
-<p role="presentation">Das Nachrichtenfeld zum Eingeben einer Nachricht, die Sie in diesem Chat senden wollen</p>
-<p role="presentation">Das Symbol <span class="guibutton"><strong>Senden</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.send"><img src="../../images/appsuite_user_icon_chat_send.png"></span> zum Senden der Nachricht
+<p role="presentation">Elemente zum Verfassen von Nachrichten
+            </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Datei hochladen</strong></span>
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.upload"><img src="../../images/appsuite_user_icon_clip.png"></span>. Fügt Dateien zum Chat hinzu.
+                </p></li>
+<li class="listitem"><p role="presentation">Das Nachrichtenfeld. Hier geben Sie die Nachricht ein, die Sie in diesem Chat senden wollen.</p></li>
+<li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Emoji hinzufügen</strong></span>
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.emoji"><img src="../../images/appsuite_user_icon_chat_emoji.png"></span>. Öffnet oder schließt das Fenster zum Hinzufügen von Emojis.
+                </p></li>
+<li class="listitem"><p role="presentation">Symbol <span class="guibutton"><strong>Senden</strong></span>
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.chat.gui.send"><img src="../../images/appsuite_user_icon_chat_send.png"></span>. Sendet die Nachricht.
+                </p></li>
+</ul>
+<p role="presentation">
           </p>
 </li>
 </ul>
@@ -178,7 +198,11 @@
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.message.create.html">Nachrichten senden, lesen, beantworten</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.message.manage.html">Nachrichten verwalten</a></p>
 </li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.objects.html">Chat starten in anderen Apps</a></p></li>
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.objects.html">Chat starten in anderen Apps</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.chat.settings.html">Chat-Einstellungen</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.settings.presencestatus.html">Anwesenheitsstatus festlegen</a></p></li>
 </ul>
 <p>
     </p>
