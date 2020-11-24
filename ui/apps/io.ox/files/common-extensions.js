@@ -201,7 +201,7 @@ define('io.ox/files/common-extensions', [
                 listItem.addClass('file-type-' + type);
 
                 // show erros in listView
-                if (type === 'folder' && baton.model.getAccountError()) {
+                if (type === 'folder' && _.isFunction(baton.model.getAccountError) && baton.model.getAccountError()) {
                     listItem.addClass('file-type-error');
                 }
             }
