@@ -350,11 +350,8 @@ define('io.ox/files/share/permissions', [
 
             onRemove: function (e) {
                 e.preventDefault();
-                // Don't remove owner.
-                if (!this.model.isMyself()) {
-                    this.model.collection.remove(this.model);
-                    this.remove();
-                }
+                this.model.collection.remove(this.model);
+                this.remove();
             },
 
             onResend: function (e) {
