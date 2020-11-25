@@ -238,7 +238,7 @@ define('io.ox/chat/data', [
             this.isText = _.constant(type === 'text');
             this.isSystem = _.constant(type === 'system');
             this.isCommand = _.constant(type === 'command');
-            this.isUser = _.constant(type === 'text' || type === 'command');
+            this.isUser = _.constant(type === 'text' || type === 'file' || type === 'command');
             this.isMyself = _.constant(type !== 'system' && this.get('sender') === data.user.email);
         },
 

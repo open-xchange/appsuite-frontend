@@ -73,8 +73,8 @@ define('io.ox/chat/views/message', [
         },
 
         renderSender: function () {
-            if (!this.model.isUser()) return $();
-            if (this.model.hasSameSender(this.options.limit)) return $();
+            if (!this.model.isUser()) return;
+            if (this.model.hasSameSender(this.options.limit)) return;
             var user = data.users.getByMail(this.model.get('sender'));
             return [
                 new Avatar({ model: user }).render().$el,
