@@ -89,6 +89,15 @@ define('io.ox/chat/main', [
             });
 
             this.listenTo(settings, 'change:density', this.onChangeDensity);
+
+            this.state = '{}';
+        },
+
+        setState: function (state, payload) {
+            var stringified = JSON.stringify(state);
+            if (this.state === stringified) return;
+            this.state = stringified;
+            this.onChangeState(_.extend(state, payload));
         },
 
         onStick: function () {
@@ -161,7 +170,6 @@ define('io.ox/chat/main', [
 
         editGroupChat: function (data) {
             var self = this;
-
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
                 openGroupDialog(_(data).pick('id', 'type')).then(function (id) {
                     self.showChat(id);
@@ -185,14 +193,8 @@ define('io.ox/chat/main', [
             var members = {};
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
-            var room = new data.ChatModel({ type: 'private', members: members, active: true }),
-                view = new ChatView({ model: room });
-
-            this.showApp();
-            this.$rightside.empty().append(view.render().$el);
-            this.$body.addClass('open');
-            view.scrollToBottom();
-            this.clearActiveSelection();
+            var room = new data.ChatModel({ type: 'private', members: members, active: true });
+            this.setState({ view: 'chat' }, { model: room });
         },
 
         leaveGroup: function (groupId) {
@@ -225,47 +227,65 @@ define('io.ox/chat/main', [
             this.closeChat();
         },
 
-        showChat: function (id, opt) {
-            var view = new ChatView(_.extend({ roomId: id }, _(opt).pick('messageId', 'reference', 'model')));
-            this.showApp();
-            this.$rightside.empty().append(view.render().$el);
-            this.$body.addClass('open');
-            view.trigger('appended');
-            view.scrollToBottom();
-            this.resetCount(id, opt);
-            $('.chat-leftside').find('li[data-cid="' + id + '"]').attr('tabindex', 0).addClass('active')
-                .siblings('li').each(function () { $(this).attr('tabindex', -1).removeClass('active'); });
-            settings.set('lastRoomId', id).save();
+        onChangeState: function (state) {
+
+            this.$rightside.empty();
+            this.$body.toggleClass('open', state.view !== 'empty');
+            this.clearActiveSelection();
+
+            switch (state.view) {
+                case 'empty':
+                    this.$rightside.append(new EmptyView().render().$el);
+                    break;
+                case 'chat':
+                    var view = new ChatView(_(state).pick('roomId', 'messageId', 'reference', 'model'));
+                    this.showApp();
+                    this.$rightside.append(view.render().$el);
+                    view.trigger('appended');
+                    view.scrollToBottom();
+                    if (state.roomId) {
+                        this.resetCount(state.roomId, state.model);
+                        this.$('.chat-leftside li[data-cid="' + state.roomId + '"]').attr('tabindex', 0).addClass('active');
+                        settings.set('lastRoomId', state.roomId).save();
+                    }
+                    break;
+                case 'history':
+                    this.$rightside.append(new History().render().$el);
+                    break;
+                case 'channels':
+                    this.$rightside.append(new ChannelList().render().$el);
+                    break;
+                case 'files':
+                    this.$rightside.append(new FileList().render().$el);
+                    break;
+                // no default
+            }
         },
 
-        clearActiveSelection: function () {
-            $('.chat-leftside li[role="option"]').each(function () { $(this).removeClass('active'); });
+        showChat: function (id, opt) {
+            this.setState(_.extend({ view: 'chat', roomId: id }, _(opt).pick('messageId', 'reference', 'model')));
         },
 
         closeChat: function () {
-            this.$rightside.empty().append(new EmptyView().render().$el);
-            this.clearActiveSelection();
-            this.$body.removeClass('open');
+            this.setState({ view: 'empty' });
         },
 
         showHistory: function () {
-            this.$body.addClass('open');
-            this.clearActiveSelection();
-            this.$rightside.empty().append(new History().render().$el);
+            this.setState({ view: 'history' });
         },
 
         showChannels: function () {
-            this.$body.addClass('open');
-            this.clearActiveSelection();
-            this.$rightside.empty().append(new ChannelList().render().$el);
+            this.setState({ view: 'channels' });
         },
 
         showAllFiles: function () {
-            this.$body.addClass('open');
-            this.clearActiveSelection();
-            data.files.fetch().then(function () {
-                this.$rightside.empty().append(new FileList().render().$el);
-            }.bind(this));
+            this.setState({ view: 'files' });
+        },
+
+        clearActiveSelection: function () {
+            $('.chat-leftside li[role="option"]').each(function () {
+                $(this).attr('tabindex', -1).removeClass('active');
+            });
         },
 
         showFile: function (cmd) {
@@ -350,8 +370,8 @@ define('io.ox/chat/main', [
             if (!node.hasClass('active')) return data.cmd === 'show-chat' ? this.showChat(data.cid, data) : this.openPrivateChat(data);
         },
 
-        resetCount: function (roomId, opt) {
-            var model = data.chats.get(roomId) || opt.model;
+        resetCount: function (roomId, model) {
+            model = data.chats.get(roomId) || model;
             model.set('unreadCount', 0);
         },
 

@@ -63,13 +63,8 @@ define('io.ox/chat/views/fileList', [
         className: 'files abs',
 
         initialize: function () {
-
             this.collection = data.files;
-
-            this.listenTo(this.collection, {
-                'add': this.onAdd
-            });
-
+            this.listenTo(this.collection, { 'add': this.onAdd });
             this.collection.fetch().fail(function () {
                 require(['io.ox/core/yell'], function (yell) {
                     yell('error', gt('Files could not be loaded.'));
