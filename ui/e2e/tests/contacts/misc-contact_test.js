@@ -92,7 +92,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
     I.retry(5).doubleClick('~Shared address books');
     I.waitForText(sharedAddressBookName);
     I.click('Add new address book');
-    I.click('Subscribe shared address book');
+    I.click('Subscribe to shared address book');
     I.waitForText('Shared address books');
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
@@ -107,7 +107,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
     I.waitForInvisible(locate('*').withText(sharedAddressBookName));
 
     I.click('Add new address book');
-    I.click('Subscribe shared address book');
+    I.click('Subscribe to shared address book');
     I.waitForText('Shared address books');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));

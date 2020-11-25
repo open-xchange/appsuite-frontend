@@ -109,7 +109,6 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     await session('userB', async () => {
         dialogs.waitForVisible();
         I.waitForText('Incoming call');
-        pause();
         dialogs.clickButton('Answer');
         I.waitForDetached('.modal-dialog');
         waitAndSwitchTab();

@@ -33,7 +33,7 @@ Scenario('[C308518] Subscribe / Unsubscribe public address book', async (I, cont
 
         I.waitForText('Add new address book');
         I.click('Add new address book');
-        I.clickDropdown('Subscribe shared address book');
+        I.clickDropdown('Subscribe to shared address book');
         dialogs.waitForVisible();
         fn(checkBoxLocator);
         dialogs.clickButton('Save');

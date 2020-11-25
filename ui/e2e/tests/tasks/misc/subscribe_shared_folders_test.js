@@ -65,7 +65,7 @@ Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', asyn
     I.retry(5).doubleClick('~Shared tasks');
     I.waitForText(sharedFolderName);
     I.click('Add new folder');
-    I.click('Subscribe shared folder');
+    I.click('Subscribe to shared folder');
     I.waitForText('Shared task folders');
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="used_for_sync"]' }));
@@ -80,7 +80,7 @@ Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', asyn
     I.waitForInvisible(locate('*').withText(sharedFolderName));
 
     I.click('Add new folder');
-    I.click('Subscribe shared folder');
+    I.click('Subscribe to shared folder');
     I.waitForText('Shared task folders');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));

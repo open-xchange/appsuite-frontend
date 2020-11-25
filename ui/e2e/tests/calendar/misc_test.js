@@ -482,10 +482,11 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText(sharedCalendarName);
 
     I.retry(5).click('Add new calendar');
-    I.click('Subscribe shared Calendar');
+
+    I.click('Subscribe to shared calendar');
 
     dialogs.waitForVisible();
-    I.waitForText('Subscribe shared calendars');
+    I.waitForText('Subscribe to shared calendars');
 
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
@@ -500,10 +501,10 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForInvisible(locate('*').withText(sharedCalendarName));
 
     I.click('Add new calendar');
-    I.click('Subscribe shared Calendar');
+    I.click('Subscribe to shared calendar');
 
     dialogs.waitForVisible();
-    I.waitForText('Subscribe shared calendars');
+    I.waitForText('Subscribe to shared calendars');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="subscribed"]' }));
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
@@ -568,10 +569,10 @@ Scenario('Manage public Calendars', async function (I, users, calendar, dialogs)
     I.waitForText(publicCalendarName);
 
     I.retry(5).click('Add new calendar');
-    I.click('Subscribe shared Calendar');
+    I.click('Subscribe to shared calendar');
 
     dialogs.waitForVisible();
-    I.waitForText('Subscribe shared calendars');
+    I.waitForText('Subscribe to shared calendars');
 
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(publicCalendarName)).find({ css: 'input[name="subscribed"]' }));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(publicCalendarName)).find({ css: 'input[name="used_for_sync"]' }));
