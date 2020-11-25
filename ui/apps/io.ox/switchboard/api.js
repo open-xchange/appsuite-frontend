@@ -50,7 +50,7 @@ define.async('io.ox/switchboard/api', [
             // call/chat only works for users, so
             // make sure we are in global address book
             return baton.array().every(function (data) {
-                return data.folder_id === 6 && data.email1;
+                return String(data.folder_id) === '6' && data.email1;
             });
         },
 
