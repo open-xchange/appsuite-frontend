@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-17 14:30+0100\n"
+"PO-Revision-Date: 2020-11-25 11:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -897,7 +897,7 @@ msgstr "Foto entfernen"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail
-#: apps/io.ox/mail/common-extensions.js
+#: apps/io.ox/mail/common-extensions.js apps/io.ox/mail/compose/main.js
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
@@ -997,7 +997,6 @@ msgstr "Intervall"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -2524,7 +2523,7 @@ msgstr "Erinnerungen für vergangene Termine anzeigen"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared calendars"
+msgid "Subscribe to shared calendars"
 msgstr "Freigegebene Kalender abonnieren"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
@@ -2973,18 +2972,14 @@ msgstr "Gebucht"
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
-#. used to concatenate two participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
 msgstr " und "
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
 #. make sure, that the trailing space is also in the translation
-#. This delimiter is used to concatenate a list of participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ", "
 msgstr ", "
 
@@ -3409,6 +3404,33 @@ msgstr "Änderungen an diesem Chat konnten nicht gespeichert werden."
 msgid "Chat could not be saved."
 msgstr "Chat konnte nicht gespeichert werden."
 
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+#, fuzzy
+msgid "Unknown command: %1$s"
+msgstr "Unbekannter Befehl: %1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+#, fuzzy
+msgid "List all commands"
+msgstr "Alle Befehle auflisten"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+#, fuzzy
+msgid "Show server version"
+msgstr "Serverversion anzeigen"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Server version: %1$s"
+msgstr "Serverversion: %1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Zoom meeting"
+msgstr "Ein Zoom-Meeting starten"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Jitsi meeting"
+msgstr "Ein Jitsi-Meeting starten"
+
 #. %1$s is a user name
 #: apps/io.ox/chat/commands.js module:io.ox/chat
 msgid "%1$s is calling."
@@ -3420,117 +3442,14 @@ msgid "Please click the following link to join: %1$s"
 msgstr "Um beizutreten, klicken Sie bitte auf den folgenden Link: %1$s"
 
 #: apps/io.ox/chat/commands.js module:io.ox/chat
-msgid "Server version: %1$s"
-msgstr "Serverversion: %1$s"
+#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
+msgid "%1$s is calling"
+msgstr "%1$s ruft an"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Could not save settings"
 msgstr "Einstellungen konnten nicht gespeichert werden"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "There was an error during authentication."
-msgstr "Bei der Authentifizierung ist ein Fehler aufgetreten."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/chat/views/content.js
-msgid "This message was deleted"
-msgstr "Diese Nachricht wurde gelöscht"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You created this conversation"
-msgstr "Sie haben diese Konversation angelegt"
-
-#. %1$s: name of the creator
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s created this conversation"
-msgstr "%1$s hat diese Konversation erstellt"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You joined the conversation"
-msgstr "Sie sind der Konversation beigetreten"
-
-#. %1$s: name of the new participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s joined the conversation"
-msgstr "%1$s ist der Konversation beigetreten"
-
-#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You added %1$s to the conversation"
-msgid_plural "You added %1$s to the conversation"
-msgstr[0] "Sie haben %1$s zur Konversation hinzugefügt"
-msgstr[1] "Sie haben %1$s zur Konversation hinzugefügt"
-
-#. %1$s: name of the participant that added the new participant
-#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s added %2$s to the conversation"
-msgid_plural "%1$s added %2$s to the conversation"
-msgstr[0] "%1$s hat %2$s zur Konversation hinzugefügt"
-msgstr[1] "%1$s hat %2$s zur Konversation hinzugefügt"
-
-#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You removed %1$s from the conversation"
-msgid_plural "You removed %1$s from the conversation"
-msgstr[0] "Sie haben %1$s aus der Konversation entfernt"
-msgstr[1] "Sie haben %1$s aus der Konversation entfernt"
-
-#. %1$s: name of the participant that removed the other participant
-#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s removed %2$s from the conversation"
-msgid_plural "%1$s removed %2$s from the conversation"
-msgstr[0] "%1$s hat %2$s aus der Konversation entfernt"
-msgstr[1] "%1$s hat %2$s aus der Konversation entfernt"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group image"
-msgstr "Sie haben das Gruppenbild geändert"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group image"
-msgstr "%1$s hat das Gruppenbild geändert"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group title to \"%1$s\""
-msgstr "Sie haben den Gruppentitel in \"%1$s\" geändert."
-
-#. %1$s: name of a chat participant
-#. %2$s: the new title
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group title to \"%2$s\""
-msgstr "%1$s hat den Gruppentitel in \"%2$s\" geändert."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group description to \"%1$s\""
-msgstr "Sie haben die Gruppenbeschreibung in \"%1$s\" geändert."
-
-#. %1$s: name of a chat participant
-#. %2$s: the new description
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group description to \"%2$s\""
-msgstr "%1$s hat die Gruppenbeschreibung in \"%2$s\" geändert."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You left the conversation"
-msgstr "Sie haben die Konversation verlassen"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s left the conversation"
-msgstr "%1$s hat die Konversation verlassen"
-
-#. If it fails to load and decrypt a chat message a system message will be shown
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Message could not be loaded"
-msgstr "Nachricht konnte nicht geladen werden"
-
-#. %1$s: messagetext
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown system message: %1$s"
-msgstr "Unbekannte Systemmeldung: %1$s"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The messages could not be loaded."
@@ -3595,16 +3514,6 @@ msgstr "Der Kanal konnte nicht verlassen werden."
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The group could not be left."
 msgstr "Die Gruppe konnte nicht verlassen werden."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown user"
-msgstr "Unbekannter Benutzer"
-
-#. shown instead of your name for your own chat messages when you're mentioned in a group of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-#, fuzzy
-msgid "You"
-msgstr "Sie"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat"
@@ -3702,10 +3611,10 @@ msgstr "Chats konnten nicht geladen werden."
 msgid "Private chats"
 msgstr "Private Chats"
 
+#. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
 #: apps/io.ox/chat/main.js module:io.ox/chat
-#, fuzzy
 msgid "Group chats"
-msgstr "Gruppenchats"
+msgstr "Chats gruppieren"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Channels"
@@ -3750,10 +3659,10 @@ msgstr "Anzeigeoptionen"
 msgid "Select last chat on start"
 msgstr "Letzten Chat beim Start auswählen"
 
+#. label of checkbox to enable/dsiable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#, fuzzy
 msgid "Group chats by type"
-msgstr "Gruppenchats nach Typ"
+msgstr "Chats nach Typ gruppieren"
 
 #. Sort chats by ... (alphabetical|last activity)
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
@@ -3778,18 +3687,6 @@ msgstr "Kompaktheitsgrad"
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Default"
 msgstr "Standard"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Receive email notifications"
-msgstr "E-Mail-Benachrichtigungen empfangen"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Private chats only"
-msgstr "Nur private Chats"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Always"
-msgstr "Immer"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Plop"
@@ -3834,6 +3731,127 @@ msgstr "Ton"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Behavior"
 msgstr "Verhalten"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#, fuzzy
+msgid "Offline email notifications"
+msgstr "Offline-E-Mail-Benachrichtigungen"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Do not send any email notifications"
+msgstr "Keine E-Mail-Benachrichtigungen senden"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#, fuzzy
+msgid "Send email notifications for my private chats"
+msgstr "E-Mail-Benachrichtigungen für meine privaten Chats senden"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#, fuzzy
+msgid "Send email notifications for all chats and channels"
+msgstr "E-Mail-Benachrichtigungen für alle Chats und Kanäle senden"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You created this conversation"
+msgstr "Sie haben diese Konversation angelegt"
+
+#. %1$s: name of the creator
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s created this conversation"
+msgstr "%1$s hat diese Konversation erstellt"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You joined the conversation"
+msgstr "Sie sind der Konversation beigetreten"
+
+#. %1$s: name of the new participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s joined the conversation"
+msgstr "%1$s ist der Konversation beigetreten"
+
+#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You added %1$s to the conversation"
+msgid_plural "You added %1$s to the conversation"
+msgstr[0] "Sie haben %1$s zur Konversation hinzugefügt"
+msgstr[1] "Sie haben %1$s zur Konversation hinzugefügt"
+
+#. %1$s: name of the participant that added the new participant
+#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s added %2$s to the conversation"
+msgid_plural "%1$s added %2$s to the conversation"
+msgstr[0] "%1$s hat %2$s zur Konversation hinzugefügt"
+msgstr[1] "%1$s hat %2$s zur Konversation hinzugefügt"
+
+#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You removed %1$s from the conversation"
+msgid_plural "You removed %1$s from the conversation"
+msgstr[0] "Sie haben %1$s aus der Konversation entfernt"
+msgstr[1] "Sie haben %1$s aus der Konversation entfernt"
+
+#. %1$s: name of the participant that removed the other participant
+#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s removed %2$s from the conversation"
+msgid_plural "%1$s removed %2$s from the conversation"
+msgstr[0] "%1$s hat %2$s aus der Konversation entfernt"
+msgstr[1] "%1$s hat %2$s aus der Konversation entfernt"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group image"
+msgstr "Sie haben das Gruppenbild geändert"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group image"
+msgstr "%1$s hat das Gruppenbild geändert"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group title to \"%1$s\""
+msgstr "Sie haben den Gruppentitel in \"%1$s\" geändert."
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group title to \"%2$s\""
+msgstr "%1$s hat den Gruppentitel in \"%2$s\" geändert."
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group description to \"%1$s\""
+msgstr "Sie haben die Gruppenbeschreibung in \"%1$s\" geändert."
+
+#. %1$s: name of a chat participant
+#. %2$s: the new description
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group description to \"%2$s\""
+msgstr "%1$s hat die Gruppenbeschreibung in \"%2$s\" geändert."
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You left the conversation"
+msgstr "Sie haben die Konversation verlassen"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s left the conversation"
+msgstr "%1$s hat die Konversation verlassen"
+
+#. If it fails to load and decrypt a chat message a system message will be shown
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Message could not be loaded"
+msgstr "Nachricht konnte nicht geladen werden"
+
+#. %1$s: messagetext
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Unknown system message: %1$s"
+msgstr "Unbekannte Systemmeldung: %1$s"
+
+#. %1$s is a name or multiple comma-separated names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+#, fuzzy
+msgid "%1$s and %2$s"
+msgstr "%1$s und %2$s"
 
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
@@ -3887,6 +3905,15 @@ msgid "Join chat"
 msgstr "Chat beitreten"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+"size of %2$s"
+msgstr ""
+"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
+"maximale Dateigröße von %2$s."
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Chat-Aktionen"
 
@@ -3937,15 +3964,6 @@ msgid "The message could not be deleted."
 msgstr "Die Nachricht konnte nicht gelöscht werden."
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-"size of %2$s"
-msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet die "
-"maximale Dateigröße von %2$s."
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid ""
 "The message cannot be sent because it exceeds the maximum message length of "
 "%1$s characters."
@@ -3960,6 +3978,10 @@ msgstr "Chat-Liste"
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Sending has been cancelled"
 msgstr "Das Versenden wurde abgebrochen"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "This message was deleted"
+msgstr "Diese Nachricht wurde gelöscht"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Show more"
@@ -5140,13 +5162,13 @@ msgid "Link postal addresses with map service"
 msgstr "Postanschriften mit Kartendienst verknüpfen"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe to shared address books"
+msgstr "Freigegebene Adressbücher abonnieren"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden address books"
 msgstr "Versteckte Adressbücher"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-msgid "Subscribe shared address books"
-msgstr "Freigegebene Adressbücher abonnieren"
 
 #. Name with title
 #. %1$s is the first name
@@ -5482,6 +5504,8 @@ msgstr "Weiter"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
@@ -6065,6 +6089,15 @@ msgid "Shared task folders"
 msgstr "Freigegebene Aufgabenordner"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "Adressbuch abonnieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe to task folder"
+msgstr "Aufgabenordner abonnieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
 msgid "Public tasks folders"
 msgstr "Öffentliche Aufgabenordner"
@@ -6089,26 +6122,33 @@ msgstr "Meine Ordner"
 msgid "Add storage account"
 msgstr "Speicherkonto hinzufügen"
 
+#. opens a dialog to manage shared or public folders
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Manage Subscriptions"
-msgstr "Abonnements verwalten"
+msgid "Manage Shares"
+msgstr "Freigaben verwalten"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared folders"
+msgstr "Freigegebene Ordner"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public folders"
+msgstr "Öffentliche Ordner"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#, fuzzy
-msgid "Shared drive folders"
-msgstr "Freigegebene Drive-Ordner"
+msgid "Subscribe to folder"
+msgstr "Ordner abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#, fuzzy
-msgid "Public drive folders"
-msgstr "Öffentliche Drive-Ordner"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe address book"
-msgstr "Adressbuch abonnieren"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared address book"
+msgid "Subscribe to shared address book"
 msgstr "Freigegebenes Adressbuch abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -6151,7 +6191,7 @@ msgid "Personal folder"
 msgstr "Persönlicher Ordner"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared folder"
+msgid "Subscribe to shared folder"
 msgstr "Freigegebenen Ordner abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -6176,7 +6216,7 @@ msgid "Subscribe via URL (iCal)"
 msgstr "Abonnieren über URL (iCal)"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared Calendar"
+msgid "Subscribe to shared calendar"
 msgstr "Freigegebenen Kalender abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -6459,6 +6499,7 @@ msgid "Sign out now"
 msgstr "Jetzt abmelden"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Are you sure?"
 msgstr "Sind Sie sich sicher?"
 
@@ -6862,9 +6903,11 @@ msgstr "Ausdruck"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/keychain/secretRecoveryDialog.js
-#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/core/yell.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Fehler"
 
@@ -7368,16 +7411,27 @@ msgid "Subscriptions"
 msgstr "Abonnements"
 
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "OK"
+msgstr "OK"
+
+#. confirmation when the last folder associated with a domain is unsubscribed
+#. %1$s domain like google.com etc, may also be a list of domains
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid ""
+"You unsubscribed from all folders of \"%1$s\". They will be removed after 30 "
+"days"
+msgstr ""
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
 msgstr "Über DAV synchronisieren"
 
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "sync via DAV"
 msgstr "über DAV synchronisieren"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
-msgstr "Adressbuch abonnieren"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
@@ -7530,12 +7584,6 @@ msgstr "Erneut erinnern"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Don't remind me again"
 msgstr "Nicht wieder erinnern"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/compose/view.js
-#: module:io.ox/mail
-msgid "OK"
-msgstr "OK"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
@@ -8185,10 +8233,9 @@ msgstr "Geben Sie hier den Dokumententitel ein"
 #. A note item in context of "note taking". "Notiz" in German, for example.
 #. More like "to notice" than "to notify".
 #: apps/io.ox/editor/main.js module:io.ox/editor apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/files apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
-msgstr "Hinweis"
+msgstr "Notiz"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
@@ -9124,8 +9171,7 @@ msgstr "Einladungsnachricht (optional)"
 
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-msgid "Message will be send to all newly invited people"
+msgid "Message will be sent to all newly invited people"
 msgstr "Nachricht wird an alle neu eingeladenen Personen gesendet"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -9147,19 +9193,16 @@ msgid "Link options"
 msgstr "Link-Optionen"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "One day"
-msgstr "Einen Tag"
+msgstr "Ein Tag"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "One week"
 msgstr "Eine Woche"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "One month"
-msgstr "Einen Monat"
+msgstr "Ein Monat"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #, fuzzy
@@ -9167,12 +9210,10 @@ msgid "Three months"
 msgstr "Drei Monate"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "Six months"
 msgstr "Sechs Monate"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "One year"
 msgstr "Ein Jahr"
 
@@ -9850,12 +9891,11 @@ msgstr ""
 "Speicherlimit überschritten ist."
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-msgid ""
-"Currently edited drafts with attachments can not be deleted until you close "
-"the correspondig mail compose window."
-msgstr ""
-"Aktuell bearbeitete Entwürfe mit Anhängen können nicht gelöscht werden, bis "
-"Sie das zugehörige Fenster zum Verfassen der E-Mail schließen."
+#, fuzzy
+msgid "This would also delete a currently edited draft."
+msgid_plural "This would also delete %1$d currently edited drafts."
+msgstr[0] "Dadurch würde auch ein aktuell bearbeiteter Entwurf gelöscht."
+msgstr[1] "Dadurch würden auch %1$d aktuell bearbeitete Entwürfe gelöscht."
 
 #. 'Delete mail' as modal dialog header to confirm to delete a mail.
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
@@ -11109,11 +11149,6 @@ msgstr "ist größer als"
 #: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "ist kleiner als"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Address"
-msgstr "Anschrift"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -13246,20 +13281,6 @@ msgid "Trash folder"
 msgstr "Ordner 'Papierkorb'"
 
 #. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Public folders"
-msgstr "Öffentliche Ordner"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Shared folders"
-msgstr "Freigegebene Ordner"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Unsubscribed folders"
 msgstr "Nicht länger abonnierte Ordner"
@@ -13816,10 +13837,6 @@ msgstr "Eingehender Anruf"
 #: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
 msgid "Answer"
 msgstr "Annehmen"
-
-#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
-msgid "%1$s is calling"
-msgstr "%1$s ruft an"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Conference call"
@@ -14490,12 +14507,12 @@ msgstr ""
 "ablehnen"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared task folders"
-msgstr "Freigegebene Aufgabenordner abonnieren"
+msgid "Subscribe to shared task folders"
+msgstr "Abonnieren freigegebener Aufgabenordner"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared tasks folders"
-msgstr "Freigegebene Aufgabenordner abonnieren"
+msgid "Subscribe to shared tasks folders"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgctxt "tooltip"
@@ -15864,6 +15881,95 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Subscribe shared calendars"
+#~ msgstr "Freigegebene Kalender abonnieren"
+
+#~ msgid "There was an error during authentication."
+#~ msgstr "Bei der Authentifizierung ist ein Fehler aufgetreten."
+
+#~ msgid "Subscribe shared address books"
+#~ msgstr "Freigegebene Adressbücher abonnieren"
+
+#, fuzzy
+#~ msgid "subscribe address book"
+#~ msgstr "Adressbuch abonnieren"
+
+#, fuzzy
+#~ msgid "subscribe task folder"
+#~ msgstr "Aufgabenordner abonnieren"
+
+#, fuzzy
+#~ msgid "subscribe folder"
+#~ msgstr "Ordner abonnieren"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Adressbuch abonnieren"
+
+#~ msgid "Subscribe shared address book"
+#~ msgstr "Freigegebenes Adressbuch abonnieren"
+
+#~ msgid "Subscribe shared folder"
+#~ msgstr "Freigegebenen Ordner abonnieren"
+
+#~ msgid "Subscribe shared Calendar"
+#~ msgstr "Freigegebenen Kalender abonnieren"
+
+#, fuzzy
+#~ msgid ""
+#~ "You unsubscribed all shares from \"%1$s\". They will be removed after 30 "
+#~ "days"
+#~ msgstr ""
+#~ "Sie haben sich von allen Freigaben von \"%1$s\" abgemeldet. Sie werden "
+#~ "nach 30 Tagen entfernt"
+
+#, fuzzy
+#~ msgid "Message will be send to all newly invited people"
+#~ msgstr "Nachricht wird an alle neu eingeladenen Personen gesendet"
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "Anschrift"
+
+#~ msgid "Subscribe shared task folders"
+#~ msgstr "Freigegebene Aufgabenordner abonnieren"
+
+#~ msgid "Subscribe shared tasks folders"
+#~ msgstr "Freigegebene Aufgabenordner abonnieren"
+
+#~ msgid "Unknown user"
+#~ msgstr "Unbekannter Benutzer"
+
+#, fuzzy
+#~ msgid "You"
+#~ msgstr "Sie"
+
+#~ msgid "Receive email notifications"
+#~ msgstr "E-Mail-Benachrichtigungen empfangen"
+
+#~ msgid "Private chats only"
+#~ msgstr "Nur private Chats"
+
+#~ msgid "Always"
+#~ msgstr "Immer"
+
+#~ msgid "Manage Subscriptions"
+#~ msgstr "Abonnements verwalten"
+
+#, fuzzy
+#~ msgid "Shared drive folders"
+#~ msgstr "Freigegebene Drive-Ordner"
+
+#, fuzzy
+#~ msgid "Public drive folders"
+#~ msgstr "Öffentliche Drive-Ordner"
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Aktuell bearbeitete Entwürfe mit Anhängen können nicht gelöscht werden, "
+#~ "bis Sie das zugehörige Fenster zum Verfassen der E-Mail schließen."
 
 #~ msgid "Sharing"
 #~ msgstr "Freigaben"
