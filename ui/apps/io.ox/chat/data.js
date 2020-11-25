@@ -476,7 +476,7 @@ define('io.ox/chat/data', [
         sync: function (method, collection, options) {
             if (method === 'read') {
                 var limit = Math.max(collection.length, DEFAULT_LIMIT);
-                return this.load({ limit: limit }, 'load');
+                return this.load({ limit: limit }, 'load', options && options.cache);
             }
             return BaseCollection.prototype.sync.call(this, method, collection, options);
         },
@@ -1054,6 +1054,7 @@ define('io.ox/chat/data', [
                     // views which use the messages-collection can prevent the expiry by listening to the expire event
                     model.messages.trigger('expire');
                     if (model.messages.expired) model.messages.reset();
+                    else model.messages.fetch({ cache: false });
                 });
             }).then(function () {
                 data.chats.add(newChats, { at: 0 });
