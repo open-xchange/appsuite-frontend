@@ -182,9 +182,7 @@ define('io.ox/onboarding/clients/extensions', [
                     $('<button class="title section-title" role="tab">')
                         .attr('aria-controls', id)
                         .append(
-                            $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
-                            $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
-                            $.txt(gt('Manual Configuration'))
+                            $.txt(gt('Show manual configuration options'))
                         ),
                     // data
                     $('<pre class="config">').append(

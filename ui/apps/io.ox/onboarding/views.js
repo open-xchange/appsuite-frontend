@@ -79,6 +79,7 @@ define('io.ox/onboarding/views', [
                 $('<div class="description">').append($('<p class="prompt">').text(this.description)),
                 $('<img class="qrcode">'),
                 $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">')),
+                $('<p class="hint">').text(gt('Please note: After downloading you will have to enable the profile in the settings App to complete the installation.')),
                 this.syncView.render().$el
             );
             this.getQrUrl();
@@ -140,10 +141,10 @@ define('io.ox/onboarding/views', [
             this.$el.append(
                 $('<div class="description">').append(
                     //#. 1$s name of the product, usually OX Drive
-                    $('<p class="prompt">').text(gt('To install %1$s for Windows, download the installation file', util.titles.windows.drive))
+                    $('<p class="prompt">').text(gt('Download %1$s for Windows', util.titles.windows.drive))
                 ),
                 //#. 1$s name of the product, usually OX Drive
-                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('%1$s for Windows Installer', util.titles.windows.drive)).append(
+                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('%1$s for Windows', util.titles.windows.drive)).append(
                     $('<i class="fa fa-download">')
                 )
             );
@@ -180,9 +181,7 @@ define('io.ox/onboarding/views', [
                 $('<div class="description">').append(
                     $('<p class="prompt">').text(gt('Please download the configuration to automatically set up your account.'))
                 ),
-                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('Download configuration')).append(
-                    $('<i class="fa fa-download">')
-                ),
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('Download configuration')),
                 this.syncView.render().$el
             );
             return this;
@@ -243,12 +242,13 @@ define('io.ox/onboarding/views', [
         initialize: function (options) {
             this.userData = options.userData;
             this.type = options.title;
+            this.expanded = options.expanded || false;
             this.mailConfig = new Backbone.Model();
             this.listenTo(this.mailConfig, 'change', this.updateMailConfig);
         },
 
         events: {
-            'click .btn.manual-toggle': 'onToggle'
+            'click .manual-toggle': 'onToggle'
         },
 
         render: function () {
@@ -262,10 +262,13 @@ define('io.ox/onboarding/views', [
                     )
                 );
             }
+            console.log('expanded', this, this.expanded);
             this.$el.append(
-                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
-                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
-                $('<div class="manual-container">').hide()
+                this.expanded ? $('<div class="manual-container">') :
+                    [
+                        $('<a href="#" role="button" class="manual-toggle" aria-expanded="false">').text(gt('Show manual configuration options')),
+                        $('<div class="manual-container">').hide()
+                    ]
             );
             this.renderManualConfig();
             this.getMailConfig();
@@ -362,7 +365,7 @@ define('io.ox/onboarding/views', [
         },
 
         events: {
-            'click .btn.manual-toggle': 'onToggle'
+            'click .manual-toggle': 'onToggle'
         },
 
         render: function () {
@@ -377,8 +380,7 @@ define('io.ox/onboarding/views', [
                 );
             }
             this.$el.append(
-                $('<button class="btn btn-link manual-toggle" aria-expanded="false">').text(gt('Manual Configuration'))
-                .prepend($('<i class="fa fa-chevron-right" aria-hidden="true">')),
+                //$('<a href="#" role="button" class="manual-toggle" aria-expanded="false">').text(gt('Show manual configuration options')),
                 $('<div class="manual-container">').toggle(needsDescription)
             );
             this.renderManualConfig();
