@@ -654,7 +654,7 @@ Scenario('[C83384] Automatically bcc all messages', async function (I, mail, use
     I.fillField('Subject', 'Forever alone');
     I.fillField({ css: 'textarea.plain-text' }, 'Sending this (not only) to myself');
     mail.send();
-    I.waitForText('Forever alone', 30);
+    I.waitForText('Forever alone', 30, '.list-view.mail-item');
     mail.selectMail('Forever alone');
     within({ frame: '.mail-detail-pane .mail-detail-frame' }, () => {
         I.waitForText('Sending this (not only) to myself');
