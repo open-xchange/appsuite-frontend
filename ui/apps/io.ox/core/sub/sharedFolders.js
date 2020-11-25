@@ -92,13 +92,28 @@ define('io.ox/core/sub/sharedFolders', [
     }
 
     function openDialog(data) {
-
-        data.dialog.on('subscribe', function () {
-            data.dialog.close();
+        var updateSubscriptions = function (ignoreWarning) {
             http.pause();
 
+            // split hash, subscribe requests first, unsubscribe requests second
+            // this helps with some race conditions in the MW
+            var subscribe = {},
+                unsubscribe = {};
+
             _.each(data.hash, function (obj, id) {
-                api.update(id, obj);
+                if (obj.subscribed) {
+                    subscribe[id] = obj;
+                    return;
+                }
+                unsubscribe[id] = obj;
+            });
+
+            _.each(subscribe, function (obj, id) {
+                api.update(id, obj, ignoreWarning);
+            });
+
+            _.each(unsubscribe, function (obj, id) {
+                api.update(id, obj, ignoreWarning);
             });
 
             http.resume().done(function () {
@@ -112,13 +127,15 @@ define('io.ox/core/sub/sharedFolders', [
                         center: false,
                         async: false
                     })
-                    .addButton({ label: gt('OK'), action: 'ok' })
+                    .addCancelButton()
+                    .addButton({ label: gt('OK'), action: 'confirm' })
                     .build(function () {
-                        // we may need to use this as a for each if multiple domains are affected
-
                         //#. confirmation when the last folder associated with a domain is unsubscribed
                         //#. %1$s domain like google.com etc, may also be a list of domains
-                        this.$body.append(gt('You unsubscribed from all folders of "%1$s". They will be removed after 30 days', 'testdomain'));
+                        this.$body.append(gt('You unsubscribed from all folders of "%1$s". Those folders will be removed from your account.', 'testdomain'));
+                    })
+                    .on('confirm', function () {
+                        updateSubscriptions(true);
                     })
                     .open();
                     return;
@@ -126,6 +143,11 @@ define('io.ox/core/sub/sharedFolders', [
 
                 if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
             });
+        };
+
+        data.dialog.on('subscribe', function () {
+            data.dialog.close();
+            updateSubscriptions();
         });
 
         ext.point(options.point).invoke('render', data.dialog);
