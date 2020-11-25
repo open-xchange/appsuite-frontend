@@ -117,9 +117,9 @@ define.async('io.ox/switchboard/api', [
                 }
 
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-                // Only send redirect uri if not default "/appsuite/api"
-                var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '');
+                var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '').replace(/\/$/, '');
                 var query = { userId: api.userId, token: this.token };
+                // Only send redirect uri if not default "/appsuite/api"
                 if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
                 if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
 
