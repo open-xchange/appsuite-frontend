@@ -160,6 +160,8 @@ define('io.ox/switchboard/extensions', [
     );
 
     function createButton(action, icon, label, baton) {
+        // do not change the initial baton as it is reused
+        baton = baton.clone();
         baton.data = [].concat(baton.data);
         var $button = $('<button type="button" class="btn btn-link">')
             .prop('disabled', true)
