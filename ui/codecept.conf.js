@@ -90,6 +90,7 @@ module.exports.config = {
         // pageobjects
         contacts: './e2e/pageobjects/contacts',
         calendar: './e2e/pageobjects/calendar',
+        chat: './e2e/pageobjects/chat',
         mail: './e2e/pageobjects/mail',
         portal: './e2e/pageobjects/portal',
         drive: './e2e/pageobjects/drive',
