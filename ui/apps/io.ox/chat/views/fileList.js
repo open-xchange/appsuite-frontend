@@ -67,12 +67,21 @@ define('io.ox/chat/views/fileList', [
         initialize: function () {
             this.collection = data.files;
             this.listenTo(this.collection, { 'add': this.onAdd });
-            this.collection.fetch().fail(function () {
-                require(['io.ox/core/yell'], function (yell) {
-                    yell('error', gt('Files could not be loaded.'));
-                });
-            });
             this.$scrollpane = $('<div class="scrollpane">').lazyloadScrollpane();
+
+            this.collection.fetch({
+                success: function (items) {
+                    this.$scrollpane.idle().append(
+                        this.renderItems(items)
+                    );
+                }.bind(this),
+                fail: function () {
+                    this.$scrollpane.idle();
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('Files could not be loaded.'));
+                    });
+                }.bind(this)
+            });
         },
 
         render: function () {
@@ -81,9 +90,7 @@ define('io.ox/chat/views/fileList', [
                     $('<h2>').append(gt('All files'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
-                this.$scrollpane.append(
-                    this.renderItems()
-                )
+                this.$scrollpane.busy()
             );
             return this;
         },

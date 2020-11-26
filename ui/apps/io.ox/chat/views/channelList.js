@@ -81,21 +81,30 @@ define('io.ox/chat/views/channelList', [
             }
 
             // get fresh data
-            this.collection.fetch();
+            this.collection.fetch({
+                success: function (channels) {
+                    this.$el.find('.scrollpane').idle().append(
+                        $('<ul>').append(
+                            channels.length > 0 ? channels.map(this.renderItem, this) : this.renderEmpty().fadeIn(100)
+                        )
+                    );
+                }.bind(this),
+                fail: function () {
+                    this.$el.find('.scrollpane').idle();
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('Channels could not be loaded.'));
+                    });
+                }.bind(this)
+            });
         },
 
         render: function () {
-            var channels = this.collection;
             this.$el.append(
                 $('<div class="header">').append(
                     $('<h2>').text(gt('All channels'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: gt('All channels') }).render(new ext.Baton()).$el,
-                $('<div class="scrollpane">').append(
-                    $('<ul>').append(
-                        channels.length > 0 ? channels.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
-                    )
-                )
+                $('<div class="scrollpane">').busy()
             );
             return this;
         },
