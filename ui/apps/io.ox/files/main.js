@@ -1181,29 +1181,45 @@ define('io.ox/files/main', [
          */
         'select-uploaded-files': function (app) {
             // listen
-            api.on('stop:upload', function (requests) {
+            api.on('stop:upload', function (requests, files) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
-                        var files,
+                        var newItemsCid,
                             listView = app.listView,
                             selection = listView.selection,
                             // selection array to select after upload
-                            items;
+                            itemsToSelect,
+                            folderCids,
+                            fileCids,
+                            newfolderIds;
 
-                        files = _(arguments).map(_.cid);
+                        // all uploaded files
+                        fileCids = _(arguments).map(_.cid);
 
-                        items = selection.getItems(function () {
+                        // get all uploaded folders,
+                        // using just the folder_ids of files doesn't work for nested empty folders
+                        newfolderIds = _.unique(_.reduce(files, function (collector, obj) {
+                            // cases to think about:
+                            //  1. upload a folder with sub folders -> uploads are added to the queue per folder, but all folders are created before
+                            //  2. add additional items to the upload queue during a currently running upload
+                            var createdFoldersByUpload = _.property(['options', 'currentUploadInfo', 'createdFoldersByUpload'])(obj);
+                            return collector.concat(createdFoldersByUpload);
+                        }, []));
+                        folderCids = _(newfolderIds).map(function (folder_id) { return listView.createFolderCompositeKey(folder_id); });
+                        newItemsCid = fileCids.concat(folderCids);
+
+                        itemsToSelect = selection.getItems(function () {
                             // add already rendered items to selection array
-                            var position = files.indexOf($(this).attr('data-cid'));
+                            var position = newItemsCid.indexOf($(this).attr('data-cid'));
                             if (position >= 0) {
-                                delete files[position];
+                                delete newItemsCid[position];
                             }
                             return position >= 0;
                         });
 
                         // limit selectable items to PRIMARY_PAGE_SIZE
                         var lastPosition = api.collectionLoader.PRIMARY_PAGE_SIZE - selection.getItems().length;
-                        _.each(_.without(files, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
+                        _.each(_.without(newItemsCid, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
                             var file = api.pool.get('detail').get(cid);
                             // select only if the current folder is the upload folder
                             if (file && app.folder.get() === file.get('folder_id')) {
@@ -1212,19 +1228,18 @@ define('io.ox/files/main', [
                                         _.each(selection.getItems(), function (item) {
                                             if ($(item).attr('data-cid') === model.cid) {
                                                 // add items to selection array after rendering
-                                                items.push(item);
+                                                itemsToSelect.push(item);
                                             }
                                         });
                                         // select all items from selectiona array after rendering
-                                        selection.selectAll(items);
+                                        selection.selectAll(itemsToSelect);
                                     });
                                 }
                             }
                         });
-
                         // deselect all items
                         selection.selectNone();
-                        selection.selectAll(items);
+                        selection.selectAll(itemsToSelect);
                     });
                 });
             });

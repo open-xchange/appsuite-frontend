@@ -149,10 +149,10 @@ define('io.ox/files/upload/main', [
             return request;
         };
 
-        this.stop = function () {
+        this.stop = function (file, position, files) {
             var requests = uploadCollection.pluck('request');
             totalSize = 0;
-            api.trigger('stop:upload', requests);
+            api.trigger('stop:upload', requests, files);
             api.trigger('refresh.all');
             totalProgress = 0;
             currentSize = 0;

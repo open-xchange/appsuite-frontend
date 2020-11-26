@@ -53,7 +53,11 @@ define('io.ox/files/listview', [
         },
 
         getCompositeKey: function (model) {
-            return model.isFolder() ? 'folder.' + model.get('id') : model.cid;
+            return model.isFolder() ? this.createFolderCompositeKey(model.get('id')) : model.cid;
+        },
+
+        createFolderCompositeKey: function (folderId) {
+            return 'folder.' + folderId;
         },
 
         onChange: function (model) {

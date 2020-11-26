@@ -24,11 +24,14 @@ define('io.ox/files/upload/file-folder', [
 
     function handleFilesUpload(updatedTreeArr, rootFolder, app, options) {
         var sortedByFolderObj = {};
+        var createdFoldersByUpload = [];
 
         // link all files in the tree with their folder id
         updatedTreeArr.forEach(function (treelayer, layerIndex) {
             treelayer.forEach(function (item) {
-                if (!item.isFile || item.preventFileUpload) { return; }
+                // track all new created folder in this upload
+                if (!item.isFile) { createdFoldersByUpload.push(item.id); return; }
+                if (item.preventFileUpload) { return; }
                 var itemFolderId;
                 if (layerIndex === 0) { // is root
                     itemFolderId = rootFolder;
@@ -47,8 +50,10 @@ define('io.ox/files/upload/file-folder', [
             fileUpload.setWindowNode(app.getWindowNode());
 
             // fill the upload queue before the upload starts to have the right number of files at start
-            // note: compared to 'offer', 'fillQueue' does no validation, validation is done in 'fileFolderUpload.upload'
-            fileUpload.create.fillQueue(files, _.extend({ folder: folderId, uploadfolderInfo: { folderName: '', foldersLeft: '' } }, options));
+            // notes:
+            // - compared to 'offer', 'fillQueue' does no validation, validation is done in 'fileFolderUpload.upload'
+            // - all folders are created in a previous step, therefore 'createdFoldersByUpload' is added as meta info for every addition to the queue
+            fileUpload.create.fillQueue(files, _.extend({ folder: folderId, currentUploadInfo: { createdFoldersByUpload: createdFoldersByUpload } }, options));
         });
         // start the upload with the filled queue
         fileUpload.create.queueChanged();
