@@ -53,7 +53,7 @@ define('io.ox/core/api/filestorage', [
         api = {
             // if the api is ready to use or rampup function must be called
             rampupDone: false,
-            // if the rampup failed, because server does not support external storages etc this attribute is true, so you don't call rampup again everytime
+            // if the rampup failed, because server does not support external storages etc this attribute is true, so you don't call rampup again every time
             rampupFailed: false,
             // always call this function if the rampupDone attribute is false or api will function incorrectly see comments above
             rampup: function () {

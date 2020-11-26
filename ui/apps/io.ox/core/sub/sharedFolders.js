@@ -18,8 +18,9 @@ define('io.ox/core/sub/sharedFolders', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views',
     'io.ox/core/http',
+    'io.ox/core/api/filestorage',
     'less!io.ox/core/sub/sharedFolders'
-], function (ext, gt, api, ModalDialog, mini, http) {
+], function (ext, gt, api, ModalDialog, mini, http, filestorageApi) {
 
     'use strict';
 
@@ -33,8 +34,8 @@ define('io.ox/core/sub/sharedFolders', [
         var suffix = folderModel.is('drive') && folderModel.is('federated-sharing') && folderModel.getAccountDisplayName()
             ? ' (' + folderModel.getAccountDisplayName() + ')'
             : null;
-        var titel = folderModel.get('display_title') || folderModel.get('title');
-        return suffix ? titel + suffix : titel;
+        var title = folderModel.get('display_title') || folderModel.get('title');
+        return suffix ? title + suffix : title;
     }
 
     function open(opt) {
@@ -93,60 +94,72 @@ define('io.ox/core/sub/sharedFolders', [
 
     function openDialog(data) {
         var updateSubscriptions = function (ignoreWarning) {
-            http.pause();
+                http.pause();
 
-            // split hash, subscribe requests first, unsubscribe requests second
-            // this helps with some race conditions in the MW
-            var subscribe = {},
-                unsubscribe = {};
+                // split hash, subscribe requests first, unsubscribe requests second
+                // this helps with some race conditions in the MW
+                var subscribe = {},
+                    unsubscribe = {};
 
-            _.each(data.hash, function (obj, id) {
-                if (obj.subscribed) {
-                    subscribe[id] = obj;
-                    return;
-                }
-                unsubscribe[id] = obj;
-            });
+                _.each(data.hash, function (obj, id) {
+                    if (obj.subscribed) {
+                        subscribe[id] = obj;
+                        return;
+                    }
+                    unsubscribe[id] = obj;
+                });
 
-            _.each(subscribe, function (obj, id) {
-                api.update(id, obj, ignoreWarning);
-            });
+                _.each(subscribe, function (obj, id) {
+                    api.update(id, obj, ignoreWarning);
+                });
 
-            _.each(unsubscribe, function (obj, id) {
-                api.update(id, obj, ignoreWarning);
-            });
+                _.each(unsubscribe, function (obj, id) {
+                    api.update(id, obj, ignoreWarning);
+                });
 
-            http.resume().done(function () {
-                // finish this once MW is done
-                // leaving this in so translations can be done already
-                var insertSpecialFederatedSharingWarningHere = false;
-                if (insertSpecialFederatedSharingWarningHere) {
-                    new ModalDialog({
-                        top: 60,
-                        width: 600,
-                        center: false,
-                        async: false
-                    })
-                    .addCancelButton()
-                    .addButton({ label: gt('OK'), action: 'confirm' })
-                    .build(function () {
-                        //#. confirmation when the last folder associated with a domain is unsubscribed
-                        //#. %1$s domain like google.com etc, may also be a list of domains
-                        this.$body.append(gt('You unsubscribed from all folders of "%1$s". Those folders will be removed from your account.', 'testdomain'));
-                    })
-                    .on('confirm', function () {
-                        updateSubscriptions(true);
-                    })
-                    .open();
-                    return;
-                }
+                http.resume().done(function () {
+                    // finish this once MW is done
+                    // leaving this in so translations can be done already
+                    var insertSpecialFederatedSharingWarningHere = false;
+                    if (insertSpecialFederatedSharingWarningHere) {
+                        openWarningDialog(['testdomain']);
+                        return;
+                    }
 
-                if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
-            });
-        };
+                    if (options.refreshFolders && _(data.hash).size() > 0) api.refresh();
+                });
+            },
+            openWarningDialog = function (accountNames) {
+                var accountNameList = accountNames.join(', ');
+                new ModalDialog({
+                    top: 60,
+                    width: 600,
+                    center: false,
+                    async: false,
+                    //#. %1$s domain like google.com etc, may also be a list of domains
+                    title: gt('Shared folders from "%1$s"', accountNameList)
+                })
+                .addCancelButton()
+                .addButton({ label: gt('OK'), action: 'confirm' })
+                .build(function () {
+                    //#. confirmation when the last folder associated with a domain is unsubscribed
+                    //#. %1$s domain like google.com etc, may also be a list of domains
+                    this.$body.append(gt('You unsubscribed from all folders of "%1$s". Those folders will be removed from your account.', accountNameList));
+                })
+                .on('confirm', function () {
+                    updateSubscriptions(true);
+                })
+                .open();
+            };
 
         data.dialog.on('subscribe', function () {
             data.dialog.close();
+            var accountsToDelete = checkAccounts(data);
+            // we will delete some accounts by doing this, offer dialog directly, no need to ask backend first
+            if (accountsToDelete.length > 0) {
+                openWarningDialog(accountsToDelete);
+                return;
+            }
             updateSubscriptions();
         });
 
@@ -303,6 +316,33 @@ define('io.ox/core/sub/sharedFolders', [
             dialog.$footer.find('button[data-action="subscribe"]').prop('disabled', true);
 
         });
+    }
+
+    // checks if accounts of federated shares will be deleted by this action (instead of waiting for MW warning first)
+    function checkAccounts(data) {
+        var federatedFolders = [];
+        // find federated shared folders
+        _(data.dialogData).each(function (folders) {
+            federatedFolders = federatedFolders.concat(folders.filter(function (folder) {
+                return api.is('federated-sharing', folder);
+            }));
+        });
+
+        if (federatedFolders.length === 0) return [];
+        // create situation after updates and grouped by accountId
+        federatedFolders = _(_(federatedFolders).map(function (folder) {
+            return {
+                accountId: folder.account_id,
+                subscribed: _.isUndefined(data.hash[folder.id]) ? folder.subscribed : data.hash[folder.id].subscribed
+            };
+        })).groupBy('accountId');
+
+        // check if accounts still have valid subscribes, return display name if not
+        federatedFolders = _(_(_(federatedFolders).map(function (folders, accountId) {
+            return _(folders).any(function (folder) { return folder.subscribed; }) ? false : filestorageApi.getAccountDisplayName(accountId);
+        })).values()).compact();
+
+        return federatedFolders;
     }
 
     return {
