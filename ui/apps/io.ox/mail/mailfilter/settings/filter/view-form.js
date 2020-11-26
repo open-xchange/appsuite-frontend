@@ -97,6 +97,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             }).render().$el;
         },
 
+        returnKeyForStop = function (actionsArray) {
+            var indicatorKey;
+            _.each(actionsArray, function (action, key) {
+                if (_.isEqual(action, { id: 'stop' })) {
+                    indicatorKey = key;
+                }
+            });
+            return indicatorKey;
+        },
+
         FilterDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
@@ -244,16 +254,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 if (currentState !== null) self.model.trigger('ChangeProcessSub', currentState);
                 currentState = null;
 
-                function returnKeyForStop(actionsArray) {
-                    var indicatorKey;
-                    _.each(actionsArray, function (action, key) {
-                        if (_.isEqual(action, { id: 'stop' })) {
-                            indicatorKey = key;
-                        }
-                    });
-                    return indicatorKey;
-                }
-
                 function returnTzOffset(timeValue) {
                     return moment.tz(timeValue, coreSettings.get('timezone')).format('Z').replace(':', '');
                 }
@@ -397,6 +397,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     var actionArray = this.model.get('actioncmds');
                     actionArray.push(_.copy(this.defaults.actions[data.value], true));
 
+                    // if there is a stop action it should always be the last
+                    if (returnKeyForStop(actionArray) !== undefined) {
+                        actionArray.splice(returnKeyForStop(actionArray), 1);
+                        actionArray.push({ id: 'stop' });
+                        this.model.set('actioncmds', actionArray);
+                    }
                     this.model.set('actioncmds', actionArray);
                     triggerRender();
                 }
@@ -753,22 +759,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
-                var stopAction;
-                if (baton.model.id === undefined) {
-                    // default value
-                    return true;
-                }
-
-                _.each(array, function (single) {
-                    if (single.id === 'stop') {
-                        stopAction = false;
-                    }
-
-                });
-                if (stopAction === undefined) {
-                    return true;
-                }
-                return stopAction;
+                return _.findIndex(array, { id: 'stop' }) === -1;
             }
 
             toggleWarning();
