@@ -115,16 +115,23 @@ define.async('io.ox/switchboard/api', [
                 } else {
                     console.error('Switchboard: Error during acquireToken!');
                 }
+
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
                 // Only send redirect uri if not default "/appsuite/api"
-                var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
-                var searchParams = appsuiteUrl.searchParams;
-                searchParams.set('userId', api.userId);
-                searchParams.set('token', this.token);
-                if (ox.apiRoot !== '/appsuite/api') searchParams.set('appsuiteApiPath', ox.apiRoot);
-                if (appsuiteApiBaseUrl) searchParams.set('appsuiteApiBaseUrl', appsuiteApiBaseUrl);
+                var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '');
+                var query = { userId: api.userId, token: this.token };
+                if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
+                if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
 
-                api.socket = io(appsuiteUrl.href, {
+                if (this.socket) {
+                    // manually change the url with the new query. socket.io will use this for any further connection
+                    // note: will most likely break with socket.io-client v3
+                    this.socket.query = query;
+                    return this.socket.connect();
+                }
+
+                api.socket = io(appsuiteUrl, {
+                    query: query,
                     transports: ['websocket'],
                     reconnectionAttempts: 20,
                     reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after approx. 10 retries)
@@ -158,13 +165,10 @@ define.async('io.ox/switchboard/api', [
                     }, 1000 * (10 + Math.floor(Math.random() * 10)));
                 }.bind(this));
                 def.resolve(api.socket);
-                this.trigger('reconnect', api.socket);
             }.bind(this));
             return def;
         }
     };
-
-    _.extend(api, Backbone.Events);
 
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
