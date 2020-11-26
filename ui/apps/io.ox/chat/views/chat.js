@@ -71,8 +71,22 @@ define('io.ox/chat/views/chat', [
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'close-chat',
+        id: 'toggle-favorite',
         index: 400,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (model.isNew() || !model.get('active')) return;
+            var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
+            this.attr('data-prio', 'lo').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="toggle-favorite">').attr('data-id', model.id).text(title).on('click', events.forward)
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 500,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -85,7 +99,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'edit-group',
-        index: 500,
+        index: 600,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -98,7 +112,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'leave-group',
-        index: 600,
+        index: 700,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -111,7 +125,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'leave-channel',
-        index: 600,
+        index: 800,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
@@ -124,7 +138,7 @@ define('io.ox/chat/views/chat', [
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'join-channel',
-        index: 700,
+        index: 900,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
