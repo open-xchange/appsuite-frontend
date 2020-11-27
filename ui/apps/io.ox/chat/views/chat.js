@@ -35,116 +35,6 @@ define('io.ox/chat/views/chat', [
 
     'use strict';
 
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'back',
-        index: 100,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'title',
-        index: 200,
-        custom: true,
-        draw: function (baton) {
-            baton.view.listenTo(baton.model, 'change:title', function () {
-                this.text(baton.model.getTitle());
-            }.bind(this));
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'switch-to-floating',
-        index: 300,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'toggle-favorite',
-        index: 400,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (model.isNew() || !model.get('active')) return;
-            var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
-            createMenuItem(this, 'toggle-favorite', model.id, title);
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'edit-group',
-        index: 500,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.isMember() || model.isPrivate()) return;
-            createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'));
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'close-chat',
-        index: 600,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.get('active') || model.isNew()) return;
-            createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'));
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'leave-group',
-        index: 700,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.isGroup() || !model.isMember()) return;
-            createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'));
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'join-channel',
-        index: 800,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!(model.isChannel() && !model.isMember())) return;
-            createMenuItem(this, 'join-channel', model.id, gt('Join channel'));
-        }
-    });
-
-    function createMenuItem(node, cmd, id, label) {
-        node.attr('data-prio', 'lo').append(
-            $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
-            .attr({ 'data-cmd': cmd, 'data-id': id })
-            .text(label)
-            .on('click', events.forward)
-        );
-    }
-
-    function isUnderFileSizeLimit(file) {
-        var sizeLimit = data.serverConfig.maxFileSize || -1;
-        if (file.size < sizeLimit) return true;
-        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', file.name, strings.fileSize(sizeLimit)));
-        return false;
-    }
-
     var ChatView = DisposableView.extend({
 
         className: 'chat abs',
@@ -167,13 +57,17 @@ define('io.ox/chat/views/chat', [
             this.reference = options.reference;
             this.model = this.model || data.chats.get(this.roomId);
             this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages });
+
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
                 'change:favorite': this.updateDropdown,
                 'change:unreadCount': this.onChangeUnreadCount,
-                'change:members': this.onChangeMembers,
-                'change:roomId': this.onChangeRoomId
+                'change:roomId': this.onChangeRoomId,
+                'change:members': this.onChangeMembers
             });
+
+            // track whether current user is member
+            this.isMember = this.model.isMember();
 
             this.listenTo(this.model.messages, {
                 'after:all': this.onUpdatePaginators.bind(this),
@@ -245,7 +139,7 @@ define('io.ox/chat/views/chat', [
         },
 
         render: function () {
-            this.$toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
+            this.toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
             this.chatMemberview = new ChatMember({ collection: this.model.members });
             this.$el.append(
                 $('<div class="header">').append(
@@ -267,7 +161,7 @@ define('io.ox/chat/views/chat', [
                         this.renderDropdown()
                     ).css('visibility', 'hidden')
                 ),
-                this.$toolbar.render(new ext.Baton({ model: this.model, view: this.$toolbar })).$el,
+                this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
@@ -294,7 +188,7 @@ define('io.ox/chat/views/chat', [
         },
 
         renderEditor: function () {
-            if (this.isMember()) {
+            if (this.isMember) {
                 var $container = $('<div class="editor-container">').append(
                     $('<div class="reference-container">'),
                     this.$editor = $('<textarea rows="1">').attr({
@@ -316,7 +210,7 @@ define('io.ox/chat/views/chat', [
                 return [attachment, input, $container, cancel, emoji, send];
             }
 
-            if (this.model.get('type') === 'channel') {
+            if (this.model.isChannel()) {
                 return $('<button type="button" class="btn btn-default btn-action join">')
                 .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
                 .append(gt('Join'));
@@ -324,8 +218,7 @@ define('io.ox/chat/views/chat', [
         },
 
         updateEditor: function () {
-            var $controls = this.$('.controls');
-            $controls.empty().append(this.renderEditor());
+            this.$('.controls').empty().append(this.renderEditor());
         },
 
         renderDropdown: function () {
@@ -373,7 +266,7 @@ define('io.ox/chat/views/chat', [
 
         updateDropdown: function () {
             this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
-            this.$toolbar.render(new ext.Baton({ model: this.model }));
+            this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
         },
 
         renderTitle: function () {
@@ -609,14 +502,10 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeMembers: function () {
-            if (this.model.get('lastMessage').type !== 'system') return;
-
-            var event = JSON.parse(this.model.get('lastMessage').data),
-                members = event.members;
-
-            if (!_.isArray(members) && _.isObject(members)) members = Object.keys(members);
-            if (!members || members.indexOf(data.user.email) < 0) return;
-
+            var isMember = this.model.isMember();
+            var changed = this.isMember !== isMember;
+            this.isMember = isMember;
+            if (!changed) return;
             this.updateEditor();
             this.updateDropdown();
         },
@@ -687,12 +576,6 @@ define('io.ox/chat/views/chat', [
             this.$('.paginate.' + direction).idle().hide();
         },
 
-        isMember: function () {
-            return _.allKeys(this.model.get('members')).filter(function (member) {
-                return member === data.user.email;
-            }).length > 0;
-        },
-
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
         },
@@ -726,6 +609,116 @@ define('io.ox/chat/views/chat', [
             this.$editor.trigger('input');
         }
     });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'back',
+        index: 100,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').append(
+                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'title',
+        index: 200,
+        custom: true,
+        draw: function (baton) {
+            baton.view.listenTo(baton.model, 'change:title', function () {
+                this.text(baton.model.getTitle());
+            }.bind(this));
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'switch-to-floating',
+        index: 300,
+        custom: true,
+        draw: function () {
+            this.attr('data-prio', 'hi').append(
+                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
+                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'toggle-favorite',
+        index: 400,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (model.isNew() || !model.get('active')) return;
+            var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
+            createMenuItem(this, 'toggle-favorite', model.id, title);
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'edit-group',
+        index: 500,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isMember() || model.isPrivate()) return;
+            createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'));
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 600,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.get('active') || model.isNew()) return;
+            createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'));
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'leave-group',
+        index: 700,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.isGroup() || !model.isMember()) return;
+            createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'));
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'join-channel',
+        index: 800,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!(model.isChannel() && !model.isMember())) return;
+            createMenuItem(this, 'join-channel', model.id, gt('Join channel'));
+        }
+    });
+
+    function createMenuItem(node, cmd, id, label) {
+        node.attr('data-prio', 'lo').append(
+            $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
+            .attr({ 'data-cmd': cmd, 'data-id': id })
+            .text(label)
+            .on('click', events.forward)
+        );
+    }
+
+    function isUnderFileSizeLimit(file) {
+        var sizeLimit = data.serverConfig.maxFileSize || -1;
+        if (file.size < sizeLimit) return true;
+        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', file.name, strings.fileSize(sizeLimit)));
+        return false;
+    }
 
     return ChatView;
 });

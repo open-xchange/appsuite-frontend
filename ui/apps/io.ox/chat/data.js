@@ -520,7 +520,12 @@ define('io.ox/chat/data', [
         },
 
         initialize: function (attr) {
+
             attr = attr || {};
+
+            // changes are done on model attribute "members"
+            // those changes will be propagated to the collection
+            // (in near future): it might be easier to just use one source of information
             this.members = new MemberCollection(this.mapMembers(attr.members), { parse: true, roomId: attr.roomId });
             this.messages = new MessageCollection([], { roomId: attr.roomId });
 
@@ -618,7 +623,28 @@ define('io.ox/chat/data', [
 
         isMember: function (email) {
             email = email || data.user.email;
-            return this.get('members') ? !!this.get('members')[email] : false;
+            var members = this.get('members');
+            return members && !!members[email];
+        },
+
+        // members is array of email addresses
+        removeMembers: function (members) {
+            var change = _.extend({}, this.get('members'));
+            [].concat(members).forEach(function (email) {
+                delete change[email];
+            });
+            this.set('members', change);
+        },
+
+        // members is key/value
+        addMembers: function (members) {
+            var change = _.extend({}, this.get('members'), members);
+            // edge case, when current user has been readded to the group
+            if (members[data.user.email]) {
+                this.fetch();
+                this.trigger('change:icon', { silent: true });
+            }
+            this.set('members', change);
         },
 
         getUnreadCount: function () {
@@ -628,32 +654,24 @@ define('io.ox/chat/data', [
             return count;
         },
 
-        parseSystemMessage: function (message, roomId) {
-            var update = JSON.parse(message.data),
-                chat = data.chats.get(roomId),
-                members;
-
-            if (update.type === 'members:removed') {
-                members = _.clone(chat.get('members')) || {};
-                update.members.forEach(function (member) {
-                    delete members[member];
-                });
-                chat.set('members', members);
-            }
-            if (update.type === 'members:added') {
-                members = _.extend({}, chat.get('members'), update.members);
-                if (update.members[data.user.email]) {
-                    // edge case, when a user has been readded to the group
-                    chat.fetch();
-                    chat.trigger('change:icon', { silent: true });
-                }
-                chat.set('members', members);
-            }
-
-            if (update.type === 'title:changed') chat.set('title', update.title);
-            if (update.type === 'image:changed') {
-                this.set({ icon: update.icon }, { silent: true });
-                chat.trigger('change:icon');
+        parseSystemMessage: function (message) {
+            var update = JSON.parse(message.data);
+            switch (update.type) {
+                case 'members:removed':
+                    this.removeMembers(update.members);
+                    break;
+                case 'members:added':
+                    this.addMembers(update.members);
+                    break;
+                case 'title:changed':
+                    this.set('title', update.title);
+                    break;
+                case 'image:changed':
+                    // why silently change, then trigger a different event?
+                    this.set({ icon: update.icon }, { silent: true });
+                    this.trigger('change:icon');
+                    break;
+                // no default
             }
         },
 

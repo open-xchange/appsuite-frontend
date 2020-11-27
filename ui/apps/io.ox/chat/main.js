@@ -207,8 +207,8 @@ define('io.ox/chat/main', [
                 title: gt('Leave chat'),
                 description: gt('Do you really want to leave the chat?')
             })
-            .addCancelButton({ left: true })
-            .addButton({ action: 'continue', label: 'Yes' })
+            .addCancelButton()
+            .addButton({ action: 'continue', label: gt('Leave') })
             .on('continue', function () {
                 data.chats.leaveGroup(groupId);
             })
