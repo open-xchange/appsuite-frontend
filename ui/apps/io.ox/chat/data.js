@@ -778,14 +778,11 @@ define('io.ox/chat/data', [
                 message: attr.content,
                 file: file,
                 members: this.get('members'),
-                command: attr.command,
+                messateType: attr.type,
                 messageData: attr.data
             };
 
-            delete attr.content;
-            delete attr.members;
-            delete attr.command;
-            delete attr.data;
+            attr = _(attr).omit('content', 'members', 'type', 'data');
 
             return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
                 data.chats.add(this, { at: 0 });
