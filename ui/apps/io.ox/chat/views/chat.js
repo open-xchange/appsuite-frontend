@@ -53,6 +53,9 @@ define('io.ox/chat/views/chat', [
         index: 200,
         custom: true,
         draw: function (baton) {
+            baton.view.listenTo(baton.model, 'change:title', function () {
+                this.text(baton.model.getTitle());
+            }.bind(this));
             this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
         }
     });
@@ -278,7 +281,7 @@ define('io.ox/chat/views/chat', [
                         this.renderDropdown()
                     ).css('visibility', 'hidden')
                 ),
-                this.$toolbar.render(new ext.Baton({ model: this.model })).$el,
+                this.$toolbar.render(new ext.Baton({ model: this.model, view: this.$toolbar })).$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
