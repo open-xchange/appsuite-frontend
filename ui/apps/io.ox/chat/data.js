@@ -290,7 +290,8 @@ define('io.ox/chat/data', [
                     isImage: /^image\//.test(blob.type),
                     name: blob.name,
                     size: blob.size,
-                    type: blob.type
+                    type: blob.type,
+                    isAnimated: this.isAnimated()
                 };
             }
 
@@ -312,9 +313,17 @@ define('io.ox/chat/data', [
                     size: file.size || 0,
                     thumbnail: url + '/thumbnail',
                     type: file.mimetype,
-                    url: url
+                    url: url,
+                    isAnimated: this.isAnimated()
                 };
             }
+        },
+
+        // only for gifs now, maybe expanded later idk
+        isAnimated: function () {
+            var file = this.get('uploading') ? this.get('blob') : this.get('file');
+            if (!file) return false;
+            return file.mimetype === 'image/gif' || file.type === 'image/gif';
         },
 
         isFile: function () {

@@ -26,7 +26,9 @@ define('io.ox/chat/views/file', [
         className: 'file',
 
         events: {
-            'click .cancel-upload': 'cancelUpload'
+            'click .cancel-upload': 'cancelUpload',
+            'click .play-button': 'toggleAnimation',
+            'click .animated-file': 'toggleAnimation'
         },
 
         initialize: function (options) {
@@ -85,14 +87,31 @@ define('io.ox/chat/views/file', [
 
             if (this.inEditor) {
                 $img.trigger('appear');
-            } else {
-                this.$el.addClass('cursor-zoom-in').attr({
-                    'data-cmd': 'show-message-file',
-                    'data-room-id': this.model.get('roomId'),
-                    'data-file-id': file.id,
-                    'data-message-id': this.model.get('messageId')
-                });
+                return;
             }
+
+            this.$el.attr({
+                'data-room-id': this.model.get('roomId'),
+                'data-file-id': file.id,
+                'data-message-id': this.model.get('messageId')
+            });
+
+            if (file.isAnimated) {
+                var animatedFile = $('<img class="animated-file">');
+                $thumbnail.append(
+                    animatedFile,
+                    $('<button class="play-button">').append(getPlayButton()).one('click', function () {
+                        api.requestBlobUrl({ url: file.url }).then(function (url) {
+                            animatedFile.attr('src', url);
+                        });
+                    }));
+            } else {
+                this.$el.addClass('cursor-zoom-in').attr({ 'data-cmd': 'show-message-file' });
+            }
+        },
+
+        toggleAnimation: function () {
+            this.$el.toggleClass('animation-running').find('.message-thumbnail').toggleClass('io-ox-busy');
         },
 
         renderFile: function (file) {
@@ -147,6 +166,15 @@ define('io.ox/chat/views/file', [
 
     function getSVG(width, height) {
         return 'data:image/svg+xml;utf8,<svg version="1.1" width="' + width + '" height="' + height + '" xmlns="http://www.w3.org/2000/svg"></svg>';
+    }
+
+    // need inline svg to adjust colors via css. doesn't work when loaded as file
+    // other possibilities, use font awesome or other font based icons
+    function getPlayButton() {
+        return '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">' +
+            '<circle r="140" cy="150" cx="150" stroke-width="16" stroke-opacity="null" fill-opacity="0.0"/>' +
+            '<path transform="rotate(90, 165, 150)" d="m99.00171,207.74987l65.99895,-115.49817l65.99895,115.49817l-131.99791,0z" fill-opacity="null" stroke-opacity="null" stroke-width="16"/>' +
+        '</svg>';
     }
 
     return FileView;
