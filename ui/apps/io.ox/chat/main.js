@@ -546,8 +546,9 @@ define('io.ox/chat/main', [
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-history">').append(
                             $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
+                            // Was "Chat History"; lets try "History" (because we have Chats & Channels)
                             //#. A list (history) of older chats, like the browser history of visited sites
-                            $.txt(gt('Chat history'))
+                            $.txt(gt('History'))
                         )
                     )
                 ),

@@ -43,7 +43,7 @@ define('io.ox/chat/views/history', [
         custom: true,
         draw: function () {
             //#. Used for chats this time, not for mail threads
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('Chat history'));
+            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('History'));
         }
     });
 
@@ -88,7 +88,7 @@ define('io.ox/chat/views/history', [
             this.$el.append(
                 $('<div class="header">').append(
                     //#. Used for a list of olders/recent chats
-                    $('<h2>').append(gt('Chat history'))
+                    $('<h2>').append(gt('History'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(

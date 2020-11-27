@@ -60,6 +60,7 @@ define('io.ox/chat/actions/openGroupDialog', [
     }
 
     function open(obj) {
+
         var def = new $.Deferred();
         var originalModel = obj.id ? data.chats.get(obj.id) : new data.ChatModel(obj);
         var model = originalModel.has('roomId') ? originalModel.clone() : originalModel;
@@ -71,8 +72,8 @@ define('io.ox/chat/actions/openGroupDialog', [
             });
         }
         var participants = (model.has('roomId') && model.members || new Backbone.Collection(members)).clone();
-
-        model.set('type', obj.type || model.get('type') || 'group');
+        var type = obj.type || model.get('type') || 'group';
+        model.set('type', type);
 
         var dialog = new ModalDialog({
             point: 'io.ox/chat/actions/openGroupDialog',
@@ -87,7 +88,8 @@ define('io.ox/chat/actions/openGroupDialog', [
                 var title = this.model.id ? gt('Edit group chat') : gt('Create group chat'),
                     url = this.model.getIconUrl() ? this.model.getIconUrl() : '',
                     imageDef;
-                if (this.model.get('type') === 'channel') title = this.model.id ? gt('Edit channel') : gt('Create new channel');
+
+                if (this.model.isChannel()) title = this.model.id ? gt('Edit channel') : gt('Create channel');
 
                 this.pictureModel = new Backbone.Model();
 
@@ -125,17 +127,16 @@ define('io.ox/chat/actions/openGroupDialog', [
             details: function () {
                 var guidDescription = _.uniqueId('form-control-label-');
                 var guidTitle = _.uniqueId('form-control-label-');
-                var isChannel = this.model.get('type') === 'channel';
-                var label = !isChannel ? gt('Group name') : gt('Channel name');
-
+                var isChannel = this.model.isChannel();
+                var label = isChannel ? gt('Channel name') : gt('Group name');
                 this.$body.append(
                     $('<div class="row">').append(
                         $('<div class="col-xs-12">').append(
-                            isChannel ? $.txt(gt('Channels are public and can be joined by anybody')) : [],
                             $('<div class="form-group">').append(
                                 $('<label class="control-label">').attr('for', guidTitle).text(label),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title', maxlength: data.serverConfig.maxGroupLength }).render().$el
                             ),
+                            isChannel ? $.txt(gt('Other users can find and join your channel under "All channels". If you prefer a conversiom in a closed group, please create a group chat.')) : [],
                             $('<div class="form-group hidden">').append(
                                 $('<label class="control-label">').attr('for', guidDescription).text('Description'),
                                 new mini.TextView({ id: guidDescription, model: this.model, name: 'description' }).render().$el
@@ -145,15 +146,10 @@ define('io.ox/chat/actions/openGroupDialog', [
                 );
             },
             participants: function () {
-                if (this.model.get('type') === 'channel') return;
-
+                if (this.model.isChannel()) return;
                 this.$body.append(
-                    new MemberView({
-                        collection: this.collection
-                    }).render().$el,
-                    new AddMemberView({
-                        collection: this.collection
-                    }).render().$el
+                    new MemberView({ collection: this.collection }).render().$el,
+                    new AddMemberView({ collection: this.collection }).render().$el
                 );
             }
         })
@@ -162,11 +158,10 @@ define('io.ox/chat/actions/openGroupDialog', [
         })
         .addCancelButton()
         .addButton((function (model) {
-            var label = gt('Create chat');
-            if (model.get('type') === 'channel') label = gt('Create channel');
-            if (model.id) label = gt('Edit chat');
+            var label = gt('Save');
+            if (!model.id) label = model.isChannel() ? gt('Create channel') : gt('Create chat');
             return { action: 'save', label: label };
-        })(model))
+        }(model)))
         .on('save', function () {
             var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(),
                 maxGroupLength = data.serverConfig.maxGroupLength || -1,

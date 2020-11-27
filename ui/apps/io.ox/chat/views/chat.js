@@ -347,24 +347,27 @@ define('io.ox/chat/views/chat', [
             var $ul = $('<ul class="dropdown-menu dropdown-menu-right">'),
                 model = this.model,
                 isActive = model.isActive(),
+                isChannel = model.isChannel(),
                 isNew = model.isNew(),
                 id = model.id;
 
-            if (isNew) addItem(gt('Close chat'), 'close-chat');
+            if (isNew) addItem(isChannel ? gt('Close channel') : gt('Close chat'), 'close-chat');
             if (!isNew && isActive) {
                 var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
                 addItem(title, 'toggle-favorite');
             }
-            if (!isNew && (model.isPrivate() || model.isGroup() || (model.isChannel() && model.isMember())) && isActive) {
-                addItem(gt('Close chat'), 'unsubscribe-chat');
-            }
             if ((model.isGroup() || model.isChannel()) && model.isMember()) {
-                addItem(gt('Edit chat'), 'edit-group-chat');
+                addItem(isChannel ? gt('Edit channel') : gt('Edit chat'), 'edit-group-chat');
+            }
+            if (!isNew && (model.isPrivate() || model.isGroup() || (model.isChannel() && model.isMember())) && isActive) {
+                addItem(isChannel ? gt('Close channel') : gt('Close chat'), 'unsubscribe-chat');
             }
             if (!model.isPrivate() && model.isMember()) {
-                addItem(gt('Leave chat'), model.isChannel() ? 'leave-channel' : 'leave-group');
+                addSeparator();
+                if (isChannel) addItem(gt('Leave channel'), 'leave-channel');
+                else addItem(gt('Leave chat'), 'leave-group');
             } else if (model.isChannel() && !model.get('active')) {
-                addItem(gt('Join chat'), 'join-channel');
+                addItem(gt('Join channel'), 'join-channel');
             }
 
             function addItem(text, cmd) {
@@ -373,6 +376,10 @@ define('io.ox/chat/views/chat', [
                         $('<a href="#" role="button">').attr({ 'data-cmd': cmd, 'data-id': id }).text(text)
                     )
                 );
+            }
+
+            function addSeparator() {
+                $ul.append('<li class="divider" role="separator">');
             }
 
             return $ul;
