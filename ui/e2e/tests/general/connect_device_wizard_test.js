@@ -38,7 +38,7 @@ Scenario('Show available setup scenarios based on capabilites', async (I, topbar
         I.click('OX Drive');
         I.waitForElement(
             locate('.btn-link.download')
-            .withText('OX Drive for Windows Installer')
+            .withText('OX Drive for Windows')
         );
         I.click('.progress-btn[data-action="reset"]');
         I.waitForText('Which device do you want to configure?');
@@ -73,8 +73,7 @@ Scenario('Show available setup scenarios based on capabilites', async (I, topbar
         I.click('Android');
         I.waitForText('Calendar');
         I.click('Calendar');
-        I.waitForText('Manual Configuration');
-        I.waitForText('CalDav');
+        I.waitForText('URL');
         I.click('Close');
     });
 
@@ -97,13 +96,13 @@ Scenario('Progressbar updates on selection and navigation', async (I, topbar) =>
         I.waitForElement('.progress-step-three.active');
         I.dontSeeElement('.progress-step-two.active');
         I.waitForText('Mail', 5, '.progress-steps');
-        I.waitForText('Manual Configuration');
+        I.waitForText('IMAP');
         I.click('.progress-step-two');
         I.waitForElement('.progress-step-two.active');
         I.dontSeeElement('.progress-step-three.active');
         I.waitForText('Email with Android Mail');
         I.click('Email with Android Mail');
-        I.waitForText('Manual Configuration');
+        I.waitForText('IMAP');
         I.click('.progress-step-one');
         I.waitForElement('.progress-step-one.active');
         I.dontSeeElement('.progress-step-three.active');

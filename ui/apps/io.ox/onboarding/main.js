@@ -88,10 +88,10 @@ define('io.ox/onboarding/main', [
     var scenarios = {
         'windows': {
             'drive': function () { return new views.DownloadView({ link: settings.get('windows/driveapp/url') }); },
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData }); }
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true }); }
         },
         'android': {
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData }); },
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true }); },
             'mailapp': function () {
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
@@ -151,7 +151,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({
                     type: 'mail',
                     title: util.titles.ios.mailsync,
-                    description: gt('To synchronize your iOS Mail client automatically, scan this code with your phone\'s camera:')
+                    description: gt('Please scan this code with your phone\'s camera:')
                 });
             },
             'mailapp': function () {

@@ -81,10 +81,12 @@ define('io.ox/files/favorite/listview', [
             _.each(self.collection.models, function (model) {
                 if (model.folder_name) {
                     folders.push(model.id);
+                } else if (model.get('folder_name')) {
+                    folders.push(model.get('id'));
                 } else {
                     files.push({
-                        id: model.attributes.id,
-                        folder_id: model.attributes.folder_id
+                        id: model.get('id'),
+                        folder_id: model.get('folder_id')
                     });
                 }
             });
