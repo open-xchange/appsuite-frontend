@@ -123,7 +123,7 @@ define('io.ox/chat/commands', [
                         + ' \uD83D\uDCDE\n'
                         //#. %1$s is a link
                         + gt('Please click the following link to join: %1$s', url);
-                    e.room.postMessage({ command: type, content: content, data: JSON.stringify({ link: url }) });
+                    e.room.postMessage({ type: 'command', command: type, content: content, data: JSON.stringify({ type: type, link: url }) });
                 });
             });
         });
@@ -132,8 +132,8 @@ define('io.ox/chat/commands', [
     function renderCall(options) {
 
         var model = options.model;
-        var json = options.json;
-        var href = _.escape(json.link);
+        var command = options.command;
+        var href = _.escape(command.link);
         if (!href) return $();
         var sender = model.get('sender');
         var caller = data.users.getName(sender) || sender;

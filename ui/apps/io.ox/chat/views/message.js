@@ -88,10 +88,10 @@ define('io.ox/chat/views/message', [
 
         renderContent: function () {
             try {
-                var json = this.model.isCommand() && JSON.parse(this.model.get('data'));
-                var render = json && commands.getRender(json.type);
+                var command = this.model.isCommand() && JSON.parse(this.model.get('data'));
+                var render = command && commands.getRender(command.type);
                 return render ?
-                    render({ model: this.model, json: json }) :
+                    render({ model: this.model, command: command }) :
                     new ContentView({ model: this.model }).render().$el;
             } catch (e) {
                 if (ox.debug) console.error(e);
