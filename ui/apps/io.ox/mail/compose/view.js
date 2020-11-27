@@ -663,7 +663,7 @@ define('io.ox/mail/compose/view', [
         },
 
         onError: function (e) {
-            this.app.pause(e);
+            this.app.onError(e);
         },
 
         ariaLiveUpdate: function (e, msg) {

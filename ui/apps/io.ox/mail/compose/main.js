@@ -302,6 +302,19 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
+        app.onError = function (e) {
+            e = e || {};
+            var isMissing = /^(UI-SPACEMISSING|MSGCS-0007)$/.test(e.code),
+                isConcurrentEditing = /^(MSGCS-0010)$/.test(e.code),
+                // consider flags set by plugins (guard for example)
+                isCritical = e.critical;
+            // critical errors: pause app
+            if (isMissing || isConcurrentEditing || isCritical) return app.pause(e);
+            require(['io.ox/core/yell'], function (yell) {
+                yell(e);
+            });
+        };
+
         app.pause = function (e) {
             var error = _.extend({ code: 'unknown', error: gt('An error occurred. Please try again.') }, e);
             // custom mappings
@@ -390,7 +403,7 @@ define('io.ox/mail/compose/main', [
                     }
 
                     // custom handlers
-                    app.pause(_.extend({ failRestore: true }, e));
+                    app.onError(_.extend({ failRestore: true }, e));
 
                     def.reject(e);
                 });

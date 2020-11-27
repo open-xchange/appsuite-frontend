@@ -1875,7 +1875,7 @@ define('io.ox/mail/main', [
                         // update state
                         return space ?
                             app.resume(space) :
-                            app.pause({ code: 'UI-SPACEMISSING' });
+                            app.onError({ code: 'UI-SPACEMISSING' });
                     });
                 }).catch(function (e) {
                     if (ox.debug) console.error(e);
