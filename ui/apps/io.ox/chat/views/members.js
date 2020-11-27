@@ -14,15 +14,12 @@
 define('io.ox/chat/views/members', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
-    'io.ox/switchboard/presence',
-    'gettext!io.ox/chat'
-], function (Disposable, AvatarView, presence, gt) {
+    'io.ox/switchboard/presence'
+], function (Disposable, AvatarView, presence) {
 
     'use strict';
 
     return Disposable.extend({
-
-        tagName: 'fieldset',
 
         className: 'members',
 
@@ -53,8 +50,6 @@ define('io.ox/chat/views/members', [
 
         render: function () {
             this.$el.empty().append(
-                //#. %1$d is the number of participants
-                $('<legend>').text(gt('Participants (%1$d)', this.collection.length - 1)),
                 $('<ul class="list-unstyled">').append(
                     this.collection.map(this.renderEntry.bind(this))
                 )

@@ -33,7 +33,7 @@ define('io.ox/chat/views/addMember', [
             var self = this,
                 typeahead = new Typeahead({
                     apiOptions: {
-                        contacts: false,
+                        contacts: true,
                         users: true,
                         groups: false,
                         distributionlists: false,
@@ -44,12 +44,11 @@ define('io.ox/chat/views/addMember', [
                         data = _(data).map(function (m) {
                             return new pModel.Participant(m);
                         });
-
                         return _(data).filter(function (model) {
                             if (model.get('id') === ox.user_id) return false;
                             if (self.collection.get(model.get('id'))) return false;
                             return true;
-                        }).reverse();
+                        });
                     },
                     click: function (e, model) {
                         self.addParticipant(model);
@@ -57,7 +56,7 @@ define('io.ox/chat/views/addMember', [
                 });
 
             this.$el.empty().append(
-                $('<legend>').text(gt('Add participant')),
+                $('<legend>').text(gt('Add members')),
                 $('<div>').append(
                     typeahead.$el,
                     $('<a href="#" role="button" class="open-addressbook-popup">').append(
@@ -68,10 +67,6 @@ define('io.ox/chat/views/addMember', [
             );
 
             typeahead.render();
-            typeahead.$el.data('ttTypeahead').dropdown.$menu.css({
-                top: '',
-                bottom: '100%'
-            });
 
             return this;
         },

@@ -148,8 +148,8 @@ define('io.ox/chat/actions/openGroupDialog', [
             participants: function () {
                 if (this.model.isChannel()) return;
                 this.$body.append(
-                    new MemberView({ collection: this.collection }).render().$el,
-                    new AddMemberView({ collection: this.collection }).render().$el
+                    new AddMemberView({ collection: this.collection }).render().$el,
+                    new MemberView({ collection: this.collection }).render().$el
                 );
             }
         })
