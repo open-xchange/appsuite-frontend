@@ -88,7 +88,8 @@ define('io.ox/chat/views/searchResult', [
                 api.elasticSearch(query),
                 this.searchAddresses(query),
                 this.searchTitles(query)
-            ).then(function (messages, addresses, rooms) {
+            )
+            .then(function (messages, addresses, rooms) {
                 var ids = {};
                 var chatsByMessage;
                 var models = [];
@@ -100,30 +101,37 @@ define('io.ox/chat/views/searchResult', [
                         room = room.clone();
                         room.set('lastMessage', message, { silent: true });
                         room.set('searchResult', true);
-                        ids[room.get('id')] = true;
+                        ids[room.id] = true;
                         return room;
                     });
                     models = models.concat(chatsByMessage);
                 }
 
+                var duplicates = {};
                 var chatsByAddress = addresses.map(function (address) {
-                    // find according room
+                    // duplicate?
+                    if (duplicates[address.email]) return;
+                    duplicates[address.email] = true;
+                    // find existing room
                     var room = data.chats.find(function (model) {
-                        if (model.get('type') !== 'private') return;
-                        return _(model.get('members')).findWhere({ email: address.email });
+                        return model.isPrivate() && _(model.get('members')).any(function (value, email) {
+                            return email === address.email;
+                        });
                     });
                     if (room) return room;
+                    // create dummy room
                     var members = {};
                     members[data.user.email] = 'admin';
                     members[address.email] = 'member';
                     return new data.ChatModel({
-                        lastMessage: { id: '1337', sender: '', content: gt('Create new chat'), type: 'text' },
+                        lastMessage: { id: '1337', sender: '', content: gt('Start new chat'), type: 'text' },
                         members: members,
                         type: 'private',
                         unreadCount: 0
                     });
-                }).filter(function (room) {
-                    return !ids[room.get('id')];
+                })
+                .filter(function (room) {
+                    return room && !ids[room.id];
                 });
 
                 models = models.concat(chatsByAddress).concat(rooms);
