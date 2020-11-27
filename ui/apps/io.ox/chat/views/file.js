@@ -97,14 +97,26 @@ define('io.ox/chat/views/file', [
             });
 
             if (file.isAnimated) {
-                var animatedFile = $('<img class="animated-file">');
-                $thumbnail.append(
-                    animatedFile,
-                    $('<button class="play-button">').append(getPlayButton()).one('click', function () {
+                var animatedFile = $('<img class="animated-file">'),
+                    playButton = $('<button class="play-button">').append(getPlayButton()),
+                    loadAnimation = function () {
                         api.requestBlobUrl({ url: file.url }).then(function (url) {
                             animatedFile.attr('src', url);
                         });
-                    }));
+                    };
+
+                $thumbnail.append(animatedFile, playButton);
+                // autostart animation for small files
+                // 5mb (1024 * 1024 * 5)
+                if (file.size && file.size < 5242880) {
+                    loadAnimation();
+                    this.$el.addClass('animation-running');
+                    $thumbnail.addClass('io-ox-busy');
+                    return;
+                }
+
+                // start animation on demand for bigger files
+                playButton.one('click', loadAnimation);
             } else {
                 this.$el.addClass('cursor-zoom-in').attr({ 'data-cmd': 'show-message-file' });
             }
