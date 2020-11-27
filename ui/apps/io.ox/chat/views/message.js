@@ -43,6 +43,7 @@ define('io.ox/chat/views/message', [
             this.options = _.extend({ isChannel: false, showDate: true }, options);
             this.listenTo(this.model, 'change:deleted change:deliveryState change:uploading', this.onChangeState);
             this.listenTo(this.model, 'change:uploading', this.onChangeUploading);
+            this.listenTo(this.model, 'change:messageId', this.onChangeMessageId);
         },
 
         render: function () {
@@ -134,6 +135,18 @@ define('io.ox/chat/views/message', [
         // after files are uploaded add correct classes
         onChangeUploading: function () {
             this.$el.toggleClass('editable', this.model.isEditable());
+        },
+
+        onChangeMessageId: function () {
+            if (this.model.isFile()) {
+                this.$el.find('.file')
+                .addClass('cursor-zoom-in').attr({
+                    'data-cmd': 'show-message-file',
+                    'data-room-id': this.model.get('roomId'),
+                    'data-file-id': this.model.get('file').fileId,
+                    'data-message-id': this.model.get('messageId')
+                });
+            }
         },
 
         renderUploadMessage: function () {
