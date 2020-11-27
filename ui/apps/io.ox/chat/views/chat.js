@@ -81,35 +81,29 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (model.isNew() || !model.get('active')) return;
             var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="toggle-favorite">').attr('data-id', model.id).text(title).on('click', events.forward)
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'close-chat',
-        index: 500,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.get('active') || model.isNew()) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="unsubscribe-chat">').attr('data-id', model.id).text(gt('Close chat')).on('click', events.forward)
-            );
+            createMenuItem(this, 'toggle-favorite', model.id, title);
         }
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'edit-group',
-        index: 600,
+        index: 500,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
             if (!model.isMember() || model.isPrivate()) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="edit-group-chat">').attr('data-id', model.id).text(gt('Edit chat')).on('click', events.forward)
-            );
+            createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'));
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'close-chat',
+        index: 600,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (!model.get('active') || model.isNew()) return;
+            createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'));
         }
     });
 
@@ -120,37 +114,29 @@ define('io.ox/chat/views/chat', [
         draw: function (baton) {
             var model = baton.model;
             if (!model.isGroup() || !model.isMember()) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-group">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/detail/toolbar').extend({
-        id: 'leave-channel',
-        index: 800,
-        custom: true,
-        draw: function (baton) {
-            var model = baton.model;
-            if (!model.isChannel() || !model.isMember()) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="leave-channel">').attr('data-id', model.id).text(gt('Leave chat')).on('click', events.forward)
-            );
+            createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'));
         }
     });
 
     ext.point('io.ox/chat/detail/toolbar').extend({
         id: 'join-channel',
-        index: 900,
+        index: 800,
         custom: true,
         draw: function (baton) {
             var model = baton.model;
             if (!(model.isChannel() && !model.isMember())) return;
-            this.attr('data-prio', 'lo').append(
-                $('<a href="#" role="menuitem" draggable="false" tabindex="-1" data-cmd="join-channel">').attr('data-id', model.id).text(gt('Join chat')).on('click', events.forward)
-            );
+            createMenuItem(this, 'join-channel', model.id, gt('Join channel'));
         }
     });
+
+    function createMenuItem(node, cmd, id, label) {
+        node.attr('data-prio', 'lo').append(
+            $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
+            .attr({ 'data-cmd': cmd, 'data-id': id })
+            .text(label)
+            .on('click', events.forward)
+        );
+    }
 
     function isUnderFileSizeLimit(file) {
         var sizeLimit = data.serverConfig.maxFileSize || -1;
