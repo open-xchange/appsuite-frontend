@@ -59,7 +59,10 @@ define('io.ox/chat/notifications', [
                 audio.volume = 0.4;
             }
             try {
-                if (audio) audio.play();
+                if (!audio) return;
+                // IE11 does not return a promise
+                var promise = audio.play();
+                if (promise && promise.catch) promise.catch(_.noop);
             } catch (e) {
                 // play() might throw an exception if the browser is inactive for too long
                 if (ox.debug) console.error(e);
