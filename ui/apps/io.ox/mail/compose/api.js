@@ -18,11 +18,20 @@ define('io.ox/mail/compose/api', [
 
     'use strict';
 
-    var api = {};
+    var api = {}, TOKEN = generateToken(), TOKENHASH = {};
 
     ox.ui.spaces = ox.ui.spaces || {};
 
     _.extend(api, Backbone.Events);
+
+    function generateToken() {
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+            token = '';
+        for (var i = 1; i <= 3; i++) {
+            token += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return token + String(Date.now());
+    }
 
     api.queue = (function () {
 
@@ -82,7 +91,7 @@ define('io.ox/mail/compose/api', [
         };
     }());
 
-    // fill mapping cache (mailref to space) and cid constuction
+    // fill mapping cache (mailref to space) and cid construction
     var process = (function () {
         function apply(space) {
             var editFor = space.meta && space.meta.editFor,
@@ -112,6 +121,11 @@ define('io.ox/mail/compose/api', [
     })();
 
     // composition space
+    // claim/clientToken:
+    // - as part of body/url (claim): binds edit rights for this client token
+    // - as part of url (clientToken): enables middleware check that denies writing calls when clientToken does not match
+    // - to force edit rights use a patch request WITH claim as body property and WITHOUT clientToken within url (app.space.claim)
+
     api.space = {
 
         hash: ox.ui.spaces,
@@ -122,7 +136,6 @@ define('io.ox/mail/compose/api', [
             return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta,security' } }).then(process);
         },
 
-        // limit of 3 currently
         add: function (obj, opt) {
             // reply or forwarding of single/multiple mails
             var references = JSON.stringify([].concat(obj.original || []));
@@ -132,16 +145,21 @@ define('io.ox/mail/compose/api', [
                 params: {
                     type: obj.type,
                     vcard: !!opt.vcard,
-                    originalAttachments: opt.attachments
+                    originalAttachments: opt.attachments,
+                    claim: TOKEN
                 },
                 contentType: 'application/json'
             }).then(process).done(function (result) {
+                TOKENHASH[result.id] = TOKENHASH[result.id] || 'add';
                 api.trigger('add', obj, result);
             });
         },
 
         get: function (id) {
-            return http.GET({ url: 'api/mail/compose/' + id }).then(process);
+            // only claim on GET when not claimed before
+            return (TOKENHASH[id] ? $.when() : api.space.claim(id)).then(function () {
+                return http.GET({ url: 'api/mail/compose/' + id }).then(process);
+            });
         },
 
         list: function () {
@@ -149,7 +167,7 @@ define('io.ox/mail/compose/api', [
         },
 
         remove: function (id, data) {
-            return http.DELETE({ url: 'api/mail/compose/' + id }).then(function (data) {
+            return http.DELETE({ url: 'api/mail/compose/' + id, params: { clientToken: TOKEN } }).then(function (data) {
                 if (data && data.success) return data;
                 return $.Deferred().reject({ action: 'remove', error: 'unknown', id: id });
             }).done(function (result) {
@@ -174,7 +192,7 @@ define('io.ox/mail/compose/api', [
             ox.trigger('mail:send:start', data);
 
             if (data.sharedAttachments && data.sharedAttachments.expiryDate) {
-                // explicitedy clone share attachments before doing some computations
+                // explicitly clone share attachments before doing some computations
                 data.sharedAttachments = _(data.sharedAttachments).clone();
                 // expiry date should count from mail send
                 data.sharedAttachments.expiryDate = _.now() + parseInt(data.sharedAttachments.expiryDate, 10);
@@ -192,7 +210,7 @@ define('io.ox/mail/compose/api', [
                 url: 'api/mail/compose/' + id + '/send',
                 data: formData,
                 // this call always expects a json response. avoid errors in html format (user only sees json parsing error in this case)
-                params: { force_json_response: true }
+                params: { force_json_response: true, clientToken: TOKEN }
             });
 
             def.progress(function (e) {
@@ -224,18 +242,33 @@ define('io.ox/mail/compose/api', [
 
             return http.UPLOAD({
                 url: 'api/mail/compose/' + id + '/save',
+                params: { clientToken: TOKEN },
                 data: formData
             }).done(function (result) {
                 api.trigger('after:save', data, result);
             });
         },
 
-        update: function (id, data) {
+        update: function (id, data, options) {
+            // to bypass server check we force by omitting clientToken queryparam
+            var opt = _.extend({ force: !TOKENHASH[id] }, options);
             return http[_.browser.ie ? 'PUT' : 'PATCH']({
                 url: 'api/mail/compose/' + id,
-                data: $.extend({}, data)
+                params: opt.force ? {} : { clientToken: TOKEN },
+                data: $.extend({ claim: TOKEN }, data)
             }).then(process).done(function (result) {
+                TOKENHASH[id] = TOKENHASH[id] || 'update';
                 api.trigger('after:update', data, result);
+            });
+        },
+
+        claim: function (id) {
+            // to bypass server check we force by omitting clientToken queryparam
+            return http[_.browser.ie ? 'PUT' : 'PATCH']({
+                url: 'api/mail/compose/' + id,
+                data: { claim: TOKEN }
+            }).then(process).done(function (result) {
+                TOKENHASH[result.id] = TOKENHASH[result.id] || 'claim';
             });
         }
     };
@@ -253,6 +286,7 @@ define('io.ox/mail/compose/api', [
 
         var upload = http.UPLOAD({
                 url: url,
+                params: { clientToken: TOKEN },
                 data: formData
             }),
             process = upload.then(function (res) {
@@ -265,7 +299,7 @@ define('io.ox/mail/compose/api', [
     }
 
     var processAttachment = function (data) {
-        // result: attachtment data with mailPath prop
+        // result: attachment data with mailPath prop
         var mailPath = data.compositionSpace.mailPath || {},
             mailref = _.cid({ id: mailPath.id, folder: mailPath.folderId });
         api.trigger('mailref:changed', { mailPath: mailPath });
@@ -280,13 +314,15 @@ define('io.ox/mail/compose/api', [
 
         original: function (space) {
             return http.POST({
-                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/original'
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/original',
+                params: { clientToken: TOKEN }
             });
         },
 
         vcard: function (space) {
             return http.POST({
-                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard'
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/vcard',
+                params: { clientToken: TOKEN }
             }).then(processAttachment);
         },
 
@@ -308,7 +344,8 @@ define('io.ox/mail/compose/api', [
 
         remove: function (space, attachment) {
             return http.DELETE({
-                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment
+                url: ox.apiRoot + '/mail/compose/' + space + '/attachments/' + attachment,
+                params: { clientToken: TOKEN }
             }).then(processAttachment);
         }
     };

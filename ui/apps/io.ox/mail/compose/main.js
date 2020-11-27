@@ -323,6 +323,9 @@ define('io.ox/mail/compose/main', [
                 case 'MSGCS-0007':
                     error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
                     break;
+                case 'MSGCS-0010':
+                    error.message = gt('This draft was changed outside of this window. To prevent possible loss of data please continue editing in that other tab or browser.');
+                    break;
                 default:
                     break;
             }
@@ -350,8 +353,10 @@ define('io.ox/mail/compose/main', [
             });
         };
 
-        app.resume = function (data) {
+        app.resume = function (data, force) {
             if (!app.error) return;
+            // does not recover when concurrent editing was identified
+            if (!force && app.error && app.error.code === 'MSGCS-0010') return;
             // reset error state
             var failRestore = app.error.failRestore;
             delete app.error;
