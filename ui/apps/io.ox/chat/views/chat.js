@@ -655,7 +655,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeRoomId: function () {
-            $('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
+            this.$('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
         },
 
         markMessageAsRead: function () {

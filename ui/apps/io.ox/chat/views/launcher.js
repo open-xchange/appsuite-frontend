@@ -14,8 +14,9 @@
 define('io.ox/chat/views/launcher', [
     'io.ox/chat/data',
     'gettext!io.ox/chat',
+    'settings!io.ox/chat',
     'less!io.ox/chat/style'
-], function (data, gt) {
+], function (data, gt, settings) {
 
     return Backbone.View.extend({
 
@@ -52,12 +53,9 @@ define('io.ox/chat/views/launcher', [
         },
 
         onClick: function () {
-            var floatingWindow = $('.floating-window').has('.ox-chat');
-
-            if ($('.ox-chat.columns').is(':visible')) {
-                $('div.ox-chat').hide();
-            } else if (floatingWindow.is(':visible')) {
-                floatingWindow.hide();
+            var model = ox.ui.floatingWindows.findWhere({ app: 'io.ox/chat' });
+            if (model) {
+                model.trigger(settings.get('hidden') === true ? 'open' : 'quit');
             } else {
                 require(['io.ox/chat/main'], function (win) {
                     win.showApp();

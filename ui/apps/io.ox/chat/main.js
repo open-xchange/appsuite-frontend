@@ -79,8 +79,11 @@ define('io.ox/chat/main', [
                     settings.set('mode', 'sticky').save();
                     this.$body.addClass('columns');
                 },
+                'open': this.showApp,
                 'quit': this.hideApp
             });
+            // give the model a unique identifer to find it
+            this.model.set('app', 'io.ox/chat', { silent: true });
 
             this.listenTo(events, 'cmd', this.onCommand);
 
@@ -283,7 +286,7 @@ define('io.ox/chat/main', [
         },
 
         clearActiveSelection: function () {
-            $('.chat-leftside li[role="option"]').each(function () {
+            this.$leftside.find('li[role="option"]').each(function () {
                 $(this).attr('tabindex', -1).removeClass('active');
             });
         },
@@ -361,7 +364,7 @@ define('io.ox/chat/main', [
 
         onClick: function (e) {
             e.stopPropagation();
-            _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
+            _.defer(function () { this.$rightside.find('textarea').trigger('focus'); }.bind(this));
         },
 
         onFocus: function (e) {
@@ -500,7 +503,7 @@ define('io.ox/chat/main', [
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 this.getResizeBar(),
-                $('<div class="chat-leftside">').addClass('density-' + settings.get('density', 'default')).append(
+                this.$leftside = $('<div class="chat-leftside">').addClass('density-' + settings.get('density', 'default')).append(
                     $('<div class="header">').append(
                         $('<div class="picture">').append(
                             new AvatarView({ model: user }).render().$el,
