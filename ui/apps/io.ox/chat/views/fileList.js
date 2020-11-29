@@ -18,8 +18,9 @@ define('io.ox/chat/views/fileList', [
     'io.ox/backbone/views/toolbar',
     'io.ox/chat/util',
     'io.ox/chat/api',
+    'io.ox/core/strings',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, data, ToolbarView, util, api, gt) {
+], function (ext, DisposableView, data, ToolbarView, util, api, strings, gt) {
 
     'use strict';
 
@@ -120,8 +121,8 @@ define('io.ox/chat/views/fileList', [
             details.append(
                 $('<div class="filename">').text(model.get('name')),
                 $('<div class="filestats">').append(
-                    $('<span class="filedate">').text(data.users.getShortName(model.get('email'))),
-                    $('<span class="filesize">').text('')
+                    $('<span class="filedate">').text(data.users.getShortName(model.get('sender'))),
+                    $('<span class="filesize">').text(strings.fileSize(model.get('size'), 0))
                 )
             );
             // list item
