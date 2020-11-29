@@ -112,9 +112,9 @@ define('io.ox/chat/views/channelList', [
                 .append(
                     $('<div>').append(
                         new ChatAvatar({ model: model }).render().$el,
-                        $('<span class="title">').text(model.getTitle()),
+                        $('<div class="title">').text(model.getTitle()),
                         //#. %1$d: is the number of members
-                        $('<span class="members">').text(gt.ngettext('%1$d member', '%1$d members', numberOfMembers, numberOfMembers))
+                        $('<div class="members">').text(gt.ngettext('%1$d member', '%1$d members', numberOfMembers, numberOfMembers))
                     ),
                     $('<div class="description">').text(model.get('description')),
                     $('<button type="button" class="btn btn-default btn-action" >')

@@ -110,17 +110,25 @@ define('io.ox/chat/views/history', [
                 .attr('data-cid', model.cid)
                 .append(
                     new ChatAvatar({ model: model }).render().$el,
-                    $('<div class="chats-container">').append(
-                        $('<div class="chats-row">').append(
-                            $('<div class="title">').text(model.getTitle()),
-                            $('<div class="body">').text(model.getLastMessageText())
-                        )
+                    $('<div>').append(
+                        $('<div>').append(
+                            $('<span class="title">').text(model.getTitle()),
+                            $('<span class="type">').text('(' + this.getType(model) + ')')
+                        ),
+                        $('<div class="body">').text(model.getLastMessageText())
                     ),
                     $('<button type="button" class="btn btn-default btn-action" >')
                         .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
                         //#. Used as a verb
                         .text(gt('Open'))
                 );
+        },
+
+        getType: function (model) {
+            var type = model.get('type');
+            if (type === 'channel') return gt('Channel');
+            if (type === 'group') return gt('Group chat');
+            return gt('Private chat');
         },
 
         getNode: function (model) {
