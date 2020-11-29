@@ -90,7 +90,7 @@ define('io.ox/chat/views/chatMember', [
         },
 
         onRemove: function (model) {
-            this.$('[data-email="' + model.get('email1') + '"]').parent().remove();
+            this.$('[data-email="' + model.get('email') + '"]').parent().remove();
             //this.updateToggleButton();
         }
     });

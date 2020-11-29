@@ -162,7 +162,6 @@ define('io.ox/chat/main', [
                                 return renderItems.call(this, list, options);
                             });
                         },
-                        useGABOnly: true,
                         title: gt('Start new conversation'),
                         button: gt('Start conversation'),
                         point: 'io.ox/contacts/addressbook-popup-single'

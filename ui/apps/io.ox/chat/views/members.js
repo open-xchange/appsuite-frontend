@@ -14,8 +14,9 @@
 define('io.ox/chat/views/members', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
+    'io.ox/chat/data',
     'io.ox/switchboard/presence'
-], function (Disposable, AvatarView, presence) {
+], function (Disposable, AvatarView, data, presence) {
 
     'use strict';
 
@@ -32,7 +33,7 @@ define('io.ox/chat/views/members', [
         },
 
         renderEntry: function (model) {
-            if (model.get('id') === ox.user_id) return;
+            if (model.id === data.user.email) return;
             return $('<li>').attr('data-id', model.get('id')).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,
@@ -40,10 +41,10 @@ define('io.ox/chat/views/members', [
                 ),
                 $('<div class="center">').append(
                     $('<strong>').text(model.getName()),
-                    $('<span>').text(model.get('email1'))
+                    $('<span>').text(model.get('email'))
                 ),
                 $('<div class="member-controls">').append(
-                    model.get('id') !== ox.user_id ? $('<button class="remove">').append($('<i class="fa fa-times">')) : null
+                    $('<button class="remove">').append($('<i class="fa fa-times" aria-hidden="true">'))
                 )
             );
         },

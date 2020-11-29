@@ -179,8 +179,9 @@ define('io.ox/chat/actions/openGroupDialog', [
             if (newTitle !== originalModel.get('title')) updates.title = newTitle; // only save when title changed
 
             if (this.model.get('description') !== originalModel.get('description')) updates.description = this.model.get('description');
-            if (!_.isEqual(this.collection.pluck('email1'), Object.keys(this.model.get('members') || {}))) {
-                var emails = this.collection.pluck('email1');
+
+            if (!_.isEqual(this.collection.pluck('email'), Object.keys(this.model.get('members') || {}))) {
+                var emails = this.collection.pluck('email');
                 if (this.model.isNew()) {
                     updates.members = membersToObject(emails);
                 } else {
@@ -203,6 +204,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                 this.close();
                 return;
             }
+
             originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
                 this.close();
                 data.chats.add(originalModel);

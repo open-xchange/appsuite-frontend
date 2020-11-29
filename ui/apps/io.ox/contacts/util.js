@@ -405,8 +405,8 @@ define('io.ox/contacts/util', [
                 if (last_name) return first(last_name);
                 if (first_name) return first(first_name);
 
-                // try mail address
-                var email = $.trim(obj.email1 || obj.email2 || obj.email3);
+                // try mail address (email without a number is used by chat, for example)
+                var email = $.trim(obj.email1 || obj.email2 || obj.email3 || obj.email);
                 if (email) return first(email);
 
                 return '';

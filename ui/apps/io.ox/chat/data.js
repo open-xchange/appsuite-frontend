@@ -109,13 +109,10 @@ define('io.ox/chat/data', [
 
     var UserModel = Backbone.Model.extend({
 
-        isSystem: function () {
-            return this.get('id') === 0;
-        },
+        idAttribute: 'email',
 
         isMyself: function () {
-            var user = data.users.getByMail(data.user.email);
-            return this === user;
+            return this.id === data.user.email;
         },
 
         getShortName: function () {
@@ -129,7 +126,11 @@ define('io.ox/chat/data', [
         },
 
         getEmail: function () {
-            return this.get('email') || this.get('email1') || this.get('email2') || this.get('email3');
+            return this.id;
+        },
+
+        isExternal: function () {
+            return !this.get('internal');
         }
     });
 
@@ -146,48 +147,54 @@ define('io.ox/chat/data', [
         getByMail: (function () {
             var cache = [];
             return function (email) {
-                if (!cache[email]) {
-                    cache[email] = this.find(function (model) {
-                        return model.get('email1') === email || model.get('email2') === email || model.get('email3') === email;
-                    });
-                }
-                if (!cache[email]) {
-                    cache[email] = new UserModel({ email1: email });
-                }
+                if (!cache[email]) cache[email] = this.get(email);
+                if (!cache[email]) cache[email] = new UserModel({ email: email });
                 return cache[email];
             };
         }()),
 
         getName: function (email) {
-            var model = this.getByMail(email);
-            return model ? model.getName() : '';
+            return this.getByMail(email).getName();
         },
 
         getShortName: function (email) {
-            var model = this.getByMail(email);
-            return model ? model.getShortName() : '';
+            return this.getByMail(email).getShortName();
         }
     });
 
     data.users = new UserCollection([]);
 
-    data.fetchUsers = function () {
-        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,515,524,555,556,557,606' }, false).then(function (result) {
-            result = _(result).map(function (item) {
-                return _.extend({
-                    cid: _.cid(item),
-                    id: item.internal_userid,
-                    first_name: String(item.first_name || '').trim(),
-                    last_name: String(item.last_name || '').trim(),
-                    nickname: String(item.nickname || '').trim(),
-                    email: String(item.email1 || item.email2 || item.email3 || '').trim().toLowerCase(),
-                    image: !!item.image1_url
-                }, _(item).pick('email1', 'email2', 'email3'));
-            });
-            return data.users.reset(result);
-        }).fail(function (err) {
-            if (ox.debug) console.error(err);
+    data.users.addFromAddressbook = function (email, item, internal) {
+        email = String(email || '').trim().toLowerCase();
+        return new UserModel({
+            email: email,
+            first_name: String(item.first_name || '').trim(),
+            last_name: String(item.last_name || '').trim(),
+            nickname: String(item.nickname || '').trim(),
+            image: !!item.image1_url,
+            internal: !!internal
         });
+    };
+
+    data.fetchUsers = function () {
+        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,515,524,555,556,557,606' }, false)
+            .then(function (result) {
+                return data.users.reset(
+                    _(result)
+                    .chain()
+                    .map(function (item) {
+                        return ['email1', 'email2', 'email3'].map(function (field) {
+                            return item[field] && data.users.addFromAddressbook(item[field], item, field === 'email1');
+                        });
+                    })
+                    .flatten()
+                    .compact()
+                    .value()
+                );
+            })
+            .fail(function (err) {
+                if (ox.debug) console.error(err);
+            });
     };
 
     var MemberCollection = BaseCollection.extend({
@@ -206,7 +213,7 @@ define('io.ox/chat/data', [
             return _(array).map(function (item) {
                 var user = data.users.getByMail(item.email);
                 if (user) user = user.toJSON();
-                return _.extend({ email1: item.email }, item, user);
+                return _.extend({ email: item.email }, item, user);
             });
         },
 
@@ -576,7 +583,7 @@ define('io.ox/chat/data', [
         },
 
         getTitle: function () {
-            var members = _(this.members.reject(function (m) { return m.get('email1') === data.user.email; }));
+            var members = _(this.members.reject(function (m) { return m.get('email') === data.user.email; }));
             return this.get('title') || members.invoke('getName').sort().join('; ');
         },
 

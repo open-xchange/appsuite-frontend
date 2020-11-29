@@ -37,7 +37,7 @@ define('io.ox/chat/views/chatListEntry', [
                     tabindex: -1,
                     role: 'option',
                     'data-cmd': 'open-private-chat',
-                    'data-email': member.get('email1') || member.get('email2') || member.get('email3'),
+                    'data-email': member.get('email'),
                     'data-cid': this.model.cid
                 };
             }

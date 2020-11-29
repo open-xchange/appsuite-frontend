@@ -82,9 +82,19 @@ define('io.ox/chat/views/message', [
                 $('<div class="sender">').append(
                     // we add a space so that we get nicer result when selecting/copying text
                     $('<span class="name">').text(user.getName() + ' '),
+                    user.isExternal() ? this.renderExternal(user) : $(),
                     $('<span class="time">').text(this.model.getTime())
                 )
             ];
+        },
+
+        renderExternal: function (user) {
+            return $('<span class="email">')
+                .attr('title', gt('Messages are delivered by email.'))
+                .append(
+                    $('<i class="fa fa-envelope-o" aria-hidden="true">'),
+                    $.txt(' ' + user.getEmail() + ' ')
+                );
         },
 
         renderContent: function () {

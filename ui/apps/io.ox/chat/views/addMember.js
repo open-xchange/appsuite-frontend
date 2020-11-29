@@ -40,13 +40,14 @@ define('io.ox/chat/views/addMember', [
                         resources: false
                     },
                     extPoint: 'io.ox/participants/add',
-                    harmonize: function (data) {
-                        data = _(data).map(function (m) {
+                    harmonize: function (result) {
+                        result = _(result).map(function (m) {
                             return new pModel.Participant(m);
                         });
-                        return _(data).filter(function (model) {
-                            if (model.get('id') === ox.user_id) return false;
-                            if (self.collection.get(model.get('id'))) return false;
+                        return _(result).filter(function (model) {
+                            var email = model.get(model.get('field') || 'email1');
+                            if (email === data.user.email) return false;
+                            if (self.collection.get(email)) return false;
                             return true;
                         });
                     },
@@ -85,8 +86,13 @@ define('io.ox/chat/views/addMember', [
 
         addParticipant: function (model) {
             var email = model.get(model.get('field')) || model.get('email');
-            this.collection.add(data.users.getByMail(email));
+            // exists?
+            var user = data.users.get(email);
+            if (!user) {
+                user = data.users.addFromAddressbook(email, model.toJSON());
+                data.users.add(user);
+            }
+            this.collection.add(user);
         }
-
     });
 });

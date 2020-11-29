@@ -137,12 +137,12 @@ define('io.ox/chat/extensions/register', [
             });
             if (users.length === 1) {
                 var user = _(users).first();
-                startPrivateChat(user.email1 || user.email2 || user.email3);
+                startPrivateChat(user.email || user.email1 || user.email2 || user.email3);
                 return;
             }
             startGroupChat({
                 members: users.map(function (user) {
-                    return user.email1 || user.email2 || user.email3;
+                    return user.email || user.email1 || user.email2 || user.email3;
                 })
             });
         }
