@@ -95,6 +95,8 @@ define('io.ox/chat/views/typing', [
     var propagate = (function () {
         var throttles = {};
         return function (roomId) {
+            // prevent typings for new private chats which have no roomId yet
+            if (!roomId) return;
             var fn = throttles[roomId];
             if (!fn) fn = throttles[roomId] = _.throttle(api.typing.bind(api, roomId, true), THROTTLE, { trailing: false });
             fn(roomId);
