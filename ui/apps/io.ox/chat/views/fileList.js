@@ -97,28 +97,31 @@ define('io.ox/chat/views/fileList', [
         },
 
         renderItem: function (model) {
-            var preview = $('<div class="preview">');
-            var details = $('<div class="details">');
-            var button = $('<button type="button">')
+            var $preview = $('<div class="preview">');
+            var $details = $('<div class="details">');
+            var $button = $('<button type="button">')
                 .attr('data-file-id', model.get('fileId'))
-                .append(preview, details);
+                .append($preview, $details);
             // preview
             if (model.isImage()) {
-                button.attr('data-cmd', 'show-file');
-                preview.addClass('cursor-zoom-in');
-                api.requestBlobUrl({ url: model.getThumbnailUrl() }).then(function (url) {
-                    preview.css('backgroundImage', 'url("' + url + '")');
+                $button.attr('data-cmd', 'show-file');
+                $preview.addClass('cursor-zoom-in').lazyload().one('appear', { url: model.getThumbnailUrl() }, function (e) {
+                    api.requestBlobUrl({ url: e.data.url }).then(function (url) {
+                        $(this).css('backgroundImage', 'url("' + url + '")').on('dispose', { url: url }, function (e) {
+                            URL.revokeObjectURL(e.data.url);
+                        });
+                    }.bind(this));
                 });
             } else {
-                button.attr({ 'data-cmd': 'download', 'data-url': model.getFileUrl() });
-                preview.addClass('flex-center-vertically').append(
+                $button.attr({ 'data-cmd': 'download', 'data-url': model.getFileUrl() });
+                $preview.addClass('flex-center-vertically').append(
                     $('<i class="fa icon" aria-hidden="true">')
                         .addClass(util.getClassFromMimetype(model.get('mimetype')))
                         .attr('title', util.getFileTypeName(model.get('mimetype'), model.get('name')))
                 );
             }
             // details
-            details.append(
+            $details.append(
                 $('<div class="filename">').text(model.get('name')),
                 $('<div class="filestats">').append(
                     $('<span class="filedate">').text(data.users.getShortName(model.get('sender'))),
@@ -126,7 +129,7 @@ define('io.ox/chat/views/fileList', [
                 )
             );
             // list item
-            return $('<li class="file">').append(button);
+            return $('<li class="file">').append($button);
         },
 
         getNode: function (model) {
