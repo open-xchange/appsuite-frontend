@@ -574,7 +574,7 @@ define('io.ox/chat/main', [
             var showLastRoom = settings.get('selectLastRoom', true);
             var lastRoomId = showLastRoom && settings.get('lastRoomId');
             var room = lastRoomId && data.chats.get(lastRoomId);
-            if (room.isActive()) return this.showChat(lastRoomId);
+            if (room && room.isActive()) return this.showChat(lastRoomId);
             // fill right side only if not selecting last room (to avoid flicker)
             this.$rightside.append(new EmptyView().render().$el);
         },
