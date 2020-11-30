@@ -1301,8 +1301,6 @@ define('io.ox/calendar/week/view', [
             }
 
             return function (e) {
-                // needless for guests
-                if (capabilities.has('guest')) return;
 
                 if (e.type === 'mousedown') {
                     var app = this.opt.app;

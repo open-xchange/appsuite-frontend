@@ -1347,7 +1347,7 @@ define('io.ox/calendar/util', [
         },
 
         // creates an attendee object from a user object or model and contact model or object
-        // distribution lists create an array of attendees representing the menmbers of the distribution list
+        // distribution lists create an array of attendees representing the members of the distribution list
         // used to create default participants and used by addparticipantsview
         // options can contain attendee object fields that should be prefilled (usually partStat: 'ACCEPTED')
         createAttendee: function (user, options) {
@@ -1368,7 +1368,7 @@ define('io.ox/calendar/util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
+                // guests have a user id but are still considered external, so don't add an entity here (normal users have guest_created_by === 0)
                 if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) {
                     attendee.entity = user.user_id || user.id;
                 } else if (user.entity) attendee.entity = user.entity;

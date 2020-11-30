@@ -18,8 +18,9 @@ define('io.ox/calendar/actions/create', [
     'io.ox/contacts/util',
     'io.ox/calendar/util',
     'gettext!io.ox/calendar',
-    'settings!io.ox/calendar'
-], function (api, ModalDialog, userAPI, util, calendarUtil, gt, settings) {
+    'settings!io.ox/calendar',
+    'io.ox/core/capabilities'
+], function (api, ModalDialog, userAPI, util, calendarUtil, gt, settings, capabilities) {
 
     'use strict';
 
@@ -122,13 +123,15 @@ define('io.ox/calendar/actions/create', [
 
         // show warning for shared folders
         api.get(params.folder).then(function (folder) {
-            if (api.can('create', folder)) return folder;
+            // there is no default folder for guests so always return the requested folder
+            if (api.can('create', folder) || capabilities.has('guest')) return folder;
             params.folder = settings.get('chronos/defaultFolderId');
             return api.get(params.folder);
         }).done(function (folder) {
             if (!api.can('create', folder)) return;
-            if (api.is('shared', folder)) showDialog(params, folder);
-            else if (api.is('public', folder)) showDialogPublic(params, folder);
+            // guests can only create in the current folder
+            if (api.is('shared', folder) && !capabilities.has('guest')) showDialog(params, folder);
+            else if (api.is('public', folder) && !capabilities.has('guest')) showDialogPublic(params, folder);
             else openEditDialog(params);
         });
     };

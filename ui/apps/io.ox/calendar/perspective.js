@@ -216,8 +216,6 @@ define('io.ox/calendar/perspective', [
         },
 
         createAppointment: function (data) {
-            if (capabilities.has('guest')) return;
-
             ext.point('io.ox/calendar/detail/actions/create')
             .invoke('action', this, { app: this.app }, data);
         },

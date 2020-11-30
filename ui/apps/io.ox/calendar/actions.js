@@ -149,7 +149,15 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        capabilities: '!guest',
+        matches: function (data) {
+            // if you are not a guest you always have your default folder to create appointments
+            if (capabilities.has('!guest')) return true;
+            // don't use collection.has(create) here, doesn't work when there is no appointment selected
+            var folder = folderAPI.pool.getModel(data.folder_id);
+            if (!folder) return false;
+            // guests need create permissions in the current folder
+            return folder.can('create');
+        },
         action: _.debounce(function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
