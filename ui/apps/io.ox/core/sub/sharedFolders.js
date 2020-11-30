@@ -93,7 +93,7 @@ define('io.ox/core/sub/sharedFolders', [
     }
 
     function openDialog(data) {
-        var updateSubscriptions = function (ignoreWarning) {
+        var updateSubscriptions = function (ignoreWarnings) {
                 http.pause();
 
                 // split hash, subscribe requests first, unsubscribe requests second
@@ -110,11 +110,11 @@ define('io.ox/core/sub/sharedFolders', [
                 });
 
                 _.each(subscribe, function (obj, id) {
-                    api.update(id, obj, ignoreWarning);
+                    api.update(id, obj, { ignoreWarnings: ignoreWarnings });
                 });
 
                 _.each(unsubscribe, function (obj, id) {
-                    api.update(id, obj, ignoreWarning);
+                    api.update(id, obj, { ignoreWarnings: ignoreWarnings });
                 });
 
                 http.resume().done(function () {
