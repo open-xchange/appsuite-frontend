@@ -71,6 +71,7 @@ define('io.ox/chat/views/fileList', [
                     yell('error', gt('Files could not be loaded.'));
                 });
             });
+            this.$scrollpane = $('<div class="scrollpane">');
         },
 
         render: function () {
@@ -80,12 +81,13 @@ define('io.ox/chat/views/fileList', [
                     $('<h2>').append(gt('All files'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
-                $('<div class="scrollpane">').append(
+                this.$scrollpane.append(
                     $('<ul>').append(
                         items.length > 0 ? items.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
                     )
                 )
             );
+            this.$scrollpane.triggerHandler('add');
             return this;
         },
         renderEmpty: function () {
@@ -105,7 +107,7 @@ define('io.ox/chat/views/fileList', [
             // preview
             if (model.isImage()) {
                 $button.attr('data-cmd', 'show-file');
-                $preview.addClass('cursor-zoom-in').lazyload().one('appear', { url: model.getThumbnailUrl() }, function (e) {
+                $preview.addClass('cursor-zoom-in').lazyload({ container: this.$scrollpane, immediate: true }).one('appear', { url: model.getThumbnailUrl() }, function (e) {
                     api.requestBlobUrl({ url: e.data.url }).then(function (url) {
                         $(this).css('backgroundImage', 'url("' + url + '")').on('dispose', { url: url }, function (e) {
                             URL.revokeObjectURL(e.data.url);
@@ -140,9 +142,11 @@ define('io.ox/chat/views/fileList', [
             if (this.disposed) return;
             $(this.el).find('.info-container').remove();
             this.updateIndices();
-            this.$('.scrollpane ul').prepend(
+            this.$scrollpane.find('ul').prepend(
                 options.changes.added.map(this.renderItem, this)
             );
+            // let lazyload react immediately
+            this.$scrollpane.triggerHandler('add');
         }, 1),
 
         updateIndices: function () {

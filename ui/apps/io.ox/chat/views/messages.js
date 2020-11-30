@@ -53,6 +53,10 @@ define('io.ox/chat/views/messages', [
                     .flatten()
                     .value()
             );
+            // optimize for immediate appearance of lazyloaded images when reopening a chat
+            _.defer(function () {
+                this.$el.closest('.scrollpane').triggerHandler('add');
+            }.bind(this));
             return this;
         },
 
