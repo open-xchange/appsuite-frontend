@@ -247,7 +247,7 @@ define('io.ox/contacts/edit/view', [
 
         isReadonly: function (name) {
             if (this.readonly[name]) return true;
-            if (name === 'email1' && this.model.get('folder_id') === 6) return true;
+            if (name === 'email1' && String(this.model.get('folder_id')) === '6') return true;
             return false;
         },
 
