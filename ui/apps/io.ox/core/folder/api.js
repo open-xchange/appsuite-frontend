@@ -704,7 +704,7 @@ define('io.ox/core/folder/api', [
     function list(id, options) {
 
         id = String(id);
-        options = _.extend({ all: false, cache: true }, options);
+        options = _.extend({ all: false, cache: true, force: false }, options);
 
         // already cached?
         var collectionId = getCollectionId(id, options.all),
@@ -742,7 +742,8 @@ define('io.ox/core/folder/api', [
                 altNames: true,
                 parent: id,
                 timezone: 'UTC',
-                tree: tree(id)
+                tree: tree(id),
+                forceRetry: options.force
             },
             appendColumns: true
         })
@@ -873,7 +874,7 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-        options = _.extend({ module: undefined, cache: true }, options);
+        options = _.extend({ module: undefined, cache: true, force: false }, options);
         if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
@@ -907,6 +908,7 @@ define('io.ox/core/folder/api', [
                 content_type: module,
                 timezone: 'UTC',
                 tree: 1,
+                forceRetry: !!options.force,
                 all: !!options.all
             }
         })
