@@ -98,7 +98,7 @@ define('io.ox/chat/views/file', [
 
             if (file.isAnimated) {
                 var animatedFile = $('<img class="animated-file">'),
-                    playButton = $('<button class="play-button">').append(getPlayButton()),
+                    playButton = $('<button class="play-button">').append($('<i class="fa fa-play">')),
                     loadAnimation = function () {
                         api.requestBlobUrl({ url: file.url }).then(function (url) {
                             animatedFile.attr('src', url);
@@ -178,15 +178,6 @@ define('io.ox/chat/views/file', [
 
     function getSVG(width, height) {
         return 'data:image/svg+xml;utf8,<svg version="1.1" width="' + width + '" height="' + height + '" xmlns="http://www.w3.org/2000/svg"></svg>';
-    }
-
-    // need inline svg to adjust colors via css. doesn't work when loaded as file
-    // other possibilities, use font awesome or other font based icons
-    function getPlayButton() {
-        return '<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">' +
-            '<circle r="140" cy="150" cx="150" stroke-width="16" stroke-opacity="null" fill-opacity="0.0"/>' +
-            '<path transform="rotate(90, 165, 150)" d="m99.00171,207.74987l65.99895,-115.49817l65.99895,115.49817l-131.99791,0z" fill-opacity="null" stroke-opacity="null" stroke-width="16"/>' +
-        '</svg>';
     }
 
     return FileView;
