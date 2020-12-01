@@ -24,20 +24,21 @@ define('io.ox/chat/util/average-color', [], function () {
             canvas.height = this.height;
             var ctx = canvas.getContext('2d');
             ctx.drawImage(this, 0, 0, this.width, this.height);
-            var c = ctx.getImageData(0, 0, this.width, this.height).data;
-            var length = c.length, i = 0, r = 0, g = 0, b = 0, n = 0;
+            var colors = ctx.getImageData(0, 0, this.width, this.height).data;
+            var length = colors.length;
+            var i = 0, r = 0, g = 0, b = 0, n = 0;
             while (i < length) {
-                r += c[i];
-                g += c[i + 1];
-                b += c[i + 2];
+                r += colors[i];
+                g += colors[i + 1];
+                b += colors[i + 2];
                 i += 4 * 5;
                 n++;
             }
             r = Math.round(r / n);
             g = Math.round(g / n);
             b = Math.round(b / n);
-            canvas = ctx = null;
-            def.resolve('rgb(' + r + ',' + g + ',' + b + ')');
+            canvas = ctx = colors = img = img.onload = null;
+            def.resolve('rgb(' + r + ', ' + g + ', ' + b + ')');
         };
         img.src = url;
         return def;

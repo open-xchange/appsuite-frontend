@@ -16,6 +16,7 @@ define('io.ox/chat/data', [
     'io.ox/chat/api',
     'io.ox/chat/events',
     'io.ox/chat/system-message',
+    'io.ox/chat/util/average-color',
     'io.ox/contacts/api',
     'io.ox/switchboard/api',
     'io.ox/switchboard/presence',
@@ -24,7 +25,7 @@ define('io.ox/chat/data', [
     'io.ox/core/notifications',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (ext, api, events, systemMessage, contactsApi, switchboardApi, presence, util, http, notifications, settings, gt) {
+], function (ext, api, events, systemMessage, averageColor, contactsApi, switchboardApi, presence, util, http, notifications, settings, gt) {
 
     'use strict';
 
@@ -754,38 +755,45 @@ define('io.ox/chat/data', [
             if (this.isNew()) return this.storeFirstMessage(attr, file);
             attr.roomId = this.get('roomId');
 
-            var formData = util.makeFormData(_.extend({}, attr, { file: file }));
-            if (file) attr = _.extend({ uploading: true, blob: file, type: 'file' }, attr);
-            var model = this.messages.add(attr, { merge: true, parse: true });
+            // get average color for images client-side
+            return file && /^image\//.test(file.type) ? averageColor.fromBlob(file).then(save.bind(this)) : save.call(this);
 
-            // for debugging; you need this very often when working on pre-post message appearance
-            if (ox.debug) {
-                if (window.upload === false) return $.when();
-                if (window.fail) {
-                    model.set('deliveryState', 'failed').trigger('progress', 0);
-                    return $.Deferred().reject();
+            function save(color) {
+
+                if (color) attr.averageColor = color;
+                var formData = util.makeFormData(_.extend({}, attr, { file: file }));
+                if (file) attr = _.extend({ uploading: true, blob: file, type: 'file' }, attr);
+                var model = this.messages.add(attr, { merge: true, parse: true });
+
+                // for debugging; you need this very often when working on pre-post message appearance
+                if (ox.debug) {
+                    if (window.upload === false) return $.when();
+                    if (window.fail) {
+                        model.set('deliveryState', 'failed').trigger('progress', 0);
+                        return $.Deferred().reject();
+                    }
                 }
-            }
 
-            // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
-            return model.save(attr, {
-                data: formData,
-                processData: false,
-                contentType: false
-            })
-            .then(
-                function success() {
-                    model.setInitialDeliveryState();
-                    model.set('uploading', false);
-                    this.set('active', true);
-                }.bind(this),
-                function fail(response) {
-                    // ignore "abort" by the user
-                    if (response.statusText === 'abort') return;
-                    this.handleError(response);
-                    model.set('deliveryState', 'failed').trigger('progress', 0);
-                }.bind(this)
-            );
+                // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
+                return model.save(attr, {
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                })
+                .then(
+                    function success() {
+                        model.setInitialDeliveryState();
+                        model.set('uploading', false);
+                        this.set('active', true);
+                    }.bind(this),
+                    function fail(response) {
+                        // ignore "abort" by the user
+                        if (response.statusText === 'abort') return;
+                        this.handleError(response);
+                        model.set('deliveryState', 'failed').trigger('progress', 0);
+                    }.bind(this)
+                );
+            }
         },
 
         storeFirstMessage: function (attr, file) {
