@@ -137,7 +137,7 @@ Scenario.skip('Update channel profile picture and name', async (I, dialogs, user
 });
 
 // skipped - wait for CAS-315 to be resolved
-Scenario.only('Preview, join and leave a channel', async (I, users, contexts, chat) => {
+Scenario.skip('Preview, join and leave a channel', async (I, users, contexts, chat) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
