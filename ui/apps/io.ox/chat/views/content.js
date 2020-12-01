@@ -140,11 +140,11 @@ define('io.ox/chat/views/content', [
         },
 
         onChangeDeleted: function () {
-            if (this.model.isDeleted()) {
-                this.$('.message-quote').remove();
-                this.$file.remove();
-                this.$file = $();
-            }
+            if (!this.model.isDeleted()) return;
+            this.$('.message-quote').remove();
+            this.$file.remove();
+            this.$file = $();
+            this.renderBody();
         }
     });
 

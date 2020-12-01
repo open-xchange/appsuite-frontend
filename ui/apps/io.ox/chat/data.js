@@ -735,92 +735,105 @@ define('io.ox/chat/data', [
         },
 
         postMessage: (function () {
+
             var lastDeferred = $.when();
+            var meIfYouCan = _.constant($.when());
+
             return function postMessage(attr, file) {
+
                 var consumed = false, consume = function () { consumed = true; };
                 // set this here such that message previews can identify the sender, but this will be ignored by the server
                 attr.sender = data.user.email;
                 events.trigger('message:post', { attr: attr, room: this, consume: consume });
-                if (!consumed) {
-                    lastDeferred = lastDeferred.then(function () {
-                        return this.storeMessage(attr, file).catch(_.constant($.when()));
-                    }.bind(this));
+                if (consumed) return lastDeferred;
+
+                // special case: very first message
+                if (this.isNew()) {
+                    return (lastDeferred = storeFirstMessage.call(this, attr, file).catch(meIfYouCan));
                 }
+
+                // add message now (so that we have an instant feedback even if a previous upload is still in progress)
+                var modelData = file ? _.extend({ uploading: true, blob: file, type: 'file' }, attr) : attr;
+                var model = this.messages.add(modelData, { merge: true, parse: true });
+
+                lastDeferred = lastDeferred.then(function () {
+                    return storeMessage.call(this, attr, file, model).catch(meIfYouCan);
+                }.bind(this));
+
                 return lastDeferred;
             };
-        }()),
 
-        storeMessage: function (attr, file) {
+            function storeMessage(attr, file, model) {
 
-            if (this.isNew()) return this.storeFirstMessage(attr, file);
-            attr.roomId = this.get('roomId');
+                attr.roomId = this.get('roomId');
 
-            // get average color for images client-side
-            return file && /^image\//.test(file.type) ? averageColor.fromBlob(file).then(save.bind(this)) : save.call(this);
+                // get average color for images client-side
+                return file && /^image\//.test(file.type) ? averageColor.fromBlob(file).then(save.bind(this)) : save.call(this);
 
-            function save(color) {
+                function save(color) {
 
-                if (color) attr.averageColor = color;
-                var formData = util.makeFormData(_.extend({}, attr, { file: file }));
-                if (file) attr = _.extend({ uploading: true, blob: file, type: 'file' }, attr);
-                var model = this.messages.add(attr, { merge: true, parse: true });
-
-                // for debugging; you need this very often when working on pre-post message appearance
-                if (ox.debug) {
-                    if (window.upload === false) return $.when();
-                    if (window.fail) {
-                        model.set('deliveryState', 'failed').trigger('progress', 0);
-                        return $.Deferred().reject();
+                    // for debugging; you need this very often when working on pre-post message appearance
+                    if (ox.debug) {
+                        if (window.upload === false) return $.when().then(_.wait(5000));
+                        if (window.fail) {
+                            model.set('deliveryState', 'failed').trigger('progress', 0);
+                            return $.Deferred().reject();
+                        }
                     }
-                }
 
-                // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
-                return model.save(attr, {
-                    data: formData,
-                    processData: false,
-                    contentType: false
-                })
-                .then(
+                    if (color) attr.averageColor = color;
+                    var formData = util.makeFormData(_.extend({}, attr, { file: file }));
+
+                    // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
+                    return model.save(attr, {
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    })
+                    .then(
+                        function success() {
+                            model.setInitialDeliveryState();
+                            model.set('uploading', false);
+                            this.set('active', true);
+                        }.bind(this),
+                        function fail(response) {
+                            // ignore "abort" by the user
+                            if (response.statusText === 'abort') return;
+                            this.handleError(response);
+                            model.set('deliveryState', 'failed').trigger('progress', 0);
+                        }.bind(this)
+                    );
+                }
+            }
+
+            function storeFirstMessage(attr, file) {
+
+                var hiddenAttr = {
+                    message: attr.content,
+                    file: file,
+                    members: this.get('members'),
+                    messateType: attr.type,
+                    messageData: attr.data
+                };
+
+                attr = _(attr).omit('content', 'members', 'type', 'data');
+
+                return this.save(attr, { hiddenAttr: hiddenAttr }).then(
                     function success() {
-                        model.setInitialDeliveryState();
-                        model.set('uploading', false);
-                        this.set('active', true);
+                        data.chats.add(this, { at: 0 });
+                        events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
+                        /*
+                        TBD: we need to do this here since the rightside is empty()'d and re-rendered completely, see cmd: show-chat
+                        */
+                        _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
                     }.bind(this),
                     function fail(response) {
-                        // ignore "abort" by the user
-                        if (response.statusText === 'abort') return;
                         this.handleError(response);
-                        model.set('deliveryState', 'failed').trigger('progress', 0);
                     }.bind(this)
                 );
             }
-        },
 
-        storeFirstMessage: function (attr, file) {
-            var hiddenAttr = {
-                message: attr.content,
-                file: file,
-                members: this.get('members'),
-                messateType: attr.type,
-                messageData: attr.data
-            };
-
-            attr = _(attr).omit('content', 'members', 'type', 'data');
-
-            return this.save(attr, { hiddenAttr: hiddenAttr }).then(function () {
-                data.chats.add(this, { at: 0 });
-                events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-                /*
-                TBD: we need to do this here since the rightside is empty()'d and re-rendered completely, see cmd: show-chat
-                */
-                _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
-            }.bind(this), this.handleError.bind(this))
-            .fail(function () {
-                require(['io.ox/core/yell'], function (yell) {
-                    yell('error', gt('The message could not be sent.'));
-                });
-            });
-        },
+        }()),
 
         toggleRecent: function () {
             var self = this;

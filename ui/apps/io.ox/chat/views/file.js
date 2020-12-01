@@ -43,6 +43,7 @@ define('io.ox/chat/views/file', [
         },
 
         render: function () {
+            if (this.disposed) return this;
             this.$el.empty();
             var model = this.model;
             if (model.get('cancelled')) return this;
@@ -164,7 +165,7 @@ define('io.ox/chat/views/file', [
         },
 
         getProgressBar: function () {
-            return $('<div class="progress"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%"></div></div>').hide();
+            return $('<div class="progress"><div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%"></div></div>');
         },
 
         renderUploadProgress: function (pct) {
@@ -177,7 +178,6 @@ define('io.ox/chat/views/file', [
             if (!this.model.abort) return;
             this.model.abort();
             this.model.set({ cancelled: true, deleted: true });
-            this.render();
         }
     });
 
