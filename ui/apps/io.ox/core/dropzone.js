@@ -214,7 +214,8 @@ define('io.ox/core/dropzone', [], function () {
                 // numFiles !== null detects, when an image from inside appsuite (e.g. compose window) is dragged onto the dropzone
                 if ((!files.length || numFiles !== files.length) && numFiles !== 0) {
                     require(['io.ox/core/yell', 'gettext!io.ox/core'], function (yell, gt) {
-                        yell('error', gt('Uploading folders is not supported.'));
+                        //#. 'display area' is the name used in the appsuite help/documentation for a zone where items can be droped at a drag & drop operation
+                        yell('error', gt('Uploading folders is not supported in this display area.'));
                     });
                 }
 
