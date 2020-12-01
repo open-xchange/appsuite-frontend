@@ -11,19 +11,21 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tours/whatsnew/main', [
+define('io.ox/core/whatsnew/main', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'io.ox/core/extPatterns/stage',
     'gettext!io.ox/core',
-    'io.ox/tours/whatsnew/meta',
+    'io.ox/core/whatsnew/meta',
     'io.ox/backbone/views/modal',
-    'less!io.ox/tours/whatsnew/style'
+    'less!io.ox/core/whatsnew/style'
 ], function (ext, capabilities, settings, Stage, gt, meta, ModalDialog) {
 
     'use strict';
 
+    // This is not the whats new TOUR this is the whats new DIALOG
+    // that's why it is part of core and not the tours package
     // no features to show, missing capabilities etc
     if (meta.getFeatures().length === 0) return;
 

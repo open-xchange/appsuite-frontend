@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tours/whatsnew/meta', [
+define('io.ox/core/whatsnew/meta', [
     'gettext!io.ox/core',
     'settings!io.ox/core',
     'io.ox/core/capabilities'
