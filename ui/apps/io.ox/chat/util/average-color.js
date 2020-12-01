@@ -20,11 +20,13 @@ define('io.ox/chat/util/average-color', [], function () {
         var img = document.createElement('img');
         img.onload = function () {
             var canvas = document.createElement('canvas');
-            canvas.width = this.width;
-            canvas.height = this.height;
+            var ratio = this.width / this.height;
+            var width = 100, height = Math.floor(width / ratio);
+            canvas.width = width;
+            canvas.height = height;
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(this, 0, 0, this.width, this.height);
-            var colors = ctx.getImageData(0, 0, this.width, this.height).data;
+            ctx.drawImage(this, 0, 0, width, height);
+            var colors = ctx.getImageData(0, 0, width, height).data;
             var length = colors.length;
             var i = 0, r = 0, g = 0, b = 0, n = 0;
             while (i < length) {
