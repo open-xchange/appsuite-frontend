@@ -140,6 +140,8 @@ define('io.ox/chat/views/chat', [
 
         render: function () {
             this.toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
+            this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
+
             this.chatMemberview = new ChatMember({ collection: this.model.members });
             this.$el.append(
                 $('<div class="header">').append(
@@ -161,7 +163,7 @@ define('io.ox/chat/views/chat', [
                         this.renderDropdown()
                     ).css('visibility', 'hidden')
                 ),
-                this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar })).$el,
+                this.toolbar.$el,
                 this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
@@ -222,32 +224,17 @@ define('io.ox/chat/views/chat', [
         },
 
         renderDropdown: function () {
-
             var $ul = $('<ul class="dropdown-menu dropdown-menu-right">'),
                 model = this.model,
-                isActive = model.isActive(),
-                isChannel = model.isChannel(),
-                isNew = model.isNew(),
                 id = model.id;
 
-            if (isNew) addItem(isChannel ? gt('Close channel') : gt('Close chat'), 'close-chat');
-            if (!isNew && isActive) {
-                var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
-                addItem(title, 'toggle-favorite');
-            }
-            if ((model.isGroup() || model.isChannel()) && model.isMember()) {
-                addItem(isChannel ? gt('Edit channel') : gt('Edit chat'), 'edit-group-chat');
-            }
-            if (!isNew && (model.isPrivate() || model.isGroup() || (model.isChannel() && model.isMember())) && isActive) {
-                addItem(isChannel ? gt('Close channel') : gt('Close chat'), 'unsubscribe-chat');
-            }
-            if (!model.isPrivate() && model.isMember()) {
-                addSeparator();
-                if (isChannel) addItem(gt('Leave channel'), 'leave-channel');
-                else addItem(gt('Leave chat'), 'leave-group');
-            } else if (model.isChannel() && !model.get('active')) {
-                addItem(gt('Join channel'), 'join-channel');
-            }
+            this.toolbar.$('.more-dropdown .dropdown-menu').children().toArray().forEach(function (child) {
+                var $child = $(child);
+                if ($child.hasClass('divider')) return addSeparator();
+                var a = $child.find('a');
+                if (!a.length) return;
+                addItem(a.text(), a.attr('data-cmd'));
+            });
 
             function addItem(text, cmd) {
                 $ul.append(
@@ -265,8 +252,8 @@ define('io.ox/chat/views/chat', [
         },
 
         updateDropdown: function () {
-            this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
             this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
+            this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
         },
 
         renderTitle: function () {
@@ -656,7 +643,7 @@ define('io.ox/chat/views/chat', [
             var model = baton.model;
             if (model.isNew() || !model.get('active')) return;
             var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
-            createMenuItem(this, 'toggle-favorite', model.id, title);
+            createMenuItem(this, 'toggle-favorite', model.id, title, 'general');
         }
     });
 
@@ -667,7 +654,7 @@ define('io.ox/chat/views/chat', [
         draw: function (baton) {
             var model = baton.model;
             if (!model.isMember() || model.isPrivate()) return;
-            createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'));
+            createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'), 'general');
         }
     });
 
@@ -678,7 +665,7 @@ define('io.ox/chat/views/chat', [
         draw: function (baton) {
             var model = baton.model;
             if (!model.get('active') || model.isNew()) return;
-            createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'));
+            createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'), 'general');
         }
     });
 
@@ -688,8 +675,9 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.isGroup() || !model.isMember()) return;
-            createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'));
+            if (!model.isGroup() && !model.isChannel()) return;
+            if (!model.isMember()) return;
+            createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'), 'actions');
         }
     });
 
@@ -699,13 +687,15 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!(model.isChannel() && !model.isMember())) return;
-            createMenuItem(this, 'join-channel', model.id, gt('Join channel'));
+            if (!model.isChannel()) return;
+            if (model.isMember()) return;
+            if (model.get('active')) return;
+            createMenuItem(this, 'join-channel', model.id, gt('Join channel'), 'join-leave', 'actions');
         }
     });
 
-    function createMenuItem(node, cmd, id, label) {
-        node.attr('data-prio', 'lo').append(
+    function createMenuItem(node, cmd, id, label, section) {
+        node.attr({ 'data-prio': 'lo', 'data-section': section }).append(
             $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
             .attr({ 'data-cmd': cmd, 'data-id': id })
             .text(label)
