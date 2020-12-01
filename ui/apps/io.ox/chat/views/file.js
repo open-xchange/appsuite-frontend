@@ -71,15 +71,20 @@ define('io.ox/chat/views/file', [
             }
 
             var preview = file.preview;
-            $img.attr('src', preview ? getSVG(preview.width, preview.height) : getSVG(1, 1));
+            if (preview) {
+                $img.attr('src', getSVG(preview.width, preview.height))
+                    .css('backgroundColor', preview.averageColor || '#eeeeee');
+            } else {
+                $img.attr('src', getSVG(1, 1)).css('backgroundColor', '#eee');
+            }
 
             this.$el.append(
                 $thumbnail.append(
-                    $img.addClass('loading').lazyload().one('appear', { url: file.thumbnail }, function (e) {
+                    $img.lazyload().one('appear', { url: file.thumbnail }, function (e) {
                         api.requestBlobUrl({ url: e.data.url }).then(function (url) {
-                            $(this).attr('src', url).removeClass('loading').on('dispose', function () {
-                                URL.revokeObjectURL(this.src);
-                            });
+                            $(this).attr('src', url)
+                            .css('backgroundColor', '')
+                            .on('dispose', function () { URL.revokeObjectURL(this.src); });
                         }.bind(this));
                     })
                 )
