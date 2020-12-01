@@ -560,14 +560,7 @@ define('io.ox/chat/main', [
             this.onChangeDensity();
 
             // load chat rooms here -- not in every ChatListView
-            data.chats.fetch().then(
-                function () {
-                    _.delay(this.onChatsLoaded.bind(this));
-                }.bind(this),
-                function () {
-                    yell('error', gt('Chats could not be loaded.'));
-                }
-            );
+            _.delay(this.onChatsLoaded.bind(this));
         },
 
         onChatsLoaded: function () {
@@ -609,11 +602,17 @@ define('io.ox/chat/main', [
                     $('<div>').append(
                         $('<button class="btn btn-primary">').text(gt('Authorize')).on('click', function () {
                             self.$body.empty().parent().busy();
-                            data.session.getUserId().then(function success() {
+                            data.session.getUserId()
+                            .then(function () {
+                                return data.chats.fetch();
+                            })
+                            .then(function success() {
                                 self.draw();
-                            }, function fail(err) {
+                            })
+                            .fail(function fail(err) {
                                 self.drawAuthorizePane(err.message || gt('Cannot connect. Please try again later.'));
-                            }).always(function () {
+                            })
+                            .always(function () {
                                 self.$body.parent().idle();
                             });
                         }),
@@ -726,6 +725,9 @@ define('io.ox/chat/main', [
         .catch($.noop)
         .then(function () {
             return data.session.getUserId();
+        })
+        .then(function () {
+            return data.chats.fetch();
         })
         .always(function () {
             win.$body.parent().idle();
