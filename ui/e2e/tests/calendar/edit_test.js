@@ -488,7 +488,7 @@ Scenario('[C7470] Delete a recurring appointment', async (I, calendar) => {
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C274402] Change organizer of appointment with internal attendees', async (I, users, calendar, dialogs) => {
+Scenario.skip('[C274402] Change organizer of appointment with internal attendees', async (I, users, calendar, dialogs) => {
     await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -529,7 +529,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
 
-Scenario('[C274409] Change organizer of series with internal attendees', async (I, users, calendar, dialogs) => {
+Scenario.skip('[C274409] Change organizer of series with internal attendees', async (I, users, calendar, dialogs) => {
     await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
     const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
     await I.haveAppointment({
