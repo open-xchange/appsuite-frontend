@@ -22,6 +22,8 @@ define('io.ox/chat/extensions/register', [
 
     'use strict';
 
+    if (_.device('smartphone || !maintab')) return;
+
     var Action = actionsUtil.Action;
 
     //
@@ -32,7 +34,6 @@ define('io.ox/chat/extensions/register', [
         id: 'chat',
         index: 125,
         draw: function () {
-            if (!capabilities.has('chat') || _.device('smartphone')) return;
 
             var node = $('<li role="presentation" class="launcher">').hide();
             this.append(node);

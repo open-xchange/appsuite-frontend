@@ -137,6 +137,7 @@ define('io.ox/switchboard/extensions', [
             index: 120,
             draw: function (baton) {
                 if (!capabilities.has('chat')) return;
+                if (_.device('smartphone || !maintab')) return;
                 this.append(
                     createButton('io.ox/chat/actions/start-chat-from-contacts', 'fa-comment', gt('Chat'), baton)
                 );

@@ -45,7 +45,8 @@
         firefoxIOS,
         browserLC = {},
         isTouch,
-        nativeNoopener;
+        nativeNoopener,
+        mainTab;
 
     // supported browsers
     us.browserSupport = {
@@ -277,6 +278,10 @@
     if (us.browser.android && display.large) display.tablet = true;
     display.desktop = !mobileOS;
     us.displayInfo = display;
+
+    // main tab? (currently just detecting the opposite case)
+    mainTab = location.href.indexOf('office?app') === -1;
+
     // extend underscore utilities
     var underscoreExtends = {
 
@@ -323,6 +328,7 @@
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);
+            misc.maintab = mainTab;
             // debug
             if (condition === 'debug' || condition === 1337) {
                 // fallback to _.extend if Object.assign does not exist

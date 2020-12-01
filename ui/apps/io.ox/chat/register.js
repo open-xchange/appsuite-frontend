@@ -18,8 +18,7 @@ define('io.ox/chat/register', [], function () {
     ox.on('core:ready', function () {
         // no smartphone support yet
         if (_.device('smartphone')) return;
-        // do not start in documents tabs yet
-        if (location.href.indexOf('office?app') >= 0) return;
+        if (_.device('!maintab')) return;
         require(['io.ox/chat/main']);
     });
 });
