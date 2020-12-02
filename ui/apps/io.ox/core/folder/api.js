@@ -86,7 +86,7 @@ define('io.ox/core/folder/api', [
 
             _(renameItems).each(function (item) {
                 if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
-                    item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
+                    item.display_title = contactUtil.getFullName(hash[item.created_by] || {}) || gt('Default calendar');
                 } else if (hash[item.created_by]) {
                     //#. %1$s is the folder owner
                     //#. %2$s is the folder title
