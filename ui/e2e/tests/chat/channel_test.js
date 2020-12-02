@@ -13,25 +13,13 @@
 
 Feature('Chat - Channels');
 
-Before(async (users, contexts) => {
+After(async (users) => {
     await Promise.all([
-        users.create(),
-        users.create(),
-        contexts.create()
-    ]);
-    await users[0].context.hasCapability('chat');
-    contexts[0].hasCapability('chat');
-});
-
-After(async (users, contexts) => {
-    await Promise.all([
-        users.removeAll(),
-        contexts.removeAll()
+        users.removeAll()
     ]);
 });
 
-// skipped - wait for CAS-315 to be resolved
-Scenario.skip('Update channel profile picture and name', async (I, dialogs, users, contexts) => {
+Scenario('Update channel profile picture and name', async (I, dialogs, users, contexts) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -134,10 +122,11 @@ Scenario.skip('Update channel profile picture and name', async (I, dialogs, user
         I.waitNumberOfVisibleElements('.message.system', 5);
         I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') === 'none', 10);
     });
+
+    context.remove();
 });
 
-// skipped - wait for CAS-315 to be resolved
-Scenario.skip('Preview, join and leave a channel', async (I, users, contexts, chat) => {
+Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -186,4 +175,6 @@ Scenario.skip('Preview, join and leave a channel', async (I, users, contexts, ch
         I.waitForText('Join');
         I.seeNumberOfVisibleElements('.message.system', 4);
     });
+
+    context.remove();
 });

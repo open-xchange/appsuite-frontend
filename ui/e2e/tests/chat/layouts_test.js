@@ -56,3 +56,19 @@ Scenario('Add chat to favorites', async (I, users, chat) => {
         I.waitForElement('.ox-chat .left-navigation ul[aria-label="Favorites"] li');
     });
 });
+
+Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat) => {
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.createPrivateChat(users[1].userdata.email1);
+    });
+
+    await session('Bob', async () => {
+        I.login({ user: users[1] });
+        I.waitForText('New Chat', 30);
+        I.waitForDetached('.indicator.chat-notification.hidden', 3, '#io-ox-toprightbar');
+        I.waitForText('User', 30, '.ox-chat');
+        I.click(locate('.ox-chat li').withText('User'));
+        I.waitForElement('.indicator.chat-notification.hidden', 3, '#io-ox-toprightbar');
+    });
+});

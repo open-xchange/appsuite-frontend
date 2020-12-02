@@ -29,38 +29,6 @@ After(async (users) => {
     ]);
 });
 
-Scenario.skip('Start a new chat', async (I, users) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        I.waitForText('New Chat', 30);
-        I.click('New Chat');
-        I.clickDropdown('Private chat');
-        I.waitForText(`${users[1].get('primaryEmail')}`);
-        I.click(locate('.address-picker li').withText(`${users[1].get('primaryEmail')}`));
-        I.click('Start conversation');
-        I.waitForElement('.ox-chat .controls');
-        I.fillField('Message', 'Wazzuuuuup?');
-        I.pressKey('Enter');
-    });
-    await session('Bob', async () => {
-        I.login({ user: users[1] });
-        I.waitForText('User', 30, '.ox-chat');
-        I.click(locate('.ox-chat li').withText('User'));
-        I.fillField('Message', 'Nothing, just chillin\', some killin\'');
-    });
-    await session('Alice', async () => {
-        I.see('is typing');
-        I.dontSee('some killin');
-    });
-    await session('Bob', async () => {
-        I.click('~Send');
-    });
-    await session('Alice', async () => {
-        I.waitForText('some killin');
-        I.dontSee('is typing');
-    });
-});
-
 Scenario('Show sender, date and avatar of sent message', async (I, users, chat) => {
     let time;
     const name = users[0].userdata.given_name + ' ' + users[0].userdata.sur_name + ' ';
