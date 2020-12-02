@@ -427,10 +427,10 @@ define('io.ox/files/share/permissions', [
 
             getRole: function () {
                 var bits = this.model.get('bits'), bitmask;
-                if (this.parentModel.isFile()) {
-                    if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.isOwner(this.parentModel)) {
+                if (this.model.isOwner(this.parentModel)) {
                     return 'owner';
+                } else if (this.parentModel.isFile()) {
+                    if (bits === 2 || bits === 4) return 'reviewer';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
                     if (bitmask.get('admin')) return 'administrator';
