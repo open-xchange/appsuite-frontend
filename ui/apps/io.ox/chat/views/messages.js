@@ -62,7 +62,14 @@ define('io.ox/chat/views/messages', [
 
         renderMessage: function (model, options) {
             var previous = this.getPreviousModel(model);
-            options = _.extend({ model: model, messageId: this.messageId, previous: previous, isChannel: this.isChannel, showDate: true }, options);
+            options = _.extend({
+                model: model,
+                messageId: this.messageId,
+                previous: previous,
+                isChannel: this.isChannel,
+                showDate: true,
+                scrollpane: this.options.scrollpane
+            }, options);
             var $message = new MessageView(options).render().$el;
             return options.showDate ? [this.renderDate(model), $message] : $message;
         },

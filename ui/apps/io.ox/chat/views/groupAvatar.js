@@ -14,9 +14,10 @@
 define('io.ox/chat/views/groupAvatar', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/api',
+    'io.ox/chat/util/url',
     'io.ox/contacts/util'
 ],
-function (DisposableView, api, util) {
+function (DisposableView, api, url, util) {
 
     'use strict';
 
@@ -38,7 +39,7 @@ function (DisposableView, api, util) {
         update: function () {
             this.$el.css('background-image', '').empty();
             if (this.model.get('icon')) {
-                api.requestBlobUrl({ url: this.model.getIconUrl() }).then(function (url) {
+                url.request(this.model.getIconUrl()).then(function (url) {
                     if (this.disposed) return;
                     this.$el.css('backgroundImage', 'url("' + url + '")');
                 }.bind(this));

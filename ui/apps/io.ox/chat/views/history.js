@@ -92,12 +92,16 @@ define('io.ox/chat/views/history', [
                 ),
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
                 $('<div class="scrollpane">').append(
-                    $('<ul>').append(
-                        this.collection.length > 0 ? this.collection.map(this.renderItem, this) : this.renderEmpty().delay(1500).fadeIn(200)
-                    )
+                    $('<ul>').append(this.renderItems())
                 )
             );
             return this;
+        },
+
+        renderItems: function () {
+            return this.collection.length > 0 ?
+                this.collection.map(this.renderItem, this) :
+                this.renderEmpty().delay(1500).fadeIn(200);
         },
 
         renderEmpty: function () {

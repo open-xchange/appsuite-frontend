@@ -32,11 +32,9 @@ define('io.ox/chat/actions/openGroupDialog', [
 
         render: function () {
             var result = ImageUploadView.prototype.render.call(this);
-
             var icon = this.model.get('type') === 'channel' ? 'fa-hashtag' : 'fa-group';
             this.$('.contact-photo').append($('<i class="fa fallback-icon">').addClass(icon));
             this.$('input').attr('data-state', 'manual');
-
             return result;
         },
 
@@ -94,23 +92,22 @@ define('io.ox/chat/actions/openGroupDialog', [
                 this.pictureModel = new Backbone.Model();
 
                 if (url) {
-                    imageDef = api.requestBlobUrl({ url: url })
-                    .then(function (url) {
+                    var options = { url: url, xhrFields: { responseType: 'blob' } };
+                    imageDef = api.request(options).then(function (blob) {
+                        var blobUrl = URL.createObjectURL(blob);
                         this.pictureModel.set({
-                            image1_data_url: url,
-                            image1_url: url,
+                            image1_data_url: blobUrl,
+                            image1_url: blobUrl,
                             file: function () {
-                                if (!url) return;
-                                return api.request({
-                                    url: url,
-                                    xhrFields: { responseType: 'blob' }
-                                }).then(function (data) {
-                                    var blob = new Blob([data]);
-                                    blob.lastModified = true;
-                                    return blob;
-                                }, function () {
-                                    return '';
-                                });
+                                return api.request(options).then(
+                                    function (blob) {
+                                        blob = new Blob([blob]);
+                                        blob.lastModified = true;
+                                        return blob;
+                                    }, function () {
+                                        return '';
+                                    }
+                                );
                             }
                         });
                     }.bind(this));

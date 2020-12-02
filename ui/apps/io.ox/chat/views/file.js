@@ -15,9 +15,10 @@ define('io.ox/chat/views/file', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/api',
     'io.ox/chat/util',
+    'io.ox/chat/util/url',
     'io.ox/core/strings',
     'gettext!io.ox/chat'
-], function (DisposableView, api, util, strings, gt) {
+], function (DisposableView, api, util, url, strings, gt) {
 
     'use strict';
 
@@ -82,10 +83,8 @@ define('io.ox/chat/views/file', [
             this.$el.append(
                 $thumbnail.append(
                     $img.lazyload().one('appear', { url: file.thumbnail }, function (e) {
-                        api.requestBlobUrl({ url: e.data.url }).then(function (url) {
-                            $(this).attr('src', url)
-                            .css('backgroundColor', '')
-                            .on('dispose', function () { URL.revokeObjectURL(this.src); });
+                        url.request(e.data.url).then(function (url) {
+                            $(this).attr('src', url).css('backgroundColor', '');
                         }.bind(this));
                     })
                 )
@@ -106,7 +105,7 @@ define('io.ox/chat/views/file', [
                 var animatedFile = $('<img class="animated-file">'),
                     playButton = $('<button class="play-button">').append($('<i class="fa fa-play">')),
                     loadAnimation = function () {
-                        api.requestBlobUrl({ url: file.url }).then(function (url) {
+                        url.request(file.url).then(function (url) {
                             animatedFile.attr('src', url);
                         });
                     };

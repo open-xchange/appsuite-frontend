@@ -78,7 +78,7 @@ define('io.ox/chat/views/message', [
             if (this.model.hasSameSender(this.options.limit)) return;
             var user = data.users.getByMail(this.model.get('sender'));
             return [
-                new Avatar({ model: user }).render().$el,
+                new Avatar({ model: user, scrollpane: this.options.scrollpane }).render().$el,
                 $('<div class="sender">').append(
                     // we add a space so that we get nicer result when selecting/copying text
                     $('<span class="name">').text(user.getName() + ' '),

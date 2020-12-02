@@ -18,9 +18,10 @@ define('io.ox/chat/views/fileList', [
     'io.ox/backbone/views/toolbar',
     'io.ox/chat/util',
     'io.ox/chat/api',
+    'io.ox/chat/util/url',
     'io.ox/core/strings',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, data, ToolbarView, util, api, strings, gt) {
+], function (ext, DisposableView, data, ToolbarView, util, api, url, strings, gt) {
 
     'use strict';
 
@@ -71,29 +72,39 @@ define('io.ox/chat/views/fileList', [
                     yell('error', gt('Files could not be loaded.'));
                 });
             });
-            this.$scrollpane = $('<div class="scrollpane">');
+            this.$scrollpane = $('<div class="scrollpane">').lazyloadScrollpane();
         },
 
         render: function () {
-            var items = this.getItems();
             this.$el.append(
                 $('<div class="header">').append(
                     $('<h2>').append(gt('All files'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/files/toolbar', title: gt('All files') }).render(new ext.Baton()).$el,
                 this.$scrollpane.append(
-                    $('<ul>').append(
-                        items.length > 0 ? items.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
-                    )
+                    this.renderItems()
                 )
             );
-            this.$scrollpane.triggerHandler('add');
             return this;
         },
+
+        renderItems: function () {
+            var $ul = $('<ul>');
+            var items = this.getItems();
+            // before adding nodes the scrollpane should be added to the DOM
+            setTimeout(function (items) {
+                $ul.append(
+                    items.length > 0 ? items.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
+                );
+            }.bind(this, items), 0);
+            return $ul;
+        },
+
         renderEmpty: function () {
             return $('<li class="info-container">').hide()
                 .append($('<div class="info">').text(gt('There are no files yet')));
         },
+
         getItems: function () {
             return this.collection;
         },
@@ -107,11 +118,12 @@ define('io.ox/chat/views/fileList', [
             // preview
             if (model.isImage()) {
                 $button.attr('data-cmd', 'show-file');
-                $preview.addClass('cursor-zoom-in').lazyload({ container: this.$scrollpane, immediate: true }).one('appear', { url: model.getThumbnailUrl() }, function (e) {
-                    api.requestBlobUrl({ url: e.data.url }).then(function (url) {
-                        $(this).css('backgroundImage', 'url("' + url + '")').on('dispose', { url: url }, function (e) {
-                            URL.revokeObjectURL(e.data.url);
-                        });
+                var preview = model.get('preview');
+                var averageColor = preview && preview.averageColor;
+                if (averageColor) $preview.css('backgroundColor', averageColor);
+                $preview.addClass('cursor-zoom-in').fastlazyload(this.$scrollpane).one('appear', { url: model.getThumbnailUrl() }, function (e) {
+                    url.request(e.data.url).then(function (url) {
+                        $(this).css('backgroundImage', 'url("' + url + '")');
                     }.bind(this));
                 });
             } else {

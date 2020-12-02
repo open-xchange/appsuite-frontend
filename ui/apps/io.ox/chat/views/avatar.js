@@ -24,7 +24,8 @@ define('io.ox/chat/views/avatar', [
 
         className: 'avatar initials',
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options || {};
             this.listenTo(this.model, 'change:first_name change:last_name', this.onChangeName);
             if (this.model.get('id') === ox.user_id) this.listenTo(contactsAPI, 'reset:image update:image', this.onUpdateUser.bind(this));
         },
@@ -37,7 +38,6 @@ define('io.ox/chat/views/avatar', [
         onUpdateUser: function () {
             userAPI.get(this.model.get('id')).then(function (data) {
                 this.model.set('image', data.number_of_images > 0);
-                if (this.model.get('image')) this.$el.css('background-image', '');
                 this.update();
             }.bind(this));
         },

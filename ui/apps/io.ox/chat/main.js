@@ -25,6 +25,7 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/fileList',
     'io.ox/chat/views/search',
     'io.ox/chat/views/searchResult',
+    'io.ox/chat/util/url',
     'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
@@ -35,7 +36,7 @@ define('io.ox/chat/main', [
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
+], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
 
     'use strict';
 
@@ -310,7 +311,7 @@ define('io.ox/chat/main', [
             var files = [fileList.get(selectedFile)];
 
             var promises = files.map(function (file) {
-                return api.requestBlobUrl({ url: file.getFileUrl() }).then(function (url) {
+                return url.request(file.getFileUrl()).then(function (url) {
                     return {
                         id: file.get('fileId'),
                         name: file.get('name'),

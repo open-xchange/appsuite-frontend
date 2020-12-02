@@ -56,7 +56,11 @@ define('io.ox/chat/views/chat', [
             this.messageId = options.messageId;
             this.reference = options.reference;
             this.model = this.model || data.chats.get(this.roomId);
-            this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages });
+
+            // we create the scrollpane early to pass it along the view chain
+            // this is just an optimization for better lazyload behavior (aka less flickering)
+            this.$scrollpane = $('<div class="scrollpane">').lazyloadScrollpane();
+            this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages, scrollpane: this.$scrollpane });
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle,
@@ -164,7 +168,7 @@ define('io.ox/chat/views/chat', [
                     ).css('visibility', 'hidden')
                 ),
                 this.toolbar.$el,
-                this.$scrollpane = $('<div class="scrollpane">').on('scroll', $.proxy(this.onScroll, this)).append(
+                this.$scrollpane.on('scroll', $.proxy(this.onScroll, this)).append(
                     this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
                         this.messagesView.render().$el,

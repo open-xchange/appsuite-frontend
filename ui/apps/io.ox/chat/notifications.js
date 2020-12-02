@@ -12,16 +12,16 @@
  */
 
 define('io.ox/chat/notifications', [
-    'io.ox/chat/api',
     'io.ox/chat/events',
     'io.ox/core/active',
     'io.ox/switchboard/presence',
     'io.ox/chat/data',
     'io.ox/contacts/api',
     'io.ox/chat/util',
+    'io.ox/chat/util/url',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (api, events, isActive, presence, data, contactsApi, util, settings, gt) {
+], function (events, isActive, presence, data, contactsApi, util, url, settings, gt) {
 
     'use strict';
 
@@ -95,7 +95,7 @@ define('io.ox/chat/notifications', [
                     : ox.base + '/apps/themes/default/fallback-image-contact.png';
             if (opt.isMultiple) {
                 if (model.get('icon')) {
-                    api.requestBlobUrl({ url: model.getIconUrl() }).then(function (icon) {
+                    url.request(model.getIconUrl()).then(function (icon) {
                         def.resolve(icon);
                     });
                 } else {

@@ -64,16 +64,7 @@ define('io.ox/chat/api', [
         });
     }
 
-    function requestBlobUrl(opt) {
-        opt.xhrFields = { responseType: 'blob' };
-        return request(opt).then(function (blob) {
-            return URL.createObjectURL(blob);
-        });
-    }
-
     api.request = request;
-    api.requestBlobUrl = requestBlobUrl;
-
     api.getJwtFromSwitchboard = getJwtFromSwitchboard;
 
     api.updateDelivery = function (roomId, messageId, state) {
