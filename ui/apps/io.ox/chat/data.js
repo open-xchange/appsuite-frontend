@@ -1111,17 +1111,18 @@ define('io.ox/chat/data', [
             socket.on('chat:delivery:update', function (obj) {
                 var roomId = obj.roomId,
                     messageId = obj.messageId,
-                    email = obj.email,
+                    userId = obj.userId,
                     modified = obj.modified,
                     state = obj.state,
                     room = data.chats.get(roomId);
 
                 function process(message) {
+
                     if (util.strings.greaterThan(message.get('messageId'), messageId)) return;
-                    if (message.isMyself() !== (email !== data.user.email)) return;
+                    if (message.isMyself() !== (userId !== data.user.email)) return;
 
                     var deliveryState = message.get('deliveryState') || {},
-                        prevState = (deliveryState[email] || {}).state || deliveryState.state || message.get('deliveryState');
+                        prevState = (deliveryState[userId] || {}).state || deliveryState.state || message.get('deliveryState');
 
                     if (prevState === 'seen') return;
                     if (prevState === 'received' && state === 'server') return;
@@ -1132,7 +1133,7 @@ define('io.ox/chat/data', [
                     else if (room.get('type') === 'private') changes = { state: state, modified: modified };
                     else {
                         changes = _.clone(deliveryState);
-                        changes[email] = { state: state, modified: modified };
+                        changes[userId] = { state: state, modified: modified };
                     }
                     message.set('deliveryState', changes);
                 }
