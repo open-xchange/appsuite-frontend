@@ -34,14 +34,14 @@ define('io.ox/chat/views/members', [
 
         renderEntry: function (model) {
             if (model.id === data.user.email) return;
-            return $('<li>').attr('data-id', model.get('id')).append(
+            return $('<li>').attr('data-id', model.id).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,
-                    presence.getPresenceIcon(model.get('email'))
+                    presence.getPresenceIcon(model.id)
                 ),
                 $('<div class="center">').append(
                     $('<strong>').text(model.getName()),
-                    $('<span>').text(model.get('email'))
+                    $('<span>').text(model.id)
                 ),
                 $('<div class="member-controls">').append(
                     $('<button class="remove">').append($('<i class="fa fa-times" aria-hidden="true">'))
