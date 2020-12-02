@@ -66,6 +66,7 @@ define('io.ox/core/main/icons', [
                 'io.ox/portal': '<i class="fa fa-th-large app-icon-portal">',
                 'io.ox/tasks': '<i class="fa fa-check-square-o app-icon-tasks">',
                 'io.ox/search': '<i class="fa fa-search">',
+                'io.ox/chat': '<i class="fa fa-comment">',
                 'launcher': '<i class="fa fa-th" aria-hidden="true">',
                 'fallback': '<i class="fa fa-question">'
             };

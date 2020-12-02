@@ -28,6 +28,7 @@ define('io.ox/core/api/apps', [
     if (ox.debug) defaultList.push('io.ox/notes');
 
     if (_.device('smartphone')) defaultList.push('io.ox/search');
+    if (!_.device('smartphone')) defaultList.push('io.ox/chat');
 
     function validApp(app) { return app && !this.blacklist[app.id]; }
 
@@ -49,6 +50,7 @@ define('io.ox/core/api/apps', [
             if (settings.contains('apps/list')) {
                 var list = settings.get('apps/list').split(',');
                 if (_.device('smartphone') && !_(list).contains('io.ox/search')) list.push('io.ox/search');
+                if (!_.device('smartphone') && !_(list).contains('io.ox/chat')) list.push('io.ox/chat');
                 this._launcher = new LauncherCollection(list);
             } else {
                 this._launcher = this.launcher;

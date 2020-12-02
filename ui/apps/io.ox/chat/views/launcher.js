@@ -15,8 +15,9 @@ define('io.ox/chat/views/launcher', [
     'io.ox/chat/data',
     'gettext!io.ox/chat',
     'settings!io.ox/chat',
+    'settings!io.ox/core',
     'less!io.ox/chat/style'
-], function (data, gt, settings) {
+], function (data, gt, settings, coreSettings) {
 
     return Backbone.View.extend({
 
@@ -39,7 +40,13 @@ define('io.ox/chat/views/launcher', [
                 $('<i class="fa fa-comment launcher-icon" aria-hidden="true">').attr('title', gt('Chat')),
                 this.badge = $('<svg height="8" width="8" class="indicator chat-notification hidden" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
             );
+            this.updateLauncherVisibility();
             return this;
+        },
+
+        updateLauncherVisibility: function () {
+            var chatIsInQuicklaunchers = _(String(coreSettings.get('apps/quickLaunch', '')).trim().split(/,\s*/)).contains('io.ox/chat/main');
+            this.$el.toggle(!chatIsInQuicklaunchers);
         },
 
         updateCounter: function () {
@@ -57,8 +64,10 @@ define('io.ox/chat/views/launcher', [
             if (model) {
                 model.trigger(settings.get('hidden') === true ? 'open' : 'quit');
             } else {
-                require(['io.ox/chat/main'], function (win) {
-                    win.showApp();
+                require(['io.ox/chat/main'], function (chat) {
+                    chat.getApp().launch().done(function () {
+                        this.getWindow().showApp();
+                    });
                 });
             }
             $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);

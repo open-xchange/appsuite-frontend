@@ -116,6 +116,18 @@ define('io.ox/core/main/apps', [
         refreshable: true
     });
 
+    // Chat
+    ui.createApp({
+        id: 'io.ox/chat',
+        name: 'io.ox/chat',
+        title:  gt.pgettext('app', 'Chat'),
+        requires: 'chat',
+        device: '!smartphone',
+        settings: true,
+        toggle: true,
+        icon: icons['io.ox/chat']
+    });
+
     // remove debug switch, once it is out of prototype state
     if (ox.debug) {
         // Notes

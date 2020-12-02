@@ -98,6 +98,9 @@ define('io.ox/chat/main', [
             this.listenTo(data.channels, 'remove', this.onRemoveFromCollection);
 
             this.state = '{}';
+
+            // alias to make window manager happy
+            this.show = this.showApp;
         },
 
         setState: function (state, payload) {
@@ -580,16 +583,21 @@ define('io.ox/chat/main', [
             this.onChangeDensity();
 
             // load chat rooms here -- not in every ChatListView
-            _.delay(this.onChatsLoaded.bind(this));
+            // returns a deferred object so you can wait for the chats to load
+            return _.delay(this.onChatsLoaded.bind(this));
         },
 
         onChatsLoaded: function () {
             var showLastRoom = settings.get('selectLastRoom', true);
             var lastRoomId = showLastRoom && settings.get('lastRoomId');
             var room = lastRoomId && data.chats.get(lastRoomId);
-            if (room && room.isActive()) return this.showChat(lastRoomId);
+            if (room && room.isActive()) {
+                this.showChat(lastRoomId);
+                return $.when();
+            }
             // fill right side only if not selecting last room (to avoid flicker)
             this.$rightside.append(new EmptyView().render().$el);
+            return $.when();
         },
 
         getLeftNavigation: function () {
@@ -725,25 +733,7 @@ define('io.ox/chat/main', [
         }
     });
 
-    var mode = settings.get('mode') || 'sticky';
-
-    win = new Window({
-        title: 'OX Chat',
-        floating: mode === 'floating',
-        sticky: mode === 'sticky',
-        stickable: true,
-        resizable: false,
-        closable: true,
-        size: 'width-lg',
-        quitOnEscape: false
-    }).render().open();
-
-    settings.set('hidden', false);
-
-    win.$body.parent().busy();
-    win.ready = $.Deferred();
-
-    data.fetchUsers()
+    var dataReady = data.fetchUsers()
         .catch($.noop)
         .then(function () {
             return data.session.getUserId();
@@ -751,24 +741,64 @@ define('io.ox/chat/main', [
         .then(function () {
             return data.chats.fetch();
         })
-        .always(function () {
-            win.$body.parent().idle();
-        })
-        .then(
-            function success() {
-                win.draw();
-                win.ready.resolveWith(win);
-                require(['io.ox/chat/notifications']);
-            },
-            function fail() {
-                win.$body.parent().idle();
-                win.drawAuthorizePane();
-            }
-        );
+        .then(function () {
+            require(['io.ox/chat/notifications']);
+        });
 
     ox.chat = {
         data: data
     };
 
-    return win;
+    var app = ox.ui.createApp({
+        name: 'io.ox/chat',
+        id: 'io.ox/chat',
+        title: 'Chat'
+    });
+
+    app.setLauncher(function () {
+
+        var mode = settings.get('mode') || 'sticky';
+
+        win = new Window({
+            title: 'OX Chat',
+            floating: mode === 'floating',
+            sticky: mode === 'sticky',
+            stickable: true,
+            resizable: false,
+            closable: true,
+            size: 'width-lg',
+            quitOnEscape: false
+        })
+        .render().open();
+
+        // don't use setWindow method. Has to much overhead for the rather special chat window
+        this.set('window', win);
+
+        settings.set('hidden', false);
+        app.settings = settings;
+
+        win.$body.parent().busy();
+
+        return dataReady
+            .always(function () {
+                win.$body.parent().idle();
+            })
+            .done(function () {
+                // return is important so you can wait for the drawing to finish
+                return win.draw();
+            })
+            .fail(function () {
+                win.$body.parent().idle();
+                win.drawAuthorizePane();
+            });
+    });
+
+    // actually not really a resume. We use it as a toggle here
+    app.setResume(function () {
+        win.model.trigger(settings.get('hidden') === true ? 'open' : 'quit');
+    });
+
+    return {
+        getApp: app.getInstance
+    };
 });

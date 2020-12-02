@@ -572,8 +572,8 @@ define('io.ox/core/desktop', [
                 );
                 // don't resume apps that are currently initializing
             } else if (this.get('state') !== 'initializing' && this.has('window')) {
-                // toggle app window
-                this.get('window').show();
+                // show or toggle app window
+                if (!this.options.toggle) this.get('window').show();
                 this.trigger('resume', this);
                 ox.trigger('app:resume', this);
 

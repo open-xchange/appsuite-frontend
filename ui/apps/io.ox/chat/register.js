@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/register', [], function () {
+define('io.ox/chat/register', [], function (settings) {
 
     'use strict';
 
@@ -19,7 +19,9 @@ define('io.ox/chat/register', [], function () {
         // no smartphone support yet
         if (_.device('smartphone')) return;
         if (_.device('!maintab')) return;
-        if (2 > 1) return;
-        require(['io.ox/chat/main']);
+        require(['settings!io.ox/chat', 'io.ox/chat/main'], function (settings, app) {
+            if (!settings.get('autoStart', false)) return;
+            app.getApp().launch();
+        });
     });
 });

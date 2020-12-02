@@ -36,9 +36,11 @@ define('io.ox/core/settings/pane', [
 
     var INDEX = 0,
         MINUTES = 60000,
+        // blacklist for apps that should not appear in the default app dropdown
+        blackList = ['io.ox/chat'],
         availableApps = apps.forLauncher().filter(function (model) {
             var requires = model.get('requires');
-            return upsell.has(requires);
+            return upsell.has(requires) && !_(blackList).contains(model.get('id'));
         }).map(function (o) {
             return {
                 label: o.getTitle(),

@@ -1102,7 +1102,11 @@ define('io.ox/chat/data', [
         initialize: function () {
             this.initialized = new $.Deferred();
 
-            this.connectSocket(switchboardApi.socket);
+            // wait until initialized. listeners need data.user to be filled
+            var self = this;
+            this.initialized.done(function () {
+                self.connectSocket(switchboardApi.socket);
+            });
         },
 
         refresh: function () {
