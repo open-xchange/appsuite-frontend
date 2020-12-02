@@ -31,7 +31,7 @@
         this.each(function () {
             setTimeout(function (el) {
                 // get offset for each element
-                var $el = $(el), offset = el.getBoundingClientRect();
+                var $el = $(el).addClass('lazyload'), offset = el.getBoundingClientRect();
                 // checks
                 if (aboveViewport(viewport, offset, $el.height())) return;
                 if (leftOfViewport(viewport, offset, $el.width())) return;
