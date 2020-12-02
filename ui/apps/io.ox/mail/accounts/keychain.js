@@ -43,22 +43,8 @@ define.async('io.ox/mail/accounts/keychain', [
     var fileAccounts = {};
 
     function init(evt, data) {
-        return $.when(accountAPI.all(), filestorageAPI.getAllAccounts()).done(function (allAccounts, allFileAccounts) {
-            allFileAccounts = allFileAccounts.models;
-            accounts = {};
-            fileAccounts = {};
-            if (data) {
-                accounts[data.id] = data;
-                data.accountType = 'mail';
-                data.displayName = data.name || data.primary_address;
-                /* read display name from users vcard, if personal field is unset
-                 * this is needed for internal accounts, at the moment
-                 * FIXME: save one API call here, if data.personal can be assured
-                */
-                userAPI.getName(ox.user_id).then(function (name) {
-                    data.personal = data.personal || name;
-                });
-            }
+        return $.when(accountAPI.all().then(function (allAccounts) {
+            var accounts = {};
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
                 account.accountType = 'mail';
@@ -68,7 +54,12 @@ define.async('io.ox/mail/accounts/keychain', [
                  * FIXME: save one API call here, if data.personal can be assured
                  */
             });
-
+            return accounts;
+        }, function () {
+            return {};
+        }), filestorageAPI.getAllAccounts().then(function (allFileAccounts) {
+            var accounts = {};
+            allFileAccounts = allFileAccounts.models;
             _(allFileAccounts).each(function (account) {
                 // show federated sharing accounts when debugging mode is true, helps developing and is also a convenient way to remove broken accounts (offers delete action)
                 var filterRegex = (ox.debug ? /owncloud|nextcloud|webdav|xox\d+|xctx\d+/ : /owncloud|nextcloud|webdav/);
@@ -81,6 +72,24 @@ define.async('io.ox/mail/accounts/keychain', [
                     account.status = error;
                 }
             });
+            return accounts;
+        }, function () {
+            return {};
+        })).always(function (allAccounts, allFileAccounts) {
+            accounts = allAccounts;
+            fileAccounts = allFileAccounts;
+            if (data) {
+                accounts[data.id] = data;
+                data.accountType = 'mail';
+                data.displayName = data.name || data.primary_address;
+                /* read display name from users vcard, if personal field is unset
+                 * this is needed for internal accounts, at the moment
+                 * FIXME: save one API call here, if data.personal can be assured
+                */
+                userAPI.getName(ox.user_id).then(function (name) {
+                    data.personal = data.personal || name;
+                });
+            }
 
             if (evt) {
                 evt = evt.namespace ? evt.type + '.' + evt.namespace : evt.type;
@@ -94,7 +103,7 @@ define.async('io.ox/mail/accounts/keychain', [
         });
     }
 
-    init().done(function () {
+    init().always(function () {
         moduleDeferred.resolve({ message: 'Loaded mail keychain' });
     });
     accountAPI.on('create:account refresh.all refresh.list', init);
