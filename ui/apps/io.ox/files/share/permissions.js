@@ -950,7 +950,7 @@ define('io.ox/files/share/permissions', [
             options = _.extend({
                 async: true,
                 focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.share.html',
                 title: title,
                 smartphoneInputFocus: true,
                 width: 800,
