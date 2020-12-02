@@ -66,7 +66,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.login('app=io.ox/mail');
     mail.waitForApp();
     I.selectFolder('Drafts');
-    I.waitForText('No subject');
+    I.waitForText('No subject', 10, '.list-view .list-item');
     I.seeElement(taskbaritem);
 
     // restore initially minimized taskbar item
@@ -81,6 +81,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.click('~Minimize', '.io-ox-mail-compose-window');
     I.waitForElement(taskbaritem);
     I.waitForInvisible(editor);
+    mail.selectMail('No subject');
     I.clickToolbar('Edit draft');
     I.waitForElement(editor);
     I.dontSeeElement(taskbaritem);
@@ -91,7 +92,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.login('app=io.ox/mail');
     mail.waitForApp();
     I.selectFolder('Drafts');
-    I.waitForText('No subject');
+    I.waitForText('No subject', 10, '.list-view .list-item');
     mail.selectMail('No subject');
     I.click(taskbaritem);
     I.waitForElement(editor);
@@ -101,7 +102,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.waitForFunction(() => window.$('.io-ox-mail-compose-window').length === 1);
 });
 
-Scenario('[RD003: Handle deleted spaces', async function (I, mail, dialogs) {
+Scenario.skip('[RD003]: Handle deleted spaces', async function (I, mail, dialogs) {
     await I.haveSetting('io.ox/mail//autoSaveAfter', 1000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -141,16 +142,17 @@ Scenario('[RD003: Handle deleted spaces', async function (I, mail, dialogs) {
 
     // delete spaces by deleting drafts
     I.say('4. delete spaces by deleting drafts');
+    I.waitForText('first space', 10, '.list-view');
     mail.selectMail('first space');
     I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
-    I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    I.clickToolbar('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
     // confirm dialog (this also deletes the draft)
     dialogs.waitForVisible();
     dialogs.clickButton('Delete');
     I.waitForDetached('.modal-dialog');
     mail.selectMail('second space');
     I.waitForElement('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
-    I.click('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
+    I.clickToolbar('.classic-toolbar [data-action="io.ox/mail/actions/delete"]');
     // confirm dialog (this also deletes the draft)
     dialogs.waitForVisible();
     dialogs.clickButton('Delete');
