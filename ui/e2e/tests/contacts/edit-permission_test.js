@@ -98,8 +98,10 @@ Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
     dialogs.waitForVisible();
     I.click('Viewer', locate('.permission.row').withAttr({ 'aria-label': `${secondUserName}, Internal user.` }));
     I.clickDropdown('Reviewer');
+    I.waitForDetached('.dropdown.open');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
+    I.waitForNetworkTraffic();
     I.logout();
 
     // #6 verify

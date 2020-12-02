@@ -274,16 +274,16 @@ Scenario('[C45041] Select files', async (I, drive) => {
     I.selectFolder('Selecttest');
 
     I.clickToolbar('Select');
-    I.click('All');
+    I.clickDropdown('All');
     I.waitNumberOfVisibleElements('.file-list-view .list-item.selected', 23);
 
     I.clickToolbar('Select');
-    I.click('All files');
+    I.clickDropdown('All files');
     I.waitNumberOfVisibleElements('.file-list-view .list-item.selected', 22);
 
 
     I.clickToolbar('Select');
-    I.click('None');
+    I.clickDropdown('None');
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
 

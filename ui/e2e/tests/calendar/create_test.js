@@ -1668,6 +1668,10 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
         I.retry(5).click('~Go to next month', calendar.locators.mini);
         I.retry(5).click(calendarDay, calendar.locators.mini);
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            if (perspective === 'List') {
+                I.waitForText('Load appointments until');
+                I.retry(3).click('Load appointments until');
+            }
             I.waitForText(title, 5, '.page.current .appointment');
         }));
     });
@@ -1680,6 +1684,10 @@ Scenario('[C7435] Create appointment via email', async function (I, mail, users,
         I.retry(5).click('~Go to next month', calendar.locators.mini);
         I.retry(5).click(calendarDay, calendar.locators.mini);
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            if (perspective === 'List') {
+                I.waitForText('Load appointments until');
+                I.retry(3).click('Load appointments until');
+            }
             I.waitForText(title, 5, '.page.current .appointment');
         }));
     });
@@ -1697,6 +1705,10 @@ Scenario('[C7427] Create appointment with external participants', async function
         I.retry(5).click('~Go to next month', calendar.locators.mini);
         I.retry(5).click(calendarDay, calendar.locators.mini);
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            if (perspective === 'List') {
+                I.waitForText('Load appointments until');
+                I.retry(3).click('Load appointments until');
+            }
             I.waitForElement('.page.current .appointment', 5);
             I.scrollTo('.page.current .appointment');
             I.waitForText(subject, 5, '.page.current .appointment');
@@ -1755,6 +1767,10 @@ Scenario('[C7426] Create appointment with internal and external participants', a
         I.retry(5).click('~Go to next month', calendar.locators.mini);
         I.retry(5).click(calendarDay, calendar.locators.mini);
         ['Day', 'Week', 'Workweek', 'Month', 'List'].forEach(perspective => calendar.withinPerspective(perspective, () => {
+            if (perspective === 'List') {
+                I.waitForText('Load appointments until');
+                I.retry(3).click('Load appointments until');
+            }
             I.waitForText(subject, 5, '.page.current .appointment');
         }));
     }
