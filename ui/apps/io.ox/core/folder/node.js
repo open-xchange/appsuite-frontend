@@ -17,9 +17,8 @@ define('io.ox/core/folder/node', [
     'io.ox/core/extensions',
     'io.ox/core/api/account',
     'settings!io.ox/core',
-    'settings!io.ox/contacts',
     'gettext!io.ox/core'
-], function (DisposableView, api, ext, account, settings, contSettings, gt) {
+], function (DisposableView, api, ext, account, settings, gt) {
 
     'use strict';
 
@@ -515,11 +514,6 @@ define('io.ox/core/folder/node', [
                 // wrong counts for unifiedroot folder
                 if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
                 if (_.isNumber(data.total) && data.total >= 0) {
-
-                    // adjust total for GAB if showAdmin is set to false
-                    if (api.is('contacts', data) && data.id === '6' && !contSettings.get('showAdmin', false)) {
-                        data.total = data.total - 1;
-                    }
 
                     //#. Used for the total count of objects or mails in a folder
                     summary.push(gt('Total: %1$d', data.total));
