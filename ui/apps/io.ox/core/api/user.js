@@ -381,16 +381,13 @@ define('io.ox/core/api/user', [
 
     // helper to find the first usable name, uses contact util for language specific formats (lastname, firstname | firstname lastname etc)
     api.checkForName = function (userData) {
-        var result;
-        if (userData && (userData.displayName || !_.isEmpty(userData.contact))) {
-            // try to get name via contact data
-            result = util.getFullName(userData.contact);
-            // display name as Fallback
-            if (!result && userData.displayName) result = userData.displayName;
-            // mail address as fallback if not myself
-            if (!result && !api.isMyself(userData) && userData.contact && userData.contact.email1) result = userData.contact.email1;
-        }
-
+        if (!userData) return;
+        // try to get name via contact data
+        var result = _.isEmpty(userData.contact) ? userData.display_name : util.getFullName(userData.contact);
+        // display name as Fallback
+        if (!result && userData.displayName) result = userData.displayName;
+        // mail address as fallback if not myself
+        if (!result && !api.isMyself(userData) && userData.contact && userData.contact.email1) result = userData.contact.email1;
         return result;
     };
 
