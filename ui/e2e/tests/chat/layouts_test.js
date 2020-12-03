@@ -72,3 +72,93 @@ Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat)
         I.waitForElement('.indicator.chat-notification.hidden', 3, '#io-ox-toprightbar');
     });
 });
+
+Scenario('Increasing unreadCounter that gets reset on opening the chats', async (I, users, contexts, chat, dialogs) => {
+    const context = await contexts.create();
+    context.hasCapability('chat');
+    const alice = await users.create(users.getRandom(), context);
+    const bob = await users.create(users.getRandom(), context);
+    const charlie = await users.create(users.getRandom(), context);
+
+    const groupTitle = 'Test Group';
+    const channelTitle = 'Test Channel';
+    const emails = [bob.userdata.email1, charlie.userdata.email1];
+
+    await session('Alice', async () => {
+        I.login({ user: alice });
+
+        // create a private chat
+        chat.createPrivateChat(bob.userdata.email1);
+        chat.sendMessage('Second message');
+        I.click('~Close chat', '.ox-chat');
+
+        // create a group chat
+        I.waitForText('New Chat', 30);
+        I.click('New Chat');
+        I.clickDropdown('Group chat');
+        chat.fillNewGroupForm(groupTitle, emails);
+        I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        chat.sendMessage('Hey group!');
+        chat.sendMessage('Second message');
+        chat.sendMessage('Third message');
+        I.click('~Close chat', '.ox-chat');
+
+        // create a channel
+        I.waitForText('New Chat', 30);
+        I.click('New Chat');
+        I.clickDropdown('Channel');
+        chat.fillNewChannelForm(channelTitle);
+        dialogs.clickButton('Create channel');
+        chat.sendMessage('First message');
+    });
+
+    await session('Bob', async () => {
+        I.login({ user: bob });
+        I.waitForText('New Chat', 30);
+
+        // join channel
+        I.waitForElement(locate('button').withText('All channels'), 30, '.ox-chat');
+        I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
+        I.waitForText(channelTitle, 3, '.ox-chat');
+        I.click({ css: 'button.join' }, '.ox-chat');
+        I.waitForElement('~Close chat', 3, '.ox-chat');
+        I.click('~Close chat', '.ox-chat');
+    });
+
+    await session('Alice', async () => {
+        chat.sendMessage('Another channel message');
+    });
+
+    await session('Bob', async () => {
+        // check all counters
+        I.waitForElement(locate('.unread-count').withText('1'), 3, '.ox-chat .left-navigation');
+        I.waitForElement(locate('.unread-count').withText('5'), 3, '.ox-chat .left-navigation');
+        I.waitForElement(locate('.unread-count').withText('2'), 3, '.ox-chat .left-navigation');
+
+        // open all chats and check again
+        I.click(locate('.unread-count').withText('1'), '.ox-chat .left-navigation');
+        I.click('~Close chat', '.ox-chat');
+        I.waitForDetached(locate('.unread-count').withText('1'), 3, '.ox-chat .left-navigation');
+        I.waitForElement(locate('.unread-count').withText('5'), 3, '.ox-chat .left-navigation');
+        I.waitForElement(locate('.unread-count').withText('2'), 3, '.ox-chat .left-navigation');
+
+        I.click(locate('.unread-count').withText('5'), '.ox-chat .left-navigation');
+        I.click('~Close chat', '.ox-chat');
+        I.waitForDetached(locate('.unread-count').withText('5'), 3, '.ox-chat .left-navigation');
+        I.waitForElement(locate('.unread-count').withText('2'), 3, '.ox-chat .left-navigation');
+
+        I.click(locate('.unread-count').withText('2'), '.ox-chat .left-navigation');
+        I.click('~Close chat', '.ox-chat');
+        I.waitForDetached(locate('.unread-count').withText('2'), 3, '.ox-chat .left-navigation');
+    });
+
+    await session('Alice', async () => {
+        chat.sendMessage('Hello again');
+    });
+
+    await session('Bob', async () => {
+        I.waitForElement(locate('.unread-count').withText('1'), 3, '.ox-chat .left-navigation');
+    });
+
+    context.remove();
+});

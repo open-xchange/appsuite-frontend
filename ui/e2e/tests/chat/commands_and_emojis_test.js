@@ -69,3 +69,78 @@ Scenario('User can be mentioned via @', async (I, users, chat) => {
         I.waitForElement('.mention.me', 3, '.ox-chat .messages');
     });
 });
+
+Scenario('User can send multi line messages', async (I, users, chat) => {
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.createPrivateChat(users[1].userdata.email1);
+
+        I.waitForElement('.controls');
+        I.fillField('~Message', 'one');
+        I.pressKey(['Shift', 'Enter']);
+        I.fillField('~Message', 'two');
+        I.pressKey(['Shift', 'Enter']);
+        I.fillField('~Message', 'three');
+        I.pressKey('Enter');
+
+        expect((await I.grabCssPropertyFrom('.ox-chat .message.myself .body', 'height'))[1]).to.equal('48px');
+    });
+});
+
+Scenario('User can check the version', async (I, users, chat) => {
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.createPrivateChat(users[1].userdata.email1);
+        I.waitForElement('.controls');
+        I.fillField('~Message', '/version');
+        I.pressKey('Enter');
+        I.waitForElement('.message.myself.command', 3, '.ox-chat .messages');
+        I.see('Server version:', '.ox-chat .messages');
+    });
+});
+
+Scenario('User can make a zoom call via command', async (I, users, chat) => {
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.createPrivateChat(users[1].userdata.email1);
+        I.waitForElement('.controls');
+        I.fillField('~Message', '/zoom');
+        I.pressKey('Enter');
+
+        I.waitForElement('.call-dialog');
+        await within('.call-dialog', async () => {
+            I.waitForElement('.conference-view.zoom');
+            I.click({ css: 'button[data-action="connect"]' });
+            I.wait(1);
+            I.waitForElement({ css: 'button[data-action="call"]' });
+            I.click({ css: 'button[data-action="call"]' });
+            I.waitForElement({ css: 'button[data-action="hangup"]' });
+            I.click({ css: 'button[data-action="hangup"]' });
+        });
+
+        I.waitForDetached('.call-dialog');
+        I.waitForElement('.incoming-call', 3, '.ox-chat .messages');
+    });
+});
+
+Scenario('User can make a jitsi call via command', async (I, users, chat) => {
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.createPrivateChat(users[1].userdata.email1);
+        I.waitForElement('.controls');
+        I.fillField('~Message', '/jitsi');
+        I.pressKey('Enter');
+
+        I.waitForElement('.call-dialog');
+        await within('.call-dialog', async () => {
+            I.waitForElement('.conference-view.jitsi');
+            I.waitForElement({ css: 'button[data-action="call"]' });
+            I.click({ css: 'button[data-action="call"]' });
+            I.waitForElement({ css: 'button[data-action="hangup"]' });
+            I.click({ css: 'button[data-action="hangup"]' });
+        });
+
+        I.waitForDetached('.call-dialog');
+        I.waitForElement('.incoming-call', 3, '.ox-chat .messages');
+    });
+});
