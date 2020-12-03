@@ -89,7 +89,7 @@ define('io.ox/chat/main', [
             this.listenTo(events, 'cmd', this.onCommand);
 
             this.listenTo(settings, 'change:groupByType', function () {
-                this.$('.left-navigation').replaceWith(this.getLeftNavigation());
+                this.$body.find('.left-navigation').replaceWith(this.getLeftNavigation());
             });
 
             this.listenTo(settings, 'change:density', this.onChangeDensity);
@@ -248,7 +248,7 @@ define('io.ox/chat/main', [
                     view.scrollToBottom();
                     if (state.roomId) {
                         this.resetCount(state.roomId, state.model);
-                        this.$('.chat-leftside li[data-cid="' + state.roomId + '"]').attr('tabindex', 0).addClass('active');
+                        this.$body.find('.chat-leftside li[data-cid="' + state.roomId + '"]').attr('tabindex', 0).addClass('active');
                         settings.set('lastRoomId', state.roomId).save();
                     }
                     break;
@@ -624,7 +624,7 @@ define('io.ox/chat/main', [
         },
 
         onChangeDensity: function () {
-            this.$('.chat-leftside')
+            this.$body.find('.chat-leftside')
                 .removeClass('density-default density-compact density-detailed')
                 .addClass('density-' + settings.get('density', 'default'));
         }
