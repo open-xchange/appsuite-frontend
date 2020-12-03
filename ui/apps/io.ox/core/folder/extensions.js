@@ -1298,36 +1298,24 @@ define('io.ox/core/folder/extensions', [
             id: 'account-errors',
             index: 500,
             draw: function (baton) {
+                var module = baton.data.module;
 
-                if (baton.data.module === 'contacts' && baton.data.meta && baton.data.meta.errors) {
-                    baton.view.showStatusIcon(gt('The subscription could not be updated due to an error and must be recreated.'), 'click:account-error', baton.data);
+                if (!/^(calendar|contacts|infostore)$/.test(module)) return;
+
+                // contacts
+                if (module === 'contacts' && baton.data.meta && baton.data.meta.errors) {
+                    return baton.view.showStatusIcon(gt('The subscription could not be updated due to an error and must be recreated.'), 'click:account-error', baton.data);
                 }
 
-                if (!/^calendar$/.test(baton.data.module)) return;
+                // calendar and drive
+                var accountError = module === 'calendar' ?
+                    baton.data['com.openexchange.calendar.accountError'] :
+                    baton.data['com.openexchange.folderstorage.accountError'];
 
-                var accountError = baton.data['com.openexchange.calendar.accountError'];
-                if (accountError) {
-                    baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
-                    ox.trigger('http:error:' + accountError.code, accountError);
-                } else {
-                    baton.view.hideStatusIcon();
-                }
-            }
-        },
-        {
-            id: 'sharing-errors',
-            index: 600,
-            draw: function (baton) {
+                if (!accountError) return baton.view.hideStatusIcon();
 
-                if (!/^infostore$/.test(baton.data.module)) return;
-
-                var accountError = baton.data['com.openexchange.folderstorage.accountError'];
-                if (accountError) {
-                    baton.view.showStatusIcon(accountError.error, 'click:storage-error', baton.data);
-                    ox.trigger('http:error:' + accountError.code, accountError);
-                } else {
-                    baton.view.hideStatusIcon();
-                }
+                baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                ox.trigger('http:error:' + accountError.code, accountError);
             }
         }
     );
