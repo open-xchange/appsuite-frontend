@@ -553,9 +553,9 @@ define('io.ox/chat/data', [
             this.listenTo(this.messages, 'change:content change:files', this.onMessageChange);
             this.listenTo(this.messages, 'change:deliveryState', _.debounce(this.onChangeDelivery, 0));
 
-            this.sortName = this.getTitle();
+            this.sortName = this.getTitle().toLowerCase();
             this.on('change:members change:title', function () {
-                this.sortName = this.getTitle();
+                this.sortName = this.getTitle().toLowerCase();
             });
         },
 
@@ -891,12 +891,12 @@ define('io.ox/chat/data', [
             this.setComparator(settings.get('sortBy', 'activity'));
             this.listenTo(settings, 'change:sortBy', function (value) {
                 this.setComparator(value);
-                this.sort();
             });
         },
 
         setComparator: function (sortBy) {
             this.comparator = sortBy === 'alphabetical' ? this.sortByTitle : this.sortByLastMessage;
+            this.sort();
         },
 
         sortByTitle: function (a, b) {
@@ -904,10 +904,10 @@ define('io.ox/chat/data', [
         },
 
         sortByLastMessage: function (a, b) {
-            var aLastMessage = a.get('lastMessage');
-            var bLastMessage = b.get('lastMessage');
             if (!a || !b) return 0;
-            return -util.strings.compare(aLastMessage.messageId, bLastMessage.messageId);
+            a = a.get('lastMessage');
+            b = b.get('lastMessage');
+            return -util.strings.compare(a.date, b.date);
         },
 
         onChangeUnreadCount: function () {
