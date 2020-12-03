@@ -78,7 +78,16 @@ define('io.ox/core/boot/login/saml', [
                     console.warn('Server is down.');
                 }, 250);
             }
-            return $.get(ox.apiRoot + samlPath + '/init?flow=login').then(function (data) {
+            var params = {
+                flow: 'login'
+            };
+            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash.replace(/^#?!{0,2}&?/, '');
+            return $.get([
+                ox.apiRoot,
+                samlPath,
+                '/init?',
+                $.param(params)
+            ].join('')).then(function (data) {
                 var baton = new ext.Baton({ data: data });
                 ext.point('io.ox.saml/login').invoke('handle', baton, baton);
                 if (baton.handled && baton.handled.catch) {
@@ -93,7 +102,17 @@ define('io.ox/core/boot/login/saml', [
             });
         },
         relogin: function () {
-            return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').then(function (data) {
+            var params = {
+                flow: 'relogin'
+            };
+            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash.replace(/^#?!{0,2}&?/, '');
+
+            return $.get([
+                ox.apiRoot,
+                samlPath,
+                '/init?',
+                $.param(params)
+            ].join('')).then(function (data) {
                 var baton = new ext.Baton({ data: data });
                 ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
                 return $.Deferred();
