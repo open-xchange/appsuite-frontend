@@ -401,46 +401,85 @@ define('io.ox/calendar/main', [
         },
 
         'account-errors': function (app) {
-            var accountError;
             app.treeView.on('click:account-error', function (folder) {
-                accountError = folder['com.openexchange.calendar.accountError'];
+                var accountError = folder['com.openexchange.calendar.accountError'];
                 if (!accountError) return;
 
-                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog, notifications) {
+                require(['io.ox/backbone/views/modal', 'io.ox/backbone/mini-views', 'io.ox/core/notifications'], function (ModalDialog, miniViews, notifications) {
                     var requiresAccountUpdate = /(OAUTH-0013)/.test(accountError.code);
                     new ModalDialog({
+                        model: new Backbone.Model(),
                         point: 'io.ox/calendar/account-errors',
                         title: gt('Calendar account error')
                     })
                     .extend({
                         default: function () {
+                            this.config = _.clone(folder['com.openexchange.calendar.config']);
+
                             this.$body.append(
-                                $('<div class="info-text">')
-                                    .css('word-break', 'break-word')
-                                    .text(accountError.error)
+                                $('<div class="form-group">').append(
+                                    $('<div class="info-text">')
+                                        .css('word-break', 'break-word')
+                                        .text(accountError.error)
+                                )
                             );
+                        },
+                        password: function () {
+                            if (!/^(LGI-0025)$/.test(accountError.code)) return;
+                            // improve error message
+                            this.$('.info-text').text('The password was changed recently. Please enter the new password.');
+                            // fallback
+                            if (_.isEmpty(this.config)) return console.warn('Could not find com.openexchange.calendar.config in folder data');
+                            // input
+                            var guid = _.uniqueId('form-control-label-');
+                            this.$body.append(
+                                $('<div class="form-group">').append(
+                                    $('<label>').attr('for', guid).text(gt('Password')),
+                                    new miniViews.PasswordView({
+                                        name: 'password',
+                                        model: this.model,
+                                        id: guid,
+                                        autocomplete: false,
+                                        options: { mandatory: true } }).render().$el
+                                )
+                            );
+                            // button
+                            this.addButton({ label: gt('Save'), action: 'save' })
+                                .on('save', function () {
+                                    var changes = _.pick(folder, 'module', 'subscribed', 'com.openexchange.calendar.provider');
+                                    changes['com.openexchange.calendar.config'] = _.extend(this.config, { password: this.model.get('password') });
+                                    folderAPI.update(folder.id, changes).fail(notifications.yell).done(function () {
+                                        folderAPI.flat({ module: 'calendar', all: true, force: true, cache: false });
+                                    });
+                                }.bind(this));
+                        },
+
+                        retry: function () {
+                            if (requiresAccountUpdate || accountError.code === 'LGI-0025') return;
+                            this.addButton({ label: gt('Try again'), action: 'retry', className: 'btn-primary' })
+                                .on('retry', function () {
+                                    notifications.yell('warning', gt('Refreshing calendar might take some time...'));
+                                    api.refreshCalendar(folder.id).then(function () {
+                                        notifications.yell('success', gt('Successfully refreshed calendar'));
+                                    }, notifications.yell).always(function () {
+                                        folderAPI.pool.unfetch(folder.id);
+                                        folderAPI.refresh();
+                                    });
+                                });
+                        },
+
+                        edit: function () {
+                            if (!requiresAccountUpdate || accountError.code === 'LGI-0025') return;
+                            this.addButton({ label: gt('Edit accounts'), action: 'accounts', className: 'btn-primary' })
+                                .on('accounts', function () {
+                                    var options = { id: 'io.ox/settings/accounts' };
+                                    ox.launch('io.ox/settings/main', options).done(function () {
+                                        this.setSettingsPane(options);
+                                    });
+                                });
                         }
                     })
                     .addCancelButton()
-                    .addButton(requiresAccountUpdate ?
-                        { label: gt('Edit accounts'), action: 'accounts', className: 'btn-primary' } :
-                        { label: gt('Try again'), action: 'retry', className: 'btn-primary' }
-                    )
-                    .on('retry', function () {
-                        notifications.yell('warning', gt('Refreshing calendar might take some time...'));
-                        api.refreshCalendar(folder.id).then(function () {
-                            notifications.yell('success', gt('Successfully refreshed calendar'));
-                        }, notifications.yell).always(function () {
-                            folderAPI.pool.unfetch(folder.id);
-                            folderAPI.refresh();
-                        });
-                    })
-                    .on('accounts', function () {
-                        var options = { id: 'io.ox/settings/accounts' };
-                        ox.launch('io.ox/settings/main', options).done(function () {
-                            this.setSettingsPane(options);
-                        });
-                    })
                     .open();
                 });
             });
