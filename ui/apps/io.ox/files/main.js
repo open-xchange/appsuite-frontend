@@ -232,35 +232,94 @@ define('io.ox/files/main', [
             });
         },
 
-        'storage-errors': function (app) {
-            app.treeView.on('click:storage-error', function (folder) {
+        'account-errors': function (app) {
+
+            // account errors are shown in EVERY folder that are part of that account
+            app.treeView.on('click:account-error', function (folder) {
                 var accountError = folder['com.openexchange.folderstorage.accountError'];
                 if (!accountError) return;
-                console.log(folder);
-                require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog) {
+
+                require(['io.ox/backbone/views/modal', 'io.ox/backbone/mini-views'], function (ModalDialog, miniViews) {
                     new ModalDialog({
-                        point: 'io.ox/files/storage/account-errors',
+                        model: new Backbone.Model(),
+                        point: 'io.ox/files/account-errors',
                         //#. title of dialog when contact subscription needs to be recreated on error
-                        title: gt('Access error')
+                        title: gt('Error')
                     })
                     .extend({
                         default: function () {
+                            this.account = filestorageAPI.getAccountsCache().findWhere({ qualifiedId: folder.account_id });
+
                             this.$body.append(
-                                $('<div class="info-text">')
-                                    .css('word-break', 'break-word')
-                                    .text(accountError.error + ' ' + accountError.error_desc)
-                                    .addClass(accountError.code.toLowerCase())
+                                $('<div class="form-group">').append(
+                                    $('<div class="info-text">')
+                                        .css('word-break', 'break-word')
+                                        .text(accountError.error + ' ' + accountError.error_desc)
+                                        .addClass(accountError.code.toLowerCase())
+                                )
                             );
+                        },
+                        // password outdated
+                        password: function () {
+                            if (!/^(LGI-0025)$/.test(accountError.code)) return;
+                            // improve error message
+                            this.$('.info-text').text('The password was changed recently. Please enter the new password.');
+                            // fallback
+                            if (!this.account) return;
+                            // input
+                            var guid = _.uniqueId('form-control-label-');
+                            this.$body.append(
+                                $('<div class="form-group">').append(
+                                    $('<label>').attr('for', guid).text(gt('Password')),
+                                    new miniViews.PasswordView({
+                                        name: 'password',
+                                        model: this.model,
+                                        id: guid,
+                                        autocomplete: false,
+                                        options: { mandatory: true } }).render().$el
+                                )
+                            );
+                            // button
+                            this.addButton({ label: gt('Save'), action: 'save' })
+                                .on('save', function () {
+                                    var password = this.model.get('password'),
+                                        data = this.account.pick('id', 'filestorageService', 'displayName');
+                                    // prevent shared 'configuration' object
+                                    _.extend(data, { configuration: { url: this.account.get('configuration').url, password: password } });
+                                    filestorageAPI.updateAccount(data).fail(notifications.yell);
+                                }.bind(this));
+                        },
+                        // all other non credentials related errors
+                        refresh: function () {
+                            if (/^(LGI-0025)$/.test(accountError.code)) return;
+                            this.addButton({ label: gt('Retry'), action: 'retry' })
+                                .on('retry', function () {
+                                    folderAPI.list(10, { cache: false, force: true }).fail(notifications.yell);
+                                });
+                        },
+                        unsubscribe: function () {
+                            // currently mw does not support unsubscribe when password changed
+                            if (/^(LGI-0025)$/.test(accountError.code)) return;
+                            this.addAlternativeButton({ label: gt('Hide folder'), action: 'unsubscribe' })
+                            .on('unsubscribe', function () {
+                                folderAPI.update(folder.id, { subscribed: false }).then(function () {
+                                    folderAPI.refresh();
+                                }, function (e) {
+                                    notifications.yell(e);
+                                });
+                            });
+                        },
+                        // all permanent errors
+                        close: function () {
+                            var closeButton = this.$footer.find('[data-action="cancel"]');
+                            // is primary
+                            var isPrimary = !this.$footer.find('button:not(.pull-left)').length;
+                            if (isPrimary) closeButton.addClass('btn-primary');
+                            // should be labled as 'Cancel' for outdated password
+                            if (/^(LGI-0025)$/.test(accountError.code)) closeButton.text(gt('Cancel'));
                         }
                     })
-                    .addCloseButton()
-                    // .addButton({ label: gt('Edit subscription'), action: 'subscription', className: 'btn-primary' })
-                    // .on('subscription', function () {
-                    //     var options = { id: 'io.ox/core/sub' };
-                    //     ox.launch('io.ox/settings/main', options).done(function () {
-                    //         this.setSettingsPane(options);
-                    //     });
-                    // })
+                    .addButton({ className: 'btn-default' })
                     .open();
                 });
             });
