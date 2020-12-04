@@ -408,14 +408,12 @@ Scenario('Create a new channel', async (I, users, contexts, chat, dialogs) => {
         dialogs.clickButton('Create channel');
 
         I.waitForElement('.ox-chat .controls');
-        I.fillField('Message', 'Hello everyone!');
-        I.pressKey('Enter');
+        chat.sendMessage('Hello everyone!');
     });
 
     await session('Bob', async () => {
         I.login({ user: bob });
         I.waitForElement(locate({ css: 'button' }).withText('All channels'), 30, '.ox-chat');
-        I.waitForNetworkTraffic();
         I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
         I.waitForText(channelTitle, 3, '.ox-chat');
         I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
