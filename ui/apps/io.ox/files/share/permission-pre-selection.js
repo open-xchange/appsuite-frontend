@@ -43,14 +43,14 @@ define('io.ox/files/share/permission-pre-selection', [
             $el = $('<div>');
             dropdown = new DropdownView({ el: $el.addClass('dropdown role')[0], caret: true, label: (baton.view.isForFolder()) ? gt('Author') : gt('Viewer'), model: baton.model, smart: true, buttonToggle: true });
             dropdown.option('inviteAs', 'Viewer', function () {
-                return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('View files only'))];
+                return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('Read only'))];
             });
             dropdown.option('inviteAs', 'Reviewer', function () {
-                return [$.txt(gt('Reviewer')), $.txt(' '), $('<br/><small>').text(gt('View and edit files'))];
+                return [$.txt(gt('Reviewer')), $.txt(' '), $('<br/><small>').text(gt('Read and write'))];
             });
             if (baton.view.isForFolder()) {
                 dropdown.option('inviteAs', 'Author', function () {
-                    return [$.txt(gt('Author')), $.txt(' '), $('<br/><small>').text(gt('View, edit and delete files'))];
+                    return [$.txt(gt('Author')), $.txt(' '), $('<br/><small>').text(gt('Read, write and delete'))];
                 });
             }
             baton.model.on('change:inviteAs', function (model) {

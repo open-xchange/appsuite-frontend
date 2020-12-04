@@ -656,15 +656,15 @@ define('io.ox/files/share/permissions', [
                 } else {
                     dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true, buttonToggle: true })
                         .option('role', 'viewer', function () {
-                            return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('View files only'))];
+                            return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('Read only'))];
                         })
                         .option('role', 'reviewer', function () {
-                            return [$.txt(gt('Reviewer')), $.txt(' '), $('<br/><small>').text(gt('View and edit files'))];
+                            return [$.txt(gt('Reviewer')), $.txt(' '), $('<br/><small>').text(gt('Read and write'))];
                         });
                     if (!isFile) {
                         // files cannot be deleted in file-based shares
                         dropdown.option('role', 'author', function () {
-                            return [$.txt(gt('Author')), $.txt(' '), $('<br/><small>').text(gt('View, edit and delete files'))];
+                            return [$.txt(gt('Author')), $.txt(' '), $('<br/><small>').text(gt('Read, write and delete'))];
                         });
                     }
                     if (baton.view.supportsAdminRole()) {
