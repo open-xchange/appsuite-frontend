@@ -115,7 +115,7 @@ define('io.ox/chat/views/history', [
                 .append(
                     new ChatAvatar({ model: model }).render().$el,
                     $('<div>').append(
-                        $('<div>').append(
+                        $('<div class="ellipsis">').append(
                             $('<span class="title">').text(model.getTitle()),
                             $('<span class="type">').text('(' + this.getType(model) + ')')
                         ),
