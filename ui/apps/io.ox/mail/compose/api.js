@@ -111,7 +111,6 @@ define('io.ox/mail/compose/api', [
             space.cid = space.cid || ('io.ox/mail/compose:' + space.id + ':edit');
             // add to mailref mapping;
             ox.ui.spaces[mailref] = space.id;
-            if (ox.debug) console.log(space.cid, mailref);
             return space;
         }
 
