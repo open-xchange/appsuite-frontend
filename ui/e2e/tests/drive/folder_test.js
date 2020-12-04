@@ -42,6 +42,7 @@ Before(async (I, users) => {
         users.create(),
         users.create()
     ]);
+    await users[0].context.doesntHaveCapability('chat');
 });
 
 After(async (users) => {
