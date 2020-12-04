@@ -131,6 +131,7 @@ Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) =
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
     const bob = await users.create(users.getRandom(), context);
+    const name = users[1].userdata.given_name + ' ' + users[1].userdata.sur_name + ' ';
 
     const channelTitle = 'Channel 1.0';
 
@@ -160,6 +161,14 @@ Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) =
         I.click(locate({ css: 'button' }).withText('Join'), '.ox-chat .controls');
         I.waitForElement('.ox-chat .controls');
         I.waitForText('You joined the conversation', 3);
+    });
+
+    await session('Alice', async () => {
+        I.waitForText(name + 'joined the conversation');
+        I.seeNumberOfVisibleElements('.message.system', 3);
+    });
+
+    await session('Bob', async () => {
         I.seeNumberOfVisibleElements('.message.system', 3);
         I.click('~Close chat', '.ox-chat');
         I.dontSee('Join');
@@ -167,6 +176,14 @@ Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) =
         I.click('~More actions', '.ox-chat');
         I.waitForElement('.smart-dropdown-container.more-dropdown');
         I.click('Leave channel', '.smart-dropdown-container.more-dropdown');
+    });
+
+    await session('Alice', async () => {
+        I.waitForText(name + 'left the conversation');
+        I.seeNumberOfVisibleElements('.message.system', 4);
+    });
+
+    await session('Bob', async () => {
         I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
         I.waitForText('Join');
         I.click(locate('.title').withText(channelTitle), '.ox-chat');
