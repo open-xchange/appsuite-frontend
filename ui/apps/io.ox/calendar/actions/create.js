@@ -39,7 +39,7 @@ define('io.ox/calendar/actions/create', [
             uri: 'mailto:' + folder.created_from.contact.email1,
             entity: folder.created_from.entity,
             contact: folder.created_from.contact
-        })) : folder.userAPI.get({ id: folder.created_by }));
+        })) : userAPI.get({ id: folder.created_by }));
         dev.done(function (user) {
             new ModalDialog({
                 title: gt('Appointments in shared calendars'),
