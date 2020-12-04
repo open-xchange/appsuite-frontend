@@ -29,6 +29,7 @@ define('io.ox/mail/invitations/register', [
 
     var labels = {
         // apps
+        'mail': gt.pgettext('app', 'Mail'),
         'tasks': gt.pgettext('app', 'Tasks'),
         'calendar': gt.pgettext('app', 'Calendar'),
         'contacts': gt.pgettext('app', 'Address Book'),
@@ -59,6 +60,7 @@ define('io.ox/mail/invitations/register', [
         // TODO: add 'unsubscribe' when https://jira.open-xchange.com/browse/MWB-730 was fixed
         'credentials_refresh': ['resubscribe'],
         // deep link classes
+        'mail': 'deep-link-mail',
         'tasks': 'deep-link-tasks',
         'calendar': 'deep-link-calendar',
         'contacts': 'deep-link-contacts',
