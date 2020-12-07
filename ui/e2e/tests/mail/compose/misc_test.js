@@ -25,6 +25,58 @@ After(async (users) => {
     await users.removeAll();
 });
 
+Scenario('[OXUIB-587] Supports predefined values (plaintext)', async (I, mail) => {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    const DATA = {
+        subject: 'OXUIB-587',
+        content: 'Supports predefined values',
+        contentType: 'text/plain'
+    };
+
+    await I.executeAsyncScript(function (DATA, done) {
+        require(['io.ox/mail/compose/main'], function (compose) {
+            var app = compose.getApp();
+            app.launch().done(function () {
+                app.open(DATA).done(done);
+            });
+        });
+    }, DATA);
+
+    // check prefilled fields
+    I.seeInField('Subject', DATA.subject);
+    I.seeInField({ css: 'textarea.plain-text' }, DATA.content);
+});
+
+Scenario('[OXUIB-587] Supports predefined values (html)', async (I, mail) => {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    const DATA = {
+        subject: 'OXUIB-587',
+        content: '<b>Supports predefined values</b>',
+        contentType: 'text/html'
+    };
+
+    await I.executeAsyncScript(function (DATA, done) {
+        require(['io.ox/mail/compose/main'], function (compose) {
+            var app = compose.getApp();
+            app.launch().done(function () {
+                app.open(DATA).done(done);
+            });
+        });
+    }, DATA);
+
+    // check prefilled fields
+    I.seeInField('Subject', DATA.subject);
+    I.waitForElement('.editor iframe');
+    within({ frame: '.editor iframe' }, () => {
+        I.see('Supports predefined values');
+        I.dontSee(DATA.content);
+    });
+});
+
 Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
     let height;
 

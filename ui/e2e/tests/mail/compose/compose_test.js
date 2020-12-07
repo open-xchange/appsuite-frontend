@@ -54,7 +54,7 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
     I.waitForText('Default signature for new messages');
     I.selectOption('Default signature for new messages', 'My signature');
     // yep, this seems useless, but when you have no default signature set, the default compose signature will be used
-    // if you have unset (explicitedly checked no signature) the reply/forward signature. no signature will be selected on reply
+    // if you have unset (explicitly checked no signature) the reply/forward signature. no signature will be selected on reply
     I.selectOption('Default signature for replies or forwards', 'My signature');
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
@@ -334,7 +334,7 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users, m
 
     // I.login('app=io.ox/mail');
 
-    // TODO check read aknowledgement
+    // TODO check read acknowledgement
     // I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
     // I.click({ css: 'li.unread' });
     // I.waitForVisible('.mail-detail-pane .subject');

@@ -288,6 +288,12 @@ define('io.ox/mail/compose/model', [
             this.unset('type');
             this.unset('original');
             return composeAPI.space.add({ type: type, original: original }, opt).then(function (data) {
+                // prevent that empty values overwrite existing values (see OXUIB-587 )
+                if (!original) {
+                    data = _.omit(data, function (value) { return !_.isBoolean(value) && !value; });
+                    data.contentType = this.get('contentType') || data.contentType;
+                }
+
                 this.prevAttributes = data;
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
