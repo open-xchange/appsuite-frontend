@@ -160,5 +160,5 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
         I.waitForElement(locate('.unread-count').withText('1'), 3, '.ox-chat .left-navigation');
     });
 
-    context.remove();
+    await context.remove();
 });

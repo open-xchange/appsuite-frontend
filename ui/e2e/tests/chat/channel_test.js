@@ -123,7 +123,7 @@ Scenario('Update channel profile picture and name', async (I, dialogs, users, co
         I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') === 'none', 10);
     });
 
-    context.remove();
+    await context.remove();
 });
 
 Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) => {
@@ -176,5 +176,5 @@ Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) =
         I.seeNumberOfVisibleElements('.message.system', 4);
     });
 
-    context.remove();
+    await context.remove();
 });

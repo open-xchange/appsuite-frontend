@@ -158,5 +158,5 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
         I.waitForText('No search results', 5, '.ox-chat .search-result');
     });
 
-    context.remove();
+    await context.remove();
 });

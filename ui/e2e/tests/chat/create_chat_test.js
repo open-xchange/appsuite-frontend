@@ -382,7 +382,7 @@ Scenario('Create a new channel', async (I, users, contexts, chat, dialogs) => {
         expect(await I.grabCssPropertyFrom('.ox-chat .group.avatar.image', 'background-image')).not.to.be.a('undefined');
     });
 
-    context.remove();
+    await context.remove();
 });
 
 Scenario('Create a new channel from floating window via dropdown', async (I, users, contexts, chat, dialogs) => {
@@ -407,7 +407,7 @@ Scenario('Create a new channel from floating window via dropdown', async (I, use
         I.waitForElement('.ox-chat .controls');
     });
 
-    context.remove();
+    await context.remove();
 });
 
 Scenario('Create a new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {
@@ -431,5 +431,5 @@ Scenario('Create a new channel from floating window via icon', async (I, users, 
         I.waitForElement('.ox-chat .controls');
     });
 
-    context.remove();
+    await context.remove();
 });
