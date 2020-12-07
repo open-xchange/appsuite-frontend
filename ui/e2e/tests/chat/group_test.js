@@ -102,7 +102,7 @@ Scenario('Leave and view a group and get re-added', async (I, users, chat, dialo
     });
 });
 
-Scenario('Update group profile picture and name', async (I, dialogs, users, chat) => {
+Scenario.skip('Update group profile picture and name', async (I, dialogs, users, chat) => {
     await users.create();
 
     const groupTitle = 'Test Group';

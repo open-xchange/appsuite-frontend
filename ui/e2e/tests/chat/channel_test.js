@@ -19,7 +19,7 @@ After(async (users) => {
     ]);
 });
 
-Scenario('Update channel profile picture and name', async (I, dialogs, users, contexts) => {
+Scenario.skip('Update channel profile picture and name', async (I, dialogs, users, contexts) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
