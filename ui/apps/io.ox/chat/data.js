@@ -480,8 +480,13 @@ define('io.ox/chat/data', [
         },
         findSimilar: function (obj) {
             // try to find via id
-            var model = this.get(obj.roomId);
+            var model = this.get(obj.messageId);
             if (model) return model;
+            // try to find via clientSideMessageId
+            if (obj.sender === data.user.email && obj.clientSideMessageId) {
+                model = this.findWhere({ clientSideMessageId: obj.clientSideMessageId });
+                if (model) return model;
+            }
             // try to find a new one, with similar attributes
             return this.find(function (model) {
                 if (!model.isNew()) return false;
@@ -746,6 +751,9 @@ define('io.ox/chat/data', [
                 attr.sender = data.user.email;
                 events.trigger('message:post', { attr: attr, room: this, consume: consume });
                 if (consumed) return lastDeferred;
+
+                // this identifier is not stored on the server but part of the response and part of websocket push events to uniquely identify the send message
+                attr.clientSideMessageId = Math.random().toString(16).slice(2);
 
                 // special case: very first message
                 if (this.isNew()) {
