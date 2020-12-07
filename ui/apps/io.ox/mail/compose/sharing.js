@@ -208,7 +208,7 @@ define('io.ox/mail/compose/sharing', [
             this.listenTo(this.model.get('attachments'), 'add remove reset change:size', this.updateVisibility);
             this.listenTo(this.model, 'change:sharedAttachments', this.syncToSharingModel);
             this.listenTo(this.sharingModel, 'change:enabled', this.updateVisibility);
-            this.listenTo(this.sharingModel, 'change:enabled', this.syncToMailModel);
+            this.listenTo(this.sharingModel, 'change:enabled', _.partial(this.syncToMailModel, { instant: true }));
         },
 
         updateVisibility: function () {
@@ -231,10 +231,12 @@ define('io.ox/mail/compose/sharing', [
             this.sharingModel.set(sharedAttachments);
         },
 
-        syncToMailModel: function () {
+        syncToMailModel: function (options) {
+            var opt = _.extend({ instant: false }, options);
 
             if (!this.sharingModel.get('enabled')) {
-                return this.model.set('sharedAttachments', { enabled: false });
+                this.model.set('sharedAttachments', { enabled: false });
+                return opt.instant ? this.model.save() : undefined;
             }
 
             var obj =  this.sharingModel.toJSON(),
@@ -242,6 +244,7 @@ define('io.ox/mail/compose/sharing', [
             // don't save password if the field is empty or disabled.
             if (!this.sharingModel.get('usepassword') || _.isEmpty(this.sharingModel.get('password'))) blacklist.push('password');
             this.model.set('sharedAttachments', _.omit(obj, blacklist));
+            return opt.instant ? this.model.save() : undefined;
         },
 
         render: function () {
