@@ -32,11 +32,6 @@ function (DisposableView, api, url, util) {
         },
 
         render: function () {
-            this.update();
-            return this;
-        },
-
-        update: function () {
             this.$el.css('background-image', '').empty();
             if (this.model.get('icon')) {
                 url.request(this.model.getIconUrl()).then(function (url) {
@@ -47,6 +42,13 @@ function (DisposableView, api, url, util) {
                 var data = { first_name: this.model.get('title'), last_name: this.model.get('description') };
                 this.$el.addClass(util.getInitialsColor(util.getInitials(data))).append(this.$icon);
             }
+            return this;
+        },
+
+        update: function () {
+            var iconUrl = this.model.getIconUrl();
+            if (iconUrl) url.revoke(iconUrl);
+            this.render();
         }
     });
 

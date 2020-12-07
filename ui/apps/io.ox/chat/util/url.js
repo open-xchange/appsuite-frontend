@@ -48,5 +48,8 @@ define('io.ox/chat/util/url', ['io.ox/chat/api'], function (api) {
         timeout[url] = setTimeout(revoke, TTL, url);
     }
 
-    return { request: request };
+    return {
+        request: request,
+        revoke: revoke
+    };
 });
