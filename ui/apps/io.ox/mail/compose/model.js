@@ -352,6 +352,10 @@ define('io.ox/mail/compose/model', [
 
             if (_.isEmpty(diff)) return $.when();
 
+            // in case autosave collides with save
+            if (this.saving) return this.requestSave();
+            this.saving = true;
+
             this.prevAttributes = this.toJSON();
 
             if (!silent) this.trigger('before:save');
@@ -361,6 +365,8 @@ define('io.ox/mail/compose/model', [
                 this.prevAttributes = prevAttributes;
                 if (ox.debug) console.warn('Update composition space failed', this.get('id'));
                 if (!silent) this.trigger('fail:save', e);
+            }.bind(this)).always(function () {
+                this.saving = false;
             }.bind(this));
         },
 
