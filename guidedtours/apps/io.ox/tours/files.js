@@ -158,33 +158,55 @@ define('io.ox/tours/files', [
                 .on('before:show', function () {
                     $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
                 })
-
-                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
-                .on('close', cleanup)
+                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'left' })
                 .end()
             .step()
                 .title(gt('Sharing option - Invite people'))
-                .content(gt('Choose from two alternatives to share your files and folder. Use "Only invited people" if you want ot manage access rights and allow recipients to create and edit files. Internal and external participants are also able to collaborate with you on documents at the same time.'))
-                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
-                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
+                .content(gt('Choose from two alternatives to share your files and folder. Use "Invited people only" if you want ot manage access rights and allow recipients to create and edit files. Internal and external participants are also able to collaborate with you on documents at the same time.'))
+                .on('before:show', function () {
+                    if ($('.share-permissions-dialog .modal-dialog').length === 0) {
+                        $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').click();
+                    } else {
+                        $('.share-permissions-dialog .modal-dialog .access-select select option[value="1"]').attr('selected', null);
+                        $('.share-permissions-dialog .modal-dialog .access-select select option[value="0"]').attr('selected', 'selected');
+                    }
+                })
+                .waitFor('.share-permissions-dialog .modal-dialog .access-select select')
+                .spotlight('.share-permissions-dialog .modal-dialog .access-select select', { position: 'right' })
+                .hotspot('.share-permissions-dialog .modal-dialog .access-select select', { position: 'left' })
+                .on('back', function () {
+                    $('.share-permissions-dialog .modal-dialog [data-action="abort"]').click();
+                })
+                .on('close', function () {
+                    $('.share-permissions-dialog .modal-dialog [data-action="abort"]').click();
+                })
                 .end()
-
             .step()
                 .title(gt('Sharing option - Everyone who has the link'))
                 .content(gt('It is also possible to get a sharing link to let others view or download your files. You can use an expiration date and password protection if you like.'))
-                .waitFor('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]')
-                .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
-                .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"] i', { position: 'left' })
+                .waitFor('.share-permissions-dialog .modal-dialog .access-select select')
+                .on('show', function () {
+                    $('.share-permissions-dialog .modal-dialog .access-select select option[value="0"]').attr('selected', null);
+                    $('.share-permissions-dialog .modal-dialog .access-select select option[value="1"]').attr('selected', 'selected');
+                })
+                .spotlight('.share-permissions-dialog .modal-dialog .access-select select', { position: 'right' })
+                .hotspot('.share-permissions-dialog .modal-dialog .access-select select', { position: 'left' })
+                .on('close', function () {
+                    $('.share-permissions-dialog .modal-dialog [data-action="abort"]').click();
+                })
+                .on('next', function () {
+                    $('.share-permissions-dialog .modal-dialog [data-action="abort"]').click();
+                })
                 .end()
             .step()
                 .title(gt('Edit documents'))
                 .content(gt('Did you know that you can edit text documents and spreadsheets online? Drive will automatically update your edited file, but thanks to versioning the original file stays available.'))
-
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
+                .on('back', function () {
+                    $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').click();
+                })
                 .end()
             .step()
                 .title(gt('File details'))
