@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-10 20:22+0200\n"
+"PO-Revision-Date: 2020-12-07 14:35+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.com>\n"
 "Language-Team: Italian <it@workshop-chapina.it>\n"
 "Language: it_IT\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -193,7 +193,7 @@ msgstr ""
 "visita guidata vi introdurrà alla vostra nuova soluzione di archiviazione in "
 "linea - il punto di accesso ai file archiviati in linea da tutti i vostri "
 "account. Qui potrete caricare e salvare i vostri file, condividerli e "
-"sincronizzarli con altri dispositivi."
+"sincronizzarli con altri dispositivi. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -385,18 +385,18 @@ msgstr "Benvenuti in %s"
 msgid ""
 "This tour will give you a quick introduction to the product in five steps."
 msgstr ""
-"Questa panoramica ti fornirà una rapida introduzione al prodotto in cinque"
-" passi."
+"Questa panoramica ti fornirà una rapida introduzione al prodotto in cinque "
+"passi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Navigation"
 msgstr "Navigazione"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
+msgid "All apps can be found in the app menu on the top left."
 msgstr ""
-"Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto a"
-" destra."
+"Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto a "
+"sinistra."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -407,8 +407,8 @@ msgid ""
 "Your personal data can be changed in the account dropdown. You can also sign "
 "out from there."
 msgstr ""
-"I tuoi dati personali possono essere modificati nel menu a tendina"
-" dell'account. Puoi anche uscire da lì."
+"I tuoi dati personali possono essere modificati nel menu a tendina "
+"dell'account. Puoi anche uscire da lì."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Settings"
@@ -417,8 +417,8 @@ msgstr "Impostazioni"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Customize the product to your needs in the settings area."
 msgstr ""
-"Personalizza il prodotto in base alle tue esigenze nell'area delle"
-" impostazioni."
+"Personalizza il prodotto in base alle tue esigenze nell'area delle "
+"impostazioni."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Help"
@@ -428,21 +428,21 @@ msgstr "Aiuto"
 msgid ""
 "If you need assistance or have further questions, you can use the help app."
 msgstr ""
-"Se hai bisogno di assistenza o hai ulteriori domande, puoi utilizzare"
-" l'applicazione di aiuto."
+"Se hai bisogno di assistenza o hai ulteriori domande, puoi utilizzare "
+"l'applicazione di aiuto."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Cancel tour"
 msgstr "Annulla la panoramica"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
 "choose \"%s\""
 msgstr ""
-"Puoi riavviare questa panoramica in qualsiasi momento facendo clic sull'icona"
-" dell'account e scegliere \"%s\""
+"Puoi riavviare questa panoramica in qualsiasi momento facendo clic "
+"sull'icona dell'account e scegliere \"%s\""
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -589,12 +589,12 @@ msgstr "Aprire le impostazioni di posta elettronica"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Per aprire le impostazioni di posta elettronica, fare clic sull'icona Menu "
-"di sistema a destra della barra dei menu. Selezionare Impostazioni. Fare "
-"clic sul messaggio a sinistra."
+"Per aprire le impostazioni di posta elettronica, fare clic sull'icona "
+"Impostazioni del menu in alto a destra della barra dei menu. Selezionare "
+"Impostazioni. Fare clic su Posta a sinistra."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -736,8 +736,8 @@ msgid ""
 "To open the settings, click on the settings icon on the upper right side of "
 "the menu bar."
 msgstr ""
-"Per aprire le impostazioni, fai clic sull'icona delle impostazioni in alto a"
-" destra della barra dei menu."
+"Per aprire le impostazioni, fai clic sull'icona delle impostazioni in alto a "
+"destra della barra dei menu."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -769,15 +769,15 @@ msgstr "Aprire la guida"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Per aprire la guida, fare clic sull'immagine dell'utente in alto a destra "
-"della barra dei menu. Seleziona Aiuto. La guida per l'applicazione "
-"selezionata viene visualizzata. Per sfogliare la guida completa, fare clic "
-"su Pagina iniziale o Indice nella parte superiore della finestra."
+"Per aprire la guida, fare clic sull'icona della guida in alto a destra della "
+"barra dei menu. Selezionare Aiuto. La guida per l'applicazione selezionata "
+"viene visualizzata.Per sfogliare la guida completa, fare clic su Pagina "
+"iniziale o Indice nella parte superiore della finestra."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -897,6 +897,30 @@ msgstr ""
 "selezione a sinistra delle attività. Se le caselle non sono visualizzate, "
 "fare clic su Vista > Caselle di selezione a destra della barra degli "
 "strumenti."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto "
+#~ "a destra."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Per aprire le impostazioni di posta elettronica, fare clic sull'icona "
+#~ "Menu di sistema a destra della barra dei menu. Selezionare Impostazioni. "
+#~ "Fare clic sul messaggio a sinistra."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Per aprire la guida, fare clic sull'immagine dell'utente in alto a destra "
+#~ "della barra dei menu. Seleziona Aiuto. La guida per l'applicazione "
+#~ "selezionata viene visualizzata. Per sfogliare la guida completa, fare "
+#~ "clic su Pagina iniziale o Indice nella parte superiore della finestra."
 
 #~ msgid "Creating new items"
 #~ msgstr "Creare nuovi elementi"

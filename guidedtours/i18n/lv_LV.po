@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-27 11:10+0300\n"
+"PO-Revision-Date: 2020-11-23 18:01+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -385,8 +385,8 @@ msgid "Navigation"
 msgstr "Navigācija"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Visas aplikācijas atrodas lietotņu izvēlnē ekrāna augšējā labajā pusē."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Visas aplikācijas atrodas aplikāciju izvēlnē augšējā kreisajā malā."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -425,7 +425,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Pārtraukt tūri"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -579,12 +579,12 @@ msgstr "E-pasta iestatījumu atvēršana"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas izvēlnes "
-"joslas labajā malā un izvēlieties Iestatījumi. Pēc tam noklikšķiniet uz e-"
-"pasta izvēlnes."
+"Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz iestatījumu ikonas "
+"izvēlnes joslas augšējā labajā malā. Izvēlieties Iestatījumi. Noklikšķiniet "
+"uz e-pasta izvēlnes kreisajā pusē."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -757,13 +757,13 @@ msgstr "Palīga atvēršana"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Lai atvērtu palīgu, noklikšķiniet uz lietotāja ikonas izvēļņu joslas labajā "
-"malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz izvēlētajai "
+"Lai atvērtu palīgu, noklikšķiniet uz palīga ikonas izvēļņu joslas labajā "
+"malā. Izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz izvēlētajai "
 "aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu visu palīdzības "
 "informāciju, noklikšķiniet uz sākuma lapas, vai arī uz Satura izvēlnes loga "
 "augšējā daļā."
@@ -882,6 +882,30 @@ msgstr ""
 "Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
 "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
 "malā noklikšķiniet uz Skats > Izvēles rūtiņas."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Visas aplikācijas atrodas lietotņu izvēlnē ekrāna augšējā labajā pusē."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz Sistēmas ikonas "
+#~ "izvēlnes joslas labajā malā un izvēlieties Iestatījumi. Pēc tam "
+#~ "noklikšķiniet uz e-pasta izvēlnes."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Lai atvērtu palīgu, noklikšķiniet uz lietotāja ikonas izvēļņu joslas "
+#~ "labajā malā un izvēlieties Palīgs. Tā rezultātā tiks parādīta pašreiz "
+#~ "izvēlētajai aplikācijai atbilstošā palīdzības informācija. Lai pārlūkotu "
+#~ "visu palīdzības informāciju, noklikšķiniet uz sākuma lapas, vai arī uz "
+#~ "Satura izvēlnes loga augšējā daļā."
 
 #~ msgid "Creating new items"
 #~ msgstr "Jaunu vienību izveide"

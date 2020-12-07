@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-15 18:20+0900\n"
+"PO-Revision-Date: 2020-12-07 14:35+0100\n"
 "Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <fr@workshop-chapina.com>\n"
 "Language: fr_FR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -194,7 +194,7 @@ msgstr ""
 "votre point d'entrée unique pour accéder à tous vos fichiers stockés en "
 "ligne en provenance de tous vos comptes. C'est ici que vous téléchargez, "
 "sauvegardez, partagez et synchronisez tous vos fichiers entre vos différents "
-"appareils."
+"appareils. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -399,10 +399,10 @@ msgid "Navigation"
 msgstr "Navigation"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
+msgid "All apps can be found in the app menu on the top left."
 msgstr ""
 "Vous pouvez retrouver toutes les applications dans le menu de l'application "
-"en haut à droite."
+"en haut à gauche."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -414,8 +414,7 @@ msgid ""
 "out from there."
 msgstr ""
 "Vous pouvez modifier vos données personnelles à partir du menu déroulant du "
-"compte. "
-"Vous pouvez également vous déconnecter depuis ce menu."
+"compte. Vous pouvez également vous déconnecter depuis ce menu."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Settings"
@@ -442,7 +441,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Annuler la visite guidée"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -597,11 +596,11 @@ msgstr "Accéder aux réglages du courriel"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Pour ouvrir les réglages du courriel, cliquez sur l'icône du « Menu "
-"Système » dans le coin en haut à droite de la barre de menus. Sélectionnez "
+"Pour ouvrir les réglages du courriel, cliquez sur l'icône du « Menu des "
+"réglages » dans le coin en haut à droite de la barre de menu. Sélectionnez "
 "« Réglages ». Cliquez sur « Courriel » dans la partie gauche."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -778,15 +777,16 @@ msgstr "Accéder à l'aide"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Pour ouvrir l'aide, cliquez sur l'icône de l'utilisateur en haut à droite de "
-"la barre de menu. Choisissez Aide. L'aide correspondant à l'application "
+"Pour ouvrir l'aide, cliquez sur l'icône d'aide en haut à droite de la barre "
+"de menu. Choisissez « Aide ». L'aide correspondant à l'application "
 "actuellement utilisée s'affiche alors. Pour parcourir l'aide complète, "
-"cliquez sur Page de démarrage ou Table des matières en haut de la fenêtre."
+"cliquez sur « Page de démarrage » ou « Table des matières » en haut de la "
+"fenêtre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -797,8 +797,8 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr ""
-"Pour vous déconnecter, cliquez sur l'icône « Menu système » en haut à "
-"droite de la barre de menus. Choisissez « Se déconnecter »."
+"Pour vous déconnecter, cliquez sur l'icône « Menu système » en haut à droite "
+"de la barre de menus. Choisissez « Se déconnecter »."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -907,6 +907,31 @@ msgstr ""
 "Pour modifier plusieurs tâches à la fois, cochez les cases figurant à gauche "
 "de chaque tâche. Si les cases à cocher ne sont pas affichées, cliquez sur « "
 "Vue > Cases à cocher » à droite de la barre d'outils."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Vous pouvez retrouver toutes les applications dans le menu de "
+#~ "l'application en haut à droite."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Pour ouvrir les réglages du courriel, cliquez sur l'icône du « Menu "
+#~ "Système » dans le coin en haut à droite de la barre de menus. "
+#~ "Sélectionnez « Réglages ». Cliquez sur « Courriel » dans la partie gauche."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Pour ouvrir l'aide, cliquez sur l'icône de l'utilisateur en haut à droite "
+#~ "de la barre de menu. Choisissez Aide. L'aide correspondant à "
+#~ "l'application actuellement utilisée s'affiche alors. Pour parcourir "
+#~ "l'aide complète, cliquez sur Page de démarrage ou Table des matières en "
+#~ "haut de la fenêtre."
 
 #~ msgid "Creating new items"
 #~ msgstr "Créer de nouveaux éléments"

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-27 10:18+0200\n"
+"PO-Revision-Date: 2020-12-03 11:57+0100\n"
 "Last-Translator: Jolanta Kasprzak-Śliwinska <jolanta@workshop-chapina.com>\n"
 "Language-Team: Polish <pl@workshop-chapina.com>\n"
 "Language: pl_PL\n"
@@ -317,8 +317,8 @@ msgid "Navigation"
 msgstr "Nawigacja"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Wszystkie aplikacje można znaleźć w menu aplikacji w prawym górnym rogu."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Wszystkie aplikacje można znaleźć w menu aplikacji w lewym górnym rogu."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -351,7 +351,7 @@ msgstr "Jeśli potrzebujesz pomocy lub masz dodatkowe pytania, skorzystaj z apli
 msgid "Cancel tour"
 msgstr "Anuluj prezentację"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -479,9 +479,9 @@ msgstr "Otwieranie ustawień poczty e-mail"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
-msgstr "Aby otworzyć ustawienia poczty e-mail, kliknij ikonę menu systemowego z prawej strony u góry paska menu. Wybierz pozycję Ustawienia. Kliknij pozycję E-mail widoczną z lewej strony."
+msgstr "Aby otworzyć ustawienia poczty e-mail, kliknij ikonę menu Ustawienia po prawej stronie u góry paska menu. Wybierz pozycję Ustawienia. Kliknij pozycję E-mail widoczną z lewej strony."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -629,11 +629,11 @@ msgstr "Otwieranie pomocy"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "Aby otworzyć pomoc, kliknij ikonę użytkownika widoczną w prawym górnym rogu paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc dotycząca aktualnie wybranej aplikacji. Aby przeglądać całą pomoc, kliknij Strona początkowa lub Spis treści w górnej części okna."
+msgstr "Aby otworzyć pomoc, kliknij ikonę pomocy widoczną w prawym górnym rogu paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc dotycząca aktualnie wybranej aplikacji. Aby przeglądać całą pomoc, kliknij Strona początkowa lub Spis treści w górnej części okna."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -736,6 +736,29 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "Aby edytować wiele zadań jednocześnie, zaznacz pola wyboru widoczne z lewej strony zadań. Jeśli pola wyboru nie są wyświetlane, kliknij pozycje Widok > Pola wyboru z prawej strony paska narzędzi."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Wszystkie aplikacje można znaleźć w menu aplikacji w prawym górnym rogu."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Aby otworzyć ustawienia poczty e-mail, kliknij ikonę menu systemowego z "
+#~ "prawej strony u góry paska menu. Wybierz pozycję Ustawienia. Kliknij "
+#~ "pozycję E-mail widoczną z lewej strony."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Aby otworzyć pomoc, kliknij ikonę użytkownika widoczną w prawym górnym "
+#~ "rogu paska menu. Wybierz polecenie Pomoc. Pojawi się pomoc dotycząca "
+#~ "aktualnie wybranej aplikacji. Aby przeglądać całą pomoc, kliknij Strona "
+#~ "początkowa lub Spis treści w górnej części okna."
 
 #~ msgid "Creating new items"
 #~ msgstr "Tworzenie nowych elementów"

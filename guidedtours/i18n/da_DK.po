@@ -1,10 +1,11 @@
 # Jacob Sparre Andersen <jacob@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2018.
+# Nicky Thomassen <nicky@workshop-chapina.com>, 2019, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-24 10:56+0200\n"
+"PO-Revision-Date: 2020-12-07 14:34+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -181,7 +182,7 @@ msgstr ""
 "Velkommen til din lagerplads i skyen. Denne rundvisning vil introducere dig "
 "til din nye online lagerløsning - din ene adgangvej til lagrede filer fra "
 "alle dine konti. Her kan du overføre, dine filer, gemme dem, og synkronisere "
-"dem med forskellige enheder."
+"dem med forskellige enheder. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -375,8 +376,8 @@ msgid "Navigation"
 msgstr "Navigation"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Alle programmer kan findes i programmenuen øverst til højre."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Alle programmer kan findes i programmenuen øverst til venstre."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -413,7 +414,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Afbryd rundvisning"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -563,11 +564,11 @@ msgstr "Åbner E-mail-indstillingerne"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
 "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i øverste "
-"højre side af menulinjen. Vælg indstillinger. Klik på E-mail i venstre side."
+"højre side af menulinjen. Vælg indstillinger. Klik på e-mail i venstre side."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -739,15 +740,15 @@ msgstr "Åbning af hjælp"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"For at åbne hjælpen, klik på brugerbilledet øverst til højre på menubjælken "
-"og vælg Hjælp. Hjælpen til den aktuelt valgte app bliver så vist. For at se "
-"den samlede hjælp, klik på Startside eller Indholdsfortegnelse øverst i "
-"vinduet."
+"For at åbne hjælpen, klik på hjælp-ikonet øverst til højre på menubjælken og "
+"vælg Hjælp. Hjælpen til den aktuelt valgte app bliver så vist. For at se den "
+"samlede hjælp, klik på Startside eller Indholdsfortegnelse i den øverste del "
+"af vinduet."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -860,6 +861,28 @@ msgstr ""
 "For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre "
 "side af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > "
 "Tjekbokse i højre side af værktøjslinjen."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "Alle programmer kan findes i programmenuen øverst til højre."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i "
+#~ "øverste højre side af menulinjen. Vælg indstillinger. Klik på E-mail i "
+#~ "venstre side."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "For at åbne hjælpen, klik på brugerbilledet øverst til højre på "
+#~ "menubjælken og vælg Hjælp. Hjælpen til den aktuelt valgte app bliver så "
+#~ "vist. For at se den samlede hjælp, klik på Startside eller "
+#~ "Indholdsfortegnelse øverst i vinduet."
 
 #~ msgid "Creating new items"
 #~ msgstr "Lav nye elementer"

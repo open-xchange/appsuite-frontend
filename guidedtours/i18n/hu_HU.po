@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-17 08:05+0200\n"
+"PO-Revision-Date: 2020-11-23 20:21+0100\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -134,7 +134,7 @@ msgstr "Levél küldése a címjegyzékben található kapcsolatnak"
 msgid ""
 "To send an email to the contact, click on an email address or on Send email "
 "in the toolbar."
-msgstr "Levél küldéséhez kattintson az e-mail-címre vagy az eszköztárban található Levél küldése ikonra."
+msgstr "Levél küldéséhez kattintson az e-mail címre vagy az eszköztárban található Levél küldése ikonra."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
@@ -315,8 +315,8 @@ msgid "Navigation"
 msgstr "Irányítás"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Az összes alkalmazás megtalálható az app menüjében, a jobb felső sarokban."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Az összes alkalmazás megtalálható az app menüjében, a bal felső sarokban."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -349,7 +349,7 @@ msgstr "Ha segítségre van szüksége vagy további kérdése van, használhatj
 msgid "Cancel tour"
 msgstr "Bemutató megszakítása"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -477,9 +477,9 @@ msgstr "Levelezés beállításainak megnyitása"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
-msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső részén található Rendszermenü ikonra. Válassza ki a Beállításokat és kattintson az E-mail beállításokra a bal oldalon."
+msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső részén található Beállítások ikonra. Válassza ki a Beállításokat és kattintson az E-mail beállításokra a bal oldalon."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -627,11 +627,11 @@ msgstr "Súgó megnyitása"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "A súgó megnyitásához kattintson a menüsor jobb felső részén található felhasználó képre. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
+msgstr "A súgó megnyitásához kattintson a menüsor jobb felső részén található súgó ikonjára. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -734,6 +734,29 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Az összes alkalmazás megtalálható az app menüjében, a jobb felső sarokban."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső "
+#~ "részén található Rendszermenü ikonra. Válassza ki a Beállításokat és "
+#~ "kattintson az E-mail beállításokra a bal oldalon."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "A súgó megnyitásához kattintson a menüsor jobb felső részén található "
+#~ "felhasználó képre. Válassza ki a Súgót. Ekkor megjelenik a kiválasztott "
+#~ "alkalmazás súgója. A teljes Súgó megtekintéséhez kattintson az oldal "
+#~ "felső részén található Kezdőlapra vagy a Tartalomjegyzékre."
 
 #~ msgid "Creating new items"
 #~ msgstr "Új elemek létrehozása"

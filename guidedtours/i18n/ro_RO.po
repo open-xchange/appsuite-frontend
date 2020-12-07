@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-11 17:42+0900\n"
+"PO-Revision-Date: 2020-11-23 23:01+0900\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -387,8 +387,10 @@ msgid "Navigation"
 msgstr "Navigare"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Toate aplicațiile pot fi găsite în meniul aplicației din dreapta sus."
+msgid "All apps can be found in the app menu on the top left."
+msgstr ""
+"Toate aplicațiile pot fi găsite în meniul aplicației, în partea de stânga "
+"sus."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -425,7 +427,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Anulează turul"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -578,12 +580,12 @@ msgstr "Deschiderea setărilor de e-mail"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Pentru a deschide setările de e-mail, apăsați pe pictograma Meniu sistem din "
-"partea dreaptă sus a barei de meniu. Selectați Setări. Apăsați pe E-mail în "
-"partea stângă."
+"Pentru a deschide setările de e-mail, apăsați pe pictograma meniului Setări "
+"din partea din dreapta sus a barei de meniu. Selectați Setări. Alegeți E-"
+"Mail în partea stângă."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -757,15 +759,16 @@ msgstr "Deschiderea ajutorului"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Pentru a deschide ajutorul, apăsați pe pictograma utilizatorului din partea "
-"dreaptă sus a barei de meniu. Selectați Ajutor. Se afișează ajutorul pentru "
-"aplicația selectată momentan. Pentru a naviga în ajutorul complet, apăsați "
-"pe Pagina de pornire sau pe Cuprins în partea superioară a ferestrei."
+"Pentru a deschide meniul de ajutorul, apăsați pe pictograma de ajutor din "
+"partea dreaptă sus a barei de meniu. Selectați Ajutor. Se vor afișa "
+"informații de ajutor pentru aplicația selectată momentan. Pentru a naviga în "
+"întregul meniu de ajutorul, apăsați pe Pagina de pornire sau pe Cuprins în "
+"partea superioară a ferestrei."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -883,6 +886,30 @@ msgstr ""
 "selectare din stânga sarcinilor. În cazul în care casetele de selectare nu "
 "sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
 "barei de unelte."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Toate aplicațiile pot fi găsite în meniul aplicației din dreapta sus."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Pentru a deschide setările de e-mail, apăsați pe pictograma Meniu sistem "
+#~ "din partea dreaptă sus a barei de meniu. Selectați Setări. Apăsați pe E-"
+#~ "mail în partea stângă."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Pentru a deschide ajutorul, apăsați pe pictograma utilizatorului din "
+#~ "partea dreaptă sus a barei de meniu. Selectați Ajutor. Se afișează "
+#~ "ajutorul pentru aplicația selectată momentan. Pentru a naviga în ajutorul "
+#~ "complet, apăsați pe Pagina de pornire sau pe Cuprins în partea superioară "
+#~ "a ferestrei."
 
 #~ msgid "Creating new items"
 #~ msgstr "Crearea de elemente noi"
