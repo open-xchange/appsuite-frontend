@@ -127,29 +127,6 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
             if (obj instanceof File) return true;
             if (typeof obj.name === 'string' && obj.type) return true;
             return false;
-        },
-
-        makeFormData: function (attr) {
-            var formData = new FormData();
-
-            _.each(attr, function (value, key) {
-                if (_.isUndefined(value)) return;
-
-                if (_.isArray(value)) {
-                    value.forEach(function (val, index) {
-                        formData.append(key + '[' + index + ']', val);
-                    });
-                    return;
-                }
-
-                if (_.isObject(value) && !util.isFile(value)) {
-                    value = JSON.stringify(value);
-                }
-
-                formData.append(key, value);
-            });
-
-            return formData;
         }
 
     };

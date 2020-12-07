@@ -163,6 +163,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             var updates = this.model.has('roomId') ? { roomId: this.model.get('roomId') } : this.model.toJSON(),
                 maxGroupLength = data.serverConfig.maxGroupLength || -1,
                 hiddenAttr = {},
+                icon,
                 newTitle = this.model.get('title').trim();
 
             if (!newTitle) { // not empty
@@ -191,9 +192,9 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             if (this.pictureModel.get('pictureFileEdited') === '') {
-                hiddenAttr.icon = null;
+                icon = null;
             } else if (this.pictureModel.get('pictureFileEdited')) {
-                hiddenAttr.icon = this.pictureModel.get('pictureFileEdited');
+                icon = this.pictureModel.get('pictureFileEdited');
             }
 
             if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) {
@@ -202,7 +203,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                 return;
             }
 
-            originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
+            originalModel.save(updates, { hiddenAttr: hiddenAttr, icon: icon }).then(function () {
                 this.close();
                 data.chats.add(originalModel);
                 def.resolve(originalModel.get('roomId'));

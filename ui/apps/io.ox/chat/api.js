@@ -14,9 +14,8 @@
 
 define('io.ox/chat/api', [
     'io.ox/switchboard/api',
-    'settings!io.ox/chat',
-    'io.ox/chat/util'
-], function (switchboardApi, settings, util) {
+    'settings!io.ox/chat'
+], function (switchboardApi, settings) {
 
     'use strict';
 
@@ -102,9 +101,9 @@ define('io.ox/chat/api', [
         return api.request({ method: 'DELETE', url: url });
     };
 
-    api.editMessage = function (newContent, message) {
+    api.editMessage = function (content, message) {
         var url = api.url + '/rooms/' + message.get('roomId') + '/messages/' + message.get('messageId');
-        return api.request({ processData: false, contentType: false, method: 'PATCH', url: url, data:  util.makeFormData({ content: newContent }) });
+        return api.request({ contentType: 'application/json', method: 'PATCH', url: url, data:  JSON.stringify({ content: content }) });
     };
 
     function formDownloadWithJwtAuth(url, token) {

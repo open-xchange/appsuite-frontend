@@ -782,7 +782,9 @@ define('io.ox/chat/data', [
                     }
 
                     if (color) attr.averageColor = color;
-                    var formData = util.makeFormData(_.extend({}, attr, { file: file }));
+                    var formData = new FormData();
+                    formData.append('json', JSON.stringify(attr));
+                    if (file) formData.append('file', file);
 
                     // model for files will be added to cache and this.messages via sockets message:new event. So no need to do it in the callback here. Temporary model is fine;
                     return model.save(attr, {
@@ -854,8 +856,15 @@ define('io.ox/chat/data', [
 
         sync: function (method, model, options) {
             if (method === 'create' || method === 'update') {
-                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference');
-                options.data = util.makeFormData(_.extend(data, options.hiddenAttr));
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference'),
+                    hiddenAttr = options.hiddenAttr,
+                    icon = options.icon,
+                    formData = new FormData();
+
+                formData.append('json', JSON.stringify(_.extend(data, hiddenAttr)));
+                if (icon) formData.append('icon', icon);
+
+                options.data = formData;
                 options.processData = false;
                 options.contentType = false;
                 options.method = method === 'create' ? 'POST' : 'PATCH';
