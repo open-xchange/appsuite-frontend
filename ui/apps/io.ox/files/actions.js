@@ -35,6 +35,8 @@ define('io.ox/files/actions', [
         // used by text editor
         allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
 
+    var moveConflictErrorCodes = [/* move to not shared folder */'FILE_STORAGE-0074', 'FILE_STORAGE-0077', 'FLD-1045', 'FLD-1048'/* , move to another shared folder 'FILE_STORAGE-0075', 'FLD-1046', 'FLD-1049'*/];
+
     if (capabilities.has('guard')) {
         allowedFileExtensions.push('pgp');
     }
@@ -634,11 +636,14 @@ define('io.ox/files/actions', [
                         fullResponse: true,
                         label: label,
                         success: success,
+                        // TODO: please avoid multiple levels of if-else-nestings. Use "return early" or underscore's chaining to improve readability.
                         successCallback: function (response, apiInput) {
                             // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
-                                    itemsLeft = [];
+                                    itemsLeft = [],
+                                    isMoveAction = type === 'move',
+                                    moveConflictError = false;
 
                                 if (!_.isArray(response)) {
                                     response = [response];
@@ -656,36 +661,59 @@ define('io.ox/files/actions', [
 
                                         if (errorResponse.categories === 'CONFLICT' && (errorCausedByFile || errorCausedByFolder)) {
 
-                                            // -> populate error title for the dialog
-                                            if (!conflicts.title) {
-                                                conflicts.title = errorResponse.error;
-                                            }
+                                            if (isMoveAction) {
 
-                                            // -> populate 'itemsLeft' for folder that will be moved after pressed on ignore conflict
-                                            if (errorCausedByFolder && type === 'move' && !_(itemsLeft).findWhere({ id: errorResponse.error_params[1] })) {
-                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
-                                            }
+                                                // -> populate 'itemsLeft' for folder that will be moved after pressed on ignore conflict
+                                                if (errorCausedByFolder && !_(itemsLeft).findWhere({ id: errorResponse.error_params[1] })) {
+                                                    itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                }
 
-                                            // -> populate 'itemsLeft' list for files that will be moved after pressed on ignore conflict
-                                            // note: when a folder is moved and the conflict happens for files in this folder, don't move these files but only the folder
-                                            if (!errorCausedByFolder && type === 'move' && warningsInErrorResponse) {
-                                                _.each(warningsInErrorResponse, function (warning) {
-                                                    if (!_(itemsLeft).findWhere({ id: warning.error_params[3] })) {
-                                                        itemsLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
-                                                    }
-                                                });
-                                            }
+                                                // -> populate 'itemsLeft' list for files that will be moved after pressed on ignore conflict
+                                                // note: when a folder is moved and the conflict happens for files in this folder, don't move these files but only the folder
+                                                if (!errorCausedByFolder && warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        if (!_(itemsLeft).findWhere({ id: warning.error_params[3] })) {
+                                                            itemsLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
+                                                        }
+                                                    });
+                                                }
 
-                                            // -> populate shown warnings for the dialog
-                                            if (warningsInErrorResponse) {
-                                                _.each(warningsInErrorResponse, function (warning) {
-                                                    conflicts.warnings.push(warning.error);
-                                                });
-                                            }
+                                                // -> populate shown warnings for the dialog
+                                                if (warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        if (moveConflictErrorCodes.indexOf(warning.code) >= 0) {
 
-                                            // unfortunately move and copy responses do nt have the same structure
-                                            if (type === 'copy') {
-                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                            if (!moveConflictError) {
+                                                                conflicts.title = gt('Change who has access?');
+                                                                conflicts.warnings.push(gt('You are moving an item out of a shared folder. People will lose access.'));
+                                                                moveConflictError = true;
+                                                            }
+
+                                                        } else {
+                                                            if (!conflicts.title) {
+                                                                conflicts.title = errorResponse.error;
+                                                            }
+                                                            conflicts.warnings.push(warning.error);
+                                                        }
+                                                    });
+                                                }
+                                            } else {
+                                                // -> populate error title for the dialog
+                                                if (!conflicts.title) {
+                                                    conflicts.title = errorResponse.error;
+                                                }
+
+                                                // -> populate shown warnings for the dialog
+                                                if (warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        conflicts.warnings.push(warning.error);
+                                                    });
+                                                }
+
+                                                // unfortunately move and copy responses do nt have the same structure
+                                                if (type === 'copy') {
+                                                    itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                }
                                             }
                                         }
                                     }
