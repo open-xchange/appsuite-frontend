@@ -819,11 +819,13 @@ define('io.ox/chat/data', [
             function storeFirstMessage(attr, file) {
 
                 var hiddenAttr = {
-                    message: attr.content,
+                    message: {
+                        content: attr.content,
+                        type: attr.type,
+                        data: attr.data
+                    },
                     file: file,
-                    members: this.get('members'),
-                    messateType: attr.type,
-                    messageData: attr.data
+                    members: this.get('members')
                 };
 
                 attr = _(attr).omit('content', 'members', 'type', 'data');
