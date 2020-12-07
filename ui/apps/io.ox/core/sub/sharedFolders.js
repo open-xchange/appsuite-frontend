@@ -144,7 +144,7 @@ define('io.ox/core/sub/sharedFolders', [
                 .build(function () {
                     //#. confirmation when the last folder associated with a domain is unsubscribed
                     //#. %1$s domain like google.com etc, may also be a list of domains
-                    this.$body.append(gt('You unsubscribed from all folders of "%1$s". Those folders will be removed from your account.', accountNameList));
+                    this.$body.append(gt('You unsubscribed from all folders on "%1$s". Those folders will be removed from your account.', accountNameList));
                 })
                 .on('confirm', function () {
                     updateSubscriptions(true);

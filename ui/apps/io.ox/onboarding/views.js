@@ -79,7 +79,7 @@ define('io.ox/onboarding/views', [
                 $('<div class="description">').append($('<p class="prompt">').text(this.description)),
                 $('<img class="qrcode">'),
                 $('<p class="link-info">').text(gt('Link: ')).append($('<a class="link">')),
-                $('<p class="hint">').text(gt('Please note: After downloading you will have to enable the profile in the settings App to complete the installation.')),
+                $('<p class="hint">').text(gt('Please note: After downloading you will have to enable the profile in the Settings app to complete the installation.')),
                 this.syncView.render().$el
             );
             this.getQrUrl();
@@ -258,7 +258,7 @@ define('io.ox/onboarding/views', [
                     .append(
                         //#, %1s primary email address of the curent user
                         $('<p class="info">').html(gt('Please try to add your mail address <b>%1$s</b> to check whether your mail client can automatically configure your email account.', this.userData.get('email1'))),
-                        $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually setup your mail account:'))
+                        $('<p class="info">').text(gt('If an automatic configuration is not possible, please use the following information to manually set up your mail account:'))
                     )
                 );
             }

@@ -44,7 +44,7 @@ define('io.ox/mail/invitations/register', [
         'inaccessible': gt('The folder is currently unavailable and cannot be added. Please try again later.'),
         'unresolvable': gt('The folder cannot be added because the link is invalid.'),
         'unsupported': gt('This type of link and is unsupported and can\'t be added.'),
-        'forbidden': gt('This folder was shared to another user. You are not allowed to add this folder.'),
+        'forbidden': gt('This folder has been shared with another user. You are not allowed to add this folder.'),
         // success messages
         'subscribe': gt('The folder was added successfully.'),
         'resubscribe': gt('The folder was added successfully.'),
