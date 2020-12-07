@@ -1,5 +1,5 @@
 /* eslint-env node, es2017 */
-var defaultContext;
+let testRunContext;
 
 // please create .env file based on .evn-example
 require('dotenv').config();
@@ -105,7 +105,7 @@ module.exports.config = {
         toolbar: './e2e/widgetobjects/toolbar',
         topbar: './e2e/widgetobjects/topbar'
     },
-    bootstrap: function (done) {
+    bootstrap: async function (done) {
         // setup chai
         var chai = require('chai');
         chai.config.includeStack = true;
@@ -120,6 +120,7 @@ module.exports.config = {
 
         var codecept = require('codeceptjs'),
             config = codecept.config.get(),
+            helperConfig = config.helpers.OpenXchange,
             seleniumReady;
         seleniumReady = new Promise(function (resolve, reject) {
             if (config.helpers.WebDriver && /127\.0\.0\.1/.test(config.helpers.WebDriver.host)) {
@@ -133,6 +134,7 @@ module.exports.config = {
 
         const contexts = codecept.container.support('contexts'),
             helper = new (require('@open-xchange/codecept-helper').helper)();
+        let ctxData;
 
         function getDefaultContext() {
             return helper.executeSoapRequest('OXContextService', 'list', {
@@ -151,59 +153,33 @@ module.exports.config = {
                 return result[0].return.primaryEmail.replace(/.*@/, '');
             });
         }
-        const testContextReady = getDefaultContext().then(function (ctx) {
-            if (typeof config.helpers.OpenXchange.mxDomain !== 'undefined') return ctx.filestoreId;
-            return guessMXDomain(ctx).then(mxDomain => {
-                config.helpers.OpenXchange.mxDomain = mxDomain;
-                return mxDomain;
-            }).then(() => ctx.filestoreId);
-        }).then(function (filestoreId) {
-            if (typeof config.helpers.OpenXchange.filestoreId !== 'undefined') filestoreId = config.helpers.OpenXchange.filestoreId;
-            const ctxData = {
-                id: config.helpers.OpenXchange.contextId,
-                filestoreId
+
+        try {
+            const defaultCtx = await getDefaultContext();
+            if (typeof helperConfig.mxDomain === 'undefined') helperConfig.mxDomain = await guessMXDomain(defaultCtx);
+            if (typeof helperConfig.filestoreId === 'undefined') helperConfig.filestoreId = defaultCtx.filestoreId;
+            ctxData = {
+                id: helperConfig.contextId,
+                filestoreId: helperConfig.filestoreId
             };
-
-            function createDefaultContext() {
-                return contexts.create(ctxData).then(function (ctx) {
-                    defaultContext = ctx;
-                }, function (err) {
-                    console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
-                    if (Number(ctxData.id) === 10) {
-                        console.error('Won\'t delete default context, use a different one.');
-                        process.exit(1);
-                    }
-                    throw err;
-                });
-            }
-            return createDefaultContext().catch(function () {
-                console.warn('##--## Waiting 5s until context is removed. Press Ctrl+C to abort. ##--##');
-                return new Promise(function (resolve) {
-                    global.setTimeout(resolve, 5000);
-                }).then(function () {
-                    return helper.executeSoapRequest('OXContextService', 'delete', {
-                        ctx: { id: ctxData.id },
-                        auth: { login: 'oxadminmaster', password: 'secret' }
-                    }).then(createDefaultContext);
-                });
-            });
-        });
-
-        Promise.all([
-            seleniumReady,
-            testContextReady
-        ]).then(() => done())
-        .catch(function (err) {
-            console.error(err);
+            testRunContext = await contexts.create(ctxData);
+        } catch (err) {
+            console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
             done(err);
-        });
+        }
+
+        if (typeof testRunContext.id !== 'undefined') helperConfig.contextId = testRunContext.id;
+        await seleniumReady.catch(err => console.err(err));
+        done();
+
     },
     teardown: async function () {
-        if (defaultContext.id !== 10) defaultContext.remove();
 
         var { contexts } = global.inject();
-
-        await Promise.all(contexts.filter(ctx => ctx.id > 100).map(ctx => ctx.remove().catch(e => console.error(e.message))));
+        // we need to run this sequentially, less stress on the MW
+        for (let ctx of contexts.filter(ctx => ctx.id > 100)) {
+            if (ctx.id !== 10) await ctx.remove().catch(e => console.error(e.message));
+        }
 
         //HACK: defer killing selenium, because it's still needed for a few ms
         setTimeout(function () {
