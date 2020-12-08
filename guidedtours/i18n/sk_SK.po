@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-14 00:09+0200\n"
+"PO-Revision-Date: 2020-11-19 02:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -381,8 +381,8 @@ msgid "Navigation"
 msgstr "Navigácia"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Všetky aplikácie nájdete v menu aplikácií vpravo hore."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Všetky aplikácie nájdete v menu aplikácií vľavo hore."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -419,14 +419,14 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Zrušiť prehliadku"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
 "choose \"%s\""
 msgstr ""
 "Túto prehliadku môžete kedykoľvek znova spustiť kliknutím na ikonu účtu a "
-"zvolením „%s“."
+"zvolením \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -566,12 +566,12 @@ msgstr "Otvorenie nastavenia emailov"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Systém v pravej "
-"hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na ľavej "
-"strane."
+"Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Nastavenia v "
+"pravej hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na "
+"ľavej strane."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -742,12 +742,12 @@ msgstr "Otvorenie Pomocníka"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Ak chcete otvoriť Pomocníka, kliknite na obrázok používateľa v pravej hornej "
+"Ak chcete otvoriť Pomocníka, kliknite na ikonu Pomocníka v pravej hornej "
 "časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma Pomocníka pre "
 "aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte kliknutím na "
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
@@ -866,6 +866,28 @@ msgstr ""
 "Ak chcete upraviť viacero úloh zároveň, zaškrtnite políčka na ľavej strane "
 "úloh. Ak políčka nie sú zobrazené, kliknite na Zobraziť > Zaškrtávacie "
 "políčka v pravej časti panelu nástrojov."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "Všetky aplikácie nájdete v menu aplikácií vpravo hore."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Systém v "
+#~ "pravej hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na "
+#~ "ľavej strane."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Ak chcete otvoriť Pomocníka, kliknite na obrázok používateľa v pravej "
+#~ "hornej časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma "
+#~ "Pomocníka pre aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte "
+#~ "kliknutím na tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #~ msgid "Creating new items"
 #~ msgstr "Vytváranie nových položiek"

@@ -3,7 +3,7 @@
 msgid ""
 msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-09 11:08+0200\n"
+"PO-Revision-Date: 2020-11-10 13:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -315,8 +315,8 @@ msgid "Navigation"
 msgstr "移動"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "すべてのアプリケーションは、右上のアプリケーションメニューで見つけられます。"
+msgid "All apps can be found in the app menu on the top left."
+msgstr "すべてのアプリケーションは左上のアプリケーションメニューで見つけられます。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -349,7 +349,7 @@ msgstr "ヘルプが必要、またはさらに質問がある場合は、ヘル
 msgid "Cancel tour"
 msgstr "ツアーを中止"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -477,9 +477,9 @@ msgstr "メール設定を開く"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
-msgstr "メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをクリックします。設定 を選択します。左側のメールをクリックします。"
+msgstr "メール設定を表示するには、メニューバーの右上の設定メニューアイコンをクリックします。設定 を選択します。左側のメールをクリックします。"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -627,11 +627,11 @@ msgstr "ヘルプを開く"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
-msgstr "ヘルプを表示するには、メニューバーの右上のユーザーイメージをクリックします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をクリックします。"
+msgstr "ヘルプを表示するには、メニューバーの右上のヘルプアイコンをクリックします。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示します。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは目次をクリックします。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -734,6 +734,29 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "複数のタスクを一度に編集するには、メールの左側にあるチェックボックスを有効にします。チェックボックスが表示されていない場合は、ツールバーの右側にある [ビュー] → [チェックボックス] の順にクリックします。"
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "すべてのアプリケーションは、右上のアプリケーションメニューで見つけられま"
+#~ "す。"
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "メール設定を表示するには、メニューバーの右上のシステムメニューアイコンをク"
+#~ "リックします。設定 を選択します。左側のメールをクリックします。"
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "ヘルプを表示するには、メニューバーの右上のユーザーイメージをクリックしま"
+#~ "す。ヘルプを選択します。現在選択されているアプリケーションのヘルプを表示し"
+#~ "ます。ヘルプをすべて参照するには、ウィンドウの上にあるスタートページまたは"
+#~ "目次をクリックします。"
 
 #~ msgid "Creating new items"
 #~ msgstr "新規アイテムの作成"

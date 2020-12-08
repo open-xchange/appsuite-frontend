@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-11 19:55+0500\n"
+"PO-Revision-Date: 2020-11-16 10:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -371,8 +371,8 @@ msgid "Navigation"
 msgstr "Навигация"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Все приложения можно найти в меню приложений справа вверху."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Все приложения можно найти в меню приложений в левом верхнем углу."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -409,7 +409,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Отменить тур"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -559,11 +559,11 @@ msgstr "Доступ к почтовым настройкам"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Для доступа к настройкам электронной почты в системном меню выберите пункт "
-"«Параметры», затем в левой части окна выберите «Почта»."
+"Чтобы открыть электронную почту, щелкните значок меню «Настройки» в верхнем "
+"углу строки меню. Выберите «Настройки». Щелкните Почта слева."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -731,15 +731,15 @@ msgstr "Справка"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Чтобы открыть справку по приложению, щелкните изображение пользователя в "
-"правом верхнем углу и выберите пункт «Справка». Чтобы открыть полное "
-"руководство, в верхней части окна выберите «Первая страница» или "
-"«Содержание»."
+"Чтобы открыть справку, щелкните значок справки в верхней правой части строки "
+"меню. Выберите Помощь. Отображается справка для текущего выбранного "
+"приложения. Чтобы просмотреть полную справку, щелкните Начальная страница "
+"или Оглавление в верхней части окна."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -851,6 +851,27 @@ msgid ""
 msgstr ""
 "Чтобы отредактировать несколько задач сразу, выберите их с помощью флажков. "
 "Если флажки недоступны, в правой части панели выберите «Вид > Флажки»."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "Все приложения можно найти в меню приложений справа вверху."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Для доступа к настройкам электронной почты в системном меню выберите "
+#~ "пункт «Параметры», затем в левой части окна выберите «Почта»."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Чтобы открыть справку по приложению, щелкните изображение пользователя в "
+#~ "правом верхнем углу и выберите пункт «Справка». Чтобы открыть полное "
+#~ "руководство, в верхней части окна выберите «Первая страница» или "
+#~ "«Содержание»."
 
 #~ msgid "Creating new items"
 #~ msgstr "Создание новых сообщений"

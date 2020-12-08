@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-10 13:57+0800\n"
+"PO-Revision-Date: 2020-11-12 22:39+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -346,8 +346,8 @@ msgid "Navigation"
 msgstr "導覽"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "可在右上角的選單找到所有應用程式。"
+msgid "All apps can be found in the app menu on the top left."
+msgstr "可以在左上角的應用程式選單找到所有應用程式。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -380,7 +380,7 @@ msgstr "若您需要協助，或有其他問題，可以使用「說明」應用
 msgid "Cancel tour"
 msgstr "取消導覽"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -514,11 +514,11 @@ msgstr "開啟郵件選項"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
-"件。"
+"要開啟電子郵件設定，點擊右上角選單列的「設定」選單圖示，然後選擇「設定」。接"
+"下來點擊左邊的「郵件」。"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -668,13 +668,14 @@ msgstr "開啟說明"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的應"
-"用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
+"要開啟說明，點擊右上角選單列的說明圖示，然後選擇「說明」。將顯示目前所選的應"
+"用程式的相關說明；若要瀏覽完整的說明內容，請點擊視窗上方的「開始頁面」或「目"
+"錄」。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -781,6 +782,25 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "可在右上角的選單找到所有應用程式。"
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
+#~ "件。"
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的"
+#~ "應用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
 
 #~ msgid "Creating new items"
 #~ msgstr "建立新項目"
