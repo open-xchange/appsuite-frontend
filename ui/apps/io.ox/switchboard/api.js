@@ -110,25 +110,28 @@ define.async('io.ox/switchboard/api', [
                 params: { action: 'acquireToken' }
             })
             .always(function (data) {
+
                 if (data.token) {
                     this.token = data.token;
                 } else {
                     console.error('Switchboard: Error during acquireToken!');
                 }
 
+                if (this.socket) {
+                    // manually change the url with the new query. socket.io will use this for any further connection
+                    // note: will most likely break with socket.io-client v3
+                    // seems like we cannot replace query but need to update the existing object
+                    this.socket.query.token = this.token;
+                    return this.socket.connect();
+                }
+
                 var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
                 var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                // set query initially; just update "token" during reconnect
                 var query = { userId: api.userId, token: this.token };
                 // Only send redirect uri if not default "/appsuite/api"
                 if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
                 if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
-
-                if (this.socket) {
-                    // manually change the url with the new query. socket.io will use this for any further connection
-                    // note: will most likely break with socket.io-client v3
-                    this.socket.query = query;
-                    return this.socket.connect();
-                }
 
                 api.socket = io(appsuiteUrl, {
                     query: query,
