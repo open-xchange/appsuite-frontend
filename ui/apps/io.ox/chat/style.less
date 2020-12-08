@@ -125,6 +125,8 @@
 
         .scrollpane {
             flex: 1;
+            /*background-image: url(apps/themes/default/baseline_8_cyan.png);
+            background-attachment: local;*/
         }
         .header {
             padding: 8px 8px 7px 16px;
@@ -640,24 +642,34 @@
     }
 
     .date-container {
-        margin: 24px 0 0 0;
-        padding: 3px 16px 4px 16px;
+        margin: 16px 0 8px 0;
+        padding: 0 16px;
         .date {
             color: #333;
             font-size: 13px;
             text-align: center;
             line-height: 16px;
-            font-weight: bold;
+            font-weight: 500;
             border-bottom: 1px solid #ddd;
+            padding: 3px 0 4px 0;
         }
     }
 
     .message {
 
-        line-height: 16px;
-        padding: 0 48px 0 72px;
+        font-size: 15px;
+        line-height: 24px;
+        padding: 0 96px 0 72px;
         position: relative;
         user-select: text;
+
+        /*&:nth-child(odd) {
+            background-color: rgba(255, 0, 255, 0.1);
+        }
+
+        &:nth-child(even) {
+            background-color: rgba(0, 255, 255, 0.1);
+        }*/
 
         > .content {
             position: relative;
@@ -679,7 +691,6 @@
         .body {
             white-space: pre-wrap;
             word-break: break-word;
-            font-size: 14px;
         }
 
         .body.contains-emoji {
@@ -694,7 +705,7 @@
             line-height: 48px;
             .emoji {
                 font-size: 40px;
-                vertical-align: initial;
+                vertical-align: top;
             }
         }
 
@@ -732,21 +743,21 @@
 
         > .sender {
             color: #333;
-            font-size: 13px;
-            padding: 19px 0 5px 0;
+            padding: 6px 0 2px 0;
+            height: 32px;
             .name {
                 font-weight: bold;
                 margin-right: 4px;
             }
             .time, .email {
                 color: @gray;
+                font-size: 13px;
             }
         }
 
         &.user > .content {
-            padding: 3px 0 1px 0;
-            display: inline-block;
-            margin-bottom: 4px;
+            margin: -2px 0 0 0;
+            padding: 0 0 10px 0;
             max-width: 100%;
         }
 
@@ -783,7 +794,7 @@
 
         .initials {
             position: absolute;
-            top: 20px;
+            top: 12px;
             left: 16px;
         }
 
@@ -832,15 +843,15 @@
         }
 
         &.system {
-            margin: 16px 0 0 0;
-            padding: 3px 16px 5px 16px;
+            margin: 8px 0 0 0;
+            padding: 7px 16px 1px 16px;
             width: 100%;
             .content {
                 width: 100%;
             }
             .body {
                 text-align: center;
-                font-size: 13px;
+                font-size: 14px;
                 color: @gray;
             }
             .name {
@@ -853,7 +864,7 @@
         }
 
         &.system + .system {
-            margin-top: 0px;
+            margin-top: -8px;
         }
 
         .show-more {
@@ -879,9 +890,10 @@
     }
 
     .message-thumbnail-container {
+        line-height: 1px;
         .name {
             font-size: 12px;
-            line-height: 16px;
+            line-height: 24px;
             color: #707070;
         }
         &.animation-running .message-thumbnail{
@@ -996,6 +1008,7 @@
         border-radius: @borderRadius;
         border-left: 4px solid rgba(0, 0, 0, 0.30);
         margin-bottom: 8px;
+        display: inline-block;
         .sender {
             color: #333;
             font-size: 12px;
@@ -1040,6 +1053,7 @@
         border: 1px solid #ddd;
         border-radius: 6px;
         padding: 15px 15px 15px 71px;
+        margin-bottom: 16px;
         height: 72px;
         display: inline-flex;
         flex-direction: column;
