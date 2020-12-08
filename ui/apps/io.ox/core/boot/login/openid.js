@@ -72,7 +72,7 @@ define('io.ox/core/boot/login/openid', [
             redirect: false,
             client: session.client(),
             version: session.version(),
-            hash: '#login_type=propagateSession'
+            uriFragment: '#login_type=propagateSession'
         };
         var url = oidcUrlFor(params);
         var frame = $('<iframe>').appendTo('body');
@@ -146,7 +146,7 @@ define('io.ox/core/boot/login/openid', [
             client: session.client(),
             version: session.version()
         };
-        if (!_.isEmpty(location.hash)) params.hash = location.hash;
+        if (!_.isEmpty(location.hash)) params.uriFragment = location.hash.replace(/^#/, '');
 
         location.href = oidcUrlFor(params);
         // defer "forever", since we are redirecting
