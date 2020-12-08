@@ -78,7 +78,7 @@ define('io.ox/core/boot/login/saml', [
             var params = {
                 flow: 'login'
             };
-            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash;
+            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash.replace(/^#/, '');
             return $.get([
                 ox.apiRoot,
                 samlPath,
@@ -102,7 +102,7 @@ define('io.ox/core/boot/login/saml', [
             var params = {
                 flow: 'relogin'
             };
-            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash;
+            if (!_.isEmpty(location.hash)) params.uriFragment = location.hash.replace(/^#/, '');
 
             return $.get([
                 ox.apiRoot,
