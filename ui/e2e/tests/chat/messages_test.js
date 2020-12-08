@@ -24,9 +24,8 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Show sender, date and avatar of sent message', async (I, users, chat) => {
@@ -113,39 +112,35 @@ Scenario('Edit a sent message', async (I, users, chat) => {
     const chatLocator = '.ox-chat .chat-rightside';
     const controlsLocator = chatLocator + ' .controls';
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
 
-        // via dropdown menu
-        I.retry(3).click('.messages svg', chatLocator);
-        I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Edit'));
-        I.pressKey('Backspace');
-        I.pressKey('!');
-        I.click('~Send', controlsLocator);
-        I.waitForElement(locate('.messages span').withText('Edited'), 3, chatLocator);
-        I.see('Hello!', chatLocator);
+    // via dropdown menu
+    I.retry(3).click('.messages svg', chatLocator);
+    I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Edit'));
+    I.pressKey('Backspace');
+    I.pressKey('!');
+    I.click('~Send', controlsLocator);
+    I.waitForElement(locate('.messages span').withText('Edited'), 3, chatLocator);
+    I.see('Hello!', chatLocator);
 
-        // via key up
-        chat.sendMessage('are you?');
-        I.pressKey('ArrowUp');
-        I.fillField('~Message', 'How ');
-        I.pressKey('Enter');
-        I.waitForText('How are you?', chatLocator);
-        I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
-    });
+    // via key up
+    chat.sendMessage('are you?');
+    I.pressKey('ArrowUp');
+    I.fillField('~Message', 'How ');
+    I.pressKey('Enter');
+    I.waitForText('How are you?', chatLocator);
+    I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
 });
 
 Scenario('Delete a message', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        chat.sendMessage('Stupid message');
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    chat.sendMessage('Stupid message');
 
-        I.retry(3).click('.ox-chat .messages svg');
-        I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Delete'));
-        I.waitForText('This message was deleted', 3, '.ox-chat .messages');
-    });
+    I.retry(3).click('.ox-chat .messages svg');
+    I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Delete'));
+    I.waitForText('This message was deleted', 3, '.ox-chat .messages');
 });
 
 Scenario('Reply to a message', async (I, users, chat) => {
@@ -171,34 +166,30 @@ Scenario('Reply to a message', async (I, users, chat) => {
     });
 });
 
-Scenario('Sending binaries and check max file size', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        chat.sendFile('e2e/media/files/generic/2MB.dat');
-        I.waitForElement('.message-file-container', 3, '.ox-chat .messages');
-        chat.sendFile('e2e/media/files/generic/16MB.dat');
-        I.waitForElement('.message.user-select-text');
-        I.see('The file "16MB.dat" cannot be uploaded because it exceeds the maximum file size of 10 MB');
-    });
+Scenario('Sending binaries and check max file size', (I, users, chat) => {
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    chat.sendFile('e2e/media/files/generic/2MB.dat');
+    I.waitForElement('.message-file-container', 3, '.ox-chat .messages');
+    chat.sendFile('e2e/media/files/generic/16MB.dat');
+    I.waitForElement('.message.user-select-text');
+    I.see('The file "16MB.dat" cannot be uploaded because it exceeds the maximum file size of 10 MB');
 });
 
-Scenario('Editor saves drafted content for each chat if not sent', async (I, users, chat) => {
+Scenario('Editor saves drafted content for each chat if not sent', (I, users, chat) => {
     const draft = 'This is a draft message.';
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
 
-        within('.ox-chat .chat-rightside', async () => {
-            I.waitForElement('.controls');
-            I.fillField('~Message', draft);
-        });
-
-        I.click('~Close chat', '.ox-chat');
-        I.waitForText('User', 30, '.ox-chat');
-        I.click(locate('.ox-chat li').withText('User'));
-
-        I.seeInField('.ox-chat .controls textarea', 'This is a draft message.');
+    within('.ox-chat .chat-rightside', () => {
+        I.waitForElement('.controls');
+        I.fillField('~Message', draft);
     });
+
+    I.click('~Close chat', '.ox-chat');
+    I.waitForText('User', 30, '.ox-chat');
+    I.click(locate('.ox-chat li').withText('User'));
+
+    I.seeInField('.ox-chat .controls textarea', 'This is a draft message.');
 });

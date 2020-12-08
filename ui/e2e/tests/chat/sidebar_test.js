@@ -21,29 +21,27 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
-Scenario('Show all files', async (I, users, chat) => {
+Scenario('Show all files', (I, users, chat) => {
     const scrollpaneLocator = '.ox-chat .chat-rightside .scrollpane';
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        chat.sendFile('e2e/media/placeholder/800x600.png');
-        chat.sendFile('e2e/media/files/0kb/document.doc');
-        chat.sendFile('e2e/media/files/0kb/spreadsheet.xls');
-        I.waitForElement(locate('.message-file-container .name').withText('spreadsheet.xls'), 5, '.ox-chat .messages');
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    chat.sendFile('e2e/media/placeholder/800x600.png');
+    chat.sendFile('e2e/media/files/0kb/document.doc');
+    chat.sendFile('e2e/media/files/0kb/spreadsheet.xls');
+    I.waitForElement(locate('.message-file-container .name').withText('spreadsheet.xls'), 5, '.ox-chat .messages');
 
-        I.click('~Close chat', '.ox-chat');
-        I.wait(0.5); // gentle wait for listeners
-        I.click('.chat-leftside button[data-cmd="show-all-files"]');
-        I.waitForElement(scrollpaneLocator);
-        I.waitForText('spreadsheet.xls', 15, scrollpaneLocator);
-        I.see('spreadsheet.xls', scrollpaneLocator);
-        I.see('document.doc', scrollpaneLocator);
-        I.see('800x600.png', scrollpaneLocator);
-    });
+    I.click('~Close chat', '.ox-chat');
+    I.wait(0.5); // gentle wait for listeners
+    I.click('.chat-leftside button[data-cmd="show-all-files"]');
+    I.waitForElement(scrollpaneLocator);
+    I.waitForText('spreadsheet.xls', 15, scrollpaneLocator);
+    I.see('spreadsheet.xls', scrollpaneLocator);
+    I.see('document.doc', scrollpaneLocator);
+    I.see('800x600.png', scrollpaneLocator);
+
 });

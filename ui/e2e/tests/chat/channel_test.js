@@ -13,18 +13,25 @@
 
 Feature('Chat - Channels');
 
-After(async (users) => {
+let context;
+
+Before(async (users, contexts) => {
+    context = await contexts.create();
+    await context.hasCapability('chat');
+
     await Promise.all([
-        users.removeAll()
+        users.create(users.getRandom(), context),
+        users.create(users.getRandom(), context)
     ]);
 });
 
-Scenario.skip('Update channel profile picture and name', async (I, dialogs, users, contexts) => {
-    const context = await contexts.create();
-    context.hasCapability('chat');
-    const alice = await users.create(users.getRandom(), context);
-    const bob = await users.create(users.getRandom(), context);
+After(async (users) => {
+    await users.removeAll();
+    await context.remove();
+});
 
+Scenario.skip('Update channel profile picture and name', async (I, dialogs, users) => {
+    const [alice, bob] = users;
     // Check initial photo: Empty | Initial name: Announcements
     await session('Alice', async () => {
         I.login({ user: alice });
@@ -122,16 +129,11 @@ Scenario.skip('Update channel profile picture and name', async (I, dialogs, user
         I.waitNumberOfVisibleElements('.message.system', 5);
         I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') === 'none', 10);
     });
-
-    await context.remove();
 });
 
-Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) => {
-    const context = await contexts.create();
-    context.hasCapability('chat');
-    const alice = await users.create(users.getRandom(), context);
-    const bob = await users.create(users.getRandom(), context);
-    const name = users[1].userdata.given_name + ' ' + users[1].userdata.sur_name + ' ';
+Scenario('Preview, join and leave a channel', async (I, users, chat) => {
+    const [alice, bob] = users;
+    const name = `${bob.get('given_name')} ${bob.get('sur_name')} `;
 
     const channelTitle = 'Channel 1.0';
 
@@ -192,6 +194,4 @@ Scenario('Preview, join and leave a channel', async (I, users, contexts, chat) =
         I.waitForText('Join');
         I.seeNumberOfVisibleElements('.message.system', 4);
     });
-
-    await context.remove();
 });

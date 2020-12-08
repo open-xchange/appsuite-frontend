@@ -22,43 +22,38 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Last used chat will be re-opened on next start', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        I.waitForText('Hello.', 3, '.ox-chat');
-        I.waitForNetworkTraffic();
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    I.waitForText('Hello.', 3, '.ox-chat');
+    I.waitForNetworkTraffic();
 
-        I.refreshPage();
-        I.waitForVisible('#io-ox-core', 30);
-        I.waitForText('Hello.', 30, '.ox-chat');
-    });
+    I.refreshPage();
+    I.waitForVisible('#io-ox-core', 30);
+    I.waitForText('Hello.', 30, '.ox-chat');
 });
 
 Scenario('Last used chat will not be re-opened on next start', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        I.waitForText('Hello.', 3, '.ox-chat');
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    I.waitForText('Hello.', 3, '.ox-chat');
 
-        // change settings
-        I.click('~Settings');
-        I.clickDropdown('Settings');
-        I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-        I.click({ css: 'li[data-id="virtual/settings/chat"]' });
-        I.waitForText('View options', 3, '.scrollable-pane');
-        I.click('Select last chat on start', '.scrollable-pane');
+    // change settings
+    I.click('~Settings');
+    I.clickDropdown('Settings');
+    I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
+    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.waitForText('View options', 3, '.scrollable-pane');
+    I.click('Select last chat on start', '.scrollable-pane');
 
-        // check
-        I.refreshPage();
-        I.waitForNetworkTraffic();
-        I.waitForText('User', 3, '.ox-chat');
-        I.dontSee('Hello.', '.ox-chat');
-    });
+    // check
+    I.refreshPage();
+    I.waitForNetworkTraffic();
+    I.waitForText('User', 3, '.ox-chat');
+    I.dontSee('Hello.', '.ox-chat');
 });
 

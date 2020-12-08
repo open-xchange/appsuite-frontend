@@ -24,9 +24,8 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Update delivery states in private chats', async (I, users, chat) => {
@@ -138,21 +137,19 @@ Scenario('There are no delivery states for channels', async (I, users, contexts,
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
 
-    await session('Alice', async () => {
-        I.login({ user: alice });
-        I.waitForText('New Chat', 30);
-        I.click('New Chat');
-        I.clickDropdown('Channel');
+    I.login({ user: alice });
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Channel');
 
-        chat.fillNewChannelForm('Channel 1.0');
-        dialogs.clickButton('Create channel');
+    chat.fillNewChannelForm('Channel 1.0');
+    dialogs.clickButton('Create channel');
 
-        I.waitForElement('.ox-chat .controls');
-        I.fillField('Message', 'Hello everyone!');
-        I.pressKey('Enter');
+    I.waitForElement('.ox-chat .controls');
+    I.fillField('Message', 'Hello everyone!');
+    I.pressKey('Enter');
 
-        I.waitForElement('.message.myself', 3, '.ox-chat .messages');
-        I.dontSee('#firstCheck', '.ox-chat');
-        I.dontSee('#secondCheck ', '.ox-chat');
-    });
+    I.waitForElement('.message.myself', 3, '.ox-chat .messages');
+    I.dontSee('#firstCheck', '.ox-chat');
+    I.dontSee('#secondCheck ', '.ox-chat');
 });

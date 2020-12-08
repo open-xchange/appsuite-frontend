@@ -22,9 +22,8 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Leave and view a group and get re-added', async (I, users, chat, dialogs) => {

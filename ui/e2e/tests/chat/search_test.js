@@ -10,7 +10,7 @@
  * @author Anne Matthes <anne.matthes@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
-Feature('Chat sidebar');
+Feature('Chat search');
 
 Before(async (users) => {
     await Promise.all([
@@ -21,9 +21,8 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario.skip('Search for a word - full text', async (I, users, chat) => {
@@ -32,51 +31,45 @@ Scenario.skip('Search for a word - full text', async (I, users, chat) => {
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
-        chat.sendMessage('Berlin Bangkok Brisbane');
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
+    chat.sendMessage('Berlin Bangkok Brisbane');
 
-        I.click('~Close chat', '.ox-chat');
+    I.click('~Close chat', '.ox-chat');
 
-        I.click('New Chat');
-        I.clickDropdown('Group chat');
-        chat.fillNewGroupForm(groupTitle, emails);
-        I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
-        chat.sendMessage('Kairo Mumbai Berlin Lima');
-        chat.sendMessage('Berlin');
+    I.click('New Chat');
+    I.clickDropdown('Group chat');
+    chat.fillNewGroupForm(groupTitle, emails);
+    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    chat.sendMessage('Kairo Mumbai Berlin Lima');
+    chat.sendMessage('Berlin');
 
-        I.click('~Close chat', '.ox-chat');
+    I.click('~Close chat', '.ox-chat');
 
-        I.waitForElement('~Search or start new chat', 3, '.ox-chat');
-        I.fillField('~Search or start new chat', 'Berlin');
+    I.waitForElement('~Search or start new chat', 3, '.ox-chat');
+    I.fillField('~Search or start new chat', 'Berlin');
 
-        pause();
-        // find in 2xprivate and group
-
-    });
+    // find in 2xprivate and group
 });
 
 Scenario('Search for a user and a private chat', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        I.waitForText('New Chat', 30);
+    I.login({ user: users[0] });
+    I.waitForText('New Chat', 30);
 
-        I.waitForElement('~Search or start new chat', 3, '.ox-chat');
-        I.fillField('~Search or start new chat', users[1].userdata.given_name);
-        I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 3, '.ox-chat');
-        I.click(`.search-result li[data-email="${users[1].userdata.email1}"]`, '.ox-chat');
-        I.waitForElement('.ox-chat .controls');
-        chat.sendMessage('Hey!');
+    I.waitForElement('~Search or start new chat', 3, '.ox-chat');
+    I.fillField('~Search or start new chat', users[1].userdata.given_name);
+    I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 3, '.ox-chat');
+    I.click(`.search-result li[data-email="${users[1].userdata.email1}"]`, '.ox-chat');
+    I.waitForElement('.ox-chat .controls');
+    chat.sendMessage('Hey!');
 
-        I.click('~Close chat', '.ox-chat');
-        I.waitForElement('~Search or start new chat', 3, '.ox-chat');
-        I.fillField('~Search or start new chat', users[1].userdata.sur_name);
+    I.click('~Close chat', '.ox-chat');
+    I.waitForElement('~Search or start new chat', 3, '.ox-chat');
+    I.fillField('~Search or start new chat', users[1].userdata.sur_name);
 
-        I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 10, '.ox-chat');
-        I.click(`.search-result li[data-email="${users[1].userdata.email1}"]`, '.ox-chat');
-        I.waitForText('Hey!', 3, '.ox-chat .messages');
-    });
+    I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 10, '.ox-chat');
+    I.click(`.search-result li[data-email="${users[1].userdata.email1}"]`, '.ox-chat');
+    I.waitForText('Hey!', 3, '.ox-chat .messages');
 });
 
 Scenario('Search for a group name', async (I, users, chat) => {
@@ -85,25 +78,23 @@ Scenario('Search for a group name', async (I, users, chat) => {
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        I.waitForText('New Chat', 30);
+    I.login({ user: users[0] });
+    I.waitForText('New Chat', 30);
 
-        I.click('New Chat');
-        I.clickDropdown('Group chat');
-        chat.fillNewGroupForm(groupTitle, emails);
-        I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
-        I.waitForElement('~Close chat', 3, '.ox-chat');
-        I.click('~Close chat', '.ox-chat');
+    I.click('New Chat');
+    I.clickDropdown('Group chat');
+    chat.fillNewGroupForm(groupTitle, emails);
+    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForElement('~Close chat', 3, '.ox-chat');
+    I.click('~Close chat', '.ox-chat');
 
 
-        I.waitForElement('~Search or start new chat', 3, '.ox-chat');
-        I.fillField('~Search or start new chat', groupTitle);
-        I.waitForElement(locate('.title').withText(groupTitle), 3, '.ox-chat .search-result');
-        I.retry(3).click(locate('.title').withText(groupTitle), '.ox-chat .search-result');
-        I.waitForElement('.message.system', 3, '.ox-chat');
-        I.seeNumberOfVisibleElements('.message.system', 2);
-    });
+    I.waitForElement('~Search or start new chat', 3, '.ox-chat');
+    I.fillField('~Search or start new chat', groupTitle);
+    I.waitForElement(locate('.title').withText(groupTitle), 3, '.ox-chat .search-result');
+    I.retry(3).click(locate('.title').withText(groupTitle), '.ox-chat .search-result');
+    I.waitForElement('.message.system', 3, '.ox-chat');
+    I.seeNumberOfVisibleElements('.message.system', 2);
 });
 
 Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) => {

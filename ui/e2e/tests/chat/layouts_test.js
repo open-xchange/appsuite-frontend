@@ -22,39 +22,36 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Add chat to favorites', async (I, users, chat) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
-        chat.createPrivateChat(users[1].userdata.email1);
+    I.login({ user: users[0] });
+    chat.createPrivateChat(users[1].userdata.email1);
 
-        // sticky layout
-        I.click('~More actions', '.ox-chat');
-        I.waitForElement('.smart-dropdown-container.more-dropdown');
-        I.click('Add to favorites', '.smart-dropdown-container.more-dropdown');
-        I.click('~Close chat', '.ox-chat');
-        I.see('Favorites', '.ox-chat .left-navigation');
-        I.click(locate('.ox-chat li').withText('User'));
-        I.click('~More actions', '.ox-chat');
-        I.waitForElement('.smart-dropdown-container.more-dropdown');
-        I.click('Remove from favorites', '.smart-dropdown-container.more-dropdown');
-        I.click('~Close chat', '.ox-chat');
-        I.dontSee('Favorites', '.ox-chat .left-navigation');
+    // sticky layout
+    I.click('~More actions', '.ox-chat');
+    I.waitForElement('.smart-dropdown-container.more-dropdown');
+    I.click('Add to favorites', '.smart-dropdown-container.more-dropdown');
+    I.click('~Close chat', '.ox-chat');
+    I.see('Favorites', '.ox-chat .left-navigation');
+    I.click(locate('.ox-chat li').withText('User'));
+    I.click('~More actions', '.ox-chat');
+    I.waitForElement('.smart-dropdown-container.more-dropdown');
+    I.click('Remove from favorites', '.smart-dropdown-container.more-dropdown');
+    I.click('~Close chat', '.ox-chat');
+    I.dontSee('Favorites', '.ox-chat .left-navigation');
 
-        // floating layout
-        I.click('~Detach window', '.ox-chat .chat-leftside');
-        I.dontSee('Favorites', '.ox-chat .left-navigation');
-        I.click(locate('.ox-chat li').withText('User'));
-        I.click('.ox-chat button[title="More actions"]');
-        I.waitForElement('.chat-rightside .dropdown.open', 3, '.ox-chat');
-        I.click('Add to favorites', '.chat-rightside .dropdown.open');
-        I.waitForText('Favorites', 3, '.ox-chat .left-navigation');
-        I.waitForElement('.ox-chat .left-navigation ul[aria-label="Favorites"] li');
-    });
+    // floating layout
+    I.click('~Detach window', '.ox-chat .chat-leftside');
+    I.dontSee('Favorites', '.ox-chat .left-navigation');
+    I.click(locate('.ox-chat li').withText('User'));
+    I.click('.ox-chat button[title="More actions"]');
+    I.waitForElement('.chat-rightside .dropdown.open', 3, '.ox-chat');
+    I.click('Add to favorites', '.chat-rightside .dropdown.open');
+    I.waitForText('Favorites', 3, '.ox-chat .left-navigation');
+    I.waitForElement('.ox-chat .left-navigation ul[aria-label="Favorites"] li');
 });
 
 Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat) => {

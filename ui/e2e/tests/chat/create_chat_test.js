@@ -25,12 +25,11 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
-Scenario('Create a new private chat', async (I, users, chat) => {
+Scenario('Create new private chat', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.createPrivateChat(users[1].userdata.email1);
@@ -47,43 +46,39 @@ Scenario('Create a new private chat', async (I, users, chat) => {
     });
 });
 
-Scenario('Create a new private chat from floating window via dropdown', async (I, users) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
+Scenario('Create new private chat from floating window via dropdown', async (I, users) => {
+    I.login({ user: users[0] });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~New', '.ox-chat');
-        I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-        I.click('Private chat', '.ox-chat .action-button-rounded .dropdown-menu');
+    I.click('~New', '.ox-chat');
+    I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
+    I.click('Private chat', '.ox-chat .action-button-rounded .dropdown-menu');
 
-        I.waitForText(users[1].userdata.email1);
-        I.click(locate('.address-picker li').withText(users[1].userdata.email1));
-        I.click('Start conversation');
-        I.waitForElement('.ox-chat .controls');
-        I.waitForVisible('.chat-rightside .chat-avatar .initials');
-    });
+    I.waitForText(users[1].userdata.email1);
+    I.click(locate('.address-picker li').withText(users[1].userdata.email1));
+    I.click('Start conversation');
+    I.waitForElement('.ox-chat .controls');
+    I.waitForVisible('.chat-rightside .chat-avatar .initials');
 });
 
-Scenario('Create a new private chat from floating window via icon', async (I, users) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
+Scenario('Create new private chat from floating window via icon', async (I, users) => {
+    I.login({ user: users[0] });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~Create private chat', '.ox-chat');
+    I.click('~Create private chat', '.ox-chat');
 
-        I.waitForText(users[1].userdata.email1);
-        I.click(locate('.address-picker li').withText(users[1].userdata.email1));
-        I.click('Start conversation');
-        I.waitForElement('.ox-chat .controls');
-        I.waitForVisible('.chat-rightside .chat-avatar .initials');
-    });
+    I.waitForText(users[1].userdata.email1);
+    I.click(locate('.address-picker li').withText(users[1].userdata.email1));
+    I.click('Start conversation');
+    I.waitForElement('.ox-chat .controls');
+    I.waitForVisible('.chat-rightside .chat-avatar .initials');
 });
 
-Scenario('Create a new private chat from address book', async (I, contacts, users, chat) => {
+Scenario('Create new private chat from address book', async (I, contacts, users, chat) => {
     await session('Alice', async () => {
         I.login('app=io.ox/contacts', { user: users[0] });
         I.waitForElement('.io-ox-contacts-window');
@@ -111,9 +106,8 @@ Scenario('Create a new private chat from address book', async (I, contacts, user
     });
 });
 
-Scenario('Create a new private chat from halo', async (I, mail, users, chat) => {
-    const alice = users[0];
-    const bob = users[1];
+Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
+    const [alice, bob] = users;
 
     await I.haveMail({
         from: [[alice.get('display_name'), alice.get('primaryEmail')]],
@@ -149,7 +143,7 @@ Scenario('Create a new private chat from halo', async (I, mail, users, chat) => 
     });
 });
 
-Scenario('Create a new private chat from mail', async (I, mail, users, chat) => {
+Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
     const [recipient, sender] = users;
 
     await I.haveMail({
@@ -184,7 +178,7 @@ Scenario('Create a new private chat from mail', async (I, mail, users, chat) => 
     });
 });
 
-Scenario('Create a new group chat', async (I, users, chat, dialogs) => {
+Scenario('Create new group chat', async (I, users, chat, dialogs) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -221,55 +215,53 @@ Scenario('Create a new group chat', async (I, users, chat, dialogs) => {
     });
 });
 
-Scenario('Create a new group chat from floating window via dropdown', async (I, users, chat, dialogs) => {
+Scenario('Create new group chat from floating window via dropdown', async (I, users, chat, dialogs) => {
     await users.create();
 
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
+    I.login({ user: users[0] });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~New', '.ox-chat');
-        I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-        I.click('Group chat', '.ox-chat .action-button-rounded .dropdown-menu');
+    I.click('~New', '.ox-chat');
+    I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
+    I.click('Group chat', '.ox-chat .action-button-rounded .dropdown-menu');
 
-        chat.fillNewGroupForm(groupTitle, emails);
-        dialogs.clickButton('Create chat');
+    chat.fillNewGroupForm(groupTitle, emails);
+    dialogs.clickButton('Create chat');
 
-        I.waitForElement('.ox-chat .controls');
-        I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
-        I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
-    });
+    I.waitForElement('.ox-chat .controls');
+    I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
+    I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
+
 });
 
-Scenario('Create a new group chat from floating window via icon', async (I, users, chat, dialogs) => {
+Scenario('Create new group chat from floating window via icon', async (I, users, chat, dialogs) => {
     await users.create();
 
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
+    I.login({ user: users[0] });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~Create group chat', '.ox-chat');
+    I.click('~Create group chat', '.ox-chat');
 
-        chat.fillNewGroupForm(groupTitle, emails);
-        dialogs.clickButton('Create chat');
+    chat.fillNewGroupForm(groupTitle, emails);
+    dialogs.clickButton('Create chat');
 
-        I.waitForElement('.ox-chat .controls');
-        I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
-        I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
-    });
+    I.waitForElement('.ox-chat .controls');
+    I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
+    I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
+
 });
 
-Scenario('Create a new group chat from mail', async (I, mail, dialogs, users, chat) => {
+Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat) => {
     await users.create();
     const [recipient, sender, cc] = users;
 
@@ -324,7 +316,7 @@ Scenario('Create a new group chat from mail', async (I, mail, dialogs, users, ch
     });
 });
 
-Scenario('Create a new group chat from appointment', async (I, dialogs, calendar, users, chat) => {
+Scenario('Create new group chat from appointment', async (I, dialogs, calendar, users, chat) => {
     await users.create();
     const [user1, user2, user3] = users;
     const subject = 'Discuss meeting';
@@ -390,7 +382,7 @@ Scenario('Create a new group chat from appointment', async (I, dialogs, calendar
     });
 });
 
-Scenario('Create a new channel', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel', async (I, users, contexts, chat, dialogs) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -422,55 +414,46 @@ Scenario('Create a new channel', async (I, users, contexts, chat, dialogs) => {
     await context.remove();
 });
 
-Scenario('Create a new channel from floating window via dropdown', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel from floating window via dropdown', async (I, users, contexts, chat, dialogs) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
-
     const channelTitle = 'Channel 1.0';
 
-    await session('Alice', async () => {
-        I.login({ user: alice });
+    I.login({ user: alice });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~New', '.ox-chat .chat-leftside');
-        I.clickDropdown('Channel');
+    I.click('~New', '.ox-chat .chat-leftside');
+    I.clickDropdown('Channel');
 
-        chat.fillNewChannelForm(channelTitle);
-        dialogs.clickButton('Create channel');
+    chat.fillNewChannelForm(channelTitle);
+    dialogs.clickButton('Create channel');
 
-        I.waitForElement('.ox-chat .controls');
-        I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
-        I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
-    });
-
-    await context.remove();
+    I.waitForElement('.ox-chat .controls');
+    I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
+    I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
 });
 
-Scenario('Create a new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
 
     const channelTitle = 'Channel 1.0';
 
-    await session('Alice', async () => {
-        I.login({ user: alice });
+    I.login({ user: alice });
 
-        I.waitForText('New Chat', 30);
-        I.click('~Detach window');
+    I.waitForText('New Chat', 30);
+    I.click('~Detach window');
 
-        I.click('~Create channel', '.ox-chat');
+    I.click('~Create channel', '.ox-chat');
 
-        chat.fillNewChannelForm(channelTitle);
-        dialogs.clickButton('Create channel');
+    chat.fillNewChannelForm(channelTitle);
+    dialogs.clickButton('Create channel');
 
-        I.waitForElement('.ox-chat .controls');
-        I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
-        I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
-    });
-
-    await context.remove();
+    I.waitForElement('.ox-chat .controls');
+    I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
+    I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
 });

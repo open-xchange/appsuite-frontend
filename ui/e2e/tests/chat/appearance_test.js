@@ -13,35 +13,31 @@
 Feature('Chat appearance');
 
 Before(async (users) => {
-    await Promise.all([
-        users.create()
-    ]);
+    await users.create();
     await users[0].context.hasCapability('chat');
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
-Scenario('Open, close and toggle chat', async (I, users) => {
-    await session('Alice', async () => {
-        I.login({ user: users[0] });
+Scenario('Open, close and toggle chat', (I) => {
+    I.login();
 
-        I.waitForElement('.io-ox-windowmanager-sticky-panel .ox-chat');
-        I.waitForText('New Chat', 3, '.io-ox-windowmanager-sticky-panel .ox-chat');
+    I.waitForElement('.io-ox-windowmanager-sticky-panel .ox-chat');
+    I.waitForText('New Chat', 3, '.io-ox-windowmanager-sticky-panel .ox-chat');
 
-        I.click('~Chat', '#io-ox-toprightbar');
-        I.dontSee('New Chat');
+    I.click('~Chat', '#io-ox-toprightbar');
+    I.dontSee('New Chat');
 
-        I.click('~Chat', '#io-ox-toprightbar');
-        I.see('New Chat', '.io-ox-windowmanager-sticky-panel .ox-chat');
+    I.click('~Chat', '#io-ox-toprightbar');
+    I.see('New Chat', '.io-ox-windowmanager-sticky-panel .ox-chat');
 
-        I.click('~Detach window');
-        I.see('OX Chat', '.floating-window');
+    I.click('~Detach window');
+    I.see('OX Chat', '.floating-window');
 
-        I.click('~Chat', '#io-ox-toprightbar');
-        I.waitForDetached('OX Chat', 3, '.floating-window');
-    });
+    I.click('~Chat', '#io-ox-toprightbar');
+    I.waitForDetached('OX Chat', 3, '.floating-window');
+
 });

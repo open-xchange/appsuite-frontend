@@ -22,9 +22,8 @@ Before(async (users) => {
 });
 
 After(async (users) => {
-    await Promise.all([
-        users.removeAll()
-    ]);
+    await users[0].context.doesntHaveCapability('chat');
+    await users.removeAll();
 });
 
 Scenario('Typing notifications will appear and stop on message sent', async (I, users, chat) => {
@@ -53,11 +52,11 @@ Scenario('Typing notifications will appear and stop on message sent', async (I, 
         I.waitForElement('.typing[style="display: none;"]', 10, '.ox-chat');
     });
 
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.fillField('~Message', message2);
         I.pressKey('Enter');
     });
-    session('Bob', async () => {
+    await session('Bob', async () => {
         I.waitForText(`${message1}${message2}`, 15, '.ox-chat');
         I.waitForElement('.typing[style="display: none;"]', 0, '.ox-chat');
     });
