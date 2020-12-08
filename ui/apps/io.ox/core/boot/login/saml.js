@@ -31,15 +31,20 @@ define('io.ox/core/boot/login/saml', [
         _.extend(this, options, {
             id: 'saml_redirect',
             handle: function (baton) {
-                try {
-                    var url = new URL(baton.data.redirect_uri, window.location.protocol + '//' + window.location.host);
+                var uri = baton.data.redirect_uri;
+                if (!uri) return;
 
-                    baton.handled = $.Deferred();
+                baton.handled = $.Deferred();
+                if ((/^http/i).test(uri)) {
+                    window.location = uri;
+                    checkReload(uri);
+                } else {
+                    var path = uri[0] === '/' ? '' : '/';
+                    path += uri;
 
-                    window.location = url.toString();
-                    checkReload(url.toString());
-                } catch (e) {
-                    // ignore errors, just do nothing
+                    uri = window.location.protocol + '//' + window.location.host + path;
+                    window.location = uri;
+                    checkReload(uri);
                 }
             }
         });
