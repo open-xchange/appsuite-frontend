@@ -57,7 +57,7 @@ define.async('io.ox/mail/accounts/keychain', [
             return accounts;
         }, function () {
             return {};
-        }), filestorageAPI.getAllAccounts().then(function (allFileAccounts) {
+        }), filestorageAPI.getAllAccounts(false, true).then(function (allFileAccounts) {
             var accounts = {};
             allFileAccounts = allFileAccounts.models;
             _(allFileAccounts).each(function (account) {
@@ -65,7 +65,7 @@ define.async('io.ox/mail/accounts/keychain', [
                     account = account.attributes;
 
                     var error = account.hasError ? { message: account.error } : account.status = 'ok';
-                    fileAccounts[account.id] = account;
+                    accounts[account.id] = account;
                     account.accountType = 'fileAccount';
                     account.status = error;
                 }
