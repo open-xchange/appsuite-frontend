@@ -243,8 +243,8 @@ Number of times hint is beeing shown. The protection of this setting needs to be
 
 ## Core: Misc
 
-<config>io.ox/core//autoLogout=`<bool>`</config>
-Timeout until a user is logged out automatically if inactive
+<config>io.ox/core//autoLogout=`<number>`</config>
+Timeout (in ms) until a user is logged out automatically if inactive
 
 <config>io.ox/core//autoStart=`<string>`</config>
 First App to start after login, Default: `io.ox/mail/main`
