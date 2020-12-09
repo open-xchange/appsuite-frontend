@@ -134,5 +134,62 @@ Scenario('User can make jitsi call via command', async (I, users, chat) => {
 
     I.waitForDetached('.call-dialog');
     I.waitForElement('.incoming-call', 3, '.ox-chat .messages');
+});
 
+Scenario('User can make a zoom call via command within a group', async (I, users, chat) => {
+    await users.create();
+    I.login({ user: users[0] });
+
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Group chat');
+    chat.fillNewGroupForm('Test group', [users[1].userdata.email1, users[2].userdata.email1]);
+    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    chat.sendMessage('Hey group!');
+    I.fillField('~Message', '/zoom');
+    I.pressKey('Enter');
+
+    I.waitForElement('.call-dialog');
+    await within('.call-dialog', async () => {
+        I.waitForElement('.conference-view.zoom');
+        I.waitForText(users[1].userdata.email1);
+        I.waitForText(users[2].userdata.email1);
+        I.retry(3).click({ css: 'button[data-action="connect"]' });
+        I.wait(1);
+        I.waitForElement({ css: 'button[data-action="call"]' });
+        I.click({ css: 'button[data-action="call"]' });
+        I.waitForElement({ css: 'button[data-action="hangup"]' });
+        I.click({ css: 'button[data-action="hangup"]' });
+    });
+
+    I.waitForDetached('.call-dialog');
+    I.waitForElement('.incoming-call', 3, '.ox-chat .messages');
+});
+
+Scenario('User can make a jitsi call via command within a group', async (I, users, chat) => {
+    await users.create();
+    I.login({ user: users[0] });
+
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Group chat');
+    chat.fillNewGroupForm('Test group', [users[1].userdata.email1, users[2].userdata.email1]);
+    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    chat.sendMessage('Hey group!');
+    I.fillField('~Message', '/jitsi');
+    I.pressKey('Enter');
+
+    I.waitForElement('.call-dialog');
+    await within('.call-dialog', async () => {
+        I.waitForElement('.conference-view.jitsi');
+        I.waitForText(users[1].userdata.email1);
+        I.waitForText(users[2].userdata.email1);
+        I.waitForElement({ css: 'button[data-action="call"]' });
+        I.click({ css: 'button[data-action="call"]' });
+        I.waitForElement({ css: 'button[data-action="hangup"]' });
+        I.click({ css: 'button[data-action="hangup"]' });
+    });
+
+    I.waitForDetached('.call-dialog');
+    I.waitForElement('.incoming-call', 3, '.ox-chat .messages');
 });

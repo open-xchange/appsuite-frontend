@@ -434,6 +434,8 @@ Scenario('Create new channel from floating window via dropdown', async (I, users
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
     I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
+
+    await context.remove();
 });
 
 Scenario('Create new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {
@@ -456,4 +458,6 @@ Scenario('Create new channel from floating window via icon', async (I, users, co
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
     I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
+
+    await context.remove();
 });

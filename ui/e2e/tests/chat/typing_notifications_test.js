@@ -61,3 +61,55 @@ Scenario('Typing notifications will appear and stop on message sent', async (I, 
         I.waitForElement('.typing[style="display: none;"]', 0, '.ox-chat');
     });
 });
+
+Scenario('Typing notifications will appear for multiple users typing', async (I, users, chat) => {
+    await users.create();
+    const message = 'This is a long message and will take a while to type in. So Alice has enough time to check if there is a typing notification.';
+
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+
+        // create a group chat
+        I.waitForText('New Chat', 30);
+        I.click('New Chat');
+        I.clickDropdown('Group chat');
+        chat.fillNewGroupForm('Test Group', [users[1].userdata.email1, users[2].userdata.email1]);
+        I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        chat.sendMessage('Hey group!');
+    });
+
+    await session('Bob', async () => {
+        I.login({ user: users[1] });
+        I.waitForText('Test Group', 30, '.ox-chat');
+        I.click(locate('.ox-chat li').withText('Test Group'));
+        I.waitForText('Hey group!', 3, '.messages');
+    });
+
+    await session('Charlie', async () => {
+        I.login({ user: users[2] });
+        I.waitForText('Test Group', 30, '.ox-chat');
+        I.click(locate('.ox-chat li').withText('Test Group'));
+        I.waitForText('Hey group!', 3, '.messages');
+        I.say('Lets go!');
+    });
+
+    session('Bob', async () => {
+        I.waitForElement('.chat-rightside');
+        await within('.chat-rightside', async () => {
+            I.fillField('~Message', message);
+        });
+    });
+    session('Charlie', async () => {
+        I.waitForElement('.chat-rightside');
+        await within('.chat-rightside', async () => {
+            I.fillField('~Message', message);
+        });
+    });
+
+    await session('Alice', async () => {
+        I.waitForDetached('.typing[style="display: none;"]', 3, '.ox-chat');
+        I.waitForText(users[0].userdata.given_name, 3, '.ox-chat .typing');
+        I.waitForText(users[1].userdata.given_name, 3, '.ox-chat .typing');
+        I.waitForElement('.typing[style="display: none;"]', 10, '.ox-chat');
+    });
+});
