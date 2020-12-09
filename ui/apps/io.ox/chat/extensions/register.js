@@ -16,9 +16,10 @@ define('io.ox/chat/extensions/register', [
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
     'io.ox/chat/data',
+    'io.ox/chat/client',
     'io.ox/core/api/account',
     'gettext!io.ox/chat'
-], function (ext, actionsUtil, capabilities, data, account, gt) {
+], function (ext, actionsUtil, capabilities, data, client, account, gt) {
 
     'use strict';
 
@@ -89,8 +90,8 @@ define('io.ox/chat/extensions/register', [
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     node.find('button').on('click', function () {
-                        require(['io.ox/chat/events'], function (events) {
-                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
+                        require(['io.ox/chat/client'], function (client) {
+                            client.openChatById(room.get('roomId'));
                         });
                     });
                     node.show().find('.ox-chat').append(
@@ -133,19 +134,14 @@ define('io.ox/chat/extensions/register', [
             return baton.data.length > 1 || baton.data[0].internal_userid !== ox.user_id;
         },
         action: function (baton) {
-            var users = baton.data.filter(function (user) {
-                return user.internal_userid !== ox.user_id;
-            });
-            if (users.length === 1) {
-                var user = _(users).first();
-                startPrivateChat(user.email || user.email1 || user.email2 || user.email3);
-                return;
-            }
-            startGroupChat({
-                members: users.map(function (user) {
-                    return user.email || user.email1 || user.email2 || user.email3;
+            var members = baton.data
+                .filter(function (contact) {
+                    return contact.internal_userid !== ox.user_id;
                 })
-            });
+                .map(function (contact) {
+                    return contact.email || contact.email1 || contact.email2 || contact.email3;
+                });
+            client.openChat({ members: members });
         }
     });
 
@@ -180,12 +176,11 @@ define('io.ox/chat/extensions/register', [
             data.chats.initialized.then(function success() {
                 var room = data.chats.findByReference('appointment', baton.model.get('id'));
                 if (!room) throw new Error();
-
                 room.messages.fetch();
                 return require(['io.ox/chat/views/messages']).then(function (MessagesView) {
                     $fieldset.find('button').on('click', function () {
-                        require(['io.ox/chat/events'], function (events) {
-                            events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
+                        require(['io.ox/chat/client'], function (client) {
+                            client.openChatById(room.get('roomId'));
                         });
                     });
                     $fieldset.show().find('.ox-chat').append(
@@ -214,11 +209,12 @@ define('io.ox/chat/extensions/register', [
             return !!data.user;
         },
         action: function (baton) {
-            startGroupChat({
-                title: baton.model.get('summary'),
-                description: baton.model.get('description'),
-                members: _(baton.model.get('attendees')).pluck('email'),
-                pimReference: { type: 'appointment', id: baton.model.get('id') }
+            var model = baton.model;
+            client.openChat({
+                title: model.get('summary'),
+                description: model.get('description'),
+                members: _(model.get('attendees')).pluck('email'),
+                pimReference: { type: 'appointment', id: model.get('id') }
             });
         }
     });
@@ -254,8 +250,9 @@ define('io.ox/chat/extensions/register', [
             return !!data.user;
         },
         action: function (baton) {
-            var field = account.is('sent|drafts', baton.data.folder_id) ? baton.data.to : baton.data.from;
-            startPrivateChat(field[0][1]);
+            var addresses = account.is('sent|drafts', baton.data.folder_id) ? baton.data.to : baton.data.from;
+            if (!addresses.length) return;
+            client.openChat({ members: _(addresses).pluck('1') });
         }
     });
 
@@ -270,37 +267,17 @@ define('io.ox/chat/extensions/register', [
                 return api.get(_.cid(baton.data));
             }).then(function (mail) {
                 var addresses = [].concat(mail.from, mail.to, mail.cc, mail.bcc);
-                addresses = _(addresses).chain().map(function (address) {
-                    return address[1];
-                }).compact().unique().without(data.user.email).value();
-                startGroupChat({
-                    title: mail.subject,
-                    members: addresses
-                });
+                var members = _(addresses)
+                    .chain()
+                    .pluck('1')
+                    .compact()
+                    .unique()
+                    .without(data.user.email)
+                    .value();
+                client.openChat({ members: members, title: mail.subject });
             });
         }
     });
-
-    function startPrivateChat(email) {
-        require(['io.ox/chat/events'], function (events) {
-            events.trigger('cmd', { cmd: 'open-private-chat', email: email });
-        });
-    }
-
-    function startGroupChat(opt) {
-        var room = opt.pimReference && data.chats.findByReference(opt.pimReference.type, opt.pimReference.id);
-        if (room) {
-            return require(['io.ox/chat/events']).then(function (events) {
-                events.trigger('cmd', { cmd: 'show-chat', id: room.get('roomId') });
-            });
-        }
-
-        return require(['io.ox/chat/actions/openGroupDialog', 'io.ox/chat/events']).then(function (openGroupDialog, events) {
-            openGroupDialog(opt).then(function (id) {
-                events.trigger('cmd', { cmd: 'show-chat', id: id });
-            });
-        });
-    }
 
     // Settings
     ext.point('io.ox/settings/pane/main').extend({

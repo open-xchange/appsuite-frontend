@@ -19,6 +19,7 @@ define('io.ox/chat/register', [], function () {
         // no smartphone support yet
         if (_.device('smartphone')) return;
         if (_.device('!maintab')) return;
+        if (2 > 1) return;
         require(['io.ox/chat/main']);
     });
 });

@@ -16,12 +16,13 @@ define('io.ox/chat/notifications', [
     'io.ox/core/active',
     'io.ox/switchboard/presence',
     'io.ox/chat/data',
+    'io.ox/chat/client',
     'io.ox/contacts/api',
     'io.ox/chat/util',
     'io.ox/chat/util/url',
     'settings!io.ox/chat',
     'gettext!io.ox/chat'
-], function (events, isActive, presence, data, contactsApi, util, url, settings, gt) {
+], function (events, isActive, presence, data, client, contactsApi, util, url, settings, gt) {
 
     'use strict';
 
@@ -151,7 +152,7 @@ define('io.ox/chat/notifications', [
                 var notification = new Notification(title, options);
                 notification.onclick = function () {
                     window.focus();
-                    events.trigger('cmd', { cmd: 'show-chat', id: model.get('roomId') });
+                    client.openChatById(model.get('roomId'));
                 };
                 return notification;
             });

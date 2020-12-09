@@ -488,12 +488,14 @@ define('io.ox/chat/main', [
             settings.set('hidden', true);
             if (this.$el.is(':visible')) return this.$el.hide();
             this.$body.hide();
+            return this;
         },
 
         showApp: function () {
             settings.set('hidden', false);
             this.$el.show();
             this.$body.show();
+            return this;
         },
 
         draw: function () {
@@ -609,6 +611,7 @@ define('io.ox/chat/main', [
                             })
                             .then(function success() {
                                 self.draw();
+                                self.ready.resolveWith(self);
                             })
                             .fail(function fail(err) {
                                 self.drawAuthorizePane(err.message || gt('Cannot connect. Please try again later.'));
@@ -721,6 +724,7 @@ define('io.ox/chat/main', [
     settings.set('hidden', false);
 
     win.$body.parent().busy();
+    win.ready = $.Deferred();
 
     data.fetchUsers()
         .catch($.noop)
@@ -736,6 +740,7 @@ define('io.ox/chat/main', [
         .then(
             function success() {
                 win.draw();
+                win.ready.resolveWith(win);
                 require(['io.ox/chat/notifications']);
             },
             function fail() {
