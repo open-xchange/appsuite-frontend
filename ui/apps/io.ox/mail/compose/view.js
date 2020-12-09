@@ -802,6 +802,12 @@ define('io.ox/mail/compose/view', [
                 isDraft = this.model.keepDraftOnClose(),
                 mailPath = this.model.get('mailPath');
 
+            // workaround
+            (function () {
+                //#. When closing compose the user decides to keep the related draft or delete it as well.
+                gt('You are about to discard this message. Do you want to delete the related draft?');
+            }());
+
             // TODO-859: smarter decisions for mailPath scenario needed
             // This dialog gets automatically dismissed
             if ((this.dirty() || isDraft || mailPath) && !this.config.get('autoDismiss')) {
