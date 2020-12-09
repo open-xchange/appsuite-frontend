@@ -171,91 +171,87 @@ Scenario('Check layouts: compact, standard and detailed', async (I, users, conte
     const channelTitle = 'Test Channel';
     const emails = [bob.userdata.email1, charlie.userdata.email1];
 
-    await session('Alice', async () => {
-        I.login({ user: alice });
+    I.login({ user: alice });
 
-        // create a private chat
-        chat.createPrivateChat(bob.userdata.email1);
-        chat.sendMessage('Second message');
-        I.click('~Close chat', '.ox-chat');
+    // create a private chat
+    chat.createPrivateChat(bob.userdata.email1);
+    chat.sendMessage('Second message');
+    I.click('~Close chat', '.ox-chat');
 
-        // create a group chat
-        I.waitForText('New Chat', 30);
-        I.click('New Chat');
-        I.clickDropdown('Group chat');
-        chat.fillNewGroupForm(groupTitle, emails);
-        I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
-        chat.sendMessage('Hey group!');
-        chat.sendMessage('Second message');
-        chat.sendMessage('Third message');
-        I.click('~Close chat', '.ox-chat');
+    // create a group chat
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Group chat');
+    chat.fillNewGroupForm(groupTitle, emails);
+    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    chat.sendMessage('Hey group!');
+    chat.sendMessage('Second message');
+    chat.sendMessage('Third message');
+    I.click('~Close chat', '.ox-chat');
 
-        // create a channel
-        I.waitForText('New Chat', 30);
-        I.click('New Chat');
-        I.clickDropdown('Channel');
-        chat.fillNewChannelForm(channelTitle);
-        dialogs.clickButton('Create channel');
-        chat.sendMessage('First message');
+    // create a channel
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Channel');
+    chat.fillNewChannelForm(channelTitle);
+    dialogs.clickButton('Create channel');
+    chat.sendMessage('First message');
 
-        // open settings
-        I.click('~Settings');
-        I.clickDropdown('Settings');
-        I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-        I.click({ css: 'li[data-id="virtual/settings/chat"]' });
-        I.waitForText('View options', 3, '.scrollable-pane');
+    // open settings
+    I.click('~Settings');
+    I.clickDropdown('Settings');
+    I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
+    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.waitForText('View options', 3, '.scrollable-pane');
 
-        // check density 'Compact'
-        I.selectOption('#settings-density', 'Compact');
-        I.waitForElement('.density-compact', 3, '.ox-chat');
-        I.waitForElement('.simple-avatar', 3, '.ox-chat');
-        I.waitForElement('.chats-row .title', 3, '.ox-chat');
-        I.dontSee('.chats-row .last-message', '.ox-chat');
-        I.dontSee('.chats-row .last-modified', '.ox-chat');
-        I.dontSee('.avatar', '.ox-chat');
-        I.click('~Detach window', '.ox-chat .chat-rightside');
-        I.selectOption('#settings-density', 'Compact');
-        I.waitForElement('.density-compact', 3, '.ox-chat');
-        I.waitForElement('.simple-avatar', 3, '.ox-chat');
-        I.waitForElement('.chats-row .title', 3, '.ox-chat');
-        I.dontSee('.chats-row .last-message', '.ox-chat');
-        I.dontSee('.chats-row .last-modified', '.ox-chat');
-        I.dontSee('.avatar', '.ox-chat');
-        I.click('~Stick to the right side');
+    // check density 'Compact'
+    I.selectOption('#settings-density', 'Compact');
+    I.waitForElement('.density-compact', 3, '.ox-chat');
+    I.waitForElement('.simple-avatar', 3, '.ox-chat');
+    I.waitForElement('.chats-row .title', 3, '.ox-chat');
+    I.dontSee('.chats-row .last-message', '.ox-chat');
+    I.dontSee('.chats-row .last-modified', '.ox-chat');
+    I.dontSee('.avatar', '.ox-chat');
+    I.click('~Detach window', '.ox-chat .chat-rightside');
+    I.selectOption('#settings-density', 'Compact');
+    I.waitForElement('.density-compact', 3, '.ox-chat');
+    I.waitForElement('.simple-avatar', 3, '.ox-chat');
+    I.waitForElement('.chats-row .title', 3, '.ox-chat');
+    I.dontSee('.chats-row .last-message', '.ox-chat');
+    I.dontSee('.chats-row .last-modified', '.ox-chat');
+    I.dontSee('.avatar', '.ox-chat');
+    I.click('~Stick to the right side');
 
-        // check density 'Default'
-        I.selectOption('#settings-density', 'Default');
-        I.waitForElement('.density-default', 3, '.ox-chat');
-        I.waitForElement('.avatar', 3, '.ox-chat');
-        I.waitForElement('.chats-row .title', 3, '.ox-chat');
-        I.dontSee('.simple-avatar', '.ox-chat');
-        I.dontSee('.chats-row .last-message', '.ox-chat');
-        I.dontSee('.chats-row .last-modified', '.ox-chat');
-        I.click('~Detach window', '.ox-chat .chat-rightside');
-        I.waitForElement('.density-default', 3, '.ox-chat');
-        I.waitForElement('.avatar', 3, '.ox-chat');
-        I.waitForElement('.chats-row .title', 3, '.ox-chat');
-        I.dontSee('.simple-avatar', '.ox-chat');
-        I.dontSee('.chats-row .last-message', '.ox-chat');
-        I.dontSee('.chats-row .last-modified', '.ox-chat');
-        I.click('~Stick to the right side');
+    // check density 'Default'
+    I.selectOption('#settings-density', 'Default');
+    I.waitForElement('.density-default', 3, '.ox-chat');
+    I.waitForElement('.avatar', 3, '.ox-chat');
+    I.waitForElement('.chats-row .title', 3, '.ox-chat');
+    I.dontSee('.simple-avatar', '.ox-chat');
+    I.dontSee('.chats-row .last-message', '.ox-chat');
+    I.dontSee('.chats-row .last-modified', '.ox-chat');
+    I.click('~Detach window', '.ox-chat .chat-rightside');
+    I.waitForElement('.density-default', 3, '.ox-chat');
+    I.waitForElement('.avatar', 3, '.ox-chat');
+    I.waitForElement('.chats-row .title', 3, '.ox-chat');
+    I.dontSee('.simple-avatar', '.ox-chat');
+    I.dontSee('.chats-row .last-message', '.ox-chat');
+    I.dontSee('.chats-row .last-modified', '.ox-chat');
+    I.click('~Stick to the right side');
 
-        // check density 'Detailed'
-        I.selectOption('#settings-density', 'Detailed');
-        I.waitForElement('.density-detailed ', 3, '.ox-chat');
-        I.waitForElement('.avatar', 3, '.ox-chat');
-        I.waitForElement('.chat-list', 3, '.ox-chat');
-        I.waitForElement('.chats-row .last-message', 3, '.ox-chat');
-        I.waitForElement('.chats-row .last-modified', 3, '.ox-chat');
-        I.dontSee('.simple-avatar', '.ox-chat');
-        I.click('~Detach window', '.ox-chat .chat-rightside');
-        I.waitForElement('.density-detailed ', 3, '.ox-chat');
-        I.waitForElement('.avatar', 3, '.ox-chat');
-        I.waitForElement('.chat-list', 3, '.ox-chat');
-        I.waitForElement('.chats-row .last-message', 3, '.ox-chat');
-        I.waitForElement('.chats-row .last-modified', 3, '.ox-chat');
-        I.dontSee('.simple-avatar', '.ox-chat');
-    });
-
-    await context.remove();
+    // check density 'Detailed'
+    I.selectOption('#settings-density', 'Detailed');
+    I.waitForElement('.density-detailed ', 3, '.ox-chat');
+    I.waitForElement('.avatar', 3, '.ox-chat');
+    I.waitForElement('.chat-list', 3, '.ox-chat');
+    I.waitForElement('.chats-row .last-message', 3, '.ox-chat');
+    I.waitForElement('.chats-row .last-modified', 3, '.ox-chat');
+    I.dontSee('.simple-avatar', '.ox-chat');
+    I.click('~Detach window', '.ox-chat .chat-rightside');
+    I.waitForElement('.density-detailed ', 3, '.ox-chat');
+    I.waitForElement('.avatar', 3, '.ox-chat');
+    I.waitForElement('.chat-list', 3, '.ox-chat');
+    I.waitForElement('.chats-row .last-message', 3, '.ox-chat');
+    I.waitForElement('.chats-row .last-modified', 3, '.ox-chat');
+    I.dontSee('.simple-avatar', '.ox-chat');
 });
