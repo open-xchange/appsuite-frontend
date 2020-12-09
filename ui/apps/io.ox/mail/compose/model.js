@@ -24,6 +24,18 @@ define('io.ox/mail/compose/model', [
 
     'use strict';
 
+    // some notes about composition spaces
+    // ---
+    // since 7.10.5 middleware supports two types
+    // a) database drafts (identifiable by 'rdb.' id-prefix )
+    // - available since 7.10.2
+    // - changes are written into the database
+    // - once space gets closed (save as draft/send) a mail is written
+    // b) real drafts (identifiable by 'draft.' id-prefix)
+    // - available since 7.10.5
+    // - every change immediately gets written as draft mail
+    // - every change creates a new mail (see 'mailPath' prop) and removes the old one
+
     var attachmentsAPI = composeAPI.space.attachments;
 
     return Backbone.Model.extend({
