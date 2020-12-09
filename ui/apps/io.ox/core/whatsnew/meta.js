@@ -26,7 +26,7 @@ define('io.ox/core/whatsnew/meta', [
             version: 1,
             capabilities: 'infostore',
             name: gt('Federated Sharing of Files'),
-            description: gt('The sharing dialogs have been significantly updated to simplify the whole sharing process, and to facilitate the sharing of files between context and other deployments.')
+            description: gt('The sharing dialogs have been significantly updated to simplify the whole sharing process, and to facilitate the sharing of files between contexts and other deployments.')
         },
         {
             version: 1,
@@ -41,6 +41,7 @@ define('io.ox/core/whatsnew/meta', [
         },
         {
             version: 1,
+            capabilities: 'webmail',
             name: gt('Saving Email Drafts'),
             description: gt('Email drafts are now automatically saved in the drafts folder and are therefore available on all your devices by default.')
         },

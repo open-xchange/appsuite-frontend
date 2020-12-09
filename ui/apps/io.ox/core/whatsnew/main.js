@@ -87,9 +87,9 @@ define('io.ox/core/whatsnew/main', [
             }
         });
     }
-
-    // autoshow if user has not seen the features of this version yet
-    if (settings.get('whatsNew/lastSeenVersion', -1) < meta.getLatestVersion()) {
+    var autoStart = settings.get('whatsNew/autoStart', true) && (settings.get('whatsNew/lastSeenVersion', -1) < meta.getLatestVersion());
+    // autostart if user has not seen the features of this version yet
+    if (autoStart) {
         new Stage('io.ox/core/stages', {
             id: 'whatsnewdialog',
             index: 1100,
