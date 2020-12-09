@@ -53,7 +53,7 @@ define('io.ox/core/whatsnew/meta', [
             version: 1,
             capabilities: 'switchboard',
             name: gt('Audio and Video'),
-            description: gt('This release comes with the ability to hold a video and/or audio chats with other people. This can be schedules within a calendar appointment, or started spontaneous from the toolbar, contacts, halo and other logical places. To help we have also added a presence indicator to the toolbar.')
+            description: gt('This release comes with the ability to hold a video or audio chat with other people. This can be scheduled within a calendar appointment, or started spontaneously from the toolbar, contacts, halo and other logical places. To help we have also added a presence indicator to the toolbar.')
         },
         {
             version: 1,
@@ -63,8 +63,7 @@ define('io.ox/core/whatsnew/meta', [
         }
     ];
 
-    // language based, uses ox.language variable
-    // TODO provide some official default links
+    // example for configuration
     /*var links = {
         fallback: 'https://www.open-xchange.com',
         ca_ES: 'https://www.open-xchange.com',
