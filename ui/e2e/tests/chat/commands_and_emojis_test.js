@@ -77,7 +77,7 @@ Scenario('User can send multi line messages', async (I, users, chat) => {
     I.fillField('~Message', 'three');
     I.pressKey('Enter');
 
-    expect((await I.grabCssPropertyFrom('.ox-chat .message.myself .body', 'height'))[1]).to.equal('48px');
+    expect((await I.grabCssPropertyFrom('.ox-chat .message.myself .body', 'height'))[1]).to.equal('72px');
 
 });
 
