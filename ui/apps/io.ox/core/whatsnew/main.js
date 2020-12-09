@@ -30,7 +30,7 @@ define('io.ox/core/whatsnew/main', [
     if (meta.getFeatures().length === 0) return;
 
     var showDialog = function () {
-        new ModalDialog({
+        var dialog = new ModalDialog({
             point: 'tours/whatsnew/dialog',
             title: gt('What\'s new in this version'),
             // yes em, this is about 500px but scales with text zoom so we don't have problems with 200% text zoom support
@@ -52,16 +52,20 @@ define('io.ox/core/whatsnew/main', [
             }
 
         })
-        .addButton({ className: 'btn-default', placement: 'left', action: 'info', label: gt('Learn more') })
         // no attribute adds close button with cancel action
         .addButton()
-        .on('info', function () {
-            window.open(meta.getLink());
-        })
         .on('close', function () {
             settings.set('whatsNew/lastSeenVersion', meta.getLatestVersion()).save();
-        })
-        .open();
+        });
+
+        if (meta.getLink()) {
+            dialog
+                .addButton({ className: 'btn-default', placement: 'left', action: 'info', label: gt('Learn more') })
+                .on('info', function () {
+                    window.open(meta.getLink());
+                });
+        }
+        dialog.open();
     };
 
     // dropdown link
