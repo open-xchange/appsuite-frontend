@@ -416,11 +416,6 @@ define('io.ox/mail/compose/model', [
             delete data.mailPath;
             delete data.cid;
             return data;
-        },
-
-        keepDraftOnClose: function () {
-            if (settings.get('features/deleteDraftOnClose') !== true) return false;
-            return !!this.get('meta').editFor;
         }
 
     });

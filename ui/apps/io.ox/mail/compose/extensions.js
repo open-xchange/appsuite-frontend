@@ -244,7 +244,7 @@ define('io.ox/mail/compose/extensions', [
 
         buttons: {
             discard: function (baton) {
-                if (_.device('!smartphone') && !baton.model.keepDraftOnClose()) return;
+                if (_.device('!smartphone')) return;
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })

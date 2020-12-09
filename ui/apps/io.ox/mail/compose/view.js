@@ -804,27 +804,18 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 def = $.when(),
-                isDraft = this.model.keepDraftOnClose(),
-                mailPath = this.model.get('mailPath');
+                mailPath = this.model.get('mailPath'),
+                // "edit draft" case of rdb implementation
+                editFor = self.model.get('meta').editFor;
 
-            // workaround
-            (function () {
-                //#. When closing compose the user decides to keep the related draft or delete it as well.
-                gt('You are about to discard this message. Do you want to delete the related draft?');
-            }());
-
-            // TODO-859: smarter decisions for mailPath scenario needed
-            // This dialog gets automatically dismissed
-            if ((this.dirty() || isDraft || mailPath) && !this.config.get('autoDismiss')) {
-
+            // This dialog may gets automatically dismissed
+            if ((this.dirty() || mailPath) && !this.config.get('autoDismiss')) {
                 if (this.app.getWindow && this.app.getWindow().floating) {
                     this.app.getWindow().floating.toggle(true);
                 } else if (_.device('smartphone')) {
                     this.app.getWindow().resume();
                 }
-                // button texts may become quite large in some languages (e. g. french, see Bug 35581)
-                // add some extra space
-                // TODO maybe we could use a more dynamical approach
+
                 def = $.Deferred();
                 new ModalDialog({
                     title: gt('Save draft'),
@@ -839,11 +830,10 @@ define('io.ox/mail/compose/view', [
                     self.saveDraft().then(def.resolve, def.reject);
                 })
                 .on('delete', function () {
-                    var isAutoDiscard = self.config.get('autoDiscard'),
-                        editFor = self.model.get('meta').editFor;
+                    var isAutoDiscard = self.config.get('autoDiscard');
                     def.resolve();
                     // TODO-859: check if this matches mailPath scenario
-                    if (!isDraft || !isAutoDiscard || !editFor) return;
+                    if (!isAutoDiscard || !editFor) return;
                     // only delete autosaved drafts that are not saved manually and have a msgref
                     mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
                 })
