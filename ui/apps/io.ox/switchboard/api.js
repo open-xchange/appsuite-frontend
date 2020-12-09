@@ -100,78 +100,77 @@ define.async('io.ox/switchboard/api', [
                 params: params,
                 type: params['X-OX-TYPE']
             };
-        },
-
-        reconnect: function () {
-            var def = $.Deferred();
-
-            http.GET({
-                module: 'token',
-                params: { action: 'acquireToken' }
-            })
-            .always(function (data) {
-
-                if (data.token) {
-                    this.token = data.token;
-                } else {
-                    console.error('Switchboard: Error during acquireToken!');
-                }
-
-                if (this.socket) {
-                    // manually change the url with the new query. socket.io will use this for any further connection
-                    // note: will most likely break with socket.io-client v3
-                    // seems like we cannot replace query but need to update the existing object
-                    this.socket.query.token = this.token;
-                    return this.socket.connect();
-                }
-
-                var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-                var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '').replace(/\/$/, '');
-                // set query initially; just update "token" during reconnect
-                var query = { userId: api.userId, token: this.token };
-                // Only send redirect uri if not default "/appsuite/api"
-                if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
-                if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
-
-                api.socket = io(appsuiteUrl, {
-                    query: query,
-                    transports: ['websocket'],
-                    reconnectionAttempts: 20,
-                    reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after approx. 10 retries)
-                })
-                .once('connect', function () {
-                    console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 8px;');
-                    api.online = true;
-                })
-                .on('disconnect', function () {
-                    console.log('Switchboard: Disconnected from switchboard service');
-                    api.online = false;
-                })
-                .on('reconnect', function (attemptNumber) {
-                    console.log('Switchboard: Reconnected to switchboard service on attempt #' + attemptNumber + '.');
-                    api.online = true;
-                })
-                .on('reconnect_attempt', function (attemptNumber) {
-                    console.log('Switchboard: Reconnect attempt #' + attemptNumber);
-                })
-                .on('reconnect_failed', function () {
-                    console.log('Switchboard: Reconnect failed. Giving up.');
-                })
-                .on('error', function (err) {
-                    if (ox.debug) console.error('Socket error:', err);
-                    api.socket.close();
-                    // in case acquireToken call fails (50x) stop here (see OXUIB-525)
-                    if (!this.token) return;
-                    // 10 sec. + Random (0-9 sec)
-                    setTimeout(function () {
-                        api.reconnect();
-                    }, 1000 * (10 + Math.floor(Math.random() * 10)));
-                }.bind(this));
-                def.resolve(api.socket);
-            }.bind(this));
-            return def;
         }
     };
+
+    function reconnect() {
+
+        return http.GET({
+            module: 'token',
+            params: { action: 'acquireToken' }
+        })
+        .catch(_.constant({}))
+        .done(function (data) {
+
+            if (data.token) {
+                api.token = data.token;
+            } else {
+                console.error('Switchboard: Error during acquireToken!');
+            }
+
+            if (api.socket) {
+                // we need to call disconnect and connect on socket.io, not just socket.
+                // for whatever reason, socket.connect() would create two sockets,
+                // even if we wait for the "disconnect" event;
+                if (api.socket.connected) api.socket.io.disconnect();
+                api.socket.io.opts.query.token = api.token;
+                console.log('Switchboard: Reconnecting with new token', api.token);
+                api.socket.io.connect();
+                return;
+            }
+
+            var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
+            var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '').replace(/\/$/, '');
+            var query = { userId: api.userId, token: api.token };
+            // Only send redirect uri if not default "/appsuite/api"
+            if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
+            if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
+
+            api.socket = io(appsuiteUrl, {
+                query: query,
+                reconnectionAttempts: 20,
+                reconnectionDelayMax: 10000, // 10 min. max delay between a reconnect (reached after approx. 10 retries)
+                transports: ['websocket']
+            })
+            .once('connect', function () {
+                console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 4px 8px;');
+                api.online = true;
+            })
+            .on('disconnect', function () {
+                console.log('Switchboard: Disconnected from switchboard service');
+                api.online = false;
+            })
+            .on('reconnect', function (attemptNumber) {
+                console.log('Switchboard: Reconnected to switchboard service on attempt #' + attemptNumber + '.');
+                api.online = true;
+            })
+            .on('reconnect_attempt', function (attemptNumber) {
+                console.log('Switchboard: Reconnect attempt #' + attemptNumber);
+            })
+            .on('reconnect_failed', function () {
+                console.log('Switchboard: Reconnect failed. Giving up.');
+            })
+            .on('error', function (err) {
+                if (ox.debug) console.error('Socket error:', err);
+                // in case acquireToken call fails (50x) stop here (see OXUIB-525)
+                if (!api.token) return api.socket.close();
+                retry();
+            });
+        });
+    }
+
+    // retry after 10 sec (and avoid duplicate calls)
+    var retry = _.throttle(reconnect, 10000, { leading: false });
 
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
@@ -182,7 +181,7 @@ define.async('io.ox/switchboard/api', [
         api.isInternal = function (id) {
             return regexp.test(id);
         };
-        return api.reconnect().then(function () {
+        return reconnect().then(function () {
             return api;
         });
     });
