@@ -111,21 +111,6 @@ Show rating string on mouse hover in feedback dialog. Default `true`.
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
 Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running. Default `true`.
 
-## Misc
-
-<config>io.ox/core//groups/limit=`<number>`</config>
-Fetch limit for groups plugin when requesting details of members. Default `1000`
-
-<config>io.ox/core//refreshInterval=`<number>`</config>
-Automatic UI refresh interval in milliseconds. Default is `300000` (5 minutes).
-
-<config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
-Enables/disables download pane for additional software components in settings. Default `false`.
-
-<config>io.ox/core//theme=`<string>`</config>
-Current user theme. Default is `default`
-
-
 ## Mail compose: tinyMCE text editor
 
 <config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
@@ -148,7 +133,6 @@ List of availabe fonts (also used for settings pane).
 Default:
 
     "System=-apple-system,BlinkMacSystemFont,helvetica,sans-serif;Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats"
-
 
 ## Metrics
 
@@ -198,7 +182,7 @@ Analytics URL, usually `https://www.google-analytics.com/analytics.js`
 Optional mappings for custom dimensions
 
 
-### Misc
+### Metrics: Misc
 
 <config>io.ox/core//tracking/console/enabled=`<bool>`</config>
 Enables debugging console adapter that logs events to browser console.
@@ -250,18 +234,44 @@ Check new password against a regular expression (i.e. "is there at least one upp
 Required special characters for new passwords
 
 
-### Client Onboarding
+## Client Onboarding
 <config>io.ox/core//features/clientOnboardingHint/enabled=`<bool>`</config>
 Enables a hint on mobiles to inform about the onboarding Wizard (true/false)
 
 <config>io.ox/core//features/clientOnboardingHint/remaining=`<number>`</config>
 Number of times hint is beeing shown. The protection of this setting needs to be disabled in any case.
 
-### Onboarding
+## Core: Misc
 
-**Capablities needed for different apps**
+<config>io.ox/core//autoLogout=`<bool>`</config>
+Timeout until a user is logged out automatically if inactive
+
+<config>io.ox/core//autoStart=`<string>`</config>
+First App to start after login, Default: `io.ox/mail/main`
+
+<config>io.ox/core//autoStartMobile=`<string>`</config>
+First App to start after login on mobile devices. Default: `io.ox/mail/main`
+
+<config>io.ox/core//selectionMode=`<string>`</config>
+Specifies behavior when selecting items in mail listview. Default: `normal` ('normal'|'alternative'|'simple')
+
+<config>io.ox/core//groups/limit=`<number>`</config>
+Fetch limit for groups plugin when requesting details of members. Default `1000`
+
+<config>io.ox/core//refreshInterval=`<number>`</config>
+Automatic UI refresh interval in milliseconds. Default is `300000` (5 minutes).
+
+<config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
+Enables/disables download pane for additional software components in settings. Default `false`.
+
+<config>io.ox/core//theme=`<string>`</config>
+Current user theme. Default is `default`
+
+# Onboarding
+
 To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
 The corresponding capabilites for the different apps are:
+
 - Mail App: `webmail mobile_mail_app`
 - Drive App: `infostore`
 - Calendar/ CalDav: `calendar caldav`
@@ -319,20 +329,6 @@ Path to drive app icon for MacOS
 <config>io.ox/onboarding//windows/driveapp/url=`<string>`</config>
 Link to installation file of drive client for Windows
 
-## Misc
-
-<config>io.ox/core//autoLogout=`<bool>`</config>
-Timeout until a user is logged out automatically if inactive
-
-<config>io.ox/core//autoStart=`<string>`</config>
-First App to start after login, Default: `io.ox/mail/main`
-
-<config>io.ox/core//autoStartMobile=`<string>`</config>
-First App to start after login on mobile devices. Default: `io.ox/mail/main`
-
-<config>io.ox/core//selectionMode=`<string>`</config>
-Specifies behavior when selecting items in mail listview. Default: `normal` ('normal'|'alternative'|'simple')
-
 # Portal
 
 Please read http://oxpedia.org/wiki/index.php?title=AppSuite:Configuring_portal_plugins for detailed
@@ -367,7 +363,7 @@ Additional data like custom description or related configuration
 Widget type like `rss` or `stickyfile`
 
 
-## Misc
+## Portal: Misc
 
 <config>io.ox/portal//mobile/summaryView=`<bool>`</config>
 User setting, show only a small summary view of each widget on smartphones
@@ -531,7 +527,7 @@ Mobile signature as plain text string.
 <config>io.ox/mail//compose/signatureLimit=`<number>`</config>
 Number of signatures listed in options dropdown of mail compose (default 2).
 
-## Misc
+## Mail: Misc
 
 <config>io.ox/mail//attachOriginalMessage=`<bool>`</config>
 Attach original message on touch devices
@@ -687,7 +683,7 @@ Show only working hours in scheduling view. Default `true`
 <config>io.ox/calendar//scheduling/dateRange=`<string>`</config>
 Show either one week or the complete month in the view (`week` or `month`). Default `week`
 
-## Misc
+## Calendar: Misc
 
 <config>io.ox/calendar//defaultFolderColor=`<string>`</config>
 Calendar folder color as CSS HEX string, defaults to `#CFE6FF`
