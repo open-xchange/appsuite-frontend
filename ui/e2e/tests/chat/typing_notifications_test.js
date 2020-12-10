@@ -32,11 +32,13 @@ Scenario('Typing notifications will appear and stop on message sent', async (I, 
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
     });
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('Hello.', 3, '.messages');
@@ -68,7 +70,7 @@ Scenario('Typing notifications will appear for multiple users typing', async (I,
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
-
+        chat.openChat();
         // create a group chat
         I.waitForText('New Chat', 30);
         I.click('New Chat');
@@ -80,6 +82,7 @@ Scenario('Typing notifications will appear for multiple users typing', async (I,
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('Test Group', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('Test Group'));
         I.waitForText('Hey group!', 3, '.messages');
@@ -87,6 +90,7 @@ Scenario('Typing notifications will appear for multiple users typing', async (I,
 
     await session('Charlie', async () => {
         I.login({ user: users[2] });
+        chat.openChat();
         I.waitForText('Test Group', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('Test Group'));
         I.waitForText('Hey group!', 3, '.messages');

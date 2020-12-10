@@ -34,6 +34,7 @@ Scenario('Update delivery states in private chats', async (I, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
         I.waitForVisible('#firstCheck', 3, '.ox-chat');
         expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
@@ -42,6 +43,7 @@ Scenario('Update delivery states in private chats', async (I, users, chat) => {
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
     });
 
@@ -73,6 +75,7 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Group chat');
@@ -87,6 +90,7 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
     });
 
@@ -97,6 +101,7 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
 
     await session('Charlie', async () => {
         I.login({ user: users[2] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
     });
 
@@ -138,6 +143,7 @@ Scenario('There are no delivery states for channels', async (I, users, contexts,
     const alice = await users.create(users.getRandom(), context);
 
     I.login({ user: alice });
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('New Chat');
     I.clickDropdown('Channel');

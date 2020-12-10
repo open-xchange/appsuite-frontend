@@ -28,6 +28,7 @@ After(async (users) => {
 
 Scenario('Last used chat will be re-opened on next start', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     I.waitForText('Hello.', 3, '.ox-chat');
     I.waitForNetworkTraffic();
@@ -39,6 +40,7 @@ Scenario('Last used chat will be re-opened on next start', async (I, users, chat
 
 Scenario('Last used chat will not be re-opened on next start', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     I.waitForText('Hello.', 3, '.ox-chat');
 
@@ -69,7 +71,7 @@ Scenario('Sort and group chats', async (I, users, contexts, chat, dialogs) => {
     const emails = [bob.userdata.email1, charlie.userdata.email1];
 
     I.login({ user: alice });
-
+    chat.openChat();
     // create a private chat
     chat.createPrivateChat(bob.userdata.email1);
     I.click('~Close chat', '.ox-chat');

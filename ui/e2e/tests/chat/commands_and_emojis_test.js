@@ -30,6 +30,7 @@ After(async (users) => {
 
 Scenario('Send emojis', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     I.waitForElement('.controls');
@@ -54,6 +55,7 @@ Scenario('Send emojis', async (I, users, chat) => {
 
 Scenario('User can be mentioned via @', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     I.waitForElement('.controls');
@@ -67,6 +69,7 @@ Scenario('User can be mentioned via @', async (I, users, chat) => {
 
 Scenario('User can send multi line messages', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     I.waitForElement('.controls');
@@ -83,6 +86,7 @@ Scenario('User can send multi line messages', async (I, users, chat) => {
 
 Scenario('User can check the version', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     I.waitForElement('.controls');
     I.fillField('~Message', '/version');
@@ -94,6 +98,7 @@ Scenario('User can check the version', async (I, users, chat) => {
 
 Scenario('User can make zoom call via command', async (I, users, chat, dialogs) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     I.waitForElement('.controls');
     I.fillField('~Message', '/zoom');
@@ -118,6 +123,7 @@ Scenario('User can make zoom call via command', async (I, users, chat, dialogs) 
 
 Scenario('User can make jitsi call via command', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     I.waitForElement('.controls');
     I.fillField('~Message', '/jitsi');
@@ -139,7 +145,7 @@ Scenario('User can make jitsi call via command', async (I, users, chat) => {
 Scenario('User can make a zoom call via command within a group', async (I, users, chat) => {
     await users.create();
     I.login({ user: users[0] });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('New Chat');
     I.clickDropdown('Group chat');
@@ -169,7 +175,7 @@ Scenario('User can make a zoom call via command within a group', async (I, users
 Scenario('User can make a jitsi call via command within a group', async (I, users, chat) => {
     await users.create();
     I.login({ user: users[0] });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('New Chat');
     I.clickDropdown('Group chat');

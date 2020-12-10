@@ -29,11 +29,13 @@ After(async (users) => {
 Scenario('Close chat, check in history and reopen chat', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
     });
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.waitForNetworkTraffic();
 

@@ -22,9 +22,9 @@ After(async (users) => {
     await users.removeAll();
 });
 
-Scenario('Open, close and toggle chat', (I) => {
+Scenario('Open, close and toggle chat', (I, chat) => {
     I.login();
-
+    chat.openChat();
     I.waitForElement('.io-ox-windowmanager-sticky-panel .ox-chat');
     I.waitForText('New Chat', 3, '.io-ox-windowmanager-sticky-panel .ox-chat');
 

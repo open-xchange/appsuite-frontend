@@ -32,6 +32,7 @@ Scenario.skip('Search for a word - full text', async (I, users, chat) => {
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     chat.sendMessage('Berlin Bangkok Brisbane');
 
@@ -54,6 +55,7 @@ Scenario.skip('Search for a word - full text', async (I, users, chat) => {
 
 Scenario('Search for a user and a private chat', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     I.waitForText('New Chat', 30);
 
     I.waitForElement('~Search or start new chat', 3, '.ox-chat');
@@ -79,6 +81,7 @@ Scenario('Search for a group name', async (I, users, chat) => {
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
     I.login({ user: users[0] });
+    chat.openChat();
     I.waitForText('New Chat', 30);
 
     I.click('New Chat');
@@ -108,7 +111,7 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
 
     await session('Alice', async () => {
         I.login({ user: alice });
-
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
@@ -142,7 +145,7 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
 
     await session('Bob', async () => {
         I.login({ user: bob });
-
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.waitForElement('~Search or start new chat', 3, '.ox-chat');
         I.fillField('~Search or start new chat', channelTitle);

@@ -1,6 +1,11 @@
 const { I } = inject();
 
 module.exports = {
+    openChat() {
+        I.waitForVisible('~Chat');
+        I.retry(3).click('~Chat');
+        I.waitForVisible('.ox-chat');
+    },
     createPrivateChat(email) {
         I.waitForText('New Chat', 30);
         I.click('New Chat');

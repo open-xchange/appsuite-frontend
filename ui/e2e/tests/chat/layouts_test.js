@@ -28,6 +28,7 @@ After(async (users) => {
 
 Scenario('Add chat to favorites', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     // sticky layout
@@ -57,11 +58,13 @@ Scenario('Add chat to favorites', async (I, users, chat) => {
 Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
     });
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.waitForDetached('.indicator.chat-notification.hidden', 3, '#io-ox-toprightbar');
         I.waitForText('User', 30, '.ox-chat');
@@ -83,7 +86,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
 
     await session('Alice', async () => {
         I.login({ user: alice });
-
+        chat.openChat();
         // create a private chat
         chat.createPrivateChat(bob.userdata.email1);
         chat.sendMessage('Second message');
@@ -111,8 +114,8 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
 
     await session('Bob', async () => {
         I.login({ user: bob });
+        chat.openChat();
         I.waitForText('New Chat', 30);
-
         // join channel
         I.waitForElement(locate('button').withText('All channels'), 30, '.ox-chat');
         I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
@@ -172,7 +175,7 @@ Scenario('Check layouts: compact, standard and detailed', async (I, users, conte
     const emails = [bob.userdata.email1, charlie.userdata.email1];
 
     I.login({ user: alice });
-
+    chat.openChat();
     // create a private chat
     chat.createPrivateChat(bob.userdata.email1);
     chat.sendMessage('Second message');

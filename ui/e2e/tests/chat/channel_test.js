@@ -30,11 +30,12 @@ After(async (users) => {
     await context.remove();
 });
 
-Scenario.skip('Update channel profile picture and name', async (I, dialogs, users) => {
+Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs, users) => {
     const [alice, bob] = users;
     // Check initial photo: Empty | Initial name: Announcements
     await session('Alice', async () => {
         I.login({ user: alice });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
@@ -53,6 +54,7 @@ Scenario.skip('Update channel profile picture and name', async (I, dialogs, user
 
     await session('Bob', async () => {
         I.login({ user: bob });
+        chat.openChat();
         I.waitForText('All channels', 30, '.ox-chat');
         I.click('All channels', '.ox-chat');
         I.waitForText('Announcements', 30, '.ox-chat');
@@ -141,6 +143,7 @@ Scenario('Preview, join and leave a channel', async (I, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: alice });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
@@ -155,6 +158,7 @@ Scenario('Preview, join and leave a channel', async (I, users, chat) => {
 
     await session('Bob', async () => {
         I.login({ user: bob });
+        chat.openChat();
         I.waitForElement(locate('button').withText('All channels'), 30, '.ox-chat');
         I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
         I.waitForText(channelTitle, 3, '.ox-chat');

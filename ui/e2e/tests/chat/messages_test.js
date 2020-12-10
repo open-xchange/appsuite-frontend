@@ -34,6 +34,7 @@ Scenario('Show sender, date and avatar of sent message', async (I, users, chat) 
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
         I.waitForElement('.sender .time', 3, '.ox-chat .scrollpane');
         time = await I.grabTextFrom('.sender .time');
@@ -41,6 +42,7 @@ Scenario('Show sender, date and avatar of sent message', async (I, users, chat) 
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
 
@@ -86,6 +88,7 @@ Scenario('Send and view an image', async (I, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
 
         chat.sendFile('e2e/media/placeholder/800x600.png');
@@ -94,6 +97,7 @@ Scenario('Send and view an image', async (I, users, chat) => {
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
 
@@ -113,6 +117,7 @@ Scenario('Edit a sent message', async (I, users, chat) => {
     const controlsLocator = chatLocator + ' .controls';
 
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     // via dropdown menu
@@ -135,6 +140,7 @@ Scenario('Edit a sent message', async (I, users, chat) => {
 
 Scenario('Delete a message', async (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     chat.sendMessage('Stupid message');
 
@@ -146,11 +152,13 @@ Scenario('Delete a message', async (I, users, chat) => {
 Scenario('Reply to a message', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
     });
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
 
@@ -168,6 +176,7 @@ Scenario('Reply to a message', async (I, users, chat) => {
 
 Scenario('Sending binaries and check max file size', (I, users, chat) => {
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     chat.sendFile('e2e/media/files/generic/2MB.dat');
     I.waitForElement('.message-file-container', 3, '.ox-chat .messages');
@@ -180,6 +189,7 @@ Scenario('Editor saves drafted content for each chat if not sent', (I, users, ch
     const draft = 'This is a draft message.';
 
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
 
     within('.ox-chat .chat-rightside', () => {

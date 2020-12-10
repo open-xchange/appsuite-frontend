@@ -34,6 +34,7 @@ Scenario('Leave and view a group and get re-added', async (I, users, chat, dialo
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Group chat');
@@ -46,6 +47,7 @@ Scenario('Leave and view a group and get re-added', async (I, users, chat, dialo
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText(groupTitle, 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText(groupTitle));
         I.waitForText('Hey group!', 3, '.messages');
@@ -110,6 +112,7 @@ Scenario.skip('Update group profile picture and name', async (I, dialogs, users,
     // Check initial photo: Empty | Initial name: Test Group
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Group chat');
@@ -126,6 +129,7 @@ Scenario.skip('Update group profile picture and name', async (I, dialogs, users,
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText(groupTitle, 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText(groupTitle));
         I.click('~Detach window', '.chat-rightside');
@@ -137,6 +141,7 @@ Scenario.skip('Update group profile picture and name', async (I, dialogs, users,
 
     await session('Charlie', async () => {
         I.login({ user: users[2] });
+        chat.openChat();
         I.waitForText(groupTitle, 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText(groupTitle));
         I.click('~Detach window', '.chat-rightside');

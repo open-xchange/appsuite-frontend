@@ -29,6 +29,7 @@ Scenario('Show all files', (I, users, chat) => {
     const scrollpaneLocator = '.ox-chat .chat-rightside .scrollpane';
 
     I.login({ user: users[0] });
+    chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
     chat.sendFile('e2e/media/placeholder/800x600.png');
     chat.sendFile('e2e/media/files/0kb/document.doc');

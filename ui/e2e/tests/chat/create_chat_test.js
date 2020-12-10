@@ -32,12 +32,14 @@ After(async (users) => {
 Scenario('Create new private chat', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
         I.click('~Close chat', '.ox-chat');
         I.waitForVisible('.chat-avatar .initials');
     });
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('Hello.', 3, '.messages');
@@ -46,9 +48,9 @@ Scenario('Create new private chat', async (I, users, chat) => {
     });
 });
 
-Scenario('Create new private chat from floating window via dropdown', async (I, users) => {
+Scenario('Create new private chat from floating window via dropdown', async (I, users, chat) => {
     I.login({ user: users[0] });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
 
@@ -63,9 +65,9 @@ Scenario('Create new private chat from floating window via dropdown', async (I, 
     I.waitForVisible('.chat-rightside .chat-avatar .initials');
 });
 
-Scenario('Create new private chat from floating window via icon', async (I, users) => {
+Scenario('Create new private chat from floating window via icon', async (I, users, chat) => {
     I.login({ user: users[0] });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
 
@@ -81,6 +83,7 @@ Scenario('Create new private chat from floating window via icon', async (I, user
 Scenario('Create new private chat from address book', async (I, contacts, users, chat) => {
     await session('Alice', async () => {
         I.login('app=io.ox/contacts', { user: users[0] });
+        chat.openChat();
         I.waitForElement('.io-ox-contacts-window');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
@@ -97,6 +100,7 @@ Scenario('Create new private chat from address book', async (I, contacts, users,
     });
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('Hello.', 3, '.messages');
@@ -118,6 +122,7 @@ Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
     await session('Bob', async () => {
         I.login({ user: bob });
         mail.waitForApp();
+        chat.openChat();
         I.waitForVisible('.ox-chat');
         mail.selectMail('Test subject');
 
@@ -135,6 +140,7 @@ Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: alice });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('Hello.', 3, '.messages');
@@ -155,6 +161,7 @@ Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
 
     await session('Alice', async () => {
         I.login({ user: recipient });
+        chat.openChat();
         mail.waitForApp();
         I.waitForVisible('.ox-chat');
         mail.selectMail('Test subject');
@@ -170,6 +177,7 @@ Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
 
     await session('Bob', async () => {
         I.login({ user: sender });
+        chat.openChat();
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('Hello.', 3, '.messages');
@@ -186,6 +194,7 @@ Scenario('Create new group chat', async (I, users, chat, dialogs) => {
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Group chat');
@@ -206,6 +215,7 @@ Scenario('Create new group chat', async (I, users, chat, dialogs) => {
 
     await session('Bob', async () => {
         I.login({ user: users[1] });
+        chat.openChat();
         I.waitForText(groupTitle, 30, '.ox-chat');
         I.click(locate({ css: 'li' }).withText(groupTitle), '.ox-chat');
         I.waitForText('Hey group!', 3, '.ox-chat .messages');
@@ -222,6 +232,7 @@ Scenario('Create new group chat from floating window via dropdown', async (I, us
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
     I.login({ user: users[0] });
+    chat.openChat();
 
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
@@ -246,6 +257,7 @@ Scenario('Create new group chat from floating window via icon', async (I, users,
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
 
     I.login({ user: users[0] });
+    chat.openChat();
 
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
@@ -276,6 +288,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
     await session('Alice', async () => {
         I.login({ user: recipient });
         mail.waitForApp();
+        chat.openChat();
         I.waitForVisible('.ox-chat');
         mail.selectMail('This better become a group');
 
@@ -297,6 +310,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
 
     await session('Bob', async () => {
         I.login({ user: sender });
+        chat.openChat();
         I.waitForText('This better become a group', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('This better become a group'));
         I.waitForText('Hello.', 3, '.messages');
@@ -307,6 +321,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
 
     await session('Charlie', async () => {
         I.login({ user: cc });
+        chat.openChat();
         I.waitForText('This better become a group', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('This better become a group'));
         I.waitForText('Hello.', 3, '.messages');
@@ -363,6 +378,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
 
     await session('Bob', async () => {
         I.login({ user: user2 });
+        chat.openChat();
         I.waitForText(subject, 30, '.ox-chat');
         I.click(locate({ css: 'li' }).withText(subject), '.ox-chat');
         I.waitForText(message, 3, '.ox-chat .messages');
@@ -373,6 +389,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
 
     await session('Charlie', async () => {
         I.login({ user: user3 });
+        chat.openChat();
         I.waitForText(subject, 30, '.ox-chat');
         I.click(locate({ css: 'li' }).withText(subject), '.ox-chat');
         I.waitForText(message, 3, '.ox-chat .messages');
@@ -392,6 +409,7 @@ Scenario('Create new channel', async (I, users, contexts, chat, dialogs) => {
 
     await session('Alice', async () => {
         I.login({ user: alice });
+        chat.openChat();
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
@@ -405,6 +423,7 @@ Scenario('Create new channel', async (I, users, contexts, chat, dialogs) => {
 
     await session('Bob', async () => {
         I.login({ user: bob });
+        chat.openChat();
         I.waitForElement(locate({ css: 'button' }).withText('All channels'), 30, '.ox-chat');
         I.click(locate({ css: 'button' }).withText('All channels'), '.ox-chat');
         I.waitForText(channelTitle, 3, '.ox-chat');
@@ -421,7 +440,7 @@ Scenario('Create new channel from floating window via dropdown', async (I, users
     const channelTitle = 'Channel 1.0';
 
     I.login({ user: alice });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
 
@@ -444,7 +463,7 @@ Scenario('Create new channel from floating window via icon', async (I, users, co
     const channelTitle = 'Channel 1.0';
 
     I.login({ user: alice });
-
+    chat.openChat();
     I.waitForText('New Chat', 30);
     I.click('~Detach window');
 
