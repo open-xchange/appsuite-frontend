@@ -29,6 +29,7 @@ After(async (users) => {
 Scenario('Receive email notifications from private chats', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
         chat.sendMessage('First message');
         chat.sendMessage('Second message');
@@ -60,6 +61,7 @@ Scenario('Receive email notifications from private chats', async (I, users, chat
 Scenario('Receive email notifications from groups', async (I, users, chat) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
 
         // create a group chat
         I.waitForText('New Chat', 30);
@@ -99,6 +101,7 @@ Scenario('Do not receive email notifications from a private chat', async (I, use
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
 
         // create private chat
         chat.createPrivateChat(users[1].userdata.email1);
@@ -127,6 +130,7 @@ Scenario.skip('Do only receive email notifications from private chats', async (I
     I.logout();
 
     I.login({ user: users[0] });
+    chat.openChat();
     // create a group chat
     I.waitForText('New Chat', 30);
     I.click('New Chat');
@@ -158,6 +162,7 @@ Scenario.skip('Receive email notifications from channels', async (I, users, cont
 
     await session('Alice', async () => {
         I.login({ user: alice });
+        chat.openChat();
 
         // create a channel
         I.waitForText('New Chat', 30);
@@ -170,6 +175,7 @@ Scenario.skip('Receive email notifications from channels', async (I, users, cont
 
     await session('Bob', async () => {
         I.login({ user: bob });
+        chat.openChat();
 
         // join channel
         I.waitForElement(locate('button').withText('All channels'), 30, '.ox-chat');
@@ -204,6 +210,7 @@ Scenario.skip('Receive email notifications from channels', async (I, users, cont
 Scenario.skip('Answering a notification will inject text to a chat', async (I, users, chat, mail) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
+        chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
         chat.sendMessage('First message');
     });

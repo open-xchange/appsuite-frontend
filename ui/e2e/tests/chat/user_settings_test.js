@@ -35,6 +35,7 @@ Scenario('Last used chat will be re-opened on next start', async (I, users, chat
 
     I.refreshPage();
     I.waitForVisible('#io-ox-core', 30);
+    chat.openChat();
     I.waitForText('Hello.', 30, '.ox-chat');
 });
 
@@ -55,6 +56,7 @@ Scenario('Last used chat will not be re-opened on next start', async (I, users, 
     // check
     I.refreshPage();
     I.waitForNetworkTraffic();
+    chat.openChat();
     I.waitForText('User', 3, '.ox-chat');
     I.dontSee('Hello.', '.ox-chat');
 });
