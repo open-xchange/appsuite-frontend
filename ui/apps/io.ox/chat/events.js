@@ -15,10 +15,8 @@ define('io.ox/chat/events', [], function () {
 
     'use strict';
 
-    var started = false;
-
     // simple event aggregator
-    var events = _.extend({}, Backbone.Events, {
+    var events = _.extend({
         forward: function (e) {
             e.preventDefault();
             // if we use stopPropagation dropdowns won't close "naturally"
@@ -26,23 +24,8 @@ define('io.ox/chat/events', [], function () {
             var node = $(e.currentTarget), data = node.data();
             if (ox.debug) console.debug('cmd', data.cmd, data);
             events.trigger('cmd cmd:' + data.cmd, data);
-        },
-        // starts the app on demand
-        // this prevents commands from failing when triggered before the chat app was started (start chat from address book buttons etc)
-        trigger: function () {
-            var self = this,
-                args = arguments;
-            if (started) return Backbone.Events.trigger.apply(self, args);
-
-            require(['io.ox/chat/main'], function (chat) {
-                chat.getApp().launch().done(function () {
-                    this.getWindow().showApp();
-                    started = true;
-                    Backbone.Events.trigger.apply(self, args);
-                });
-            });
         }
-    });
+    }, Backbone.Events);
 
     // forward local command clicks into event hub
     $(document).on('click', '.ox-chat [data-cmd]', events.forward);

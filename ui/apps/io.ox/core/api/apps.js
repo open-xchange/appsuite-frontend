@@ -19,7 +19,9 @@ define('io.ox/core/api/apps', [
 ], function (ext, manifests, capabilities, settings) {
 
     'use strict';
-    var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
+
+    var defaultList = [
+        'io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
         'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
     ];

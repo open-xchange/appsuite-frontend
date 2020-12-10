@@ -83,6 +83,7 @@ define('io.ox/chat/main', [
                 'open': this.showApp,
                 'quit': this.hideApp
             });
+
             // give the model a unique identifer to find it
             this.model.set('app', 'io.ox/chat', { silent: true });
 
@@ -505,16 +506,19 @@ define('io.ox/chat/main', [
         }()),
 
         hideApp: function () {
-            settings.set('hidden', true);
-            if (this.$el.is(':visible')) return this.$el.hide();
-            this.$body.hide();
+            if (!settings.get('hidden')) {
+                settings.set('hidden', true);
+                if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
+            }
             return this;
         },
 
         showApp: function () {
-            settings.set('hidden', false);
-            this.$el.show();
-            this.$body.show();
+            if (settings.get('hidden')) {
+                settings.set('hidden', false);
+                this.$el.show();
+                this.$body.show();
+            }
             return this;
         },
 
@@ -583,21 +587,16 @@ define('io.ox/chat/main', [
             this.onChangeDensity();
 
             // load chat rooms here -- not in every ChatListView
-            // returns a deferred object so you can wait for the chats to load
-            return _.delay(this.onChatsLoaded.bind(this));
+            _.delay(this.onChatsLoaded.bind(this));
         },
 
         onChatsLoaded: function () {
             var showLastRoom = settings.get('selectLastRoom', true);
             var lastRoomId = showLastRoom && settings.get('lastRoomId');
             var room = lastRoomId && data.chats.get(lastRoomId);
-            if (room && room.isActive()) {
-                this.showChat(lastRoomId);
-                return $.when();
-            }
+            if (room && room.isActive()) return this.showChat(lastRoomId);
             // fill right side only if not selecting last room (to avoid flicker)
             this.$rightside.append(new EmptyView().render().$el);
-            return $.when();
         },
 
         getLeftNavigation: function () {
@@ -784,8 +783,7 @@ define('io.ox/chat/main', [
                 win.$body.parent().idle();
             })
             .done(function () {
-                // return is important so you can wait for the drawing to finish
-                return win.draw();
+                win.draw();
             })
             .fail(function () {
                 win.$body.parent().idle();
@@ -793,9 +791,8 @@ define('io.ox/chat/main', [
             });
     });
 
-    // actually not really a resume. We use it as a toggle here
     app.setResume(function () {
-        win.model.trigger(settings.get('hidden') === true ? 'open' : 'quit');
+        win.model.trigger('open');
     });
 
     return {

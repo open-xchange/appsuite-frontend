@@ -24,7 +24,7 @@ define('io.ox/chat/settings/defaults', [], function () {
             playWhen: 'always',
             file: 'plop.mp3'
         },
-        autostartChat: false,
+        autoStart: false,
         groupByType: false,
         sortBy: 'activity',
         density: 'default',

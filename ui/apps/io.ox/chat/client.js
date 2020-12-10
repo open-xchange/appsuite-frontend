@@ -16,8 +16,10 @@ define('io.ox/chat/client', [], function () {
     'use strict';
 
     function launchApp() {
-        return require(['io.ox/chat/main']).then(function (win) {
-            return win.ready;
+        return require(['io.ox/chat/main']).then(function (chat) {
+            return chat.getApp().launch().then(function () {
+                return this.getWindow().showApp();
+            });
         });
     }
 
@@ -27,50 +29,47 @@ define('io.ox/chat/client', [], function () {
         // - title <string>
         // - members <array of email addresses>
         openChat: function (options) {
-            launchApp().done(function () {
-                var win = this;
+            launchApp().done(function (win) {
                 var members = options.members;
                 if (members.length === 1) return api.openPrivateChat(members[0]);
                 require(['io.ox/chat/data'], function (data) {
                     var pimReference = options.pimReference;
                     var room = pimReference && data.chats.findByReference(pimReference.type, pimReference.id);
-                    if (room) win.showApp().showChat(room.get('roomId'));
+                    if (room) win.showChat(room.get('roomId'));
                     api.openGroupChat(options);
                 });
             });
         },
 
         openPrivateChat: function (email) {
-            launchApp().done(function () {
-                this.showApp().openPrivateChat({ email: email });
+            launchApp().done(function (win) {
+                win.openPrivateChat({ email: email });
             });
         },
 
         openGroupChat: function (options) {
-            launchApp().done(function () {
-                var win = this;
+            launchApp().done(function (win) {
                 require(['io.ox/chat/actions/openGroupDialog']).then(function (openGroupDialog) {
                     openGroupDialog(options).then(function (id) {
-                        win.showApp().showChat(id);
+                        win.showChat(id);
                     });
                 });
             });
         },
 
         openChatByReference: function (pimReference) {
-            launchApp().done(function () {
-                var win = this;
+            launchApp().done(function (win) {
                 require(['io.ox/chat/data'], function (data) {
                     var room = pimReference && data.chats.findByReference(pimReference.type, pimReference.id);
                     if (!room) return;
-                    win.showApp().showChopenChatat(room.get('roomId'));
+                    win.showChopenChatat(room.get('roomId'));
                 });
             });
         },
 
         openChatById: function (id) {
-            launchApp().done(function () {
-                this.showApp().showChat(id);
+            launchApp().done(function (win) {
+                win.showChat(id);
             });
         }
     };

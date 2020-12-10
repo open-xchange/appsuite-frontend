@@ -33,6 +33,7 @@ define('io.ox/chat/views/launcher', [
         initialize: function () {
             this.badge = this.$('.chat-notification');
             this.listenTo(data.chats, 'add remove change:unreadCount', this.updateCounter);
+            this.listenTo(coreSettings, 'change:apps/quickLaunch', this.updateLauncherVisibility);
         },
 
         render: function () {

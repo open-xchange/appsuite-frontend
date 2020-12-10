@@ -92,7 +92,8 @@ Scenario('Create new private chat from address book', async (I, contacts, users,
         contacts.selectContact(`${users[1].get('sur_name')}, ${users[1].get('given_name')}`);
         I.waitForText('Chat', 5, '.action-button-rounded');
         I.waitForEnabled(locate('.action-button-rounded .btn').withText('Chat'));
-        I.click('Chat');
+
+        I.click('Chat', '.action-button-rounded');
 
         chat.sendMessage('Hello.');
         I.click('~Close chat', '.ox-chat');
@@ -131,7 +132,7 @@ Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
 
         I.waitForText('Chat', 5, '.io-ox-halo .action-button-rounded');
         I.waitForEnabled(locate('.io-ox-halo .action-button-rounded .btn').withText('Chat'));
-        I.click('Chat');
+        I.click('Chat', '.action-button-rounded');
 
         chat.sendMessage('Hello.');
         I.click('~Close chat', '.ox-chat');
@@ -187,6 +188,7 @@ Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
 });
 
 Scenario('Create new group chat', async (I, users, chat, dialogs) => {
+
     await users.create();
 
     const groupTitle = 'Test Group';
