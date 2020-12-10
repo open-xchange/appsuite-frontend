@@ -133,7 +133,6 @@ html.baseline {
 // bootstrap overwrite end
 
 #io-ox-login-screen {
-    overflow-y: auto;
     height: 100%;
     z-index: 65102;
     background-color: @wallpaper-end-color;
@@ -178,18 +177,6 @@ html.baseline {
     }
 }
 
-#io-ox-login-background {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    height: 100%;
-    background-size: cover !important;
-    background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
-}
-
 #io-ox-login-blocker {
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
@@ -206,10 +193,14 @@ html.baseline {
 #io-ox-login-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     height: 100%;
     min-height: 100%;
     padding: 0;
+    background-size: cover !important;
+    background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
+    overflow-y: auto;
 
     .login-logo {
         max-height: 32px;
@@ -224,6 +215,8 @@ html.baseline {
 
     .composition-element {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         margin: 4px 8px;
         min-width: fit-content;
 
@@ -234,22 +227,20 @@ html.baseline {
 }
 
 #io-ox-login-header {
-    z-index: 1;
-    position: absolute;
     width: 100%;
-    min-height: 100px;
     margin: 0;
     background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0));
 }
 
 #io-ox-login-toolbar {
-    height: 32px;
+    position: relative;
+    height: 56px;
     display: flex;
     align-items: center;
-    margin: 16px;
+    padding: 0 16px;
 
     label {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 
     div {
@@ -280,7 +271,6 @@ html.baseline {
 
 #io-ox-login-content {
     display: flex;
-    height: 100%;
     width: 100%;
 
     .align-center {
@@ -296,17 +286,12 @@ html.baseline {
 }
 
 #io-ox-login-footer {
-    z-index: 1;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    margin: 0;
+    margin: 64px 0 0 0;
+    padding: 6px 2px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    min-height: 40px;
-    padding: 2px 4px;
 
     background-color: rgba(0, 0, 0, 0.15);
 
@@ -317,18 +302,12 @@ html.baseline {
             color: #94c1ec;
         }
     }
-
     > * {
         margin: 0 8px;
+        &:first-child { margin-left: 0; }
+        &:last-child { margin-right: 0; }
     }
 
-    > *:first-child {
-        margin-left: 0;
-    }
-
-    > *:last-child {
-        margin-right: 0;
-    }
 }
 
 #io-ox-languages {
@@ -378,7 +357,7 @@ html.baseline {
     width: 420px;
     text-align: center;
     border-radius: 6px;
-    box-shadow: 0 15px 70px 0px rgba(0,0,0,.5);
+    box-shadow: 0 15px 70px 0 rgba(0,0,0,.5);
 
     * {
         color: #333333;
@@ -533,16 +512,9 @@ html.baseline {
 
 /* small screen size */
 
-@media (max-width: 950px) {
-
-    #io-ox-login-teaser {
-        visibility: hidden;
-        width: 0px;
-    }
-
-    #io-ox-login-content > .align-center {
-        flex-grow: 1;
-    }
+@media (max-width: 767px) {
+    #io-ox-login-teaser { display: none; }
+    #io-ox-login-content > .align-center { flex-grow: 1; }
 }
 
 @media (max-height: 300px) { #io-ox-language-list { max-height: 100px; } }
@@ -552,135 +524,48 @@ html.baseline {
 
 /* mobile stuff */
 
-.smartphone #io-ox-login-screen {
+.smartphone #io-ox-login-screen #io-ox-login-container {
 
-    #io-ox-login-background {
-        background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
+    .login-spacer,
+    #box-form-header,
+    .username label, .password label,
+    #io-ox-information-message { display: none; }
+
+    .login-logo {
+        margin: 16px;
+        max-height: 24px;
     }
 
-    #io-ox-login-container {
-        height: unset;
-        padding: 0;
+    #login-title-mobile {
+        margin-right: 16px;
+        align-self: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
+        flex-grow: 1;
+    }
 
-        #io-ox-login-header {
-            position: relative;
-            margin: 0;
+    #io-ox-login-content #box-form {
+        width: 320px;
+
+        #box-form-body {
+            border-radius: 6px;
             min-height: unset;
-        }
 
-        #io-ox-login-toolbar {
-            margin: 0;
-            height: unset;
-            min-height: 56px;
-            align-items: unset;
-            padding: 0 16px;
-
-            .login-logo {
-                margin: 16px 16px;
-                max-height: 24px;
-            }
-
-            .login-spacer {
-                display: none;
-            }
-
-            #login-title-mobile {
-                margin-right: 16px;
-                align-self: center;
-                font-size: 18px;
-                font-weight: bold;
-                text-align: right;
-                flex-grow: 1;
+            #io-ox-login-feedback {
+                transition:transform 0.3s ease-out;
+                transform:scaleY(1);
+                &:empty{ transform:scaleY(0); }
             }
         }
+    }
 
-        #io-ox-login-content {
-            width: 100%;
+    #io-ox-login-footer {
+        margin-top: 0;
+        justify-content: center;
+        #io-ox-languages {
             margin: 0;
-            position: relative;
-            flex-grow: 1;
-
-            .align-center {
-                align-self: unset;
-
-                > .row {
-                    height: 100%;
-                    align-items: center;
-                    display: flex;
-                }
-            }
-
-            #io-ox-login-box {
-                padding: 0;
-
-                .row {
-                    width: 100%;
-
-                    .flex-column {
-                        height: 100%;
-                    }
-
-                    #box-form {
-                        padding: 0;
-                        max-width: unset;
-                        margin: 0 auto;
-                        width: 320px;
-
-                        #box-form-header {
-                            display: none;
-                        }
-
-                        #box-form-body {
-                            border-radius: 6px;
-                            min-height: unset;
-                            height: 100%;
-
-                            .row.username, .row.row.password {
-                                label {
-                                    display: none;
-                                }
-                            }
-
-                            #io-ox-login-feedback {
-                                transition:transform 0.3s ease-out;
-                                transform:scaleY(1);
-
-                                &:empty{
-                                    transform:scaleY(0);
-                                }
-                            }
-                        }
-
-                        #box-form-body, #box-form-header {
-                            margin: 0;
-                        }
-                    }
-                }
-            }
-
-            #io-ox-information-message {
-                display: none;
-            }
-        }
-
-        #io-ox-login-footer {
-            position: relative;
-            display: flex;
-            margin: 0;
-            padding: 4px;
-            justify-content: center;
-
-            .login-spacer {
-                display: none;
-            }
-
-            #io-ox-languages {
-                margin: 0;
-
-                .lang-label {
-                    margin-bottom: 0;
-                }
-            }
+            .lang-label { margin-bottom: 0; }
         }
     }
 }

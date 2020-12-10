@@ -234,10 +234,9 @@ define('io.ox/core/boot/form', [
 
             var configCss = '';
 
-            if (_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundColor + ' } ';
-            else if (_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background.wallpaper { background: ' + lc.backgroundImage + ' } ';
-            else if (!_.device('smartphone') && lc.backgroundImage) configCss += '#io-ox-login-background { background: ' + lc.backgroundImage + ' } ';
-            else if (!_.device('smartphone') && lc.backgroundColor) configCss += '#io-ox-login-background { background: ' + lc.backgroundColor + ' } ';
+            var background = lc.backgroundColor ? lc.backgroundColor : false;
+            if (!_.device('smartphone')) background = lc.backgroundImage ? lc.backgroundImage : false;
+            if (background) configCss += '#io-ox-login-container { background: ' + background + ' } ';
 
             if (lc.topVignette && lc.topVignette.transparency) configCss += '#io-ox-login-header { background: linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)) } ';
 
