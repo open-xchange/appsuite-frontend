@@ -270,6 +270,13 @@ define('io.ox/mail/compose/model', [
 
         create: function () {
             var self = this;
+
+            this.type = this.get('type') || (self.has('id') ? 'edit' : 'new');
+            this.original = this.get('original');
+            // unset type and original since both are only used on creation of a model
+            this.unset('type');
+            this.unset('original');
+
             // restore existing
             if (self.has('id')) {
                 return composeAPI.space.get(self.get('id')).then(function success(data) {
@@ -290,18 +297,13 @@ define('io.ox/mail/compose/model', [
             }
 
             //new/reply/replyall/forward/resend/edit/copy
-            var type = this.get('type') || 'new',
-                original = this.get('original'),
-                opt = {
-                    vcard: !/(edit|copy)/.test(type) && settings.get('appendVcard', false)
-                };
-            // unset type and original since both are only used on creation of a model
-            this.type = type;
-            this.unset('type');
-            this.unset('original');
-            return composeAPI.space.add({ type: type, original: original }, opt).then(function (data) {
-                // prevent that empty values overwrite existing values (see OXUIB-587 )
-                if (!original) {
+            var opt = {
+                vcard: !/(edit|copy)/.test(this.type) && settings.get('appendVcard', false)
+            };
+
+            return composeAPI.space.add({ type: this.type, original: this.original }, opt).then(function (data) {
+                // prevent that empty values overwrite predefined values (see OXUIB-587 )
+                if (!this.original) {
                     data = _.omit(data, function (value) { return !_.isBoolean(value) && !value; });
                     data.contentType = this.get('contentType') || data.contentType;
                 }
