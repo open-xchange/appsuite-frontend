@@ -20,7 +20,6 @@ define('io.ox/chat/views/chat', [
     'io.ox/chat/views/chatMember',
     'io.ox/chat/views/messages',
     'io.ox/chat/views/content',
-    'io.ox/chat/views/reference-preview',
     'io.ox/chat/views/typing',
     'io.ox/chat/events',
     'io.ox/chat/data',
@@ -31,7 +30,7 @@ define('io.ox/chat/views/chat', [
     'io.ox/core/strings',
     'io.ox/core/notifications',
     'io.ox/chat/views/dropzone'
-], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, ReferencePreview, typing, events, data, util, yell, ToolbarView, gt, strings, notifications, dropzone) {
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, typing, events, data, util, yell, ToolbarView, gt, strings, notifications, dropzone) {
 
     'use strict';
 
@@ -97,8 +96,6 @@ define('io.ox/chat/views/chat', [
             });
 
             this.on('dispose', this.onDispose);
-
-            this.listenTo(events, 'cmd:remove-reference', this.onRemoveReference);
 
             this.messagesView.messageId = this.messageId;
             // there are two cases when to reset the collection before usage
@@ -176,7 +173,6 @@ define('io.ox/chat/views/chat', [
                     ),
                     this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
-                this.$referencePreview = this.reference ? new ReferencePreview({ reference: this.reference }).render().$el : undefined,
                 $('<div class="controls">').append(
                     this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
                         $('<i class="fa fa-chevron-down" aria-hidden="true">'),
@@ -476,12 +472,6 @@ define('io.ox/chat/views/chat', [
 
             // remove reference preview
             this.onRemoveReference();
-        },
-
-        onRemoveReference: function () {
-            if (this.$referencePreview) this.$referencePreview.remove();
-            delete this.$referencePreview;
-            delete this.reference;
         },
 
         onChangeTitle: function (model) {
