@@ -802,7 +802,7 @@ define('io.ox/files/actions', [
         // get folder id
         if (baton.collection.has('one')) {
             var data = baton.first();
-            id = baton.collection.has('folders') ? data.id : data.folder_id;
+            id = data.folder_id || data.id;
         } else if (baton.app) {
             // use current folder
             id = baton.app.folder.get();
