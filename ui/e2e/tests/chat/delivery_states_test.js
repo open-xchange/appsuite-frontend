@@ -11,8 +11,6 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-const { expect } = require('chai');
-
 Feature('Chat - Delivery states');
 
 Before(async (users) => {
@@ -29,16 +27,14 @@ After(async (users) => {
 });
 
 Scenario('Update delivery states in private chats', async (I, users, chat) => {
-    const unreadColor = 'rgb(51, 51, 51)';
-    const readColor = 'rgb(2, 120, 212)';
-
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
-        I.waitForVisible('#firstCheck', 3, '.ox-chat');
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('none');
+        chat.sendMessage('Hi');
+        I.waitForElement('.delivery.server');
+        I.waitForDetached('.delivery.server');
+        I.waitForElement('.delivery.received');
     });
 
     await session('Bob', async () => {
@@ -48,9 +44,11 @@ Scenario('Update delivery states in private chats', async (I, users, chat) => {
     });
 
     await session('Alice', async () => {
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('block');
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'stroke'))[0]).to.equal(unreadColor);
+        chat.sendMessage('Whats up?');
+        await within('.ox-chat .messages', async () => {
+            I.dontSee('.delivery.server');
+            I.waitForElement('.delivery.received');
+        });
     });
 
     await session('Bob', async () => {
@@ -60,9 +58,8 @@ Scenario('Update delivery states in private chats', async (I, users, chat) => {
     });
 
     await session('Alice', async () => {
-        I.wait(1);
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(readColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'stroke'))[0]).to.equal(readColor);
+        I.waitForDetached('.delivery.received');
+        I.waitForElement('.delivery.seen');
     });
 });
 
@@ -70,8 +67,6 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
     await users.create();
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
-    const unreadColor = 'rgb(51, 51, 51)';
-    const readColor = 'rgb(2, 120, 212)';
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
@@ -83,9 +78,8 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
         chat.sendMessage('Hey group!');
 
-        I.waitForVisible('#firstCheck', 3, '.ox-chat');
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('none');
+        I.waitForElement('.delivery.server');
+        I.waitForDetached('.delivery.server');
     });
 
     await session('Bob', async () => {
@@ -95,20 +89,17 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
     });
 
     await session('Alice', async () => {
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('none');
+        chat.sendMessage('Whats up?');
+        await within('.ox-chat .messages', async () => {
+            I.waitForElement('.delivery.server');
+            I.waitForDetached('.delivery.server');
+        });
     });
 
     await session('Charlie', async () => {
         I.login({ user: users[2] });
         chat.openChat();
         I.waitForText('New Chat', 30);
-    });
-
-    await session('Alice', async () => {
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('block');
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'stroke'))[0]).to.equal(unreadColor);
     });
 
     await session('Bob', async () => {
@@ -118,10 +109,9 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
     });
 
     await session('Alice', async () => {
-        I.wait(1);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'display'))[0]).to.equal('block');
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(unreadColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'stroke'))[0]).to.equal(unreadColor);
+        I.waitForElement('.delivery.received');
+        I.wait(0.5);
+        I.dontSee('.delivery.seen');
     });
 
     await session('Charlie', async () => {
@@ -131,9 +121,8 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
     });
 
     await session('Alice', async () => {
-        I.wait(1);
-        expect((await I.grabCssPropertyFrom('.ox-chat #firstCheck', 'stroke'))[0]).to.equal(readColor);
-        expect((await I.grabCssPropertyFrom('.ox-chat #secondCheck', 'stroke'))[0]).to.equal(readColor);
+        I.waitForDetached('.delivery.received');
+        I.waitForElement('.delivery.seen');
     });
 });
 

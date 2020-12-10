@@ -87,7 +87,8 @@ Scenario('Receive email notifications from groups', async (I, users, chat) => {
     });
 });
 
-Scenario('Do not receive email notifications from a private chat', async (I, users, chat) => {
+// unskip when CAS-330 is resolved
+Scenario.skip('Do not receive email notifications from a private chat', async (I, users, chat) => {
     await session('Bob', async () => {
         I.login({ user: users[1] });
         I.click('~Settings');
