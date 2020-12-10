@@ -959,8 +959,12 @@ define('io.ox/mail/compose/view', [
 
         toggleEditorMode: function () {
 
-            var self = this, content;
+            var self = this, content,
+                signature = this.config.get('signature');
 
+            if (signature) {
+                this.config.set('signatureId', '');
+            }
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
@@ -984,7 +988,7 @@ define('io.ox/mail/compose/view', [
                     this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
                     this.app.getWindowNode().trigger('scroll');
                 }
-
+                if (signature) this.config.set('signatureId', signature.id);
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;
