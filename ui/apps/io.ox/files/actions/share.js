@@ -13,7 +13,6 @@
  */
 
 define('io.ox/files/actions/share', [
-    'gettext!io.ox/files'
 ], function () {
 
     'use strict';
