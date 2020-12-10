@@ -197,7 +197,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                 icon = this.pictureModel.get('pictureFileEdited');
             }
 
-            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0) {
+            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0 && icon === undefined) {
                 def.resolve(this.model.get('roomId'));
                 this.close();
                 return;

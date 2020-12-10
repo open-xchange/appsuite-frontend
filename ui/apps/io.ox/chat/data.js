@@ -667,7 +667,7 @@ define('io.ox/chat/data', [
             // edge case, when current user has been readded to the group
             if (members[data.user.email]) {
                 this.fetch();
-                this.trigger('change:icon', { silent: true });
+                this.trigger('change:iconId', { silent: true });
             }
             this.set('members', change);
         },
@@ -692,9 +692,7 @@ define('io.ox/chat/data', [
                     this.set('title', update.title);
                     break;
                 case 'image:changed':
-                    // why silently change, then trigger a different event?
-                    this.set({ icon: update.icon }, { silent: true });
-                    this.trigger('change:icon');
+                    this.set({ iconId: update.iconId });
                     break;
                 case 'chat:deleted':
                     this.set('members', {});
@@ -713,9 +711,9 @@ define('io.ox/chat/data', [
         },
 
         getIconUrl: function () {
-            if (!this.get('icon')) return;
+            if (!this.get('iconId')) return;
             var endpoint = this.get('type') !== 'channel' ? '/rooms/' : '/channels/';
-            return api.url + endpoint + this.get('roomId') + '/icon';
+            return api.url + endpoint + this.get('roomId') + '/icon/' + this.get('iconId');
         },
 
         isActive: function () { return !!this.get('active'); },

@@ -95,7 +95,7 @@ define('io.ox/chat/notifications', [
                     ? ox.base + '/apps/themes/default/fallback-image-group.png'
                     : ox.base + '/apps/themes/default/fallback-image-contact.png';
             if (opt.isMultiple) {
-                if (model.get('icon')) {
+                if (model.get('iconId')) {
                     url.request(model.getIconUrl()).then(function (icon) {
                         def.resolve(icon);
                     });

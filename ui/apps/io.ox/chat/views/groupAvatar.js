@@ -26,14 +26,14 @@ function (DisposableView, api, url, util) {
         className: 'group avatar image',
 
         initialize: function () {
-            this.listenTo(this.model, 'change:icon', this.update);
+            this.listenTo(this.model, 'change:iconId', this.update);
             if (this.model.isChannel()) this.$icon = $('<i class="fa fa-hashtag">');
             else if (this.model.isGroup()) this.$icon = $('<i class="fa fa-group">');
         },
 
         render: function () {
             this.$el.css('background-image', '').empty();
-            if (this.model.get('icon')) {
+            if (this.model.get('iconId')) {
                 url.request(this.model.getIconUrl()).then(function (url) {
                     if (this.disposed) return;
                     this.$el.css('backgroundImage', 'url("' + url + '")');
