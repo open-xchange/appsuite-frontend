@@ -111,6 +111,17 @@ Show rating string on mouse hover in feedback dialog. Default `true`.
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
 Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running. Default `true`.
 
+<config>io.ox/core//feedback/maxFeedbacks=`<number>`</config>
+maximum number of feedbacks that are allowed in one timeframe (works with relative and absolute dates)
+
+Default: `1` if io.ox/core//feedback/timeLimit is set else `undefined` (i.e. unlimited)
+
+<config>io.ox/core//feedback/timeLimit=`<string>`</config>
+Can be relative or absolute ISO strings to define a time, e.g. “2020-01-21” or “3M” (meaning within 3 months).
+See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details.
+
+Default: `false`
+
 ## Mail compose: tinyMCE text editor
 
 <config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
