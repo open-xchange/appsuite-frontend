@@ -529,7 +529,8 @@ define('io.ox/chat/data', [
         idAttribute: 'roomId',
 
         urlRoot: function () {
-            return api.url + '/rooms';
+            var endpoint = this.isChannel() && !this.isNew() ? 'channels' : 'rooms';
+            return api.url + '/' + endpoint;
         },
 
         initialize: function (attr) {
@@ -640,6 +641,17 @@ define('io.ox/chat/data', [
             return members && !!members[email];
         },
 
+        isAdmin: function (email) {
+            email = email || data.user.email;
+            var members = this.get('members');
+            return members && members[email] === 'admin';
+        },
+
+        isCreator: function (email) {
+            email = email || data.user.email;
+            return this.get('creator') === email;
+        },
+
         // members is array of email addresses
         removeMembers: function (members) {
             var change = _.extend({}, this.get('members'));
@@ -683,6 +695,9 @@ define('io.ox/chat/data', [
                     // why silently change, then trigger a different event?
                     this.set({ icon: update.icon }, { silent: true });
                     this.trigger('change:icon');
+                    break;
+                case 'chat:deleted':
+                    this.set('members', {});
                     break;
                 // no default
             }
@@ -1207,6 +1222,12 @@ define('io.ox/chat/data', [
                         room.set('lastMessage', _.extend({}, room.get('lastMessage'), message));
                     }
                 });
+            });
+
+            socket.on('chat:chat:deleted', function (message) {
+                var roomId = message.roomId;
+                data.chats.remove(roomId);
+                data.channels.remove(roomId);
             });
         },
 

@@ -181,7 +181,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             if (!_.isEqual(this.collection.pluck('email'), Object.keys(this.model.get('members') || {}))) {
                 var emails = this.collection.pluck('email');
                 if (this.model.isNew()) {
-                    updates.members = membersToObject(emails);
+                    if (!this.model.isChannel()) updates.members = membersToObject(emails);
                 } else {
                     var prevEmails = Object.keys(this.model.get('members')),
                         addedEmails = _.difference(emails, prevEmails),

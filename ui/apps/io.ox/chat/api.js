@@ -89,6 +89,11 @@ define('io.ox/chat/api', [
         return request({ method: 'PUT', url: url, processData: false, contentType: false });
     };
 
+    api.deleteGroup = function (roomId) {
+        var url = api.url + '/rooms/' + roomId;
+        return request({ method: 'DELETE', url: url });
+    };
+
     api.getUserId = function () { return request({ url: api.url + '/user' }); };
 
     api.elasticSearch = function (query) {

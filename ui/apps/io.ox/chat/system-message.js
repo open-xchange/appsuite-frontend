@@ -72,6 +72,11 @@ define('io.ox/chat/system-message', ['gettext!io.ox/chat'], function (gt) {
                 //#. %1$s: name of a chat participant
                 //#. %2$s: the new title
                 return gt('%1$s changed the group title to "%2$s"', getOriginatorName(context), json.title);
+            case 'chat:deleted':
+                if (me) return gt('You deleted this chat');
+                //#. %1$s: name of a chat participant
+                //#. %2$s: the new title
+                return gt('This chat has been deleted by "%1$s"', getOriginatorName(context));
             case 'changeDescription':
                 if (me) return gt('You changed the group description to "%1$s"', json.description);
                 //#. %1$s: name of a chat participant

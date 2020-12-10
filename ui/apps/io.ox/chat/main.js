@@ -94,6 +94,9 @@ define('io.ox/chat/main', [
 
             this.listenTo(settings, 'change:density', this.onChangeDensity);
 
+            this.listenTo(data.chats, 'remove', this.onRemoveFromCollection);
+            this.listenTo(data.channels, 'remove', this.onRemoveFromCollection);
+
             this.state = '{}';
         },
 
@@ -122,16 +125,17 @@ define('io.ox/chat/main', [
                 case 'open-private-chat': this.openPrivateChat(data); break;
                 case 'view-channel': this.viewChannel(data); break;
                 case 'join-channel': this.joinChannel(data); break;
-                case 'leave-channel': this.leaveChannel(data.id, false); break;
+                case 'leave-channel': this.leaveChannel(data.id); break;
                 case 'show-chat': this.showChat(data.id || data.cid, data); break;
                 case 'close-chat': this.closeChat(); break;
+                case 'delete-chat': this.deleteChat(data); break;
                 case 'show-history': this.showHistory(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
                 case 'show-file': this.showFile(data); break;
                 case 'show-message-file': this.showMessageFile(data); break;
                 case 'open-chat': this.resubscribeChat(data.id); break;
-                case 'unsubscribe-chat': this.unsubscribeChat(data.id, false); break;
+                case 'unsubscribe-chat': this.unsubscribeChat(data.id); break;
                 case 'add-member': this.addMember(data.id); break;
                 case 'switch-to-floating': this.toggleWindowMode('floating'); break;
                 case 'discard-app': this.hideApp(); break;
@@ -197,7 +201,7 @@ define('io.ox/chat/main', [
             members[data.user.email] = 'admin';
             members[cmd.email] = 'member';
             var room = new data.ChatModel({ type: 'private', members: members, active: true });
-            this.setState({ view: 'chat' }, { model: room });
+            this.setState({ view: 'chat', roomId: room.get('roomId') }, { model: room });
         },
 
         leaveGroup: function (groupId) {
@@ -271,6 +275,19 @@ define('io.ox/chat/main', [
 
         closeChat: function () {
             this.setState({ view: 'empty' });
+        },
+
+        deleteChat: function (cmd) {
+            var room = data.chats.get(cmd.id);
+            if (room.isGroup()) return api.deleteGroup(cmd.id);
+
+            room.destroy({ wait: true });
+            this.closeChat();
+        },
+
+        onRemoveFromCollection: function (model) {
+            var state = JSON.parse(this.state);
+            if (state.roomId === model.get('roomId')) this.closeChat();
         },
 
         showHistory: function () {

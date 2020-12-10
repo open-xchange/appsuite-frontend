@@ -540,7 +540,7 @@ define('io.ox/chat/views/chat', [
 
         markMessageAsRead: function () {
             if (this.hidden) return;
-            if (!this.model.isMember()) return;
+            if (this.model.isChannel() && !this.model.isMember()) return;
             var lastIndex = this.model.messages.findLastIndex(function (message) {
                 return message.get('sender') !== data.user.email;
             });
@@ -695,6 +695,21 @@ define('io.ox/chat/views/chat', [
             if (model.isMember()) return;
             if (model.get('active')) return;
             createMenuItem(this, 'join-channel', model.id, gt('Join channel'), 'join-leave', 'actions');
+        }
+    });
+
+    ext.point('io.ox/chat/detail/toolbar').extend({
+        id: 'delete-room',
+        index: 800,
+        custom: true,
+        draw: function (baton) {
+            var model = baton.model;
+            if (model.isPrivate()) return;
+            if (!model.isMember()) return;
+            if (model.isGroup() && !model.isAdmin()) return;
+            if (model.isChannel() && !(model.isAdmin() || model.isCreator())) return;
+
+            createMenuItem(this, 'delete-chat', model.id, model.isChannel() ? gt('Delete channel') : gt('Delete chat'), 'join-leave', 'delete');
         }
     });
 
