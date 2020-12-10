@@ -127,6 +127,17 @@ Enables/disables download pane for additional software components in settings.
 Current user theme. Default `default`
 
 
+<config>io.ox/core//feedback/maxFeedbacks=`<number>`</config>
+maximum number of feedbacks that are allowed in one timeframe (works with relative and absolute dates)
+
+Default: `1` if io.ox/core//feedback/timeLimit is set else `undefined` (i.e. unlimited)
+
+<config>io.ox/core//feedback/timeLimit=`<string>`</config>
+Can be relative or absolute ISO strings to define a time, e.g. “2020-01-21” or “3M” (meaning within 3 months).
+See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details.
+
+Default: `false`
+
 ## Mail compose: tinyMCE text editor
 
 <config>io.ox/core//maxUploadIdleTimeout</config>
