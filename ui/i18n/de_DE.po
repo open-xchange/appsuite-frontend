@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-01 14:53+0100\n"
+"PO-Revision-Date: 2020-12-10 11:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1429,9 +1429,10 @@ msgid "Create in public calendar"
 msgstr "In öffentlichem Kalender anlegen"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/calendar/main.js
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/core/relogin.js module:io.ox/core apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/mail/invitations/register.js apps/io.ox/onboarding/views.js
@@ -1644,6 +1645,7 @@ msgstr "Termin anlegen"
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
@@ -1652,10 +1654,10 @@ msgstr "Termin anlegen"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
-#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js module:io.ox/files
 #: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
@@ -2180,9 +2182,9 @@ msgstr "Fehler: Termine konnten nicht geladen werden"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
-#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
-#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
-#: module:plugins/portal
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Erneut versuchen"
 
@@ -2253,10 +2255,6 @@ msgid "Calendar account error"
 msgstr "Kalender-Kontofehler"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Edit accounts"
-msgstr "Konten bearbeiten"
-
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Erneut versuchen"
 
@@ -2270,6 +2268,10 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Successfully refreshed calendar"
 msgstr "Kalender erfolgreich aktualisiert"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Konten bearbeiten"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
@@ -3365,14 +3367,13 @@ msgid "Group name"
 msgstr "Gruppenname"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#, fuzzy
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
 "prefer a conversiom in a closed group, please create a group chat."
 msgstr ""
 "Andere Benutzer können Ihren Kanal unter \"Alle Kanäle\" finden und ihm "
-"beitreten. Wenn Sie ein Gespräch in einer geschlossenen Gruppe bevorzugen, "
-"erstellen Sie bitte einen Gruppenchat."
+"beitreten. Wenn Sie eine Konversation in einer geschlossenen Gruppe "
+"bevorzugen, erstellen Sie bitte einen Gruppenchat."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3380,7 +3381,6 @@ msgstr "Chat erstellen"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/chat/data.js
-#, fuzzy
 msgid "The group could not be saved since the name can not be empty"
 msgstr ""
 "Die Gruppe konnte nicht gespeichert werden, da der Name nicht leer sein darf"
@@ -3406,7 +3406,6 @@ msgid "Unknown command: %1$s"
 msgstr "Unbekannter Befehl: %1$s"
 
 #: apps/io.ox/chat/commands.js module:io.ox/chat
-#, fuzzy
 msgid "List all commands"
 msgstr "Alle Befehle auflisten"
 
@@ -3475,10 +3474,6 @@ msgstr "Ein Kanal mit diesem Namen ist bereits vorhanden"
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Ein Fehler ist aufgetreten. Bitte erneut versuchen ."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The message could not be sent."
-msgstr "Die Nachricht konnte nicht gesendet werden."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be hidden. Please try again."
@@ -3601,13 +3596,8 @@ msgstr "Alle Dateien"
 #. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
-#, fuzzy
 msgid "History"
 msgstr "Verlauf"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-msgid "Chats could not be loaded."
-msgstr "Chats konnten nicht geladen werden."
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Private chats"
@@ -3659,7 +3649,7 @@ msgstr "Anzeigeoptionen"
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #, fuzzy
 msgid "Select last chat on start"
-msgstr "Letzten Chat beim Start auswählen"
+msgstr "Beim Start letzten Chat auswählen"
 
 #. label of checkbox to enable/dsiable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
@@ -3718,7 +3708,7 @@ msgstr "Benachrichtigungen"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Show desktop notifications for new messages"
-msgstr "Desktopbenachrichtigungen für neue Nachrichten anzeigen"
+msgstr "Für neue Nachrichten Desktop-Benachrichtigungen anzeigen"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play notification sound for new messages"
@@ -3735,7 +3725,6 @@ msgid "Behavior"
 msgstr "Verhalten"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#, fuzzy
 msgid "Offline email notifications"
 msgstr "Offline-E-Mail-Benachrichtigungen"
 
@@ -3744,14 +3733,12 @@ msgid "Do not send any email notifications"
 msgstr "Keine E-Mail-Benachrichtigungen senden"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#, fuzzy
 msgid "Send email notifications for my private chats"
-msgstr "E-Mail-Benachrichtigungen für meine privaten Chats senden"
+msgstr "Für meine privaten Chats E-Mail-Benachrichtigungen senden"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#, fuzzy
 msgid "Send email notifications for all chats and channels"
-msgstr "E-Mail-Benachrichtigungen für alle Chats und Kanäle senden"
+msgstr "Für alle Chats und Kanäle E-Mail-Benachrichtigungen senden"
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You created this conversation"
@@ -3884,6 +3871,12 @@ msgid "Add members"
 msgstr "Mitglieder hinzufügen"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
+#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
+#: apps/io.ox/chat/views/history.js
+msgid "Close chat"
+msgstr "Chat schließen"
+
+#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Es sind noch keine Kanäle vorhanden"
 
@@ -3932,12 +3925,16 @@ msgid "Upload file"
 msgstr "Datei hochladen"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Close channel"
-msgstr "Kanal schließen"
+msgid "The message could not be deleted."
+msgstr "Die Nachricht konnte nicht gelöscht werden."
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Close chat"
-msgstr "Chat schließen"
+msgid ""
+"The message cannot be sent because it exceeds the maximum message length of "
+"%1$s characters."
+msgstr ""
+"Die Nachricht kann nicht gesendet werden, da sie die maximale "
+"Nachrichtenlänge von %1$s Zeichen überschreitet."
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
@@ -3960,24 +3957,16 @@ msgid "Edit chat"
 msgstr "Chat bearbeiten"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Close channel"
+msgstr "Kanal schließen"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Leave channel"
 msgstr "Kanal verlassen"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Kanal beitreten"
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "The message could not be deleted."
-msgstr "Die Nachricht konnte nicht gelöscht werden."
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid ""
-"The message cannot be sent because it exceeds the maximum message length of "
-"%1$s characters."
-msgstr ""
-"Die Nachricht kann nicht gesendet werden, da sie die maximale "
-"Nachrichtenlänge von %1$s Zeichen überschreitet."
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6057,7 +6046,6 @@ msgstr "Importieren"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
 #: module:io.ox/files apps/io.ox/files/contextmenu.js
-#, fuzzy
 msgid "Share / Permissions"
 msgstr "Freigeben / Berechtigungen"
 
@@ -6356,7 +6344,7 @@ msgstr ""
 "definieren. Unterstützte Trennzeichen sind das Komma und das Semikolon."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
+#: apps/io.ox/core/whatsnew/main.js
 msgid "Learn more"
 msgstr "Weitere Infos"
 
@@ -6449,9 +6437,9 @@ msgid "Currently refreshing"
 msgstr "Es wird aktualisiert"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
+#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-Mail"
@@ -6920,13 +6908,14 @@ msgstr "In %1$s speichern"
 msgid "Printout"
 msgstr "Ausdruck"
 
+#. title of dialog when contact subscription needs to be recreated on error
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/core/yell.js
-#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/reauth_handler.js
+#: module:io.ox/core/viewer apps/io.ox/core/yell.js apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/keychain/secretRecoveryDialog.js
+#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Fehler"
 
@@ -7167,7 +7156,7 @@ msgstr "Benutzerdefiniert"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
-msgstr "Standard-Design"
+msgstr "Standard-Theme"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
@@ -7245,7 +7234,7 @@ msgstr "Erster Tag der Woche: %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
-msgstr "Design"
+msgstr "Theme"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
@@ -7431,7 +7420,6 @@ msgstr "Abonnements"
 
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
-#, fuzzy
 msgid "Shared folders from \"%1$s\""
 msgstr "Freigegebene Ordner von \"%1$s\""
 
@@ -7445,13 +7433,10 @@ msgstr "OK"
 #. confirmation when the last folder associated with a domain is unsubscribed
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
-#, fuzzy
 msgid ""
-"You unsubscribed from all folders of \"%1$s\". Those folders will be removed "
+"You unsubscribed from all folders on \"%1$s\". Those folders will be removed "
 "from your account."
 msgstr ""
-"Sie haben sich von allen Ordnern auf \"%1$s\" abgemeldet. Diese Ordner "
-"werden aus Ihrem Konto entfernt."
 
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
@@ -8225,6 +8210,96 @@ msgstr ""
 msgid "Start video"
 msgstr "Video starten"
 
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+msgid "What's new in this version"
+msgstr "Was ist neu in dieser Version"
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+#: apps/io.ox/tours/whats-new.js
+msgid "What's new"
+msgstr "Was ist neu"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Federated Sharing of Files"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The sharing dialogs have been significantly updated to simplify the whole "
+"sharing process, and to facilitate the sharing of files between contexts and "
+"other deployments."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Improved \"Connect your device\" Wizard"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The \"Connect your device\" wizard now features simplified device selection, "
+"as well as the use of QR codes to make setting up your device even easier."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "%1$s Usability"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgctxt "app"
+msgid "OX Drive"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
+"sharing dialogs have also been simplified and search performance was "
+"improved."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Saving Email Drafts"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"Email drafts are now automatically saved in the drafts folder and are "
+"therefore available on all your devices by default."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Navigation Improvements"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The top navigation area has been redesigned to make accessing modules, help "
+"and settings easier."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Audio and Video"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"This release comes with the ability to hold a video or audio chat with other "
+"people. This can be scheduled within a calendar appointment, or started "
+"spontaneously from the toolbar, contacts, halo and other logical places. To "
+"help we have also added a presence indicator to the toolbar."
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Chat for %1$s"
+msgstr ""
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"With this release you will notice a new chat bubble icon in the toolbar. "
+"This opens the new chat bar and lets you write messages to any other OX App "
+"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+msgstr ""
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/tasks/actions.js
@@ -8370,6 +8445,14 @@ msgstr "Allgemeine Emoji-Symbole"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail
 msgid "All Emoji"
 msgstr "Alle Emoji-Symbole"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Change who has access?"
+msgstr ""
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "You are moving an item out of a shared folder. People will lose access."
+msgstr ""
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -8709,10 +8792,9 @@ msgstr ""
 msgid "Error: Failed to load files"
 msgstr "Fehler: Dateien konnten nicht geladen werden"
 
-#. title of dialog when contact subscription needs to be recreated on error
 #: apps/io.ox/files/main.js module:io.ox/files
-msgid "Access error"
-msgstr "Zugriffsfehler"
+msgid "Hide folder"
+msgstr ""
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -9020,8 +9102,8 @@ msgstr "Betrachter"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
-msgid "View files only"
-msgstr "Nur Dateien anzeigen"
+msgid "Read only"
+msgstr ""
 
 #. Role: view folder + read/write all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
@@ -9031,13 +9113,13 @@ msgstr "Überarbeiter"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
-msgid "View and edit files"
-msgstr "Dateien anzeigen und bearbeiten"
+msgid "Read and write"
+msgstr ""
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
-msgid "View, edit and delete files"
-msgstr "Dateien anzeigen, bearbeiten und löschen"
+msgid "Read, write and delete"
+msgstr ""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
@@ -9137,7 +9219,6 @@ msgid "Invited people only"
 msgstr "Nur eingeladene Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
 msgid "Anyone with the link and invited people"
 msgstr "Jeder mit dem Link und eingeladene Personen"
 
@@ -9176,7 +9257,6 @@ msgid "Do you really want to remove all shares?"
 msgstr "Möchten Sie wirklich alle Freigaben entfernen?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
 msgid "Unshare"
 msgstr "Freigabe aufheben"
 
@@ -9206,7 +9286,6 @@ msgid "Do you really want to discard all changes?"
 msgstr "Möchten Sie wirklich alle Änderungen verwerfen?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-#, fuzzy
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Jeder im Internet mit dem Link kann die Datei anzeigen."
 
@@ -9215,7 +9294,6 @@ msgid "Copy link"
 msgstr "Link kopieren"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-#, fuzzy
 msgid "Link options"
 msgstr "Link-Optionen"
 
@@ -10671,6 +10749,13 @@ msgstr "Speichern ..."
 msgid "Saved %s"
 msgstr "Gespeichert %s"
 
+#. When closing compose the user decides to keep the related draft or delete it as well.
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid ""
+"You are about to discard this message. Do you want to delete the related "
+"draft?"
+msgstr ""
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
@@ -10806,7 +10891,6 @@ msgstr ""
 "Das Kennwort wurde kürzlich geändert. Bitte geben Sie das neue Kennwort ein."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#, fuzzy
 msgid "The folder cannot be added because it was removed by the owner."
 msgstr ""
 "Der Ordner kann nicht hinzugefügt werden, da er vom Besitzer entfernt wurde."
@@ -10824,19 +10908,15 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Der Ordner kann nicht hinzugefügt werden, da der Link ungültig ist."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#, fuzzy
 msgid "This type of link and is unsupported and can't be added."
 msgstr ""
 "Diese Art von Link wird nicht unterstützt und kann nicht hinzugefügt werden."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#, fuzzy
 msgid ""
-"This folder was shared to another user. You are not allowed to add this "
-"folder."
+"This folder has been shared with another user. You are not allowed to add "
+"this folder."
 msgstr ""
-"Dieser Ordner wurde für einen anderen Benutzer freigegeben. Sie dürfen "
-"diesen Ordner nicht hinzufügen."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 #, fuzzy
@@ -10864,7 +10944,6 @@ msgstr "Zu %1$s hinzufügen"
 
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#, fuzzy
 msgid "Remove from %1$s"
 msgstr "Aus %1$s entfernen"
 
@@ -12783,7 +12862,6 @@ msgstr ""
 "folgenden Einstellungen in Ihrem CalDav-Client ein:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-#, fuzzy
 msgid "Please scan this code with your phone's camera:"
 msgstr "Scannen Sie diesen Code bitte mit Ihrer Telefonkamera:"
 
@@ -12850,23 +12928,23 @@ msgstr "iPhone oder iPad"
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Email with Android Mail"
-msgstr "E-Mails senden mit Android Mail"
+msgstr "E-Mails über Android Mail"
 
 #. 1$s product name of mail application, e.g. OX Mail
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Email with %1$s"
-msgstr "E-Mails senden mit %1$s"
+msgstr "E-Mails über %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Email with Apple Mail"
-msgstr "E-Mails senden mit Apple Mail"
+msgstr "E-Mails über Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #, fuzzy
 msgid "Email with iOS Mail"
-msgstr "E-Mails senden mit iOS Mail"
+msgstr "E-Mails über iOS Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
@@ -12885,13 +12963,10 @@ msgid "Link: "
 msgstr "Link: "
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#, fuzzy
 msgid ""
 "Please note: After downloading you will have to enable the profile in the "
-"settings App to complete the installation."
+"Settings app to complete the installation."
 msgstr ""
-"Bitte beachten Sie: Nach dem Herunterladen müssen Sie das Profil in der "
-"Einstellungen-App aktivieren, um die Installation abzuschließen."
 
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -12930,13 +13005,10 @@ msgstr ""
 "kann."
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#, fuzzy
 msgid ""
 "If an automatic configuration is not possible, please use the following "
-"information to manually setup your mail account:"
+"information to manually set up your mail account:"
 msgstr ""
-"Wenn eine automatische Konfiguration nicht möglich ist, verwenden Sie bitte "
-"die folgenden Informationen, um Ihr E-Mail-Konto manuell einzurichten:"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Incoming Server Settings (IMAP)"
@@ -14750,12 +14822,6 @@ msgstr ""
 "Sie können nun zusätzliche Verifizierungsoptionen hinzufügen, um die "
 "Sicherheit Ihres Kontos zu erhöhen."
 
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
-msgid "What's new"
-msgstr "Was ist neu"
-
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr ""
@@ -14776,10 +14842,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
 msgstr "Nicht mehr anzeigen"
-
-#: apps/io.ox/tours/whatsnew/main.js module:io.ox/core
-msgid "What's new in this version"
-msgstr "Was ist neu in dieser Version"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Upgrade to premium edition"
@@ -15932,6 +15994,57 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid ""
+#~ "You unsubscribed from all folders of \"%1$s\". Those folders will be "
+#~ "removed from your account."
+#~ msgstr ""
+#~ "Sie haben sich von allen Ordnern auf \"%1$s\" abgemeldet. Diese Ordner "
+#~ "werden aus Ihrem Konto entfernt."
+
+#~ msgid "Access error"
+#~ msgstr "Zugriffsfehler"
+
+#~ msgid "View files only"
+#~ msgstr "Nur Dateien anzeigen"
+
+#~ msgid "View and edit files"
+#~ msgstr "Dateien anzeigen und bearbeiten"
+
+#~ msgid "View, edit and delete files"
+#~ msgstr "Dateien anzeigen, bearbeiten und löschen"
+
+#, fuzzy
+#~ msgid ""
+#~ "This folder was shared to another user. You are not allowed to add this "
+#~ "folder."
+#~ msgstr ""
+#~ "Dieser Ordner wurde für einen anderen Benutzer freigegeben. Sie dürfen "
+#~ "diesen Ordner nicht hinzufügen."
+
+#, fuzzy
+#~ msgid ""
+#~ "Please note: After downloading you will have to enable the profile in the "
+#~ "settings App to complete the installation."
+#~ msgstr ""
+#~ "Bitte beachten Sie: Nach dem Herunterladen müssen Sie das Profil in der "
+#~ "Einstellungen-App aktivieren, um die Installation abzuschließen."
+
+#, fuzzy
+#~ msgid ""
+#~ "If an automatic configuration is not possible, please use the following "
+#~ "information to manually setup your mail account:"
+#~ msgstr ""
+#~ "Wenn eine automatische Konfiguration nicht möglich ist, verwenden Sie "
+#~ "bitte die folgenden Informationen, um Ihr E-Mail-Konto manuell "
+#~ "einzurichten:"
+
+#~ msgid "The message could not be sent."
+#~ msgstr "Die Nachricht konnte nicht gesendet werden."
+
+#~ msgid "Chats could not be loaded."
+#~ msgstr "Chats konnten nicht geladen werden."
 
 #~ msgid "Create new channel"
 #~ msgstr "Neuen Kanal erstellen"
