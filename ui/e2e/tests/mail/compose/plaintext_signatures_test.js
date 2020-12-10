@@ -274,3 +274,61 @@ Scenario('Add and replace signatures with special characters', async function (I
     I.seeInField({ css: 'textarea.plain-text' }, second);
     I.dontSeeInField({ css: 'textarea.plain-text' }, first);
 });
+
+Scenario('[OXUIB-177] Change signature and toggle editor mode', async (I, mail) => {
+
+    const first = 'My first signature';
+    const second = 'My second signature';
+
+    await Promise.all([
+        I.haveSetting({ 'io.ox/mail': { messageFormat: 'text' } }),
+        I.haveSnippet({
+            content: `<p>${first}</p>`,
+            displayname: 'First Signature',
+            misc: { insertion: 'below', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        }),
+        I.haveSnippet({
+            content: `<p>${second}</p>`,
+            displayname: 'Second Signature',
+            misc: { insertion: 'above', 'content-type': 'text/html' },
+            module: 'io.ox/mail',
+            type: 'signature'
+        })
+    ]);
+
+    I.login('app=io.ox/mail');
+    mail.newMail();
+    I.waitForVisible({ css: 'textarea.plain-text' });
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('First Signature');
+    I.seeInField({ css: 'textarea.plain-text' }, first);
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('HTML');
+    I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
+
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForText(first);
+    });
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('Second Signature');
+
+    await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForText(second);
+        I.dontSee(first);
+    });
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('Plain Text');
+    I.waitForVisible({ css: 'textarea.plain-text' });
+    I.seeInField({ css: 'textarea.plain-text' }, second);
+
+    I.click(mail.locators.compose.options);
+    I.clickDropdown('First Signature');
+    I.seeInField({ css: 'textarea.plain-text' }, first);
+    I.dontSeeInField({ css: 'textarea.plain-text' }, second);
+});
