@@ -547,10 +547,15 @@ define('io.ox/files/share/permissions', [
                 var bits = 0;
                 if (this.model.isFile()) {
                     bits = fileRoles[this.permissionPreSelection.getSelectedPermission()];
+                } else if (model.get('type') === 'guest' && /^(contacts|tasks)$/.test(this.model.get('module'))) {
+                    bits = roles.viewer.bit;
                 } else {
                     bits = roles[this.permissionPreSelection.getSelectedPermission()].bit;
                 }
+
+
                 model.set('bits', bits);
+
                 var newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
                 newEntity.find('.display_name').append($('<span class="added">').text('ADDED'));
                 return this.$el.prepend(newEntity);
