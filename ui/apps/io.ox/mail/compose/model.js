@@ -122,6 +122,13 @@ define('io.ox/mail/compose/model', [
             return _.cid({ id: mailPath.id, folder: mailPath.folderId });
         },
 
+        isEmpty: function () {
+            var hasRecipients = [].concat(this.get('to'), this.get('cc'), this.get('bcc')).length > 0,
+                hasContent = !!(this.get('content') + this.get('subject')),
+                hasAttachments = this.get('attachments').length > 0;
+            return !hasRecipients && !hasAttachments && !hasContent;
+        },
+
         onChangeMailPath: function (mailPath) {
             // ever writing operation creates a new draft
             if (this.get('mailPath')) this.set('mailPath', mailPath);

@@ -809,10 +809,15 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 def = $.when(),
-                mailPath = this.model.get('mailPath');
+                // failRestored spaces are set to dirty at load
+                hasChanged = this.isDirty(),
+                isEdit = /(edit)/.test(this.model.type),
+                isNotEmpty = !this.model.isEmpty();
+
+            var showDialog = isEdit || (hasChanged && isNotEmpty);
 
             // This dialog may gets automatically dismissed
-            if ((this.dirty() || mailPath) && !this.config.get('autoDismiss')) {
+            if (showDialog && !this.config.get('autoDismiss')) {
                 if (this.app.getWindow && this.app.getWindow().floating) {
                     this.app.getWindow().floating.toggle(true);
                 } else if (_.device('smartphone')) {
