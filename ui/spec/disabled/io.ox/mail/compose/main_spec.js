@@ -136,11 +136,11 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
                     expect(app.view.$el.find('a[data-name="disp_notification_to"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
                 });
                 it('should set attach vcard', function () {
-                    app.view.model.set('vcard', 1);
+                    app.view.model.set('vcard', true);
                     expect(app.view.$el.find('a[data-name="vcard"] i').hasClass('fa-check'), ' option is checked in menu options').to.be.true;
                 });
                 it('should set attach vcard', function () {
-                    app.view.model.set('vcard', 0);
+                    app.view.model.set('vcard', false);
                     expect(app.view.$el.find('a[data-name="vcard"] i').hasClass('fa-check'), ' option is unchecked in menu options').to.be.false;
                 });
                 it('should change editor mode from text to html', function () {

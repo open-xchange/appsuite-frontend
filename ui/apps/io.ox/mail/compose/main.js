@@ -55,7 +55,13 @@ define('io.ox/mail/compose/main', [
         perform: function (baton) {
             var self = this;
             return require(['io.ox/mail/compose/config', 'io.ox/mail/compose/view']).then(function (MailComposeConfig, MailComposeView) {
-                self.config = new MailComposeConfig(_.extend({}, baton.config, { type: self.model.type }));
+                var attachments = baton.model.get('attachments'),
+                    vcard = !!(attachments && attachments.findWhere({ origin: 'VCARD' })),
+                    type = self.model.type;
+                self.config = new MailComposeConfig(_.extend({}, baton.config, {
+                    type: type,
+                    vcard: vcard
+                }));
                 self.view = baton.view = new MailComposeView({ app: self, model: self.model, config: self.config });
                 if (_.device('smartphone')) return;
                 baton.win.nodes.body.append(self.view.toolbarContainer);
