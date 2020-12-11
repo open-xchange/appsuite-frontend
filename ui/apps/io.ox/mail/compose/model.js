@@ -83,6 +83,10 @@ define('io.ox/mail/compose/model', [
                         .uniq(function (address) {
                             return address.length > 1 ? address[1] : address[0];
                         })
+                        .each(function (address) {
+                            // allow proper diff management (mw returns null, tokenfield uses empty string)
+                            address[0] = _.isNull(address[0]) ? '' : address[0];
+                        })
                         .value();
                 }.bind(this));
                 // check for prefilled subject
