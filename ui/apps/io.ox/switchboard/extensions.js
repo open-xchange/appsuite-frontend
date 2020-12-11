@@ -95,7 +95,7 @@ define('io.ox/switchboard/extensions', [
                     return { presence: $el };
                 },
                 set: function (data, fields) {
-                    fields.presence.toggle(data.folder_id === 6);
+                    fields.presence.toggle(String(data.folder_id) === '6');
                     var icon = presence.getPresenceIcon(data.email1);
                     fields.presence.replaceWith(icon);
                     fields.presence = icon;

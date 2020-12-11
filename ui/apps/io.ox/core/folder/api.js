@@ -905,7 +905,7 @@ define('io.ox/core/folder/api', [
             params: {
                 action: 'allVisible',
                 altNames: true,
-                content_type: module,
+                content_type: module === 'contacts' ? 'contact' : module,
                 timezone: 'UTC',
                 tree: 1,
                 forceRetry: !!options.force,

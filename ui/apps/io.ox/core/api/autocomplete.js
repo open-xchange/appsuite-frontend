@@ -146,9 +146,9 @@ define('io.ox/core/api/autocomplete', [
                     _.each(self.fields, function (field) {
                         if (obj[field]) {
                             // magic for users beyond global adress book
-                            if (obj.folder_id !== 6 && obj.type === 'user') return;
+                            if (String(obj.folder_id) !== '6' && obj.type === 'user') return;
                             // remove users from contact api results
-                            if (self.options.users && obj.folder_id === 6 && obj.type === 'contact') return;
+                            if (self.options.users && String(obj.folder_id) === '6' && obj.type === 'contact') return;
                             // convert user from contact api to real user
                             if (obj.type === 'user' && obj.internal_userid) {
                                 obj.contact_id = obj.id;

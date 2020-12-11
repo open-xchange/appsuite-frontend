@@ -165,7 +165,7 @@ define('io.ox/core/api/user', [
                         }
                         // get new contact and trigger contact events
                         // skip this if GAB is missing
-                        if (data.folder_id === 6 && capabilities.has('!gab')) return;
+                        if (String(data.folder_id) === '6' && capabilities.has('!gab')) return;
                         // fetch contact
                         contactsApi.get({ folder_id: data.folder_id, id: data.contact_id }).done(function (contactData) {
                             contactsApi.trigger('update:' + _.ecid(contactData), contactData);

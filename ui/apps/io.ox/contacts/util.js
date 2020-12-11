@@ -28,7 +28,7 @@ define('io.ox/contacts/util', [
             index: 'last',
             id: 'department',
             draw: function (baton) {
-                if (baton.data.folder_id === 6 &&
+                if (String(baton.data.folder_id) === '6' &&
                     !!baton.data.department
                 ) {
                     this.append(

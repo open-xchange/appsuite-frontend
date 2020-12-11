@@ -52,7 +52,7 @@ define('io.ox/contacts/actions/invite', [
         }
 
         // check for anonymous contacts
-        if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+        if (list.length === 1 && (list[0].id === 0 || String(list[0].folder_id) === '0')) {
             var adress = list[0].email1 || list[0].email2 || list[0].email3;
             def = $.Deferred().resolve([{ type: 5, mail: adress }]);
         } else {

@@ -303,7 +303,7 @@ define('io.ox/backbone/views/actions/util', [
             if (!model) return false;
             var condition = String(action.folder).replace(/\w[\w:]+/ig, function (match) {
                 if (/^(undefined|null|true|false)$/.test(match)) return match;
-                if (match === 'gab') return baton.folder_id === 6;
+                if (match === 'gab') return String(baton.folder_id) === '6';
                 return model.can(match.toLowerCase());
             });
             try {

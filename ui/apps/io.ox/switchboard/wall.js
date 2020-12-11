@@ -69,7 +69,7 @@ define('io.ox/switchboard/wall', [
             e.preventDefault();
             var cid = $(e.currentTarget).closest('.wall-message').data('cid');
             var model = this.collection.get(cid);
-            var data = { email1: model.get('from'), folder_id: 6 };
+            var data = { email1: model.get('from'), folder_id: '6' };
             var baton = new ext.Baton({ data: [data] });
             actionsUtil.invoke('io.ox/switchboard/wall-user', baton);
         }

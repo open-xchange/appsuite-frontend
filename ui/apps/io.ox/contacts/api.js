@@ -82,10 +82,7 @@ define('io.ox/contacts/api', [
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
                 sort: '607',
-                order: 'asc',
-                admin: function () {
-                    return settings.get('showAdmin', false);
-                }
+                order: 'asc'
             },
             list: {
                 action: 'list',
