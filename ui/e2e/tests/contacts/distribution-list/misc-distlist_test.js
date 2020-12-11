@@ -23,7 +23,7 @@ After(async function (users) {
 
 const util = require('./util');
 
-Scenario.skip('Add external participant as contact', async function (I, contacts, dialogs) {
+Scenario('Add external participant as contact', async function (I, contacts, dialogs) {
     const haloview = locate({ css: '.io-ox-sidepopup .io-ox-halo' }).as('Halo View');
 
     I.login('app=io.ox/contacts');
