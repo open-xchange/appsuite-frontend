@@ -135,6 +135,46 @@ Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs
     await context.remove();
 });
 
+Scenario('Cannot create or edit channel to have the same name', async (I, dialogs, chat) => {
+    const channelTitle = 'Only one';
+    const alternativeTitle = 'Another one';
+
+    I.login();
+    chat.openChat();
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Channel');
+
+    chat.fillNewChannelForm(channelTitle);
+    I.click(locate('button').withText('Create channel'), '.ox-chat-popup');
+
+    I.waitForElement('.ox-chat .controls');
+    I.waitForElement('~Close chat');
+    I.click('~Close chat');
+
+    I.waitForText('New Chat', 30);
+    I.click('New Chat');
+    I.clickDropdown('Channel');
+
+    chat.fillNewChannelForm(channelTitle);
+    I.click(locate('button').withText('Create channel'), '.ox-chat-popup');
+
+    I.waitForText('A channel with the same name already exists', 5, '.io-ox-alert-error');
+    I.fillField('Channel name', alternativeTitle);
+    dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForElement('.ox-chat .controls');
+    I.clickToolbar('~More actions');
+    I.clickDropdown('Edit channel');
+
+    dialogs.waitForVisible();
+    I.fillField('Channel name', channelTitle);
+    dialogs.clickButton('Save');
+
+    I.waitForText('A channel with the same name already exists', 5, '.io-ox-alert-error');
+});
+
 Scenario('Preview, join and leave a channel', async (I, users, chat) => {
     const [alice, bob] = users;
     const name = `${bob.get('given_name')} ${bob.get('sur_name')} `;
