@@ -10,7 +10,7 @@
  * @author Anne Matthes <anne.matthes@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
-Feature('Chat search');
+Feature('Chat > Search');
 
 Before(async (users) => {
     await Promise.all([

@@ -13,7 +13,7 @@
 
 const moment = require('moment');
 
-Feature('Create chats');
+Feature('Chat > Create chats');
 
 Before(async (users) => {
     await Promise.all([

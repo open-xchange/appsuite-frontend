@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat layout');
+Feature('Chat > Layout');
 
 Before(async (users) => {
     await Promise.all([

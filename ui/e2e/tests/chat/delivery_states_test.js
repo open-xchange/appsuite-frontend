@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat - Delivery states');
+Feature('Chat > Delivery states');
 
 Before(async (users) => {
     await Promise.all([

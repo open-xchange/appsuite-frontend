@@ -10,7 +10,7 @@
  * @author Anne Matthes <anne.matthes@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
-Feature('Chat appearance');
+Feature('Chat > Appearance');
 
 Before(async (users) => {
     await users.create();

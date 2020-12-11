@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat - Group chats');
+Feature('Chat > Group chats');
 
 Before(async (users) => {
     await Promise.all([

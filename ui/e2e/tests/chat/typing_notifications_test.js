@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat typing notifications');
+Feature('Chat > Typing notifications');
 
 Before(async (users) => {
     await Promise.all([

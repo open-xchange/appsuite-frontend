@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat - SMTP');
+Feature('Chat > SMTP');
 
 Before(async (users) => {
     await Promise.all([

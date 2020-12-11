@@ -13,7 +13,7 @@
 
 const { expect } = require('chai');
 
-Feature('Chat accessibility');
+Feature('Chat > Accessibility');
 
 let context;
 

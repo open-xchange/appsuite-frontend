@@ -10,7 +10,7 @@
  * @author Anne Matthes <anne.matthes@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
-Feature('Chat sidebar');
+Feature('Chat > Sidebar');
 
 Before(async (users) => {
     await Promise.all([

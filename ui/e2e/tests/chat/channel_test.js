@@ -11,7 +11,7 @@
  */
 /// <reference path="../../steps.d.ts" />
 
-Feature('Chat - Channels');
+Feature('Chat > Channels');
 
 let context;
 

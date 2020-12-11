@@ -13,7 +13,7 @@
 
 const { expect } = require('chai');
 
-Feature('Chat commands and emojis');
+Feature('Chat > Commands and emojis');
 
 Before(async (users) => {
     await Promise.all([
