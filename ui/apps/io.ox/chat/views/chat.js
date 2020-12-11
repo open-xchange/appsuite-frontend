@@ -469,9 +469,6 @@ define('io.ox/chat/views/chat', [
                 if (this.reference) message.reference = this.reference;
                 this.model.postMessage(message);
             }
-
-            // remove reference preview
-            this.onRemoveReference();
         },
 
         onChangeTitle: function (model) {
