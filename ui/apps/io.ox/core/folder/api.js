@@ -803,7 +803,7 @@ define('io.ox/core/folder/api', [
         do {
             result.push(data = pool.getModel(current).toJSON());
             current = data.folder_id;
-            done = String(current) === '1';
+            done = String(current) === '1' || current === id;
         } while (current && !done);
 
         // resolve in reverse order (root > folder)
