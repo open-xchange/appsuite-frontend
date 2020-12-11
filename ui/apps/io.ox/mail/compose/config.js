@@ -27,8 +27,6 @@ define('io.ox/mail/compose/config', [
             return {
                 // based on model.type
                 type: 'new',
-                // enable auto-remove on "discard"
-                autoDiscard: true,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
                 preferredEditorMode: mode,

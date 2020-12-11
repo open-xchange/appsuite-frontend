@@ -809,9 +809,7 @@ define('io.ox/mail/compose/view', [
 
             var self = this,
                 def = $.when(),
-                mailPath = this.model.get('mailPath'),
-                // "edit draft" case of rdb implementation
-                editFor = self.model.get('meta').editFor;
+                mailPath = this.model.get('mailPath');
 
             // This dialog may gets automatically dismissed
             if ((this.dirty() || mailPath) && !this.config.get('autoDismiss')) {
@@ -835,12 +833,9 @@ define('io.ox/mail/compose/view', [
                     self.saveDraft().then(def.resolve, def.reject);
                 })
                 .on('delete', function () {
-                    var isAutoDiscard = self.config.get('autoDiscard');
+                    // draft mail gets automatically deleted once the space gets removed (real drafts)
+                    // MWB-783 covers edit-case for 'rdb'
                     def.resolve();
-                    // TODO-859: check if this matches mailPath scenario
-                    if (!isAutoDiscard || !editFor) return;
-                    // only delete autosaved drafts that are not saved manually and have a msgref
-                    mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
                 })
                 .open();
             }
