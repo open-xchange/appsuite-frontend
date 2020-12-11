@@ -53,7 +53,6 @@ define('io.ox/chat/views/chat', [
 
             this.roomId = options.roomId;
             this.messageId = options.messageId;
-            this.reference = options.reference;
             this.model = this.model || data.chats.get(this.roomId);
 
             // we create the scrollpane early to pass it along the view chain
@@ -465,9 +464,7 @@ define('io.ox/chat/views/chat', [
                 this.model.postMessage({ content: content, replyTo: replyTo });
                 this.onCancelSpecialMode();
             } else {
-                var message = { content: content };
-                if (this.reference) message.reference = this.reference;
-                this.model.postMessage(message);
+                this.model.postMessage({ content: content });
             }
         },
 
