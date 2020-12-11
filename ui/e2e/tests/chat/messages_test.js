@@ -116,37 +116,58 @@ Scenario('Edit a sent message', async (I, users, chat) => {
     const chatLocator = '.ox-chat .chat-rightside';
     const controlsLocator = chatLocator + ' .controls';
 
-    I.login({ user: users[0] });
-    chat.openChat();
-    chat.createPrivateChat(users[1].userdata.email1);
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.openChat();
+        chat.createPrivateChat(users[1].userdata.email1);
 
-    // via dropdown menu
-    I.retry(3).click('.messages svg', chatLocator);
-    I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Edit'));
-    I.pressKey('Backspace');
-    I.pressKey('!');
-    I.click('~Send', controlsLocator);
-    I.waitForElement(locate('.messages span').withText('Edited'), 3, chatLocator);
-    I.see('Hello!', chatLocator);
+        // via dropdown menu
+        I.retry(3).click('.messages svg', chatLocator);
+        I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Edit'));
+        I.pressKey('Backspace');
+        I.pressKey('!');
+        I.click('~Send', controlsLocator);
+        I.waitForElement(locate('.messages span').withText('Edited'), 3, chatLocator);
+        I.see('Hello!', chatLocator);
 
-    // via key up
-    chat.sendMessage('are you?');
-    I.pressKey('ArrowUp');
-    I.fillField('~Message', 'How ');
-    I.pressKey('Enter');
-    I.waitForText('How are you?', chatLocator);
-    I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
+        // via key up
+        chat.sendMessage('are you?');
+        I.pressKey('ArrowUp');
+        I.fillField('~Message', 'How ');
+        I.pressKey('Enter');
+        I.waitForText('How are you?', chatLocator);
+        I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
+    });
+
+    await session('Bob', async () => {
+        I.login({ user: users[1] });
+        chat.openChat();
+        I.waitForText('User', 30, '.ox-chat');
+        I.click(locate('.ox-chat li').withText('User'));
+        I.waitForText('How are you?', chatLocator);
+        I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
+    });
 });
 
 Scenario('Delete a message', async (I, users, chat) => {
-    I.login({ user: users[0] });
-    chat.openChat();
-    chat.createPrivateChat(users[1].userdata.email1);
-    chat.sendMessage('Stupid message');
+    await session('Alice', async () => {
+        I.login({ user: users[0] });
+        chat.openChat();
+        chat.createPrivateChat(users[1].userdata.email1);
+        chat.sendMessage('Stupid message');
 
-    I.retry(3).click('.ox-chat .messages svg');
-    I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Delete'));
-    I.waitForText('This message was deleted', 3, '.ox-chat .messages');
+        I.retry(3).click('.ox-chat .messages svg');
+        I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Delete'));
+        I.waitForText('This message was deleted', 3, '.ox-chat .messages');
+    });
+
+    await session('Bob', async () => {
+        I.login({ user: users[1] });
+        chat.openChat();
+        I.waitForText('User', 30, '.ox-chat');
+        I.click(locate('.ox-chat li').withText('User'));
+        I.waitForText('This message was deleted', 3, '.ox-chat .messages');
+    });
 });
 
 Scenario('Reply to a message', async (I, users, chat) => {
@@ -171,6 +192,11 @@ Scenario('Reply to a message', async (I, users, chat) => {
         I.pressKey('Enter');
         I.waitForElement(locate('.message-quote .body').withText('Hello.').inside('.ox-chat .messages .myself'));
         I.waitForElement(locate('.body').withText('Hi!').inside('.ox-chat .messages .myself'));
+    });
+
+    await session('Alice', async () => {
+        I.waitForElement(locate('.message-quote .body').withText('Hello.').inside('.ox-chat .messages:not(.myself)'));
+        I.waitForElement(locate('.body').withText('Hi!').inside('.ox-chat .messages:not(.myself)'));
     });
 });
 
