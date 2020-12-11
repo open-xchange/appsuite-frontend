@@ -45,7 +45,7 @@ define('io.ox/mail/compose/main', [
             var self = this;
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
-                if (baton.data && baton.data.id) baton.model.restored = true;
+                baton.model.restored = !!(baton.data && baton.data.id);
                 return self.model.initialized;
             });
         }

@@ -758,6 +758,10 @@ define('io.ox/mail/compose/view', [
             node.fadeIn();
         },
 
+        isDirty: function () {
+            return !_.isEmpty(this.model.deepDiff(this.initialModel));
+        },
+
         dirty: function (state) {
             if (state === false) {
                 // update content here as the update events from the editor might be throttled
@@ -766,7 +770,8 @@ define('io.ox/mail/compose/view', [
             } else if (state === true) {
                 this.initialModel = {};
             } else {
-                return !_.isEmpty(this.model.deepDiff(this.initialModel));
+                // deprecated: use isDirty instead
+                return this.isDirty();
             }
         },
 
