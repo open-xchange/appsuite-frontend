@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-10 11:40+0100\n"
+"PO-Revision-Date: 2020-12-11 15:53+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3606,7 +3606,7 @@ msgstr "Private Chats"
 #. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Group chats"
-msgstr "Chats gruppieren"
+msgstr "Gruppenchats"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Channels"
