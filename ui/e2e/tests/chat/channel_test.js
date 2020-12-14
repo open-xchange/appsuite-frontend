@@ -30,6 +30,7 @@ After(async (users) => {
     await context.remove();
 });
 
+// TODO: Unskip when CAS-335 is resolved
 Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs, users) => {
     const [alice, bob] = users;
     // Check initial photo: Empty | Initial name: Announcements
@@ -135,7 +136,8 @@ Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs
     await context.remove();
 });
 
-Scenario('Cannot create or edit channel to have the same name', async (I, dialogs, chat) => {
+// TODO: Unskip when CAS-335 is resolved
+Scenario.skip('Cannot create or edit channel to have the same name', async (I, dialogs, chat) => {
     const channelTitle = 'Only one';
     const alternativeTitle = 'Another one';
 
