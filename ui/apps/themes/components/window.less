@@ -607,12 +607,14 @@
     &.maximized {
         width: 1060px;
         height: ~"calc(100% - 72px)";
+        max-width: 100%;
         max-height: 1200px;
         top: 0px;
         left: ~"calc(50% - 530px)";
 
         @media (max-height: 750px) {
             height: 100%;
+            top: 0px !important
         }
 
         .floating-header .controls button[data-action="maximized"] {
