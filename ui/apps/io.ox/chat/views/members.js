@@ -15,8 +15,9 @@ define('io.ox/chat/views/members', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
     'io.ox/chat/data',
+    'io.ox/chat/api',
     'io.ox/switchboard/presence'
-], function (Disposable, AvatarView, data, presence) {
+], function (Disposable, AvatarView, data, api, presence) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/chat/views/members', [
         },
 
         renderEntry: function (model) {
-            if (model.id === data.user.email) return;
+            if (api.isMyself(model.id)) return;
             return $('<li>').attr('data-id', model.id).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,

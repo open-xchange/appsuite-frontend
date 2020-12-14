@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/system-message', ['gettext!io.ox/chat'], function (gt) {
+define('io.ox/chat/system-message', ['io.ox/chat/api', 'gettext!io.ox/chat'], function (api, gt) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/chat/system-message', ['gettext!io.ox/chat'], function (gt) {
         }
 
         var originator = model.get('sender');
-        var me = originator === data.user.email;
+        var me = api.isMyself(originator);
         var members;
         var context = {
             members: getMembers(json),

@@ -279,7 +279,7 @@ define('io.ox/chat/views/chat', [
                 prevTop = this.scrollInfo.prevTop,
                 isScrolledDown = this.scrollInfo.isScrolledDown,
                 multipleMessages = added.length > 1,
-                isCurrentUser = added[0].get('sender') === data.user.email;
+                isCurrentUser = api.isMyself(added[0].get('sender'));
 
             if (multipleMessages || isCurrentUser || isScrolledDown) {
                 if (this.autoScroll) this.scrollToBottom();
@@ -377,7 +377,7 @@ define('io.ox/chat/views/chat', [
             // cursor up handling to edit last own message
             // check if user has already typed something
             if (e.which === 38 && !this.specialMode && !this.model.get('draft')) {
-                var last = this.model.getLastMessageForUser(data.user.email);
+                var last = this.model.getLastMessageForUser(api.userId);
                 if (last) this.onMessageEdit(last);
             }
             if (e.which === 13) {
@@ -526,7 +526,7 @@ define('io.ox/chat/views/chat', [
             if (this.hidden) return;
             if (this.model.isChannel() && !this.model.isMember()) return;
             var lastIndex = this.model.messages.findLastIndex(function (message) {
-                return message.get('sender') !== data.user.email;
+                return !api.isMyself(message.get('sender'));
             });
             if (lastIndex < 0) return;
             var message = this.model.messages.at(lastIndex);

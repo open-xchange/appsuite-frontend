@@ -26,7 +26,11 @@ define('io.ox/chat/api', [
         host: host,
         urlRoot: url.href,
         url: url.href + 'api',
-        origin: url.origin
+        origin: url.origin,
+        userId: switchboardApi.userId,
+        isMyself: function (id) {
+            return switchboardApi.isMyself(id);
+        }
     };
 
     function refreshJWT(payload) {

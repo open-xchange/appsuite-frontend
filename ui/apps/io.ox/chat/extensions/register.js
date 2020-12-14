@@ -16,10 +16,11 @@ define('io.ox/chat/extensions/register', [
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
     'io.ox/chat/data',
+    'io.ox/chat/api',
     'io.ox/chat/client',
     'io.ox/core/api/account',
     'gettext!io.ox/chat'
-], function (ext, actionsUtil, capabilities, data, client, account, gt) {
+], function (ext, actionsUtil, capabilities, data, api, client, account, gt) {
 
     'use strict';
 
@@ -272,7 +273,7 @@ define('io.ox/chat/extensions/register', [
                     .pluck('1')
                     .compact()
                     .unique()
-                    .without(data.user.email)
+                    .without(api.userId)
                     .value();
                 client.openChat({ members: members, title: mail.subject });
             });

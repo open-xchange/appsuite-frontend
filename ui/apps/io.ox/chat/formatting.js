@@ -112,7 +112,7 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
 
         return function (mention) {
             if (!me) {
-                var user = data.users.getByMail(data.user.email);
+                var user = data.users.getMyself();
                 me = ['nickname', 'first_name', 'last_name']
                     .map(function (field) { return user.get(field); })
                     .filter(Boolean)

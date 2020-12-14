@@ -190,21 +190,8 @@ define('io.ox/chat/views/chatListEntry', [
         },
 
         onChangeLastMessage: function () {
-            // var model = this.model;
-            //     isPrivate = model.get('type') === 'private',
-            //     isCurrentUser = model.get('lastMessage').sender === data.user.email,
-            //     lastMessage = this.getLastMessage(),
-            //     isSystemMessage = lastMessage ? lastMessage.type === 'system' : false;
-            // this.lastMessage = lastMessage;
             this.$('.last-modified').text(this.model.getLastMessageDate());
             this.$('.last-message').text(this.model.getLastMessageText());
-            // this.$('.delivery')
-            //     .toggleClass('hidden', !isCurrentUser)
-            //     .removeClass('server received seen')
-            //     .addClass(isCurrentUser ? util.getDeliveryStateClass(model.get('lastMessage').deliveryState) : '');
-            // this.$('.sender')
-            //     .toggleClass('hidden', isCurrentUser || isPrivate || isSystemMessage)
-            //     .text(model.getLastSenderName() + ':');
         }
     });
 

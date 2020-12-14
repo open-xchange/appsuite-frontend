@@ -191,7 +191,7 @@ define('io.ox/chat/main', [
         openPrivateChat: function (cmd) {
 
             if (!cmd.email) return console.error('openPrivateChat(): Missing email address');
-            if (cmd.email === data.user.email) return;
+            if (api.isMyself(cmd.email)) return;
 
             var chat = data.chats.findPrivateRoom(cmd.email);
 
@@ -202,7 +202,7 @@ define('io.ox/chat/main', [
             }
 
             var members = {};
-            members[data.user.email] = 'admin';
+            members[api.userId] = 'admin';
             members[cmd.email] = 'member';
             var room = new data.ChatModel({ type: 'private', members: members, active: true });
             this.setState({ view: 'chat', roomId: room.get('roomId') }, { model: room });
@@ -523,7 +523,8 @@ define('io.ox/chat/main', [
         },
 
         draw: function () {
-            var user = data.users.getByMail(data.user.email),
+
+            var user = data.users.getByMail(api.userId),
                 mode = settings.get('mode') || 'sticky';
 
             // start with BAD style and hard-code stuff

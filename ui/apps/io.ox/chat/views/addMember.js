@@ -16,9 +16,10 @@ define('io.ox/chat/views/addMember', [
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
     'io.ox/chat/data',
+    'io.ox/chat/api',
     'gettext!io.ox/chat',
     'io.ox/participants/add'
-], function (Disposable, Typeahead, pModel, data, gt) {
+], function (Disposable, Typeahead, pModel, data, api, gt) {
 
     'use strict';
 
@@ -46,7 +47,7 @@ define('io.ox/chat/views/addMember', [
                         });
                         return _(result).filter(function (model) {
                             var email = model.get(model.get('field') || 'email1');
-                            if (email === data.user.email) return false;
+                            if (api.isMyself(email)) return false;
                             if (self.collection.get(email)) return false;
                             return true;
                         });

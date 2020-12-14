@@ -78,7 +78,7 @@ define('io.ox/chat/data', [
             }.bind(this));
 
             // collect some additional infos
-            var userModel = data.users.getByMail(data.user.email);
+            var userModel = data.users.getByMail(api.userId);
             this.set(_.extend({
                 displayName: userModel.getName(),
                 preferredLocale: ox.locale
@@ -113,7 +113,7 @@ define('io.ox/chat/data', [
         idAttribute: 'email',
 
         isMyself: function () {
-            return this.id === data.user.email;
+            return api.isMyself(this.id);
         },
 
         getShortName: function () {
@@ -153,6 +153,10 @@ define('io.ox/chat/data', [
                 return cache[email];
             };
         }()),
+
+        getMyself: function () {
+            return this.getByMail(api.userId);
+        },
 
         getName: function (email) {
             return this.getByMail(email).getName();
@@ -237,7 +241,7 @@ define('io.ox/chat/data', [
         },
 
         defaults: function () {
-            return { content: '', sender: data.user.email, date: +moment(), type: 'text' };
+            return { content: '', sender: api.userId, date: +moment(), type: 'text' };
         },
 
         initialize: function () {
@@ -247,7 +251,7 @@ define('io.ox/chat/data', [
             this.isSystem = _.constant(type === 'system');
             this.isCommand = _.constant(type === 'command');
             this.isUser = _.constant(type === 'text' || type === 'file' || type === 'command');
-            this.isMyself = _.constant(type !== 'system' && this.get('sender') === data.user.email);
+            this.isMyself = _.constant(type !== 'system' && this.get('sender') === api.userId);
         },
 
         isDeleted: function () {
@@ -371,7 +375,7 @@ define('io.ox/chat/data', [
         setInitialDeliveryState: function () {
             var room = data.chats.get(this.get('roomId'));
             if (!room) return;
-            if (this.get('sender') !== data.user.email) return;
+            if (this.get('sender') !== api.userId) return;
 
             if (room.get('type') === 'private') {
                 if (this.get('deliveryState')) return;
@@ -379,7 +383,7 @@ define('io.ox/chat/data', [
             } else if (room.get('type') === 'group') {
                 var deliveryState = _.clone(this.get('deliveryState')) || {};
                 room.members.forEach(function (member) {
-                    if (member.get('email') === data.user.email) return;
+                    if (member.get('email') === api.userId) return;
                     deliveryState[member.get('email')] = deliveryState[member.get('email')] || {
                         state: 'server',
                         modified: +moment()
@@ -483,7 +487,7 @@ define('io.ox/chat/data', [
             var model = this.get(obj.messageId);
             if (model) return model;
             // try to find via clientSideMessageId
-            if (obj.sender === data.user.email && obj.clientSideMessageId) {
+            if (api.isMyself(obj.sender) && obj.clientSideMessageId) {
                 model = this.findWhere({ clientSideMessageId: obj.clientSideMessageId });
                 if (model) return model;
             }
@@ -590,7 +594,7 @@ define('io.ox/chat/data', [
         },
 
         getTitle: function () {
-            var members = _(this.members.reject(function (m) { return m.get('email') === data.user.email; }));
+            var members = _(this.members.reject(function (m) { return api.isMyself(m.get('email')); }));
             return this.get('title') || members.invoke('getName').sort().join('; ');
         },
 
@@ -631,24 +635,24 @@ define('io.ox/chat/data', [
         getFirstMember: function () {
             // return first member that is not current user
             return this.members.find(function (member) {
-                return member.get('email') !== data.user.email;
+                return !api.isMyself(member.get('email'));
             });
         },
 
         isMember: function (email) {
-            email = email || data.user.email;
+            email = email || api.userId;
             var members = this.get('members');
             return members && !!members[email];
         },
 
         isAdmin: function (email) {
-            email = email || data.user.email;
+            email = email || api.userId;
             var members = this.get('members');
             return members && members[email] === 'admin';
         },
 
         isCreator: function (email) {
-            email = email || data.user.email;
+            email = email || api.userId;
             return this.get('creator') === email;
         },
 
@@ -665,7 +669,7 @@ define('io.ox/chat/data', [
         addMembers: function (members) {
             var change = _.extend({}, this.get('members'), members);
             // edge case, when current user has been readded to the group
-            if (members[data.user.email]) {
+            if (members[api.userId]) {
                 this.fetch();
                 this.trigger('change:iconId', { silent: true });
             }
@@ -761,7 +765,7 @@ define('io.ox/chat/data', [
 
                 var consumed = false, consume = function () { consumed = true; };
                 // set this here such that message previews can identify the sender, but this will be ignored by the server
-                attr.sender = data.user.email;
+                attr.sender = api.userId;
                 events.trigger('message:post', { attr: attr, room: this, consume: consume });
                 if (consumed) return lastDeferred;
 
@@ -970,7 +974,7 @@ define('io.ox/chat/data', [
             if (!model || !model.isChannel()) return;
 
             var members = _.clone(model.get('members')) || {};
-            members[data.user.email] = 'member';
+            members[api.userId] = 'member';
             model.set({ active: true, members: members });
             data.chats.add(model);
 
@@ -1155,7 +1159,7 @@ define('io.ox/chat/data', [
                 function process(message) {
 
                     if (util.strings.greaterThan(message.get('messageId'), messageId)) return;
-                    if (message.isMyself() !== (userId !== data.user.email)) return;
+                    if (message.isMyself() !== (userId !== api.userId)) return;
 
                     var deliveryState = message.get('deliveryState') || {},
                         prevState = (deliveryState[userId] || {}).state || deliveryState.state || message.get('deliveryState');
@@ -1180,7 +1184,7 @@ define('io.ox/chat/data', [
             socket.on('chat:message:new', function (attr) {
                 var roomId = attr.roomId,
                     message = attr.message,
-                    mySelf = message.sender === data.user.email;
+                    mySelf = api.isMyself(message.sender);
 
                 // stop typing
                 events.trigger('typing:' + roomId, message.sender, false);
@@ -1245,12 +1249,11 @@ define('io.ox/chat/data', [
         },
 
         getUserId: function () {
-            return api.getUserId().then(function (chatUser) {
-                data.user = chatUser;
-                data.user.email = data.user.email || data.user.userId;
-                data.userSettings = new UserSettings(chatUser.settings);
-                data.serverConfig = chatUser.config || {};
-                this.set('userId', chatUser.id);
+            return api.getUserId().then(function (user) {
+                data.user = user;
+                data.userSettings = new UserSettings(user.settings);
+                data.serverConfig = user.config || {};
+                this.set('userId', api.userId);
                 this.initialized.resolve();
             }.bind(this))
             .fail(function () {

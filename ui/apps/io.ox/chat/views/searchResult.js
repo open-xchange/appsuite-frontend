@@ -65,9 +65,10 @@ define('io.ox/chat/views/searchResult', [
                         .search(query, res.index, res.hash, true)
                         .filter(function (user) {
                             // filter own user
-                            return user.email !== data.user.email &&
+                            console.log('user', user);
+                            if (api.isMyself(user.email)) return false;
                             // internal users are only identified by email1
-                            user.field === 'email1' || user.user_id === 0;
+                            return user.field === 'email1' || user.user_id === 0;
                         });
                 });
             });
@@ -121,7 +122,7 @@ define('io.ox/chat/views/searchResult', [
                     if (room) return room;
                     // create dummy room
                     var members = {};
-                    members[data.user.email] = 'admin';
+                    members[api.userId] = 'admin';
                     members[address.email] = 'member';
                     return new data.ChatModel({
                         lastMessage: { id: '1337', sender: '', content: gt('Start new chat'), type: 'text' },

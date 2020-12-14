@@ -62,7 +62,7 @@ define('io.ox/chat/actions/openGroupDialog', [
         var def = new $.Deferred();
         var originalModel = obj.id ? data.chats.get(obj.id) : new data.ChatModel(obj);
         var model = originalModel.has('roomId') ? originalModel.clone() : originalModel;
-        var members = [data.users.getByMail(data.user.email)];
+        var members = [data.users.getByMail(api.userId)];
         if (obj.members) {
             obj.members.forEach(function (email) {
                 var model = data.users.getByMail(email);
