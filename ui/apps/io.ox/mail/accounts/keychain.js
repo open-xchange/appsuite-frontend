@@ -57,7 +57,7 @@ define.async('io.ox/mail/accounts/keychain', [
             return accounts;
         }, function () {
             return {};
-        }), filestorageAPI.getAllAccounts(false, true).then(function (allFileAccounts) {
+        }), filestorageAPI.getAllAccounts().then(function (allFileAccounts) {
             var accounts = {};
             allFileAccounts = allFileAccounts.models;
             _(allFileAccounts).each(function (account) {
