@@ -77,7 +77,7 @@ define('io.ox/core/api/jobs', [
                         });
                     });
                 });
-            }, 60000);
+            }, 2000);
         },
         get: function (id) {
             if (!id) {
