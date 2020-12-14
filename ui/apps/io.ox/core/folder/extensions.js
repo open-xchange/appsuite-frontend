@@ -418,7 +418,7 @@ define('io.ox/core/folder/extensions', [
                         require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                             subscribe.open({
                                 module: 'infostore',
-                                help: 'ox.appsuite.user.sect.files.folder.displayshared.html',
+                                help: 'ox.appsuite.user.sect.drive.folder.subscribeshared.html',
                                 title: gt('Shared folders'),
                                 point: 'io.ox/core/folder/subscribe-shared-files-folders',
                                 sections: {
