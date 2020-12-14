@@ -58,6 +58,10 @@ define('io.ox/chat/views/launcher', [
 
             if (count > 0) this.badge.toggleClass('hidden', false);
             else this.badge.toggleClass('hidden', true);
+
+            // adds a badge when added to quick launch menu
+            var app = ox.ui.apps.get('io.ox/chat');
+            if (app) app.set('hasBadge', count > 0);
         },
 
         onClick: function () {
