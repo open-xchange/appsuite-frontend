@@ -272,7 +272,7 @@ Scenario('[C104269] Import App Suite CSV', async (I, contacts, dialogs) => {
     // ------------------------------------------------------------------
 
     function importCSV(file, type) {
-        I.click('.folder-options.contextmenu-control');
+        I.click('.folder-options.contextmenu-control', '~Contacts');
         I.clickDropdown('Import');
         dialogs.waitForVisible();
         I.selectOption('Format', type === 'csv' ? 'CSV' : 'VCARD');
