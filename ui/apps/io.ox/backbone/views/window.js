@@ -139,14 +139,13 @@ define('io.ox/backbone/views/window', [
                 'change:mode': this.onChangeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
-                'change:floating': this.onChangeDisplayMode,
-                'change:sticky': this.onChangeDisplayMode,
+                'change:sticky': this.onChangeStickyMode,
                 'close': function () { this.$el.remove(); }
             });
             this.$body = this.options.$body || $('<div>');
             this.$body = this.$el.find('.window-container-center').length > 0 ? this.$el.find('.window-container-center') : this.$body;
             collection.add(this.model);
-            if (!this.model.get('lazy')) new TaskbarElement({ model: this.model }).render();
+            if (!this.model.get('lazy') && this.model.get('showInTaskbar')) new TaskbarElement({ model: this.model }).render();
 
             //bind some functions
             _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow', 'onResize');
@@ -348,7 +347,7 @@ define('io.ox/backbone/views/window', [
                 $('#io-ox-windowmanager').append(
                     $('<div class="io-ox-windowmanager-sticky-panel border-left" role="region">').append(this.$body)
                 );
-                $('#io-ox-screens').addClass('has-sticky-window');
+                checkIfSticky();
                 return this;
             }
             this.$('.floating-body').append(this.$body);
@@ -356,6 +355,7 @@ define('io.ox/backbone/views/window', [
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
             this.activate({ firstTime: true });
+            checkIfSticky();
             return this;
         },
 
@@ -412,7 +412,7 @@ define('io.ox/backbone/views/window', [
             // no auto positioning for moved windows
             if (this.model.get('wasMoved')) return;
 
-            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because ther might be gaps due to minimized/closed windows)
+            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because there might be gaps due to minimized/closed windows)
             var occupiedPositions = _(collection.filter({ minimized: false, floating: true, wasMoved: false })).chain().without(this.model).pluck('attributes').pluck('shift').value(),
                 nextValidPosition = _.difference(_.range(occupiedPositions.length), occupiedPositions)[0];
 
@@ -469,18 +469,10 @@ define('io.ox/backbone/views/window', [
             this.$header.find('h1 .count').toggle(this.model.get('count') > 0).text(this.model.get('count'));
         },
 
-        onChangeDisplayMode: function () {
-            var changed = this.model.changed, mode;
-            if (changed.floating) mode = 'floating';
-            else if (changed.sticky) mode = 'sticky';
-
-            this.model.set({ floating: mode === 'floating', sticky: mode === 'sticky' }, { silent: true });
-
+        onChangeStickyMode: function () {
             if (this.$el.is(':visible')) this.$el.detach();
             else this.$body.closest('.io-ox-windowmanager-sticky-panel').detach();
-
             this.open();
-            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);
         },
 
         minimize: function () {
@@ -497,6 +489,8 @@ define('io.ox/backbone/views/window', [
         onMinimize: function () {
             // don't animate multiple times
             if (this.minimizing) return;
+            // doesn't have a taskbar entry, return
+            if (!this.model.get('showInTaskbar')) return;
             var self = this;
             var taskBarEl = taskbar.addByCid(this.model.cid);
             var windowWidth = this.$el.width();
@@ -517,6 +511,7 @@ define('io.ox/backbone/views/window', [
 
         toggle: function (model, minimized) {
             this.$el.toggle(!minimized);
+            checkIfSticky();
             if (minimized) return this.deactivate();
             this.activate();
             // shift window if needed (no 100% overlapping)
@@ -711,6 +706,11 @@ define('io.ox/backbone/views/window', [
 
         return taskbarItem;
     };
+
+    function checkIfSticky() {
+        // add marker class if we find a sticky non minimized window
+        $('#io-ox-screens').toggleClass('has-sticky-window', !!collection.findWhere({ sticky: true, minimized: false }));
+    }
 
     return {
         View: WindowView,

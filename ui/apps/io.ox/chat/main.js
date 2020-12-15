@@ -75,11 +75,7 @@ define('io.ox/chat/main', [
             FloatingWindow.View.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, {
-                'change:sticky': function () {
-                    if (!this.model.get('sticky')) return;
-                    settings.set('mode', 'sticky').save();
-                    this.$body.addClass('columns');
-                },
+                'change:sticky': this.toggleWindowMode,
                 'open': this.showApp,
                 'quit': this.hideApp
             });
@@ -141,7 +137,7 @@ define('io.ox/chat/main', [
                 case 'open-chat': this.resubscribeChat(data.id); break;
                 case 'unsubscribe-chat': this.unsubscribeChat(data.id); break;
                 case 'add-member': this.addMember(data.id); break;
-                case 'switch-to-floating': this.toggleWindowMode('floating'); break;
+                case 'switch-to-floating': this.model.set('sticky', false); break;
                 case 'discard-app': this.hideApp(); break;
                 case 'toggle-favorite': this.toggleFavorite(data.id); break;
                 case 'download': this.download(data); break;
@@ -425,9 +421,9 @@ define('io.ox/chat/main', [
             if (model) model.toggleFavorite();
         },
 
-        toggleWindowMode: function (mode) {
+        toggleWindowMode: function () {
+            var mode = this.model.get('sticky') ? 'sticky' : 'floating';
             var cid = this.getCurrentMessageCid();
-            win.model.set(mode, true);
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
             this.scrollToMessage(cid);
@@ -507,26 +503,22 @@ define('io.ox/chat/main', [
         }()),
 
         hideApp: function () {
-            if (!settings.get('hidden')) {
-                settings.set('hidden', true);
-                if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
-            }
+            if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
+            this.model.set('minimized', true);
             return this;
         },
 
         showApp: function () {
-            if (settings.get('hidden')) {
-                settings.set('hidden', false);
-                this.$el.show();
-                this.$body.show();
-            }
+            this.$el.show();
+            this.$body.show();
+            this.model.set('minimized', false);
             return this;
         },
 
         draw: function () {
 
             var user = data.users.getByMail(api.userId),
-                mode = settings.get('mode') || 'sticky';
+                mode = settings.get('mode', 'sticky');
 
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
@@ -625,7 +617,7 @@ define('io.ox/chat/main', [
 
         drawAuthorizePane: function (errorMessage) {
             var self = this,
-                mode = settings.get('mode') || 'sticky';
+                mode = settings.get('mode', 'sticky');
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 $('<div class="auth-container">').append(
                     $('<div>').append(
@@ -758,12 +750,12 @@ define('io.ox/chat/main', [
 
     app.setLauncher(function () {
 
-        var mode = settings.get('mode') || 'sticky';
+        var mode = settings.get('mode', 'sticky');
 
         win = new Window({
             title: 'OX Chat',
-            floating: mode === 'floating',
             sticky: mode === 'sticky',
+            showInTaskbar: false,
             stickable: true,
             resizable: false,
             closable: true,
@@ -775,7 +767,6 @@ define('io.ox/chat/main', [
         // don't use setWindow method. Has to much overhead for the rather special chat window
         this.set('window', win);
 
-        settings.set('hidden', false);
         app.settings = settings;
 
         // add some scaffold css now to avoid invisible busy spinner (width 0px etc)

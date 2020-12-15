@@ -38,7 +38,8 @@ define('io.ox/chat/notifications', [
         // don't notify if busy
         if (presence.getMyAvailability() === 'busy') return;
         // don't notify if the user is currently active and the UI is not hidden
-        var active = isActive() && !settings.get('hidden'),
+        var win = ox.ui.floatingWindows.findWhere({ app: 'io.ox/chat' }),
+            active = isActive() && win && !win.get('minimized'),
             alwaysPlay = settings.get('sounds/playWhen') === 'always';
         // treat sound and desktop notifications differently
         if (!active || alwaysPlay) playSound();

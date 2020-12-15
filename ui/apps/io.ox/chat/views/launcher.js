@@ -14,10 +14,9 @@
 define('io.ox/chat/views/launcher', [
     'io.ox/chat/data',
     'gettext!io.ox/chat',
-    'settings!io.ox/chat',
     'settings!io.ox/core',
     'less!io.ox/chat/style'
-], function (data, gt, settings, coreSettings) {
+], function (data, gt, coreSettings) {
 
     return Backbone.View.extend({
 
@@ -67,7 +66,7 @@ define('io.ox/chat/views/launcher', [
         onClick: function () {
             var model = ox.ui.floatingWindows.findWhere({ app: 'io.ox/chat' });
             if (model) {
-                model.trigger(settings.get('hidden') === true ? 'open' : 'quit');
+                model.trigger(model.get('minimized') === true ? 'open' : 'quit');
             } else {
                 require(['io.ox/chat/main'], function (chat) {
                     chat.getApp().launch().done(function () {
@@ -75,7 +74,6 @@ define('io.ox/chat/views/launcher', [
                     });
                 });
             }
-            $('#io-ox-screens').toggleClass('has-sticky-window', $('#io-ox-windowmanager .io-ox-windowmanager-sticky-panel>:visible').length > 0);
         }
     });
 });
