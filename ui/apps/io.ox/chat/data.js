@@ -1023,6 +1023,10 @@ define('io.ox/chat/data', [
     var ChannelCollection = ChatCollection.extend({
         url: function () {
             return api.url + '/channels';
+        },
+        setComparator: function () {
+            this.comparator = this.sortByTitle;
+            this.sort();
         }
     });
 
