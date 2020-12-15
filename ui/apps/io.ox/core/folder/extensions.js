@@ -401,9 +401,9 @@ define('io.ox/core/folder/extensions', [
 
                 require(['io.ox/core/api/filestorage'], function (filestorageApi) {
                     // remove old listeners
-                    filestorageApi.off('create delete update', draw);
+                    filestorageApi.off('create delete update reset', draw);
                     // append new listeners and draw immediatly
-                    filestorageApi.on('create delete update', draw);
+                    filestorageApi.on('create delete update reset', draw);
                     draw();
                 });
             };
