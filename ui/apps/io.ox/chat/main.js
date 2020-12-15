@@ -201,11 +201,12 @@ define('io.ox/chat/main', [
                 return this.showChat(chat.get('roomId') || chat.cid, { model: chat });
             }
 
+            // open temporary chat (until first message)
             var members = {};
             members[api.userId] = 'admin';
             members[cmd.email] = 'member';
             var room = new data.ChatModel({ type: 'private', members: members, active: true });
-            this.setState({ view: 'chat', roomId: room.get('roomId') }, { model: room });
+            this.setState({ view: 'chat', temporary: true, member: cmd.email }, { model: room });
         },
 
         leaveGroup: function (groupId) {
