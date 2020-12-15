@@ -60,9 +60,9 @@ define('io.ox/chat/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('View options'),
-                        util.checkbox('autoStart', gt('Open chat after login'), settings),
+                        // util.checkbox('autoStart', gt('Open chat after login'), settings),
                         util.checkbox('selectLastRoom', gt('Select last chat on start'), settings),
-                        //#. label of checkbox to enable/dsiable grouping chats by type
+                        //#. label of checkbox to enable/disable grouping chats by type
                         util.checkbox('groupByType', gt('Group chats by type'), settings),
                         //#. Sort chats by ... (alphabetical|last activity)
                         util.radio('sortBy', gt('Sort chats by'), settings, [

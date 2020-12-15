@@ -124,7 +124,6 @@ define('io.ox/core/main/apps', [
         requires: 'chat',
         device: '!smartphone',
         settings: true,
-        toggle: true,
         icon: icons['io.ox/chat']
     });
 
