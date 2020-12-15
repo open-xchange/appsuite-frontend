@@ -255,6 +255,7 @@ define.async('io.ox/oauth/keychain', [
             if (!relatedAccount) return;
             getAllAcccounts().then(function (data) {
                 accounts.reset(data);
+                if (relatedAccount.get('enabledScopes').includes('drive')) filestorageApi.trigger('reset');
             });
         });
     }
