@@ -778,7 +778,8 @@ define('io.ox/chat/main', [
         settings.set('hidden', false);
         app.settings = settings;
 
-        win.$body.parent().busy();
+        // add some scaffold css now to avoid invisible busy spinner (width 0px etc)
+        win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).parent().busy();
 
         return dataReady
             .always(function () {
