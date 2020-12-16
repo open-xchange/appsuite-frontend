@@ -170,7 +170,7 @@ define('io.ox/core/boot/login/openid', [
             client: session.client(),
             version: session.version()
         };
-        if (!_.isEmpty(location.hash)) params.uriFragment = location.hash;
+        if (!_.isEmpty(location.hash)) params.uriFragment = decodeURIComponent(location.hash.replace(/^#/, ''));
 
         location.href = oidcUrlFor(params);
         // defer "forever", since we are redirecting

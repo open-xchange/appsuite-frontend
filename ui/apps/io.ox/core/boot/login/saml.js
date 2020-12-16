@@ -80,7 +80,18 @@ define('io.ox/core/boot/login/saml', [
                     console.warn('Server is down.');
                 }, 250);
             }
-            return $.get(ox.apiRoot + samlPath + '/init?flow=login').then(function (data) {
+            var params = {
+                flow: 'login'
+            };
+            // decode value from location.hash because it already is encoded and would be encoded again
+            // before being sent to the MW (through $.param)
+            if (!_.isEmpty(location.hash)) params.uriFragment = decodeURIComponent(location.hash.replace(/^#/, ''));
+            return $.get([
+                ox.apiRoot,
+                samlPath,
+                '/init?',
+                $.param(params)
+            ].join('')).then(function (data) {
                 var baton = new ext.Baton({ data: data });
                 ext.point('io.ox.saml/login').invoke('handle', baton, baton);
                 if (baton.handled && baton.handled.catch) {
@@ -95,7 +106,19 @@ define('io.ox/core/boot/login/saml', [
             });
         },
         relogin: function () {
-            return $.get(ox.apiRoot + samlPath + '/init?flow=relogin').then(function (data) {
+            var params = {
+                flow: 'relogin'
+            };
+            // decode value from location.hash because it already is encoded and would be encoded again
+            // before being sent to the MW (through $.param)
+            if (!_.isEmpty(location.hash)) params.uriFragment = decodeURIComponent(location.hash.replace(/^#/, ''));
+
+            return $.get([
+                ox.apiRoot,
+                samlPath,
+                '/init?',
+                $.param(params)
+            ].join('')).then(function (data) {
                 var baton = new ext.Baton({ data: data });
                 ext.point('io.ox.saml/relogin').invoke('handle', baton, baton);
                 return $.Deferred();
