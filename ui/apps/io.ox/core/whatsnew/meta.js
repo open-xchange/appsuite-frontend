@@ -48,19 +48,19 @@ define('io.ox/core/whatsnew/meta', [
         {
             version: 1,
             name: gt('Navigation Improvements'),
-            description: gt('The top navigation area has been redesigned to make accessing modules, help and settings easier.')
+            description: gt('The top navigation area has been redesigned to make accessing apps, help and settings easier.')
         },
         {
             version: 1,
             capabilities: 'switchboard',
             name: gt('Audio and Video'),
-            description: gt('This release comes with the ability to hold a video or audio chat with other people. This can be scheduled within a calendar appointment, or started spontaneously from the toolbar, contacts, halo and other logical places. To help we have also added a presence indicator to the toolbar.')
+            description: gt('This release comes with the ability to hold a video or audio call with other people. This can be scheduled within a calendar appointment, or started directly from contacts, the halo view and other logical places. To help we have also added a presence indicator.')
         },
         {
             version: 1,
             capabilities: 'chat',
             name: gt('Chat for %1$s', ox.serverConfig.productName),
-            description: gt('With this release you will notice a new chat bubble icon in the toolbar. This opens the new chat bar and lets you write messages to any other OX App Suite user. Chats can be instigated from the chat bar, contacts or halo.')
+            description: gt('With this release you will notice a new chat bubble icon in the menu bar. This opens the new chat window and lets you write messages to any other OX App Suite user. Chats can be instigated from the chat window, contacts or halo view.')
         }
     ];
 
