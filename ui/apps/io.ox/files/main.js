@@ -1050,6 +1050,11 @@ define('io.ox/files/main', [
                 } else {
                     //use 2 items per row on smartphones in portrait orientation
                     app.listView.$el.removeClass('grid-3').addClass('grid-2');
+
+                    if (_.device('iOS < 14')) {
+                        document.documentElement.style.height = '100%';
+                        window.scrollTo(0, 1);
+                    }
                 }
             }
 
