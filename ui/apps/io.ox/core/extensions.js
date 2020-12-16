@@ -509,6 +509,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         },
 
         // shallow copy (since batons also contain DOM nodes)
+        // be careful as this function can only clone attributes that are objects correctly, (doesn't work correctly with arrays or strings)
         clone: function (options) {
             var clone = new Baton();
             _(this).each(function (obj, key) {

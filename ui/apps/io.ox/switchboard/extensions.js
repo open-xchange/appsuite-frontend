@@ -41,6 +41,12 @@ define('io.ox/switchboard/extensions', [
         id: 'availability',
         index: 10,
         extend: function () {
+            var self = this;
+            function addPresenceIcon() {
+                _.defer(function () {
+                    self.$toggle.append(presence.getPresenceIcon(api.userId));
+                });
+            }
             // add to account dropdown
             var availability = presence.getMyAvailability();
             this.model.set('availability', availability);
@@ -57,15 +63,16 @@ define('io.ox/switchboard/extensions', [
                 presence.changeOwnAvailability(availability);
             });
 
+            // redraw presence icon after updating contact picture (OXUIB-497)
+            contactsAPI.on('reset:image update:image', addPresenceIcon);
+
             // respond to automatic state changes
             presence.on('change-own-availability', function (availability) {
                 this.model.set('availability', availability);
             }.bind(this));
 
             // finally, add presence icon to dropdown node
-            _.defer(function () {
-                this.$toggle.append(presence.getPresenceIcon(api.userId));
-            }.bind(this));
+            addPresenceIcon();
         }
     });
 
@@ -160,6 +167,8 @@ define('io.ox/switchboard/extensions', [
     );
 
     function createButton(action, icon, label, baton) {
+        // do not change the initial baton as it is reused
+        baton = baton.clone();
         baton.data = [].concat(baton.data);
         var $button = $('<button type="button" class="btn btn-link">')
             .prop('disabled', true)

@@ -366,21 +366,31 @@ define('io.ox/mail/main', [
 
         'account-status-check': function () {
 
-            accountAPI.all().done(function (data) {
-                _.each(data, function (accountData) {
-                    accountAPI.getStatus(accountData.id).done(function (obj) {
-                        if (obj[accountData.id].status !== 'ok') {
-                            app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
-                        }
+            function checkAllAccounts() {
+                accountAPI.all().done(function (data) {
+                    _.each(data, function (accountData) {
+                        accountAPI.getStatus(accountData.id).done(function (obj) {
+                            if (obj[accountData.id].status !== 'ok') {
+                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
+                            } else if (obj[accountData.id].status === 'ok') {
+                                var node = app.treeView.getNodeView(accountData.root_folder);
+                                if (!node) return;
+                                node.hideStatusIcon();
+                            }
+                        });
                     });
                 });
-            });
+            }
+
+            accountAPI.on('account:recovered', checkAllAccounts);
 
             app.treeView.on('checkAccountStatus', function () {
                 ox.launch('io.ox/settings/main', { folder: 'virtual/settings/io.ox/settings/accounts' }).done(function () {
                     this.setSettingsPane({ folder: 'virtual/settings/io.ox/settings/accounts' });
                 });
             });
+
+            checkAllAccounts();
         },
 
         'OAuth-reauthorize': function (app) {

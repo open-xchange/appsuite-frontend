@@ -49,7 +49,7 @@ define.async('io.ox/switchboard/api', [
             // call/chat only works for users, so
             // make sure we are in global address book
             return baton.array().every(function (data) {
-                return data.folder_id === 6 && data.email1;
+                return String(data.folder_id) === '6' && data.email1;
             });
         },
 
@@ -114,16 +114,23 @@ define.async('io.ox/switchboard/api', [
                 } else {
                     console.error('Switchboard: Error during acquireToken!');
                 }
-                var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
-                // Only send redirect uri if not default "/appsuite/api"
-                var appsuiteUrl = new URL('https://' + api.host.replace(/^https?:\/\//, ''));
-                var searchParams = appsuiteUrl.searchParams;
-                searchParams.set('userId', api.userId);
-                searchParams.set('token', data.token);
-                if (ox.apiRoot !== '/appsuite/api') searchParams.set('appsuiteApiPath', ox.apiRoot);
-                if (appsuiteApiBaseUrl) searchParams.set('appsuiteApiBaseUrl', appsuiteApiBaseUrl);
 
-                api.socket = io(appsuiteUrl.href, {
+                var appsuiteApiBaseUrl = settings.get('appsuiteApiBaseUrl', '');
+                var appsuiteUrl = 'https://' + api.host.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                var query = { userId: api.userId, token: this.token };
+                // Only send redirect uri if not default "/appsuite/api"
+                if (ox.apiRoot !== '/appsuite/api') query.appsuiteApiPath = ox.apiRoot;
+                if (appsuiteApiBaseUrl) query.appsuiteApiBaseUrl = appsuiteApiBaseUrl;
+
+                if (this.socket) {
+                    // manually change the url with the new query. socket.io will use this for any further connection
+                    // note: will most likely break with socket.io-client v3
+                    this.socket.query = query;
+                    return this.socket.connect();
+                }
+
+                api.socket = io(appsuiteUrl, {
+                    query: query,
                     transports: ['websocket'],
                     reconnectionAttempts: 20,
                     reconnectionDelayMax: 10000 // 10 min. max delay between a reconnect (reached after approx. 10 retries)

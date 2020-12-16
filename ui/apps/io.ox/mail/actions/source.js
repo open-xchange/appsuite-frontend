@@ -68,7 +68,11 @@ define('io.ox/mail/actions/source', [
                         setAuthentification(data, this.$el)
                     ).done(function () {
                         self.idle();
-                        self.$el.find('textarea.mail-source-view').focus().scrollTop(0);
+                        self.$el.find('textarea.mail-source-view').focus();
+                        // use defer here. Firefox has a very odd focus mechanic. Focussing the textarea causes it to scroll to the bottom. Scrolltop directly after this is ignored, so use defer
+                        _.defer(function () {
+                            self.$el.find('textarea.mail-source-view').scrollTop(0);
+                        });
                     });
                 })
                 .busy(true)
