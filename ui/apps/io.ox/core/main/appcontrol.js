@@ -88,7 +88,10 @@ define('io.ox/core/main/appcontrol', [
                     tabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
-                ox.launch(this.model.get('path'));
+
+                // if there is a custom quicklaunch function for this app, use it. Else just use the default launch function
+                if (this.quicklaunch && this.model.quickLaunch) this.model.quickLaunch();
+                else ox.launch(this.model.get('path'));
             } else {
                 var requires = this.model.get('requires');
                 upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });

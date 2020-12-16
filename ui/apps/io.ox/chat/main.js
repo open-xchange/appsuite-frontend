@@ -13,6 +13,7 @@
 
 define('io.ox/chat/main', [
     'io.ox/core/extensions',
+    'io.ox/chat/views/launcher',
     'io.ox/chat/api',
     'io.ox/chat/data',
     'io.ox/chat/events',
@@ -36,7 +37,7 @@ define('io.ox/chat/main', [
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
+], function (ext, launcher, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
 
     'use strict';
 
@@ -784,6 +785,10 @@ define('io.ox/chat/main', [
                 win.drawAuthorizePane();
             });
     });
+
+    // custom function if chat is used in quicklaunch menu. This enables toggling instead of just opening
+    // just reusing the onClick function from the original launcher should do the trick
+    app.quickLaunch = launcher.prototype.onClick;
 
     app.setResume(function () {
         win.model.trigger('open');

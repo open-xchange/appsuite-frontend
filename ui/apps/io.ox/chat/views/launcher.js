@@ -63,6 +63,7 @@ define('io.ox/chat/views/launcher', [
             if (app) app.set('hasBadge', count > 0);
         },
 
+        // not only used by this view.This function is reused by the quick launcher view if chat is in quick launch menu
         onClick: function () {
             var model = ox.ui.floatingWindows.findWhere({ app: 'io.ox/chat' });
             if (model) {
