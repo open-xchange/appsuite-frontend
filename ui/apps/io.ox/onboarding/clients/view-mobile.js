@@ -141,6 +141,7 @@ define('io.ox/onboarding/clients/view-mobile', [
             if (!action.image && !action.imageplaceholder) return;
             this.find('.description').prepend($('<a class="app" target="_blank">').attr('href', action.link).append(
                 $('<img class="app-icon action-call" role="button">').attr({
+                    'data-detail': action.store.name,
                     'src': action.image || action.imageplaceholder
                 })
             ));
