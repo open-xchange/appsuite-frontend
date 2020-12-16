@@ -51,7 +51,7 @@ define('io.ox/files/share/public-link', [
         draw: function (baton) {
             var link = baton.model.get('url', ''),
                 formID = _.uniqueId('copy-pl-to-clipboard-'),
-                input = $('<input type="text" class="public-link-url-input">').attr('id', formID).val(link);
+                input = $('<button type="button" class="public-link-url-input">').attr('id', formID).val(link);
             this.append(
                 input,
                 $('<div class="row"></div>')
