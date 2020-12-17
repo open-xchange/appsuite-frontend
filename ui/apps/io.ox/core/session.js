@@ -103,78 +103,28 @@ define('io.ox/core/session', [
             }
 
             // GET request
-            return (
-                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken')
-                    // no auto-login for server-token-based logins
-                    ? $.Deferred().reject({})
-                    // try auto-login
-                    : withTimeout(http.GET, {
-                        module: 'login',
-                        appendColumns: false,
-                        appendSession: false,
-                        processResponse: false,
-                        params: {
-                            action: 'autologin',
-                            client: that.client(),
-                            rampup: true,
-                            rampUpFor: CLIENT,
-                            version: that.version()
-                        }
-                    })
-            )
-            .then(
-                function success(data) {
-                    ox.secretCookie = true;
-                    ox.rampup = data.rampup || ox.rampup || {};
-                    isAutoLogin = true;
-                    return data;
-                },
-                // If autologin fails, try token login
-                function fail(data) {
-                    if (!_.url.hash('serverToken')) throw (data || {});
-                    return withTimeout(http.POST, {
-                        module: 'login',
-                        jsessionid: _.url.hash('jsessionid'),
-                        appendColumns: false,
-                        appendSession: false,
-                        processResponse: false,
-                        data: {
-                            action: 'tokens',
-                            client: that.client(),
-                            version: that.version(),
-                            serverToken: _.url.hash('serverToken'),
-                            clientToken: _.url.hash('clientToken'),
-                            rampup: true,
-                            rampUpFor: CLIENT
-                        }
-                    })
-                    .then(function (response) {
-                        // make sure we have rampupdata
-                        if (response.data.rampup) {
-                            return response.data;
-                        }
-                        //session needed for rampup call
-                        ox.session = response.data.session;
-                        return that.rampup().then(function (rampupData) {
-                            response.data.rampup = rampupData;
-                            return response.data;
-                        });
-                    });
+            return withTimeout(http.GET, {
+                module: 'login',
+                appendColumns: false,
+                appendSession: false,
+                processResponse: false,
+                params: {
+                    action: 'autologin',
+                    client: that.client(),
+                    rampup: true,
+                    rampUpFor: CLIENT,
+                    version: that.version()
                 }
-            )
-            .then(function (data) {
+            })
+            .then(function success(data) {
+                ox.secretCookie = true;
+                ox.rampup = data.rampup || ox.rampup || {};
+                isAutoLogin = true;
+
                 set(data);
                 // global event
                 ox.trigger('login', data);
                 return data;
-            })
-            .done(function () {
-                _.url.hash({
-                    jsessionid: null,
-                    serverToken: null,
-                    clientToken: null,
-                    'token.autologin': null
-                });
             });
         },
 
@@ -259,24 +209,6 @@ define('io.ox/core/session', [
                 return (ox.rampup = data.rampup || ox.rampup || {});
             });
         },
-
-        /*
-        redeemToken: function (token) {
-            console.warn('WARNING: Redeem-token is deprecated and will be remove in the near future.');
-            return http.POST({
-                processResponse: false,
-                appendSession: false,
-                appendColumns: false,
-                module: 'login',
-                url: 'api/login?action=redeemToken',
-                data: {
-                    authId: uuids.randomUUID(),
-                    token: token,
-                    client: 'mobile-notifier',
-                    secret: 'notifier-123'
-                }
-            });
-        },*/
 
         logout: function () {
             if (ox.online) {

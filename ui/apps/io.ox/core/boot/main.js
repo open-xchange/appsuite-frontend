@@ -179,6 +179,7 @@ define.async('io.ox/core/boot/main', [
                 util.debug('loaded rampup namespace > running rampup phase');
                 return Stage.run('io.ox/core/boot/rampup', baton, { methodName: 'fetch' });
             }).then(function () {
+                ox.rampup = _.clone(baton.data);
                 util.debug('finished rampup phase > getting boot/load namespace', ox.rampup);
                 return require(['io.ox/core/boot/load']);
             }).then(function () {
