@@ -119,13 +119,9 @@ define.async('io.ox/switchboard/api', [
             }
 
             if (api.socket) {
-                // we need to call disconnect and connect on socket.io, not just socket.
-                // for whatever reason, socket.connect() would create two sockets,
-                // even if we wait for the "disconnect" event;
-                if (api.socket.connected) api.socket.io.disconnect();
-                api.socket.io.opts.query.token = api.token;
                 console.log('Switchboard: Reconnecting with new token', api.token);
-                api.socket.io.connect();
+                api.socket.io.opts.query.token = api.token;
+                api.socket.connect();
                 return;
             }
 
@@ -138,12 +134,15 @@ define.async('io.ox/switchboard/api', [
 
             api.socket = io(appsuiteUrl, {
                 query: query,
-                reconnectionAttempts: 20,
-                reconnectionDelayMax: 10000, // 10 min. max delay between a reconnect (reached after approx. 10 retries)
+                // reconnect with a max delay of 5 minutes; no attempt limit
+                reconnectionDelayMax: 5 * 60 * 1000,
                 transports: ['websocket']
             })
             .once('connect', function () {
                 console.log('%cConnected to switchboard service', 'background-color: green; color: white; padding: 4px 8px;');
+            })
+            .on('connect', function () {
+                resetRetryDelay();
                 api.online = true;
             })
             .on('disconnect', function () {
@@ -152,7 +151,6 @@ define.async('io.ox/switchboard/api', [
             })
             .on('reconnect', function (attemptNumber) {
                 console.log('Switchboard: Reconnected to switchboard service on attempt #' + attemptNumber + '.');
-                api.online = true;
             })
             .on('reconnect_attempt', function (attemptNumber) {
                 console.log('Switchboard: Reconnect attempt #' + attemptNumber);
@@ -162,15 +160,35 @@ define.async('io.ox/switchboard/api', [
             })
             .on('error', function (err) {
                 if (ox.debug) console.error('Socket error:', err);
-                // in case acquireToken call fails (50x) stop here (see OXUIB-525)
-                if (!api.token) return api.socket.close();
-                retry();
+                // disconnect socket
+                api.socket.disconnect();
+                // continue unless acquireToken call fails (see OXUIB-525)
+                if (api.token) retry();
             });
         });
     }
 
-    // retry after 10 sec (and avoid duplicate calls)
-    var retry = _.throttle(reconnect, 10000, { leading: false });
+    // retry (and avoid duplicate calls)
+    var retrying = false;
+    // we start with 4 seconds and double the delay every attempt
+    // 4s, 8s, 16s, 32s, 64s, 128s, 256s, 300s
+    var retryDelay = 4;
+    // maximum is 5 minutes
+    var retryDelayMax = 300;
+
+    function retry() {
+        if (retrying) return;
+        retrying = true;
+        setTimeout(function () {
+            retrying = false;
+            retryDelay = Math.min(retryDelay * 2, retryDelayMax);
+            reconnect();
+        }, retryDelay * 1000);
+    }
+
+    function resetRetryDelay() {
+        retryDelay = 4;
+    }
 
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
