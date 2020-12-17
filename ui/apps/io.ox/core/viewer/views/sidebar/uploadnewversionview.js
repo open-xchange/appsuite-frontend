@@ -74,18 +74,19 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
         },
 
         upload: function (comment) {
+            var newFile = this.getFile();
             var data = {
                     folder: this.model.get('folder_id'),
                     id: this.model.get('id'),
                     // If file already encrypted, update should also be encrypted
-                    params: this.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
+                    params: FilesAPI.versions.mustEncryptNewVersion(this.model, newFile.name) ? { 'cryptoAction': 'Encrypt' } : {}
                 },
                 node = this.app ? this.app.getWindowNode() : this.$el.closest('.io-ox-viewer').find('.viewer-displayer');
 
             if (folderApi.pool.getModel(this.model.get('folder_id')).supports('extended_metadata')) data.version_comment = comment || '';
 
             fileUpload.setWindowNode(node);
-            fileUpload.update.offer(this.getFile(), data);
+            fileUpload.update.offer(newFile, data);
         },
 
         initialize: function (options) {

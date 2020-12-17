@@ -186,7 +186,7 @@ define('io.ox/files/api', [
             return (
                 this.isPgp() ||
                 // check if file has "guard" file extension
-                (/\.(grd|grd2|pgp)$/i).test(this.get('filename'))
+                api.isGuardExtension({ filename: this.get('filename') })
             );
         },
 
@@ -298,7 +298,7 @@ define('io.ox/files/api', [
             pdf:   (/^pdf$/),
             zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
             txt:   (/^(txt|md)$/),
-            guard: (/^(grd|grd2|pgp)$/)
+            guard: (/^(grd|grd2|pgp)$/i) // added case insensitive flag, was used by previous guard code that was refactored
         },
 
         supportsPreview: function () {
@@ -432,14 +432,14 @@ define('io.ox/files/api', [
     // Helper functions based on file extension.
     //
 
-    // Returns the file extension, removes pgp from .xyz.pgp if present
-    api.getExtension = function (file) {
+    // @param preserveCryptoExtension: If false, it returns the file extension, removes pgp from .xyz.pgp if present
+    api.getExtension = function (file, preserveCryptoExtension) {
         var filename = file && (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title);
         var parts = String(filename || '').split('.');
         var extension;
 
         // if extension is .xyz.pgp, remove the pgp and return extension
-        if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+        if (!preserveCryptoExtension && (parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
             extension = parts[parts.length - 1].toLowerCase();
         } else if (parts.length > 1) {
             extension = parts.pop().toLowerCase();
@@ -450,6 +450,7 @@ define('io.ox/files/api', [
         return extension;
     };
 
+    // 'file' is a file descriptor, an object with file properties
     api.isText = function (file) {
         return api.Model.prototype.types.txt.test(api.getExtension(file));
     };
@@ -484,6 +485,12 @@ define('io.ox/files/api', [
 
     api.isVideo = function (file) {
         return api.Model.prototype.types.video.test(api.getExtension(file));
+    };
+
+    api.isGuardExtension = function (file) {
+        var fileExt = api.getExtension(file, true);
+        // check if file has "guard" file extension
+        return api.Model.prototype.types.guard.test(fileExt);
     };
 
     // get URL to open, download, or preview a file
@@ -1851,6 +1858,11 @@ define('io.ox/files/api', [
                 }
                 return currentVersion;
             });
+        },
+
+        mustEncryptNewVersion: function (previousFileModel, newFilename) {
+            var isNewFileEncrypted = api.isGuardExtension({ filename: newFilename });
+            return previousFileModel.isEncrypted() && !isNewFileEncrypted;
         }
     };
 

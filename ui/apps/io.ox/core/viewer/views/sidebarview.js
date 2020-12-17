@@ -383,12 +383,14 @@ define('io.ox/core/viewer/views/sidebarview', [
                 return;
             }
             var self = this;
+            var fileName = _.first(files).name;
+
             require(['io.ox/files/upload/main'], function (fileUpload) {
                 var data = {
                     folder: self.model.get('folder_id'),
                     id: self.model.get('id'),
                     // If file already encrypted, update should also be encrypted
-                    params: self.model.isEncrypted() ? { 'cryptoAction': 'Encrypt' } : {}
+                    params: FilesAPI.versions.mustEncryptNewVersion(self.model, fileName) ? { 'cryptoAction': 'Encrypt' } : {}
                 };
                 var node = self.isViewer ? self.$el.parent().find('.viewer-displayer') : self.app.getWindowNode();
                 fileUpload.setWindowNode(node);
