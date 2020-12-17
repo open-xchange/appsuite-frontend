@@ -500,7 +500,12 @@ define('plugins/core/feedback/register', [
                 button = $('<button type="button">').text(gt('Feedback')).on('click', this.show)
             );
             $('#io-ox-screens').append(node);
-            if (position === 'right') node.css('bottom', button.width() + 128 + 'px');
+            if (position === 'right') {
+                // temporary inline style so width calculation is correct
+                node.css('display', 'block');
+                node.css('bottom', button.width() + 128 + 'px');
+                node.css('display', '');
+            }
         }
     };
 
