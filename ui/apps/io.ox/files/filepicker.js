@@ -527,7 +527,7 @@ define('io.ox/files/filepicker', [
                     return filesAPI.upload({
                         file: item.file,
                         filename: o.filename,
-                        folder: o.folder,
+                        folder: o.folder || folderAPI.getDefaultFolder('infostore'),
                         timestamp: _.now()
                     })
                     .then(
