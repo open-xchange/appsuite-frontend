@@ -290,6 +290,7 @@ define('io.ox/calendar/settings/pane', [
             id: 'alarms',
             index: INDEX += 100,
             render: function () {
+                if (settings.isConfigurable && !settings.isConfigurable('showPastReminders')) return;
                 this.$el.append(
                     util.fieldset(gt('Reminders'),
                         $('<div class="form-group">').append(
