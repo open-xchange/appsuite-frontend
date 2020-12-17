@@ -117,12 +117,17 @@ define('io.ox/core/sub/sharedFolders', [
                     api.update(id, obj, { ignoreWarnings: ignoreWarnings });
                 });
 
-                http.resume().done(function () {
-                    // finish this once MW is done
-                    // leaving this in so translations can be done already
-                    var insertSpecialFederatedSharingWarningHere = false;
-                    if (insertSpecialFederatedSharingWarningHere) {
-                        openWarningDialog(['testdomain']);
+                http.resume().then(function (responses) {
+                    // look for error FLD-1038. This means: Last folder of a domain (technically this is actually an account) was removed.
+                    // we show a confirmation dialog then, as this would result in the removal of the corresponding account as well (no more resubscribing without the original mail)
+                    var accountsToRemove = _(responses).chain().map(function (response) {
+                        // error params 1 is the domain name
+                        if (response && response.error && response.error.code === 'FLD-1038') return response.error.warnings.error_params[1];
+                        return false;
+                    }).compact().unique().valueOf();
+
+                    if (accountsToRemove.length > 0) {
+                        openWarningDialog(accountsToRemove);
                         return;
                     }
 
