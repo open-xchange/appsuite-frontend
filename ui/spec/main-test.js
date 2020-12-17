@@ -17,8 +17,9 @@ _.extend(ox, Backbone.Events);
 
 require([
     'io.ox/core/extPatterns/stage',
+    'io.ox/core/extensions',
     'io.ox/core/boot/login/auto'
-], function (Stage) {
+], function (Stage, ext) {
 
     'use strict';
 
@@ -43,7 +44,7 @@ require([
 
     $('body').prepend('<div id="background-loader">');
 
-    ox.rampup = { disabled: true };
+    ext.point('io.ox/core/boot/rampup').disable('compositionSpaces');
 
     new Stage('io.ox/core/stages', {
         id: 'basic_settings',
