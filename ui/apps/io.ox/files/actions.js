@@ -318,6 +318,11 @@ define('io.ox/files/actions', [
         // single folders only
         collection: 'one && folders',
         matches: function (baton) {
+            // enable for federated share that support it
+            if (filestorageApi.isFederatedAccount(baton.first().account_id)) {
+                var canDownloadFolder = _.contains(baton.first().supported_capabilities, 'zippable_folder');
+                return canDownloadFolder;
+            }
             // disable for external storages
             return !filestorageApi.isExternal(baton.first());
         },
