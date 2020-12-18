@@ -15,20 +15,14 @@ define('io.ox/files/share/share-settings', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/views/disposable',
     'io.ox/core/extensions',
-    'io.ox/files/share/api',
-    'io.ox/files/share/model',
     'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/dropdown',
-    'io.ox/contacts/api',
-    'io.ox/core/api/group',
-    'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
     'io.ox/core/settings/util',
     'gettext!io.ox/files',
     'io.ox/core/folder/util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ModalDialog, DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, groupApi, Tokenfield, yell, settingsUtil, gt, util) {
+], function (ModalDialog, DisposableView, ext, miniViews, yell, settingsUtil, gt, util) {
 
     'use strict';
 
@@ -106,6 +100,7 @@ define('io.ox/files/share/share-settings', [
                         model.set('temporary', true);
                     }, 10);
                 } else {
+                    // Expired option is Never
                     model.set('temporary', false);
                     model.set('expiry_date', null);
                     select.find('.option:selected').text(typeTranslations[6]);
@@ -143,7 +138,7 @@ define('io.ox/files/share/share-settings', [
         }
     });
     ext.point(POINT_SETTINGS + '/settings-public-link').extend({
-        id: 'secured',
+        id: 'password',
         index: INDEX += 100,
         draw: function (baton) {
             var guid;
@@ -164,16 +159,9 @@ define('io.ox/files/share/share-settings', [
                         .end()
                 )
             );
-
-            baton.view.listenTo(baton.model, 'change:password', function (model, val, options) {
-                if (val && !model.get('secured')) {
-                    model.set('secured', true, options);
-                } else {
-                    model.set('secured', false, options);
-                }
-            });
         }
     });
+
     /*
      * extension point for allowance of subfolder access
      *
@@ -344,13 +332,7 @@ define('io.ox/files/share/share-settings', [
             .addCancelButton()
             .addButton({ label: gt('Save'), action: 'save' });
             dialog.on('save', function () {
-                if (shareSettingsView.model.get('secured') === true && _.isEmpty(shareSettingsView.model.get('password'))) {
-                    yell('error', gt('Please set password'));
-                    dialog.idle();
-                } else {
-                    shareSettingsView.trigger('changePublicLinkSettings', shareSettingsView.model);
-                    dialog.close();
-                }
+                dialog.close();
             });
             dialog.$body.append(shareSettingsView.render().$el);
             dialog.$body.addClass('share-options');

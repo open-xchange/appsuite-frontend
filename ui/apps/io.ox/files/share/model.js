@@ -14,9 +14,8 @@
 define('io.ox/files/share/model', [
     'io.ox/files/share/api',
     'io.ox/core/api/group',
-    'io.ox/core/yell',
-    'gettext!io.ox/core'
-], function (api, groupApi, yell, gt) {
+    'io.ox/core/yell'
+], function (api, groupApi, yell) {
 
     'use strict';
 
@@ -28,7 +27,6 @@ define('io.ox/files/share/model', [
                 recipients: [],
                 message: '',
                 edit: false,
-                secured: false,
                 password: '',
                 temporary: false,
                 expires: 6,
@@ -64,7 +62,7 @@ define('io.ox/files/share/model', [
                                 this.attributes.url = permission.share_url;
                                 if (permission.password) {
                                     this.attributes.password = permission.password;
-                                    this.attributes.secured = true;
+                                    // TODO York why is hasUrl true if password is set
                                     hasUrl = true;
                                 }
                                 if (permission.expiry_date) {
@@ -72,6 +70,7 @@ define('io.ox/files/share/model', [
                                     this.attributes.expiry_date = permission.expiry_date;
                                     this.attributes.temporary = true;
                                 }
+                                this.attributes.includeSubfolders = permission.includeSubfolders;
                             }
                         }, this);
                     }
@@ -96,7 +95,7 @@ define('io.ox/files/share/model', [
                 }
             });
             // limit to relevant attributes
-            return _(changes).pick('expiry_date', 'includeSubfolders', 'password', 'temporary', 'secured');
+            return _(changes).pick('expiry_date', 'includeSubfolders', 'password', 'temporary');
         },
 
         hasChanges: function () {
@@ -150,10 +149,10 @@ define('io.ox/files/share/model', [
 
             data.includeSubfolders = this.get('includeSubfolders');
 
-            if (this.get('secured') && this.get('password') !== '') {
-                data.password = this.get('password');
-            } else {
+            if (_.isEmpty(this.get('password'))) {
                 data.password = null;
+            } else {
+                data.password = this.get('password');
             }
 
             // collect recipients data
@@ -236,9 +235,7 @@ define('io.ox/files/share/model', [
                     var changes = self.getChanges(),
                         data = model.toJSON();
                     // set password to null if password protection was revoked
-                    if (changes.secured === false) {
-                        data.password = null;
-                    } else if (!('password' in changes)) {
+                    if (!('password' in changes)) {
                         // remove password from data unless it has changed
                         delete data.password;
                     }
@@ -263,14 +260,6 @@ define('io.ox/files/share/model', [
         send: function () {
             if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
-        },
-
-        validate: function (attr, options) {
-            // special case: bug 53466
-            if (options._event === 'change') return;
-            if (attr.secured === true && _.isEmpty(attr.password)) {
-                return gt('Please set password');
-            }
         }
     });
 
