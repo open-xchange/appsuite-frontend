@@ -1401,7 +1401,7 @@ define('io.ox/files/share/permissions', [
                     })
                 );
             } else {
-                dialog.$body.addClass(_.browser.IE ? 'IE11' : '').prepend(
+                dialog.$body.addClass(_.browser.IE ? 'IE11' : '').append(
                     permissionsView.$el.busy({
                         empty: false,
                         immediate: true
