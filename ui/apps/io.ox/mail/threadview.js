@@ -116,7 +116,7 @@ define('io.ox/mail/threadview', [
         empty: function () {
             this.$messages.empty();
             this.$el.scrollTop(0);
-            this.$el.find('.thread-view-list').hide();
+            this.$el.find('.thread-view-list').scrollTop(0).hide();
             this.model = null;
         },
 
@@ -285,7 +285,7 @@ define('io.ox/mail/threadview', [
 
             this.updateHeader();
 
-            this.$el.find('.thread-view-list').show();
+            this.$el.find('.thread-view-list').scrollTop(0).show();
 
             this.nextAutoSelect = this.autoSelectMail(true);
             this.$messages.append(
