@@ -30,7 +30,7 @@ define('io.ox/files/share/share-settings', [
         POINT_SETTINGS = 'io.ox/files/share/share-settings';
 
     /*
-     * extension point public link title text
+     * Extension point for public link title text
      */
     ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'title',
@@ -41,8 +41,9 @@ define('io.ox/files/share/share-settings', [
             );
         }
     });
+
     /*
-     * extension point for expires dropdown
+     * Extension point for public link expires dropdown
      */
     ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'temporary',
@@ -137,6 +138,10 @@ define('io.ox/files/share/share-settings', [
             });
         }
     });
+
+    /**
+     * Extension point for public link password
+     */
     ext.point(POINT_SETTINGS + '/settings-public-link').extend({
         id: 'password',
         index: INDEX += 100,
@@ -163,11 +168,11 @@ define('io.ox/files/share/share-settings', [
     });
 
     /*
-     * extension point for allowance of subfolder access
+     * Extension point for public link allowance of subfolder access
      *
      * see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-invite-people').extend({
         id: 'includeSubfolders',
         index: INDEX += 100,
         draw: function (baton) {
@@ -209,38 +214,40 @@ define('io.ox/files/share/share-settings', [
             }
         }
     });
-    /* Begin of permission options */
-    var DialogConfigModel = Backbone.Model.extend({
-        defaults: {
-            // default is true for nested and false for flat folder tree, #53439
-            cascadePermissions: true,
-            message: '',
-            sendNotifications: false,
-            disabled: false
-        },
-        toJSON: function () {
-            var data = {
-                cascadePermissions: this.get('cascadePermissions'),
-                notification: { transport: 'mail' }
-            };
 
-            if (dialogConfig.get('sendNotifications')) {
-                // add personal message only if not empty
-                // but always send notification!
-                if (this.get('message') && $.trim(this.get('message')) !== '') {
-                    data.notification.message = this.get('message');
-                }
-            } else {
-                delete data.notification;
-            }
-            return data;
-        }
-    });
-    var dialogConfig = new DialogConfigModel();
+    // /* Begin of permission options */
+    // var DialogConfigModel = Backbone.Model.extend({
+    //     defaults: {
+    //         // default is true for nested and false for flat folder tree, #53439
+    //         cascadePermissions: true,
+    //         message: '',
+    //         sendNotifications: false,
+    //         disabled: false
+    //     },
+    //     toJSON: function () {
+    //         var data = {
+    //             cascadePermissions: this.get('cascadePermissions'),
+    //             notification: { transport: 'mail' }
+    //         };
+
+    //         if (dialogConfig.get('sendNotifications')) {
+    //             // add personal message only if not empty
+    //             // but always send notification!
+    //             if (this.get('message') && $.trim(this.get('message')) !== '') {
+    //                 data.notification.message = this.get('message');
+    //             }
+    //         } else {
+    //             delete data.notification;
+    //         }
+    //         return data;
+    //     }
+    // });
+    // var dialogConfig = new DialogConfigModel();
+
     /*
-     * extension point invite options title text
+     * Extension point for invite people options title text
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-invite-people').extend({
         id: 'invite-options-title',
         index: INDEX += 100,
         draw: function () {
@@ -249,42 +256,46 @@ define('io.ox/files/share/share-settings', [
             );
         }
     });
+
     /*
-     * extension point invite options send email
+     * Extension point for invite people options send notification email
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-invite-people').extend({
         id: 'inviteptions-send-email',
         index: INDEX += 100,
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<div>').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                    settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), dialogConfig).on('change', function (e) {
+                    settingsUtil.checkbox('sendNotifications', gt('Send notification by email'), baton.dialogConfig).on('change', function (e) {
                         var input = e.originalEvent.srcElement;
-                        dialogConfig.set('byHand', input.checked);
-                    })
+                        baton.dialogConfig.set('byHand', input.checked);
+                    }).prop('disabled', baton.dialogConfig.get('disabled'))
                 )
             );
+            this.find('[name="sendNotifications"]').prop('disabled', baton.dialogConfig.get('disabled'));
         }
     });
+
     /*
-     * extension point invite options include subfolder
+     * extension point for invite people options include subfolder
      */
-    ext.point(POINT_SETTINGS + '/settings').extend({
+    ext.point(POINT_SETTINGS + '/settings-invite-people').extend({
         id: 'inviteptions-cascade-permissions',
         index: INDEX += 100,
         draw: function (baton) {
             if (baton.view.applyToSubFolder) {
                 this.append(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), dialogConfig).on('change', function (e) {
+                        settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), baton.dialogConfig).on('change', function (e) {
                             var input = e.originalEvent.srcElement;
-                            dialogConfig.set('cascadePermissions', input.checked);
+                            baton.dialogConfig.set('cascadePermissions', input.checked);
                         })
                     )
                 );
             }
         }
     });
+
     /*
      * main view
      */
@@ -301,7 +312,7 @@ define('io.ox/files/share/share-settings', [
             this.hasPublicLink = options.model.hasPublicLink();
             this.hasLinkSupport = options.hasLinkSupport;
             this.applyToSubFolder = options.applyToSubFolder;
-            this.baton = ext.Baton({ model: this.model, view: this });
+            this.baton = ext.Baton({ model: this.model, view: this, dialogConfig: options.dialogConfig });
 
             this.listenTo(this.model, 'invalid', function (model, error) {
                 yell('error', error);
@@ -313,7 +324,7 @@ define('io.ox/files/share/share-settings', [
             if (this.hasLinkSupport) {
                 ext.point(POINT_SETTINGS + '/settings-public-link').invoke('draw', this.$el, this.baton);
             }
-            ext.point(POINT_SETTINGS + '/settings').invoke('draw', this.$el, this.baton);
+            ext.point(POINT_SETTINGS + '/settings-invite-people').invoke('draw', this.$el, this.baton);
             return this;
         }
     });
@@ -323,7 +334,6 @@ define('io.ox/files/share/share-settings', [
         showSettingsDialog: function (shareSettingsView) {
             var dialog = new ModalDialog({
                 async: true,
-                focus: '.link-group>input[type=text]',
                 title: 'Sharing options',
                 width: 300,
                 smartphoneInputFocus: true

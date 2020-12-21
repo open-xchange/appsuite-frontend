@@ -925,29 +925,11 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
-        // traverse folders upwards and check if root folder is Public Files
-        isOrIsUnderPublicFolder: function (model) {
-
-            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
-
-            function checkFolder(id) {
-                if (id === '15') { return true; }
-                if (id === '9' || id === '1' || id === '0' || id === undefined) { return false; }
-
-                var model = folderAPI.pool.getModel(id);
-                var parentId = model && model.get('folder_id');
-
-                return checkFolder(parentId);
-            }
-
-            return checkFolder(id);
-        },
-
         show: function (objModel, linkModel, options) {
 
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
+                notificationDefault = false,
                 title,
                 guid;
 
@@ -1039,22 +1021,27 @@ define('io.ox/files/share/permissions', [
             });
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
-                if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
+                updateSendNotificationSettings();
+                dialog.$body.find('.file-share-options').toggle(permissionsView.collection.length > 0);
+            });
+
+            dialogConfig.on('change:message', function () {
+                updateSendNotificationSettings();
+            });
+
+            function updateSendNotificationSettings() {
+                // Allways send a notification message if a guest is added or some text is in the message box
+                if (hasNewGuests() || (!_.isEmpty(dialogConfig.get('message')) && permissionsView.collection.length > 0)) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
-                    dialogConfig.unset('byHand');
+                } else if (dialogConfig.get('byHand') !== undefined) {
+                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
+                    dialogConfig.set('disabled', false);
                 } else {
                     dialogConfig.set('sendNotifications', notificationDefault);
                     dialogConfig.set('disabled', false);
                 }
-
-                if (dialogConfig.get('byHand') !== undefined) {
-                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
-                    dialogConfig.set('disabled', false);
-                }
-                dialog.$body.find('.file-share-options').toggle(dialogConfig.get('sendNotifications') && permissionsView.collection.length > 0);
-
-            });
+            }
 
             function unshareRequested() {
                 var confirmDialog = new ModalDialog({
@@ -1107,14 +1094,6 @@ define('io.ox/files/share/permissions', [
                     )
                 );
             }
-
-            dialogConfig.on('change:disabled', function () {
-                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
-            });
-            // set correct status after resume, picker might set disabled status while the dialog is paused
-            dialog.on('resume', function () {
-                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
-            });
 
             dialog.$el.addClass('share-permissions-dialog');
 
@@ -1267,7 +1246,7 @@ define('io.ox/files/share/permissions', [
                             permissionPreSelection.render().$el
                         )
                     ),
-                    // add message - not available for mail
+
                     $('<div class="file-share-options form-group">')
                     .toggle(false)
                     .addClass(_.browser.IE ? 'IE' : 'nonIE')
@@ -1295,10 +1274,6 @@ define('io.ox/files/share/permissions', [
                     window.resizeHandlerPolyfill(dialog.$body.find('.message-text')[0]);
                 }
 
-                dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {
-                    this.$('.message-text').parent().toggle(value);
-                });
-
                 typeaheadView.render();
             }
 
@@ -1313,7 +1288,7 @@ define('io.ox/files/share/permissions', [
             }
 
             function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, applyToSubFolder: objModel.isFolder() && options.nested });
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
                 shareSettings.showSettingsDialog(settingsView);
             }
 
@@ -1333,7 +1308,7 @@ define('io.ox/files/share/permissions', [
                 // publicLink.share().then(this.close, function () {
                 publicLink.share().then(function () {
                     if (entity && publicLink.hasChanges()) {
-                        permissions = mergePermissionsAndPublicLink(permissionsView.collection.toJSON(), entity, objModel.isFolder() ? 257 : 1);
+                        permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
                     }
 
                     if (objModel.isFolder()) {
