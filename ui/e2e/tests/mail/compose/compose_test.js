@@ -22,8 +22,8 @@ Before(async function (users) {
 After(async function (users) {
     await users.removeAll();
 });
-// Skipped due to OXUIB-554
-Scenario.skip('Compose and discard with/without prompts', async function (I, users, mail) {
+
+Scenario('Compose and discard with/without prompts', async function (I, users, mail) {
     const [user] = users;
 
     // preparations
@@ -38,6 +38,7 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // workflow 1: Compose & discard
     mail.newMail();
@@ -59,6 +60,7 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
     I.openApp('Mail');
+    mail.waitForApp();
     mail.newMail();
 
     let text = await I.grabValueFrom({ css: 'textarea.plain-text' });

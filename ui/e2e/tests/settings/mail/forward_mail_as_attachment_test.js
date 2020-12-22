@@ -22,8 +22,8 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-// Skipped due to OXUIB-554
-Scenario.skip('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => {
+
+Scenario('[C7778] Forwarding mail inline/attachment', async (I, users, mail) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -34,6 +34,7 @@ Scenario.skip('[C7778] Forwarding mail inline/attachment', async (I, users, mail
     }, { user });
 
     I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
     mail.selectMail('Richtig gutes Zeug');
     I.waitForVisible('h1.subject');
     I.click('Forward');

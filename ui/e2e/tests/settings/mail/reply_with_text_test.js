@@ -22,8 +22,8 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-// Skipped due to OXUIB-554
-Scenario.skip('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
+
+Scenario('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
     const user = users[0];
     const listview = locate('.list-view-control').as('List View');
 
@@ -35,6 +35,7 @@ Scenario.skip('[C7776] Insert the original email text to a reply', async (I, use
     }, { user });
 
     I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
@@ -51,6 +52,7 @@ Scenario.skip('[C7776] Insert the original email text to a reply', async (I, use
     I.click('Insert the original email text to a reply');
 
     I.openApp('Mail');
+    mail.waitForApp();
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');

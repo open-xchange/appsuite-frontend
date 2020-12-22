@@ -21,8 +21,8 @@ Before(async (users) => {
 After(async (users) => {
     await users.removeAll();
 });
-// Skipped due to OXUIB-554
-Scenario.skip('[C248438] Context menu can be opened by right click', async (I, users, mail, dialogs) => {
+
+Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail, dialogs) => {
 
     const icke = users[0].userdata.email1,
         subject = 'Context menu can be opened by right click';

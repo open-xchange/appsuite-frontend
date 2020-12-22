@@ -337,8 +337,8 @@ Scenario('[C7769] Delete signature', async function (I) {
     I.dontSee('Testsignaturecontent');
 
 });
-// Skipped due to OXUIB-554
-Scenario.skip('[C7770] Set default signature', async function (I, users, mail) {
+
+Scenario('[C7770] Set default signature', async function (I, users, mail) {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -378,6 +378,7 @@ Scenario.skip('[C7770] Set default signature', async function (I, users, mail) {
     I.see('Default signature for replies or forwardings', `.settings-list-item[data-id="${snippets[2].data}"`);
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose a mail
     I.clickToolbar('Compose');
