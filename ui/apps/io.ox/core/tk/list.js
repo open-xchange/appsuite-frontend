@@ -45,10 +45,10 @@ define('io.ox/core/tk/list', [
         className: 'list-view',
 
         scaffold: $(
-            '<li class="list-item">' +
+            '<div class="list-item selectable" role="option" aria-selected="false" tabindex="-1">' +
             '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
-            '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
-            '</li>'
+            '<div class="list-item-content"></div>' +
+            '</div>'
         ),
 
         busyIndicator: $('<li class="busy-indicator" role="presentation"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
@@ -110,7 +110,7 @@ define('io.ox/core/tk/list', [
             if (e.isKeyboardEvent) this.onContextMenu(e);
         },
 
-        // use throttle instead of debouce in order to respond during scroll momentum
+        // use throttle instead of debounce in order to respond during scroll momentum
         onScroll: _.throttle(function () {
 
             if (this.disposed || this.isBusy || !this.loader.collection || this.collection.complete || !this.$el.is(':visible')) return;
@@ -813,13 +813,7 @@ define('io.ox/core/tk/list', [
         },
 
         createListItem: function () {
-            var li = this.scaffold.clone();
-            if (this.options.selection) {
-                // a11y: use role=option and aria-selected here; no need for "aria-posinset" or "aria-setsize"
-                // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
-                li.addClass('selectable').attr({ 'aria-selected': false, role: 'option', 'tabindex': '-1' });
-            }
-            return li;
+            return this.scaffold.clone();
         },
 
         getPreviousLabel: function (li) {

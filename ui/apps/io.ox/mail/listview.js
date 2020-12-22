@@ -287,7 +287,7 @@ define('io.ox/mail/listview', [
             id: 'row3',
             index: 300,
             draw: function (baton) {
-                if (!baton.app || !baton.app.useTextPreview) return;
+                if (!baton.app || !baton.app.useTextPreview()) return;
                 var row = $('<div class="list-item-row">');
                 ext.point('io.ox/mail/listview/item/default/row3').invoke('draw', row, baton);
                 this.append(row);

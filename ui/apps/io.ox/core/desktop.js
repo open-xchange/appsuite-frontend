@@ -976,7 +976,7 @@ define('io.ox/core/desktop', [
     });
 
     // show
-    $('#io-ox-core').show();
+    $('#io-ox-core').removeAttr('style');
 
     // check if any open application has unsaved changes
     window.onbeforeunload = function () {
@@ -1014,7 +1014,7 @@ define('io.ox/core/desktop', [
                 },
 
                 get: function (id) {
-                    return $('#io-ox-screens').find('#io-ox-' + id);
+                    return $('#io-ox-' + id);
                 },
 
                 current: function () {
@@ -1022,7 +1022,7 @@ define('io.ox/core/desktop', [
                 },
 
                 hide: function (id) {
-                    this.get(id).hide();
+                    this.get(id);
                     this.trigger('hide-' + id);
                 },
 
@@ -1034,7 +1034,7 @@ define('io.ox/core/desktop', [
                             that.hide(screenId);
                         }
                     });
-                    this.get(id).show();
+                    this.get(id).removeAttr('style');
                     current = id;
                     this.trigger('show-' + id);
                 }
@@ -1405,7 +1405,7 @@ define('io.ox/core/desktop', [
                             //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
-                        node.show();
+                        node.css({ visibility: 'visible', zIndex: 1 }).removeAttr('aria-hidden');
 
                         if (self === null) return;
                         // don't hide window if this is a floating one
@@ -1452,7 +1452,7 @@ define('io.ox/core/desktop', [
                         this.nodes.outer.detach();
                         $('body').css('overflowY', '');
                     } else {
-                        this.nodes.outer.hide();
+                        this.nodes.outer.css({ visibility: 'hidden', zIndex: -1 }).attr('aria-hidden', true);
                     }
                     this.state.visible = false;
                     this.trigger('hide');

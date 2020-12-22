@@ -810,10 +810,6 @@ define('io.ox/mail/main', [
                 return app.supportsTextPreviewConfiguration() && app.props.get('textPreview');
             };
 
-            app.on('resume', function () {
-                // Viewport calculations are invalid when app is invisible (See Bug 58552)
-                this.listView.fetchTextPreview();
-            });
         },
 
         /*

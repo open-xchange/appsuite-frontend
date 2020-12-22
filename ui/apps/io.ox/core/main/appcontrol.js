@@ -316,13 +316,8 @@ define('io.ox/core/main/appcontrol', [
             ox.ui.apps.on('launch resume', function (model) {
                 if (model.get('floating')) return;
 
-                $('.launcher-dropdown').find('.lcell[data-app-name]')
-                    .removeClass('active').end()
-                    .find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active');
-
-                $('#io-ox-quicklaunch').find('.lcell[data-id]')
-                    .removeClass('active').end()
-                    .find('.lcell[data-id="' + model.get('name') + '"]').addClass('active');
+                $('.launcher-dropdown').find('.lcell[data-app-name="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
+                $('#io-ox-quicklaunch').find('.lcell[data-id="' + model.get('name') + '"]').addClass('active').siblings().removeClass('active');
 
                 _.defer(function () {
                     $(document).trigger('resize');

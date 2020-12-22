@@ -42,7 +42,7 @@ define('io.ox/core/tk/sidebar', [], function () {
             // ensure proper css classes
             options.sidebar.addClass('abs generic-sidebar scrollpane border-' + (options.side === 'left' ? 'right' : 'left'));
 
-            // replace target node (default is indow manager) by sidebar container
+            // replace target node (default is window manager) by sidebar container
             var container = $('<div class="abs generic-sidebar-container"><div class="abs generic-sidebar-content"></div></div>');
             var target = options.target || $('#io-ox-windowmanager');
             container.insertBefore(target);

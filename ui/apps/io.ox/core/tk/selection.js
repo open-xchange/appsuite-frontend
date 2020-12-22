@@ -123,11 +123,6 @@ define('io.ox/core/tk/selection', [
             return e && e.shiftKey && multiple;
         };
 
-        // TODO: unused
-        // isDragged = function (e) {
-        //     return $(e.currentTarget).hasClass('dnd-over');
-        // };
-
         hasMultiple = function () {
             return _.size(selectedItems) > 1;
         };
@@ -324,12 +319,8 @@ define('io.ox/core/tk/selection', [
         };
 
         dblClickHandler = function (e) {
-            var node, key;
-            if (!e.isDefaultPrevented()) {
-                node = $(this);
-                key = node.attr('data-obj-id');
-                self.trigger('selection:doubleclick', key);
-            }
+            if (e.isDefaultPrevented()) return;
+            self.trigger('selection:doubleclick', $(this).attr('data-obj-id'));
         };
 
         mousedownHandler = function (e) {
@@ -418,7 +409,7 @@ define('io.ox/core/tk/selection', [
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
 
-                // check if the touchstart was triggerd from a inline button or folder tree
+                // check if the touchstart was triggered from a inline button or folder tree
                 if (mobileSelectMode) {
                     apply(id, e, true);
                 }
@@ -577,7 +568,7 @@ define('io.ox/core/tk/selection', [
                 // clear mark
                 clearMarks();
                 if (isMarker(e)) return;
-                // call orignale clear
+                // call orignal clear
                 clearOrginal(e);
             };
             fastMark = function (id, node) {
