@@ -282,7 +282,7 @@ define('io.ox/mail/compose/model', [
         create: function () {
             var self = this;
 
-            this.type = this.get('type') || (self.has('id') ? 'edit' : 'new');
+            this.type = this.get('type') || 'new';
             this.original = this.get('original');
             // unset type and original since both are only used on creation of a model
             this.unset('type');
@@ -291,6 +291,7 @@ define('io.ox/mail/compose/model', [
             // restore existing
             if (self.has('id')) {
                 return composeAPI.space.get(self.get('id')).then(function success(data) {
+                    self.type = data.meta.type || self.type;
                     return self.sanitizeContent(data);
                 }, function fail(data) {
                     var baton = new ext.Baton({ model: self, result: data });
