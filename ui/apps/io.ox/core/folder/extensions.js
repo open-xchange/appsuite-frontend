@@ -411,8 +411,14 @@ define('io.ox/core/folder/extensions', [
 
         // used to manage subscribed/unsubscribed status of folders from federated shares
         manageSubscriptions: function () {
-            this.append(
-                $('<li role="presentation">').append(
+            var node = $('<li role="presentation">');
+            // append node now (serves as placeholder until requests return)
+            this.append(node);
+            $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (pFolders, sFolders) {
+                // check if there are folders to unsubscribe at all
+                if (_.isEmpty(pFolders) && _.isEmpty(sFolders)) return node.remove();
+
+                node.append(
                     //#. opens a dialog to manage shared or public folders
                     $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Shares')).on('click', function () {
                         require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
@@ -442,8 +448,10 @@ define('io.ox/core/folder/extensions', [
                             });
                         });
                     })
-                )
-            );
+                );
+            }, function () {
+                node.remove();
+            });
         },
 
         subscribe: function (baton) {
