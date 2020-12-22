@@ -45,7 +45,6 @@ define('io.ox/files/share/model', [
         },
 
         _setUrlAndSettings: function () {
-            var hasUrl = false;
             var extendedObjPermissions = 'com.openexchange.share.extendedObjectPermissions';
             var extendedPermissions = 'com.openexchange.share.extendedPermissions';
             if (this.attributes.files) {
@@ -62,8 +61,6 @@ define('io.ox/files/share/model', [
                                 this.attributes.url = permission.share_url;
                                 if (permission.password) {
                                     this.attributes.password = permission.password;
-                                    // TODO York why is hasUrl true if password is set
-                                    hasUrl = true;
                                 }
                                 if (permission.expiry_date) {
                                     this.attributes.expires = permission.expires;
@@ -76,7 +73,6 @@ define('io.ox/files/share/model', [
                     }
                 }, this);
             }
-            return hasUrl;
         },
 
         hasUrl: function () {
