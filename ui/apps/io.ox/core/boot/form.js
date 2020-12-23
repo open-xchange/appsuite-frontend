@@ -235,7 +235,7 @@ define('io.ox/core/boot/form', [
             var configCss = '';
 
             var background = lc.backgroundColor ? lc.backgroundColor : false;
-            if (!_.device('smartphone')) background = lc.backgroundImage ? lc.backgroundImage : false;
+            if (!_.device('smartphone')) background = (lc.backgroundImage ? lc.backgroundImage : false) || background;
             if (background) configCss += '#io-ox-login-container { background: ' + background + ' } ';
 
             if (lc.topVignette && lc.topVignette.transparency) configCss += '#io-ox-login-header { background: linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)) } ';
