@@ -789,6 +789,31 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
+    function getFolderId(baton) {
+        var folderId;
+        if (baton.collection.has('one')) {
+
+            if (baton.models && baton.models.length > 0) {
+                var selectedModel = baton.models[0];
+                folderId = selectedModel.isFolder() ? selectedModel.get('id') : selectedModel.get('folder_id');
+            }
+
+            if (!folderId) {
+                var data = baton.first();
+                folderId = baton.collection.has('folders') ? data.id : data.folder_id;
+                if (!folderId) {
+                    folderId = data.folder_id && data.folder_id !== 'folder' ? data.folder_id : data.id;
+                }
+            }
+
+        } else if (baton.app) {
+            // use current folder
+            folderId = baton.app.folder.get();
+        }
+
+        return folderId;
+    }
+
     /**
      * Checks if the collection inside an event is shareable
      * @param {Event} e
@@ -799,19 +824,12 @@ define('io.ox/files/actions', [
      *  Whether the elements inside the collection are shareable
      */
     function isShareable(type, baton) {
-        var id;
         // not possible for multi-selection
         if (baton.collection.has('multiple')) return false;
         if (isContact(baton)) return false;
         if (baton.isViewer && !isCurrentVersion(baton)) return false;
         // get folder id
-        if (baton.collection.has('one')) {
-            var data = baton.first();
-            id = data.folder_id || data.id;
-        } else if (baton.app) {
-            // use current folder
-            id = baton.app.folder.get();
-        }
+        var id = getFolderId(baton);
         if (!id) return false;
         // general capability and folder check
         var model = folderAPI.pool.getModel(id);
