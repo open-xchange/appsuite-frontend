@@ -79,7 +79,9 @@ define('io.ox/core/boot/fixes', [], function () {
         // ios scroll fix; only fix if scrollTop is below 64 pixel
         // some apps like portal really scroll <body>
         if ($(window).scrollTop() > 64) return;
-        _.defer(function () { $(window).scrollTop(0); });
+
+        // iOS safari bug: needs to get triggered later because rendering is not complete after setTimeout 0
+        setTimeout(function () { window.scrollTo(0, 1); }, 500);
     });
 
     // Touch
