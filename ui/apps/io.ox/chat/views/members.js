@@ -16,8 +16,10 @@ define('io.ox/chat/views/members', [
     'io.ox/chat/views/avatar',
     'io.ox/chat/data',
     'io.ox/chat/api',
-    'io.ox/switchboard/presence'
-], function (Disposable, AvatarView, data, api, presence) {
+    'io.ox/chat/util',
+    'io.ox/switchboard/presence',
+    'gettext!io.ox/chat'
+], function (Disposable, AvatarView, data, api, util, presence, gt) {
 
     'use strict';
 
@@ -45,7 +47,9 @@ define('io.ox/chat/views/members', [
                     $('<span>').text(model.id)
                 ),
                 $('<div class="member-controls">').append(
-                    $('<button class="remove">').append($('<i class="fa fa-times" aria-hidden="true">'))
+                    $('<button class="remove">')
+                        .attr('title', gt('Remove member'))
+                        .append(util.svg({ icon: 'fa-times' }))
                 )
             );
         },

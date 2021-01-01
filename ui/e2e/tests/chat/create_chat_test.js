@@ -55,8 +55,8 @@ Scenario('Create new private chat from floating window via dropdown', async (I, 
     I.click('~Detach window');
 
     I.click('~New', '.ox-chat');
-    I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-    I.click('Private chat', '.ox-chat .action-button-rounded .dropdown-menu');
+    I.waitForElement('.ox-chat .btn-round .dropdown-menu');
+    I.click('Private chat', '.ox-chat .btn-round .dropdown-menu');
 
     I.waitForText(users[1].userdata.email1);
     I.click(locate('.address-picker li').withText(users[1].userdata.email1));
@@ -240,15 +240,15 @@ Scenario('Create new group chat from floating window via dropdown', async (I, us
     I.click('~Detach window');
 
     I.click('~New', '.ox-chat');
-    I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-    I.click('Group chat', '.ox-chat .action-button-rounded .dropdown-menu');
+    I.waitForElement('.ox-chat .btn-round .dropdown-menu');
+    I.click('Group chat', '.ox-chat .btn-round .dropdown-menu');
 
     chat.fillNewGroupForm(groupTitle, emails);
     dialogs.clickButton('Create chat');
 
     I.waitForElement('.ox-chat .controls');
-    I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
-    I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
+    I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
+    I.waitForVisible('.chat-leftside .chat-avatar svg[data-icon="fa-group"]');
 
 });
 
@@ -270,8 +270,8 @@ Scenario('Create new group chat from floating window via icon', async (I, users,
     dialogs.clickButton('Create chat');
 
     I.waitForElement('.ox-chat .controls');
-    I.waitForVisible('.chat-rightside .chat-avatar .fa-group');
-    I.waitForVisible('.chat-leftside .chat-avatar .fa-group');
+    I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
+    I.waitForVisible('.chat-leftside .chat-avatar svg[data-icon="fa-group"]');
 
 });
 
@@ -307,7 +307,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
 
         chat.sendMessage('Hello.');
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 
     await session('Bob', async () => {
@@ -318,7 +318,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
         I.waitForText('Hello.', 3, '.messages');
         I.see('This better become a group', '.ox-chat .classic-toolbar');
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 
     await session('Charlie', async () => {
@@ -329,7 +329,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
         I.waitForText('Hello.', 3, '.messages');
         I.see('This better become a group', '.ox-chat .classic-toolbar');
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 });
 
@@ -376,7 +376,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
 
         chat.sendMessage(message);
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 
     await session('Bob', async () => {
@@ -387,7 +387,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
         I.waitForText(message, 3, '.ox-chat .messages');
         I.seeNumberOfVisibleElements('.message.system', 2, '.ox-chat');
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 
     await session('Charlie', async () => {
@@ -398,7 +398,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
         I.waitForText(message, 3, '.ox-chat .messages');
         I.seeNumberOfVisibleElements('.message.system', 2, '.ox-chat');
         I.click('~Close chat', '.ox-chat');
-        I.waitForVisible('.chat-list .chat-avatar .fa-group');
+        I.waitForVisible('.chat-list .chat-avatar svg[data-icon="fa-group"]');
     });
 });
 
@@ -454,8 +454,8 @@ Scenario('Create new channel from floating window via dropdown', async (I, users
     dialogs.clickButton('Create channel');
 
     I.waitForElement('.ox-chat .controls');
-    I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);
-    I.waitForFunction(async () => $('.chat-leftside .group.avatar.image').css('background-image') !== 'none', 10);
+    I.waitForFunction(async () => $('.chat-rightside .group-avatar.image').css('background-image') !== 'none', 10);
+    I.waitForFunction(async () => $('.chat-leftside .group-avatar.image').css('background-image') !== 'none', 10);
 });
 
 Scenario('Create new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {

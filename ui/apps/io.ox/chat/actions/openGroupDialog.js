@@ -22,9 +22,10 @@ define('io.ox/chat/actions/openGroupDialog', [
     'io.ox/chat/data',
     'io.ox/core/notifications',
     'io.ox/chat/api',
+    'io.ox/chat/util',
     'gettext!io.ox/chat',
     'less!io.ox/contacts/edit/style'
-], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, notifications, api, gt) {
+], function (ext, ModalDialog, ImageUploadView, MemberView, AddMemberView, mini, data, notifications, api, util, gt) {
 
     'use strict';
 
@@ -33,7 +34,7 @@ define('io.ox/chat/actions/openGroupDialog', [
         render: function () {
             var result = ImageUploadView.prototype.render.call(this);
             var icon = this.model.get('type') === 'channel' ? 'fa-hashtag' : 'fa-group';
-            this.$('.contact-photo').append($('<i class="fa fallback-icon">').addClass(icon));
+            this.$('.contact-photo').append(util.svg({ icon: icon }).addClass('fallback-icon'));
             this.$('input').attr('data-state', 'manual');
             return result;
         },

@@ -129,9 +129,16 @@ define('io.ox/switchboard/presence', [
         invisible: gt('Invisible')
     };
 
-    // create template
-    var tmpl = $('<div class="presence">')
-        .append('<span class="icon" aria-hidden="true"><i class="fa"></i></span>');
+    // create svg-based template
+    var tmpl = $(
+        '<div class="presence">' +
+        '<span class="icon" aria-hidden="true">' +
+        '<svg viewbox="0 0 100 100" class="fa">' +
+        '<text class="online" x="50" y="86" text-anchor="middle">\uf00c</text>' +
+        '<text class="absent" x="50" y="86" text-anchor="middle">\uf017</text>' +
+        '<text class="busy" x="50" y="86" text-anchor="middle">\uf068</text>' +
+        '</svg></span></div>'
+    );
 
     function createPresenceNode(availability, id) {
         return createPresenceIcon(availability).attr('data-id', id);
@@ -139,7 +146,9 @@ define('io.ox/switchboard/presence', [
 
     function createPresenceIcon(availability) {
         var className = availability === 'invisible' ? 'offline' : availability;
-        return tmpl.clone().addClass(className).children('.icon').attr('title', names[availability]).end();
+        return tmpl.clone()
+            .addClass(className)
+            .children('.icon').attr('title', names[availability]).end();
     }
 
     function updateUserPresences() {

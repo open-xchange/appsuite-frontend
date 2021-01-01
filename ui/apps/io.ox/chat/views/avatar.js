@@ -44,10 +44,15 @@ define('io.ox/chat/views/avatar', [
 
         update: function () {
             var data = this.model.pick('email', 'first_name', 'last_name', 'image');
-            this.$el
-                .text(data.image ? '' : util.getInitials(data))
-                .addClass(util.getInitialsColor(util.getInitials(data)))
-                .css('background-image', data.image ? 'url(api/contacts/picture?action=get&email=' + encodeURIComponent(data.email) + '&width=96&height=96&scaleType=cover)' : '');
+            var initials = util.getInitials(data);
+            this.$el.addClass(util.getInitialsColor(initials));
+            if (!data.image) {
+                this.$el.append(
+                    '<svg viewbox="0 0 48 48"><text x="24" y="28" text-anchor="middle">' + _.escape(initials) + '</text></svg>'
+                );
+            } else {
+                this.$el.css('background-image', 'url(api/contacts/picture?action=get&email=' + encodeURIComponent(data.email) + '&width=96&height=96&scaleType=cover)');
+            }
         },
 
         onChangeName: function () {

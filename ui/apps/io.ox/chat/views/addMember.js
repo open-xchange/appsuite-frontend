@@ -17,9 +17,10 @@ define('io.ox/chat/views/addMember', [
     'io.ox/participants/model',
     'io.ox/chat/data',
     'io.ox/chat/api',
+    'io.ox/chat/util',
     'gettext!io.ox/chat',
     'io.ox/participants/add'
-], function (Disposable, Typeahead, pModel, data, api, gt) {
+], function (Disposable, Typeahead, pModel, data, api, util, gt) {
 
     'use strict';
 
@@ -61,10 +62,10 @@ define('io.ox/chat/views/addMember', [
                 $('<legend>').text(gt('Add members')),
                 $('<div>').append(
                     typeahead.$el,
-                    $('<a href="#" role="button" class="open-addressbook-popup">').append(
-                        $('<i class="fa fa-address-book" aria-hidden="true">').attr('title', gt('Select contacts'))
-                    ).attr('aria-label', gt('Select contacts'))
-                    .on('click', this.openAddressBookPicker.bind(this))
+                    $('<a href="#" role="button" class="open-addressbook-popup">')
+                        .append(util.svg({ icon: 'fa-address-book' }).attr('title', gt('Select contacts')))
+                        .attr('aria-label', gt('Select contacts'))
+                        .on('click', this.openAddressBookPicker.bind(this))
                 )
             );
 

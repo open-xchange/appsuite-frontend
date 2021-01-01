@@ -103,7 +103,7 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
         renderFile: function (file) {
             if (!file) return;
             return [
-                $('<i class="fa icon" aria-hidden="true">').addClass(util.getClassFromMimetype(file.mimetype)),
+                util.svg({ icon: 'fa-' + util.getClassFromMimetype(file.mimetype) }).addClass('file-type'),
                 $('<span class="name">').text(file.name)
             ];
         },
@@ -127,10 +127,48 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
             if (obj instanceof File) return true;
             if (typeof obj.name === 'string' && obj.type) return true;
             return false;
-        }
+        },
 
+        svg: function (options) {
+            var icon = map[options.icon] || '';
+            return $('<svg viewbox="0 0 100 100" class="fa" aria-hidden="true" data-icon="' + options.icon + '">' +
+                '<text x="50" y="86" text-anchor="middle">' + icon + '</text>' +
+                '</svg>');
+        }
+    };
+
+    var map = {
+        'fa-address-book': '\uf2b9',
+        'fa-bars': '\uf0c9',
+        'fa-chevron-down': '\uf078',
+        'fa-chevron-left': '\uf053',
+        'fa-clock-o': '\uf017',
+        'fa-download': '\uf019',
+        'fa-envelope-o': '\uf003',
+        'fa-group': '\uf0c0',
+        'fa-hashtag': '\uf292',
+        'fa-paperclip': '\uf0c6',
+        'fa-paper-plane': '\uf1d8',
+        'fa-phone': '\uf095',
+        'fa-play': '\uf04b',
+        'fa-plus': '\uf067',
+        'fa-smile-o': '\uf118',
+        'fa-times': '\uf00d',
+        'fa-times-circle': '\uf057',
+        'fa-user': '\uf007',
+        'fa-users': '\uf0c0',
+        'fa-window-maximize': '\uf2d0',
+        // file types
+        'fa-file': '\uf016', // fa-file-o
+        'fa-pdf': '\uf1c1', // fa-file-pdf-o
+        'fa-txt': '\uf0f6', // fa-file-text-o
+        'fa-doc': '\uf1c3', // fa-file-word-o
+        'fa-xls': '\uf1c3', // fa-file-excel-o
+        'fa-ppt': '\uf1c4', // fa-file-powerpoint-o
+        'fa-zip': '\uf187', // fa-archive
+        'fa-svg': '\uf1c9', // fa-file-code-o
+        'fa-image': '\uf1c5' // file-image-o
     };
 
     return util;
-
 });

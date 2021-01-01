@@ -103,7 +103,9 @@ define('io.ox/chat/views/file', [
 
             if (file.isAnimated) {
                 var animatedFile = $('<img class="animated-file">'),
-                    playButton = $('<button class="play-button">').append($('<i class="fa fa-play">')),
+                    playButton = $('<button class="play-button">')
+                        .attr('title', gt('Load animation'))
+                        .append(util.svg({ icon: 'fa-play' })),
                     loadAnimation = function () {
                         url.request(file.url).then(function (url) {
                             animatedFile.attr('src', url);
@@ -113,7 +115,7 @@ define('io.ox/chat/views/file', [
                 $thumbnail.append(animatedFile, playButton);
                 // autostart animation for small files
                 // 5mb (1024 * 1024 * 5)
-                if (file.size && file.size < 5242880) {
+                if (file.size && file.size < 0x100000 * 5) {
                     loadAnimation();
                     this.$el.addClass('animation-running');
                     $thumbnail.addClass('io-ox-busy');
@@ -138,9 +140,11 @@ define('io.ox/chat/views/file', [
             var fileType = util.getFileTypeName(file.type, file.name);
 
             this.$el.addClass('message-file-container').append(
-                $('<i class="fa icon" aria-hidden="true">').addClass(classFromMimeType),
-                $('<div class="name ellipsis">').text(file.name),
-                $('<div class="info ellipsis">').text(fileSize + ' ' + fileType)
+                util.svg({ icon: 'fa-' + classFromMimeType }).addClass('file-type ' + classFromMimeType),
+                $('<div class="details">').append(
+                    $('<div class="name ellipsis">').text(file.name),
+                    $('<div class="info ellipsis">').text(fileSize + ' ' + fileType)
+                )
             );
 
             if (file.isBlob) {
@@ -153,14 +157,14 @@ define('io.ox/chat/views/file', [
         getDownloadButton: function (url) {
             return $('<button type="button" class="file-action download">')
                 .attr({ 'data-cmd': 'download', 'data-url': url, 'title': gt('Download file') })
-                .append('<i class="fa fa-download" aria-hidden="true">');
+                .append(util.svg({ icon: 'fa-download' }));
         },
 
         getCancelUploadButton: function () {
             return $('<button type="button" class="file-action cancel-upload">')
                 .hide()
                 .attr('title', gt('Cancel file upload'))
-                .append('<i class="fa fa-times" aria-hidden="true">');
+                .append(util.svg({ icon: 'fa-times' }));
         },
 
         getProgressBar: function () {

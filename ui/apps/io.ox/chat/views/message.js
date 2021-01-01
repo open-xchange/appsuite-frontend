@@ -92,7 +92,7 @@ define('io.ox/chat/views/message', [
             return $('<span class="email">')
                 .attr('title', gt('Messages are delivered by email.'))
                 .append(
-                    $('<i class="fa fa-envelope-o" aria-hidden="true">'),
+                    util.svg({ icon: 'fa-envelope-o' }),
                     $.txt(' ' + user.getEmail() + ' ')
                 );
         },
@@ -122,7 +122,7 @@ define('io.ox/chat/views/message', [
             if (this.model.isSystem()) return;
             var toggle = $('<button type="button" class="btn btn-link dropdown-toggle actions-toggle" aria-haspopup="true" data-toggle="dropdown">')
                     .attr('title', gt('Message actions'))
-                    .append($('<i class="fa fa-bars" aria-hidden="true">')),
+                    .append(util.svg({ icon: 'fa-bars' })),
                 menu = $('<ul class="dropdown-menu dropdown-menu-right">'),
                 dropdown = new Dropdown({
                     className: 'message-actions-dropdown dropdown',

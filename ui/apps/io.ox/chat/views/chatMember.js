@@ -14,67 +14,23 @@
 define('io.ox/chat/views/chatMember', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/badge'
-    //'gettext!io.ox/chat'
 ], function (DisposableView, BadgeView) {
 
     'use strict';
 
     var ChatMemberView = DisposableView.extend({
 
-        tagName: 'div',
         className: 'chat-members-container',
 
-        events: {
-            'click .expand-members': 'toggleList'
-        },
-
         initialize: function () {
-            this.listenTo(this.collection, {
-                add: this.onAdd,
-                remove: this.onRemove
-            });
+            this.listenTo(this.collection, { add: this.onAdd, remove: this.onRemove });
         },
 
         render: function () {
             this.$el.append(
                 $('<ul class="members">').append(this.collection.map(this.renderMember, this))
-                //$('<button class="expand-members btn btn-link">').attr('title', gt('Show all members')).append($('<i class="fa fa-caret-down">'))
             );
-            //this.updateToggleButton();
             return this;
-        },
-
-        updateToggleButton: function () {
-            // cannot calculate length if invisible
-            if (!this.$el.is(':visible')) return;
-
-            var members = this.$('li'),
-                overflow = false;
-            // check if we have started a second row
-            for (var i = 0; i < members.length - 1 && overflow === false; i++) {
-                if (members[i].offsetTop < members[i + 1].offsetTop) overflow = true;
-            }
-            if (overflow) return this.showButton();
-
-            this.hideButton();
-        },
-
-        hideButton: function () {
-            this.toggleList(false);
-            this.$el.removeClass('show-button');
-        },
-
-        showButton: function () {
-            this.$el.addClass('show-button');
-        },
-
-        toggleList: function (expand) {
-            var isExpanded = _.isBoolean(expand) ? !expand : this.$el.closest('.header').hasClass('expanded');
-
-            this.$el.closest('.header').toggleClass('expanded', !isExpanded)
-                .find('.expand-members i')
-                .toggleClass('fa-caret-up', !isExpanded)
-                .toggleClass('fa-caret-down', isExpanded);
         },
 
         renderMember: function (model) {
@@ -83,15 +39,11 @@ define('io.ox/chat/views/chatMember', [
         },
 
         onAdd: function (model) {
-            this.$('.members').append(
-                $('<li>').append(new BadgeView({ model: model }).render().$el)
-            );
-            //this.updateToggleButton();
+            this.$('.members').append(this.renderMember(model));
         },
 
         onRemove: function (model) {
             this.$('[data-email="' + model.get('email') + '"]').parent().remove();
-            //this.updateToggleButton();
         }
     });
 

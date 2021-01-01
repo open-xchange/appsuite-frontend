@@ -16,8 +16,9 @@ define('io.ox/chat/commands', [
     'io.ox/chat/events',
     'io.ox/switchboard/api',
     'io.ox/chat/data',
+    'io.ox/chat/util',
     'gettext!io.ox/chat'
-], function (ext, events, api, data, gt) {
+], function (ext, events, api, data, util, gt) {
 
     'use strict';
 
@@ -139,9 +140,11 @@ define('io.ox/chat/commands', [
         var caller = data.users.getName(sender) || sender;
 
         return $('<a class="content incoming-call" target="_blank" rel="noopener">').attr('href', href).append(
-            $('<i class="fa fa-phone" aria-hidden="true">'),
-            $('<div class="caller ellipsis">').text(gt('%1$s is calling', caller)),
-            $('<div class="join-link ellipsis">').text(href)
+            $('<div class="icon">').append(util.svg({ icon: 'fa-phone' })),
+            $('<div class="details">').append(
+                $('<div class="caller ellipsis">').text(gt('%1$s is calling', caller)),
+                $('<div class="join-link ellipsis">').text(href)
+            )
         );
     }
 

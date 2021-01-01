@@ -17,6 +17,7 @@ define('io.ox/chat/main', [
     'io.ox/chat/api',
     'io.ox/chat/data',
     'io.ox/chat/events',
+    'io.ox/chat/util',
     'io.ox/backbone/views/window',
     'io.ox/chat/views/empty',
     'io.ox/chat/views/chat',
@@ -27,7 +28,8 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/search',
     'io.ox/chat/views/searchResult',
     'io.ox/chat/util/url',
-    'io.ox/core/notifications',
+    'io.ox/chat/toolbar',
+    'io.ox/contacts/api',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
     'io.ox/chat/views/avatar',
@@ -37,7 +39,7 @@ define('io.ox/chat/main', [
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, notifications, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
 
     'use strict';
 
@@ -205,7 +207,7 @@ define('io.ox/chat/main', [
                 data.chats.add(chat);
                 this.showChat(chat.get('roomId'));
             }.bind(this), function fail() {
-                notifications.yell('error', gt('Private chat could not be created.'));
+                yell('error', gt('Private chat could not be created.'));
             });
         },
 
@@ -533,9 +535,12 @@ define('io.ox/chat/main', [
                             new AvatarView({ model: user }).render().$el,
                             presence.getPresenceIcon(user.get('email'))
                         ),
-                        $('<div class="dropdown pull-right action-button-rounded">').append(
+                        $('<div class="name">').text(user.getName()),
+                        $('<div class="dropdown btn-round">').append(
                             $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
-                                .append($('<i class="fa fa-plus" aria-hidden="true">').attr('title', gt('New'))),
+                                .append(
+                                    util.svg({ icon: 'fa-plus', size: 16 }).attr('title', gt('New'))
+                                ),
                             $('<ul class="dropdown-menu" role="menu">').append(
                                 //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New')),
@@ -555,8 +560,7 @@ define('io.ox/chat/main', [
                                         .text(gt('Channel'))
                                 )
                             )
-                        ),
-                        $('<div class="name">').text(user.getName())
+                        )
                     ),
                     new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
                     new searchView().render().$el,
@@ -564,15 +568,15 @@ define('io.ox/chat/main', [
                     // recent, all channels, all files
                     $('<div class="navigation-actions">').append(
                         $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                            $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">'),
+                            util.svg({ icon: 'fa-hashtag' }).addClass('btn-icon'),
                             $.txt(gt('All channels'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                            $('<i class="fa fa-paperclip btn-icon" aria-hidden="true">'),
+                            util.svg({ icon: 'fa-paperclip' }).addClass('btn-icon'),
                             $.txt(gt('All files'))
                         ),
                         $('<button type="button" class="btn-nav" data-cmd="show-history">').append(
-                            $('<i class="fa fa-clock-o btn-icon" aria-hidden="true">'),
+                            util.svg({ icon: 'fa-clock-o' }).addClass('btn-icon'),
                             // Was "Chat History"; lets try "History" (because we have Chats & Channels)
                             //#. A list (history) of older chats, like the browser history of visited sites
                             $.txt(gt('History'))
@@ -676,13 +680,7 @@ define('io.ox/chat/main', [
         prio: 'hi',
         mobile: 'lo',
         custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
-                )
-            );
-        }
+        draw: toolbar.detach
     });
 
     ext.point('io.ox/chat/list/toolbar/create').extend({

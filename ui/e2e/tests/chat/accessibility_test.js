@@ -108,8 +108,8 @@ Scenario.skip('Check accessibility of the chat in floating mode', async (I, cont
 
         // create a private chat
         I.click('~New', '.ox-chat');
-        I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-        I.click('Private chat', '.ox-chat .action-button-rounded .dropdown-menu');
+        I.waitForElement('.ox-chat .btn-round .dropdown-menu');
+        I.click('Private chat', '.ox-chat .btn-round .dropdown-menu');
         I.waitForText(bob.userdata.email1);
         I.click(locate('.address-picker li').withText(bob.userdata.email1));
         I.click('Start conversation');
@@ -120,8 +120,8 @@ Scenario.skip('Check accessibility of the chat in floating mode', async (I, cont
 
         // create a group chat
         I.click('~New', '.ox-chat');
-        I.waitForElement('.ox-chat .action-button-rounded .dropdown-menu');
-        I.click('Group chat', '.ox-chat .action-button-rounded .dropdown-menu');
+        I.waitForElement('.ox-chat .btn-round .dropdown-menu');
+        I.click('Group chat', '.ox-chat .btn-round .dropdown-menu');
         chat.fillNewGroupForm(groupTitle, emails);
         expect(await I.grabAxeReport()).to.be.accessible;
         dialogs.clickButton('Create chat');

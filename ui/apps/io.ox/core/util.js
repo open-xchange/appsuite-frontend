@@ -295,7 +295,6 @@ define('io.ox/core/util', [
             $outer.remove();
             return 100 - widthWithScroll;
         })
-
     };
 
     return that;

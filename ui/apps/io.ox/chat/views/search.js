@@ -14,8 +14,9 @@
 define('io.ox/chat/views/search', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/events',
+    'io.ox/chat/util',
     'gettext!io.ox/chat'
-], function (DisposableView, events, gt) {
+], function (DisposableView, events, util, gt) {
 
     'use strict';
 
@@ -38,7 +39,9 @@ define('io.ox/chat/views/search', [
             this.$el.append(
                 //#. search (e.g. by name) for an already existing chat or start a new chat
                 $('<input type="text" spellcheck="false" autocomplete="off" placeholder="' + gt('Search or start new chat') + '">').attr('aria-label', gt('Search or start new chat')),
-                $('<button type="button" class="btn btn-link">').append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+                $('<button type="button" class="btn btn-link">').append(
+                    util.svg({ icon: 'fa-times-circle' })
+                )
             );
             return this;
         },

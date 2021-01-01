@@ -20,45 +20,11 @@ define('io.ox/chat/views/fileList', [
     'io.ox/chat/api',
     'io.ox/chat/util/url',
     'io.ox/core/strings',
+    'io.ox/chat/toolbar',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, data, ToolbarView, util, api, url, strings, gt) {
+], function (ext, DisposableView, data, ToolbarView, util, api, url, strings, toolbar, gt) {
 
     'use strict';
-
-    ext.point('io.ox/chat/files/toolbar').extend({
-        id: 'back',
-        index: 100,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').attr('aria-label', gt('Close chat')).append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/files/toolbar').extend({
-        id: 'title',
-        index: 200,
-        custom: true,
-        draw: function () {
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All files'));
-        }
-    });
-
-    ext.point('io.ox/chat/files/toolbar').extend({
-        id: 'switch-to-floating',
-        index: 300,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
-                )
-            );
-        }
-    });
 
     var FileList = DisposableView.extend({
 
@@ -127,17 +93,19 @@ define('io.ox/chat/views/fileList', [
                     }.bind(this));
                 });
             } else {
+                var mimetype = model.get('mimetype');
+                var filetype = util.getClassFromMimetype(mimetype);
                 $button.attr({ 'data-cmd': 'download', 'data-url': model.getFileUrl() });
                 $preview.addClass('flex-center-vertically').append(
-                    $('<i class="fa icon" aria-hidden="true">')
-                        .addClass(util.getClassFromMimetype(model.get('mimetype')))
-                        .attr('title', util.getFileTypeName(model.get('mimetype'), model.get('name')))
+                    util.svg({ icon: 'fa-' + filetype })
+                        .addClass('file-type ' + filetype)
+                        .attr('title', util.getFileTypeName(mimetype, model.get('name')))
                 );
             }
             // details
             $details.append(
                 $('<div class="filename">').text(model.get('name')),
-                $('<div class="filestats">').append(
+                $('<div class="filestats ellipsis">').append(
                     $('<span class="filedate">').text(data.users.getShortName(model.get('sender'))),
                     $('<span class="filesize">').text(strings.fileSize(model.get('size'), 0))
                 )
@@ -168,6 +136,29 @@ define('io.ox/chat/views/fileList', [
             });
         }
     });
+
+    ext.point('io.ox/chat/files/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function () {
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All files'));
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        }
+    );
 
     return FileList;
 });

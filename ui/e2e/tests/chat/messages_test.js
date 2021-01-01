@@ -122,7 +122,7 @@ Scenario('Edit a sent message', async (I, users, chat) => {
         chat.createPrivateChat(users[1].userdata.email1);
 
         // via dropdown menu
-        I.retry(3).click('.messages svg', chatLocator);
+        I.retry(3).click('.messages svg.delivery', chatLocator);
         I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Edit'));
         I.pressKey('Backspace');
         I.pressKey('!');
@@ -156,7 +156,7 @@ Scenario('Delete a message', async (I, users, chat) => {
         chat.createPrivateChat(users[1].userdata.email1);
         chat.sendMessage('Stupid message');
 
-        I.retry(3).click('.ox-chat .messages svg');
+        I.retry(3).click('.ox-chat .messages svg.delivery');
         I.click(locate('.smart-dropdown-container.message-actions-dropdown a').withText('Delete'));
         I.waitForText('This message was deleted', 3, '.ox-chat .messages');
     });

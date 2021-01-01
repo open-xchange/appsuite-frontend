@@ -18,45 +18,11 @@ define('io.ox/chat/views/channelList', [
     'io.ox/chat/api',
     'io.ox/chat/data',
     'io.ox/backbone/views/toolbar',
+    'io.ox/chat/toolbar',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, ChatAvatar, api, data, ToolbarView, gt) {
+], function (ext, DisposableView, ChatAvatar, api, data, ToolbarView, toolbar, gt) {
 
     'use strict';
-
-    ext.point('io.ox/chat/channel-list/toolbar').extend({
-        id: 'back',
-        index: 100,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').attr('aria-label', gt('Close chat')).append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/channel-list/toolbar').extend({
-        id: 'title',
-        index: 200,
-        custom: true,
-        draw: function () {
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All channels'));
-        }
-    });
-
-    ext.point('io.ox/chat/channel-list/toolbar').extend({
-        id: 'switch-to-floating',
-        index: 300,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
-                )
-            );
-        }
-    });
 
     var ChannelList = DisposableView.extend({
 
@@ -110,19 +76,19 @@ define('io.ox/chat/views/channelList', [
             return $('<li class="channel">')
                 .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('roomId') })
                 .append(
-                    $('<div>').append(
-                        new ChatAvatar({ model: model }).render().$el,
+                    new ChatAvatar({ model: model }).render().$el,
+                    $('<div class="details">').append(
                         $('<div class="title">').text(model.getTitle()),
                         //#. %1$d: is the number of members
-                        $('<div class="members">').text(gt.ngettext('%1$d member', '%1$d members', numberOfMembers, numberOfMembers))
+                        $('<div class="members">').text(gt.ngettext('%1$d member', '%1$d members', numberOfMembers, numberOfMembers)),
+                        $('<div class="description">').text(model.get('description'))
                     ),
-                    $('<div class="description">').text(model.get('description')),
                     $('<button type="button" class="btn btn-default btn-action" >')
                         .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('roomId') })
                         .prop('disabled', isMember)
                         .toggleClass('join', !isMember)
                         .toggleClass('hidden', isMember)
-                        .append(isMember ? $('<i class="fa fa-check">') : gt('Join'))
+                        .text(gt('Join'))
                 );
         },
 
@@ -149,6 +115,29 @@ define('io.ox/chat/views/channelList', [
             this.collection.expired = false;
         }
     });
+
+    ext.point('io.ox/chat/channel-list/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function () {
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All channels'));
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        }
+    );
 
     return ChannelList;
 });

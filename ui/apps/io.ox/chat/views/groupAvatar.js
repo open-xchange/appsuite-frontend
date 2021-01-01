@@ -14,10 +14,10 @@
 define('io.ox/chat/views/groupAvatar', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/api',
+    'io.ox/chat/util',
     'io.ox/chat/util/url',
     'io.ox/contacts/util'
-],
-function (DisposableView, api, url, util) {
+], function (DisposableView, api, util, url, contactsUtil) {
 
     'use strict';
 
@@ -27,8 +27,8 @@ function (DisposableView, api, url, util) {
 
         initialize: function () {
             this.listenTo(this.model, 'change:iconId', this.update);
-            if (this.model.isChannel()) this.$icon = $('<i class="fa fa-hashtag">');
-            else if (this.model.isGroup()) this.$icon = $('<i class="fa fa-group">');
+            if (this.model.isChannel()) this.$icon = util.svg({ icon: 'fa-hashtag' });
+            else if (this.model.isGroup()) this.$icon = util.svg({ icon: 'fa-group' });
         },
 
         render: function () {
@@ -40,7 +40,7 @@ function (DisposableView, api, url, util) {
                 }.bind(this));
             } else {
                 var data = { first_name: this.model.get('title'), last_name: this.model.get('description') };
-                this.$el.addClass(util.getInitialsColor(util.getInitials(data))).append(this.$icon);
+                this.$el.addClass(contactsUtil.getInitialsColor(contactsUtil.getInitials(data))).append(this.$icon);
             }
             return this;
         },

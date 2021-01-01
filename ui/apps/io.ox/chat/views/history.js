@@ -19,50 +19,15 @@ define('io.ox/chat/views/history', [
     'io.ox/backbone/views/toolbar',
     'io.ox/core/strings',
     'io.ox/chat/util',
+    'io.ox/chat/toolbar',
     'gettext!io.ox/chat'
-], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, util, gt) {
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, util, toolbar, gt) {
 
     'use strict';
 
-    ext.point('io.ox/chat/history/toolbar').extend({
-        id: 'back',
-        index: 100,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="close-chat">').attr('aria-label', gt('Close chat')).append(
-                    $('<i class="fa fa-chevron-left" aria-hidden="true">').css({ 'margin-right': '4px' }), gt('Chats')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/chat/history/toolbar').extend({
-        id: 'title',
-        index: 200,
-        custom: true,
-        draw: function () {
-            //#. Used for chats this time, not for mail threads
-            this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('History'));
-        }
-    });
-
-    ext.point('io.ox/chat/history/toolbar').extend({
-        id: 'switch-to-floating',
-        index: 300,
-        custom: true,
-        draw: function () {
-            this.attr('data-prio', 'hi').append(
-                $('<a href="#" role="button" draggable="false" tabindex="-1" data-cmd="switch-to-floating">').attr('aria-label', gt('Detach window')).append(
-                    $('<i class="fa fa-window-maximize" aria-hidden="true">').attr('title', gt('Detach window'))
-                )
-            );
-        }
-    });
-
     var History = DisposableView.extend({
 
-        className: 'history abs',
+        className: 'history-list abs',
 
         initialize: function () {
 
@@ -105,16 +70,16 @@ define('io.ox/chat/views/history', [
         },
 
         renderEmpty: function () {
-            return $('<li class="history-list">').hide()
+            return $('<li class="history-item">').hide()
                 .append($('<div class="info">').text(gt('There are no archived chats yet')));
         },
 
         renderItem: function (model) {
-            return $('<li class="history-list">')
+            return $('<li class="history-item">')
                 .attr('data-cid', model.cid)
                 .append(
                     new ChatAvatar({ model: model }).render().$el,
-                    $('<div>').append(
+                    $('<div class="details">').append(
                         $('<div class="ellipsis">').append(
                             $('<span class="title">').text(model.getTitle()),
                             $('<span class="type">').text('(' + this.getType(model) + ')')
@@ -162,6 +127,30 @@ define('io.ox/chat/views/history', [
             this.collection.expired = false;
         }
     });
+
+    ext.point('io.ox/chat/history/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function () {
+                //#. Used for chats this time, not for mail threads
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('History'));
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        }
+    );
 
     return History;
 });

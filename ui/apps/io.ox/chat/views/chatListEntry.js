@@ -160,8 +160,8 @@ define('io.ox/chat/views/chatListEntry', [
             var $el = $('<div class="simple-avatar">');
             switch (this.model.get('type')) {
                 case 'private': $el.append(this.renderPresenceIcon()); break;
-                case 'group': $el.append('<i class="fa fa-users" aria-hidden="true">'); break;
-                case 'channel': $el.append('<i class="fa fa-hashtag" aria-hidden="true">'); break;
+                case 'group': $el.append(util.svg({ icon: 'fa-group' })); break;
+                case 'channel': $el.append(util.svg({ icon: 'fa-hashtag' })); break;
                 // no default
             }
             return $el;

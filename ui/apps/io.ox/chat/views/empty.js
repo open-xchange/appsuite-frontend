@@ -11,28 +11,32 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable', 'gettext!io.ox/chat'], function (DisposableView, gt) {
+define('io.ox/chat/views/empty', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/util',
+    'gettext!io.ox/chat'
+], function (DisposableView, util, gt) {
 
     'use strict';
+
+    function button(cmd, icon, text) {
+        return $('<button type="button" class="btn btn-link">')
+            .attr({ 'data-cmd': cmd, 'aria-label': text })
+            .append(
+                $('<div class="btn-round">').append(util.svg({ icon: icon }).attr('title', text)),
+                $.txt(text)
+            );
+    }
 
     return DisposableView.extend({
 
         render: function () {
             this.$el.append(
-                $('<div class="start-chat abs action-button-rounded">').append(
+                $('<div class="start-chat abs">').append(
                     $('<div class="center empty-view">').append(
-                        $('<button type="button" class="btn btn-link" data-cmd="start-private-chat">').attr('aria-label', gt('Create private chat')).append(
-                            $('<i class="fa fa-user" aria-hidden="true">').attr('title', gt('Private chat')),
-                            $.txt(gt('Create private chat'))
-                        ),
-                        $('<button type="button" class="btn btn-link" data-cmd="edit-group-chat">').attr('aria-label', gt('Create group chat')).append(
-                            $('<i class="fa fa-group" aria-hidden="true">').attr('title', gt('Group chat')),
-                            $.txt(gt('Create group chat'))
-                        ),
-                        $('<button type="button" class="btn btn-link" data-cmd="edit-group-chat" data-type="channel">').attr('aria-label', gt('Create channel')).append(
-                            $('<i class="fa fa-hashtag" aria-hidden="true">').attr('title', gt('Channel')),
-                            $.txt(gt('Create channel'))
-                        )
+                        button('start-private-chat', 'fa-user', gt('Create private chat')),
+                        button('edit-group-chat', 'fa-group', gt('Create group chat')),
+                        button('edit-group-chat', 'fa-hashtag', gt('Create channel')).attr('data-type', 'channel')
                     )
                 )
             );
