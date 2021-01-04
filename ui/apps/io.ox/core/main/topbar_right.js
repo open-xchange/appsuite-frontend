@@ -442,17 +442,23 @@ define('io.ox/core/main/topbar_right', [
         id: 'change-user-password',
         index: 175,
         extend: function () {
-
             if (!capabilities.has('edit_password && guest')) return;
 
+            var linkText = function (empty) { return empty ? gt('Add login password') : gt('Change login password'); };
+
             this.link('change-password',
-                settings.get('password/emptyCurrent') ? gt('Add login password') : gt('Change login password'),
+                linkText(settings.get('password/emptyCurrent')),
                 function (e) {
                     e.preventDefault();
                     require(['plugins/portal/userSettings/register'], function (userSettings) {
                         userSettings.changePassword();
                     });
                 });
+
+            this.listenTo(settings, 'change:password/emptyCurrent', function (value) {
+                this.$el.find('[data-name="change-password"]')
+                    .text(linkText(value));
+            }.bind(this));
         }
     });
 

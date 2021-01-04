@@ -158,7 +158,9 @@ define('plugins/portal/userSettings/register', [
                     //no need to logut guests
                     if (!isGuest) {
                         main.logout();
+                        return;
                     }
+                    settings.set('password/emptyCurrent', newPassword1 === null);
                 })
                 .fail(function (error) {
                     yell(error);
