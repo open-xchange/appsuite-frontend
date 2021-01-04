@@ -26,8 +26,10 @@ define('io.ox/core/whatsnew/main', [
 
     // This is not the whats new TOUR this is the whats new DIALOG
     // that's why it is part of core and not the tours package
+
+    // no dialog for guests
     // no features to show, missing capabilities etc
-    if (meta.getFeatures().length === 0) return;
+    if (capabilities.has('guest') || meta.getFeatures().length === 0) return;
 
     var showDialog = function () {
         var dialog = new ModalDialog({
@@ -70,12 +72,11 @@ define('io.ox/core/whatsnew/main', [
 
     // dropdown link
     if (settings.get('whatsNew/menuEntry', true)) {
-        ext.point('io.ox/core/appcontrol/right/help').extend({
+        // account menu on smartphones help menu on desktop
+        ext.point(_.device('smartphone') ? 'io.ox/core/appcontrol/right/account' : 'io.ox/core/appcontrol/right/help').extend({
             id: 'whats-new',
             index: 260,
             extend: function () {
-                if (capabilities.has('guest')) return;
-                if (_.device('smartphone')) return;
                 this.append(
                     $('<a href="#" data-action="whats-new" role="menuitem">')
                     .text(gt('What\'s new'))
@@ -100,8 +101,4 @@ define('io.ox/core/whatsnew/main', [
             }
         });
     }
-
-    return {
-        showDialog: showDialog
-    };
 });

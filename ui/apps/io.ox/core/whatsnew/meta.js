@@ -112,8 +112,10 @@ define('io.ox/core/whatsnew/meta', [
             return _(features).filter(function (feature) {
                 // not seen by user or from the latest version (we always want to show the features from the latest version because empty lists are boring)
                 // also user must have the correct capabilities
+                // some features may also be device specific (disabled on smartphones etc)
                 return (feature.version > settings.get('whatsNew/lastSeenVersion', -1) || feature.version === latestVersion) &&
-                       (!feature.capabilities || capabilities.has(feature.capabilities));
+                       (!feature.capabilities || capabilities.has(feature.capabilities) &&
+                       (!feature.device || _.device(feature.device)));
             });
         },
         // returns language specific help url or fallback if configured
