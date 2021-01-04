@@ -27,16 +27,17 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
 
         fetch: function () {
 
-            var useExistingData = this.fetched ||
-                (this.type === 'mail' && !capabilities.has('webmail')) ||
-                (this.type === 'filestore' && !capabilities.has('infostore'));
+            var isUnified = settings.get('quotaMode', 'default') === 'unified',
+                useExistingData = this.fetched ||
+                (this.type === 'mail' && !capabilities.has('webmail') && !isUnified) ||
+                (this.type === 'filestore' && !capabilities.has('infostore') && !isUnified);
 
             if (useExistingData) return this.toJSON();
 
             return http.GET({
                 module: 'quota',
                 // return unified quota if quota mode is unified, use it for both, mail and file
-                params: { action: (settings.get('quotaMode', 'default') === 'unified' ? 'unified' : this.type) }
+                params: { action: (isUnified ? 'unified' : this.type) }
             })
             .then(function (data) {
                 this.fetched = true;

@@ -414,6 +414,7 @@ define('io.ox/core/folder/extensions', [
             var node = $('<li role="presentation">');
             // append node now (serves as placeholder until requests return)
             this.append(node);
+            // 10 is public folders, 15 is shared folders
             $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (pFolders, sFolders) {
                 // check if there are folders to unsubscribe at all
                 if (_.isEmpty(pFolders) && _.isEmpty(sFolders)) return node.remove();
