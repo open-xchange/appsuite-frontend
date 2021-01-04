@@ -1695,19 +1695,20 @@ define('io.ox/mail/api', [
     }
 
     api.allMessagesFolder = settings.get('allMessagesFolder', 'default0/virtual/all');
+    api.allUnseenMessagesFolder = settings.get('allUnseenMessagesFolder');
 
     api.getAllUnseenMessages = function () {
         return http.GET({
             module: 'mail',
             params: {
                 action: 'all',
-                folder: api.allMessagesFolder,
+                folder: api.allUnseenMessagesFolder || api.allMessagesFolder,
                 // need original_id and original_folder_id
                 columns: '600,654,655',
                 sort: '661',
                 order: 'desc',
-                unseen: true,
-                deleted: false,
+                unseen: !!api.allUnseenMessagesFolder,
+                deleted: !api.allUnseenMessagesFolder,
                 timezone: 'utc'
             }
         });
@@ -1721,13 +1722,13 @@ define('io.ox/mail/api', [
             if (params.folder === 'virtual/all-unseen') {
                 return {
                     action: 'all',
-                    folder: api.allMessagesFolder,
+                    folder: api.allUnseenMessagesFolder || api.allMessagesFolder,
                     // need original_id and original_folder_id
                     columns: http.defaultColumns.mail.unseen,
                     sort: '661',
                     order: 'desc',
-                    unseen: true,
-                    deleted: false,
+                    unseen: !!api.allUnseenMessagesFolder,
+                    deleted: !api.allUnseenMessagesFolder,
                     timezone: 'utc'
                 };
             }
@@ -1766,7 +1767,9 @@ define('io.ox/mail/api', [
         },
         httpGet: function (module, params) {
             // apply static limit for all-unseen
-            var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
+            var isAllFolder = api.allMessagesFolder && params.folder === api.allMessagesFolder,
+                isUnseenfolder = api.allUnseenMessagesFolder && params.folder === api.allUnseenMessagesFolder,
+                isAllUnseen = (isUnseenfolder || isAllFolder) && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
                 // drop all seen messages for all-unseen
@@ -1835,7 +1838,8 @@ define('io.ox/mail/api', [
         // special handling for top-level mail account folders (e.g. bug 34818)
         if (/^default\d+$/.test(options.folder)) return true;
         // allow virtual/all
-        if (options.folder === api.allMessagesFolder) return false;
+        if (api.allMessagesFolder && options.folder === api.allMessagesFolder) return false;
+        if (api.allUnseenMessagesFolder && options.folder === api.allUnseenMessagesFolder) return false;
         // check read access
         var model = folderAPI.pool.getModel(options.folder);
         return !model.can('read');
