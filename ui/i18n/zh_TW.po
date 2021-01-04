@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-14 21:39+0800\n"
+"PO-Revision-Date: 2020-12-13 19:22+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -676,6 +676,7 @@ msgstr "已將 %1$s 移動至 %3$s 的 %2$s 位置"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
@@ -883,10 +884,10 @@ msgstr "移除圖片"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/common-extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js apps/io.ox/mail/compose/main.js
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
@@ -918,9 +919,9 @@ msgstr "下載"
 #: apps/io.ox/core/main/logout.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
@@ -986,8 +987,8 @@ msgstr "間隔"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
@@ -1097,13 +1098,14 @@ msgstr "您想要列印約會的詳細資訊或是精簡清單？"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/chat/settings/pane.js
+#: module:io.ox/chat apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "精簡"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Detailed"
 msgstr "詳細"
 
@@ -1404,12 +1406,14 @@ msgid "Create in public calendar"
 msgstr "於公開行事曆建立"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/calendar/main.js
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/core/relogin.js module:io.ox/core apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+#: apps/io.ox/mail/invitations/register.js apps/io.ox/onboarding/views.js
+#: module:io.ox/core/onboarding
 msgid "Password"
 msgstr "密碼"
 
@@ -1594,6 +1598,7 @@ msgstr "約會詳情"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/perspective.js apps/io.ox/chat/data.js module:io.ox/chat
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "發生錯誤。請稍後重試。"
 
@@ -1612,18 +1617,21 @@ msgstr "建立約會"
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
-#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js module:io.ox/files
 #: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1656,6 +1664,7 @@ msgstr "建立"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
@@ -1676,9 +1685,12 @@ msgstr "放棄"
 msgid "Subject"
 msgstr "主題"
 
+#. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 msgid "Location"
 msgstr "地點"
 
@@ -1876,7 +1888,8 @@ msgstr "約會"
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/tasks/edit/main.js module:io.ox/tasks
+#: module:io.ox/editor apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 msgid "Discard changes"
 msgstr "放棄修改"
 
@@ -1924,7 +1937,6 @@ msgid "Scheduling"
 msgstr "行程"
 
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
-#: apps/io.ox/chat/views/addMember.js module:io.ox/chat
 msgid "Add participant"
 msgstr "添加參與者"
 
@@ -2131,9 +2143,9 @@ msgstr "錯誤: 約會載入失敗"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
-#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
-#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
-#: module:plugins/portal
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "蟲試"
 
@@ -2204,10 +2216,6 @@ msgid "Calendar account error"
 msgstr "帳號變更錯誤"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Edit accounts"
-msgstr "編輯帳號"
-
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "再試一次"
 
@@ -2220,6 +2228,10 @@ msgstr "可能要花一些時間重新整理行事曆…"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Successfully refreshed calendar"
 msgstr "已成功重新整理行事曆"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "編輯帳號"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
@@ -2351,8 +2363,9 @@ msgstr[0] "%1$d 天"
 msgstr[1] "%1$d 天"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "日曆"
@@ -2456,7 +2469,7 @@ msgstr "對已結束的約會顯示提醒"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared calendars"
+msgid "Subscribe to shared calendars"
 msgstr "訂閱共享行事曆"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
@@ -2905,18 +2918,14 @@ msgstr "已保留"
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
-#. used to concatenate two participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
 msgstr "及"
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
 #. make sure, that the trailing space is also in the translation
-#. This delimiter is used to concatenate a list of participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ", "
 msgstr "、"
 
@@ -3277,29 +3286,9 @@ msgid "Create group chat"
 msgstr "建立群組聊天"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/views/chat.js
 msgid "Edit channel"
 msgstr "編輯頻道"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Create new channel"
-msgstr "建立新頻道"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
-msgid "Group name"
-msgstr "群組名稱"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Channel name"
-msgstr "頻道名稱"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Channels are public and can be joined by anybody"
-msgstr "頻道公開，可讓任何人加入"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Create chat"
-msgstr "建立聊天"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/chat/views/empty.js
@@ -3307,9 +3296,36 @@ msgid "Create channel"
 msgstr "建立頻道"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js
-msgid "Edit chat"
-msgstr "編輯聊天"
+msgid "Channel name"
+msgstr "頻道名稱"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
+msgid "Group name"
+msgstr "群組名稱"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid ""
+"Other users can find and join your channel under \"All channels\". If you "
+"prefer a conversiom in a closed group, please create a group chat."
+msgstr ""
+"其他使用者可以在「所有頻道」當中尋找加入您的頻道。若您偏好使用封閉群組聊天，"
+"請建立群組聊天。"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid "Create chat"
+msgstr "建立聊天"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/data.js
+msgid "The group could not be saved since the name can not be empty"
+msgstr "名稱不能為空白，無法儲存群組"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid ""
+"The chat could not be saved since the name exceeds the length limit of %1$s "
+"characters"
+msgstr "由於名稱超過 %1$s 字元的長度限制，無法儲存聊天"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Changes to this chat could not be saved."
@@ -3318,6 +3334,30 @@ msgstr "無法儲存對此聊天的變更。"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Chat could not be saved."
 msgstr "無法儲存聊天。"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Unknown command: %1$s"
+msgstr "未知指令: %1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "List all commands"
+msgstr "列出所有指令"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Show server version"
+msgstr "顯示伺服器版本"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Server version: %1$s"
+msgstr "伺服器版本：%1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Zoom meeting"
+msgstr "開始 Zoom 會議"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Jitsi meeting"
+msgstr "開始 Jitsi 會議"
 
 #. %1$s is a user name
 #: apps/io.ox/chat/commands.js module:io.ox/chat
@@ -3330,117 +3370,14 @@ msgid "Please click the following link to join: %1$s"
 msgstr "請點擊下列連結加入：%1$s"
 
 #: apps/io.ox/chat/commands.js module:io.ox/chat
-msgid "Server version: %1$s"
-msgstr "伺服器版本：%1$s"
+#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
+msgid "%1$s is calling"
+msgstr "%1$s 來電"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Could not save settings"
 msgstr "無法儲存設定"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "There was an error during authentication."
-msgstr "驗證時發生錯誤。"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/chat/views/content.js
-msgid "This message was deleted"
-msgstr "訊息已刪除"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You created this conversation"
-msgstr "您建立了這場對話"
-
-#. %1$s: name of the creator
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s created this conversation"
-msgstr "%1$s 建立了這場對話"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You joined the conversation"
-msgstr "您加入了這場對話"
-
-#. %1$s: name of the new participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s joined the conversation"
-msgstr "%1$s 加入了這場對話"
-
-#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You added %1$s to the conversation"
-msgid_plural "You added %1$s to the conversation"
-msgstr[0] "您已將 %1$s 加入這場對話"
-msgstr[1] "您已將 %1$s 加入這場對話"
-
-#. %1$s: name of the participant that added the new participant
-#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s added %2$s to the conversation"
-msgid_plural "%1$s added %2$s to the conversation"
-msgstr[0] "%1$s 已將 %2$s 加入這場對話"
-msgstr[1] "%1$s 已將 %2$s 加入這場對話"
-
-#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You removed %1$s from the conversation"
-msgid_plural "You removed %1$s from the conversation"
-msgstr[0] "您已將 %1$s 從這場對話移除"
-msgstr[1] "您已將 %1$s 從這場對話移除"
-
-#. %1$s: name of the participant that removed the other participant
-#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s removed %2$s from the conversation"
-msgid_plural "%1$s removed %2$s from the conversation"
-msgstr[0] "%1$s 已將 %2$s 從這場對話移除"
-msgstr[1] "%1$s 已將 %2$s 從這場對話移除"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group image"
-msgstr "您更改了群組圖片"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group image"
-msgstr "%1$s 更改了群組圖片"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group title to \"%1$s\""
-msgstr "您已將群組標題更改為 \"%1$s\""
-
-#. %1$s: name of a chat participant
-#. %2$s: the new title
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group title to \"%2$s\""
-msgstr "%1$s 已將群組標題更改為 \"%2$s\""
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group description to \"%1$s\""
-msgstr "您已將群組描述更改為 \"%1$s\""
-
-#. %1$s: name of a chat participant
-#. %2$s: the new description
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group description to \"%2$s\""
-msgstr "%1$s 已將群組描述更改為 \"%2$s\""
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You left the conversation"
-msgstr "您已離開對話"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s left the conversation"
-msgstr "%1$s 已離開對話"
-
-#. If it fails to load and decrypt a chat message a system message will be shown
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Message could not be loaded"
-msgstr "無法載入訊息"
-
-#. %1$s: messagetext
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown system message: %1$s"
-msgstr "未知的系統訊息：%1$s"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The messages could not be loaded."
@@ -3455,14 +3392,18 @@ msgid "The message length exceeds the limit and could not be delivered"
 msgstr "訊息長度超過限制，無法傳遞"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "The group could not be saved since the name exceeds the length limit"
+msgstr "由於名稱超過長度限制，無法儲存群組"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "A channel with the same name already exists"
+msgstr "已有同名頻道存在"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "出現錯誤。請再試一次。"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The message could not be sent."
-msgstr "無法傳送訊息。"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be hidden. Please try again."
@@ -3485,21 +3426,12 @@ msgid "The chat could not be loaded."
 msgstr "無法載入聊天。"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The group could not be left."
-msgstr "無法離開群組。"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The channel could not be left."
 msgstr "無法離開頻道。"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown user"
-msgstr "使用者未知"
-
-#. shown instead of your name for your own chat messages when you're mentioned in a group of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You"
-msgstr "您"
+msgid "The group could not be left."
+msgstr "無法離開群組。"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat"
@@ -3527,6 +3459,7 @@ msgstr "透過聊天回覆所有人"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
+#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Chat"
 msgstr "聊天"
 
@@ -3549,6 +3482,10 @@ msgid "Do you really want to leave the chat?"
 msgstr "您真的要離開聊天嗎？"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Leave"
+msgstr "離開"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "The file could not be loaded."
 msgstr "無法載入檔案。"
 
@@ -3559,14 +3496,17 @@ msgid "New"
 msgstr "新增"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "私人聊天"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "群組聊天"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "頻道"
 
@@ -3584,9 +3524,27 @@ msgstr "所有檔案"
 #. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
-#: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Chat history"
-msgstr "聊天記錄"
+msgid "History"
+msgstr "歷史"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chats"
+msgstr "私人聊天"
+
+#. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Group chats"
+msgstr "群組聊天"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Channels"
+msgstr "頻道"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
+#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+msgid "Chats"
+msgstr "聊天"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Authorize"
@@ -3611,25 +3569,53 @@ msgid "Picture"
 msgstr "圖片"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Receive email notifications"
-msgstr "接收電子郵件通知"
+msgid "View options"
+msgstr "檢視選項"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Private chats only"
-msgstr "僅私人聊天"
+msgid "Select last chat on start"
+msgstr "啟動時選擇上次的聊天室"
+
+#. label of checkbox to enable/dsiable grouping chats by type
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Group chats by type"
+msgstr "用類型對聊天分組"
+
+#. Sort chats by ... (alphabetical|last activity)
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Sort chats by"
+msgstr "排序聊天依照"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Always"
-msgstr "總是"
+msgid "Last activity"
+msgstr "上次活動"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Alphabetical"
+msgstr "按字母順序排列"
+
+#. Visual List density (German "Kompaktheitsgrad"); can be compact, default, or detailed
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "List density"
+msgstr "清單密度"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "預設"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Plop"
+msgstr "Plop"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Click"
+msgstr "Click"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Bongo"
 msgstr "Bongo"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
-msgid "Wood"
-msgstr "Wood"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play sound for every message"
@@ -3641,9 +3627,13 @@ msgstr "僅在聊天室位於背景時發出音效"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Notification sounds"
-msgstr "通知音效"
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Notifications"
+msgstr "通知"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Show desktop notifications for new messages"
+msgstr "收到新訊息時顯示桌面通知"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play notification sound for new messages"
@@ -3660,8 +3650,121 @@ msgid "Behavior"
 msgstr "行為"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Show desktop notifications for new messages"
-msgstr "收到新訊息時顯示桌面通知"
+msgid "Offline email notifications"
+msgstr "離線電子郵件通知"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Do not send any email notifications"
+msgstr "不要傳送任何電子郵件通知"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Send email notifications for my private chats"
+msgstr "為我的私人聊天傳送電子郵件通知"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Send email notifications for all chats and channels"
+msgstr "為所有聊天與頻道傳送電子郵件通知"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You created this conversation"
+msgstr "您建立了這場對話"
+
+#. %1$s: name of the creator
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s created this conversation"
+msgstr "%1$s 建立了這場對話"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You joined the conversation"
+msgstr "您加入了這場對話"
+
+#. %1$s: name of the new participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s joined the conversation"
+msgstr "%1$s 加入了這場對話"
+
+#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You added %1$s to the conversation"
+msgid_plural "You added %1$s to the conversation"
+msgstr[0] "您已將 %1$s 加入這場對話"
+msgstr[1] "您已將 %1$s 加入這場對話"
+
+#. %1$s: name of the participant that added the new participant
+#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s added %2$s to the conversation"
+msgid_plural "%1$s added %2$s to the conversation"
+msgstr[0] "%1$s 已將 %2$s 加入這場對話"
+msgstr[1] "%1$s 已將 %2$s 加入這場對話"
+
+#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You removed %1$s from the conversation"
+msgid_plural "You removed %1$s from the conversation"
+msgstr[0] "您已將 %1$s 從這場對話移除"
+msgstr[1] "您已將 %1$s 從這場對話移除"
+
+#. %1$s: name of the participant that removed the other participant
+#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s removed %2$s from the conversation"
+msgid_plural "%1$s removed %2$s from the conversation"
+msgstr[0] "%1$s 已將 %2$s 從這場對話移除"
+msgstr[1] "%1$s 已將 %2$s 從這場對話移除"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group image"
+msgstr "您更改了群組圖片"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group image"
+msgstr "%1$s 更改了群組圖片"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group title to \"%1$s\""
+msgstr "您已將群組標題更改為 \"%1$s\""
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group title to \"%2$s\""
+msgstr "%1$s 已將群組標題更改為 \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group description to \"%1$s\""
+msgstr "您已將群組描述更改為 \"%1$s\""
+
+#. %1$s: name of a chat participant
+#. %2$s: the new description
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group description to \"%2$s\""
+msgstr "%1$s 已將群組描述更改為 \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You left the conversation"
+msgstr "您已離開對話"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s left the conversation"
+msgstr "%1$s 已離開對話"
+
+#. If it fails to load and decrypt a chat message a system message will be shown
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Message could not be loaded"
+msgstr "無法載入訊息"
+
+#. %1$s: messagetext
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Unknown system message: %1$s"
+msgstr "未知的系統訊息：%1$s"
+
+#. %1$s is a name or multiple comma-separated names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s and %2$s"
+msgstr "%1$s 和 %2$s"
 
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
@@ -3688,11 +3791,15 @@ msgstr "簡報"
 msgid "File"
 msgstr "檔案"
 
+#: apps/io.ox/chat/views/addMember.js module:io.ox/chat
+msgid "Add members"
+msgstr "新增成員"
+
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 #: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
 #: apps/io.ox/chat/views/history.js
-msgid "Chats"
-msgstr "聊天"
+msgid "Close chat"
+msgstr "關閉聊天"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
@@ -3713,34 +3820,6 @@ msgid "Join"
 msgstr "加入"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Close chat"
-msgstr "關閉聊天"
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Join chat"
-msgstr "加入聊天"
-
-#. %1$s is a member name
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s is typing ..."
-msgstr "%1$s 正在打字…"
-
-#. %1$s and %2$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s and %2$s are typing ..."
-msgstr "%1$s 與 %2$s 正在打字…"
-
-#. %1$s, %2$s, and %3$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s, and %3$s are typing ..."
-msgstr "%1$s、%2$s、%3$s 正在打字…"
-
-#. %1$s and %2$s are member names, %3$d is the number of further members
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s and %3$d others are typing ..."
-msgstr "%1$s、%2$s 還有其他 %3$d 個人正在打字…"
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "聊天操作"
 
@@ -3758,6 +3837,10 @@ msgstr "訊息"
 msgid "Send"
 msgstr "發送"
 
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Add emoji"
+msgstr "新增表情符號"
+
 #. An action to upload a local file e.g. to Drive.
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -3771,37 +3854,73 @@ msgid "The message could not be deleted."
 msgstr "無法刪除訊息。"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid ""
+"The message cannot be sent because it exceeds the maximum message length of "
+"%1$s characters."
+msgstr "由於訊息超過最大長度限制（%1$s 個字），無法傳送。"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Remove from favorites"
+msgstr "自最愛清單移除"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Add to favorites"
+msgstr "新增至最愛"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Edit chat"
+msgstr "編輯聊天"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Close channel"
+msgstr "關閉頻道"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Leave channel"
+msgstr "離開頻道"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Join channel"
+msgstr "加入頻道"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
 "size of %2$s"
 msgstr "因為超過了檔案大小限制 %2$s，無法上傳檔案「%1$s」"
 
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid ""
-"The message cannot be sent because it exceeds the maximum message length of "
-"%1$s characters."
-msgstr "由於訊息超過最大長度限制（%1$s 個字），無法傳送。"
-
 #: apps/io.ox/chat/views/chatList.js module:io.ox/chat
 msgid "Chat list"
 msgstr "聊天清單"
-
-#: apps/io.ox/chat/views/chatList.js module:io.ox/chat
-msgid "Chats could not be loaded."
-msgstr "無法載入聊天。"
-
-#: apps/io.ox/chat/views/content.js module:io.ox/chat
-msgid "Show more"
-msgstr "顯示更多"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Sending has been cancelled"
 msgstr "已取消傳送"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "This message was deleted"
+msgstr "訊息已刪除"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Show more"
+msgstr "顯示更多"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Delivery failed"
 msgstr "傳遞失敗"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Edited"
+msgstr "已編輯"
 
 #: apps/io.ox/chat/views/dropzone.js module:io.ox/chat
 msgid "Drop file here to send it"
@@ -3810,6 +3929,10 @@ msgstr "將檔案放在此處，即可發送"
 #: apps/io.ox/chat/views/empty.js module:io.ox/chat
 msgid "Create private chat"
 msgstr "建立私人瞭天"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Download file"
+msgstr "下載檔案"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Cancel file upload"
@@ -3840,12 +3963,9 @@ msgstr "還沒有封存的聊天"
 msgid "Open"
 msgstr "打開"
 
-#. %1$d is the number of participants
-#: apps/io.ox/chat/views/members.js module:io.ox/chat
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
-msgid "Participants (%1$d)"
-msgstr "參與者（%1$d）"
+#: apps/io.ox/chat/views/message.js module:io.ox/chat
+msgid "Messages are delivered by email."
+msgstr "訊息將透過電子郵件傳遞。"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Message actions"
@@ -3888,8 +4008,28 @@ msgid "No search results"
 msgstr "無搜尋結果"
 
 #: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
-msgid "Create new chat"
-msgstr "建立新聊天"
+msgid "Start new chat"
+msgstr "開始新聊天"
+
+#. %1$s is a member name
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s is typing ..."
+msgstr "%1$s 正在打字…"
+
+#. %1$s and %2$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s and %2$s are typing ..."
+msgstr "%1$s 與 %2$s 正在打字…"
+
+#. %1$s, %2$s, and %3$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s, and %3$s are typing ..."
+msgstr "%1$s、%2$s、%3$s 正在打字…"
+
+#. %1$s and %2$s are member names, %3$d is the number of further members
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s and %3$d others are typing ..."
+msgstr "%1$s、%2$s 還有其他 %3$d 個人正在打字…"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -4933,13 +5073,13 @@ msgid "Link postal addresses with map service"
 msgstr "使用地圖服務連結郵件地址"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe to shared address books"
+msgstr "訂閱共享通訊錄"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden address books"
 msgstr "隱藏的通訊錄"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-msgid "Subscribe shared address books"
-msgstr "訂閱共享通訊錄"
 
 #. Name with title
 #. %1$s is the first name
@@ -4990,7 +5130,9 @@ msgid "Private contact"
 msgstr "私人聯絡人"
 
 #. %1$s is a map service, like "Google Maps"
+#. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Open in %1$s"
 msgstr "於 %s 開啟"
 
@@ -5260,6 +5402,8 @@ msgstr "下一個"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Email address"
 msgstr "電子郵件地址"
 
@@ -5699,15 +5843,15 @@ msgstr "重新命名資料夾"
 msgid "Rename"
 msgstr "重命名"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-msgid "Default calendar"
-msgstr "預設行事曆"
-
 #. %1$s is the folder owner
 #. %2$s is the folder title
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
+
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+msgid "Default calendar"
+msgstr "預設行事曆"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -5773,23 +5917,14 @@ msgid "Import"
 msgstr "匯入"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Sharing"
-msgstr "共享"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js
-msgid "Permissions / Invite people"
-msgstr "權限 / 邀請人員"
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+msgid "Share / Permissions"
+msgstr "分享 / 權限"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Permissions"
 msgstr "許可權"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-msgid "Create sharing link"
-msgstr "建立分享鏈結"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -5831,6 +5966,15 @@ msgid "Shared task folders"
 msgstr "共享任務資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "訂閱通訊錄"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe to task folder"
+msgstr "訂閱任務資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
 msgid "Public tasks folders"
 msgstr "公開任務資料夾"
@@ -5855,12 +5999,33 @@ msgstr "我的資料夾"
 msgid "Add storage account"
 msgstr "新增儲存空間帳號"
 
+#. opens a dialog to manage shared or public folders
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe address book"
-msgstr "訂閱通訊錄"
+msgid "Manage Shares"
+msgstr "管理分享"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared folders"
+msgstr "共用資料夾"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public folders"
+msgstr "公開資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared address book"
+msgid "Subscribe to folder"
+msgstr "訂閱資料夾"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe to shared address book"
 msgstr "訂閱共享通訊錄"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5903,7 +6068,7 @@ msgid "Personal folder"
 msgstr "個人資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared folder"
+msgid "Subscribe to shared folder"
 msgstr "訂閱共享資料夾"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5928,7 +6093,7 @@ msgid "Subscribe via URL (iCal)"
 msgstr "透過網址（iCal）訂閱"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared Calendar"
+msgid "Subscribe to shared calendar"
 msgstr "訂閱共享行事曆"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5946,20 +6111,6 @@ msgstr "您將此資料夾與其他使用者分享"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "This folder has subscriptions"
 msgstr "此資料夾有訂閱"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Remove from favorites"
-msgstr "自最愛清單移除"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Add to favorites"
-msgstr "新增至最愛"
 
 #. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
@@ -6065,7 +6216,7 @@ msgstr ""
 "CSV 檔案的第一筆紀錄必須定義有效欄位名稱，可使用逗號或分號作為分隔符號。"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
+#: apps/io.ox/core/whatsnew/main.js
 msgid "Learn more"
 msgstr "了解更多"
 
@@ -6152,15 +6303,16 @@ msgid "Currently refreshing"
 msgstr "正在整理中"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
+#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "郵件"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "通訊錄"
@@ -6174,13 +6326,15 @@ msgstr "入口"
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/invitations/register.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "雲端空間"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
 msgctxt "app"
 msgid "Tasks"
@@ -6218,6 +6372,7 @@ msgid "Sign out now"
 msgstr "立刻登出"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Are you sure?"
 msgstr "您確定嗎？"
 
@@ -6415,10 +6570,6 @@ msgstr "無通知"
 msgid "Close notification area"
 msgstr "關閉通知區域"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Notifications"
-msgstr "通知"
-
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
@@ -6461,6 +6612,7 @@ msgstr "訪客"
 
 #. Role: create folder + read/write/delete all
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
 #: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "作者"
@@ -6566,7 +6718,7 @@ msgid "The user has administrative rights"
 msgstr "使用者有管理員全線"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "套用至所有子資料夾"
 
@@ -6602,9 +6754,12 @@ msgstr "儲存至 %1$s"
 msgid "Printout"
 msgstr "列印"
 
+#. title of dialog when contact subscription needs to be recreated on error
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/keychain/secretRecoveryDialog.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/core/yell.js apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/keychain/secretRecoveryDialog.js
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
@@ -6851,11 +7006,6 @@ msgid "Unicolor"
 msgstr "單色"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "預設"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
 msgstr "多色"
 
@@ -7100,6 +7250,26 @@ msgstr "發佈"
 msgid "Subscriptions"
 msgstr "訂閱"
 
+#. %1$s domain like google.com etc, may also be a list of domains
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Shared folders from \"%1$s\""
+msgstr "來自「%1$s」的共享資料夾"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "OK"
+msgstr "確認"
+
+#. confirmation when the last folder associated with a domain is unsubscribed
+#. %1$s domain like google.com etc, may also be a list of domains
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid ""
+"You unsubscribed from all folders on \"%1$s\". Those folders will be removed "
+"from your account."
+msgstr "您取消訂閱了 \"%1$s\" 上的所有資料夾，這些資料夾將從您的帳號移除。"
+
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
 msgstr "透過 DAV 同步"
@@ -7107,10 +7277,6 @@ msgstr "透過 DAV 同步"
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "sync via DAV"
 msgstr "透過 DAV 同步"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
-msgstr "訂閱通訊錄"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
@@ -7257,11 +7423,6 @@ msgid "Don't remind me again"
 msgstr "不要再提醒我"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "OK"
-msgstr "確認"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
 msgid "Press to open Details"
@@ -7287,6 +7448,10 @@ msgstr "Bell"
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Wood"
+msgstr "Wood"
 
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Chimes"
@@ -7514,7 +7679,8 @@ msgstr ""
 "員能夠存取此檔案或資料夾。"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/files/share/public-link.js
+#: module:io.ox/files
 msgid "The link has been copied to the clipboard."
 msgstr "已將連結複製到剪貼簿。"
 
@@ -7743,21 +7909,12 @@ msgid "Share"
 msgstr "共享"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Share this file"
-msgstr "分享此檔案"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Open attachment"
 msgstr "開啟附件"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Print as PDF"
 msgstr "列印為 PDF 檔"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Invite people"
-msgstr "邀請使用者"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -7857,6 +8014,108 @@ msgstr "播放影片時發生錯誤。可能是您的瀏覽器不支援該格式
 msgid "Start video"
 msgstr "開始播放"
 
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+msgid "What's new in this version"
+msgstr "此版本的更新功能"
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+#: apps/io.ox/tours/whats-new.js
+msgid "What's new"
+msgstr "最新消息"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Federated Sharing of Files"
+msgstr "聯合檔案分享"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The sharing dialogs have been significantly updated to simplify the whole "
+"sharing process, and to facilitate the sharing of files between contexts and "
+"other deployments."
+msgstr ""
+"已大幅改進分享對話框，簡化分享流程，並讓不同環境與其他安裝之間的檔案分享過程"
+"變得更易用。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Improved \"Connect your device\" Wizard"
+msgstr "改進了「連結您的裝置」精靈"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The \"Connect your device\" wizard now features simplified device selection, "
+"as well as the use of QR codes to make setting up your device even easier."
+msgstr ""
+"「連結您的裝置」精靈簡化了裝置選擇功能，並提供 QR Code，讓設定裝置變得更簡"
+"單。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "%1$s Usability"
+msgstr "%1$s 可用性"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgctxt "app"
+msgid "OX Drive"
+msgstr "OX Drive"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
+"sharing dialogs have also been simplified and search performance was "
+"improved."
+msgstr ""
+"%1$s 現在提供將資料夾從電腦桌面拖曳到 %1$s 的功能。分享對話框也已經簡化，搜尋"
+"效能更加改進。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Saving Email Drafts"
+msgstr "正在儲存郵件草稿"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"Email drafts are now automatically saved in the drafts folder and are "
+"therefore available on all your devices by default."
+msgstr "現在起，會自動將郵件草稿儲存到草稿信件匣，預設在您的所有裝置都能存取。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Navigation Improvements"
+msgstr "改善導覽功能"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The top navigation area has been redesigned to make accessing modules, help "
+"and settings easier."
+msgstr "重新設計過頂部的導覽區域，讓使用各模組、說明與設定更簡單。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Audio and Video"
+msgstr "語音與視訊"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"This release comes with the ability to hold a video or audio chat with other "
+"people. This can be scheduled within a calendar appointment, or started "
+"spontaneously from the toolbar, contacts, halo and other logical places. To "
+"help we have also added a presence indicator to the toolbar."
+msgstr ""
+"此發行版包含與其他人進行視訊或語音聊天會議的功能。可在行事曆約會中安排會議，"
+"或從工具列、聯絡人、Halo 或其他方式主動發起。為了幫助您使用，我們也在工具列中"
+"加入了顯示狀態。"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Chat for %1$s"
+msgstr "Chat for %1$s"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"With this release you will notice a new chat bubble icon in the toolbar. "
+"This opens the new chat bar and lets you write messages to any other OX App "
+"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+msgstr ""
+"在此發行版本中，您會注意到工具列上出現了新的聊天泡泡圖示。此功能會開啟新的聊"
+"天列，並讓您能夠發出訊息給其他 OX App Suite 使用者。可從聊天列、聯絡人或 "
+"halo 發起聊天。"
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/tasks/actions.js
@@ -7893,8 +8152,7 @@ msgstr "在此輸入文件標題"
 #. A note item in context of "note taking". "Notiz" in German, for example.
 #. More like "to notice" than "to notify".
 #: apps/io.ox/editor/main.js module:io.ox/editor apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/files apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "備註"
 
@@ -8003,6 +8261,14 @@ msgid "All Emoji"
 msgstr "全部表情符號"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Change who has access?"
+msgstr "要更改能存取的成員？"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "You are moving an item out of a shared folder. People will lose access."
+msgstr "您正將項目移出分享資料夾，其他人將無法再存取。"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
 msgstr "已移動檔案"
 
@@ -8033,20 +8299,6 @@ msgstr "新增筆記"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Upload folder"
 msgstr "上傳資料夾"
-
-#. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Every recipient gets an individual link. Guests can also create and change "
-"files."
-msgstr "每個收件者都會收到一個獨立的鏈結，訪客也可以建立或變更檔案。"
-
-#. sharing: a link will be created
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Everybody gets the same link. The link just allows to view the file or "
-"folder."
-msgstr "每個人都會收到一樣的鏈結，該鏈結僅能檢視檔案或資料夾。"
 
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
@@ -8215,41 +8467,6 @@ msgstr ""
 msgid "Save as PDF"
 msgstr "另存為 PDF"
 
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Send link"
-msgstr "傳送鏈結"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$d number of items (files or folders)
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for %1$d item"
-msgid_plural "Sharing link created for %1$d items"
-msgstr[0] "已針對 %1$d 個項目建立共享連結"
-msgstr[1] "已針對 %1$d 個項目建立共享連結"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$s file name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for file \"%1$s\""
-msgstr "已為檔案 \"%1$s\" 建立共享鏈結"
-
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s folder name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for folder \"%1$s\""
-msgstr "已為資料夾 \"%1$s\" 建立共享鏈結"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Remove link"
-msgstr "移除連結"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "The link has been removed"
-msgstr "連結已移除"
-
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "Select file"
 msgstr "選擇檔案"
@@ -8289,8 +8506,9 @@ msgid "Locked"
 msgstr "已鎖定"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Edit Share"
-msgstr "編輯共享項目"
+#: apps/io.ox/files/share/toolbar.js module:io.ox/files
+msgid "Edit share"
+msgstr "編輯分享"
 
 #. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -8298,6 +8516,10 @@ msgstr "編輯共享項目"
 #: module:io.ox/files apps/io.ox/settings/apps/settings/pane.js
 msgid "Revoke access"
 msgstr "撤回存取權"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+msgid "Create sharing link"
+msgstr "建立分享鏈結"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -8363,6 +8585,10 @@ msgstr "沒有任何已經上傳的檔案符合要求的檔案類型。"
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
 msgstr "錯誤: 檔案載入失敗"
+
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Hide folder"
+msgstr "隱藏資料夾"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -8631,6 +8857,7 @@ msgstr "保留部分最近的版本"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/public-link.js
 msgid "Public link"
 msgstr "公開鏈結"
 
@@ -8647,18 +8874,36 @@ msgid "Internal users"
 msgstr "內部使用者"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Please set password"
 msgstr "請設定密碼"
 
 #. Role: view folder + read all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Viewer"
 msgstr "檢視者"
 
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read only"
+msgstr "唯讀"
+
 #. Role: view folder + read/write all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Reviewer"
 msgstr "評論者"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read and write"
+msgstr "可讀寫"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read, write and delete"
+msgstr "讀寫與刪除"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
@@ -8676,18 +8921,6 @@ msgstr "組"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "目前角色"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read only)"
-msgstr "（唯讀）"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read and write)"
-msgstr "（讀與寫）"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read, write, and delete)"
-msgstr "（讀、寫、刪除）"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
@@ -8765,6 +8998,18 @@ msgstr "使用者"
 msgid "Resend invitation"
 msgstr "重寄邀請函"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invited people only"
+msgstr "僅受邀成員"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and invited people"
+msgstr "任何收到連結的人和受邀請的人"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this folder?"
+msgstr "誰能存取此資料夾？"
+
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8788,91 +9033,104 @@ msgid "Permissions for %1$s \"%2$s\""
 msgstr "「%2$s」%1$s的權限"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Send notification by email"
-msgstr "傳送通知郵件"
+msgid "Remove shares"
+msgstr "移除分享"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Add people"
-msgstr "新增人員"
+msgid "Do you really want to remove all shares?"
+msgstr "您真的要刪除所有分享項目嗎？"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Enter a Message to inform users"
-msgstr "請輸入訊息通知使用者"
+msgid "Unshare"
+msgstr "取消分享"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Name or email address"
+msgstr "姓名或電子郵寄地址"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite people"
+msgstr "邀請使用者"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite as: "
+msgstr "邀請為："
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invitation message (optional)"
+msgstr "邀請訊息（選填）"
 
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid ""
-"Personal message (optional). This message is sent to all newly invited "
-"people."
-msgstr "個人訊息（非必填），此訊息將傳送給所有新邀請的人員。"
+msgid "Message will be sent to all newly invited people"
+msgstr "訊息將送給所有受邀請的成員"
 
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Edit share"
-msgstr "編輯分享"
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Do you really want to discard all changes?"
+msgstr "您確定要捨棄所有變更嗎？"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"You can copy and paste this link in an email, instant messenger or social "
-"network. Please note that anyone with this link can access the share."
-msgstr ""
-"您可以複製並將此連結貼到郵件、即時訊息或社交網路中，請注意任何看到此連結的人"
-"都能存取此分享內容。"
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "網路上任何擁有此連結的人都可以檢視檔案。"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Add recipients ..."
-msgstr "新增收件者…"
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Copy link"
+msgstr "複製連結"
 
-#. placeholder text in share dialog
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Message (optional)"
-msgstr "訊息（非必要）"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Link options"
+msgstr "連結選項"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Share with subfolders"
-msgstr "與子資料夾一同分享"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one day"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One day"
 msgstr "一天"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one week"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One week"
 msgstr "一週"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one month"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One month"
 msgstr "一個月"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "three months"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Three months"
 msgstr "三個月"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "six months"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Six months"
 msgstr "六個月"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one year"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One year"
 msgstr "一年"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Expires in"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Expiration"
 msgstr "過期於"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Expires on"
-msgstr "過期於"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Password (optional)"
+msgstr "密碼（選填）"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Password required"
-msgstr "需要輸入密碼"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Enter Password"
 msgstr "請輸入密碼"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Share with subfolders"
+msgstr "與子資料夾一同分享"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Invite options"
+msgstr "邀請選項"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Send notification by email"
+msgstr "傳送通知郵件"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -9488,10 +9746,10 @@ msgid ""
 msgstr "當您的空間已滿時，電子郵件無法被到垃圾桶。"
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-msgid ""
-"Currently edited drafts with attachments can not be deleted until you close "
-"the correspondig mail compose window."
-msgstr "在您關閉郵件編寫視窗前，無法刪除正在編輯的有附件的草稿。"
+msgid "This would also delete a currently edited draft."
+msgid_plural "This would also delete %1$d currently edited drafts."
+msgstr[0] "也將刪除目前正在編輯的草稿。"
+msgstr[1] "也將刪除 %1$d 份目前正在編輯的草稿。"
 
 #. 'Delete mail' as modal dialog header to confirm to delete a mail.
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
@@ -9941,14 +10199,21 @@ msgid "Compose"
 msgstr "撰寫"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "儲存並關閉"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
 msgstr "無法於伺服器找到郵件草稿，可能已同時送出或刪除了。"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"This draft was changed outside of this window. To prevent possible loss of "
+"data please continue editing in that other tab or browser."
+msgstr ""
+"此草稿已在此是窗外被修改，為了避免資料遺失，請到該分頁或瀏覽器繼續編輯。"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "儲存並關閉"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -10069,11 +10334,6 @@ msgid "%1$d year"
 msgid_plural "%1$d years"
 msgstr[0] "%1$d 年"
 msgstr[1] "%1$d 年"
-
-#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Expiration"
-msgstr "過期於"
 
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -10205,6 +10465,13 @@ msgstr "儲存中…"
 msgid "Saved %s"
 msgstr "已儲存 %s"
 
+#. When closing compose the user decides to keep the related draft or delete it as well.
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid ""
+"You are about to discard this message. Do you want to delete the related "
+"draft?"
+msgstr "您即將捨棄此訊息，確定要刪除相關的草稿嗎？"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
@@ -10329,6 +10596,69 @@ msgstr "已匯入郵件"
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "將 EML 檔案放到這裡以匯入"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Please enter the password."
+msgstr "請輸入密碼。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "最近更改了密碼，請輸入新密碼。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder cannot be added because it was removed by the owner."
+msgstr "由於已被擁有者刪除，無法新增此資料夾。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid ""
+"The folder is currently unavailable and cannot be added. Please try again "
+"later."
+msgstr "此資料夾目前無法使用，也無法新增，請稍候再試。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder cannot be added because the link is invalid."
+msgstr "由於連結無效，無法新增資料夾。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "This type of link and is unsupported and can't be added."
+msgstr "不支援此類連結，無法新增。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid ""
+"This folder has been shared with another user. You are not allowed to add "
+"this folder."
+msgstr "此資料夾已分享給其他使用者，不被允許新增此資料夾。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder was added successfully."
+msgstr "成功新增資料夾。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder was removed successfully."
+msgstr "成功移除資料夾。"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Please enter password."
+msgstr "請輸入密碼。"
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "View folder"
+msgstr "檢視資料夾"
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Add to %1$s"
+msgstr "新增至 %1$s"
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Remove from %1$s"
+msgstr "從 %1$s 移除"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "%1$s shared a folder with you"
+msgstr "%1$s 與您分享了資料夾"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
@@ -10642,11 +10972,6 @@ msgstr "大於"
 #: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "小於"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Address"
-msgstr "地址"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11258,6 +11583,11 @@ msgstr "顯示送達回執請求"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show folder with all unseen messages"
 msgstr "顯示包含所有未讀訊息的信件匣"
+
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Notification sounds"
+msgstr "通知音效"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Play sound on incoming mail"
@@ -12041,8 +12371,8 @@ msgstr "顯示更少選項"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/views.js
-msgid "Manual Configuration"
-msgstr "手動設定"
+msgid "Show manual configuration options"
+msgstr "顯示手動設定選項"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Automatic Configuration (via SMS)"
@@ -12178,10 +12508,8 @@ msgid ""
 msgstr "若要與您手機上的行事曆同步，請在您的 CardDav 客戶端輸入下列設定："
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid ""
-"To synchronize your iOS Mail client automatically, scan this code with your "
-"phone's camera:"
-msgstr "若要與您的 iOS 郵件軟體自動同步，請用您的手機相機掃描下列這組代碼："
+msgid "Please scan this code with your phone's camera:"
+msgstr "請使用手機的相機掃描此代碼："
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
@@ -12274,6 +12602,12 @@ msgstr "請使用您的手機相機掃描下列代碼，以同步您的 \"%1$s\"
 msgid "Link: "
 msgstr "連結："
 
+#: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+msgid ""
+"Please note: After downloading you will have to enable the profile in the "
+"Settings app to complete the installation."
+msgstr "請注意：下載後必須要「設定」應用程式中開啟此設定檔，才能完成安裝。"
+
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "To install %1$s, please scan this code with your phone's camera:"
@@ -12281,13 +12615,13 @@ msgstr "若要安裝 %1$s，請使用您的手機相機掃描下列這組代碼�
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-msgid "To install %1$s for Windows, download the installation file"
-msgstr "若要安裝 %1$s for Windows，請下載安裝程式"
+msgid "Download %1$s for Windows"
+msgstr "下載 %1$s for Windows"
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-msgid "%1$s for Windows Installer"
-msgstr "%1$s for Windows 安裝程式"
+msgid "%1$s for Windows"
+msgstr "%1$s for Windows"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Please download the configuration to automatically set up your account."
@@ -12307,7 +12641,7 @@ msgstr ""
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid ""
 "If an automatic configuration is not possible, please use the following "
-"information to manually setup your mail account:"
+"information to manually set up your mail account:"
 msgstr "若無法進行自動設定，請使用下列資訊來手動設定郵件帳號："
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -12406,6 +12740,11 @@ msgstr "此清單還沒有參與者"
 #: apps/io.ox/participants/views.js
 msgid "Members (%1$d)"
 msgstr "成員（%1$d）"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Participants (%1$d)"
+msgstr "參與者（%1$d）"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource group"
@@ -12677,20 +13016,6 @@ msgstr "已包含資料夾"
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Trash folder"
 msgstr "垃圾桶"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Public folders"
-msgstr "公開資料夾"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Shared folders"
-msgstr "共用資料夾"
 
 #. shown when a download of mail data is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -13025,6 +13350,11 @@ msgstr "過期於"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
+msgid "Expires on"
+msgstr "過期於"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
 msgid "Failure reason"
 msgstr "失敗原因"
 
@@ -13222,10 +13552,6 @@ msgstr "來電"
 #: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
 msgid "Answer"
 msgstr "接聽"
-
-#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
-msgid "%1$s is calling"
-msgstr "%1$s 來電"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Conference call"
@@ -13879,11 +14205,11 @@ msgid ""
 msgstr "當您參與的任務當中的參與者接受或拒絕時接收通知"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared task folders"
+msgid "Subscribe to shared task folders"
 msgstr "訂閱共享任務資料夾"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared tasks folders"
+msgid "Subscribe to shared tasks folders"
 msgstr "訂閱共享任務資料夾"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
@@ -14068,12 +14394,6 @@ msgid ""
 "your account."
 msgstr "您可以新增其他驗證選項，來加強帳號的安全性。"
 
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
-msgid "What's new"
-msgstr "最新消息"
-
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "要了解新功能與改善過的功能，請造訪 "
@@ -14092,10 +14412,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
 msgstr "不要再顯示"
-
-#: apps/io.ox/tours/whatsnew/main.js module:io.ox/core
-msgid "What's new in this version"
-msgstr "此版本的更新功能"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Upgrade to premium edition"
@@ -14319,6 +14635,10 @@ msgstr "提供意見回饋"
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "共享約會"
+
+#: apps/plugins/halo/mail/register.js module:plugins/halo
+msgid "Chat history"
+msgstr "聊天記錄"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -15214,6 +15534,195 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid "Subscribe shared calendars"
+#~ msgstr "訂閱共享行事曆"
+
+#~ msgid "Create new channel"
+#~ msgstr "建立新頻道"
+
+#~ msgid "Channels are public and can be joined by anybody"
+#~ msgstr "頻道公開，可讓任何人加入"
+
+#~ msgid "There was an error during authentication."
+#~ msgstr "驗證時發生錯誤。"
+
+#~ msgid "The message could not be sent."
+#~ msgstr "無法傳送訊息。"
+
+#~ msgid "Unknown user"
+#~ msgstr "使用者未知"
+
+#~ msgid "You"
+#~ msgstr "您"
+
+#~ msgid "Receive email notifications"
+#~ msgstr "接收電子郵件通知"
+
+#~ msgid "Private chats only"
+#~ msgstr "僅私人聊天"
+
+#~ msgid "Always"
+#~ msgstr "總是"
+
+#~ msgid "Join chat"
+#~ msgstr "加入聊天"
+
+#~ msgid "Chats could not be loaded."
+#~ msgstr "無法載入聊天。"
+
+#~ msgid "Create new chat"
+#~ msgstr "建立新聊天"
+
+#~ msgid "Subscribe shared address books"
+#~ msgstr "訂閱共享通訊錄"
+
+#~ msgid "Sharing"
+#~ msgstr "共享"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "權限 / 邀請人員"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "訂閱通訊錄"
+
+#~ msgid "Subscribe shared address book"
+#~ msgstr "訂閱共享通訊錄"
+
+#~ msgid "Subscribe shared folder"
+#~ msgstr "訂閱共享資料夾"
+
+#~ msgid "Subscribe shared Calendar"
+#~ msgstr "訂閱共享行事曆"
+
+#~ msgid "Share this file"
+#~ msgstr "分享此檔案"
+
+#~ msgid ""
+#~ "Every recipient gets an individual link. Guests can also create and "
+#~ "change files."
+#~ msgstr "每個收件者都會收到一個獨立的鏈結，訪客也可以建立或變更檔案。"
+
+#~ msgid ""
+#~ "Everybody gets the same link. The link just allows to view the file or "
+#~ "folder."
+#~ msgstr "每個人都會收到一樣的鏈結，該鏈結僅能檢視檔案或資料夾。"
+
+#~ msgid "Send link"
+#~ msgstr "傳送鏈結"
+
+#, c-format
+#~ msgid "Sharing link created for %1$d item"
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "已針對 %1$d 個項目建立共享連結"
+#~ msgstr[1] "已針對 %1$d 個項目建立共享連結"
+
+#, c-format
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgstr "已為檔案 \"%1$s\" 建立共享鏈結"
+
+#, c-format
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgstr "已為資料夾 \"%1$s\" 建立共享鏈結"
+
+#~ msgid "Remove link"
+#~ msgstr "移除連結"
+
+#~ msgid "The link has been removed"
+#~ msgstr "連結已移除"
+
+#~ msgid "Edit Share"
+#~ msgstr "編輯共享項目"
+
+#~ msgid "(Read only)"
+#~ msgstr "（唯讀）"
+
+#~ msgid "(Read and write)"
+#~ msgstr "（讀與寫）"
+
+#~ msgid "(Read, write, and delete)"
+#~ msgstr "（讀、寫、刪除）"
+
+#~ msgid "Add people"
+#~ msgstr "新增人員"
+
+#~ msgid "Enter a Message to inform users"
+#~ msgstr "請輸入訊息通知使用者"
+
+#~ msgid ""
+#~ "Personal message (optional). This message is sent to all newly invited "
+#~ "people."
+#~ msgstr "個人訊息（非必填），此訊息將傳送給所有新邀請的人員。"
+
+#~ msgid ""
+#~ "You can copy and paste this link in an email, instant messenger or social "
+#~ "network. Please note that anyone with this link can access the share."
+#~ msgstr ""
+#~ "您可以複製並將此連結貼到郵件、即時訊息或社交網路中，請注意任何看到此連結的"
+#~ "人都能存取此分享內容。"
+
+#~ msgid "Add recipients ..."
+#~ msgstr "新增收件者…"
+
+#~ msgid "Message (optional)"
+#~ msgstr "訊息（非必要）"
+
+#~ msgid "one day"
+#~ msgstr "一天"
+
+#~ msgid "one week"
+#~ msgstr "一週"
+
+#~ msgid "one month"
+#~ msgstr "一個月"
+
+#~ msgid "three months"
+#~ msgstr "三個月"
+
+#~ msgid "six months"
+#~ msgstr "六個月"
+
+#~ msgid "one year"
+#~ msgstr "一年"
+
+#~ msgid "Expires in"
+#~ msgstr "過期於"
+
+#~ msgid "Password required"
+#~ msgstr "需要輸入密碼"
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr "在您關閉郵件編寫視窗前，無法刪除正在編輯的有附件的草稿。"
+
+#~ msgid "Address"
+#~ msgstr "地址"
+
+#~ msgid "Manual Configuration"
+#~ msgstr "手動設定"
+
+#~ msgid ""
+#~ "To synchronize your iOS Mail client automatically, scan this code with "
+#~ "your phone's camera:"
+#~ msgstr "若要與您的 iOS 郵件軟體自動同步，請用您的手機相機掃描下列這組代碼："
+
+#~ msgid "To install %1$s for Windows, download the installation file"
+#~ msgstr "若要安裝 %1$s for Windows，請下載安裝程式"
+
+#~ msgid "%1$s for Windows Installer"
+#~ msgstr "%1$s for Windows 安裝程式"
+
+#~ msgid ""
+#~ "If an automatic configuration is not possible, please use the following "
+#~ "information to manually setup your mail account:"
+#~ msgstr "若無法進行自動設定，請使用下列資訊來手動設定郵件帳號："
+
+#~ msgid "Subscribe shared task folders"
+#~ msgstr "訂閱共享任務資料夾"
+
+#~ msgid "Subscribe shared tasks folders"
+#~ msgstr "訂閱共享任務資料夾"
+
 #~ msgid "100%"
 #~ msgstr "100%"
 
@@ -15547,11 +16056,6 @@ msgstr "新增至 %s"
 #~| msgid "%s client for Mac OS"
 #~ msgid "%1$s for MacOS"
 #~ msgstr "%s Mac OS 客戶端"
-
-#, fuzzy
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s Windows 客戶端"
 
 #, fuzzy
 #~| msgid "%s client for iOS"
@@ -18383,9 +18887,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Launching an app"
 #~ msgstr "執行應用程式"
-
-#~ msgid "Leave"
-#~ msgstr "離開"
 
 #, fuzzy
 #~ msgid "Leave Presentation"

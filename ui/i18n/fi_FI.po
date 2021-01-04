@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-11-30 13:51+0100\n"
+"PO-Revision-Date: 2020-12-30 02:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -675,6 +675,7 @@ msgstr "%1$s siirretty asemaan %2$s/%3$s"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+#: apps/io.ox/chat/main.js module:io.ox/chat
 #: apps/io.ox/core/folder/favorites.js apps/io.ox/files/favorites.js
 #: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
 msgid "Favorites"
@@ -826,7 +827,7 @@ msgstr "CW"
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Today,"
-msgstr "Tänään"
+msgstr "Tänään,"
 
 #. CW is calender week and %1$d is the week number
 #. %1$d = Calendar week
@@ -884,10 +885,10 @@ msgstr "Poista valokuva"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
-#: module:io.ox/mail apps/io.ox/mail/common-extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/actions/source.js module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js apps/io.ox/mail/compose/main.js
 #: apps/io.ox/mail/mailfilter/autoforward/indicator.js
 #: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 #: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
@@ -919,9 +920,9 @@ msgstr "Lataa"
 #: apps/io.ox/core/main/logout.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/relogin.js apps/io.ox/core/sub/subscriptions.js
 #: module:io.ox/core/sub apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/compose/actions/extensions.js
 #: apps/io.ox/mail/compose/extensions.js apps/io.ox/mail/main.js
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
 #: module:io.ox/core/boot apps/io.ox/multifactor/views/constants.js
@@ -987,8 +988,8 @@ msgstr "Väli"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 #: apps/io.ox/core/notifications.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 #: apps/io.ox/settings/security/settings/pane.js
 msgid "Never"
@@ -1100,13 +1101,14 @@ msgstr ""
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/timeView.js apps/io.ox/chat/settings/pane.js
+#: module:io.ox/chat apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Compact"
 msgstr "Tiivis"
 
 #. answer Button to 'Do you want the appointments printed in detail or as a compact list?'
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Detailed"
 msgstr "Yksityiskohtainen"
 
@@ -1417,12 +1419,14 @@ msgid "Create in public calendar"
 msgstr "Luo julkisessa kalenterissa"
 
 #: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/core/boot/i18n.js
-#: module:io.ox/core/boot apps/io.ox/core/relogin.js module:io.ox/core
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/calendar/actions/subscribe-ical.js apps/io.ox/calendar/main.js
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/core/relogin.js module:io.ox/core apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-#: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+#: apps/io.ox/mail/invitations/register.js apps/io.ox/onboarding/views.js
+#: module:io.ox/core/onboarding
 msgid "Password"
 msgstr "Salasana"
 
@@ -1610,6 +1614,7 @@ msgstr "Tapaamisen yksityiskohdat"
 
 #: apps/io.ox/calendar/detail/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/perspective.js apps/io.ox/chat/data.js module:io.ox/chat
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "Tapahtui virhe. Yritä uudelleen."
 
@@ -1628,18 +1633,21 @@ msgstr "Luo tapaaminen"
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
 #: module:io.ox/calendar/settings/schedjoules
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
-#: module:io.ox/calendar apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/edit-description.js module:io.ox/files
 #: apps/io.ox/files/actions/save-as-pdf.js apps/io.ox/files/filepicker.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings
+#: apps/io.ox/files/main.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 #: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
@@ -1672,6 +1680,7 @@ msgstr "Luo"
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
@@ -1692,9 +1701,12 @@ msgstr "Hylkää"
 msgid "Subject"
 msgstr "Aihe"
 
+#. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 msgid "Location"
 msgstr "Sijainti"
 
@@ -1893,7 +1905,8 @@ msgstr "Tapaaminen"
 #: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/tasks/edit/main.js module:io.ox/tasks
+#: module:io.ox/editor apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 msgid "Discard changes"
 msgstr "Hylkää muutokset"
 
@@ -1941,7 +1954,6 @@ msgid "Scheduling"
 msgstr "Suunnittelu"
 
 #: apps/io.ox/calendar/freetime/participantsView.js module:io.ox/calendar
-#: apps/io.ox/chat/views/addMember.js module:io.ox/chat
 msgid "Add participant"
 msgstr "Lisää osallistuja"
 
@@ -2150,9 +2162,9 @@ msgstr "Virhe: Tapaamisten lataaminen ei onnistunut"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
-#: module:io.ox/files apps/io.ox/mail/detail/view.js module:io.ox/mail
-#: apps/io.ox/mail/listview.js apps/plugins/portal/twitter/register.js
-#: module:plugins/portal
+#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Yritä uudelleen"
 
@@ -2223,10 +2235,6 @@ msgid "Calendar account error"
 msgstr "Kalenteritilivirhe"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
-msgid "Edit accounts"
-msgstr "Muokkaa tilejä"
-
-#: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
@@ -2239,6 +2247,10 @@ msgstr "Kalenterin virkistäminen saattaa kestää hetken..."
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Successfully refreshed calendar"
 msgstr "Kalenterin virkistäminen onnistui"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+msgid "Edit accounts"
+msgstr "Muokkaa tilejä"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/week/print.js
@@ -2371,8 +2383,9 @@ msgstr[0] "%1$d päivää"
 msgstr[1] "%1$d päivää"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgctxt "app"
 msgid "Calendar"
 msgstr "Kalenteri"
@@ -2483,7 +2496,7 @@ msgstr "Näytä aiempioen tapaamisten muistutukset"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared calendars"
+msgid "Subscribe to shared calendars"
 msgstr "Tilaa jaettuja kalentereja"
 
 #: apps/io.ox/calendar/settings/schedjoules/schedjoules.js
@@ -2932,18 +2945,14 @@ msgstr "Varattu"
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
 #. make sure that the leading and trailing spaces are also in the translation
-#. used to concatenate two participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
 msgstr " ja "
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
 #. make sure, that the trailing space is also in the translation
-#. This delimiter is used to concatenate a list of participant names
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/chat/data.js
-#: module:io.ox/chat
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ", "
 msgstr ", "
 
@@ -2962,8 +2971,8 @@ msgstr "Päivittäin."
 msgctxt "daily"
 msgid "Every %1$d day."
 msgid_plural "Every %1$d days."
-msgstr[0] "Joka %1$d. päivä"
-msgstr[1] "Joka %1$d. päivä"
+msgstr[0] "Joka %1$d. päivä."
+msgstr[1] "Joka %1$d. päivä."
 
 #. recurrence string
 #. the case %1$d == 1 is handled separately and will not be used
@@ -3307,29 +3316,9 @@ msgid "Create group chat"
 msgstr "Luo ryhmäkeskustelu"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/views/chat.js
 msgid "Edit channel"
 msgstr "Muokkaa kanavaa"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Create new channel"
-msgstr "Luo uusi kanava"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
-msgid "Group name"
-msgstr "Ryhmän nimi"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Channel name"
-msgstr "Kanavan nimi"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Channels are public and can be joined by anybody"
-msgstr "Kanavat ovat julkisia ja niihin voi liittyä kuka tahansa"
-
-#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-msgid "Create chat"
-msgstr "Luo keskustelu"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/chat/views/empty.js
@@ -3337,9 +3326,38 @@ msgid "Create channel"
 msgstr "Luo kanava"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js
-msgid "Edit chat"
-msgstr "Muokkaa keskustelua"
+msgid "Channel name"
+msgstr "Kanavan nimi"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/edit.js module:io.ox/core
+msgid "Group name"
+msgstr "Ryhmän nimi"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid ""
+"Other users can find and join your channel under \"All channels\". If you "
+"prefer a conversiom in a closed group, please create a group chat."
+msgstr ""
+"Muut käyttäjät voivat löytää kanavasi ja liittyä siihen \"Kaikki kanavat\" -"
+"valinnan kautta. Jos haluat keskustella suljetussa ryhmässä, luo "
+"ryhmäkeskustelu."
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid "Create chat"
+msgstr "Luo keskustelu"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#: apps/io.ox/chat/data.js
+msgid "The group could not be saved since the name can not be empty"
+msgstr "Ryhmää ei voitu tallentaa, koska nimi ei voi olla tyhjä"
+
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+msgid ""
+"The chat could not be saved since the name exceeds the length limit of %1$s "
+"characters"
+msgstr ""
+"Keskustelua ei voitu tallentaa, koska nimi ylittää %1$s merkin enimmäismäärän"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Changes to this chat could not be saved."
@@ -3348,6 +3366,30 @@ msgstr "Muutoksia tähän keskusteluun ei voitu tallentaa."
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Chat could not be saved."
 msgstr "Keskustelua ei voitu tallentaa."
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Unknown command: %1$s"
+msgstr "Tuntematon komento: %1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "List all commands"
+msgstr "Komentoluettelo"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Show server version"
+msgstr "Näytä palvelinversio"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Server version: %1$s"
+msgstr "Palvelimen versio:%1$s"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Zoom meeting"
+msgstr "Aloita Zoom-kokous"
+
+#: apps/io.ox/chat/commands.js module:io.ox/chat
+msgid "Start a Jitsi meeting"
+msgstr "Aloita Jitsi-kokous"
 
 #. %1$s is a user name
 #: apps/io.ox/chat/commands.js module:io.ox/chat
@@ -3360,117 +3402,14 @@ msgid "Please click the following link to join: %1$s"
 msgstr "Liity napauttamalla seuraavaa linkkiä: %1$s"
 
 #: apps/io.ox/chat/commands.js module:io.ox/chat
-msgid "Server version: %1$s"
-msgstr "Palvelimen versio:%1$s"
+#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
+msgid "%1$s is calling"
+msgstr "%1$s soittaa"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Could not save settings"
 msgstr "Asetuksia ei voitu tallentaa"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "There was an error during authentication."
-msgstr "Varmennuksessa tapahtui virhe."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat apps/io.ox/chat/views/content.js
-msgid "This message was deleted"
-msgstr "Tämä viesti poistettiin"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You created this conversation"
-msgstr "Loit tämän keskustelun"
-
-#. %1$s: name of the creator
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s created this conversation"
-msgstr "%1$s loi tämän keskusteluun"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You joined the conversation"
-msgstr "Liityit keskusteluun"
-
-#. %1$s: name of the new participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s joined the conversation"
-msgstr "%1$s liittyi keskusteluun"
-
-#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You added %1$s to the conversation"
-msgid_plural "You added %1$s to the conversation"
-msgstr[0] "Lisäsit %1$s keskusteluun"
-msgstr[1] "Lisäsit %1$s keskusteluun"
-
-#. %1$s: name of the participant that added the new participant
-#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s added %2$s to the conversation"
-msgid_plural "%1$s added %2$s to the conversation"
-msgstr[0] "%1$s lisäsi keskusteluun käyttäjän %2$s"
-msgstr[1] "%1$s lisäsi keskusteluun käyttäjät %2$s"
-
-#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You removed %1$s from the conversation"
-msgid_plural "You removed %1$s from the conversation"
-msgstr[0] "Poistit käyttäjän %1$s keskustelusta"
-msgstr[1] "Poistit käyttäjät %1$s keskustelusta"
-
-#. %1$s: name of the participant that removed the other participant
-#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s removed %2$s from the conversation"
-msgid_plural "%1$s removed %2$s from the conversation"
-msgstr[0] "%1$s poisti keskustelusta käyttäjän %2$s"
-msgstr[1] "%1$s poisti keskustelusta käyttäjät %2$s "
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group image"
-msgstr "Vaihdoit ryhmän kuvan"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group image"
-msgstr "%1$s vaihtoi ryhmän kuvan"
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group title to \"%1$s\""
-msgstr "Vaihdoit ryhmän nimeksi \"%1$s\""
-
-#. %1$s: name of a chat participant
-#. %2$s: the new title
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group title to \"%2$s\""
-msgstr "%1$s vaihtoi ryhmän nimeksi \"%2$s\""
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You changed the group description to \"%1$s\""
-msgstr "Vaihdoit ryhmän kuvaukseksi \"%1$s\""
-
-#. %1$s: name of a chat participant
-#. %2$s: the new description
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s changed the group description to \"%2$s\""
-msgstr "%1$s vaihtoi ryhmän kuvaukseksi \"%2$s\""
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You left the conversation"
-msgstr "Poistuit keskustelusta"
-
-#. %1$s: name of a chat participant
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "%1$s left the conversation"
-msgstr "%1$s poistui keskustelusta"
-
-#. If it fails to load and decrypt a chat message a system message will be shown
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Message could not be loaded"
-msgstr "Viestiä  ei voitu ladata"
-
-#. %1$s: messagetext
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown system message: %1$s"
-msgstr "Tuntematon järjestelmäviesti: $1%s"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The messages could not be loaded."
@@ -3485,14 +3424,18 @@ msgid "The message length exceeds the limit and could not be delivered"
 msgstr "Viesti ylittää enimmäispituuden eikä sitä voitu toimittaa perille"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "The group could not be saved since the name exceeds the length limit"
+msgstr "Ryhmää ei voitu tallentaa, koska nimi ylittää enimmäispituuden"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
+msgid "A channel with the same name already exists"
+msgstr "Samanniminen kanava on jo olemassa"
+
+#: apps/io.ox/chat/data.js module:io.ox/chat
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Jokin meni vikaan. Yritä myöhemmin uudelleen."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The message could not be sent."
-msgstr "Viestiä ei voitu lähettää."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be hidden. Please try again."
@@ -3515,21 +3458,12 @@ msgid "The chat could not be loaded."
 msgstr "Keskustelua ei voitu ladata."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "The group could not be left."
-msgstr "Ryhmästä ei voinut poistua."
-
-#: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The channel could not be left."
 msgstr "Kanavasta ei voinut poistua."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "Unknown user"
-msgstr "Tuntematon käyttäjä"
-
-#. shown instead of your name for your own chat messages when you're mentioned in a group of names
-#: apps/io.ox/chat/data.js module:io.ox/chat
-msgid "You"
-msgstr "Sinä"
+msgid "The group could not be left."
+msgstr "Ryhmästä ei voinut poistua."
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat"
@@ -3557,6 +3491,7 @@ msgstr "Vastaa kaikille keskustelun kautta"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
+#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Chat"
 msgstr "Keskustelu"
 
@@ -3579,6 +3514,10 @@ msgid "Do you really want to leave the chat?"
 msgstr "Haluatko varmasti poistua keskustelusta?"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Leave"
+msgstr "Lähde"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "The file could not be loaded."
 msgstr "Tiedostoa ei voitu ladata."
 
@@ -3589,14 +3528,17 @@ msgid "New"
 msgstr "Uusi"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Yksityinen keskustelu"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Ryhmäkeskustelu"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
+#: apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Kanava"
 
@@ -3614,9 +3556,27 @@ msgstr "Kaikki tiedostot"
 #. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
-#: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Chat history"
+msgid "History"
 msgstr "Keskusteluhistoria"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chats"
+msgstr "Yksityiset keskustelut"
+
+#. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Group chats"
+msgstr "Ryhmäkeskustelut"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Channels"
+msgstr "Kanavat"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
+#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+msgid "Chats"
+msgstr "Keskustelut"
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "Authorize"
@@ -3641,25 +3601,53 @@ msgid "Picture"
 msgstr "Kuva"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Receive email notifications"
-msgstr "Vastaanota sähköposti-ilmoituksia"
+msgid "View options"
+msgstr "Näytä valinnat"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Private chats only"
-msgstr "Vain yksityiset keskustelut"
+msgid "Select last chat on start"
+msgstr "Valitse viimeinen keskustelu aloittaessasi"
+
+#. label of checkbox to enable/dsiable grouping chats by type
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Group chats by type"
+msgstr "Ryhmäkeskustelut tyypin mukaan"
+
+#. Sort chats by ... (alphabetical|last activity)
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Sort chats by"
+msgstr "Lajittele keskustelut"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Always"
-msgstr "Aina"
+msgid "Last activity"
+msgstr "Viimeisin aktiviteetti"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Alphabetical"
+msgstr "Aakkosjärjestyksessä"
+
+#. Visual List density (German "Kompaktheitsgrad"); can be compact, default, or detailed
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "List density"
+msgstr "Luettelon tiheys"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+msgid "Default"
+msgstr "Oletus"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Plop"
+msgstr "Plop"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Click"
+msgstr "Napsauta"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Bongo"
 msgstr "Bongo"
-
-#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
-msgid "Wood"
-msgstr "Puu"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play sound for every message"
@@ -3671,9 +3659,13 @@ msgstr "Soita ääni vain kun keskustelu on taustalla"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Notification sounds"
-msgstr "Ilmoitusäänet"
+#: apps/io.ox/core/notifications.js module:io.ox/core
+msgid "Notifications"
+msgstr "Ilmoitukset"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Show desktop notifications for new messages"
+msgstr "Näytä uusien viestien työpöytäilmoitukset"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Play notification sound for new messages"
@@ -3690,8 +3682,121 @@ msgid "Behavior"
 msgstr "Käytös"
 
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
-msgid "Show desktop notifications for new messages"
-msgstr "Näytä uusien viestien työpöytäilmoitukset"
+msgid "Offline email notifications"
+msgstr "Offline-sähköposti-ilmoitukset"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Do not send any email notifications"
+msgstr "Älä lähetä sähköposti-ilmoituksia"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Send email notifications for my private chats"
+msgstr "Lähetä sähköposti-ilmoitus yksityisistä keskusteluistani"
+
+#: apps/io.ox/chat/settings/pane.js module:io.ox/chat
+msgid "Send email notifications for all chats and channels"
+msgstr "Lähetä sähköposti-ilmoitus kaikista keskusteluista ja kanavista"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You created this conversation"
+msgstr "Loit tämän keskustelun"
+
+#. %1$s: name of the creator
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s created this conversation"
+msgstr "%1$s loi tämän keskusteluun"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You joined the conversation"
+msgstr "Liityit keskusteluun"
+
+#. %1$s: name of the new participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s joined the conversation"
+msgstr "%1$s liittyi keskusteluun"
+
+#. %1$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You added %1$s to the conversation"
+msgid_plural "You added %1$s to the conversation"
+msgstr[0] "Lisäsit %1$s keskusteluun"
+msgstr[1] "Lisäsit %1$s keskusteluun"
+
+#. %1$s: name of the participant that added the new participant
+#. %2$s: name of the added participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s added %2$s to the conversation"
+msgid_plural "%1$s added %2$s to the conversation"
+msgstr[0] "%1$s lisäsi keskusteluun käyttäjän %2$s"
+msgstr[1] "%1$s lisäsi keskusteluun käyttäjät %2$s"
+
+#. %1$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You removed %1$s from the conversation"
+msgid_plural "You removed %1$s from the conversation"
+msgstr[0] "Poistit käyttäjän %1$s keskustelusta"
+msgstr[1] "Poistit käyttäjät %1$s keskustelusta"
+
+#. %1$s: name of the participant that removed the other participant
+#. %2$s: name of the removed participant or participants and can be a single name or a comma separated list of names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s removed %2$s from the conversation"
+msgid_plural "%1$s removed %2$s from the conversation"
+msgstr[0] "%1$s poisti keskustelusta käyttäjän %2$s"
+msgstr[1] "%1$s poisti keskustelusta käyttäjät %2$s"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group image"
+msgstr "Vaihdoit ryhmän kuvan"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group image"
+msgstr "%1$s vaihtoi ryhmän kuvan"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group title to \"%1$s\""
+msgstr "Vaihdoit ryhmän nimeksi \"%1$s\""
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group title to \"%2$s\""
+msgstr "%1$s vaihtoi ryhmän nimeksi \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You changed the group description to \"%1$s\""
+msgstr "Vaihdoit ryhmän kuvaukseksi \"%1$s\""
+
+#. %1$s: name of a chat participant
+#. %2$s: the new description
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s changed the group description to \"%2$s\""
+msgstr "%1$s vaihtoi ryhmän kuvaukseksi \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You left the conversation"
+msgstr "Poistuit keskustelusta"
+
+#. %1$s: name of a chat participant
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s left the conversation"
+msgstr "%1$s poistui keskustelusta"
+
+#. If it fails to load and decrypt a chat message a system message will be shown
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Message could not be loaded"
+msgstr "Viestiä  ei voitu ladata"
+
+#. %1$s: messagetext
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "Unknown system message: %1$s"
+msgstr "Tuntematon järjestelmäviesti: $1%s"
+
+#. %1$s is a name or multiple comma-separated names
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "%1$s and %2$s"
+msgstr "%1$s ja %2$s"
 
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
@@ -3718,11 +3823,15 @@ msgstr "Esitys"
 msgid "File"
 msgstr "Tiedosto"
 
+#: apps/io.ox/chat/views/addMember.js module:io.ox/chat
+msgid "Add members"
+msgstr "Lisää jäseniä"
+
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 #: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
 #: apps/io.ox/chat/views/history.js
-msgid "Chats"
-msgstr "Keskustelut"
+msgid "Close chat"
+msgstr "Sulje keskustelu"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
@@ -3743,34 +3852,6 @@ msgid "Join"
 msgstr "Liity"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Close chat"
-msgstr "Sulje keskustelu"
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "Join chat"
-msgstr "Liity keskusteluun"
-
-#. %1$s is a member name
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s is typing ..."
-msgstr "%1$s kirjoittaa..."
-
-#. %1$s and %2$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s and %2$s are typing ..."
-msgstr "%1$s ja %2$s kirjoittavat ..."
-
-#. %1$s, %2$s, and %3$s are member names
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s, and %3$s are typing ..."
-msgstr "%1$s, %2$s ja %3$d kirjoittavat ..."
-
-#. %1$s and %2$s are member names, %3$d is the number of further members
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
-msgid "%1$s, %2$s and %3$d others are typing ..."
-msgstr "%1$s, %2$s ja %3$d ja muut kirjoittavat ..."
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Keskustelutoimenpiteet"
 
@@ -3788,6 +3869,10 @@ msgstr "Viesti"
 msgid "Send"
 msgstr "Lähetä"
 
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Add emoji"
+msgstr "Lisää emoji"
+
 #. An action to upload a local file e.g. to Drive.
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -3801,13 +3886,6 @@ msgid "The message could not be deleted."
 msgstr "Viestiä ei voitu poistaa."
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-"size of %2$s"
-msgstr "Tiedostoa \"%1$s\" ei voida ladata, koska se ylittää %2$s enimmäiskoon"
-
-#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid ""
 "The message cannot be sent because it exceeds the maximum message length of "
 "%1$s characters."
@@ -3815,25 +3893,68 @@ msgstr ""
 "Viestiä ei voida lähettää, koska se on pidempi kuin viestin enimmäispituus "
 "%1$s merkkiä."
 
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Remove from favorites"
+msgstr "Poista suosikeista"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
+msgid "Add to favorites"
+msgstr "Lisää suosikkeihin"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Edit chat"
+msgstr "Muokkaa keskustelua"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Close channel"
+msgstr "Sulje kanava"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Leave channel"
+msgstr "Poistu kanavalta"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Join channel"
+msgstr "Liity kanavalle"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+"size of %2$s"
+msgstr "Tiedostoa \"%1$s\" ei voida ladata, koska se ylittää %2$s enimmäiskoon"
+
 #: apps/io.ox/chat/views/chatList.js module:io.ox/chat
 msgid "Chat list"
 msgstr "Keskustelulista"
-
-#: apps/io.ox/chat/views/chatList.js module:io.ox/chat
-msgid "Chats could not be loaded."
-msgstr "Keskusteluja ei voitu ladata."
-
-#: apps/io.ox/chat/views/content.js module:io.ox/chat
-msgid "Show more"
-msgstr "Näytä enemmän"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Sending has been cancelled"
 msgstr "Lähettäminen on peruttu"
 
 #: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "This message was deleted"
+msgstr "Tämä viesti poistettiin"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Show more"
+msgstr "Näytä enemmän"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
 msgid "Delivery failed"
 msgstr "Toimitus epäonnistui"
+
+#: apps/io.ox/chat/views/content.js module:io.ox/chat
+msgid "Edited"
+msgstr "Muokattu"
 
 #: apps/io.ox/chat/views/dropzone.js module:io.ox/chat
 msgid "Drop file here to send it"
@@ -3842,6 +3963,10 @@ msgstr "Lähetä tiedosto pudottamalla se tähän"
 #: apps/io.ox/chat/views/empty.js module:io.ox/chat
 msgid "Create private chat"
 msgstr "Luo yksityinen keskustelu"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Download file"
+msgstr "Lataa tiedosto"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Cancel file upload"
@@ -3872,12 +3997,9 @@ msgstr "Arkistoituja keskusteluja ei ole vielä olemassa"
 msgid "Open"
 msgstr "Avaa"
 
-#. %1$d is the number of participants
-#: apps/io.ox/chat/views/members.js module:io.ox/chat
-#: apps/io.ox/participants/chronos-views.js module:io.ox/core
-#: apps/io.ox/participants/views.js
-msgid "Participants (%1$d)"
-msgstr "Osallistujat (%1$d)"
+#: apps/io.ox/chat/views/message.js module:io.ox/chat
+msgid "Messages are delivered by email."
+msgstr "Viestit lähetetään sähköpostitse."
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Message actions"
@@ -3920,8 +4042,28 @@ msgid "No search results"
 msgstr "Ei hakutuloksia"
 
 #: apps/io.ox/chat/views/searchResult.js module:io.ox/chat
-msgid "Create new chat"
-msgstr "Luo uusi keskustelu"
+msgid "Start new chat"
+msgstr "Aloita uusi keskustelu"
+
+#. %1$s is a member name
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s is typing ..."
+msgstr "%1$s kirjoittaa..."
+
+#. %1$s and %2$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s and %2$s are typing ..."
+msgstr "%1$s ja %2$s kirjoittavat ..."
+
+#. %1$s, %2$s, and %3$s are member names
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s, and %3$s are typing ..."
+msgstr "%1$s, %2$s ja %3$d kirjoittavat ..."
+
+#. %1$s and %2$s are member names, %3$d is the number of further members
+#: apps/io.ox/chat/views/typing.js module:io.ox/chat
+msgid "%1$s, %2$s and %3$d others are typing ..."
+msgstr "%1$s, %2$s ja %3$d ja muut kirjoittavat ..."
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -4970,13 +5112,13 @@ msgid "Link postal addresses with map service"
 msgstr "Yhdistä postiosoite karttapalveluun"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Subscribe to shared address books"
+msgstr "Tilaa jaettuja osoitekirjoja"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Hidden address books"
 msgstr "Piilotetut osoitekirjat"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-msgid "Subscribe shared address books"
-msgstr "Tilaa jaettuja osoitekirjoja"
 
 #. Name with title
 #. %1$s is the first name
@@ -5031,7 +5173,9 @@ msgid "Private contact"
 msgstr "Yksityinen yhteystieto"
 
 #. %1$s is a map service, like "Google Maps"
+#. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Open in %1$s"
 msgstr "Avaa %1$s"
 
@@ -5308,6 +5452,8 @@ msgstr "Seuraava"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -5755,15 +5901,15 @@ msgstr "Uudelleennimeä kansio"
 msgid "Rename"
 msgstr "Uudelleennimeä"
 
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-msgid "Default calendar"
-msgstr "Oletuskalenteri"
-
 #. %1$s is the folder owner
 #. %2$s is the folder title
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 msgid "%1$s: %2$s"
 msgstr "%1$s %2$s"
+
+#: apps/io.ox/core/folder/api.js module:io.ox/core
+msgid "Default calendar"
+msgstr "Oletuskalenteri"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -5831,23 +5977,14 @@ msgid "Import"
 msgstr "Tuo"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "Sharing"
-msgstr "Jaetaan"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/files/contextmenu.js
-msgid "Permissions / Invite people"
-msgstr "Luvat/ Kutsu ihmisiä"
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files apps/io.ox/files/contextmenu.js
+msgid "Share / Permissions"
+msgstr "Jaa / Käyttöoikeudet"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Permissions"
 msgstr "Oikeudet"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-msgid "Create sharing link"
-msgstr "Luo jakolista"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/contextmenu.js apps/io.ox/files/toolbar.js
@@ -5889,6 +6026,15 @@ msgid "Shared task folders"
 msgstr "Jaetut tehtäväkansiot"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Subscribe to address book"
+msgstr "Tilaa osoitekirja"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe to task folder"
+msgstr "Tilaa tehtäväkansio"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
 msgid "Public tasks folders"
 msgstr "Julkiset tehtäväkansiot"
@@ -5913,12 +6059,33 @@ msgstr "Omat kansiot"
 msgid "Add storage account"
 msgstr "Lisää säilytystili"
 
+#. opens a dialog to manage shared or public folders
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe address book"
-msgstr "Tilaa osoitekirja"
+msgid "Manage Shares"
+msgstr "Hallitse jakoja"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Shared folders"
+msgstr "Jaetut kansiot"
+
+#. shown when a download of mail data is requested (has header "Included folders ...")
+#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
+#. shown when a download of task data is requested (has header "Included folders ...")
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/settings/personalData/settings/pane.js
+msgid "Public folders"
+msgstr "Julkiset kansiot"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared address book"
+msgid "Subscribe to folder"
+msgstr "Tilaa kansio"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe to shared address book"
 msgstr "Tilaa jaettu osoitekirja"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5961,7 +6128,7 @@ msgid "Personal folder"
 msgstr "Oma kansio"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared folder"
+msgid "Subscribe to shared folder"
 msgstr "Tilaa jaettu kansio"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5986,7 +6153,7 @@ msgid "Subscribe via URL (iCal)"
 msgstr "Tilaa URLin (iCal) kautta"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe shared Calendar"
+msgid "Subscribe to shared calendar"
 msgstr "Tilaa jaettu kalenteri"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -6004,20 +6171,6 @@ msgstr "Jaat tämän kansion muiden käyttäjien kanssa"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "This folder has subscriptions"
 msgstr "Tässä kansiossa on tilauksia"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Remove from favorites"
-msgstr "Poista suosikeista"
-
-#: apps/io.ox/core/folder/favorites.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/contextmenu.js
-#: apps/io.ox/files/favorites.js apps/io.ox/files/toolbar.js
-msgid "Add to favorites"
-msgstr "Lisää suosikkeihin"
 
 #. Used for the total count of objects or mails in a folder
 #: apps/io.ox/core/folder/node.js module:io.ox/core
@@ -6125,7 +6278,7 @@ msgstr ""
 "puolipiste."
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
+#: apps/io.ox/core/whatsnew/main.js
 msgid "Learn more"
 msgstr "Lue lisää"
 
@@ -6216,15 +6369,16 @@ msgid "Currently refreshing"
 msgstr "Virkistetään"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-#: apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
+#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Sähköposti"
 
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgctxt "app"
 msgid "Address Book"
 msgstr "Osoitekirja"
@@ -6238,13 +6392,15 @@ msgstr "Portaali"
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/invitations/register.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
 msgctxt "app"
 msgid "Tasks"
@@ -6282,6 +6438,7 @@ msgid "Sign out now"
 msgstr "Kirjaudu heti ulos"
 
 #: apps/io.ox/core/main/autologout.js module:io.ox/core
+#: apps/io.ox/mail/actions/delete.js module:io.ox/mail
 msgid "Are you sure?"
 msgstr "Oletko varma?"
 
@@ -6485,10 +6642,6 @@ msgstr "Ei ilmoituksia"
 msgid "Close notification area"
 msgstr "Sulje ilmoitusalue"
 
-#: apps/io.ox/core/notifications.js module:io.ox/core
-msgid "Notifications"
-msgstr "Ilmoitukset"
-
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
@@ -6531,6 +6684,7 @@ msgstr "Vieras"
 
 #. Role: create folder + read/write/delete all
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
 #: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Tekijä"
@@ -6636,7 +6790,7 @@ msgid "The user has administrative rights"
 msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Käytä kaikkiin alakansioihin"
 
@@ -6672,9 +6826,12 @@ msgstr "Tallenna kohteeseen  %1$s"
 msgid "Printout"
 msgstr "Tuloste"
 
+#. title of dialog when contact subscription needs to be recreated on error
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/keychain/secretRecoveryDialog.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer apps/io.ox/core/yell.js apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/keychain/secretRecoveryDialog.js
 #: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
@@ -6922,11 +7079,6 @@ msgstr "Oletusteema"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
 msgstr "Yksivärinen"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
-msgid "Default"
-msgstr "Oletus"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Multicolor"
@@ -7181,6 +7333,28 @@ msgstr "Julkaisut"
 msgid "Subscriptions"
 msgstr "Tilaukset"
 
+#. %1$s domain like google.com etc, may also be a list of domains
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "Shared folders from \"%1$s\""
+msgstr "Jaetut kansiot kohteesta %1$s"
+
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/mail/compose/view.js
+#: module:io.ox/mail
+msgid "OK"
+msgstr "OK"
+
+#. confirmation when the last folder associated with a domain is unsubscribed
+#. %1$s domain like google.com etc, may also be a list of domains
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid ""
+"You unsubscribed from all folders on \"%1$s\". Those folders will be removed "
+"from your account."
+msgstr ""
+"Olet poistanut tilauksen kaikista \"%1$s\" -kansioista. Nämä kansiot "
+"poistetaan tililtäsi."
+
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
 msgstr "Synkronointi DAVin kautta"
@@ -7188,10 +7362,6 @@ msgstr "Synkronointi DAVin kautta"
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "sync via DAV"
 msgstr "synkronointi DAVin kautta"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Subscribe to address book"
-msgstr "Tilaa osoitekirja"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "No subscription services available for this module"
@@ -7341,11 +7511,6 @@ msgid "Don't remind me again"
 msgstr "Älä muistuta minua uudestaan"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "OK"
-msgstr "OK"
-
-#: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #: apps/plugins/notifications/calendar/register.js module:plugins/notifications
 #: apps/plugins/notifications/tasks/register.js
 msgid "Press to open Details"
@@ -7371,6 +7536,10 @@ msgstr "Kello"
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
+
+#: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
+msgid "Wood"
+msgstr "Puu"
 
 #: apps/io.ox/core/tk/sounds-util.js module:plugins/notifications
 msgid "Chimes"
@@ -7609,7 +7778,8 @@ msgstr ""
 "tiedostoon/kansioon."
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer
+#: module:io.ox/core/viewer apps/io.ox/files/share/public-link.js
+#: module:io.ox/files
 msgid "The link has been copied to the clipboard."
 msgstr "Linkki on kopioitu leikepöydälle."
 
@@ -7840,21 +8010,12 @@ msgid "Share"
 msgstr "Jaa"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "Share this file"
-msgstr "Jaa tiedosto"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Open attachment"
 msgstr "Avaa liite"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Print as PDF"
 msgstr "Tulosta PDF-tiedostona"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid "Invite people"
-msgstr "Kutsu ihmisiä"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -7956,6 +8117,117 @@ msgstr ""
 msgid "Start video"
 msgstr "Aloita video"
 
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+msgid "What's new in this version"
+msgstr "Uutta tässä versiossa"
+
+#. %1$s is the product name, e.g. OX App Suite
+#: apps/io.ox/core/whatsnew/main.js module:io.ox/core
+#: apps/io.ox/tours/whats-new.js
+msgid "What's new"
+msgstr "Uutta"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Federated Sharing of Files"
+msgstr "Yhteinen tiedostojen jako"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The sharing dialogs have been significantly updated to simplify the whole "
+"sharing process, and to facilitate the sharing of files between contexts and "
+"other deployments."
+msgstr ""
+"Jakamisvalintaikkunoja on päivitetty merkittävästi koko jakamisprosessin "
+"yksinkertaistamiseksi ja tiedostojen jakamisen helpottamiseksi eri "
+"asiayhteyksissä ja tarkoituksiin."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Improved \"Connect your device\" Wizard"
+msgstr "Parannettu ohjattu laitteen yhdistäminen"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The \"Connect your device\" wizard now features simplified device selection, "
+"as well as the use of QR codes to make setting up your device even easier."
+msgstr ""
+"Ohjatussa \"Yhdistä laite\" -toiminnossa on nyt yksinkertaistettu "
+"laitevalinta sekä QR-koodien käyttö laitteen määrittämisen helpottamiseksi."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "%1$s Usability"
+msgstr "%1$s käytettävyys"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgctxt "app"
+msgid "OX Drive"
+msgstr "OX Drive"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
+"sharing dialogs have also been simplified and search performance was "
+"improved."
+msgstr ""
+"%1$s tarjoaa nyt mahdollisuuden raahata ja pudottaa työpöytäkansioita "
+"kohteeseen %1$s. Myös jakamisvalintaikkunoita on yksinkertaistettu ja "
+"hakutehoa parannettu."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Saving Email Drafts"
+msgstr "Sähköpostiluonnosten tallentaminen"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"Email drafts are now automatically saved in the drafts folder and are "
+"therefore available on all your devices by default."
+msgstr ""
+"Sähköpostiluonnokset tallennetaan nyt automaattisesti luonnoskansioon, joten "
+"ne ovat oletusarvoisesti käytettävissä kaikilla laitteillasi."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Navigation Improvements"
+msgstr "Siirtymisen parannukset"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"The top navigation area has been redesigned to make accessing modules, help "
+"and settings easier."
+msgstr ""
+"Yläsiirtymisalue on suunniteltu uudelleen moduulien, ohjeen ja asetusten "
+"käytön helpottamiseksi."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Audio and Video"
+msgstr "Ääni ja video"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"This release comes with the ability to hold a video or audio chat with other "
+"people. This can be scheduled within a calendar appointment, or started "
+"spontaneously from the toolbar, contacts, halo and other logical places. To "
+"help we have also added a presence indicator to the toolbar."
+msgstr ""
+"Tämän julkaisun mukana tulee mahdollisuus pitää video- tai äänikeskustelua "
+"muiden kanssa. Tämä voidaan ajoittaa kalenteritapaamiseen tai aloittaa oma-"
+"aloitteisesti työkaluriviltä, yhteystiedoista, halosta ja muista loogista "
+"paikoista. Auttaaksemme olemme myös lisänneet tavoitettavuusilmaisimen "
+"työkaluriville."
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid "Chat for %1$s"
+msgstr "Keskustele %1$s"
+
+#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
+msgid ""
+"With this release you will notice a new chat bubble icon in the toolbar. "
+"This opens the new chat bar and lets you write messages to any other OX App "
+"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+msgstr ""
+"Tämän julkaisun avulla huomaat työkalurivillä uuden chat-kuplakuvakkeen. "
+"Tämä avaa uuden keskustelupalkin ja antaa sinun kirjoittaa viestejä muille "
+"OX App Suite -käyttäjille. Keskustelut voidaan luoda chat-palkista, "
+"yhteystiedoista tai halosta."
+
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/core/yell.js module:io.ox/core apps/io.ox/tasks/actions.js
@@ -7992,8 +8264,7 @@ msgstr "Syötä asiakirjan otsikko tähän"
 #. A note item in context of "note taking". "Notiz" in German, for example.
 #. More like "to notice" than "to notify".
 #: apps/io.ox/editor/main.js module:io.ox/editor apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/mail/actions/delete.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js
+#: module:io.ox/files apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Note"
 msgstr "Huomaa"
 
@@ -8103,6 +8374,15 @@ msgid "All Emoji"
 msgstr "Kaikki emoji merkit"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
+msgid "Change who has access?"
+msgstr "Muuttaa käyttöoikeuksien haltijoita?"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+msgid "You are moving an item out of a shared folder. People will lose access."
+msgstr ""
+"Olet siirtämässä kohdetta pois jaetusta kansiosta. Ihmiset menettävät pääsyn."
+
+#: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
 msgstr "Tiedosto on siirretty"
 
@@ -8133,24 +8413,6 @@ msgstr "Uusi huomautus"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Upload folder"
 msgstr "Lataa kansio"
-
-#. sharing: a guest user will be created for the owner of that email address
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Every recipient gets an individual link. Guests can also create and change "
-"files."
-msgstr ""
-"Jokainen vastaanottaja saa oman linkkinsä. Vieraat voivat myös luoda ja "
-"muuttaa tiedostoja."
-
-#. sharing: a link will be created
-#: apps/io.ox/files/actions.js module:io.ox/files
-msgid ""
-"Everybody gets the same link. The link just allows to view the file or "
-"folder."
-msgstr ""
-"Kaikki saavat saman linkin. Linkki sallii vain tiedoston tai kansion "
-"katselemisen."
 
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Lock"
@@ -8326,41 +8588,6 @@ msgstr ""
 msgid "Save as PDF"
 msgstr "Tallenna PDF-tiedostoksi"
 
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Send link"
-msgstr "Lähetä linkki"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$d number of items (files or folders)
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for %1$d item"
-msgid_plural "Sharing link created for %1$d items"
-msgstr[0] "Jakamislinkki luotu %1$d kohteelle"
-msgstr[1] "Jakamislinkki luotu %1$d kohteelle"
-
-#. informs user about the consequences when creating a rule for selected mail
-#. %1$s file name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for file \"%1$s\""
-msgstr "Jakamislinkki luotu tiedostolle \"%1$s\""
-
-#. informs user about the consequences when creating a rule for selected mails ()
-#. %1$s folder name
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-#, c-format
-msgid "Sharing link created for folder \"%1$s\""
-msgstr "Jakamislinkki luotu kansiolle \"%1$s\""
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Remove link"
-msgstr "Poista linkki"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "The link has been removed"
-msgstr "Linkki on poistettu"
-
 #: apps/io.ox/files/actions/upload-new-version.js module:io.ox/files
 msgid "Select file"
 msgstr "Valitse tiedosto"
@@ -8400,8 +8627,9 @@ msgid "Locked"
 msgstr "Lukittu"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
-msgid "Edit Share"
-msgstr "Muokkaa jaettua"
+#: apps/io.ox/files/share/toolbar.js module:io.ox/files
+msgid "Edit share"
+msgstr "Muokkaa jakamista"
 
 #. 'Revoke access' as header of a modal dialog to confirm to revoke access of an application.
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -8409,6 +8637,10 @@ msgstr "Muokkaa jaettua"
 #: module:io.ox/files apps/io.ox/settings/apps/settings/pane.js
 msgid "Revoke access"
 msgstr "Peruuta käyttöoikeus"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+msgid "Create sharing link"
+msgstr "Luo jakolista"
 
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -8474,6 +8706,10 @@ msgstr "Yksikään ladatuista tiedostoista ei vastaa pyydettyä tiedostotyyppiä
 #: apps/io.ox/files/listview.js module:io.ox/files
 msgid "Error: Failed to load files"
 msgstr "Virhe: Tiedostojen lataaminen ei onnistunut"
+
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid "Hide folder"
+msgstr "Piilota kansio"
 
 #. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
@@ -8750,6 +8986,7 @@ msgstr "Säilytä viimeaikaisten versioiden määrä"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/public-link.js
 msgid "Public link"
 msgstr "Julkinen linkki"
 
@@ -8766,18 +9003,36 @@ msgid "Internal users"
 msgstr "Sisäiset käyttäjät"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Please set password"
 msgstr "Aseta salasanasi"
 
 #. Role: view folder + read all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Viewer"
 msgstr "Katselija"
 
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read only"
+msgstr "Ainoastaan lukuoikeus"
+
 #. Role: view folder + read/write all
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Reviewer"
 msgstr "Arvioija"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read and write"
+msgstr "Lue ja kirjoita"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read, write and delete"
+msgstr "Lue, kirjoita ja poista"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "The notification has been resent"
@@ -8795,18 +9050,6 @@ msgstr "Ryhmä"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Nykyinen rooli"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read only)"
-msgstr "(Kirjoitussuojattu)"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read and write)"
-msgstr "(Lue ja kirjoita)"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "(Read, write, and delete)"
-msgstr "(Lue, kirjoita ja poista)"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Detailed access rights"
@@ -8884,6 +9127,18 @@ msgstr "Käyttäjä"
 msgid "Resend invitation"
 msgstr "Lähetä kutsu uudelleen"
 
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invited people only"
+msgstr "Vain kutsutut"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and invited people"
+msgstr "Kaikki, joilla on linkki ja kutsutut ihmiset"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this folder?"
+msgstr "Kuka voi käyttää tätä kansiota?"
+
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -8907,94 +9162,104 @@ msgid "Permissions for %1$s \"%2$s\""
 msgstr "Valtuudet  %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Send notification by email"
-msgstr "Lähetä ilmoitus sähköpostitse"
+msgid "Remove shares"
+msgstr "Poista jaettuja kohteita"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Add people"
-msgstr "Lisää ihmisiä"
+msgid "Do you really want to remove all shares?"
+msgstr "Haluatko varmasti poistaa kaikki jaot?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Enter a Message to inform users"
-msgstr "Kirjoita viesti käyttäjille"
+msgid "Unshare"
+msgstr "Poista jakaminen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Name or email address"
+msgstr "Nimi tai sähköpostiosoite"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite people"
+msgstr "Kutsu ihmisiä"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invite as: "
+msgstr "Kutsu nimellä: "
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Invitation message (optional)"
+msgstr "Kutsuviesti (valinnainen)"
 
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid ""
-"Personal message (optional). This message is sent to all newly invited "
-"people."
-msgstr ""
-"Henkilökohtainen viesti (valinnainen). Viesti lähetetään kaikille uusille "
-"kutsutuille."
+msgid "Message will be sent to all newly invited people"
+msgstr "Viesti lähetetään kaikille uusille kutsutuille"
 
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Edit share"
-msgstr "Muokkaa jakamista"
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Do you really want to discard all changes?"
+msgstr "Haluatko varmasti hylätä kaikki muutokset?"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid ""
-"You can copy and paste this link in an email, instant messenger or social "
-"network. Please note that anyone with this link can access the share."
-msgstr ""
-"Voit kopioida tämän linkin sähköpostiviestiin, messengeriin tai sosiaaliseen "
-"verkostoon. Huomioi, että kuka tahansa pääsee jakamaasi kohteeseen tämän "
-"linkin kautta."
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Kuka tahansa Internetissä, jolla on linkki, voi tarkastella tiedostoa."
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Add recipients ..."
-msgstr "Lisää vastaanottajia..."
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Copy link"
+msgstr "Kopioi linkki"
 
-#. placeholder text in share dialog
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Message (optional)"
-msgstr "Viesti (valinnainen)"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Link options"
+msgstr "Linkkivalinnat"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Share with subfolders"
-msgstr "Jaa alakansioiden kanssa"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One day"
+msgstr "Yksi päivä"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one day"
-msgstr "yhden päivän"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One week"
+msgstr "Yksi viikko"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one week"
-msgstr "yksi viikko"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One month"
+msgstr "Yksi kuukausi"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one month"
-msgstr "yhden kuukauden"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Three months"
+msgstr "Kolme kuukautta"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "three months"
-msgstr "kolmen kuukauden"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Six months"
+msgstr "Puoli vuotta"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "six months"
-msgstr "puolen vuoden"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "One year"
+msgstr "Yksi vuosi"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "one year"
-msgstr "vuoden"
+#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
+msgid "Expiration"
+msgstr "Vanhentuminen"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Expires in"
-msgstr "Menee vanhaksi"
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Password (optional)"
+msgstr "Salasana (valinnainen)"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-#: apps/io.ox/settings/security/certificates/settings/utils.js
-#: module:io.ox/settings/certificates
-msgid "Expires on"
-msgstr "Menee vanhaksi"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Password required"
-msgstr "Tarvitaan salasana"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Enter Password"
 msgstr "Kirjoita salasana"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Share with subfolders"
+msgstr "Jaa alakansioiden kanssa"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Invite options"
+msgstr "Kutsuvalinnat"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Send notification by email"
+msgstr "Lähetä ilmoitus sähköpostitse"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -9630,12 +9895,10 @@ msgstr ""
 "Viestikiintiön ollessa ylitettynä, et voi siirtää viestejä roskakansioon."
 
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
-msgid ""
-"Currently edited drafts with attachments can not be deleted until you close "
-"the correspondig mail compose window."
-msgstr ""
-"Tällä hetkellä muokattavia liitteitä sisältäviä luonnoksia ei voida poistaa "
-"ennen kuin vastaava sähköpostinkirjoitusikkuna on suljettu."
+msgid "This would also delete a currently edited draft."
+msgid_plural "This would also delete %1$d currently edited drafts."
+msgstr[0] "Tämä poistaisi myös muokatun luonnoksen."
+msgstr[1] "Tämä poistaisi myös %1$d muokattua luonnosta."
 
 #. 'Delete mail' as modal dialog header to confirm to delete a mail.
 #: apps/io.ox/mail/actions/delete.js module:io.ox/mail
@@ -10096,16 +10359,24 @@ msgid "Compose"
 msgstr "Uusi viesti"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Tallenna ja sulje"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
 "The mail draft could not be found on the server. It was sent or deleted in "
 "the meantime."
 msgstr ""
 "Viestiluonnosta ei löytynyt palvelimelta. Se on lähetetty tai poistettu "
 "tällä välin."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"This draft was changed outside of this window. To prevent possible loss of "
+"data please continue editing in that other tab or browser."
+msgstr ""
+"Tätä luonnosta muutettiin tämän ikkunan ulkopuolella. Voit estää tietojen "
+"menettämisen jatkamalla muokkaamista toisessa välilehdessä tai selaimessa."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Tallenna ja sulje"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
@@ -10227,11 +10498,6 @@ msgid "%1$d year"
 msgid_plural "%1$d years"
 msgstr[0] "%1$d vuoden kuluttua"
 msgstr[1] "%1$d vuoden kuluttua"
-
-#. label of a selectbox to select a time (1 day 1 month etc.) or "never"
-#: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
-msgid "Expiration"
-msgstr "Vanhentuminen"
 
 #. label of a selectbox: automatically delete files after a share/sharing-link expired?
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -10365,6 +10631,14 @@ msgstr "Tallennetaan..."
 msgid "Saved %s"
 msgstr "Tallennettu %s"
 
+#. When closing compose the user decides to keep the related draft or delete it as well.
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid ""
+"You are about to discard this message. Do you want to delete the related "
+"draft?"
+msgstr ""
+"Olet hylkäämäsi tämän viestin. Haluatko poistaa siihen liittyvän luonnoksen?"
+
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
 msgid "Delete draft"
@@ -10489,6 +10763,72 @@ msgstr "Viesti tuotu"
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
 msgstr "Tuodaksesi EML-tiedosto tiputa se tähän"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Please enter the password."
+msgstr "Anna salasana."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "Salasana vaihdettiin äskettäin. Anna uusi salasana."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder cannot be added because it was removed by the owner."
+msgstr "Kansiota ei voi lisätä, koska omistaja on poistanut sen."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid ""
+"The folder is currently unavailable and cannot be added. Please try again "
+"later."
+msgstr ""
+"Kansio ei ole tällä hetkellä käytettävissä, eikä sitä voi lisätä. Yritä "
+"myöhemmin uudelleen."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder cannot be added because the link is invalid."
+msgstr "Kansiota ei voi lisätä, koska linkki ei kelpaa."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "This type of link and is unsupported and can't be added."
+msgstr "Tämäntyyppistä linkkiä ei tueta, eikä sitä voi lisätä."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid ""
+"This folder has been shared with another user. You are not allowed to add "
+"this folder."
+msgstr ""
+"Tämä kansio on jaettu toisen käyttäjän kanssa. Et voi lisätä tätä kansiota."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder was added successfully."
+msgstr "Kansion lisääminen onnistui."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The folder was removed successfully."
+msgstr "Kansion poistaminen onnistui."
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Please enter password."
+msgstr "Anna salasana."
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "View folder"
+msgstr "Näytä kansio"
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Add to %1$s"
+msgstr "Lisää %1$s-sovellukseen"
+
+#. %1$s is a app name like calendar or drive (product name; might be customized)
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "Remove from %1$s"
+msgstr "Poista %1$s-sovelluksesta"
+
+#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "%1$s shared a folder with you"
+msgstr "%1$s on jakanut kanssasi tiedoston"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 msgid "Error: Failed to load messages"
@@ -10804,11 +11144,6 @@ msgstr "Suurempi kuin"
 #: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "Pienempi kuin"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Address"
-msgstr "Osoite"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11423,6 +11758,11 @@ msgstr "Näytä lukukuittauspyynnöt"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show folder with all unseen messages"
 msgstr "Näytä kansio, jossa kaikki avaamattomat viestit"
+
+#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Notification sounds"
+msgstr "Ilmoitusäänet"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Play sound on incoming mail"
@@ -12231,8 +12571,8 @@ msgstr "Näytä vähemmän vaihtoehtoja"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/views.js
-msgid "Manual Configuration"
-msgstr "Manuaalinen konfiguraatio"
+msgid "Show manual configuration options"
+msgstr "Näytä manuaaliset määritysasetukset"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Automatic Configuration (via SMS)"
@@ -12373,12 +12713,8 @@ msgstr ""
 "asetukset CardDav-asiakasohjelmaan:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid ""
-"To synchronize your iOS Mail client automatically, scan this code with your "
-"phone's camera:"
-msgstr ""
-"Jos haluat synkronoida iOS Mail -asiakasohjelman automaattisesti, skannaa "
-"tämä koodi puhelimesi kameralla:"
+msgid "Please scan this code with your phone's camera:"
+msgstr "Skannaa tämä koodi puhelimesi kameralla:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
@@ -12471,6 +12807,14 @@ msgstr "Skannaa tämä koodi puhelimesi kameralla synkronoidaksesi \"%1$s\":"
 msgid "Link: "
 msgstr "Linkki: "
 
+#: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
+msgid ""
+"Please note: After downloading you will have to enable the profile in the "
+"Settings app to complete the installation."
+msgstr ""
+"Huom. Lataamisen jälkeen sinun on otettava profiili käyttöön Asetukset-"
+"sovelluksessa asennuksen viimeistelemiseksi."
+
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "To install %1$s, please scan this code with your phone's camera:"
@@ -12478,13 +12822,13 @@ msgstr "Asenna %1$s skannaamalla tämä koodi puhelimesi kameralla:"
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-msgid "To install %1$s for Windows, download the installation file"
-msgstr "Asenna %1$s Windowsilla lataamalla asennustiedosto"
+msgid "Download %1$s for Windows"
+msgstr "Lataa %1$s Windowsille"
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-msgid "%1$s for Windows Installer"
-msgstr "%1$s Windows Installerille"
+msgid "%1$s for Windows"
+msgstr "%s asiakasohjelmisto Windowsille"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Please download the configuration to automatically set up your account."
@@ -12505,10 +12849,10 @@ msgstr ""
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid ""
 "If an automatic configuration is not possible, please use the following "
-"information to manually setup your mail account:"
+"information to manually set up your mail account:"
 msgstr ""
-"Jos automaattinen konfiguraatio ei ole mahdollinen, käytä seuraavia tietoja "
-"sähköpostitilisi manuaaliseen asetukseen:"
+"Jos automaattinen määritys ei ole mahdollista, määritä sähköpostitili "
+"manuaalisesti seuraavien tietojen avulla:"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Incoming Server Settings (IMAP)"
@@ -12607,6 +12951,11 @@ msgstr "Tällä listalla ei vielä ole osallistujia"
 #: apps/io.ox/participants/views.js
 msgid "Members (%1$d)"
 msgstr "Jäsenet  (%1$d)"
+
+#: apps/io.ox/participants/chronos-views.js module:io.ox/core
+#: apps/io.ox/participants/views.js
+msgid "Participants (%1$d)"
+msgstr "Osallistujat (%1$d)"
 
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Resource group"
@@ -12884,20 +13233,6 @@ msgstr "Sisältyvät kansiot"
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
 msgid "Trash folder"
 msgstr "Roskat"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Public folders"
-msgstr "Julkiset kansiot"
-
-#. shown when a download of mail data is requested (has header "Included folders ...")
-#. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
-#. shown when a download of task data is requested (has header "Included folders ...")
-#: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-msgid "Shared folders"
-msgstr "Jaetut kansiot"
 
 #. shown when a download of mail data is requested (has header "Included folders ...")
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
@@ -13243,6 +13578,11 @@ msgstr "Vanhentunut"
 
 #: apps/io.ox/settings/security/certificates/settings/utils.js
 #: module:io.ox/settings/certificates
+msgid "Expires on"
+msgstr "Menee vanhaksi"
+
+#: apps/io.ox/settings/security/certificates/settings/utils.js
+#: module:io.ox/settings/certificates
 msgid "Failure reason"
 msgstr "Epäonnistumisen syy"
 
@@ -13441,10 +13781,6 @@ msgstr "Saapuva puhelu"
 #: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
 msgid "Answer"
 msgstr "Vastaa"
-
-#: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
-msgid "%1$s is calling"
-msgstr "%1$s soittaa"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Conference call"
@@ -14108,11 +14444,11 @@ msgstr ""
 "osallistut"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared task folders"
+msgid "Subscribe to shared task folders"
 msgstr "Tilaa jaettuja tehtäväkansioita"
 
 #: apps/io.ox/tasks/settings/pane.js module:io.ox/tasks
-msgid "Subscribe shared tasks folders"
+msgid "Subscribe to shared tasks folders"
 msgstr "Tilaa jaettuja tehtäväkansioita"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
@@ -14303,12 +14639,6 @@ msgstr ""
 "Voit nyt lisätä lisää varmennusvaihtoehtoja tilisi turvallisuuden "
 "parantamiseksi."
 
-#. %1$s is the product name, e.g. OX App Suite
-#: apps/io.ox/tours/whats-new.js module:io.ox/core
-#: apps/io.ox/tours/whatsnew/main.js
-msgid "What's new"
-msgstr "Uutta"
-
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "To learn more about the new and improved features you can visit "
 msgstr "Uusista ja parammista ominaisuuksista saat lisää tietoa vierailemalla "
@@ -14327,10 +14657,6 @@ msgstr ""
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "Never show again"
 msgstr "Älä näytä uudestaam"
-
-#: apps/io.ox/tours/whatsnew/main.js module:io.ox/core
-msgid "What's new in this version"
-msgstr "Uutta tässä versiossa"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Upgrade to premium edition"
@@ -14559,6 +14885,10 @@ msgstr "Anna palautetta"
 #: apps/plugins/halo/appointments/register.js module:plugins/halo
 msgid "Shared Appointments"
 msgstr "Jaetut tapaamiset"
+
+#: apps/plugins/halo/mail/register.js module:plugins/halo
+msgid "Chat history"
+msgstr "Keskusteluhistoria"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -15471,6 +15801,208 @@ msgstr "Kutsu %s:in"
 msgid "Add on %s"
 msgstr "%s lisää"
 
+#~ msgid "Subscribe shared calendars"
+#~ msgstr "Tilaa jaettuja kalentereja"
+
+#~ msgid "Create new channel"
+#~ msgstr "Luo uusi kanava"
+
+#~ msgid "Channels are public and can be joined by anybody"
+#~ msgstr "Kanavat ovat julkisia ja niihin voi liittyä kuka tahansa"
+
+#~ msgid "There was an error during authentication."
+#~ msgstr "Varmennuksessa tapahtui virhe."
+
+#~ msgid "The message could not be sent."
+#~ msgstr "Viestiä ei voitu lähettää."
+
+#~ msgid "Unknown user"
+#~ msgstr "Tuntematon käyttäjä"
+
+#~ msgid "You"
+#~ msgstr "Sinä"
+
+#~ msgid "Receive email notifications"
+#~ msgstr "Vastaanota sähköposti-ilmoituksia"
+
+#~ msgid "Private chats only"
+#~ msgstr "Vain yksityiset keskustelut"
+
+#~ msgid "Always"
+#~ msgstr "Aina"
+
+#~ msgid "Join chat"
+#~ msgstr "Liity keskusteluun"
+
+#~ msgid "Chats could not be loaded."
+#~ msgstr "Keskusteluja ei voitu ladata."
+
+#~ msgid "Create new chat"
+#~ msgstr "Luo uusi keskustelu"
+
+#~ msgid "Subscribe shared address books"
+#~ msgstr "Tilaa jaettuja osoitekirjoja"
+
+#~ msgid "Sharing"
+#~ msgstr "Jaetaan"
+
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Luvat/ Kutsu ihmisiä"
+
+#~ msgid "Subscribe address book"
+#~ msgstr "Tilaa osoitekirja"
+
+#~ msgid "Subscribe shared address book"
+#~ msgstr "Tilaa jaettu osoitekirja"
+
+#~ msgid "Subscribe shared folder"
+#~ msgstr "Tilaa jaettu kansio"
+
+#~ msgid "Subscribe shared Calendar"
+#~ msgstr "Tilaa jaettu kalenteri"
+
+#~ msgid "Share this file"
+#~ msgstr "Jaa tiedosto"
+
+#~ msgid ""
+#~ "Every recipient gets an individual link. Guests can also create and "
+#~ "change files."
+#~ msgstr ""
+#~ "Jokainen vastaanottaja saa oman linkkinsä. Vieraat voivat myös luoda ja "
+#~ "muuttaa tiedostoja."
+
+#~ msgid ""
+#~ "Everybody gets the same link. The link just allows to view the file or "
+#~ "folder."
+#~ msgstr ""
+#~ "Kaikki saavat saman linkin. Linkki sallii vain tiedoston tai kansion "
+#~ "katselemisen."
+
+#~ msgid "Send link"
+#~ msgstr "Lähetä linkki"
+
+#, c-format
+#~ msgid "Sharing link created for %1$d item"
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Jakamislinkki luotu %1$d kohteelle"
+#~ msgstr[1] "Jakamislinkki luotu %1$d kohteelle"
+
+#, c-format
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgstr "Jakamislinkki luotu tiedostolle \"%1$s\""
+
+#, c-format
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgstr "Jakamislinkki luotu kansiolle \"%1$s\""
+
+#~ msgid "Remove link"
+#~ msgstr "Poista linkki"
+
+#~ msgid "The link has been removed"
+#~ msgstr "Linkki on poistettu"
+
+#~ msgid "Edit Share"
+#~ msgstr "Muokkaa jaettua"
+
+#~ msgid "(Read only)"
+#~ msgstr "(Kirjoitussuojattu)"
+
+#~ msgid "(Read and write)"
+#~ msgstr "(Lue ja kirjoita)"
+
+#~ msgid "(Read, write, and delete)"
+#~ msgstr "(Lue, kirjoita ja poista)"
+
+#~ msgid "Add people"
+#~ msgstr "Lisää ihmisiä"
+
+#~ msgid "Enter a Message to inform users"
+#~ msgstr "Kirjoita viesti käyttäjille"
+
+#~ msgid ""
+#~ "Personal message (optional). This message is sent to all newly invited "
+#~ "people."
+#~ msgstr ""
+#~ "Henkilökohtainen viesti (valinnainen). Viesti lähetetään kaikille uusille "
+#~ "kutsutuille."
+
+#~ msgid ""
+#~ "You can copy and paste this link in an email, instant messenger or social "
+#~ "network. Please note that anyone with this link can access the share."
+#~ msgstr ""
+#~ "Voit kopioida tämän linkin sähköpostiviestiin, messengeriin tai "
+#~ "sosiaaliseen verkostoon. Huomioi, että kuka tahansa pääsee jakamaasi "
+#~ "kohteeseen tämän linkin kautta."
+
+#~ msgid "Add recipients ..."
+#~ msgstr "Lisää vastaanottajia..."
+
+#~ msgid "Message (optional)"
+#~ msgstr "Viesti (valinnainen)"
+
+#~ msgid "one day"
+#~ msgstr "yhden päivän"
+
+#~ msgid "one week"
+#~ msgstr "yksi viikko"
+
+#~ msgid "one month"
+#~ msgstr "yhden kuukauden"
+
+#~ msgid "three months"
+#~ msgstr "kolmen kuukauden"
+
+#~ msgid "six months"
+#~ msgstr "puolen vuoden"
+
+#~ msgid "one year"
+#~ msgstr "vuoden"
+
+#~ msgid "Expires in"
+#~ msgstr "Menee vanhaksi"
+
+#~ msgid "Password required"
+#~ msgstr "Tarvitaan salasana"
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Tällä hetkellä muokattavia liitteitä sisältäviä luonnoksia ei voida "
+#~ "poistaa ennen kuin vastaava sähköpostinkirjoitusikkuna on suljettu."
+
+#~ msgid "Address"
+#~ msgstr "Osoite"
+
+#~ msgid "Manual Configuration"
+#~ msgstr "Manuaalinen konfiguraatio"
+
+#~ msgid ""
+#~ "To synchronize your iOS Mail client automatically, scan this code with "
+#~ "your phone's camera:"
+#~ msgstr ""
+#~ "Jos haluat synkronoida iOS Mail -asiakasohjelman automaattisesti, skannaa "
+#~ "tämä koodi puhelimesi kameralla:"
+
+#~ msgid "To install %1$s for Windows, download the installation file"
+#~ msgstr "Asenna %1$s Windowsilla lataamalla asennustiedosto"
+
+#~ msgid "%1$s for Windows Installer"
+#~ msgstr "%1$s Windows Installerille"
+
+#~ msgid ""
+#~ "If an automatic configuration is not possible, please use the following "
+#~ "information to manually setup your mail account:"
+#~ msgstr ""
+#~ "Jos automaattinen konfiguraatio ei ole mahdollinen, käytä seuraavia "
+#~ "tietoja sähköpostitilisi manuaaliseen asetukseen:"
+
+#~ msgid "Subscribe shared task folders"
+#~ msgstr "Tilaa jaettuja tehtäväkansioita"
+
+#~ msgid "Subscribe shared tasks folders"
+#~ msgstr "Tilaa jaettuja tehtäväkansioita"
+
 #~ msgid "100%"
 #~ msgstr "100%"
 
@@ -15792,10 +16324,6 @@ msgstr "%s lisää"
 #~| msgid "%s client for Mac OS"
 #~ msgid "%1$s for MacOS"
 #~ msgstr "%s asiakasohjelmisto Mac OS:lle"
-
-#~| msgid "%s client for Windows"
-#~ msgid "%1$s for Windows"
-#~ msgstr "%s asiakasohjelmisto Windowsille"
 
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for iOS"
@@ -17267,9 +17795,6 @@ msgstr "%s lisää"
 
 #~ msgid "Launching an app"
 #~ msgstr "Sovelluksen käynnistäminen"
-
-#~ msgid "Leave"
-#~ msgstr "Lähde"
 
 #~ msgid "Leave empty if you have none"
 #~ msgstr "Jätä tyhjäksi jos ei mitään"
