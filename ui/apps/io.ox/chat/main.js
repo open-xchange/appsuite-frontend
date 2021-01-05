@@ -27,7 +27,7 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/search',
     'io.ox/chat/views/searchResult',
     'io.ox/chat/util/url',
-    'io.ox/contacts/api',
+    'io.ox/core/notifications',
     'io.ox/backbone/views/toolbar',
     'io.ox/backbone/views/modal',
     'io.ox/chat/views/avatar',
@@ -37,7 +37,7 @@ define('io.ox/chat/main', [
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
+], function (ext, launcher, api, data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, notifications, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
 
     'use strict';
 
@@ -153,8 +153,9 @@ define('io.ox/chat/main', [
                 picker.open(
                     function callback(items) {
                         if (items.length === 0) return;
-                        var members = _(items).pluck('email');
-                        return self.openPrivateChat({ email: members[0] });
+                        var email = _(items).pluck('email')[0];
+
+                        return self.openPrivateChat({ email: email });
                     },
                     {
                         help: false,
@@ -194,16 +195,18 @@ define('io.ox/chat/main', [
 
             if (chat) {
                 if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
-                // we need to fall back to the cid in case, the room has not been saved yet
-                return this.showChat(chat.get('roomId') || chat.cid, { model: chat });
+                return this.showChat(chat.get('roomId'));
             }
 
-            // open temporary chat (until first message)
-            var members = {};
-            members[api.userId] = 'admin';
-            members[cmd.email] = 'member';
-            var room = new data.ChatModel({ type: 'private', members: members, active: true });
-            this.setState({ view: 'chat', temporary: true, member: cmd.email }, { model: room });
+            var members = _.object([[api.userId, 'admin'], [cmd.email, 'member']]);
+            chat = new data.ChatModel({ type: 'private', members: members, active: true });
+
+            return chat.save().then(function success() {
+                data.chats.add(chat);
+                this.showChat(chat.get('roomId'));
+            }.bind(this), function fail() {
+                notifications.yell('error', gt('Private chat could not be created.'));
+            });
         },
 
         leaveGroup: function (groupId) {

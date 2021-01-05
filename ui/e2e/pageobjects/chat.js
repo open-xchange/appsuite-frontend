@@ -4,7 +4,7 @@ module.exports = {
     openChat() {
         I.waitForVisible('~Chat');
         I.retry(3).click('~Chat');
-        I.waitForVisible('.ox-chat');
+        I.waitForVisible('.ox-chat', 15);
     },
     createPrivateChat(email) {
         I.waitForText('New Chat', 30);

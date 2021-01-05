@@ -772,11 +772,6 @@ define('io.ox/chat/data', [
                 // this identifier is not stored on the server but part of the response and part of websocket push events to uniquely identify the send message
                 attr.clientSideMessageId = Math.random().toString(16).slice(2);
 
-                // special case: very first message
-                if (this.isNew()) {
-                    return (lastDeferred = storeFirstMessage.call(this, attr, file).catch(meIfYouCan));
-                }
-
                 // add message now (so that we have an instant feedback even if a previous upload is still in progress)
                 var modelData = file ? _.extend({ uploading: true, blob: file, type: 'file' }, attr) : attr;
                 var model = this.messages.add(modelData, { merge: true, parse: true });
@@ -831,35 +826,6 @@ define('io.ox/chat/data', [
                         }.bind(this)
                     );
                 }
-            }
-
-            function storeFirstMessage(attr, file) {
-
-                var hiddenAttr = {
-                    message: {
-                        content: attr.content,
-                        type: attr.type,
-                        data: attr.data
-                    },
-                    file: file,
-                    members: this.get('members')
-                };
-
-                attr = _(attr).omit('content', 'members', 'type', 'data');
-
-                return this.save(attr, { hiddenAttr: hiddenAttr }).then(
-                    function success() {
-                        data.chats.add(this, { at: 0 });
-                        events.trigger('cmd', { cmd: 'show-chat', id: this.get('roomId') });
-                        /*
-                        TBD: we need to do this here since the rightside is empty()'d and re-rendered completely, see cmd: show-chat
-                        */
-                        _.defer(function () { $('.chat-rightside textarea').trigger('focus'); });
-                    }.bind(this),
-                    function fail(response) {
-                        this.handleError(response);
-                    }.bind(this)
-                );
             }
 
         }()),
@@ -1118,7 +1084,6 @@ define('io.ox/chat/data', [
         },
 
         refresh: function () {
-            var newChats = data.chats.filter(function (model) { return model.isNew(); });
             $.when.apply($,
                 _([data.chats, data.channels])
                     .map(function (collection) {
@@ -1141,8 +1106,6 @@ define('io.ox/chat/data', [
                     if (model.messages.expired) model.messages.reset();
                     else model.messages.fetch({ cache: false });
                 });
-            }).then(function () {
-                data.chats.add(newChats, { at: 0 });
             });
         },
 

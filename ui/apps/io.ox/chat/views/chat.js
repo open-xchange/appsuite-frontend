@@ -629,7 +629,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (model.isNew() || !model.get('active')) return;
+            if (!model.get('active')) return;
             var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
             createMenuItem(this, 'toggle-favorite', model.id, title, 'general');
         }
@@ -652,7 +652,7 @@ define('io.ox/chat/views/chat', [
         custom: true,
         draw: function (baton) {
             var model = baton.model;
-            if (!model.get('active') || model.isNew()) return;
+            if (!model.get('active')) return;
             createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'), 'general');
         }
     });

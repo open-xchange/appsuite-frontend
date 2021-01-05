@@ -31,7 +31,7 @@ define('io.ox/chat/views/chatListEntry', [
         tagName: 'li',
 
         attributes: function () {
-            if (!this.model.get('roomId')) {
+            if (this.model.get('searchDummy')) {
                 var member = this.model.getFirstMember();
                 return {
                     tabindex: -1,
