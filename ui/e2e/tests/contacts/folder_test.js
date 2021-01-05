@@ -80,7 +80,7 @@ Scenario('[C7355] - Create a new private folder', function (I, contacts) {
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
     contacts.newAddressbook(folderName);
-    I.waitForVisible(locate({ css: '[aria-label="My address books"] .folder:not(.selected) .folder-label' }).at(1).withText(folderName).as(folderName));
+    I.waitForVisible(locate({ css: '[aria-label="My address books"] .folder:not(.selected) .folder-label' }).withText(folderName).as(folderName));
 
 });
 
