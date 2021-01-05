@@ -47,9 +47,8 @@ define('io.ox/tours/main', [
                     return Tour.registry.run('default/io.ox/intro');
                 });
             } else if (!disableTour && !tourSettings.get('multifactor/shownTour', false)) {
-                baton.data.popups.push({ name: 'tour:io.ox/multifactor' });
                 return require(['io.ox/tours/multifactor']).then(function (tour) {
-                    return tour.run();
+                    if (tour.run()) baton.data.popups.push({ name: 'tour:io.ox/multifactor' });
                 });
             }
 
