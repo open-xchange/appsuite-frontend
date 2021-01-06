@@ -607,8 +607,8 @@ define('io.ox/files/share/permissions', [
 
                 this.append(
                     $('<div class="col-sm-5 col-xs-10">').append(
-                        $('<div class="display_name">').append(
-                            baton.model.isUser() ? baton.model.getDisplayName(true) : $.txt(baton.model.getDisplayName())
+                        $('<div class="display_name">').append($('<div class="name">').append(
+                            baton.model.isUser() ? baton.model.getDisplayName(true) : $.txt(baton.model.getDisplayName()))
                         ),
                         $('<div class="description">').append(
                             url ? $('<a href="" target="_blank">').attr('href', url).text(url) : $.txt(baton.view.description)
