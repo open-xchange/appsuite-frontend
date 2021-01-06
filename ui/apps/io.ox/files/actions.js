@@ -208,7 +208,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Mario
     new Action('io.ox/files/actions/editor', {
         toggle: !!window.Blob,
         collection: 'one && modify',
@@ -274,7 +273,7 @@ define('io.ox/files/actions', [
             launch();
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/editor-new', {
         toggle: !!window.Blob,
         folder: 'create',
@@ -292,7 +291,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/download', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
@@ -311,7 +310,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/download-folder', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
@@ -332,7 +331,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/downloadversion', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
@@ -351,7 +350,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Kristof
     new Action('io.ox/files/actions/send', {
         collection: 'some && items',
         matches: function (baton) {
@@ -374,7 +372,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // // TODO check action Jonas
+
     new Action('io.ox/files/actions/delete', {
         collection: 'some && delete',
         matches: function (baton) {
@@ -395,7 +393,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/viewer', {
         collection: 'some && items',
         matches: function (baton) {
@@ -422,7 +420,6 @@ define('io.ox/files/actions', [
     });
 
     // drive action for double-click or enter in files
-    // TODO check action Mario
     new Action('io.ox/files/actions/default', {
         action: function (baton) {
             var model = baton.models && baton.models[0];
@@ -434,7 +431,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Jonas
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         device: '!smartphone',
@@ -452,7 +448,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         device: '!smartphone',
@@ -479,7 +475,6 @@ define('io.ox/files/actions', [
         });
     }
 
-    // TODO check action Kristof
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         collection: 'one && items',
@@ -525,7 +520,7 @@ define('io.ox/files/actions', [
             }
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/save-as-pdf', {
         // bug 54493: no "Save as PDF" for anonymous guests (same solution as in bug 42621)
         capabilities: 'document_preview && !guest && !anonymous',
@@ -545,7 +540,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     new Action('io.ox/files/actions/edit-description', {
         collection: 'one && items',
         matches: function (baton) {
@@ -567,8 +562,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
-    // TODO check action Mario
     new Action('io.ox/files/actions/upload-new-version', {
         toggle: supportsComments,
         collection: 'one && modify && items',
@@ -587,7 +580,6 @@ define('io.ox/files/actions', [
     });
 
     // Action to restore a list of files and folders
-    // TODO check action Kristof
     new Action('io.ox/files/actions/restore', {
         collection: 'some',
         matches: function (baton) {
@@ -620,7 +612,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             // anonymous guests just have one folder so no valid target folder (see bug 42621)
@@ -839,7 +831,6 @@ define('io.ox/files/actions', [
     }
 
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
-    // TODO check action Kristof
     new Action('io.ox/files/actions/editShare', {
         matches: function (baton) {
             if (!baton.app) return false;
@@ -863,7 +854,6 @@ define('io.ox/files/actions', [
     });
 
     // folder based actions
-    // TODO check action Kristof
     new Action('io.ox/files/actions/invite', {
         capabilities: 'invite_guests || share_links',
         collection: '!multiple',
@@ -888,7 +878,6 @@ define('io.ox/files/actions', [
     });
 
     // Action to revoke the sharing of the files.
-    // TODO check action Kristof
     new Action('io.ox/files/share/revoke', {
         matches: function (baton) {
             if (!baton.app) return false;
@@ -1017,7 +1006,6 @@ define('io.ox/files/actions', [
     });
 
     // version specific actions
-    // TODO check action Mario
     new Action('io.ox/files/versions/actions/makeCurrent', {
         collection: 'one && items && modify',
         matches: function (baton) {
@@ -1046,7 +1034,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Mario
     new Action('io.ox/files/versions/actions/delete', {
         collection: 'one && items && delete',
         matches: function (baton) {
@@ -1062,7 +1049,6 @@ define('io.ox/files/actions', [
     });
 
     // Add new folder
-    // TODO check action Jonas
     new Action('io.ox/files/actions/add-folder', {
         matches: function (baton) {
             var model = folderAPI.pool.getModel(baton.app.folder.get());
@@ -1076,8 +1062,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
-    // TODO check action Jonas
     new Action('io.ox/files/premium/actions/synchronize', {
         capabilities: 'boxcom || google || microsoftgraph',
         matches: function () {
@@ -1091,9 +1075,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
     // Action to switch to the folder of a file
-    // TODO check action Kristof
     new Action('io.ox/files/actions/show-in-folder', {
         device: '!smartphone',
         collection: 'one',
@@ -1151,7 +1133,6 @@ define('io.ox/files/actions', [
     });
 
     // Action to add files/folders to favorites
-    // TODO check action Kristof
     new Action('io.ox/files/actions/favorites/add', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
@@ -1198,7 +1179,6 @@ define('io.ox/files/actions', [
     }
 
     // Action to remove files/folders to favorites
-    // TODO check action Kristof
     new Action('io.ox/files/actions/favorites/remove', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
@@ -1223,7 +1203,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Kristof
+
     new Action('io.ox/files/favorite/back', {
         toggle: _.device('smartphone'),
         matches: function (baton) {
