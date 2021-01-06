@@ -122,7 +122,8 @@ define('io.ox/core/sub/sharedFolders', [
                     // we show a confirmation dialog then, as this would result in the removal of the corresponding account as well (no more resubscribing without the original mail)
                     var accountsToRemove = _(responses).chain().map(function (response) {
                         // error params 1 is the domain name
-                        if (response && response.error && response.error.code === 'FLD-1038') return response.error.warnings.error_params[1];
+                        //#. text used when no domain name is given (like google.com etc)
+                        if (response && response.error && response.error.code === 'FLD-1038') return _.isEmpty(response.error.warnings.error_params[1]) ? gt('unknown Domain') : response.error.warnings.error_params[1];
                         return false;
                     }).compact().unique().valueOf();
 
