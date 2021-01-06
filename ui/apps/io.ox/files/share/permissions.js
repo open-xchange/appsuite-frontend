@@ -1248,13 +1248,16 @@ define('io.ox/files/share/permissions', [
 
                                 _.each(list, function (value) {
                                     if (_.isEmpty(value)) return;
-                                    // add to collection
-                                    permissionsView.collection.add(new Permission({
+                                    var obj = {
                                         bits: getBitsExternal(objModel),
                                         contact: { email1: value },
                                         type: 'guest',
-                                        new: true
-                                    }));
+                                        new: true,
+                                        field: 'email1'
+                                    };
+                                    if (permissionsView.collection.isAlreadyGuest(obj)) return;
+                                    // add to collection
+                                    permissionsView.collection.add(new Permission(obj));
                                 });
 
                                 // clear input field
