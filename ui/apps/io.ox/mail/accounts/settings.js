@@ -398,7 +398,7 @@ define('io.ox/mail/accounts/settings', [
         configureManuallyDialog = function (args, newMailaddress) {
             new ModalDialog({ width: 400, title: gt('Error') })
                 .addCancelButton()
-                .addButton({ action: 'manual', label: gt('Manual') })
+                .addButton({ action: 'manual', label: gt('Configure manually') })
                 .on('manual', function () {
                     var data = {};
                     data.primary_address = newMailaddress;
@@ -411,34 +411,51 @@ define('io.ox/mail/accounts/settings', [
                 .$body.text(gt('Auto-configuration failed. Do you want to configure your account manually?'));
         },
 
-        autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
+        autoConfigureAccount = function (opt) {
+            var args = opt.args,
+                dialog = opt.dialog,
+                email = opt.email,
+                password = opt.password,
+                def = opt.def,
+                enforceSecureConnection = opt.enforceSecureConnection;
 
             api.autoconfig({
-                'email': newMailaddress,
-                'password': newPassword,
-                'force_secure': !!forceSecure
+                'email': email,
+                'password': password,
+                'force_secure': !!enforceSecureConnection
             })
             .done(function (data) {
                 if (data.login) {
-                    data.primary_address = newMailaddress;
-                    data.password = newPassword;
+                    data.primary_address = email;
+                    data.password = password;
                     // make sure not to set the SMTP credentials
                     delete data.transport_login;
                     delete data.transport_password;
 
-                    validateMailaccount(data, popup, def, { onValidationError: function () {
-                        // in case the validation fails this callback will be executed
-                        configureManuallyDialog(args, newMailaddress);
-                        popup.close();
-                        def.reject();
+                    validateMailaccount(data, dialog, def, { onValidationError: function (state, error) {
+                        if (error) {
+                            if (error.code === 'MSG-0091') {
+                                // typical error "wrong credentials", let the user try again without
+                                // going to the manual configuration
+                                dialog.idle();
+                                notifications.yell('error', gt('The provided password for the email address %1$s is incorrect', email));
+                            } else {
+                                configureManuallyDialog(args, email);
+                                dialog.close();
+                                def.reject();
+                            }
+                        }
                     } });
 
-                } else if (forceSecure) {
+                } else if (enforceSecureConnection) {
                     new ModalDialog({ async: true, width: 400, title: gt('Warning') })
                         .addCancelButton()
                         .addButton({ action: 'proceed', label: gt('Ignore Warnings') })
                         .on('proceed', function () {
-                            autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
+                            // proceed without tls/ssl
+                            opt.enforceSecureConnection = false;
+                            opt.dialog = this;
+                            autoConfigureAccount(opt);
                         })
                         .on('cancel', function () {
                             def.reject();
@@ -446,62 +463,67 @@ define('io.ox/mail/accounts/settings', [
                         .open()
                         .$body.append(gt('Cannot establish secure connection. Do you want to proceed anyway?'));
 
-                    popup.close();
+                    dialog.close();
                 } else {
-                    configureManuallyDialog(args, newMailaddress);
-                    popup.close();
+                    configureManuallyDialog(args, email);
+                    dialog.close();
                     def.reject();
                 }
             })
             .fail(function () {
-                configureManuallyDialog(args, newMailaddress);
-                popup.close();
+                configureManuallyDialog(args, email);
+                dialog.close();
                 def.reject();
             });
         },
 
-        mailAutoconfigDialog = function (args, o) {
-            var def = $.Deferred();
-            if (o) {
-                collection = o.collection;
+        mailAutoconfigDialog = function (args, opt) {
+            var def = $.Deferred(),
+                baton = ext.Baton({});
+            if (opt) {
+                collection = opt.collection ? opt.collection : collection;
             }
 
-            var baton = ext.Baton({});
-
-            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                new ModalDialog({
-                    model: new Backbone.Model(),
-                    title: gt('Add mail account'),
-                    enter: 'add',
-                    async: true
+            new ModalDialog({
+                model: new Backbone.Model(),
+                title: gt('Add mail account'),
+                enter: 'add',
+                async: true
+            })
+                .build(function () {
+                    baton.popup = this;
+                    // invoke extensions
+                    ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.$body, baton);
                 })
-                    .build(function () {
-                        baton.popup = this;
-                        // invoke extensions
-                        ext.point('io.ox/mail/add-account/preselect').invoke('draw', this.$body, baton);
-                    })
-                    .addCancelButton()
-                    .addButton({ label: gt('Add'), action: 'add' })
-                    .on('add', function () {
-                        var alertPlaceholder = this.$body.find('.alert-placeholder'),
-                            newMailaddress = this.$body.find('.add-mail-account-address').val(),
-                            newPassword = this.$body.find('.add-mail-account-password').val();
+                .addCancelButton()
+                .addButton({ label: gt('Add'), action: 'add' })
+                .on('add', function () {
+                    var alertPlaceholder = this.$body.find('.alert-placeholder'),
+                        newMailaddress = this.$body.find('.add-mail-account-address').val(),
+                        newPassword = this.$body.find('.add-mail-account-password').val();
 
-                        if (myModel.isMailAddress(newMailaddress) === undefined) {
-                            drawBusy(alertPlaceholder);
-                            autoconfigApiCall(args, newMailaddress, newPassword, this, def, true);
-                        } else {
-                            var message = gt('This is not a valid mail address');
-                            drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
-                            this.$body.find('.add-mail-account-password').focus();
-                            this.idle();
-                        }
-                    })
-                    .on('open', function () {
-                        this.$footer.find('[data-action="add"]').hide();
-                    })
-                    .open();
-            });
+                    if (myModel.isMailAddress(newMailaddress) === undefined) {
+                        this.busy();
+                        autoConfigureAccount({
+                            args: args,
+                            email: newMailaddress,
+                            password: newPassword,
+                            dialog: this,
+                            def: def,
+                            enforceSecureConnection: true
+                        });
+                    } else {
+                        var message = gt('This is not a valid mail address');
+                        drawAlert(alertPlaceholder, message, { errorAttributes: 'address' });
+                        this.$body.find('.add-mail-account-password').focus();
+                        this.idle();
+                    }
+                })
+                .on('open', function () {
+                    this.$footer.find('[data-action="add"]').hide();
+                })
+                .open();
+
             return def;
         },
 
@@ -510,23 +532,20 @@ define('io.ox/mail/accounts/settings', [
         },
 
         failDialog = function (message) {
-
             var alertPlaceholder = $('<div>');
 
-            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-                new ModalDialog({
-                    title: gt('Error'),
-                    width: 400,
-                    async: true
-                })
-                .addButton({ label: gt('Close'), action: 'cancel' })
-                .build(function () {
-                    this.$body.append(alertPlaceholder);
-                    this.$footer.find('.btn').addClass('closebutton');
-                    drawMessageWarning(alertPlaceholder, message);
-                })
-                .open();
-            });
+            new ModalDialog({
+                title: gt('Error'),
+                width: 400,
+                async: true
+            })
+            .addButton({ label: gt('Close'), action: 'cancel' })
+            .build(function () {
+                this.$body.append(alertPlaceholder);
+                this.$footer.find('.btn').addClass('closebutton');
+                drawMessageWarning(alertPlaceholder, message);
+            })
+            .open();
         };
 
     return {
