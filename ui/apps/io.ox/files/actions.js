@@ -690,7 +690,7 @@ define('io.ox/files/actions', [
 
                                                             if (!moveConflictError) {
                                                                 conflicts.title = gt('Change who has access?');
-                                                                conflicts.warnings.push(gt('You are moving an item out of a shared folder. People will lose access.'));
+                                                                conflicts.warnings.push(gt('You are moving one or more items that are shared with other people. These people will lose access.'));
                                                                 moveConflictError = true;
                                                             }
 
