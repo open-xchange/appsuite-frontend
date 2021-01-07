@@ -182,7 +182,7 @@ define('io.ox/chat/data', [
     };
 
     data.fetchUsers = function () {
-        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,515,524,555,556,557,606' }, false)
+        return contactsApi.getAll({ folder: 6, columns: '1,20,501,502,515,524,555,556,557,606,607' }, false)
             .then(function (result) {
                 return data.users.reset(
                     _(result)
