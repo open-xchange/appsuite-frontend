@@ -519,7 +519,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // consider mousedown only if unselected and not in multiple-mode
             if (e.type === 'mousedown' && !this.isMultiple(e) && $(e.currentTarget).is('.selected')) return;
             // ignore clicks in multiple-mode
-            if (e.type === 'click' && this.isMultiple(e) && !isTouch) return;
+            if (e.type === 'click' && this.isMultiple(e)) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
