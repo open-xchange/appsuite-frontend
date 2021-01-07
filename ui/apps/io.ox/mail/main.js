@@ -1893,7 +1893,7 @@ define('io.ox/mail/main', [
             // edit of existing draft
             composeAPI.on('before:send before:save', function (id, data) {
                 var editFor = data.meta.editFor;
-                if (!editFor) return;
+                if (!editFor || data.mailPath) return;
 
                 var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
                     draftsId = account.getFoldersByType('drafts');
@@ -1912,7 +1912,7 @@ define('io.ox/mail/main', [
             // existing draft removed
             composeAPI.on('after:send', function (data) {
                 var editFor = data.meta.editFor;
-                if (!editFor) return;
+                if (!editFor || data.mailPath) return;
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) app.listView.reload();
             });

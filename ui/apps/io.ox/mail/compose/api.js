@@ -96,7 +96,7 @@ define('io.ox/mail/compose/api', [
         function apply(space) {
             var editFor = space.meta && space.meta.editFor,
                 mailPath = space.mailPath, mailref;
-            if (editFor) {
+            if (editFor && !mailPath) {
                 // db drafts (backward compability)
                 mailref = _.cid({ id: editFor.originalId, folder: editFor.originalFolderId });
                 space.cid = 'io.ox/mail/compose:' + mailref + ':edit';
