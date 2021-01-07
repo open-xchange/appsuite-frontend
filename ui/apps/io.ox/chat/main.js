@@ -768,6 +768,8 @@ define('io.ox/chat/main', [
 
         // don't use setWindow method. Has to much overhead for the rather special chat window
         this.set('window', win);
+        // strange circular dependency we need for getCurrentFloatingApp()
+        win.app = app;
 
         app.settings = settings;
 
