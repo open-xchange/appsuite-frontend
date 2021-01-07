@@ -144,7 +144,7 @@ define('io.ox/core/api/user', [
                         api.caches.all.clear(),
                         api.caches.list.remove({ id: o.id }),
                         // update contact caches
-                        //no add here because this userdata not contactdata (similar but not equal)
+                        // no add here because this is user data not contact data (similar but not equal)
                         contactsApi.caches.get.remove({ folder_id: data.folder_id, id: data.contact_id }),
                         contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
                         contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
@@ -265,13 +265,6 @@ define('io.ox/core/api/user', [
                 else if (opt.type === 'email-localpart') name = (data.email1 || data.display_name || '').replace(/@.*$/, '');
                 else if (opt.type === 'initials') name = util.getInitials(data);
                 node.nodeValue = name;
-            })
-            .always(function () {
-                // use defer! otherwise we return null on cache hit
-                _.defer(function () {
-                    // don't leak
-                    node = null;
-                });
             });
         return node;
     };
@@ -343,7 +336,7 @@ define('io.ox/core/api/user', [
         return $.Deferred().reject({ error: 'Unknown User' });
     };
 
-    // creates a textnode and fills it with a displayname (inserting the name may be asynchronous if it has to be requeste first)
+    // creates a text node and fills it with a display name (inserting the name may be asynchronous if it has to be requested first)
     api.getTextNodeExtended = function (data, type) {
         if (data === undefined) return '';
 

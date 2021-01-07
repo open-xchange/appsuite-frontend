@@ -208,8 +208,49 @@
         return document.createTextNode(str !== undefined ? str : '');
     };
 
+    var faClassHash = {
+        'fa-address-book-o': '\uf2ba',
+        'fa-archive': '\uf187',
+        'fa-bars': '\uf0c9',
+        'fa-bookmark-o': '\uf097',
+        'fa-calendar': '\uf073',
+        'fa-camera-retro': '\uf083',
+        'fa-caret-down': '\uf0d7',
+        'fa-check-square': '\uf14a',
+        'fa-check-square-o': '\uf046',
+        'fa-cloud': '\uf0c2',
+        'fa-cog': '\uf013',
+        'fa-comment': '\uf075',
+        'fa-comment-o': '\uf0e5',
+        'fa-envelope-o': '\uf003',
+        'fa-folder-open-o': '\uf115',
+        'fa-mail-forward': '\uf064',
+        'fa-phone': '\uf095',
+        'fa-question': '\uf128',
+        'fa-refresh': '\uf021',
+        'fa-reply': '\uf112',
+        'fa-reply-all': '\uf122',
+        'fa-search': '\uf002',
+        'fa-square-o': '\uf096',
+        'fa-th-large': '\uf009',
+        'fa-th': '\uf00a',
+        'fa-trash-o': '\uf014',
+        'fa-question-circle': '\uf059'
+    };
+
+    $.icon = function (name, title, classList) {
+        var icon = faClassHash[name] || '';
+        title = title ? '<title>' + title + '</title>' : '';
+        classList = classList ? ' ' + classList : '';
+        return '<svg viewbox="0 0 100 100" class="fa fasvg' + classList + '" aria-hidden="true">' + title + '<text x="50" y="86" text-anchor="middle">' + icon + '</text></svg>';
+    };
+
+    $.checkbox = function () {
+        return '<svg viewbox="0 0 100 100" class="fa fa-checkmark fasvg" aria-hidden="true"><text x="50" y="86" text-anchor="middle" class="checkmark">\uf14a</text><text x="50" y="86" text-anchor="middle" class="checkbox">\uf096</text></svg>';
+    };
+
     $.fn.scrollable = function () {
-        return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
+        return $('<div class="scrollable-pane">').appendTo(this.addClass('scrollable'));
     };
 
     $.alert = function (o) {

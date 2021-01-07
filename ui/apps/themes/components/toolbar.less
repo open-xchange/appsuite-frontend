@@ -214,11 +214,11 @@
 }
 
 .classic-toolbar, .mobile-navbar {
-
+    display: flex;
     position: absolute;
     top: 0;
     width: 100%;
-    height: @toolbar-height;
+    height: 40px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
@@ -227,10 +227,10 @@
 
     & > li {
 
+        display: flex;
+        flex-direction: column;
         list-style: none;
-        display: inline-block;
         padding: 0;
-        float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
         & >a.upsell i.fa.fa-star {
@@ -243,10 +243,14 @@
 
             height: 100%;
             display: inline-block;
-            line-height: @toolbar-line-height - 0.125;
-            padding: @toolbar-vertical-padding @default-padding;
+            // line-height: @toolbar-line-height - 0.125;
+            // padding: @toolbar-vertical-padding @default-padding;
+            // padding: 8px 16px;
+            padding: 0 16px 2px;
+            display: flex;
+            align-items: center;
+
             text-decoration: none;
-            float: left;
             outline: 0;
 
             i { text-decoration: none; }
@@ -268,7 +272,7 @@
     }
 
     & > li.pull-right {
-        float: right;
+        margin-left: auto;
         & > .dropdown-menu { right: 4px; }
     }
 
@@ -399,9 +403,9 @@
     }
 
     .toolbar-item {
+        display: flex;
+        align-items: center;
         color: #333;
-        display: inline-block;
-        float: left;
         line-height: @height-default - 0.0625;
         padding: 0 @default-padding;
         text-decoration: none;

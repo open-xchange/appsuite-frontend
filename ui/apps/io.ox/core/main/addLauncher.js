@@ -39,9 +39,10 @@ define('io.ox/core/main/addLauncher', [], function () {
 
         //construct
         node.append(function () {
+            console.log(label[0].tagName);
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="-1">').text(label);
-            } else if (label[0].tagName === 'I') {
+            } else if (label[0].tagName === 'I' || label[0].tagName === 'svg') {
                 return $('<a href="#" class="apptitle" role="button" tabindex="-1">').attr('aria-label', arialabel ? _.escape(arialabel) : null).append(label);
             }
             return label;

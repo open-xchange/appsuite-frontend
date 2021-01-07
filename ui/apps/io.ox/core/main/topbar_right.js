@@ -24,10 +24,12 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/main/refresh',
     'io.ox/core/main/addLauncher',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/user',
+    'io.ox/core/svg',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
+], function (session, http, ext, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, contactsUtil, userAPI, svg, settings, gt) {
 
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
@@ -133,7 +135,7 @@ define('io.ox/core/main/topbar_right', [
         draw: function () {
             if (_.device('smartphone')) return;
 
-            var node = $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">');
+            var node = $($.icon('fa-refresh'));
 
             this.append(
                 addLauncher(
@@ -179,7 +181,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-help-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Help'))
-                    .append('<i class="fa fa-question launcher-icon" aria-hidden="true">').attr('title', gt('Help')),
+                    .append($.icon('fa-question', gt('Help'), 'launcher-icon')),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
@@ -255,7 +257,7 @@ define('io.ox/core/main/topbar_right', [
             // single item (no dropdown)
             if (ext.point('io.ox/core/appcontrol/right/settings').list().length <= 1) {
                 return this.append(
-                    addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
+                    addLauncher('right', $($.icon('fa-cog', gt('Settings'))), function () {
                         ox.launch('io.ox/settings/main');
                     }, gt('Settings'))
                     .attr('id', 'io-ox-settings-topbar-icon')
@@ -266,7 +268,7 @@ define('io.ox/core/main/topbar_right', [
             var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
                     .attr('aria-label', gt('Settings'))
-                    .append('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')),
+                    .append($.icon('fa-cog', gt('Settings'))),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
@@ -344,19 +346,21 @@ define('io.ox/core/main/topbar_right', [
             userAPI.on('update', updatePicture);
 
             function updatePicture() {
+                var $initials;
                 node.empty().append(
                     contactAPI.pictureHalo(
                         $('<div class="user-picture" aria-hidden="true">')
                         .append(
-                            $('<span class="initials">').append(
-                                userAPI.getTextNode(ox.user_id, { type: 'initials' })
-                            ),
-                            $('<i class="fa fa-camera-retro" aria-hidden="true">')
+                            $initials = $('<span class="initials">'),
+                            $.icon('fa-camera-retro')
                         ),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
                     )
                 );
+                userAPI.me().then(function (data) {
+                    $initials.append(svg.circleAvatar(contactsUtil.getInitials(data)));
+                });
             }
 
             this.$ul.append(container);

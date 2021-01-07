@@ -33,7 +33,7 @@ define('io.ox/core/tk/list', [
         // PULL TO REFRESH constants
         PTR_START =           5,    // Threshold when pull-to-refresh starts
         PTR_TRIGGER =       150,    // threshold when refresh is done
-        PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+        PTR_MAX_PULLDOWN =  300,    // max distance where the PTR node can be dragged to
         PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
@@ -46,7 +46,7 @@ define('io.ox/core/tk/list', [
 
         scaffold: $(
             '<li class="list-item">' +
-            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
+            '<div class="list-item-checkmark">' + $.checkbox() + '</div>' +
             '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
@@ -397,12 +397,12 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.isPulling && distance <= PTR_MAX_PULLDOWM) {
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWN) {
                 this.pullToRefreshTriggerd = false;
                 e.preventDefault();
                 e.stopPropagation();
 
-                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWM) * distance,
+                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWN) * distance,
                     top = -70 + ((70 / PTR_TRIGGER) * distance);
 
                 this.pullToRefreshIndicator
@@ -415,7 +415,7 @@ define('io.ox/core/tk/list', [
                 if ((currentY - this.pullToRefreshStartY) >= PTR_TRIGGER) {
                     this.pullToRefreshTriggerd = true;
                 }
-            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWM) {
+            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWN) {
                 e.preventDefault();
                 e.stopPropagation();
             }

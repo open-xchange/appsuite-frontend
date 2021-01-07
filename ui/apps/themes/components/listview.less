@@ -171,7 +171,7 @@
         position: relative;
         font-size: 13px;
         line-height: 20px;
-        padding: 6px (@list-view-padding - 1px) 5px ~"calc(1rem + 32px)";
+        padding: 6px (@list-view-padding - 1px) 5px (@list-view-padding + 32px);
         cursor: pointer;
     }
 
@@ -189,12 +189,16 @@
         width: @list-view-padding + 30;
 
         .fa-checkmark {
-            color: #767676;
             position: absolute;
             left: @default-padding;
             top: 12px;
-            font-size: 18px;
-            &:before { content: "\f096"; } // fa-square-o
+            .checkmark {
+                visibility: hidden;
+            }
+            .checkbox {
+                visibility: visible;
+                fill: #767676;
+            }
         }
     }
 
@@ -224,8 +228,14 @@
 
     .list-item.selected:not(.no-checkbox) {
         .fa-checkmark {
-            color: @control-background;
-            &:before { content: "\f14a"; }// fa-check-square-o
+            .checkmark {
+                fill: #fff;
+                visibility: visible;
+            }
+            .checkbox {
+                visibility: hidden;
+                fill: @control-background;
+            }
         }
     }
 
@@ -238,7 +248,7 @@
         color: @text-color;
         background-color: @selected-unfocussed-background;
         -webkit-font-smoothing: antialiased;
-        .fa-checkmark { color: @grid-checkbox-color; }
+        .fa-checkmark { fill: @grid-checkbox-color; }
         &:hover { background-color: lighten(@selected-unfocussed-background, 2%); }
     }
 

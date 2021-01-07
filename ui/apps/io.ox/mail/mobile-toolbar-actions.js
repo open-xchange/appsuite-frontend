@@ -27,14 +27,14 @@ define('io.ox/mail/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Compose'),
-            icon: 'fa fa-pencil',
+            icon: 'fa-pencil',
             ref: 'io.ox/mail/actions/compose',
             drawDisabled: true
         },
         'reply': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-reply',
+            icon: 'fa-reply',
             title: gt('Reply to sender'),
             ref: 'io.ox/mail/actions/reply',
             drawDisabled: true
@@ -42,7 +42,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         'reply-all': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-reply-all',
+            icon: 'fa-reply-all',
             title: gt('Reply to all recipients'),
             ref: 'io.ox/mail/actions/reply-all',
             drawDisabled: true
@@ -50,7 +50,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         'forward': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-mail-forward',
+            icon: 'fa-mail-forward',
             title: gt('Forward'),
             ref: 'io.ox/mail/actions/forward',
             drawDisabled: true
@@ -58,7 +58,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         'delete': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             title: gt('Delete'),
             ref: 'io.ox/mail/actions/delete',
             drawDisabled: true
@@ -97,7 +97,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         'archive': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-archive',
+            icon: 'fa-archive',
             //#. Verb: (to) archive messages
             title: gt.pgettext('verb', 'Archive')
         },

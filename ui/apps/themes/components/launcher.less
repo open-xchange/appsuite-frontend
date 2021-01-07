@@ -30,10 +30,10 @@
 @launcher-text-size: 12px;
 @launcher-badge-color: #757575; //#c30000;
 
-@launcher-size: 6rem;
+@launcher-size: 96px;
 @launcher-vertical-amount: 3;
-@launcher-spacing: 0.125rem;
-@launcher-outer-spacing: 0.5rem;
+@launcher-spacing: 2px;
+@launcher-outer-spacing: 8px;
 
 @quicklaunch-width: @appcontrol-height;
 @quicklaunch-width-smartphone: @appcontrol-height-smartphone;
@@ -42,7 +42,7 @@
 @quicklaunch-stroke-width-retina: 3px;
 @quicklaunch-button-color: rgba(255, 255, 255, 0.80);
 
-@svg-wrap-size: 3.5rem; // absolute value to avoid subpixel rendering
+@svg-wrap-size: 56px; // absolute value to avoid subpixel rendering
 
 // adjust positions of top-bar and screens
 #io-ox-core {
@@ -56,13 +56,11 @@
 }
 
 .smartphone {
+
     .popover-signout {
         margin-right: 10px;
         .popover-content-signout { color: #333; }
     }
-}
-
-.smartphone {
 
     #io-ox-appcontrol {
 
@@ -99,7 +97,6 @@
         width: 60px;
         max-height: 100%;
         margin-top: -1px;
-        // this works both ways, with and without default app action (changes markup and wraps a button around the logo)
         position: relative;
         top: ~"calc(50% - 11px)";
     }
@@ -163,17 +160,20 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     }
 
     #io-ox-launcher, #io-ox-quicklaunch {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
         flex-shrink:0;
         align-self: auto;
         min-width: 0;
         min-height: auto;
         & > button {
+            .fasvg { height:18px }
             // styles for fa-icon
             font-size: 18px;
             color: @appcontrol-launcher-color;
             padding: 2px 16px 2px 16px;
-            // 48px
-            width: 2.667em;
+            width: 48px;
             // svg styles
             //padding: 24px 16px;
             //width: @appcontrol-height - 16;
@@ -201,6 +201,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         color: @quicklaunch-button-color;
         margin-top: initial;
         & > .lcell > .icon {
+            fill: #fff;
+            line-height: 0;
             margin-bottom: 4px;
         }
     }
@@ -214,14 +216,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         outline: 0;
         //svg .fill-c1 { fill: @brand-primary; }
         //svg .stroke-c1 { fill: @brand-primary; }
-    }
-
-    svg.indicator {
-        position: absolute;
-        z-index: 1;
-        top: 18px;
-        left: 33px;
-        circle { fill: #eb4400 }
     }
 
     #io-ox-quicklaunch {
@@ -238,7 +232,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             position: absolute;
             z-index: 1;
             top: 18px;
-            left: 1.85em;
+            left: 33px;
             circle { fill: #eb4400 }
         }
 
@@ -344,13 +338,19 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                     color: @appcontrol-launcher-color-highlight;
                 }
             }
+            .fasvg {
+                height: 18px;
+                text {
+                    fill: #fff;
+                }
+            }
         }
 
         .launcher-icon.fa-question { font-size: 24px; }
         .launcher-icon.fa-refresh { position: relative; }
 
         .contact-picture {
-            .picture(2.5rem, 2.5rem);
+            .picture(40px, 40px);
             .flex-center;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);
@@ -555,7 +555,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             //top: -10px;
             //height: 100%;
             //width: 100%;
-            padding: 0.625rem 0;
+            top: 10px;
             font-size: 36px;
             color: @app-color-standard;
             overflow: visible;

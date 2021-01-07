@@ -37,7 +37,7 @@ define('io.ox/chat/views/launcher', [
 
         render: function () {
             this.$el.attr('tabindex', -1).empty().append(
-                $('<i class="fa fa-comment launcher-icon" aria-hidden="true">').attr('title', gt('Chat')),
+                $.icon('fa-comment', gt('Chat')),
                 this.badge = $('<svg height="8" width="8" class="indicator chat-notification hidden" focusable="false"><circle cx="4" cy="4" r="4"></svg>')
             );
             this.updateLauncherVisibility();

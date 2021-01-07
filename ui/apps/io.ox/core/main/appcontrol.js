@@ -69,7 +69,7 @@ define('io.ox/core/main/appcontrol', [
             if (this.checkUpsell()) {
                 elem.addClass('upsell').append(
                     _(settings.get('upsell/defaultIcon', 'fa-star').split(/ /)).map(function (icon) {
-                        return $('<i class="fa" aria-hidden="true">').addClass(icon);
+                        return $.icon(icon);
                     })
                 );
             }
@@ -131,7 +131,7 @@ define('io.ox/core/main/appcontrol', [
 
             this.$icon = icon ? $(icon) : $(icons.fallback).find('text > tspan').text(firstLetter).end();
 
-            this.$icon.attr('aria-hidden', true);
+            // this.$icon.attr('aria-hidden', true);
 
             // reverted for 7.10
             if (settings.get('coloredIcons', false)) this.$icon.addClass('colored');
@@ -601,7 +601,7 @@ define('io.ox/core/main/appcontrol', [
                 $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Refresh'));
 
                 if (useSpinner) {
-                    refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                    refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('svg');
                     if (refreshIcon.hasClass('fa-spin')) {
                         refreshIcon.addClass('fa-spin-paused');
                         var done = false;
@@ -622,7 +622,7 @@ define('io.ox/core/main/appcontrol', [
                     $('#io-ox-refresh-icon .apptitle').attr('aria-label', gt('Currently refreshing'));
 
                     if (useSpinner) {
-                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('svg');
                         if (!refreshIcon.hasClass('fa-spin')) {
                             refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
                         }

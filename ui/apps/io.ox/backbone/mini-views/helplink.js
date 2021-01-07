@@ -80,7 +80,7 @@ define('io.ox/backbone/mini-views/helplink', [
 
             this.options = _.extend({
                 base: 'help',
-                content: $('<i class="fa" aria-hidden="true">').attr('title', gt('Online help')),
+                content: $($.icon('fa-question-circle', gt('Online help'))),
                 href: 'index.html',
                 iconClass: 'fa-question-circle',
                 context: '',
@@ -88,7 +88,7 @@ define('io.ox/backbone/mini-views/helplink', [
             }, options);
 
             if (!_.isString(this.options.content)) {
-                this.options.content.addClass(this.options.iconClass);
+                this.options.content = $($.icon(this.options.iconClass, gt('Online help')));
             }
 
             if (!settings.get('features/showHelpLinks', true)) this.$el.addClass('hidden');

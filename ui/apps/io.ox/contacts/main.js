@@ -31,10 +31,11 @@ define('io.ox/contacts/main', [
     'io.ox/core/page-controller',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/core/svg',
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
     'less!io.ox/contacts/style'
-], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView, svg) {
 
     'use strict';
 
@@ -237,11 +238,12 @@ define('io.ox/contacts/main', [
                         fields.description.text(description);
                         fields.location.text(util.getSummaryLocation(data));
                         var url = api.getContactPhotoUrl(data, 48);
-                        fields.photo
-                            .empty()
-                            .text(url ? '' : util.getInitials(data))
-                            .css('background-image', url ? 'url(' + url + ')' : '')
-                            .toggleClass('empty', !url);
+                        var node = fields.photo.empty();
+                        if (url) {
+                            node.css('background-image', url ? 'url(' + url + ')' : '');
+                        } else {
+                            node.addClass('empty').append(svg.circleAvatar(util.getInitials(data)));
+                        }
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
                             fields.name.addClass('gray').text(gt('Empty name and description found.'));

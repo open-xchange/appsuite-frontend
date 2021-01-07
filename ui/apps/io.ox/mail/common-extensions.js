@@ -31,8 +31,9 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/attachments/view',
     'io.ox/backbone/views/action-dropdown',
     'io.ox/backbone/views/actions/util',
+    'io.ox/core/svg',
     'gettext!io.ox/mail'
-], function (ext, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, ToolbarView, settings, attachment, ActionDropdownView, actionsUtil, gt) {
+], function (ext, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, ToolbarView, settings, attachment, ActionDropdownView, actionsUtil, svg, gt) {
 
     'use strict';
 
@@ -52,9 +53,7 @@ define('io.ox/mail/common-extensions', [
         if (status || isSpam) return node.text('!');
 
         // add initials
-        var initials = getInitials(baton.data.from);
-        node.text(initials);
-
+        node.append(svg.circleAvatar(getInitials(baton.data.from)));
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
 
         return contactsAPI.pictureHalo(
@@ -64,7 +63,6 @@ define('io.ox/mail/common-extensions', [
         );
     }
 
-    //
     function getInitials(from) {
         if (!_.isArray(from) || !from.length) return '';
         var name = util.getDisplayName(from[0]);

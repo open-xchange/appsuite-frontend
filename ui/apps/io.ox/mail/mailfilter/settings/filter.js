@@ -110,16 +110,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
         rulename = _.copy(myView.model.get('rulename'), true);
 
         var Dialog = ModalDialog.extend({
-            // manipulating the focus renders the dialog dropdowns unfunctional
+            // manipulating the focus renders the dialog dropdown menus dysfunctional
             pause: function () {
                 // $(document).off('focusin', this.keepFocus);
                 this.$el.next().addBack().hide();
-                this.toggleAriaHidden(false);
             },
             resume: function () {
                 // $(document).on('focusin', $.proxy(this.keepFocus, this));
                 this.$el.next().addBack().show();
-                this.toggleAriaHidden(true);
             }
         });
 

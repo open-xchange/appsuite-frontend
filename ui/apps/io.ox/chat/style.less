@@ -59,8 +59,6 @@
         .chat-leftside {
             width: 100%;
             background-color: #fff;
-            // important for text zoom
-            max-width: 100%;
         }
         .chat-rightside,
         .chat-rightside .header,
@@ -166,6 +164,10 @@
             max-height: 100%;
             overflow-y: auto;
 
+            .dropdown {
+                height: 48px;
+            }
+
             .flex-grow {
                 overflow: visible;
             }
@@ -178,16 +180,10 @@
             margin: -1px 0 0 0;
             padding: 0;
         }
-
-        .dropdown {
-            height: 3rem;
-            display: flex;
-            align-items: center;
-        }
     }
 
     .chat .header.expanded .chat-avatar {
-        margin-top: 0.25rem;
+        margin-top: 4px;
     }
 
     .resizebar {
@@ -237,7 +233,7 @@
         align-items: center;
 
         .picture {
-            .picture(@pictureSize, 3rem);
+            .picture(@pictureSize, @pictureSize);
             margin-right: 8px;
             float: left;
             display: flex;
@@ -269,8 +265,8 @@
 
         .state {
             position: absolute;
-            left: ~"calc(2rem + 12px)";
-            top: ~"calc(2.25rem + 12px)";
+            left: 44px;
+            top: 48px;
         }
     }
 
@@ -285,7 +281,7 @@
 
     .classic-toolbar-container {
         position: relative;
-        height: 2.5rem;
+        height: 40px;
         display: none;
         .classic-toolbar {
             height: 2.5rem;
@@ -582,7 +578,7 @@
     .initials {
         display: inline-block;
         background-color: #eee;
-        .picture(2.5rem, 2.5rem);
+        .picture(40px, 40px);
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         .flex-center();
@@ -640,8 +636,8 @@
         }
         .state {
             position: absolute;
-            top: ~"calc(2rem - 3px)";
-            left: ~"calc(2rem - 4px)";
+            top: 29px;
+            left: 28px;
         }
         .image .fa {
             color: rgba(0, 0, 0, 0.6);
@@ -1341,7 +1337,7 @@
 
         .jump-down {
             position: absolute;
-            top: ~"calc(-1.875rem - 30px)";
+            top: -60px;
             right: 8px;
             background-color: white;
             font-size: 0;
@@ -1415,7 +1411,7 @@
         text-align: center;
         width: @stateSize;
         height: @stateSize;
-        border-radius: 50%;
+        border-radius: 10px;
         padding-top: 3px;
         &.large {
             height: 16px;
@@ -1608,7 +1604,7 @@
     .btn-circle {
         width: @pictureSize;
         height: @pictureSize;
-        border-radius: 50%;
+        border-radius: @pictureSize / 2;
         text-align: center;
         background-color: transparent;
         color: @gray;
@@ -1855,10 +1851,6 @@ svg.fa {
         }
 
         .twitter-typeahead pre { display: none };
-
-        .tt-input {
-            height: 1.875rem;
-        }
 
         .open-addressbook-popup {
             position: absolute;

@@ -61,7 +61,7 @@ define.async('io.ox/mail/toolbar', [
         'reply': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-reply',
+            icon: 'fa-reply',
             title: gt('Reply to sender'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/reply'
@@ -69,7 +69,7 @@ define.async('io.ox/mail/toolbar', [
         'reply-all': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-reply-all',
+            icon: 'fa-reply-all',
             title: gt('Reply to all recipients'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/reply-all'
@@ -77,7 +77,7 @@ define.async('io.ox/mail/toolbar', [
         'forward': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-mail-forward',
+            icon: 'fa-mail-forward',
             title: gt('Forward'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/forward'
@@ -85,7 +85,7 @@ define.async('io.ox/mail/toolbar', [
         'delete': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             title: gt('Delete'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/delete'
@@ -93,21 +93,21 @@ define.async('io.ox/mail/toolbar', [
         'spam': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-ban',
+            icon: 'fa-ban',
             title: gt('Mark as spam'),
             ref: 'io.ox/mail/actions/spam'
         },
         'nospam': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-thumbs-up',
+            icon: 'fa-thumbs-up',
             title: gt('Not spam'),
             ref: 'io.ox/mail/actions/nospam'
         },
         'category': {
             prio: 'hi',
             mobile: 'none',
-            icon: 'fa fa-folder-open-o',
+            icon: 'fa-folder-open-o',
             title: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
@@ -120,7 +120,7 @@ define.async('io.ox/mail/toolbar', [
         'color': {
             prio: 'hi',
             mobile: 'none',
-            icon: 'fa fa-bookmark-o',
+            icon: 'fa-bookmark-o',
             title: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
@@ -131,7 +131,7 @@ define.async('io.ox/mail/toolbar', [
         'flag': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-star',
+            icon: 'fa-star',
             //#. Verb: (to) flag messages
             title: gt.pgettext('verb', 'Flag'),
             ref: 'io.ox/mail/actions/flag'
@@ -139,7 +139,7 @@ define.async('io.ox/mail/toolbar', [
         'unflag': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-star-o',
+            icon: 'fa-star-o',
             //#. Verb: (to) unflag messages
             title: gt.pgettext('verb', 'Unflag'),
             ref: 'io.ox/mail/actions/unflag'
@@ -147,7 +147,7 @@ define.async('io.ox/mail/toolbar', [
         'archive': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'fa fa-archive',
+            icon: 'fa-archive',
             //#. Verb: (to) archive messages
             title: gt.pgettext('verb', 'Archive'),
             ref: 'io.ox/mail/actions/archive'

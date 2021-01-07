@@ -163,7 +163,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
-            this.toggleAriaHidden(true);
             this.trigger('open');
             this.setFocus(o);
             // track open instances
@@ -195,15 +194,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     if (focusNode.length !== 0) focusNode.focus();
                 });
             }
-        },
-
-        toggleAriaHidden: function () {
-            // A11y: This function may be removed in the future (needs more testing)
-            //
-            // New:
-            // Uses new WCAG 1.1 aria-modal on role="dialog" element
-            // Old:
-            // this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {
@@ -387,7 +377,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
             // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
             this.disableFormElements();
-            this.toggleAriaHidden(false);
             this.trigger('pause');
         },
 
@@ -400,7 +389,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
             // add marker class again(needed by yells for example)
             $(document.body).addClass('modal-open');
-            this.toggleAriaHidden(true);
             this.idle();
             this.trigger('resume');
         }
@@ -414,7 +402,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');
         if (!e || e.type !== 'hidden') this.$el.modal('hide');
-        this.toggleAriaHidden(false);
         this.trigger('close');
         var previousFocus = this.previousFocus;
         this.$el.remove();

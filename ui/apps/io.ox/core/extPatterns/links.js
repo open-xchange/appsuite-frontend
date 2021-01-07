@@ -72,7 +72,7 @@ define('io.ox/core/extPatterns/links', [
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
-                    a.append(preRendered.i.clone().addClass(self.icon).attr('aria-hidden', 'true'));
+                    a.append($.icon(self.icon));
                 } else if (title) {
                     // add text. add title unless it matches content
                     a.append($.txt(title));
@@ -218,7 +218,7 @@ define('io.ox/core/extPatterns/links', [
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
                 .append(_.isString(self.label) ? $.txt(self.label) : $())
-                .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
+                .append(_.isString(self.icon) ? $.icon(self.icon) : $())
             );
         };
 
@@ -559,8 +559,8 @@ define('io.ox/core/extPatterns/links', [
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
                 })
                 .append(
-                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+                    options.icon ? $.icon(options.icon, label.textContent) : label,
+                    options.noCaret ? $() : $.icon('fa-caret-down')
                 ),
                 $ul: ul
             });

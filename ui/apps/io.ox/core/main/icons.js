@@ -59,16 +59,26 @@ define('io.ox/core/main/icons', [
             //icons = JSON.parse(icons);
             // use FA icons for 7.10
             icons = {
-                'io.ox/mail': '<i class="fa fa-envelope-o app-icon-mail">',
-                'io.ox/calendar': '<i class="fa fa-calendar app-icon-calendar">',
-                'io.ox/contacts': '<i class="fa fa-address-book-o app-icon-addressbook">',
-                'io.ox/files': '<i class="fa fa-cloud app-icon-drive">',
-                'io.ox/portal': '<i class="fa fa-th-large app-icon-portal">',
-                'io.ox/tasks': '<i class="fa fa-check-square-o app-icon-tasks">',
-                'io.ox/search': '<i class="fa fa-search">',
-                'io.ox/chat': '<i class="fa fa-comment-o app-icon-chat">',
-                'launcher': '<i class="fa fa-th" aria-hidden="true">',
-                'fallback': '<i class="fa fa-question">'
+                // 'io.ox/mail': '<i class="fa fa-envelope-o app-icon-mail">',
+                'io.ox/mail': $.icon('fa-envelope-o'),
+                // 'io.ox/calendar': '<i class="fa fa-calendar app-icon-calendar">',
+                'io.ox/calendar': $.icon('fa-calendar'),
+                //'io.ox/contacts': '<i class="fa fa-address-book-o app-icon-addressbook">',
+                'io.ox/contacts': $.icon('fa-address-book-o'),
+                // 'io.ox/files': '<i class="fa fa-cloud app-icon-drive">',
+                'io.ox/files': $.icon('fa-cloud'),
+                //'io.ox/portal': '<i class="fa fa-th-large app-icon-portal">',
+                'io.ox/portal': $.icon('fa-th-large'),
+                //'io.ox/tasks': '<i class="fa fa-check-square-o app-icon-tasks">',
+                'io.ox/tasks': $.icon('fa-check-square-o'),
+                //'io.ox/search': '<i class="fa fa-search">',
+                'io.ox/search': $.icon('fa-search'),
+                //'io.ox/chat': '<i class="fa fa-comment-o app-icon-chat">',
+                'io.ox/chat': $.icon('fa-comment-o'),
+                //'launcher': '<i class="fa fa-th" aria-hidden="true">',
+                'launcher': $.icon('fa-th'),
+                //'fallback': '<i class="fa fa-question">'
+                'fallback': $.icon('fa-question')
             };
             exposeIcons();
         }

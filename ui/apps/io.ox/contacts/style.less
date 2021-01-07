@@ -21,8 +21,8 @@
 
     &.abs { left: @thumbIndexWidth; }
 
-    @photoSize: ~"calc(1rem + 32px)";
-    @paddingLeft: ~"calc(1rem + 64px)";
+    @photoSize: 48px;
+    @paddingLeft: @photoSize + 32;
     @checkboxWidth: 32px;
     @paddingLabel: 32px;
 
@@ -94,8 +94,8 @@
     }
 
     &.editable .vgrid-cell.contact {
-        padding-left: ~"calc(1rem + 96px)";
-        .contact-photo { left: ~"calc(1rem + 32px)"; }
+        padding-left: @paddingLeft + @checkboxWidth;
+        .contact-photo { left: @checkboxWidth + 16; }
     }
 
     &.editable .vgrid-cell.vgrid-label  {

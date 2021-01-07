@@ -180,7 +180,7 @@ html.windows {
         }
         & > a {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             span { .ellipsis(); }
             padding-left: 16px;
         }
@@ -224,7 +224,7 @@ html.windows {
         display: table-cell;
         vertical-align: middle;
         padding: 0;
-        @icon-width: 1.5rem;
+        @icon-width: 24px;
 
         &.column-1 { width: @icon-width; text-align: center; }
         &.column-2 { width: @icon-width; text-align: center; }
@@ -695,7 +695,7 @@ html.macos .preview-right, html.ios {
 
 .mail-item {
 
-    @pictureSize: 2rem;
+    @pictureSize: 32px;
 
     .contact-picture {
         position: absolute;
@@ -711,7 +711,7 @@ html.macos .preview-right, html.ios {
 
      &.show-contact-pictures .list-item:not(.small) .list-item-content {
         position: relative;
-        padding-left: calc(@pictureSize~" + 16px");
+        padding-left: @pictureSize + 16px;
     }
 
     &.show-contact-pictures.show-text-preview .list-item:not(.small) .contact-picture {
@@ -744,7 +744,7 @@ html.macos .preview-right, html.ios {
         @lines: 2;
         font-size: 13px;
         line-height: 16px;
-        height: 16px * @lines;
+        height: 1rem * @lines;
         -webkit-line-clamp: @lines;
         -webkit-box-orient: vertical;
         white-space: normal;
@@ -1239,10 +1239,10 @@ html.macos .preview-right, html.ios {
 
     &:not(.io-ox-find-active) {
         .categories-toolbar-container { display: flex; }
-        .classic-toolbar-container .classic-toolbar { top: 2.5rem; }
+        .classic-toolbar-container .classic-toolbar { top: 40px; }
 
         // layout: vertical, horizontal, list
-        .window-body.classic-toolbar-visible .abs.window-content { top: 5rem; }
+        .window-body.classic-toolbar-visible .abs.window-content { top: 5 * 16px; }
     }
 }
 
