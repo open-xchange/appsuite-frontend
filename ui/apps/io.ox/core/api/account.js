@@ -346,6 +346,25 @@ define('io.ox/core/api/account', [
         return this.getPrimaryAddress(isUnified ? 0 : account_id);
     };
 
+    api.getAddressesFromFolder = function (folder_id) {
+        // get account id (strict)
+        var account_id = this.parseAccountId(folder_id, true),
+            isUnified = api.isUnified(account_id);
+
+        // get primary address and aliases
+        return $.when(
+            this.getPrimaryAddress(isUnified ? 0 : account_id),
+            api.getSenderAddresses(isUnified ? 0 : account_id)
+        ).then(function (primary, all) {
+            return {
+                primary: primary,
+                aliases: _.reject(all, function (address) {
+                    return primary[1] === address[1];
+                })
+            };
+        });
+    };
+
     api.getDefaultDisplayName = function () {
         return require(['io.ox/contacts/util', 'io.ox/core/api/user']).then(function (util, api) {
             return api.get({ id: ox.user_id }).then(function (data) {
