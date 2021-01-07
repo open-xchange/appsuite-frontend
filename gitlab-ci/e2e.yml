@@ -67,7 +67,7 @@ trigger appsuite-stack deployment pipeline:
     - if: '$CI_COMMIT_REF_SLUG == "develop"'
       when: always
 
-merge filter report and rerun:
+merge filter report:
   stage: merge
   image: gitlab.open-xchange.com:4567/frontend/dev_env/puppeteer:latest
   dependencies:
@@ -90,7 +90,7 @@ merge filter report and rerun:
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
     MIN_SUCCESS: 1
-    MAX_RERUNS: 10
+    MAX_RERUNS: 5
     # services configuration
     SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
     # gitlab config
@@ -105,7 +105,7 @@ merge filter report and rerun:
     # ignore any failing tests
     - yarn e2e -i || true
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/filter_report.json > ./build/e2e/filter_failed_tests.txt
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/filter_report_missing.json > ./build/e2e/filter_failed_tests.txt
     - while read line; do echo $line && npx codeceptjs run-rerun --fgrep "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
     - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
   tags:
@@ -127,6 +127,24 @@ merge filter report and rerun:
     when:
       - runner_system_failure
 
+rerun failed tests:
+  extends: run e2e tests
+  stage: merge
+  dependencies:
+    - run e2e tests
+  needs:
+    - run e2e tests
+  variables:
+    MIN_SUCCESS: 1
+    MAX_RERUNS: 5
+  script:
+  - cd ui
+  - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+  - ls build/e2e/filter_report_*.json
+  - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/$FILTER_REPORT > ./build/e2e/filter_failed_tests.txt
+  - while read line; do echo $line && npx codeceptjs run-rerun --fgrep "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
+  - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
+
 generate e2e report:
   stage: report
   image: gitlab.open-xchange.com:4567/frontend/dev_env/allure:latest
@@ -134,7 +152,8 @@ generate e2e report:
     GIT_STRATEGY: none
   dependencies:
     - run e2e tests
-    - merge filter report and rerun
+    - merge filter report
+    - rerun failed tests
     - run single test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
@@ -164,7 +183,8 @@ publish e2e report:
     GIT_STRATEGY: none
   dependencies:
     - generate e2e report
-    - merge filter report and rerun
+    - merge filter report
+    - rerun failed tests
   script:
     # fail if there is no history being generated. Prevents empty reports from being "published".
     - ls ui/build/allure-report/history.tar > /dev/null
