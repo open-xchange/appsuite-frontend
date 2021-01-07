@@ -925,7 +925,7 @@ define('io.ox/mail/common-extensions', [
             function draw(model) {
                 this.find('.disposition-notification').remove();
 
-                // skip? (cancaled or already returned)
+                // skip? (canceled or already returned)
                 if (skip[model.cid]) return;
                 // has proper attribute? (only available if message was unseen on fetch)
                 if (!util.hasUnsendReadReceipt(model.toJSON())) return;

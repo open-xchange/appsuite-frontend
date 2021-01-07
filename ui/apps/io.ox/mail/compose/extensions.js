@@ -871,7 +871,6 @@ define('io.ox/mail/compose/extensions', [
             };
         }()),
 
-        // TOOO-784: streamline
         toggleToolbar: function (baton) {
             if (_.device('smartphone')) return;
 
