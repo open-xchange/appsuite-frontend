@@ -9,11 +9,11 @@
  *
  * @author Anne Matthes <anne.matthes@open-xchange.com>
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 const { expect } = require('chai');
 
-Feature('Chat > Accessibility');
+Feature('ChatAccessibility');
 
 let context;
 
