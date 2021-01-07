@@ -1469,10 +1469,13 @@ define('io.ox/mail/api', [
     // send read receipt
     // data must include "folder" and "id"
     api.ack = function (data) {
-
-        return accountAPI.getPrimaryAddressFromFolder(data.folder).then(function (addressArray) {
-
-            var name = addressArray[0],
+        var to = _.first(data.to) || [];
+        delete data.to;
+        return accountAPI.getAddressesFromFolder(data.folder).then(function (addresses) {
+            // prefer alias for ack in case mail was addressed to it
+            var alias = _.find(addresses.aliases, function (alias) { return alias[1] === to[1]; }),
+                addressArray = alias ? alias : addresses.primary,
+                name = addressArray[0],
                 address = addressArray[1],
                 from = !name ? address : '"' + name + '" <' + address + '>';
 
