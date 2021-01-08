@@ -408,6 +408,10 @@
                 while (modules.length > 0) {
                     url = base;
                     while (modules[0] && ox.abs.length + url.length + 1 + modules[0].length < limit) {
+                        if (modules[0].indexOf('..') >= 0) {
+                            console.error('module names must not be relative');
+                            modules.shift();
+                        }
                         url += ',' + modules.shift();
                     }
                     requests.push($.ajax({ url: url, dataType: 'text' }));
