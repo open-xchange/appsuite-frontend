@@ -65,13 +65,13 @@ define([
         });
 
         it('should parse attribute selectors', function () {
-            var customCss = 'input[type="email"] { border: 1px solid blue }';
-            util.scopeCustomCss(customCss, scopeIdentifier).should.equal('#io-ox-login-screen input[type="email"] { border: 1px solid blue }');
+            var customCss = 'input[type="text"] { border: 1px solid blue }';
+            util.scopeCustomCss(customCss, scopeIdentifier).should.equal('#io-ox-login-screen input[type="text"] { border: 1px solid blue }');
         });
 
         it('should parse state selectors', function () {
-            var customCss = 'input[type="email"]:focus { border: 1px solid orange }';
-            util.scopeCustomCss(customCss, scopeIdentifier).should.equal('#io-ox-login-screen input[type="email"]:focus { border: 1px solid orange }');
+            var customCss = 'input[type="text"]:focus { border: 1px solid orange }';
+            util.scopeCustomCss(customCss, scopeIdentifier).should.equal('#io-ox-login-screen input[type="text"]:focus { border: 1px solid orange }');
         });
 
         it('should parse multiple rules', function () {
