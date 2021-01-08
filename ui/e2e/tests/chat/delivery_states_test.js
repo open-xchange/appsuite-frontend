@@ -145,6 +145,5 @@ Scenario('There are no delivery states for channels', async (I, users, contexts,
     I.pressKey('Enter');
 
     I.waitForElement('.message.myself', 3, '.ox-chat .messages');
-    I.dontSee('#firstCheck', '.ox-chat');
-    I.dontSee('#secondCheck ', '.ox-chat');
+    I.dontSeeElement('.delivery', '.ox-chat');
 });

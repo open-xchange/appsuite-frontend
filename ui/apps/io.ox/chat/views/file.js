@@ -61,7 +61,7 @@ define('io.ox/chat/views/file', [
                 $('<div class="name">').text(file.name)
             );
 
-            var $img = $('<img>');
+            var $img = $('<img alt="">');
             var $thumbnail = $('<div class="message-thumbnail">').append($img);
 
             if (file.isBlob) {
@@ -102,7 +102,7 @@ define('io.ox/chat/views/file', [
             });
 
             if (file.isAnimated) {
-                var animatedFile = $('<img class="animated-file">'),
+                var animatedFile = $('<img class="animated-file" alt="">'),
                     playButton = $('<button class="play-button">')
                         .attr('title', gt('Load animation'))
                         .append(util.svg({ icon: 'fa-play' })),

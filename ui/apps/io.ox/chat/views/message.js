@@ -31,8 +31,8 @@ define('io.ox/chat/views/message', [
     var deliveryIcon = $(
         '<svg class="delivery" aria-hidden="true" version="1.1" viewBox="0 0 13 8" xmlns="http://www.w3.org/2000/svg">' +
         '<g fill="none" fill-rule="evenodd"><g transform="translate(-9 -9)"><g transform="translate(9.3308 9.482)" ' +
-        'stroke="#333" stroke-linejoin="round"><polyline id="firstCheck" points="0.9132 3.738 3.2524 6.0905 8.0929 1.0988"/>' +
-        '<polyline id="secondCheck" points="5.7437 4.5731 7.2524 6.0905 12 1.0988"/></g></svg>'
+        'stroke="#333" stroke-linejoin="round"><polyline points="0.9132 3.738 3.2524 6.0905 8.0929 1.0988"/>' +
+        '<polyline points="5.7437 4.5731 7.2524 6.0905 12 1.0988"/></g></svg>'
     );
 
     var MessageView = DisposableView.extend({

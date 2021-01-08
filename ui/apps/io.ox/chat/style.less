@@ -560,6 +560,7 @@
 
     .scrollpane {
         overflow-y: auto;
+        outline: none;
     }
 
     .initials {
@@ -678,13 +679,11 @@
     .delivery {
         width: 14px;
         height: 14px;
-        #secondCheck { display: none; }
-        &.received {
-            #secondCheck { display: block; }
-        }
-        &.seen {
-            polyline { stroke: @lightblue; }
-            #secondCheck { display: block; }
+        polyline:nth-child(2) { display: none; }
+        &.received polyline:nth-child(2) { display: block; }
+        &.seen polyline {
+            display: block;
+            stroke: @lightblue;
         }
     }
 
@@ -1056,7 +1055,7 @@
     .message-quote {
         color: #707070;
         padding: 8px;
-        background-color: #f0f0f0;
+        background-color: #f5f5f5;
         border-radius: @borderRadius;
         border-left: 4px solid rgba(0, 0, 0, 0.30);
         margin-bottom: 8px;
