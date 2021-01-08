@@ -87,7 +87,7 @@ Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', 
     I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     I.click('~Save', '.io-ox-mail-compose-window');
     dialogs.waitForVisible();
-    dialogs.clickButton('Discard message');
+    dialogs.clickButton('Delete draft');
     I.waitForDetached('.io-ox-mail-compose-window');
 
     I.click('Invite', '.action-button-rounded');

@@ -816,9 +816,6 @@ define('io.ox/mail/compose/view', [
             // TODO-859: smarter decisions for mailPath scenario needed
             // This dialog gets automatically dismissed
             if ((this.dirty() || isDraft || mailPath) && !this.config.get('autoDismiss')) {
-                var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
-                    saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
-                    modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
 
                 if (this.app.getWindow && this.app.getWindow().floating) {
                     this.app.getWindow().floating.toggle(true);
@@ -830,27 +827,32 @@ define('io.ox/mail/compose/view', [
                 // TODO maybe we could use a more dynamical approach
                 def = $.Deferred();
 
-                var dialogOptions = { title: discardText, description: modalText };
-                // up to 540px because of 3 buttons, french needs this for example
-                if (!_.device('smartphone')) dialogOptions.width = '560px';
+                // var dialogOptions = { title: gt('Save draft'), description: gt('Do you want to keep this draft?') };
+                // // up to 540px because of 3 buttons, french needs this for example
+                // if (!_.device('smartphone')) dialogOptions.width = '560px';
 
-                new ModalDialog(dialogOptions)
-                    .addCancelButton()
-                    .addButton({ label: saveText, action: 'savedraft', placement: 'left', className: 'btn-default' })
-                    .addButton({ label: discardText, action: 'delete' })
-                    .on('savedraft', function () {
-                        self.saveDraft().then(def.resolve, def.reject);
-                    })
-                    .on('delete', function () {
-                        var isAutoDiscard = self.config.get('autoDiscard'),
-                            editFor = self.model.get('meta').editFor;
-                        def.resolve();
-                        // TODO-859: check if this matches mailPath scenario
-                        if (!isDraft || !isAutoDiscard || !editFor) return;
-                        // only delete autosaved drafts that are not saved manually and have a msgref
-                        mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
-                    })
-                    .open();
+                new ModalDialog({
+                    title: gt('Save draft'),
+                    description: gt('This email has not been sent. You can save the draft to work on later.'),
+                    // up to 540px because of 3 buttons, french needs this for example
+                    width: _.device('smartphone') ? undefined : '560px'
+                })
+                .addCancelButton()
+                .addButton({ label: gt('Save draft'), action: 'savedraft' })
+                .addAlternativeButton({ label: gt('Delete draft'), action: 'delete' })
+                .on('savedraft', function () {
+                    self.saveDraft().then(def.resolve, def.reject);
+                })
+                .on('delete', function () {
+                    var isAutoDiscard = self.config.get('autoDiscard'),
+                        editFor = self.model.get('meta').editFor;
+                    def.resolve();
+                    // TODO-859: check if this matches mailPath scenario
+                    if (!isDraft || !isAutoDiscard || !editFor) return;
+                    // only delete autosaved drafts that are not saved manually and have a msgref
+                    mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
+                })
+                .open();
             }
 
             return def.then(function () {

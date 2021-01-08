@@ -173,10 +173,10 @@ Scenario('[C114959] Draft can be used as templates', async function (I, mail, di
     //I.seeInField('Subject','[Copy]');
     I.click(mail.locators.compose.close);
 
-    //waiting for Modal dialog "Discard message" and click on "Save as draft"
-    I.waitForText('Discard message', 5, dialogs.locators.header);
-    I.click('Save as draft');
-    I.waitForInvisible('Discard message', 5, dialogs.locators.header);
+    //waiting for Modal dialog "Save draft" and click on "Save draft"
+    I.waitForText('Save draft', 5, dialogs.locators.header);
+    I.click('Save draft');
+    I.waitForInvisible('Save message', 5, dialogs.locators.header);
     I.waitForInvisible('.window-container.io-ox-mail-compose-window');
 
     //Check new draft in list view

@@ -37,8 +37,8 @@ Scenario('[C7380] Send saved draft mail', async function (I, users, mail) {
     I.fillField('Subject', '' + testrailId + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
     I.click(mail.locators.compose.close);
-    I.waitForText('Save as draft');
-    I.click('Save as draft');
+    I.waitForText('Save draft');
+    I.click('Save draft');
     I.waitForDetached('.io-ox-mail-compose');
     I.selectFolder('Drafts');
     mail.selectMail(testrailId + ' - ' + subject);
@@ -126,7 +126,7 @@ Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
     I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
-    dialogs.clickButton('Save as draft');
+    dialogs.clickButton('Save draft');
     I.waitForDetached('.modal-dialog');
     //I.wait(1);
     I.selectFolder('Drafts');
@@ -407,8 +407,8 @@ Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
     I.fillField('Subject', testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
     I.click(mail.locators.compose.close);
-    I.see('Do you really want to discard your message?');
-    I.click('Discard message');
+    I.see('This email has not been sent. You can save the draft to work on later.');
+    I.click('Delete draft');
 });
 
 Scenario('[C8820] Forward attachments', async function (I, users, mail) {
@@ -418,7 +418,7 @@ Scenario('[C8820] Forward attachments', async function (I, users, mail) {
     await I.haveSetting('io.ox/mail//attachments/layout/detail/open', true);
     I.login('app=io.ox/mail', { user });
 
-    //login user 1 and send mail with attachements
+    //login user 1 and send mail with attachments
     mail.newMail();
     I.fillField('To', user2.userdata.primaryEmail);
     I.pressKey('Enter');

@@ -130,7 +130,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
 
     // // discard mail
     I.click(mail.locators.compose.close);
-    I.click('Discard message');
+    I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -214,7 +214,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
 
     // discard mail
     I.click(mail.locators.compose.close);
-    I.click('Discard message');
+    I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -326,7 +326,7 @@ Scenario('[C265555] Change the Signature', async function (I, mail, dialogs) {
 
     I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
-    dialogs.clickButton('Save as draft');
+    dialogs.clickButton('Save draft');
     I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-mail-compose');
 

@@ -103,17 +103,17 @@ Scenario('Checks when saving', async (I, mail) => {
     I.click(toggle);
     I.waitForVisible(unchecked, 10);
 
-    // try to save as draft (disabled drive mail)
+    // try to save draft (disabled drive mail)
     I.click(mail.locators.compose.close);
-    I.waitForText('Save as draft');
-    I.click('Save as draft');
+    I.waitForText('Save draft');
+    I.click('Save draft');
     I.waitForVisible(message);
     I.waitForVisible(checked, 10);
 
-    // save as draft (enabled drive mail)
+    // save draft (enabled drive mail)
     I.click(mail.locators.compose.close);
-    I.waitForText('Save as draft');
-    I.click('Save as draft');
+    I.waitForText('Save draft');
+    I.click('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');
 });
 
@@ -146,7 +146,7 @@ Scenario('Checks when sending', async (I, mail, users) => {
     I.click(toggle);
     I.waitForVisible(unchecked, 10);
 
-    // save as draft (enabled drive mail)
+    // save draft (enabled drive mail)
     I.click('Send');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);

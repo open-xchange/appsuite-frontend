@@ -42,7 +42,7 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
     // workflow 1: Compose & discard
     mail.newMail();
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
     I.waitForDetached('.io-ox-mail-compose');
 
     // workflow 3: Compose & discard with signature and vcard
@@ -66,14 +66,14 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
     expect(text).to.contain('My unique signature content');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
     I.click(mail.locators.compose.close);
-    I.see('Do you really want to discard your message?');
-    I.click('Discard message');
+    I.see('This email has not been sent. You can save the draft to work on later.');
+    I.click('Delete draft');
 
     // workflow 5: Compose with to, subject, some text, then send
     mail.newMail();
@@ -107,7 +107,7 @@ Scenario.skip('Compose and discard with/without prompts', async function (I, use
         '> Testcontent'
     ));
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
 });
 
 Scenario('Compose mail with different attachments', async function (I, users, mail) {
@@ -256,7 +256,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Subject', 'Testsubject #1');
     I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
-    dialogs.clickButton('Save as draft');
+    dialogs.clickButton('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');
 
     I.selectFolder('Drafts');

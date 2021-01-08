@@ -38,7 +38,7 @@ Scenario('[C114958] Delete draft when closing composer', async (I, users, mail, 
     I.pressKey('Tab');
     I.fillField('span', 'Testcontent');
     I.click('~Save and close', '.io-ox-mail-compose-window');
-    dialogs.clickButton('Save as draft');
+    dialogs.clickButton('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');
     I.selectFolder('Drafts');
     mail.waitForApp();

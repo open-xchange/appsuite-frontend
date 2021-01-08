@@ -121,7 +121,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
 
     // discard mail
     I.click(mail.locators.compose.close);
-    I.click('Discard message');
+    I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -200,7 +200,7 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
 
     // discard mail
     I.click(mail.locators.compose.close);
-    I.click('Discard message');
+    I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
