@@ -345,6 +345,12 @@ define('io.ox/files/api', [
 
         getAccountError: function () {
             return this.get('com.openexchange.folderstorage.accountError');
+        },
+
+        // get the parent folder regardless whether it's a file or folder
+        // note: folder fileModels have folder_id  = 'folder' (see Resolve function), so folder_id can't be used to get the parent folder
+        getParentFolder: function () {
+            return this.isFile() ? this.get('folder_id') : folderAPI.pool.getModel(this.get('id')).get('folder_id');
         }
 
     });

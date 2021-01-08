@@ -745,8 +745,11 @@ define('io.ox/files/actions', [
                                                 });
                                             },
                                             callbackCancel: function () {
-                                                // note: drag&drop and actions via menu use a different baton, see b53498
-                                                var folder_id = baton.first().folder_id;
+                                                // note: drag&drop and actions via folder tree menu use a different baton, see b53498
+                                                var model = new api.Model(baton.first());
+                                                // you can't use folder_id to get the parent for 'folder' fileModels
+                                                var folder_id = model.getParentFolder();
+
                                                 if (folder_id) {
                                                     folderAPI.reload(folder_id);
                                                     // bug 53498: refresh the list to display the not moved elements again after a failed move,
