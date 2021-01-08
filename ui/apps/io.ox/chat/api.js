@@ -20,7 +20,12 @@ define('io.ox/chat/api', [
     'use strict';
 
     var host = _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('host');
-    var url = new URL('https://' + host.replace(/^https?:\/\//, ''));
+    var url = _.device('!IE') ? new URL('https://' + host.replace(/^https?:\/\//, '')) :
+        // simple fallback, might not work for every host url
+        {
+            href: 'https://' + host.replace(/^https?:\/\//, '').replace(/\/$/, '') + '/',
+            origin: 'https://' + host.replace(/^https?:\/\//, '').replace(/\/$/, '')
+        };
 
     var api = {
         host: host,
@@ -57,7 +62,9 @@ define('io.ox/chat/api', [
 
     function request(opt) {
         return getJwtFromSwitchboard().then(function (jwt) {
-            opt = Object.assign({ headers: { 'Authorization': 'Bearer ' + jwt } }, opt);
+            // fallback to _.extend for backwards compatibility, hello IE11
+            var ObjectAssign = Object.assign || _.extend;
+            opt = ObjectAssign({ headers: { 'Authorization': 'Bearer ' + jwt } }, opt);
             return $.ajax(opt);
         }).catch(function (res) {
             if (res.status !== 401) throw res;

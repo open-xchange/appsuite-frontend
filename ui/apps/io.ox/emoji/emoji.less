@@ -76,7 +76,8 @@ img.emoji {
 
     button {
         /* we need a different font, otherwise we see broken emojis */
-        font: 28px/40px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        // segoe is needed for IE11 or emojis will be black and white only
+        font: 28px/40px "Helvetica Neue", "Segoe UI Emoji", Helvetica, Arial, sans-serif;
         color: @black;
         display: inline-block;
         width: 40px;

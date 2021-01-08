@@ -20,8 +20,8 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     var regItalic = /(^|\s)_(.+?)_/g;
     var regStrikethrough = /(^|\s)~(.+?)~/g;
     var regInlineCode = /(^|\s)&#x60;(.+?)&#x60;/g;
-    // eslint complains about s flag which is needed otherwise
-    var regMultilineCode = new RegExp('(^|\\s)&#x60;&#x60;&#x60;(.+?)&#x60;&#x60;&#x60;', 'gs');
+    // [^] is a substitute for . with the s flag (dotall). This makes eslint and IE11 happy
+    var regMultilineCode = new RegExp('(^|\\s)&#x60;&#x60;&#x60;([^]+?)&#x60;&#x60;&#x60;', 'g');
     var regURL = /(https?:\/\/\S+)/g;
     var regBlockquote = /(((^|\n)&gt;( [^\n]+| *))+)/g;
     var regMention = /(^|\s)@(\w+)/g;
@@ -29,13 +29,21 @@ define('io.ox/chat/formatting', ['io.ox/chat/data'], function (data) {
     var regShortcode = /(^|\s):(\w+):/g;
     var regHyperino = /^Hyperino$/i;
 
-    // Using unicode properties seems to catch more (and needs less code)
-    // support: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Browser_compatibility
-    // Chrome:64 (2018); Edge:79 (2020); Firefox:78 (2020); Safari:11.1 (2018); IE:--
-    // regex is written as a function due to (falsy) eslint (would report invalid regex)
-    var regOnlyEmoji = new RegExp('^(\\p{Emoji_Presentation}|\u200D){1,9}$', 'u');
-    var regEmojiReplace = new RegExp('((\\p{Emoji_Presentation}|\u200D)+)', 'ug');
-    var regEmoji = new RegExp('\\p{Emoji_Presentation}', 'u');
+    var regOnlyEmoji, regEmojiReplace, regEmoji;
+    if (_.device('IE')) {
+        // regex that doesn't match anything
+        regOnlyEmoji = new RegExp('a^');
+        regEmojiReplace = new RegExp('a^');
+        regEmoji = new RegExp('a^');
+    } else {
+        // Using unicode properties seems to catch more (and needs less code)
+        // support: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Browser_compatibility
+        // Chrome:64 (2018); Edge:79 (2020); Firefox:78 (2020); Safari:11.1 (2018); IE:--
+        // regex is written as a function due to (falsy) eslint (would report invalid regex)
+        regOnlyEmoji = new RegExp('^(\\p{Emoji_Presentation}|\u200D){1,9}$', 'u');
+        regEmojiReplace = new RegExp('((\\p{Emoji_Presentation}|\u200D)+)', 'ug');
+        regEmoji = new RegExp('\\p{Emoji_Presentation}', 'u');
+    }
 
     var emoticons = {
         ':-)': '🙂',
