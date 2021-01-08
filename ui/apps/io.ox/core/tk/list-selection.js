@@ -1027,6 +1027,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return true;
         },
 
+        isRange: function () {
+            return false;
+        },
+
         onSelectionEmpty: function () {
             if (this.getItems().parent().find('li:focus').length > 0) return;
             this._lastposition = -1;
