@@ -47,7 +47,7 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users,
     I.waitForElement(locate('.permissions-view .row').at(2));
     I.click('Author');
     I.clickDropdown('Viewer');
-
+    I.fillField('.form-control.message-text', 'Hello');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 

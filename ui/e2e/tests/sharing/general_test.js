@@ -276,6 +276,8 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
         setRights('Viewer', 'Reviewer', users[2]);
         setRights('Viewer', 'Reviewer', users[3]);
+        I.fillField('.form-control.message-text', 'Hello');
+
         dialogs.clickButton('Share');
     });
 

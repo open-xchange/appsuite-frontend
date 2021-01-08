@@ -210,12 +210,14 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
     dialogs.clickButton('Select');
     I.waitForElement(locate('.permissions-view .row').at(1));
+    I.fillField('.form-control.message-text', 'Hello');
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.see('This file is shared with others', '.detail-pane');
 
     I.clickToolbar('~More actions');
     I.click('Copy');
+    dialogs.waitForVisible();
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
     I.retry(5).click('Documents', '.modal');
@@ -257,7 +259,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function (I, use
     dialogs.waitForVisible();
     I.waitForText('Copy', 5, '.modal');
     I.pressKey('Arrow_Down');
-    I.click('Documents', '.modal');
+    I.retry(5).click('Documents', '.modal');
     I.waitForElement(locate('li.selected').withAttr({ 'aria-label': 'Documents' }).inside('.modal-body'));
     dialogs.clickButton('Copy');
     I.waitForDetached('.modal-dialog');
