@@ -56,7 +56,7 @@ define('io.ox/chat/views/history', [
                     $('<h2>').append(gt('History'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
-                $('<div class="scrollpane">').append(
+                $('<div class="scrollpane" tabindex="-1">').append(
                     $('<ul>').append(this.renderItems())
                 )
             );

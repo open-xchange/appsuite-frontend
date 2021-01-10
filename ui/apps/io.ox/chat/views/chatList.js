@@ -21,6 +21,8 @@ define('io.ox/chat/views/chatList', [
 
     var ChatListView = DisposableView.extend({
 
+        tagName: 'li',
+        attributes: { role: 'treeitem' },
         className: 'chats',
 
         initialize: function (options) {
@@ -41,7 +43,8 @@ define('io.ox/chat/views/chatList', [
                 'sort': this.onSort
             });
 
-            this.$ul = $('<ul class="chat-list" role="listbox">').attr('aria-label', this.options.header);
+            this.$el.attr('aria-label', this.options.header);
+            this.$ul = $('<ul class="chat-list" role="group">');
         },
 
         render: function () {
@@ -54,7 +57,7 @@ define('io.ox/chat/views/chatList', [
                 })
             );
             this.$el.append(
-                $('<h2>').text(this.options.header),
+                $('<h2 aria-hidden="true">').text(this.options.header),
                 this.$ul
             );
             return this;

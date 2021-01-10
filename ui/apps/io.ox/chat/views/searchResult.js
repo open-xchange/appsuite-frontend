@@ -25,12 +25,8 @@ define('io.ox/chat/views/searchResult', [
 
     var SearchResultView = DisposableView.extend({
 
-        tagName: 'ul',
+        tagName: 'li',
         className: 'search-result chat-list',
-        attributes: {
-            role: 'listbox',
-            'aria-label': gt('Chat search results')
-        },
 
         initialize: function () {
             this.collection = new Backbone.Collection();
@@ -38,24 +34,32 @@ define('io.ox/chat/views/searchResult', [
                 this.query = query;
                 this.search(query);
             });
-            this.listenTo(this.collection, 'add remove reset', _.debounce(this.render.bind(this), 10));
+            this.listenTo(this.collection, 'add remove reset', _.debounce(this.renderItems.bind(this), 10));
         },
 
         render: function () {
+            this.$el.append(
+                $('<div class="sr-only">').text(gt('Chat search results')),
+                this.$ul = $('<ul role="group">')
+            );
+            this.renderItems();
+            return this;
+        },
+
+        renderItems: function () {
             this.$el.parent().toggleClass('show-search', !!this.query);
             var nodes = this.collection.map(function (model) {
                 return new ChatListEntryView({ model: model, density: 'detailed', showTyping: false }).$el;
             });
-            this.$el.empty().append(nodes);
+            this.$ul.empty().append(nodes);
             if (this.collection.length === 0) {
-                this.$el.append(
-                    $('<li class="no-results" role="option" tabindex="0">').text(gt('No search results'))
+                this.$ul.append(
+                    $('<li class="no-results" role="presentation">').text(gt('No search results'))
                 );
             } else {
                 nodes[0].attr('tabindex', 0);
                 this.$('.last-message').mark(this.query);
             }
-            return this;
         },
 
         searchAddresses: function (query) {

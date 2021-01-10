@@ -140,7 +140,6 @@ define('io.ox/chat/views/chat', [
         render: function () {
             this.toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
             this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
-
             this.chatMemberview = new ChatMember({ collection: this.model.members });
             this.$el.append(
                 $('<div class="header">').append(
@@ -172,10 +171,7 @@ define('io.ox/chat/views/chat', [
                     this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
                 $('<div class="controls">').append(
-                    this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').append(
-                        util.svg({ icon: 'fa-chevron-down' }),
-                        this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
-                    ).toggle(this.isJumpDownVisible()),
+                    this.renderJumpDown(),
                     this.renderEditor()
                 )
             );
@@ -185,6 +181,15 @@ define('io.ox/chat/views/chat', [
             if (this.$dropdown.find('.dropdown-menu').children().length > 0) this.$dropdown.css('visibility', 'visible');
 
             return this;
+        },
+
+        renderJumpDown: function () {
+            var title = gt('Scroll to newest message');
+            this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').attr('title', title).append(
+                util.svg({ icon: 'fa-chevron-down' }).attr('aria-label', title),
+                this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
+            );
+            return this.$jumpDown.toggle(this.isJumpDownVisible());
         },
 
         renderEditor: function () {

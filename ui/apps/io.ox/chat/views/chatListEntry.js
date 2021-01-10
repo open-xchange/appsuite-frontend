@@ -34,16 +34,18 @@ define('io.ox/chat/views/chatListEntry', [
             if (this.model.get('searchDummy')) {
                 var member = this.model.getFirstMember();
                 return {
+                    role: 'treeitem',
                     tabindex: -1,
-                    role: 'option',
+                    'aria-selected': false,
                     'data-cmd': 'open-private-chat',
                     'data-email': member.get('email'),
                     'data-cid': this.model.cid
                 };
             }
             return {
+                role: 'treeitem',
                 tabindex: -1,
-                role: 'option',
+                'aria-selected': false,
                 'data-cmd': 'show-chat',
                 'data-cid': this.model.get('roomId') || this.model.cid,
                 'data-message-id': this.model.get('searchResult') ? this.model.get('lastMessage').messageId : undefined
