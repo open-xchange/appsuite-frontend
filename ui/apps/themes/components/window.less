@@ -503,8 +503,9 @@
 
 .floating-window {
     @headerHeight: 40px;
-    @headerColor: linear-gradient(0deg, #f5f5f5, #fff);
-    @headerColorInactive:#f5f5f5;
+    @headerColor: #f5f5f5;
+    @headerGradient: linear-gradient(0deg, #f5f5f5, #fff);
+    @headerColorInactive: #f5f5f5;
     @headerTextColor: #333;
     @headerIconColor: #707070;
 
@@ -535,7 +536,8 @@
         z-index: 14;
         .floating-window-content { .elevation-3(); }
         .floating-header {
-            background: @headerColor;
+            background-color: @headerColor;
+            background-image: @headerGradient;
             h1 {
                 color: @headerTextColor;
             }

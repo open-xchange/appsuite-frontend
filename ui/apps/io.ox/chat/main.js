@@ -62,14 +62,8 @@ define('io.ox/chat/main', [
 
         events: function () {
             return _.extend(FloatingWindow.View.prototype.events, {
-                'keydown .left-navigation': 'onLeftNavigationKeydown',
                 'keydown .overlay': 'onOverlayEvent',
                 'click .overlay': 'onOverlayEvent'
-                // We need to solve this differently
-                // these lines conflict with the "show-chat" command
-                // users might not be able to switch between certain chats
-                // 'focus ul[role="listbox"] > li': 'onFocus',
-                // 'click ul[role="listbox"] > li': 'onClick'
             });
         },
 
@@ -245,7 +239,6 @@ define('io.ox/chat/main', [
 
             this.$rightside.empty();
             this.$body.toggleClass('open', state.view !== 'empty');
-            this.clearActiveSelection();
 
             switch (state.view) {
                 case 'empty':
@@ -259,7 +252,7 @@ define('io.ox/chat/main', [
                     view.scrollToBottom();
                     if (state.roomId) {
                         this.resetCount(state.roomId, state.model);
-                        this.$body.find('.chat-leftside li[data-cid="' + state.roomId + '"]').attr('tabindex', 0).addClass('active');
+                        this.$body.find('.accessible-list').data('plugin').set(state.roomId);
                         settings.set('lastRoomId', state.roomId).save();
                     }
                     break;
@@ -307,12 +300,6 @@ define('io.ox/chat/main', [
 
         showAllFiles: function () {
             this.setState({ view: 'files' });
-        },
-
-        clearActiveSelection: function () {
-            this.$leftside.find('li[role="option"]').each(function () {
-                $(this).attr('tabindex', -1).removeClass('active');
-            });
         },
 
         showFile: function (cmd) {
@@ -366,24 +353,6 @@ define('io.ox/chat/main', [
                     selection: { id: selectedFile }
                 });
             });
-        },
-
-        onLeftNavigationKeydown: function (e) {
-            if (!/^(13|32|38|40)$/.test(e.which)) return;
-
-            e.preventDefault();
-
-            // Cursor up / down
-            if (/^(38|40)$/.test(e.which)) {
-                var items = this.$('.left-navigation [role="option"]'),
-                    index = items.index(document.activeElement) + (e.which === 38 ? -1 : +1);
-                index = Math.max(0, Math.min(index, items.length - 1));
-                items.eq(index).focus();
-            }
-
-            // Enter / space
-            if (/^(13|32)$/.test(e.which)) this.onClick(e);
-
         },
 
         onClick: function (e) {
@@ -529,15 +498,15 @@ define('io.ox/chat/main', [
             // start with BAD style and hard-code stuff
             this.$body.empty().addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).append(
                 this.getResizeBar(),
-                this.$leftside = $('<div class="chat-leftside">').addClass('density-' + settings.get('density', 'default')).append(
+                this.$leftside = $('<nav class="chat-leftside">').addClass('density-' + settings.get('density', 'default')).append(
                     $('<div class="header">').append(
                         $('<div class="picture">').append(
                             new AvatarView({ model: user }).render().$el,
                             presence.getPresenceIcon(user.get('email'))
                         ),
                         $('<div class="name">').text(user.getName()),
-                        $('<div class="dropdown btn-round">').append(
-                            $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
+                        $('<div class="dropdown">').append(
+                            $('<button type="button" class="btn btn-round dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('aria-label', gt('New'))
                                 .append(
                                     util.svg({ icon: 'fa-plus', size: 16 }).attr('title', gt('New'))
                                 ),
@@ -602,13 +571,13 @@ define('io.ox/chat/main', [
         },
 
         getLeftNavigation: function () {
-            var $el = $('<div class="left-navigation">').append(
+            var $tree = $('<ul role="tree">').append(
                 new SearchResultView().render().$el,
                 new ChatListView({ collection: data.chats, filter: function (m) { return m.isFavorite(); }, header: gt('Favorites') }).render().$el
             );
             if (settings.get('groupByType', false)) {
                 // by type
-                $el.append(
+                $tree.append(
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isPrivate(); }, header: gt('Private chats') }).render().$el,
                     //#. one ot the headlines when chats are grouped by type (group chats, private chats, channels)
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite() && m.isGroup(); }, header: gt('Group chats') }).render().$el,
@@ -616,11 +585,17 @@ define('io.ox/chat/main', [
                 );
             } else {
                 // one view for all (default)
-                $el.append(
+                $tree.append(
                     new ChatListView({ collection: data.chats, filter: function (m) { return !m.isFavorite(); }, header: gt('Chats') }).render().$el
                 );
             }
-            return $el;
+            return $('<nav class="left-navigation" role="navigation">')
+                .attr('aria-label', gt('Chats'))
+                .append($tree)
+                .makeAccessible()
+                .on('select', function (e, cids) {
+                    if (cids[0]) this.showChat(cids[0]);
+                }.bind(this));
         },
 
         drawAuthorizePane: function (errorMessage) {

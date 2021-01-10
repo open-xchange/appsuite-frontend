@@ -170,5 +170,139 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
         'fa-image': '\uf1c5' // file-image-o
     };
 
+    (function ($) {
+
+        // we should MERGE this with other selection implementations
+        // like list-selection.js after 7.10.5 (!)
+
+        var pluginName = 'makeAccessible';
+
+        $.fn[pluginName] = function (options) {
+            return this.each(function () {
+                if ($.data(this, 'plugin_' + pluginName)) return;
+                $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+            });
+        };
+
+        function Plugin(el, options) {
+            this.el = el;
+            this.$el = $(el);
+            this.$el.data('plugin', this);
+            this.options = $.extend({ selector: '[aria-selected]' }, options);
+            this.initialize();
+        }
+
+        $.extend(Plugin.prototype, {
+
+            initialize: function () {
+                this.$el
+                    .addClass('accessible-list')
+                    .attr('tabindex', 0)
+                    .on('focus', this.onFocus.bind(this))
+                    .on('blur', this.onBlur.bind(this))
+                    .on('keydown', this.options.selector, this.onKeydown.bind(this))
+                    .on('click', this.options.selector, this.onClick.bind(this));
+            },
+
+
+            getItems: function () {
+                return this.$el.find(this.options.selector);
+            },
+
+            find: function (el) {
+                var items = this.getItems();
+                if (_.isString(el)) el = items.filter(el);
+                return { items: items, index: items.index(el) };
+            },
+
+            onFocus: function () {
+                if (document.activeElement !== this.el) return;
+                console.log('onFocus?');
+                // forward focus to first item
+                this.$el.attr('tabindex', -1);
+                var f = this.find('[tabindex="0"]:first');
+                this.select(f.index, f.items);
+            },
+
+            onBlur: function () {
+                if ($.contains(this.el, document.activeElement)) return;
+                // make sure an inner or the outer element is in tab order
+                var f = this.find('[tabindex="0"]:first');
+                this.$el.attr('tabindex', Math.min(f.index, 0));
+            },
+
+            onKeydown: function (e) {
+                if (!/^(13|32|38|40)$/.test(e.which)) return;
+                e.preventDefault();
+                var f = this.find(document.activeElement);
+                switch (e.which) {
+                    // cursor up/down
+                    case 38:
+                    case 40:
+                        this.focus(f.index + (e.which === 38 ? -1 : +1), f.items);
+                        break;
+                    // enter/space
+                    case 13:
+                    case 32:
+                        this.select(f.index, f.items);
+                        break;
+                    // no default
+                }
+            },
+
+            onClick: function (e) {
+                var f = this.find(target(e));
+                this.select(f.index, f.items);
+            },
+
+            focus: function (index, items) {
+                this.change(index, { tabindex: true, focus: true }, items);
+            },
+
+            select: function (index, items) {
+                this.change(index, { tabindex: true, focus: true, select: true, event: true }, items);
+            },
+
+            set: function (cid) {
+                var f = this.find('[data-cid="' + $.escape(cid) + '"]');
+                if (f.index === -1) return;
+                this.$el.attr('tabindex', -1);
+                this.change(f.index, { tabindex: true, focus: false, select: true, event: false }, f.items);
+            },
+
+            change: function (index, options, items) {
+                items = items || this.getItems();
+                index = Math.max(0, Math.min(index, items.length - 1));
+                var $el = items.eq(index);
+                if (options.tabindex) {
+                    resetTabindex(items);
+                    $el.attr('tabindex', 0);
+                }
+                if (options.focus) $el.focus();
+                if (options.select) {
+                    resetSelected(items);
+                    $el.attr('aria-selected', true);
+                }
+                if (options.event) {
+                    var cid = $el.data('cid');
+                    this.$el.triggerHandler('select', [[cid]]);
+                }
+            }
+        });
+
+        function target(e) {
+            return $(e.currentTarget);
+        }
+
+        function resetTabindex(items) {
+            items.filter('[tabindex="0"]').attr('tabindex', -1);
+        }
+
+        function resetSelected(items) {
+            items.filter('[aria-selected="true"]').attr('aria-selected', false);
+        }
+
+    }(jQuery));
+
     return util;
 });
