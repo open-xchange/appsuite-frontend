@@ -106,8 +106,8 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
     const alice = await users.create(users.getRandom(), context);
     const bob = await users.create(users.getRandom(), context);
 
-    const channelTitle = 'Channel 1.0';
-    const channelTitle2 = 'Channel 2.0';
+    const channelTitleA = 'Channel A ' + (+new Date());
+    const channelTitleB = 'Channel B ' + (+new Date());
 
     await session('Alice', async () => {
         I.login({ user: alice });
@@ -115,7 +115,7 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
-        chat.fillNewChannelForm(channelTitle);
+        chat.fillNewChannelForm(channelTitleA);
         dialogs.clickButton('Create channel');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
@@ -125,7 +125,7 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
         I.waitForText('New Chat', 30);
         I.click('New Chat');
         I.clickDropdown('Channel');
-        chat.fillNewChannelForm(channelTitle2);
+        chat.fillNewChannelForm(channelTitleB);
         dialogs.clickButton('Create channel');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
@@ -134,11 +134,11 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
 
         I.waitForElement('~Search or start new chat', 3, '.ox-chat');
         I.fillField('~Search or start new chat', 'Channel');
-        I.waitForElement(locate('.title').withText(channelTitle), 3, '.ox-chat .search-result');
-        I.waitForElement(locate('.title').withText(channelTitle2), 3, '.ox-chat .search-result');
-        I.fillField('~Search or start new chat', channelTitle);
-        I.waitForInvisible(locate('.title').withText(channelTitle2), 3, '.ox-chat .search-result');
-        I.retry(5).click(locate('.title').withText(channelTitle), '.ox-chat .search-result');
+        I.waitForElement(locate('.title').withText(channelTitleA), 3, '.ox-chat .search-result');
+        I.waitForElement(locate('.title').withText(channelTitleB), 3, '.ox-chat .search-result');
+        I.fillField('~Search or start new chat', channelTitleA);
+        I.waitForInvisible(locate('.title').withText(channelTitleB), 3, '.ox-chat .search-result');
+        I.retry(5).click(locate('.title').withText(channelTitleA), '.ox-chat .search-result');
         I.waitForElement('.message.system', 3, '.ox-chat');
         I.seeNumberOfVisibleElements('.message.system', 2);
     });
@@ -148,7 +148,7 @@ Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) 
         chat.openChat();
         I.waitForText('New Chat', 30);
         I.waitForElement('~Search or start new chat', 3, '.ox-chat');
-        I.fillField('~Search or start new chat', channelTitle);
+        I.fillField('~Search or start new chat', channelTitleA);
         I.waitForText('No search results', 5, '.ox-chat .search-result');
     });
 

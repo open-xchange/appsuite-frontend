@@ -181,7 +181,7 @@ Scenario('Preview, join and leave a channel', async (I, users, chat) => {
     const [alice, bob] = users;
     const name = `${bob.get('given_name')} ${bob.get('sur_name')} `;
 
-    const channelTitle = 'Channel 1.0';
+    const channelTitle = 'Channel ' + (+new Date());
 
     await session('Alice', async () => {
         I.login({ user: alice });

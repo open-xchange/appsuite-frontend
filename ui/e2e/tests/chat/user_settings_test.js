@@ -96,9 +96,9 @@ Scenario('Sort and group chats', async (I, users, contexts, chat, dialogs) => {
     chat.sendMessage('First message');
     I.click('~Close chat', '.ox-chat');
 
-    I.waitForText(channelTitle, 3, 'ul[aria-label="Chats"] li:nth-child(1)');
-    I.waitForText(groupTitle, 3, 'ul[aria-label="Chats"] li:nth-child(2)');
-    I.waitForText('User', 3, 'ul[aria-label="Chats"] li:nth-child(3)');
+    I.waitForText(channelTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(1)');
+    I.waitForText(groupTitle, 3, 'li[aria-label="Chats"] > ul >  li:nth-child(2)');
+    I.waitForText('User', 3, 'li[aria-label="Chats"] > ul > li:nth-child(3)');
     I.dontSee('Private chats', '.ox-chat .left-navigation');
     I.dontSee('Group chats', '.ox-chat .left-navigation');
     I.dontSee('Channels', '.ox-chat .left-navigation');
@@ -112,21 +112,21 @@ Scenario('Sort and group chats', async (I, users, contexts, chat, dialogs) => {
     I.click('Select last chat on start', '.scrollable-pane');
 
     I.click('Alphabetical', '.scrollable-pane');
-    I.waitForText(groupTitle, 3, 'ul[aria-label="Chats"] li:nth-child(1)');
-    I.waitForText(channelTitle, 3, 'ul[aria-label="Chats"] li:nth-child(2)');
-    I.waitForText('User', 3, 'ul[aria-label="Chats"] li:nth-child(3)');
+    I.waitForText(groupTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(1)');
+    I.waitForText(channelTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(2)');
+    I.waitForText('User', 3, 'li[aria-label="Chats"] > ul > li:nth-child(3)');
 
     I.click('Last activity', '.scrollable-pane');
-    I.waitForText(channelTitle, 3, 'ul[aria-label="Chats"] li:nth-child(1)');
-    I.waitForText(groupTitle, 3, 'ul[aria-label="Chats"] li:nth-child(2)');
-    I.waitForText('User', 3, 'ul[aria-label="Chats"] li:nth-child(3)');
+    I.waitForText(channelTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(1)');
+    I.waitForText(groupTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(2)');
+    I.waitForText('User', 3, 'li[aria-label="Chats"] > ul > li:nth-child(3)');
 
     I.click('Group chats by type', '.scrollable-pane');
 
     I.waitForText('Private chats', 30, '.ox-chat .left-navigation');
-    I.waitForText('User', 3, '.ox-chat .left-navigation ul[aria-label="Private chats"]');
+    I.waitForText('User', 3, '.ox-chat .left-navigation li[aria-label="Private chats"]');
     I.waitForText('Group chats', 3, '.ox-chat .left-navigation');
-    I.waitForText(groupTitle, 3, '.ox-chat .left-navigation ul[aria-label="Group chats"]');
+    I.waitForText(groupTitle, 3, '.ox-chat .left-navigation li[aria-label="Group chats"]');
     I.waitForText('Channels', 3, '.ox-chat .left-navigation');
-    I.waitForText(channelTitle, 3, '.ox-chat .left-navigation ul[aria-label="Channels"]');
+    I.waitForText(channelTitle, 3, '.ox-chat .left-navigation li[aria-label="Channels"]');
 });

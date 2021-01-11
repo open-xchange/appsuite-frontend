@@ -137,7 +137,7 @@ Scenario('There are no delivery states for channels', async (I, users, contexts,
     I.click('New Chat');
     I.clickDropdown('Channel');
 
-    chat.fillNewChannelForm('Channel 1.0');
+    chat.fillNewChannelForm('Channel ' + (+new Date()));
     dialogs.clickButton('Create channel');
 
     I.waitForElement('.ox-chat .controls');

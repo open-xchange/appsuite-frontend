@@ -52,7 +52,7 @@ Scenario('Add chat to favorites', async (I, users, chat) => {
     I.waitForElement('.chat-rightside .dropdown.open', 3, '.ox-chat');
     I.click('Add to favorites', '.chat-rightside .dropdown.open');
     I.waitForText('Favorites', 3, '.ox-chat .left-navigation');
-    I.waitForElement('.ox-chat .left-navigation ul[aria-label="Favorites"] li');
+    I.waitForElement('.ox-chat .left-navigation li[aria-label="Favorites"] .chat-list li');
 });
 
 Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat) => {
