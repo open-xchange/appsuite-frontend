@@ -30,8 +30,8 @@ Scenario('[C9999] simple test', async function (I, users) {
     I.waitForVisible('.io-ox-office-portal-text-window');
 
     // click the "Blank text document" button to create a new text document
-    I.waitForText('Blank text document');
-    I.click('Blank text document');
+    I.waitForVisible('a.template-item.blank-doc');
+    I.click('a.template-item.blank-doc');
 
     // wait for the new browser tab to appear
     I.wait(1);
