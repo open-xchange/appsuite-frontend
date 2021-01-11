@@ -330,7 +330,7 @@ define('io.ox/mail/compose/main', [
                     error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
                     break;
                 case 'MSGCS-0010':
-                    error.message = gt('This draft was changed outside of this window. To prevent possible loss of data please continue editing in that other tab or browser.');
+                    error.message = gt('This draft has been changed in another tab or browser. Please continue editing the most recent version. If you have closed that tab in the meantime, you can restore the most recent draft here.');
                     break;
                 default:
                     break;
@@ -342,21 +342,46 @@ define('io.ox/mail/compose/main', [
             if (this.view) this.view.inlineYell('');
             // disable floating window and show error message
             var win = this.get('window');
+            var model = this.model;
             if (!win) return;
-            win.busy(undefined, undefined, function () {
-                // prevents busy spinner
-                this.idle();
-                this.find('.footer').empty()
-                    .append($('<div class="message">').text(error.message || error.error));
 
-                // add extra close button for mobile
-                if (!_.device('smartphone')) return;
-                this.find('.footer').empty().append(
-                    $('<button type="button" class="btn btn-default btn-primary">')
-                        .text(gt('Close'))
-                        .on('click', function () { app.quit(); })
+            // show window-blocker dialog
+            win.busy(undefined, undefined, function () {
+
+                var container = $('<div class="block-message">').append(
+                    $('<div class="message">').text(error.message || error.error),
+                    $('<div class="actions">')
                 );
+
+                // prevents busy spinner
+                this.find('.footer').empty().append(container);
+                this.idle();
+
+                // add extra close button
+                container.find('.actions').append(
+                    $('<button type="button" class="btn btn-default btn-primary">')
+                    .text(gt('Close'))
+                    .on('click', function () { app.quit(); })
+                );
+
+                // restore action for concurrent editing
+                if (error.code === 'MSGCS-0010') {
+                    container.find('.actions').prepend(
+                        $('<button type="button" class="btn btn-default">')
+                        .text(gt('Restore draft'))
+                        .on('click', restore)
+                    );
+                }
             });
+
+            function restore() {
+                app.quit();
+                var newapp = createInstance();
+                newapp.launch();
+                newapp.open(_(model.toJSON()).pick('id', 'meta', 'security')).done(function () {
+                    newapp.model.claim();
+                });
+            }
         };
 
         app.resume = function (data, force) {
@@ -427,7 +452,7 @@ define('io.ox/mail/compose/main', [
             if (app.view && !app.error) return app.view.discard();
         });
 
-        // after view is detroyed
+        // after view is destroyed
         app.on('quit', function () {
             if (app.model) app.model.destroy();
         });
