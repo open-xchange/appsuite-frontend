@@ -280,7 +280,7 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,20,109,700,7010',
+                    columns: '1,2,5,20,109,700,7010,7040,703,702',
                     timezone: 'UTC'
                 }
             });

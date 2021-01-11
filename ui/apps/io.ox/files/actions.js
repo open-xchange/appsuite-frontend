@@ -823,6 +823,8 @@ define('io.ox/files/actions', [
         if (baton.collection.has('multiple')) return false;
         if (isContact(baton)) return false;
         if (baton.isViewer && !isCurrentVersion(baton)) return false;
+        // Links aren't possible for encrypted files
+        if (type === 'link' && baton.first() && new api.Model(baton.first()).isEncrypted()) return false;
         // get folder id
         var id = getFolderId(baton);
         if (!id) return false;
