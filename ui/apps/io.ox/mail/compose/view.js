@@ -826,11 +826,6 @@ define('io.ox/mail/compose/view', [
                 // add some extra space
                 // TODO maybe we could use a more dynamical approach
                 def = $.Deferred();
-
-                // var dialogOptions = { title: gt('Save draft'), description: gt('Do you want to keep this draft?') };
-                // // up to 540px because of 3 buttons, french needs this for example
-                // if (!_.device('smartphone')) dialogOptions.width = '560px';
-
                 new ModalDialog({
                     title: gt('Save draft'),
                     description: gt('This email has not been sent. You can save the draft to work on later.'),

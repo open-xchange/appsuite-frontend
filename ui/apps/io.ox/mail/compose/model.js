@@ -345,6 +345,11 @@ define('io.ox/mail/compose/model', [
                 .value();
         },
 
+        // claims edit rights for this tab/browser
+        claim: function () {
+            return composeAPI.space.claim(this.get('id'));
+        },
+
         save: function (silent) {
             if (this.destroyed || this.paused) return $.when();
             var prevAttributes = this.prevAttributes,
