@@ -28,7 +28,7 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
         },
 
         setup: function () {
-            if (!this.options.targetId && !this.options.input && !this.options.content) throw Error('Copy to clipboard needs an id, content or an input to operate correctly');
+            if (!this.options.targetId && !this.options.input && !_.has(this.options, 'content')) throw Error('Copy to clipboard needs an id, content or an input to operate correctly');
         },
 
         render: function () {
@@ -38,7 +38,7 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
 
             if (this.options.targetId) {
                 target = this.options.targetId;
-            } else if (this.options.content) {
+            } else if (_.has(this.options, 'content')) {
                 content = this.options.content;
             } else {
                 target = this.options.input.attr('id');
@@ -88,6 +88,13 @@ define('io.ox/backbone/mini-views/copy-to-clipboard', [
             // remove tooltip if copy to clipboard is disposed
             this.$el.tooltip('destroy');
             Abstract.prototype.dispose.call(this, arguments);
+        },
+
+        /**
+         * Change the attribute 'data-clipboard-text' to change the clipboard content.
+         */
+        changeClipboardText: function (text) {
+            this.$el.attr('data-clipboard-text', text);
         }
 
     });

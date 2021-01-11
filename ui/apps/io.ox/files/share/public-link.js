@@ -49,29 +49,35 @@ define('io.ox/files/share/public-link', [
         id: 'public-link-row',
         index: INDEX += 100,
         draw: function (baton) {
-            var link = baton.model.get('url', ''),
-                formID = _.uniqueId('copy-pl-to-clipboard-'),
-                input = $('<button type="button" class="public-link-url-input">').attr('id', formID).val(link);
+            var link = baton.model.get('url');
+
+            var copyLinkButton = new CopyToClipboard({
+                content: link,
+                buttonStyle: 'link',
+                buttonLabel: gt('Copy link'),
+                events: {
+                    'click': function () {
+                        this.$el.tooltip('hide');
+                        require(['io.ox/core/yell'], function (yell) {
+                            yell({ type: 'success', message: gt('The link has been copied to the clipboard.') });
+                        });
+                    }
+                }
+            });
+
             this.append(
-                input,
+                // input,
                 $('<div class="row"></div>')
                 .append(
                     $('<div class="col-sm-1 col-xs-2 text-center"><i class="fa fa-link" aria-hidden="true"></i></div>'),
                     $('<div class="col-sm-5 col-xs-6"></div>').text(gt('Anyone on the internet with the link can view the file.')),
-                    $('<div class="col-sm-6 col-xs-4 text-left"></div>').append(new CopyToClipboard({ targetId: '#' + formID, buttonStyle: 'link', buttonLabel: gt('Copy link'),
-                        events: {
-                            'click': function () {
-                                this.$el.tooltip('hide');
-                                require(['io.ox/core/yell'], function (yell) {
-                                    yell({ type: 'success', message: gt('The link has been copied to the clipboard.') });
-                                });
-                            }
-                        } }).render().$el)
+                    $('<div class="col-sm-6 col-xs-4 text-left"></div>').append(copyLinkButton.render().$el)
                 )
             );
+
             baton.model.on('change:url', function (model) {
-                var url = model.get('url', '');
-                input.val(url);
+                var url = model.get('url');
+                copyLinkButton.changeClipboardText(url);
             });
         }
     });
