@@ -141,7 +141,7 @@ rerun failed tests:
   script:
   - cd ui
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-  - ls build/e2e/filter_report_*.json
+  - ls ./build/e2e/$FILTER_REPORT
   - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/$FILTER_REPORT > ./build/e2e/filter_failed_tests.txt
   - while read line; do echo $line && npx codeceptjs run-rerun --fgrep "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
   - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
