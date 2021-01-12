@@ -376,8 +376,8 @@ define('io.ox/mail/compose/model', [
             return composeAPI.space.claim(this.get('id'));
         },
 
-        save: function (silent) {
-            if (this.destroyed || this.paused) return $.when();
+        save: function (silent, force) {
+            if (!force && (this.destroyed || this.paused)) return $.when();
             var prevAttributes = this.prevAttributes,
                 attributes = this.toJSON();
             // remove pending inline images from content
@@ -417,7 +417,12 @@ define('io.ox/mail/compose/model', [
             // that prevents any edge cases of "composition space not found"
             return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
                 return $.when(def).catch();
-            })).then(function () {
+            }))
+            // update space one final time so the draft that is moved to the trash has the current data
+            .then(function () {
+                return this.save(true, true);
+            }.bind(this))
+            .then(function () {
                 // using clone here to include mailPath prop for folder refresh
                 return composeAPI.space.remove(this.get('id'), _.clone(this.attributes));
             }.bind(this));
