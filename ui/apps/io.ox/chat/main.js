@@ -35,11 +35,12 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/avatar',
     'io.ox/switchboard/presence',
     'io.ox/core/yell',
+    'io.ox/core/a11y',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, settings, gt) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt) {
 
     'use strict';
 
@@ -258,12 +259,15 @@ define('io.ox/chat/main', [
                     break;
                 case 'history':
                     this.$rightside.append(new History().render().$el);
+                    a11y.getTabbable(this.$rightside).first().focus();
                     break;
                 case 'channels':
                     this.$rightside.append(new ChannelList().render().$el);
+                    a11y.getTabbable(this.$rightside).first().focus();
                     break;
                 case 'files':
                     this.$rightside.append(new FileList().render().$el);
+                    a11y.getTabbable(this.$rightside).first().focus();
                     break;
                 // no default
             }
@@ -275,6 +279,9 @@ define('io.ox/chat/main', [
 
         closeChat: function () {
             this.setState({ view: 'empty' });
+            if (settings.get('mode') === 'sticky') {
+                this.$body.find('.accessible-list [tabindex=0]').focus();
+            }
         },
 
         deleteChat: function (cmd) {
@@ -565,9 +572,14 @@ define('io.ox/chat/main', [
             var showLastRoom = settings.get('selectLastRoom', true);
             var lastRoomId = showLastRoom && settings.get('lastRoomId');
             var room = lastRoomId && data.chats.get(lastRoomId);
-            if (room && room.isActive()) return this.showChat(lastRoomId);
-            // fill right side only if not selecting last room (to avoid flicker)
-            this.$rightside.append(new EmptyView().render().$el);
+            if (room && room.isActive()) {
+                this.showChat(lastRoomId);
+            } else {
+                // fill right side only if not selecting last room (to avoid flicker)
+                this.$rightside.append(new EmptyView().render().$el);
+            }
+            // finally set the initial focus
+            a11y.getTabbable(this.$body).first().focus();
         },
 
         getLeftNavigation: function () {

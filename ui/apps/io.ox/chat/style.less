@@ -1739,6 +1739,11 @@ svg.fa {
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
+                outline: 0;
+                &:focus {
+                    border: 1px solid @link-color;
+                    box-shadow: 0 0 8px 2px @link-color;
+                }
 
                 label { display: none!important; }
 

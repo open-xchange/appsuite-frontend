@@ -90,7 +90,7 @@ define('io.ox/chat/views/chat', [
 
             this.on('appended', function () {
                 // restore textarea height for draft content
-                this.$editor.trigger('input');
+                this.$editor.focus().trigger('input');
             });
 
             this.on('dispose', this.onDispose);

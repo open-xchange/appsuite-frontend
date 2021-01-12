@@ -119,6 +119,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                     this.$('.modal-header').empty().append(
                         $('<h1 class="modal-title">').attr('id', title_id).text(title),
                         new PictureUpload({ model: this.pictureModel }).render().$el
+                            .find('.contact-photo').attr({ role: 'button', title: gt('Chage image'), tabindex: 0 }).end()
                     );
                 }.bind(this));
             },

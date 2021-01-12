@@ -48,7 +48,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
             'focus .file': 'toggleFocus',
             'blur .file': 'toggleFocus',
             'click .file': 'onClick',
-            'click .contact-photo': 'onClickContainer'
+            'click .contact-photo': 'onClickContainer',
+            'keydown .contact-photo': 'onKey'
         },
 
         initialize: function () {
@@ -81,6 +82,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
 
         onClickContainer: function () {
             return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
+        },
+
+        onKey: function (e) {
+            // forward enter to click handler
+            if (e.which === 13) this.onClickContainer();
         },
 
         removeImage: function (e) {
