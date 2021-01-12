@@ -357,6 +357,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     padding: 3px 20px;
     display: flex;
     width: 100%;
+
     .action { //, .action:hover, .action:focus {
         display: flex;
         padding: 0;
@@ -417,7 +418,23 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             text-overflow: ellipsis;
         }
     }
-
+    .smartphone & {
+        .user-picture-container {
+            width: 48px;
+        }
+        .user-picture {
+            width: 48px;
+            height: 48px;
+        }
+        .action {
+            flex-direction: column;
+            justify-content: center;
+        }
+        .text-container {
+            text-align: left;
+        }
+        width: auto;
+    }
 }
 // Fix for IE dropdown width calculation see OXUIB-184
 .ie11 .launcher-dropdown.dropdown-menu {
