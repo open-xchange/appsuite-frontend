@@ -119,7 +119,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                     this.$('.modal-header').empty().append(
                         $('<h1 class="modal-title">').attr('id', title_id).text(title),
                         new PictureUpload({ model: this.pictureModel }).render().$el
-                            .find('.contact-photo').attr({ role: 'button', title: gt('Chage image'), tabindex: 0 }).end()
+                            .find('.contact-photo').attr({ role: 'button', title: gt('Change image'), tabindex: 0 }).end()
                     );
                 }.bind(this));
             },
@@ -135,7 +135,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                                 $('<label class="control-label">').attr('for', guidTitle).text(label),
                                 new mini.InputView({ id: guidTitle, model: this.model, name: 'title', maxlength: data.serverConfig.maxGroupLength }).render().$el
                             ),
-                            isChannel ? $.txt(gt('Other users can find and join your channel under "All channels". If you prefer a conversiom in a closed group, please create a group chat.')) : [],
+                            isChannel ? $.txt(gt('Other users can find and join your channel under "All channels". If you prefer a conversation in a closed group, please create a group chat.')) : [],
                             $('<div class="form-group hidden">').append(
                                 $('<label class="control-label">').attr('for', guidDescription).text('Description'),
                                 new mini.TextView({ id: guidDescription, model: this.model, name: 'description' }).render().$el
