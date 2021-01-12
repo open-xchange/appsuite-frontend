@@ -38,7 +38,8 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
-    let url = await I.grabValueFrom('.public-link-url-input');
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     url = Array.isArray(url) ? url[0] : url;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
@@ -85,7 +86,8 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
-    url = await I.grabValueFrom('.public-link-url-input');
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     url = Array.isArray(url) ? url[0] : url;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
@@ -110,6 +112,9 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.clickToolbar('Share');
     dialogs.waitForVisible();
     I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let link = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
+    link = Array.isArray(link) ? link[0] : link;
     I.click('.settings-button');
     dialogs.waitForVisible();
     I.fillField('Password', 'CorrectHorseBatteryStaple');
@@ -118,8 +123,6 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.waitForText('Copy link');
     I.click('Copy link');
     I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
-    let link = await I.grabValueFrom('.public-link-url-input');
-    link = Array.isArray(link) ? link[0] : link;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');
     I.logout();
@@ -128,8 +131,8 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
     I.amOnPage(link);
     I.waitForVisible('input[name="password"]');
     I.waitForFocus('input[name="password"]');
-    I.fillField('Password', 'CorrectHorseBatteryStaple');
-    I.click('Sign in');
+    I.fillField('input[name="password"]', 'CorrectHorseBatteryStaple');
+    I.click('signin');
     drive.waitForApp();
     I.see('Music', '.folder-tree .selected');
 });
@@ -465,6 +468,8 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     I.clickToolbar('Share');
     dialogs.waitForVisible();
     I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let link = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     I.click('.settings-button');
     dialogs.waitForVisible();
     I.selectOption('Expiration', 'One week');
@@ -473,7 +478,6 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     I.waitForText('Copy link');
     I.click('Copy link');
     I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
-    let link = await I.grabValueFrom('.public-link-url-input');
     link = Array.isArray(link) ? link[0] : link;
 
     dialogs.clickButton('Share', locators.dialog);

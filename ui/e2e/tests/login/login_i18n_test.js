@@ -33,6 +33,8 @@ Scenario('[OXUI-700] for guest users with password', async (I, users, dialogs) =
     I.waitForText('Anyone with the link and invited people');
     I.waitForText('Copy link');
     I.wait(0.2);
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let link = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     I.waitForEnabled('.settings-button');
     I.click('.settings-button');
     dialogs.waitForVisible();
@@ -42,7 +44,6 @@ Scenario('[OXUI-700] for guest users with password', async (I, users, dialogs) =
     I.waitForText('Copy link');
     I.click('Copy link');
     I.waitForText('The link has been copied to the clipboard', 5, '.io-ox-alert');
-    let link = await I.grabValueFrom('.public-link-url-input');
     link = Array.isArray(link) ? link[0] : link;
     dialogs.clickButton('Share');
     I.waitForDetached('.modal-dialog');

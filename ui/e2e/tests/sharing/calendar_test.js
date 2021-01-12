@@ -67,7 +67,8 @@ Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sha
         I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
-        url = await I.grabValueFrom('.public-link-url-input');
+        I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+        url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
         url = Array.isArray(url) ? url[0] : url;
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');

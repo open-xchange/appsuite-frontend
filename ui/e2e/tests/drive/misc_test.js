@@ -97,7 +97,10 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
-    const url = await I.grabValueFrom('.public-link-url-input');
+
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    const url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
+
     dialogs.clickButton('Share');
 
     I.waitForDetached('.modal-dialog');

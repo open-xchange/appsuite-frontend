@@ -64,7 +64,6 @@ Scenario('[Z104305] Contacts - Modal Dialog - Public link (with exceptions)', as
         ['.tt-hint'], ['.tt-input'],
         ['[placeholder="Password"]'],
         ['[placeholder="Message (optional)"]'],
-        ['input[type="text"].public-link-url-input'],
         ['.access-dropdown'],
         ['#invite-people-pane'],
         ['.public-link']
