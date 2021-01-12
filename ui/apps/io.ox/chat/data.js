@@ -843,8 +843,9 @@ define('io.ox/chat/data', [
         },
 
         toggleFavorite: function () {
-            this.set('favorite', !this.isFavorite());
-            // TBD: update server-side
+            return api.setFavorite(this.get('roomId'), !this.isFavorite()).then(function () {
+                this.set('favorite', !this.isFavorite());
+            }.bind(this));
         },
 
         sync: function (method, model, options) {

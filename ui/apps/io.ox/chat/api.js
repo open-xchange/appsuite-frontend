@@ -100,6 +100,11 @@ define('io.ox/chat/api', [
         return request({ method: 'PUT', url: url, processData: false, contentType: false });
     };
 
+    api.setFavorite = function (roomId, state) {
+        var url = api.url + '/rooms/' + roomId + '/favorite/' + state;
+        return request({ method: 'PUT', url: url, processData: false, contentType: false });
+    };
+
     api.deleteGroup = function (roomId) {
         var url = api.url + '/rooms/' + roomId;
         return request({ method: 'DELETE', url: url });

@@ -400,7 +400,12 @@ define('io.ox/chat/main', [
 
         toggleFavorite: function (roomId) {
             var model = data.chats.get(roomId);
-            if (model) model.toggleFavorite();
+            if (model) {
+                model.toggleFavorite().catch(function () {
+                    if (model.isFavorite()) yell('error', gt('The chat could not be removed from favorites. Please try again.'));
+                    else yell('error', gt('The chat could not be added to favorites. Please try again.'));
+                });
+            }
         },
 
         toggleWindowMode: function () {
