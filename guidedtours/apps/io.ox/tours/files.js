@@ -163,7 +163,7 @@ define('io.ox/tours/files', [
                 .end()
             .step()
                 .title(gt('Sharing option - Invite people'))
-                .content(gt('Choose from two alternatives to share your files and folder. Use "Invited people only" if you want ot manage access rights and allow recipients to create and edit files. Internal and external participants are also able to collaborate with you on documents at the same time.'))
+                .content(gt('Choose from two alternatives to share your files and folders. Use "Invited people only" if you want to manage access rights and allow recipients to create and edit files. Internal and external participants are also able to collaborate with you on documents at the same time.'))
                 .on('before:show', function () {
                     if ($('.share-permissions-dialog .modal-dialog').length === 0) {
                         $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').click();
