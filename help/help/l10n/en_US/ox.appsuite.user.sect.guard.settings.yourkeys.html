@@ -1,0 +1,154 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7.2. Managing own keys</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. GuardSettings">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. Password management">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Managing public keys">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Encrypting Data with <span class="phrase">Guard</span>
+</h1>
+<h2 class="sr-only">
+<span class="phrase">Guard</span>Settings</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
+<div class="titlepage"><div><div><h3 class="title">13.7.2. Managing own keys</h3></div></div></div>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">On the <span class="phrase"><span class="guilabel"><strong>Guard security settings</strong></span></span> page, you can:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">display own keys, display details</p></li>
+<li class="listitem">
+<p role="presentation">add new keys</p>
+<p role="presentation">If you own several keys, you can define which key should be the current one. The current key is used for encrypting data.</p>
+</li>
+<li class="listitem">
+<p role="presentation">add user IDs</p>
+<p role="presentation">When adding additional user IDs to a key, you can use the key for multiple E-Mail accounts.</p>
+</li>
+<li class="listitem"><p role="presentation">download keys</p></li>
+<li class="listitem"><p role="presentation">delete keys</p></li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
+<p class="title">How to display your own keys or make a key the current one:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">Enable the <span class="guibutton"><strong>Show Advanced Settings</strong></span> checkbox below <span class="guibutton"><strong>Advanced</strong></span>.</p>
+<p role="presentation">Click on <span class="guibutton"><strong>Your keys</strong></span> below <span class="guilabel"><strong>Keys</strong></span>. The <span class="guilabel"><strong>Your Keys</strong></span> window opens.</p>
+<p role="presentation">
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Your existing keys are displayed. Each key consists of a master key and a subkey.<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Among other things, the master key is used for signing your E-Mails.</p></li>
+<li class="listitem"><p role="presentation">The subkey is used for encrypting and decrypting E-Mails and files.</p></li>
+</ul>
+                  </p></li>
+<li class="listitem"><p role="presentation">Depending on the requirement, <span class="phrase">Guard</span> automatically uses the master key or the subkey. </p></li>
+</ul>
+            </p>
+</li>
+<li class="step"><p role="presentation">If your key list contains more than one key, you can define the current key. To do so, enable the <span class="guibutton"><strong>Current</strong></span> checkbox next to the main key. From now on, the current key will be used for encryption.</p></li>
+<li class="step"><p role="presentation">To display details for a key, click the <span class="guibutton"><strong>Details</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. The <span class="guilabel"><strong>Key Details</strong></span> window opens. To view the key's signatures, click on <span class="guibutton"><strong>Signatures</strong></span>.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
+<p class="title">How to add a new key in the <span class="guilabel"><strong>Your Keys</strong></span> window:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Add</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>. The <span class="guilabel"><strong>Adding Keys</strong></span> window opens.</p></li>
+<li class="step">
+<p role="presentation">You have the following options:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">To add a private key, click on <span class="guibutton"><strong>Upload Private Key</strong></span>. Select a file containing a private key. The <span class="guilabel"><strong>Upload Private Keys</strong></span> window opens.</p>
+<p role="presentation">To upload the new key, enter your <span class="phrase">Guard</span> security password. Enter a new password for the new key.</p>
+</li>
+<li class="listitem"><p role="presentation">To add a public key, click on <span class="guibutton"><strong>Upload Public Key Only</strong></span>. Select a file containing a public key. </p></li>
+<li class="listitem">
+<p role="presentation">To create a new key pair, click on <span class="guibutton"><strong>Create New Keys</strong></span>. The <span class="phrase"><span class="guilabel"><strong>Create Guard Security Keys</strong></span></span> window opens.</p>
+<p role="presentation">Enter a password for the new key. Confirm the password.</p>
+<p role="presentation">The new key consists of a master key and a corresponding subkey.</p>
+</li>
+</ul>
+            </p>
+<p role="presentation">The new key will be entered on top of your key list. The new key becomes the current key.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
+<p class="title">How to add an additional user ID in the <span class="guilabel"><strong>Your Keys</strong></span> window:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Edit</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>. The <span class="guilabel"><strong>Add User ID</strong></span> window opens.</p></li>
+<li class="step">
+<p role="presentation">Enter a name for the user ID. Enter the E-Mail address that you want to use for this key.</p>
+<p role="presentation">Enter your password for this key.</p>
+<p role="presentation">Click on <span class="guibutton"><strong>OK</strong></span>.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
+<p class="title">How to download a key in the <span class="guilabel"><strong>Your Keys</strong></span> window:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Download</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>.</p></li>
+<li class="step">
+<p role="presentation">Define whether to download your private key only, your public key only or both keys.</p>
+<p role="presentation"><span class="phrase"><strong>Caution:</strong></span> Your private key will be downloaded in encrypted form. You should not download your private key to a publicly accessible system, though.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.delete">
+<p class="title">How to delete a key in the <span class="guilabel"><strong>Your Keys</strong></span> window:</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Warning:</strong></span> If you delete a private key, you can no longer decrypt objects that have been encrypted with this key. If you are unsure, you should not delete the key but revoke it. A revoked key can no longer be used for encryption. But you can still decrypt objects that have been encrypted with this key.</p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Delete</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. The <span class="guilabel"><strong>Delete Private Key</strong></span> window opens.</p></li>
+<li class="step"><p role="presentation">You have the following options:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">To revoke a private key, click on <span class="guibutton"><strong>Revoke</strong></span>. </p>
+<p role="presentation">if you revoke a key, it will no longer be used. But you can still decrypt objects that have been encrypted with this key. For this reason, revoking a key is better than deleting it.</p>
+<p role="presentation">Enter the password for the private key. If required, select a reason for revoking the key.</p>
+<p role="presentation">Click on <span class="guibutton"><strong>Revoke</strong></span>.</p>
+</li>
+<li class="listitem">
+<p role="presentation">In order to delete a private key, click on <span class="guibutton"><strong>Delete</strong></span>. </p>
+<p role="presentation"><span class="phrase"><strong>Warning:</strong></span> If you delete a private key, you can no longer decrypt objects that have been encrypted with this key.</p>
+<p role="presentation">Enter the password for the private key.</p>
+<p role="presentation">Click the <span class="guibutton"><strong>Delete</strong></span> button.</p>
+</li>
+</ul>When deleting a master key, the corresponding subkey will be deleted too.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.settings.yourkeys">
+        </p>
+<p class="title">Related topics:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Managing public keys</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Password management</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">Parent topic: <a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span>Settings</a></p>
+</div>
+          </div>
+        </body>
+</html>
