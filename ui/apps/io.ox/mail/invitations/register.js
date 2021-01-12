@@ -134,6 +134,8 @@ define('io.ox/mail/invitations/register', [
                             filestorageAPI.getAllAccounts(false)
                                 .then(refreshFolder.bind(self, self.model.get('module')));
                         });
+                    } else {
+                        refreshFolder(self.model.get('module'));
                     }
                     if (self.options.yell !== false) yell('success', messages[action]);
                 },
