@@ -59,10 +59,11 @@ Scenario('Checks when adding/removing attachments', async (I, mail) => {
     I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-mango.png');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
-
+    I.waitForNetworkTraffic();
 
     // disable and reenable again
     I.uncheckOption(checked);
+    I.waitForText('Saved a few seconds ago', 5, '.window-footer .inline-yell');
     I.checkOption(unchecked);
     I.waitForVisible(message);
 
