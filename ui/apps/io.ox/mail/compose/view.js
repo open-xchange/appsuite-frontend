@@ -807,43 +807,44 @@ define('io.ox/mail/compose/view', [
         discard: function () {
             if (this.model.paused) return $.when();
 
+            // failRestored spaces are set to dirty at load
+            var hasChanged = this.isDirty(),
+                isEdit = !!(this.model.get('meta') || {}).editFor,
+                isEmpty = this.model.isEmpty();
+
+            // autosave latest draft
+            if (isEdit && !hasChanged) return this.saveDraft().then(this.clean.bind(this));
+
+            // delete
+            if (isEmpty || !hasChanged || this.config.get('autoDismiss')) return this.clean();
+
+            // fallback: dialog (this dialog may gets automatically dismissed)
             var self = this,
-                def = $.when(),
-                // failRestored spaces are set to dirty at load
-                hasChanged = this.isDirty(),
-                isEdit = /(edit)/.test(this.model.type),
-                isNotEmpty = !this.model.isEmpty();
-
-            var showDialog = isEdit || (hasChanged && isNotEmpty);
-
-            // This dialog may gets automatically dismissed
-            if (showDialog && !this.config.get('autoDismiss')) {
-                if (this.app.getWindow && this.app.getWindow().floating) {
-                    this.app.getWindow().floating.toggle(true);
-                } else if (_.device('smartphone')) {
-                    this.app.getWindow().resume();
-                }
-
                 def = $.Deferred();
-                new ModalDialog({
-                    title: gt('Save draft'),
-                    description: gt('This email has not been sent. You can save the draft to work on later.'),
-                    // up to 540px because of 3 buttons, french needs this for example
-                    width: _.device('smartphone') ? undefined : '560px'
-                })
-                .addCancelButton()
-                .addButton({ label: gt('Save draft'), action: 'savedraft' })
-                .addAlternativeButton({ label: gt('Delete draft'), action: 'delete' })
-                .on('savedraft', function () {
-                    self.saveDraft().then(def.resolve, def.reject);
-                })
-                .on('delete', function () {
-                    // draft mail gets automatically deleted once the space gets removed (real drafts)
-                    // MWB-783 covers edit-case for 'rdb'
-                    def.resolve();
-                })
-                .open();
+            if (this.app.getWindow && this.app.getWindow().floating) {
+                this.app.getWindow().floating.toggle(true);
+            } else if (_.device('smartphone')) {
+                this.app.getWindow().resume();
             }
+
+            new ModalDialog({
+                title: gt('Save draft'),
+                description: gt('This email has not been sent. You can save the draft to work on later.'),
+                // up to 540px because of 3 buttons, french needs this for example
+                width: _.device('smartphone') ? undefined : '560px'
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Save draft'), action: 'savedraft' })
+            .addAlternativeButton({ label: gt('Delete draft'), action: 'delete' })
+            .on('savedraft', function () {
+                self.saveDraft().then(def.resolve, def.reject);
+            })
+            .on('delete', function () {
+                // draft mail gets automatically deleted once the space gets removed (real drafts)
+                // MWB-783 covers edit-case for 'rdb'
+                return def.resolve();
+            })
+            .open();
 
             return def.then(function () {
                 self.clean();
