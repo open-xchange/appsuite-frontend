@@ -405,7 +405,7 @@ define('io.ox/calendar/week/view', [
                 _.extend(events, {
                     'dblclick .appointment-panel': 'onCreateAppointment'
                 });
-                if (_.device('desktop')) {
+                if (_.device('desktop') && this.model.get('mode') !== 'day') {
                     _.extend(events, {
                         'mousedown .appointment.modify': 'onDrag',
                         'mousedown .resizable-handle': 'onResize'
@@ -665,22 +665,25 @@ define('io.ox/calendar/week/view', [
         },
 
         onDrag: function (e) {
-            var node, model, startDate, endDate, offset, slotWidth, numColumns;
-            if (this.model.get('mergeView')) return;
+            var node = $(e.target).closest('.appointment'),
+                model = this.opt.view.collection.get(node.attr('data-cid')),
+                startDate = model.getMoment('startDate'),
+                endDate = model.getMoment('endDate'),
+                weekStart = this.model.get('startDate'),
+                numColumns = this.model.get('numColumns'),
+                weekEnd = moment(this.model.get('startDate')).add(numColumns, 'days'),
+                offset, slotWidth;
+
             if ($(e.target).is('.resizable-handle')) return;
+            if (startDate.isBefore(weekStart)) return;
+            if (endDate.isAfter(weekEnd)) return;
 
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.appointment-panel',
                 start: function (e) {
-                    node = $(e.target).closest('.appointment');
-                    model = this.opt.view.collection.get(node.attr('data-cid'));
                     this.$('[data-cid="' + model.cid + '"]').addClass('resizing').removeClass('current hover');
 
-                    startDate = model.getMoment('startDate');
-                    endDate = model.getMoment('endDate');
-
-                    numColumns = this.model.get('mergeView') ? this.opt.app.folders.list().length : this.model.get('numColumns');
                     slotWidth = this.$('.appointment-panel').width() / numColumns;
                     offset = Math.floor((e.pageX - $(e.currentTarget).offset().left) / slotWidth) * slotWidth;
                 },

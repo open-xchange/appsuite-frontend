@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-09-03 10:39+0200\n"
+"PO-Revision-Date: 2021-01-04 15:53+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -6226,7 +6226,7 @@ msgstr "Benutzerdefiniert"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Default Theme"
-msgstr "Standard-Design"
+msgstr "Standard-Theme"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Unicolor"
@@ -6309,7 +6309,7 @@ msgstr "Erster Tag der Woche: %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Theme"
-msgstr "Design"
+msgstr "Theme"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Design"
