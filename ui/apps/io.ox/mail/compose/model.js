@@ -105,6 +105,7 @@ define('io.ox/mail/compose/model', [
                 this.listenTo(data.attachments, 'upload:failed', this.onError);
                 this.listenTo(this, 'fail:save', this.onError);
                 this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
+                this.listenTo(composeAPI, 'mail-compose-claim:' + data.id, this.onExternalClaim);
             }.bind(this));
         },
 
@@ -132,6 +133,11 @@ define('io.ox/mail/compose/model', [
         onChangeMailPath: function (mailPath) {
             // ever writing operation creates a new draft
             if (this.get('mailPath')) this.set('mailPath', mailPath);
+        },
+
+        onExternalClaim: function () {
+            // when some other browser tab claims write access
+            this.onError({ code: 'MSGCS-0010' });
         },
 
         onError: function (e) {

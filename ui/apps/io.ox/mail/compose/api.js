@@ -18,11 +18,46 @@ define('io.ox/mail/compose/api', [
 
     'use strict';
 
-    var api = {}, TOKEN = generateToken(), TOKENHASH = {};
+    var api = {},
+        TOKEN = generateToken(),
+        // used as pseudo-"channel" to propagate claims to all browser tabs
+        localStorageKey = 'mail-compose-claim';
 
     ox.ui.spaces = ox.ui.spaces || {};
 
     _.extend(api, Backbone.Events);
+
+    // concurrent editing
+    var claims = (function () {
+        var hash = {};
+
+        (function register() {
+            if (!window.Modernizr.localstorage) return;
+            window.addEventListener('storage', function (event) {
+                if (event.storageArea !== localStorage || event.key !== localStorageKey) return;
+                var id = localStorage.getItem(localStorageKey);
+                if (!id) return;
+                // trigger event and remove from claim-hash
+                api.trigger(localStorageKey + ':' + id);
+                delete hash[id];
+            });
+        })();
+
+        return {
+            get: function (id) {
+                return hash[id];
+            },
+            set: function (id, value) {
+                if (hash[id]) return;
+                hash[id] = value;
+                // propagate to other browser tabs
+                if (!window.Modernizr.localstorage) return;
+                // trigger event and reset
+                window.localStorage.setItem(localStorageKey, id);
+                window.localStorage.removeItem(localStorageKey);
+            }
+        };
+    })();
 
     function generateToken() {
         var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -149,14 +184,14 @@ define('io.ox/mail/compose/api', [
                 },
                 contentType: 'application/json'
             }).then(process).done(function (result) {
-                TOKENHASH[result.id] = TOKENHASH[result.id] || 'add';
+                claims.set(result.id, 'add');
                 api.trigger('add', obj, result);
             });
         },
 
         get: function (id) {
             // only claim on GET when not claimed before
-            return (TOKENHASH[id] ? $.when() : api.space.claim(id)).then(function () {
+            return (claims.get(id) ? $.when() : api.space.claim(id)).then(function () {
                 return http.GET({ url: 'api/mail/compose/' + id }).then(process);
             });
         },
@@ -250,13 +285,13 @@ define('io.ox/mail/compose/api', [
 
         update: function (id, data, options) {
             // to bypass server check we force by omitting clientToken queryparam
-            var opt = _.extend({ force: !TOKENHASH[id] }, options);
+            var opt = _.extend({ force: !claims.get(id) }, options);
             return http[_.browser.ie ? 'PUT' : 'PATCH']({
                 url: 'api/mail/compose/' + id,
                 params: opt.force ? {} : { clientToken: TOKEN },
                 data: $.extend({ claim: TOKEN }, data)
             }).then(process).done(function (result) {
-                TOKENHASH[id] = TOKENHASH[id] || 'update';
+                claims.set(result.id, 'update');
                 api.trigger('after:update', data, result);
             });
         },
@@ -267,7 +302,7 @@ define('io.ox/mail/compose/api', [
                 url: 'api/mail/compose/' + id,
                 data: { claim: TOKEN }
             }).then(process).done(function (result) {
-                TOKENHASH[result.id] = TOKENHASH[result.id] || 'claim';
+                claims.set(result.id, 'claim');
             });
         }
     };
