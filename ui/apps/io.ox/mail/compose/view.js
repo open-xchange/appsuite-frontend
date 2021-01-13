@@ -804,6 +804,7 @@ define('io.ox/mail/compose/view', [
             delete this.editor;
         },
 
+        // called on app.quit
         discard: function () {
             if (this.model.paused) return $.when();
 
@@ -811,6 +812,9 @@ define('io.ox/mail/compose/view', [
             var hasChanged = this.isDirty(),
                 isEdit = !!(this.model.get('meta') || {}).editFor,
                 isEmpty = this.model.isEmpty();
+
+            // already saved/send?
+            if (this.model.destroyed) return this.clean();
 
             // autosave latest draft
             if (isEdit && !hasChanged) return this.saveDraft().then(this.clean.bind(this));
