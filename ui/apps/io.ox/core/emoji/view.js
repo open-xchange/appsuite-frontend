@@ -14,19 +14,17 @@
 
 define('io.ox/core/emoji/view', [
     'io.ox/backbone/views/disposable',
-    'raw!io.ox/emoji/unified.json',
+    'raw!io.ox/core/emoji/unified.json',
+    'settings!io.ox/core',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail',
-    'less!io.ox/emoji/emoji'
-], function (DisposableView, unified, settings, gt) {
+    'gettext!io.ox/core',
+    'less!io.ox/core/emoji/style'
+], function (DisposableView, unified, settings, mailSettings, gt) {
 
     'use strict';
 
+    // parse once
     unified = JSON.parse(unified);
-
-    //
-    // View. One per editor instance.
-    //
 
     var EmojiView = DisposableView.extend({
 
@@ -86,7 +84,6 @@ define('io.ox/core/emoji/view', [
         },
 
         render: function () {
-
             this.$el.append(
                 $('<div class="emoji-header">').append(
                     $('<span class="emoji-category">')
@@ -94,29 +91,21 @@ define('io.ox/core/emoji/view', [
                 $('<div class="emoji-icons">'),
                 $('<div class="emoji-footer">')
             );
-
             this.drawCategories();
             this.setCategory();
             this.isRendered = true;
             this.toggle(true);
-
             return this;
         },
 
         drawCategories: function () {
-
-            function draw(category) {
-                return $('<button type="button">')
-                    .attr('data-category', category.name)
-                    .attr('title', /*#, dynamic */ gt(category.name))
-                    .text(category.unicode);
-            }
-
-            var footer = this.$('.emoji-footer').empty(),
-                categories = util.getCategories();
-
-            footer.empty().append(
-                _(categories).map(draw)
+            this.$('.emoji-footer').empty().append(
+                _(categories).map(function (category, id) {
+                    return $('<button type="button">')
+                        .attr('data-category', id)
+                        .attr('title', name)
+                        .text(category.code);
+                })
             );
         },
 
@@ -132,8 +121,14 @@ define('io.ox/core/emoji/view', [
                 list = this.getEmojis();
 
             node.append(
-                list.map(function (unicode) {
-                    return $('<button type="button">').text(unicode);
+                list.map(function (code) {
+                    try {
+                        var emoji = /^0x/.test(code) ? String.fromCodePoint.apply(String, code.split(' ')) : code;
+                        return $('<button type="button">').text(emoji);
+                    } catch (e) {
+                        console.error('String.fromCodePoint', code, e);
+                        return '.';
+                    }
                 })
             );
 
@@ -151,7 +146,7 @@ define('io.ox/core/emoji/view', [
         setCategory: function (category) {
             // always draw emojis because the collection might have changed
             this.currentCategory = category || util.getDefaultCategory();
-            this.$('.emoji-category').text(util.getTitle(this.currentCategory));
+            this.$('.emoji-category').text(util.getCategoryName(this.currentCategory));
             this.$('.emoji-footer > button').removeClass('active');
             this.$('.emoji-footer > [data-category="' + this.currentCategory + '"]').addClass('active');
             this.drawEmojis();
@@ -176,28 +171,83 @@ define('io.ox/core/emoji/view', [
         }
     });
 
+    var categories = {
+        'Recently': {
+            //#. Emoji category
+            name: gt('Recently used'),
+            code: '\ud83d\udd52'
+        },
+        'Smileys & People': {
+            //#. Emoji category
+            name: gt('Smileys & People'),
+            code: '\ud83d\ude00'
+        },
+        'Animals & Nature': {
+            //#. Emoji category
+            name: gt('Animals & Nature'),
+            code: '\ud83d\udc36'
+        },
+        'Food & Drink': {
+            //#. Emoji category
+            name: gt('Food & Drink'),
+            code: '\ud83c\udf70'
+        },
+        'Activities': {
+            //#. Emoji category
+            name: gt('Activities'),
+            code: '\u26bd'
+        },
+        'Travel & Places': {
+            //#. Emoji category
+            name: gt('Travel & Places'),
+            code: '\ud83c\udfe0'
+        },
+        'Objects': {
+            //#. Emoji category
+            name: gt('Objects'),
+            code: '\ud83d\udca1'
+        },
+        'Symbols': {
+            //#. Emoji category
+            name: gt('Symbols'),
+            code: '\u2764'
+        },
+        'Flags': {
+            //#. Emoji category
+            name: gt('Flags'),
+            code: '\ud83c\udfc1'
+        }
+    };
+
     // helper
 
     var util = {
 
-        getCategories: function () {
-            return unified.meta;
+        getDefaultCategory: function () {
+            return 'Smileys & People';
+        },
+
+        getCategoryName: function (category) {
+            return (categories[category] || {}).name || '';
+        },
+
+        getRecents: function () {
+            // this has been are mail settings but we now (2021) use it at least for chat, too
+            var oldRecently = mailSettings.get('emoji/recently', {});
+            return settings.get('emoji/recently', oldRecently);
         },
 
         // add to "recently used" category
-        addRecent: function (unicode) {
-
-            var recently = settings.get('emoji/recently', {}),
-                // encode unicode to avoid backend bug
-                key = escape(unicode);
-
+        addRecent: function (code) {
+            var recently = this.getRecents();
+            // encode unicode to avoid backend bug
+            var key = escape(code);
             if (key in recently) {
                 recently[key].count++;
                 recently[key].time = _.now();
             } else {
                 recently[key] = { count: 1, time: _.now() };
             }
-
             settings.set('emoji/recently', recently).save();
         },
 
@@ -206,53 +256,26 @@ define('io.ox/core/emoji/view', [
         },
 
         getEmojis: function (category) {
-
-            if (category === 'Recently') {
-
-                return _(settings.get('emoji/recently', {}))
-                    .chain()
-                    .map(function (value, key) {
-                        return [unescape(key), value];
-                    })
-                    // sort by timestamp
-                    .sortBy(function (array) {
-                        return 0 - array[1].time;
-                    })
-                    // get first 40 icons (5 rows; 8 per row)
-                    .first(40)
-                    // now sort by frequency (descending order)
-                    .sortBy(function (array) {
-                        return array[1].count;
-                    })
-                    // extract the icon
-                    .pluck(0)
-                    .value()
-                    .reverse();
-            }
-
-            return unified[category] || [];
-        },
-
-        getDefaultCategory: function () {
-            return 'People';
-        },
-
-        getTitle: function (id) {
-            switch (id) {
-                //#. Emoji category
-                case 'Recently': return gt('Recently used');
-                //#. Emoji category
-                case 'People': return gt('People');
-                //#. Emoji category
-                case 'Symbols': return gt('Symbols');
-                //#. Emoji category
-                case 'Nature': return gt('Nature');
-                //#. Emoji category
-                case 'Objects': return gt('Objects');
-                //#. Emoji category
-                case 'Places': return gt('Places');
-                // no default
-            }
+            if (category !== 'Recently') return unified[category] || [];
+            return _(this.getRecents())
+                .chain()
+                .map(function (value, key) {
+                    return [unescape(key), value];
+                })
+                // sort by timestamp
+                .sortBy(function (array) {
+                    return 0 - array[1].time;
+                })
+                // get first 40 icons (5 rows; 8 per row)
+                .first(40)
+                // now sort by frequency (descending order)
+                .sortBy(function (array) {
+                    return array[1].count;
+                })
+                // extract the icon
+                .pluck(0)
+                .value()
+                .reverse();
         }
     };
 
