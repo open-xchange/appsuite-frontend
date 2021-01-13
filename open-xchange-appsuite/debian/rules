@@ -7,7 +7,7 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),$(filter nostrip,$(DEB_BUILD_O
 	FLAGS += debug=1
 endif
 
-HTDOC := var/www/html
+HTDOC := /var/www/html
 
 PKGNAME := $(strip $(shell egrep '^Source: ' debian/control | cut -f 2 -d ':'))
 ROOT := $(CURDIR)/debian/$(PKGNAME)
