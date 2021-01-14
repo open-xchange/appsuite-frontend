@@ -122,3 +122,15 @@ Scenario('[OXUIB-74] Redirect during autologin using LGI-0016 error', async func
     });
     I.waitInUrl('open-xchange.com', 5);
 });
+
+
+Scenario('[OXUIB-651] Login not possible with Chrome and umlauts in username', async function (I) {
+    I.amOnPage('ui');
+    I.setCookie({ name: 'locale', value: 'en_US' });
+    I.refreshPage();
+    I.waitForFocus('#io-ox-login-username', 30);
+    I.fillField('User name', 'mister@Täst.com');
+    I.pressKey('Enter');
+    let email = await I.grabValueFrom('#io-ox-login-username');
+    expect(email).to.equal('mister@Täst.com');
+});
