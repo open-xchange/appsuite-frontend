@@ -123,10 +123,7 @@ Scenario('[C83404] Attachments can be copied', async ({ I, drive }) => {
     });
 
     // Open Dropdown and select 'Copy' to copy last file
-    within(locate('.list-item').last(), () => {
-        I.waitForText('testpresentation.ppsm');
-        I.rightClick('testpresentation.ppsm');
-    });
+    I.rightClick(locate('.list-item').withText('testpresentation.ppsm').last());
     I.clickDropdown('Copy');
 
     // Wait for modal and copy file to default folder 'My files'
