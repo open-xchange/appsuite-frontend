@@ -213,7 +213,6 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                     .on('click', this.options.selector, this.onClick.bind(this));
             },
 
-
             getItems: function () {
                 return this.$el.find(this.options.selector);
             },
@@ -275,6 +274,19 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                 if (f.index === -1) return;
                 this.$el.attr('tabindex', -1);
                 this.change(f.index, { tabindex: true, focus: false, select: true, event: false }, f.items);
+            },
+
+            dodge: function (currIndex) {
+                var items = this.getItems();
+
+                // if list is empty, restore tabindex on list
+                if (!items.length) {
+                    this.$el.attr('tabindex', 0);
+                    return;
+                }
+
+                this.change(currIndex, { tabindex: true, focus: true, select: false });
+                resetSelected(items);
             },
 
             change: function (index, options, items) {

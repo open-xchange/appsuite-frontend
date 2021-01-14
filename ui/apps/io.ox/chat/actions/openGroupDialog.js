@@ -226,6 +226,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             }.bind(this));
         })
         .on('discard', def.reject)
+        .on('cancel', def.reject)
         .open();
 
         return def.promise();

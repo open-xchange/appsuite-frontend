@@ -110,7 +110,7 @@ define('io.ox/chat/main', [
 
         setState: function (state, payload) {
             var stringified = JSON.stringify(state);
-            if (this.state === stringified) return;
+            if (this.state === stringified) return this.setStateFocus(state);
             this.state = stringified;
             this.onChangeState(_.extend(state, payload));
         },
@@ -119,6 +119,14 @@ define('io.ox/chat/main', [
             var cid = this.getCurrentMessageCid();
             this.model.set('sticky', false);
             this.scrollToMessage(cid);
+        },
+
+        setStateFocus: function (state) {
+            if (state.view === 'chat') {
+                this.$rightside.find('textarea').trigger('focus');
+            } else {
+                a11y.getTabbable(this.$rightside).first().focus();
+            }
         },
 
         onStick: function () {
@@ -187,7 +195,9 @@ define('io.ox/chat/main', [
                         button: gt('Start conversation'),
                         point: 'io.ox/contacts/addressbook-popup-single'
                     }
-                );
+                ).on('cancel', function () {
+                    a11y.getTabbable(self.$body).first().focus();
+                });
             });
         },
 
@@ -196,6 +206,8 @@ define('io.ox/chat/main', [
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
                 openGroupDialog(_(data).pick('id', 'type')).then(function (id) {
                     self.showChat(id);
+                }, function () {
+                    a11y.getTabbable(self.$body).first().focus();
                 });
             });
         },
@@ -270,21 +282,21 @@ define('io.ox/chat/main', [
                     view.scrollToBottom();
                     if (state.roomId) {
                         this.resetCount(state.roomId, state.model);
-                        this.$body.find('.accessible-list').data('plugin').set(state.roomId);
+                        this.resetTabindex(state.roomId);
                         settings.set('lastRoomId', state.roomId).save();
                     }
                     break;
                 case 'history':
                     this.$rightside.append(new History().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 case 'channels':
                     this.$rightside.append(new ChannelList().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 case 'files':
                     this.$rightside.append(new FileList().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 // no default
             }
@@ -295,9 +307,22 @@ define('io.ox/chat/main', [
         },
 
         closeChat: function () {
+            var prevState = JSON.parse(this.state).view,
+                fallback = a11y.getTabbable(this.$body).first(),
+                refocus;
+
             this.setState({ view: 'empty' });
-            if (settings.get('mode') === 'sticky') {
-                this.$body.find('.accessible-list [tabindex=0]').focus();
+
+            // try to restore focus
+            if (settings.get('mode', 'sticky') === 'sticky') {
+                if (prevState === 'chat') {
+                    refocus = this.$body.find('.accessible-list [tabindex=0]').attr('aria-selected', false);
+                } else {
+                    var navigation = this.$body.find('.navigation-actions button');
+                    refocus = navigation.eq(['channels', 'files', 'history'].indexOf(prevState));
+                }
+                if (!refocus) refocus = fallback;
+                refocus.focus();
             }
         },
 
@@ -402,9 +427,14 @@ define('io.ox/chat/main', [
         },
 
         unsubscribeChat: function (roomId) {
-            var model = data.chats.get(roomId);
+            var model = data.chats.get(roomId),
+                listItem = this.$leftside.find('[data-cid="' + $.escape(roomId) + '"]'),
+                listIndex = this.$leftside.find('[data-cid]').index(listItem);
+
             if (!model) return;
-            model.toggleRecent();
+            model.toggleRecent().then(function () {
+                this.$body.find('.accessible-list').data('plugin').dodge(listIndex);
+            }.bind(this));
             this.closeChat();
         },
 
@@ -419,7 +449,9 @@ define('io.ox/chat/main', [
         toggleFavorite: function (roomId) {
             var model = data.chats.get(roomId);
             if (model) {
-                model.toggleFavorite().catch(function () {
+                model.toggleFavorite().then(function success() {
+                    this.resetTabindex(roomId);
+                }.bind(this), function fail() {
                     if (model.isFavorite()) yell('error', gt('The chat could not be removed from favorites. Please try again.'));
                     else yell('error', gt('The chat could not be added to favorites. Please try again.'));
                 });
@@ -430,11 +462,19 @@ define('io.ox/chat/main', [
             var mode = this.model.get('sticky') ? 'sticky' : 'floating';
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
+            this.scrollToMessage(cid);
+            _.defer(function () {
+                a11y.getTabbable(this.$body).first().focus();
+            }.bind(this));
         },
 
         // we offer this via command because it's needed at different places, e.g. messages and file overview
         download: function (data) {
             api.downloadFile(data.url);
+        },
+
+        resetTabindex: function (roomId) {
+            _.defer(function () { this.$body.find('.accessible-list').data('plugin').set(roomId); }.bind(this));
         },
 
         getCurrentMessageCid: function () {
@@ -545,24 +585,24 @@ define('io.ox/chat/main', [
                                 //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New')),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
-                                    .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
+                                        .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
                                         .text(gt('Private chat'))
                                 ),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id })
                                         .text(gt('Group chat'))
                                 ),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
                                         .text(gt('Channel'))
                                 )
                             )
                         )
                     ),
-                    new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
+                    new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: gt('Chat actions') }).render(new ext.Baton()).$el,
                     new searchView().render().$el,
                     this.getLeftNavigation(),
                     // recent, all channels, all files
