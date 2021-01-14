@@ -13,7 +13,7 @@
 
 Feature('Chat > User settings');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Last used chat will be re-opened on next start', async (I, users, chat) => {
+Scenario('Last used chat will be re-opened on next start', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
@@ -39,7 +39,7 @@ Scenario('Last used chat will be re-opened on next start', async (I, users, chat
     I.waitForText('Hello.', 30, '.ox-chat');
 });
 
-Scenario('Last used chat will not be re-opened on next start', async (I, users, chat) => {
+Scenario('Last used chat will not be re-opened on next start', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
@@ -61,7 +61,7 @@ Scenario('Last used chat will not be re-opened on next start', async (I, users, 
     I.dontSee('Hello.', '.ox-chat');
 });
 
-Scenario('Sort and group chats', async (I, users, contexts, chat, dialogs) => {
+Scenario('Sort and group chats', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);

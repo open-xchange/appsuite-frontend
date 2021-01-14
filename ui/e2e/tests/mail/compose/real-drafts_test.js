@@ -14,18 +14,18 @@
 
 Feature('Mail Compose > Real drafts');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 const editor = locate('.io-ox-mail-compose-window .editor iframe');
 const taskbaritem = locate('.taskbar-button');
 
-Scenario('[RD001] Refresh draft folder on change', async function (I, mail) {
+Scenario('[RD001] Refresh draft folder on change', async function ({ I, mail }) {
     const mailSubject = 'RD001';
     const defaultText = 'Some text';
 
@@ -51,7 +51,7 @@ Scenario('[RD001] Refresh draft folder on change', async function (I, mail) {
     I.waitForText(mailSubject, 5, '.list-view');
 });
 
-Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) {
+Scenario('[RD002] Restore open space on "edit draft"', async function ({ I, mail }) {
     await I.haveSetting('io.ox/mail//autoSaveAfter', 5000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -102,7 +102,7 @@ Scenario('[RD002] Restore open space on "edit draft"', async function (I, mail) 
     I.waitForFunction(() => window.$('.io-ox-mail-compose-window').length === 1);
 });
 
-Scenario.skip('[RD003]: Handle deleted spaces', async function (I, mail, dialogs) {
+Scenario.skip('[RD003: Handle deleted spaces', async function ({ I, mail, dialogs }) {
     await I.haveSetting('io.ox/mail//autoSaveAfter', 1000);
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 

@@ -14,15 +14,15 @@
 
 Feature('Mail > Delete');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7405] - Delete E-Mail', function (I, users) {
+Scenario('[C7405] - Delete E-Mail', function ({ I, users }) {
     const [user] = users,
         testrailID = 'C7405',
         timestamp = Math.round(+new Date() / 1000);
@@ -48,7 +48,7 @@ Scenario('[C7405] - Delete E-Mail', function (I, users) {
     I.retry(5).see(testrailID + ' - ' + timestamp);
 });
 
-Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
+Scenario('[C7406] - Delete several E-Mails', async function ({ I, users }) {
     const [user] = users,
         testrailID = 'C7406',
         timestamp = Math.round(+new Date() / 1000);
@@ -94,7 +94,7 @@ Scenario('[C7406] - Delete several E-Mails', async function (I, users) {
     I.waitForElement({ css: '[title="' + testrailID + ' - ' + timestamp + ' - 2"]' });
 });
 
-Scenario('[C265146] Delete with setting selectBeforeDelete=false', async function (I, users) {
+Scenario('[C265146] Delete with setting selectBeforeDelete=false', async function ({ I, users }) {
 
     function getTestMail(from, to, opt) {
         opt = opt || {};

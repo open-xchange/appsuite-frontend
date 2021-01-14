@@ -15,16 +15,16 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[7817] Pre-loading external content', async (I, users) => {
+Scenario.skip('[7817] Pre-loading external content', async ({ I, users }) => {
     const u = users[0];
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     await I.haveMail({

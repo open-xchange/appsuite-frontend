@@ -15,15 +15,15 @@
 Feature('Mail Compose > Drive Mail');
 
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('Checks when adding/removing attachments', async (I, mail) => {
+Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         message = locate({ css: '.io-ox-alert' }).as('Yell: warning');
@@ -78,7 +78,7 @@ Scenario('Checks when adding/removing attachments', async (I, mail) => {
     I.checkOption(unchecked);
 });
 
-Scenario('Checks when saving', async (I, mail) => {
+Scenario('Checks when saving', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         toggle = locate({ css: '.share-attachments .checkbox.custom label' }),
@@ -118,7 +118,7 @@ Scenario('Checks when saving', async (I, mail) => {
     I.waitForDetached('.io-ox-mail-compose-window');
 });
 
-Scenario('Checks when sending', async (I, mail, users) => {
+Scenario('Checks when sending', async ({ I, mail, users }) => {
     const [user] = users,
         checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),

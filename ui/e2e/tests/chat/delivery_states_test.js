@@ -13,7 +13,7 @@
 
 Feature('Chat > Delivery states');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Update delivery states in private chats', async (I, users, chat) => {
+Scenario('Update delivery states in private chats', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -63,7 +63,7 @@ Scenario('Update delivery states in private chats', async (I, users, chat) => {
     });
 });
 
-Scenario('Update delivery states in groups', async (I, users, chat) => {
+Scenario('Update delivery states in groups', async ({ I, users, chat }) => {
     await users.create();
     const groupTitle = 'Test Group';
     const emails = [users[1].userdata.email1, users[2].userdata.email1];
@@ -126,7 +126,7 @@ Scenario('Update delivery states in groups', async (I, users, chat) => {
     });
 });
 
-Scenario('There are no delivery states for channels', async (I, users, contexts, chat, dialogs) => {
+Scenario('There are no delivery states for channels', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);

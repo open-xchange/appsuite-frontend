@@ -14,15 +14,15 @@ const moment = require('moment-timezone');
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and switch timezones', async function (I, dialogs) {
+Scenario('Create appointment and switch timezones', async function ({ I, dialogs }) {
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;

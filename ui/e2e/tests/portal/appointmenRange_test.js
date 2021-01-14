@@ -13,14 +13,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7490] Appointment range', async (I, users) => {
+Scenario('[C7490] Appointment range', async ({ I, users }) => {
 
     // set settings
     I.haveSetting('io.ox/portal//widgets/user', '{}');

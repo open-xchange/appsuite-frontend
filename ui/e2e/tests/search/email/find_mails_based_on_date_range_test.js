@@ -15,15 +15,15 @@
 
 Feature('Mail > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8405] Find mails based on a date range', async (I, users) => {
+Scenario('[C8405] Find mails based on a date range', async ({ I, users }) => {
 
     // Precondition: Have some emails in the Inbox with timestamps from 2016 and 2017
 

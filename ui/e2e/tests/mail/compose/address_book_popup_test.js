@@ -14,17 +14,17 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // The user running the test
     await users.create(); // 1st member of distributionlist
     await users.create(); // 2nd member of distributionlist
     await users.create(); // another user, addressed individually
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85622] Address Book Popup', async (I, users, mail) => {
+Scenario('[C85622] Address Book Popup', async ({ I, users, mail }) => {
     // Preparation
     // Create Distributionlist
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

@@ -20,11 +20,11 @@ const moment = require('moment');
 const DRIVE = 'drive', MAIL = 'mail', EAS = 'eas', CALDAV = 'caldav';
 const SUBJECT = 'test mail subject';
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -62,7 +62,7 @@ async function addUser(I, users, name, type) {
     return newuser;
 }
 
-Scenario.skip('Add and remove application password', async (I, users) => {
+Scenario.skip('Add and remove application password', async ({ I, users }) => {
 
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/appPasswords']);
@@ -164,7 +164,7 @@ async function testUser(I, user, type, calendar, contacts) {
     I.logout();
 }
 
-Scenario.skip('Add and use application password', async (I, users, calendar, contacts) => {
+Scenario.skip('Add and use application password', async ({ I, users, calendar, contacts }) => {
 
     const user = users[0];
 

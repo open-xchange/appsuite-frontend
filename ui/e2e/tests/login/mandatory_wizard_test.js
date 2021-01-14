@@ -15,15 +15,15 @@
 
 Feature('General > Mandatory Wizard');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7341] Use first run mandatory wizard', async function (I, users, contacts, mail) {
+Scenario('[C7341] Use first run mandatory wizard', async function ({ I, users, contacts, mail }) {
     const [user] = users;
     const first_name = 'John';
     const last_name = 'Wayne';

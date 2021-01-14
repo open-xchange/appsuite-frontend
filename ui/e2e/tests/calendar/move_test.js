@@ -16,15 +16,15 @@ const moment = require('moment');
 
 Feature('Calendar > Actions');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Move appointment to different folder', async function (I, dialogs) {
+Scenario('Move appointment to different folder', async function ({ I, dialogs }) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const startDate = moment().startOf('day').add(10, 'hours').format('YYYYMMDD[T]HHmmss');
     const endDate   = moment().startOf('day').add(11, 'hours').format('YYYYMMDD[T]HHmmss');

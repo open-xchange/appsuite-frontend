@@ -15,15 +15,15 @@
 
 Feature('Tasks > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7736] Discard Task after entered some information', async (I, tasks, dialogs) => {
+Scenario('[C7736] Discard Task after entered some information', async ({ I, tasks, dialogs }) => {
 
     // 1. Create a new task and enter a title and then discard this task.
 

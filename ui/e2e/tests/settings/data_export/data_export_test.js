@@ -14,15 +14,15 @@
 
 Feature('Settings > Data export (GDPR)');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('request a new download and cancel it', async function (I, dialogs) {
+Scenario('request a new download and cancel it', async function ({ I, dialogs }) {
     I.login('app=io.ox/settings');
 
     I.waitForText('Download personal data', 5);
@@ -78,7 +78,7 @@ Scenario('request a new download and cancel it', async function (I, dialogs) {
     });
 });
 
-Scenario('open direct link to data export settings page', async function (I) {
+Scenario('open direct link to data export settings page', async function ({ I }) {
     I.login('app=io.ox/settings&folder=virtual/settings/personaldata');
 
     //list view
@@ -90,7 +90,7 @@ Scenario('open direct link to data export settings page', async function (I) {
     I.waitForText('Download your personal data', 5);
 });
 
-Scenario('show only available options', async function (I, users) {
+Scenario('show only available options', async function ({ I, users }) {
     await users[0].hasModuleAccess({ tasks: false });
     I.login('app=io.ox/settings');
 

@@ -17,15 +17,15 @@ const expect = require('chai').expect;
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C287803] Configure quick launchers', function (I) {
+Scenario('[C287803] Configure quick launchers', function ({ I }) {
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
     I.waitForElement({ css: 'select[name="language"]' });
@@ -72,7 +72,7 @@ Scenario('[C287803] Configure quick launchers', function (I) {
     I.seeElement('~Portal', '#io-ox-quicklaunch');
 });
 
-Scenario('Configure quick launchers to be all None', async function (I, dialogs) {
+Scenario('Configure quick launchers to be all None', async function ({ I, dialogs }) {
     await I.haveSetting('io.ox/core//apps/quickLaunchCount', 5);
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForText('Configure quick launchers ...', 5, '.rightside');

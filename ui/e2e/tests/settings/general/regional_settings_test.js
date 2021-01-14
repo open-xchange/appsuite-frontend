@@ -3,18 +3,18 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 const moment = require('moment');
 const expect = require('chai').expect;
 
-Scenario.skip('[C287824] Regional settings', async (I, users, dialogs) => {
+Scenario.skip('[C287824] Regional settings', async ({ I, dialogs }) => {
 
     // #1 #2 - login, open basic settings
     I.login('app=io.ox/settings', 'folder=virtual/settings/');

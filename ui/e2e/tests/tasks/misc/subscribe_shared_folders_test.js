@@ -13,15 +13,15 @@
 
 Feature('Tasks > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', async function (I, users) {
+Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }

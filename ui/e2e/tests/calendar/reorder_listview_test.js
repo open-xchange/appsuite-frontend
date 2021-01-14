@@ -15,17 +15,17 @@ const moment = require('moment');
 Feature('Calendar > List View');
 
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
 // Tests proper labeling and focus after changing the startDate of appointments in the listview
-Scenario('Reorder appointments with labels in list view', async function (I, calendar) {
+Scenario('Reorder appointments with labels in list view', async function ({ I, calendar }) {
 
     /**
     * The following cases are tested within this test:

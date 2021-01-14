@@ -15,16 +15,16 @@
 Feature('Client Onboarding > Tours');
 
 //create users
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
 //delete users
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C303317] Welcome Tour', (I, mail) => {
+Scenario.skip('[C303317] Welcome Tour', ({ I, mail }) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 

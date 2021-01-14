@@ -13,7 +13,7 @@
 
 const { expect } = require('chai');
 
-Scenario('General - Connection indicator', async function (I, mail) {
+Scenario('General - Connection indicator', async function ({ I, mail }) {
     I.login();
     mail.waitForApp();
     I.executeScript(function () {

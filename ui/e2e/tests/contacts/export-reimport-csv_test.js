@@ -14,7 +14,7 @@
 
 Feature('Import/Export > Contacts');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await Promise.all([
         users.create(),
         users.create(),
@@ -22,11 +22,11 @@ Before(async function (users) {
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C104271] Export and re-import vCard', async function (I, users, contacts, dialogs) {
+Scenario('[C104271] Export and re-import vCard', async function ({ I, users, contacts, dialogs }) {
     // This test also covers '[C104272] Export and re-import CSV'
     I.login('app=io.ox/contacts');
     contacts.waitForApp();

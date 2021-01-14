@@ -17,16 +17,16 @@ const moment = require('moment');
 
 Feature('Accessibility > Switchboard');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Switchboard - Call history', async (I) => {
+Scenario('Switchboard - Call history', async ({ I }) => {
 
     const primaryEmail = 'someone@schmalzgollum.com';
     const display_name = 'someone';
@@ -50,7 +50,7 @@ Scenario('Switchboard - Call history', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Presence', async (I) => {
+Scenario('Switchboard - Presence', async ({ I }) => {
 
     I.login();
     I.waitForVisible('~My account');
@@ -60,7 +60,7 @@ Scenario('Switchboard - Presence', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Call dialog', async (I, dialogs) => {
+Scenario('Switchboard - Call dialog', async ({ I, dialogs }) => {
 
     const primaryEmail = 'someone@schmalzgollum.com';
     const display_name = 'someone';
@@ -82,7 +82,7 @@ Scenario('Switchboard - Call dialog', async (I, dialogs) => {
 
 });
 
-Scenario('Switchboard - Addressbook', async (I, users, contacts) => {
+Scenario('Switchboard - Addressbook', async ({ I, users, contacts }) => {
 
     I.login('app=io.ox/contacts');
     I.waitForElement('.io-ox-contacts-window');
@@ -95,7 +95,7 @@ Scenario('Switchboard - Addressbook', async (I, users, contacts) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Calendar', async (I, calendar) => {
+Scenario('Switchboard - Calendar', async ({ I, calendar }) => {
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
 
@@ -127,7 +127,7 @@ Scenario('Switchboard - Calendar', async (I, calendar) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Call history keyboard navigation', async (I, settings) => {
+Scenario('Switchboard - Call history keyboard navigation', async ({ I, settings }) => {
 
     const mail = 'someone@testsomething.com';
     const name = 'someone';

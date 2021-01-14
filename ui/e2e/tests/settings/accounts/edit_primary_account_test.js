@@ -15,15 +15,15 @@
 
 Feature('Primary mail account');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7838] Edit primary mail account', async (I, mail, settings, dialogs) => {
+Scenario('[C7838] Edit primary mail account', async ({ I, mail, settings, dialogs }) => {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/settings');
     settings.waitForApp();

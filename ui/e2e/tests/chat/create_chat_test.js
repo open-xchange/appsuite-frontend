@@ -15,7 +15,7 @@ const moment = require('moment');
 
 Feature('Chat > Create chats');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -24,12 +24,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Create new private chat', async (I, users, chat) => {
+Scenario('Create new private chat', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -48,7 +48,7 @@ Scenario('Create new private chat', async (I, users, chat) => {
     });
 });
 
-Scenario('Create new private chat from floating window via dropdown', async (I, users, chat) => {
+Scenario('Create new private chat from floating window via dropdown', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     I.waitForText('New Chat', 30);
@@ -65,7 +65,7 @@ Scenario('Create new private chat from floating window via dropdown', async (I, 
     I.waitForVisible('.chat-rightside .chat-avatar .initials');
 });
 
-Scenario('Create new private chat from floating window via icon', async (I, users, chat) => {
+Scenario('Create new private chat from floating window via icon', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     I.waitForText('New Chat', 30);
@@ -80,7 +80,7 @@ Scenario('Create new private chat from floating window via icon', async (I, user
     I.waitForVisible('.chat-rightside .chat-avatar .initials');
 });
 
-Scenario('Create new private chat from address book', async (I, contacts, users, chat) => {
+Scenario('Create new private chat from address book', async ({ I, contacts, users, chat }) => {
     await session('Alice', async () => {
         I.login('app=io.ox/contacts', { user: users[0] });
         chat.openChat();
@@ -111,7 +111,7 @@ Scenario('Create new private chat from address book', async (I, contacts, users,
     });
 });
 
-Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
+Scenario('Create new private chat from halo', async ({ I, mail, users, chat }) => {
     const [alice, bob] = users;
 
     await I.haveMail({
@@ -150,7 +150,7 @@ Scenario('Create new private chat from halo', async (I, mail, users, chat) => {
     });
 });
 
-Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
+Scenario('Create new private chat from mail', async ({ I, mail, users, chat }) => {
     const [recipient, sender] = users;
 
     await I.haveMail({
@@ -187,8 +187,7 @@ Scenario('Create new private chat from mail', async (I, mail, users, chat) => {
     });
 });
 
-Scenario('Create new group chat', async (I, users, chat, dialogs) => {
-
+Scenario('Create new group chat', async ({ I, users, chat, dialogs }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -227,7 +226,7 @@ Scenario('Create new group chat', async (I, users, chat, dialogs) => {
     });
 });
 
-Scenario('Create new group chat from floating window via dropdown', async (I, users, chat, dialogs) => {
+Scenario('Create new group chat from floating window via dropdown', async ({ I, users, chat, dialogs }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -252,7 +251,7 @@ Scenario('Create new group chat from floating window via dropdown', async (I, us
 
 });
 
-Scenario('Create new group chat from floating window via icon', async (I, users, chat, dialogs) => {
+Scenario('Create new group chat from floating window via icon', async ({ I, users, chat, dialogs }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -275,7 +274,7 @@ Scenario('Create new group chat from floating window via icon', async (I, users,
 
 });
 
-Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat) => {
+Scenario('Create new group chat from mail', async ({ I, mail, dialogs, users, chat }) => {
     await users.create();
     const [recipient, sender, cc] = users;
 
@@ -333,7 +332,7 @@ Scenario('Create new group chat from mail', async (I, mail, dialogs, users, chat
     });
 });
 
-Scenario('Create new group chat from appointment', async (I, dialogs, calendar, users, chat) => {
+Scenario('Create new group chat from appointment', async ({ I, dialogs, calendar, users, chat }) => {
     await users.create();
     const [user1, user2, user3] = users;
     const subject = 'Discuss meeting';
@@ -402,7 +401,7 @@ Scenario('Create new group chat from appointment', async (I, dialogs, calendar, 
     });
 });
 
-Scenario('Create new channel', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -435,7 +434,7 @@ Scenario('Create new channel', async (I, users, contexts, chat, dialogs) => {
     await context.remove();
 });
 
-Scenario('Create new channel from floating window via dropdown', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel from floating window via dropdown', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -457,7 +456,7 @@ Scenario('Create new channel from floating window via dropdown', async (I, users
     I.waitForFunction(async () => $('.chat-leftside .group-avatar.image').css('background-image') !== 'none', 10);
 });
 
-Scenario('Create new channel from floating window via icon', async (I, users, contexts, chat, dialogs) => {
+Scenario('Create new channel from floating window via icon', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);

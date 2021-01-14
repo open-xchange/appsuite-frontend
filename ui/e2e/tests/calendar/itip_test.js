@@ -23,17 +23,17 @@ actions.add(['Decline', 'declined', 'declined', 'You declined this appointment']
 
 Feature('Calendar > iTIP');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 
 });
 
-Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current, contexts) {
+Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail, users, current, contexts }) {
     const ctx = await contexts.create();
     const externalUser = await users.create(users.getRandom(), ctx);
     await Promise.all([
@@ -155,7 +155,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     });
 });
 
-Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar, contexts) {
+Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail, calendar, contexts }) {
     const ctx = await contexts.create();
     await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with attachment with User#B
@@ -239,7 +239,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
 
 });
 
-Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {
+Scenario('[C241126] iTIP mails without appointment reference', async function ({ I, mail, calendar }) {
     // 1.) Import the attached mail 'mail3.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_3.eml' });
     // 2.) Read the mail3
@@ -286,7 +286,7 @@ Scenario('[C241126] iTIP mails without appointment reference', async function (I
     I.retry(5).dontSee('Appointment canceled: #1');
 });
 
-Scenario('[Bug 63767] Error when creating appointment from email', async function (I, users, mail) {
+Scenario('[Bug 63767] Error when creating appointment from email', async function ({ I, users, mail }) {
 
     const userMail = users[0].userdata.email1;
 

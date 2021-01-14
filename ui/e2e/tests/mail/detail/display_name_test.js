@@ -16,15 +16,15 @@ const expect = require('chai').expect;
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[Bug 67245] Forwarded mails from external clients without a displayname get NULL as name', async (I, users, mail) => {
+Scenario('[Bug 67245] Forwarded mails from external clients without a displayname get NULL as name', async ({ I, users, mail }) => {
 
 
     await I.haveMail({

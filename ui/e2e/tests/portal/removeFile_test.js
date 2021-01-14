@@ -14,14 +14,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7486] Remove a file', async (I, users, portal, dialogs) => {
+Scenario('[C7486] Remove a file', async ({ I, users, portal, dialogs }) => {
 
     // Add a file to drive
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });

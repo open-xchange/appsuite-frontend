@@ -14,16 +14,16 @@ const moment = require('moment');
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Create recurring appointments with one participant', async function (I, users, calendar, dialogs) {
+Scenario('Create recurring appointments with one participant', async function ({ I, users, calendar, dialogs }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -247,7 +247,7 @@ Scenario('Create recurring appointments with one participant', async function (I
 });
 
 
-Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function (I, calendar, dialogs) {
+Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function ({ I, calendar, dialogs }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -302,7 +302,7 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     I.waitForElement({ xpath: '//div[contains(@class, "calendar-detail")]//div[@class="recurrence"][text()="Every day."]' });
 });
 
-Scenario('[Bug 62034] Appointment series ends one day to early', async function (I, calendar, dialogs) {
+Scenario('[Bug 62034] Appointment series ends one day to early', async function ({ I, calendar, dialogs }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

@@ -14,17 +14,17 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('[C114967] Draft is created automatically on logout', async function (I, mail) {
+Scenario('[C114967] Draft is created automatically on logout', async ({ I, mail }) => {
 
     const mailSubject = 'C114967';
     const defaultText = 'Draft is created automatically on logout';
@@ -62,7 +62,7 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
     });
 });
 
-Scenario('Did you know dialog is correctly shown on save and close', async function (I, mail) {
+Scenario('Did you know dialog is correctly shown on save and close', async ({ I, mail }) => {
 
     I.login('app=io.ox/mail');
 
@@ -142,7 +142,7 @@ Scenario('Did you know dialog is correctly shown on save and close', async funct
 
 });
 
-Scenario('[C114959] Draft can be used as templates', async function (I, mail, dialogs) {
+Scenario('[C114959] Draft can be used as templates', async ({ I, mail, dialogs }) => {
 
     I.login('app=io.ox/mail');
 

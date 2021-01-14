@@ -18,15 +18,15 @@ const expect = require('chai').expect;
 
 Feature('Settings > Address Book');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85624] Configure postal addresses map service', async (I, contacts) => {
+Scenario('[C85624] Configure postal addresses map service', async ({ I, contacts }) => {
 
     const verifyMapType = async function (mapName, link, value, isContactsFolder = false) {
         // Go back to settings and switch to other display style

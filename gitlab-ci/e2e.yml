@@ -106,7 +106,8 @@ merge filter report and rerun:
     - yarn e2e -i || true
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/filter_report.json > ./build/e2e/filter_failed_tests.txt
-    - while read line; do echo $line && npx codeceptjs run-rerun --fgrep "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
+    - unset FILTER_SUITE
+    - while read line; do echo $line && npx ./e2e/customRerun.js "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
     - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
   tags:
     - e2e
@@ -208,11 +209,14 @@ run single test:
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e-test.os.oxui.de
+  variables:
+    MIN_SUCCESS: 10
+    MAX_RERUNS: 10
   script:
   - cd ui
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
   - echo ${CI_COMMIT_REF_NAME//e2e\//}
-  - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
+  - npx ./e2e/customRerun.js "${CI_COMMIT_REF_NAME//e2e\//}"
   parallel: 5
   timeout: 60 minutes
   rules:

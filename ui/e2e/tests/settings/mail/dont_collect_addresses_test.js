@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[7772] No contact collection when sending mail', async (I) => {
+Scenario('[7772] No contact collection when sending mail', async ({ I }) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
     I.login('app=io.ox/mail');

@@ -17,16 +17,16 @@ const { expect } = require('chai');
 
 Feature('Login');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 
-Scenario('[C7336] Successful Login', async function (I, users) {
+Scenario('[C7336] Successful Login', async function ({ I, users }) {
     await users[0].hasConfig('io.ox/core//autoStart', 'io.ox/mail/main');
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
@@ -39,7 +39,7 @@ Scenario('[C7336] Successful Login', async function (I, users) {
     I.waitForText('No message selected', 30);
 });
 
-Scenario('[C7337] Unsuccessful Login', function (I, users) {
+Scenario('[C7337] Unsuccessful Login', function ({ I, users }) {
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
@@ -50,7 +50,7 @@ Scenario('[C7337] Unsuccessful Login', function (I, users) {
     I.waitForText('The user name or password is incorrect.');
 });
 
-Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
+Scenario('[C7339] Stay signed in checkbox', async function ({ I, users }) {
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
@@ -89,19 +89,19 @@ Scenario('[C7339] Stay signed in checkbox', async function (I, users) {
     I.waitForVisible('#io-ox-login-screen');
 });
 
-Scenario('[C7340] Successful logout', function (I) {
+Scenario('[C7340] Successful logout', function ({ I }) {
     I.login();
     I.logout();
     I.waitForVisible('#io-ox-login-screen');
 });
 
-Scenario('[C163025] Screen gets blured when session times out', function (I) {
+Scenario('[C163025] Screen gets blured when session times out', function ({ I }) {
     I.login();
     I.clearCookie();
     I.waitForElement('.abs.unselectable.blur');
 });
 
-Scenario('[OXUIB-74] Redirect during autologin using LGI-0016 error', async function (I) {
+Scenario('[OXUIB-74] Redirect during autologin using LGI-0016 error', async function ({ I }) {
     I.amOnPage('ui');
     I.mockRequest('GET', `${process.env.LAUNCH_URL}/api/login?action=autologin`, {
         error: 'http://www.open-xchange.com/',

@@ -15,16 +15,16 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users, contacts, mail, dialogs) => {
+Scenario.skip('[C104306] contact folders using “Permisions” dialog and sharing link', async ({ I, users, contacts, mail, dialogs }) => {
     let url;
     // Alice shares a folder with 2 contacts
     await session('Alice', async () => {

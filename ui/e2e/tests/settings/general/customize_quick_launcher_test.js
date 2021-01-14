@@ -14,15 +14,15 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C274141] Customize default app, order and count for Quicklauncher @contentReview', async (I) =>{
+Scenario('[C274141] Customize default app, order and count for Quicklauncher @contentReview', async ({ I }) =>{
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });

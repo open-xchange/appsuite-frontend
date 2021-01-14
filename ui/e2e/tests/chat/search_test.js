@@ -12,7 +12,7 @@
 /// <reference path="../../steps.d.ts" />
 Feature('Chat > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -20,12 +20,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario.skip('Search for a word - full text', async (I, users, chat) => {
+Scenario.skip('Search for a word - full text', async ({ I, users, chat }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -53,7 +53,7 @@ Scenario.skip('Search for a word - full text', async (I, users, chat) => {
     // find in 2xprivate and group
 });
 
-Scenario('Search for a user and a private chat', async (I, users, chat) => {
+Scenario('Search for a user and a private chat', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     I.waitForText('New Chat', 30);
@@ -74,7 +74,7 @@ Scenario('Search for a user and a private chat', async (I, users, chat) => {
     I.waitForText('Hey!', 3, '.ox-chat .messages');
 });
 
-Scenario('Search for a group name', async (I, users, chat) => {
+Scenario('Search for a group name', async ({ I, users, chat }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -87,20 +87,20 @@ Scenario('Search for a group name', async (I, users, chat) => {
     I.click('New Chat');
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
-    I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.click(locate('.btn-primary').withText('Create chat'));
     I.waitForElement('~Close chat', 3, '.ox-chat');
     I.click('~Close chat', '.ox-chat');
 
 
     I.waitForElement('~Search or start new chat', 3, '.ox-chat');
     I.fillField('~Search or start new chat', groupTitle);
-    I.waitForElement(locate('.title').withText(groupTitle), 3, '.ox-chat .search-result');
+    I.waitForText(groupTitle, 5, '.ox-chat .search-result');
     I.retry(3).click(locate('.title').withText(groupTitle), '.ox-chat .search-result');
     I.waitForElement('.message.system', 3, '.ox-chat');
     I.seeNumberOfVisibleElements('.message.system', 2);
 });
 
-Scenario('Search for a channel name', async (I, users, contexts, chat, dialogs) => {
+Scenario('Search for a channel name', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);

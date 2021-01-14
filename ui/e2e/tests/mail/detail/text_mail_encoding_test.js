@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[Bug 63470] Encoding wrong in plain text mails', async (I, users, mail) => {
+Scenario('[Bug 63470] Encoding wrong in plain text mails', async ({ I, users, mail }) => {
 
 
     var currentUser = users[0].userdata.email1;

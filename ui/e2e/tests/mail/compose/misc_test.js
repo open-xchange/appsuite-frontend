@@ -16,16 +16,16 @@ Feature('Mail Compose');
 
 const expect = require('chai').expect;
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // Sender
     await users.create(); // Recipient
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[OXUIB-587] Supports predefined values (plaintext)', async (I, mail) => {
+Scenario('[OXUIB-587] Supports predefined values (plaintext)', async ({ I, mail }) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -49,7 +49,7 @@ Scenario('[OXUIB-587] Supports predefined values (plaintext)', async (I, mail) =
     I.seeInField({ css: 'textarea.plain-text' }, DATA.content);
 });
 
-Scenario('[OXUIB-587] Supports predefined values (html)', async (I, mail) => {
+Scenario('[OXUIB-587] Supports predefined values (html)', async ({ I, mail }) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -77,7 +77,7 @@ Scenario('[OXUIB-587] Supports predefined values (html)', async (I, mail) => {
     });
 });
 
-Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
+Scenario('[C12122] Auto-size recipient fields', async function ({ I, mail }) {
     let height;
 
     I.login('app=io.ox/mail');
@@ -105,7 +105,7 @@ Scenario('[C12122] Auto-size recipient fields', async function (I, mail) {
 
 });
 
-Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', async function (I, mail) {
+Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', async function ({ I, mail }) {
 
     I.login();
     mail.newMail();
@@ -118,7 +118,7 @@ Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', 
     });
 });
 
-Scenario('[C271752] Reduce image size for image attachments in mail compose', async (I, mail, users) => {
+Scenario('[C271752] Reduce image size for image attachments in mail compose', async ({ I, mail, users }) => {
     let [sender, recipient] = users;
 
     // enable Image resize setting

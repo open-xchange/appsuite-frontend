@@ -15,16 +15,16 @@ const expect = require('chai').expect;
 
 Feature('Portal');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
-Scenario('adding a mail containing XSS code', async function (I, users, portal, dialogs) {
+Scenario('adding a mail containing XSS code', async function ({ I, users, portal, dialogs }) {
     let [user] = users;
     await I.haveMail({
         attachments: [{

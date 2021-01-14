@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[7773] Contact collection when reading mail', async (I, users) => {
+Scenario('[7773] Contact collection when reading mail', async ({ I, users }) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

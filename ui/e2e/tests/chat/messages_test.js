@@ -15,7 +15,7 @@ const { expect } = require('chai');
 
 Feature('Chat > Messages');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -23,14 +23,15 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Show sender, date and avatar of sent message', async (I, users, chat) => {
+Scenario('Show sender, date and avatar of sent message', async ({ I, users, chat }) => {
     let time;
     const name = users[0].userdata.given_name + ' ' + users[0].userdata.sur_name + ' ';
+
 
     await session('Alice', async () => {
         I.login({ user: users[0] });
@@ -60,7 +61,7 @@ Scenario('Show sender, date and avatar of sent message', async (I, users, chat) 
     });
 });
 
-Scenario('Send and view an image', async (I, users, chat) => {
+Scenario('Send and view an image', async ({ I, users, chat }) => {
     const imgLocator = '.message .file .message-thumbnail img';
 
     const checkImage = async function (I) {
@@ -69,8 +70,8 @@ Scenario('Send and view an image', async (I, users, chat) => {
             I.waitForElement(imgLocator);
             const prevWidth = await I.grabCssPropertyFrom(imgLocator, 'width');
             const prevHeight = await I.grabCssPropertyFrom(imgLocator, 'height');
-            expect(prevWidth[0]).to.equal('240px');
-            expect(prevHeight[0]).to.equal('180px');
+            expect(prevWidth).to.equal('240px');
+            expect(prevHeight).to.equal('180px');
 
             I.retry(3).click(imgLocator);
         });
@@ -81,8 +82,8 @@ Scenario('Send and view an image', async (I, users, chat) => {
             I.wait(1); // wait to render image
             const orgWidth = await I.grabCssPropertyFrom('.viewer-displayer-image', 'width');
             const orgHeight = await I.grabCssPropertyFrom('.viewer-displayer-image', 'height');
-            expect(orgWidth[0]).to.equal('800px');
-            expect(orgHeight[0]).to.equal('600px');
+            expect(orgWidth).to.equal('800px');
+            expect(orgHeight).to.equal('600px');
         });
     };
 
@@ -112,7 +113,7 @@ Scenario('Send and view an image', async (I, users, chat) => {
     });
 });
 
-Scenario('Edit a sent message', async (I, users, chat) => {
+Scenario('Edit a sent message', async ({ I, users, chat }) => {
     const chatLocator = '.ox-chat .chat-rightside';
     const controlsLocator = chatLocator + ' .controls';
 
@@ -149,7 +150,7 @@ Scenario('Edit a sent message', async (I, users, chat) => {
     });
 });
 
-Scenario('Delete a message', async (I, users, chat) => {
+Scenario('Delete a message', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -170,7 +171,7 @@ Scenario('Delete a message', async (I, users, chat) => {
     });
 });
 
-Scenario('Reply to a message', async (I, users, chat) => {
+Scenario('Reply to a message', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -200,7 +201,7 @@ Scenario('Reply to a message', async (I, users, chat) => {
     });
 });
 
-Scenario('Sending binaries and check max file size', (I, users, chat) => {
+Scenario('Sending binaries and check max file size', ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
@@ -211,7 +212,7 @@ Scenario('Sending binaries and check max file size', (I, users, chat) => {
     I.see('The file "16MB.dat" cannot be uploaded because it exceeds the maximum file size of 10 MB');
 });
 
-Scenario('Editor saves drafted content for each chat if not sent', (I, users, chat) => {
+Scenario('Editor saves drafted content for each chat if not sent', ({ I, users, chat }) => {
     const draft = 'This is a draft message.';
 
     I.login({ user: users[0] });

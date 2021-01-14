@@ -17,11 +17,11 @@ const expect = require('chai').expect;
 
 Feature('Mail > Detail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -40,7 +40,7 @@ function getTestMail(user, content) {
     };
 }
 
-Scenario('[C83388] Visual indicator for blocked images', async function (I, users, mail) {
+Scenario('[C83388] Visual indicator for blocked images', async function ({ I, users, mail }) {
     // dependes on mail?action=get-param "view: noimg"
     let [user] = users;
     const style = 'repeating-linear-gradient';

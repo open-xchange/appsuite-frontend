@@ -12,15 +12,15 @@
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Create appointments in workweekview', async function (I, users) {
+Scenario('Create appointments in workweekview', async function ({ I, users }) {
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
         'io.ox/calendar': { showCheckboxes: true }
@@ -70,7 +70,7 @@ Scenario('Create appointments in workweekview', async function (I, users) {
     I.seeNumberOfElements('.workweek .appointment .title', 2);
 });
 
-Scenario('Create appointments in weekview', async function (I, users) {
+Scenario('Create appointments in weekview', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -107,7 +107,7 @@ Scenario('Create appointments in weekview', async function (I, users) {
     I.seeNumberOfElements('.weekview-container.week .appointment .appointment-content .title', 2);
 });
 
-Scenario('Create appointments in monthview', async function (I, users) {
+Scenario('Create appointments in monthview', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -144,7 +144,7 @@ Scenario('Create appointments in monthview', async function (I, users) {
     I.seeNumberOfElements('.month-container .appointment .appointment-content .title', 2);
 });
 
-Scenario('Create appointments in dayview', async function (I, users, calendar) {
+Scenario('Create appointments in dayview', async function ({ I, users, calendar }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },

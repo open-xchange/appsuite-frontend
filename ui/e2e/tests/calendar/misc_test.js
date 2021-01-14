@@ -20,7 +20,7 @@ const expect = require('chai').expect,
 
 Feature('Calendar');
 
-Before(async (I, users) => {
+Before(async ({ I, users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -30,11 +30,11 @@ Before(async (I, users) => {
         'io.ox/calendar': { showCheckboxes: true }
     });
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C274425] Month label in Calendar week view', async function (I, calendar) {
+Scenario('[C274425] Month label in Calendar week view', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
     I.retry(5).executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
@@ -43,12 +43,12 @@ Scenario('[C274425] Month label in Calendar week view', async function (I, calen
     expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('December 2019 - January 2020 CW 1');
 });
 
-Scenario('[C207509] Year view', async (I, calendar) => {
+Scenario('[C207509] Year view', async ({ I, calendar }) => {
     I.login(['app=io.ox/calendar&perspective=year']);
     calendar.waitForApp();
     // Expected Result: The year view displays each day of the year separated in month.
-    I.seeNumberOfElements('.year-view .month-container', 12);
-    let calenderWeeks = await I.grabTextFrom('.year-view tbody td.cw');
+    I.waitNumberOfVisibleElements('.year-view .month-container', 12);
+    let calenderWeeks = await I.grabTextFromAll('.year-view tbody td.cw');
     calenderWeeks.map(weekString => parseInt(weekString, 10));
     calenderWeeks = new Set(calenderWeeks);
     expect(calenderWeeks.size).to.be.within(52, 53);
@@ -109,7 +109,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
             daysLocator = locate('td')
                 .after('.cw')
                 .inside('.year-view-container'),
-            { 0: firstWeek, length: l, [l - 1]: lastWeek } = _(await I.grabTextFrom(daysLocator)).chunk(7);
+            { 0: firstWeek, length: l, [l - 1]: lastWeek } = _(await I.grabTextFromAll(daysLocator)).chunk(7);
         expect(`${firstWeek.indexOf('1')}`).to.equal(startDay);
         expect(`${lastWeek.indexOf('31')}`).to.equal(endDay);
     };
@@ -136,7 +136,7 @@ Scenario('[C207509] Year view', async (I, calendar) => {
     I.see('January', '.monthview-container');
 });
 
-Scenario('[C236795] Visibility Flags', (I, calendar) => {
+Scenario('[C236795] Visibility Flags', ({ I, calendar }) => {
     const createAppointment = (subject, startDate, startTime, visibility) => {
         I.clickToolbar('New appointment');
         I.waitForVisible('.io-ox-calendar-edit-window');
@@ -187,7 +187,7 @@ Scenario('[C236795] Visibility Flags', (I, calendar) => {
     checkAppointment('Secret visibility', 'PRIVATE', '2:00 PM');
 });
 
-Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (I, calendar) => {
+Scenario('[C236832] Navigate by using the mini calendar in folder tree', async ({ I, calendar }) => {
     I.say('1. Sign in, switch to calendar');
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
@@ -238,7 +238,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 
     // Expected Result: The whole month is displayed
     const daysLocator = locate('td').after('.cw').inside('.window-sidepanel .date-picker .grid');
-    const days = new Set(await I.grabTextFrom(daysLocator));
+    const days = new Set(await I.grabTextFromAll(daysLocator));
 
     expect(days.size).to.equal(31);
     _.range(1, 32).forEach(day => expect(days.has(`${day}`)).to.be.true);
@@ -253,7 +253,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
     I.see('17', '.weekview-container .weekview-toolbar .weekday');
 });
 
-Scenario('[C244785] Open event from invite notification in calendar', async (I, users, calendar) => {
+Scenario('[C244785] Open event from invite notification in calendar', async ({ I, users, calendar }) => {
     const [userA, userB] = users;
     const startTime = moment().add(10, 'minutes');
     const endTime = moment().add(70, 'minutes');
@@ -308,7 +308,7 @@ Scenario('[C244785] Open event from invite notification in calendar', async (I, 
     I.see(`${userB.userdata.sur_name}, ${userB.userdata.given_name}`, '.io-ox-sidepopup');
 });
 
-Scenario('[C252158] All my public appointments', (I, users, calendar, dialogs) => {
+Scenario('[C252158] All my public appointments', ({ I, users, calendar, dialogs }) => {
     const [userA, userB] = users;
 
     // 1. User#A: Login and go to Calendar
@@ -398,7 +398,7 @@ Scenario('[C252158] All my public appointments', (I, users, calendar, dialogs) =
     I.dontSee(subject);
 });
 
-Scenario('[C265147] Appointment organizer should be marked in attendee list', async (I, calendar, users) => {
+Scenario('[C265147] Appointment organizer should be marked in attendee list', async ({ I, calendar, users }) => {
     const [userA, userB] = users;
 
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false } }, { user: userB });
@@ -451,7 +451,7 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
     I.seeElement(organizerLocator);
 });
 
-Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function (I, users, calendar, dialogs) {
+Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function ({ I, users, calendar, dialogs }) {
     const sharedCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar`;
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
 
@@ -521,7 +521,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.waitForText(sharedCalendarName);
 });
 
-Scenario('Manage public Calendars', async function (I, users, calendar, dialogs) {
+Scenario('Manage public Calendars', async function ({ I, users, calendar, dialogs }) {
     const publicCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New public`;
 
     I.login('app=io.ox/calendar');
@@ -597,7 +597,7 @@ Scenario('Manage public Calendars', async function (I, users, calendar, dialogs)
     dialogs.clickButton('Delete');
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function (I, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change to daylight saving', async function ({ I, calendar }) {
     // see: OXUIB-146 Fix daylight saving issues
     const folder = await calendar.defaultFolder();
 
@@ -653,7 +653,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
     expect(topOfAppointment4).to.equal('50%');
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function (I, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Sunday, change from daylight saving', async function ({ I, calendar }) {
     // see: OXUIB-146 Fix daylight saving issues
     const folder = await calendar.defaultFolder();
 
@@ -709,7 +709,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart S
     expect(topOfAppointment4).to.equal('50%');
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function (I, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change to daylight saving', async function ({ I, calendar }) {
     // see: OXUIB-146 Fix daylight saving issues
     I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
 
@@ -767,7 +767,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
     expect(topOfAppointment4).to.equal('50%');
 });
 
-Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function (I, calendar) {
+Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart Monday, change from daylight saving', async function ({ I, calendar }) {
     // see: OXUIB-146 Fix daylight saving issues
     I.haveSetting('io.ox/core//localeData/firstDayOfWeek', 'monday');
 
@@ -825,7 +825,7 @@ Scenario('Weeks with daylight saving changes are rendered correctly: Weekstart M
     expect(topOfAppointment4).to.equal('50%');
 });
 
-Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
+Scenario('[C85743] Special-Use flags', async function ({ I, dialogs }) {
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');
     I.waitForText('Edit');
     I.retry(10).click('Edit');
@@ -836,7 +836,7 @@ Scenario('[C85743] Special-Use flags', async function (I, dialogs) {
     I.dontSeeInField('#sent_fullname', 'INBOX/Sent Messages');
 });
 
-Scenario('[C274517] Download multiple attachments (as ZIP)', async function (I, calendar) {
+Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I, calendar }) {
     I.handleDownloads('../../build/e2e');
     const folder = await calendar.defaultFolder();
     const subject = 'Meetup XY';

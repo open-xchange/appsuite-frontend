@@ -15,15 +15,15 @@
 
 Feature('Mail > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85616] Progress bar for sending mail', async (I, users) => {
+Scenario('[C85616] Progress bar for sending mail', async ({ I, users }) => {
 
     // 1. Go to Mail -> Compose
 

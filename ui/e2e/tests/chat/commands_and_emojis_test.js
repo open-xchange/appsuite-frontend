@@ -15,7 +15,7 @@ const { expect } = require('chai');
 
 Feature('Chat > Commands and emojis');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -23,12 +23,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Send emojis', async (I, users, chat) => {
+Scenario('Send emojis', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -38,12 +38,12 @@ Scenario('Send emojis', async (I, users, chat) => {
         I.fillField('~Message', ':)');
         I.pressKey('Enter');
         I.waitForElement('.only-emoji .emoji', 3, '.ox-chat .messages');
-        expect((await I.grabCssPropertyFrom('.only-emoji .emoji', 'font-size'))[0]).to.equal('40px');
+        expect((await I.grabCssPropertyFrom('.only-emoji .emoji', 'font-size'))).to.equal('40px');
 
         I.waitForElement('.controls');
         I.fillField('~Message', 'Some text and :)');
         I.pressKey('Enter');
-        expect((await I.grabCssPropertyFrom('.contains-emoji:not(.only-emoji) .emoji', 'font-size'))[0]).to.equal('22px');
+        expect((await I.grabCssPropertyFrom('.contains-emoji:not(.only-emoji) .emoji', 'font-size'))).to.equal('22px');
 
         I.click('~Detach window', '.chat-rightside');
         I.click('Add emoji', '.ox-chat');
@@ -60,14 +60,14 @@ Scenario('Send emojis', async (I, users, chat) => {
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForElement('.only-emoji .emoji', 3, '.ox-chat .messages');
-        expect((await I.grabCssPropertyFrom('.only-emoji .emoji', 'font-size'))[0]).to.equal('40px');
-        expect((await I.grabCssPropertyFrom('.contains-emoji:not(.only-emoji) .emoji', 'font-size'))[0]).to.equal('22px');
+        expect((await I.grabCssPropertyFrom('.only-emoji .emoji', 'font-size'))).to.equal('40px');
+        expect((await I.grabCssPropertyFrom('.contains-emoji:not(.only-emoji) .emoji', 'font-size'))).to.equal('22px');
         I.retry(3).seeNumberOfVisibleElements('.ox-chat .messages .contains-emoji:not(.only-emoji)', 1);
         I.retry(1).seeNumberOfVisibleElements('.ox-chat .messages .contains-emoji.only-emoji', 2);
     });
 });
 
-Scenario('User can be mentioned via @', async (I, users, chat) => {
+Scenario('User can be mentioned via @', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -92,7 +92,7 @@ Scenario('User can be mentioned via @', async (I, users, chat) => {
     });
 });
 
-Scenario('User can send multi line messages', async (I, users, chat) => {
+Scenario('User can send multi line messages', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -107,7 +107,7 @@ Scenario('User can send multi line messages', async (I, users, chat) => {
         I.pressKey('Enter');
 
         I.waitForElement(locate('.body').withText('one'));
-        expect((await I.grabCssPropertyFrom(locate('.body').withText('one'), 'height'))[0]).to.equal('72px');
+        expect((await I.grabCssPropertyFrom(locate('.body').withText('one'), 'height'))).to.equal('72px');
     });
 
     await session('Bob', async () => {
@@ -116,11 +116,11 @@ Scenario('User can send multi line messages', async (I, users, chat) => {
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForElement(locate('.body').withText('one'));
-        expect((await I.grabCssPropertyFrom(locate('.body').withText('one'), 'height'))[0]).to.equal('72px');
+        expect((await I.grabCssPropertyFrom(locate('.body').withText('one'), 'height'))).to.equal('72px');
     });
 });
 
-Scenario('User can check the version', async (I, users, chat) => {
+Scenario('User can check the version', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
@@ -132,7 +132,7 @@ Scenario('User can check the version', async (I, users, chat) => {
 
 });
 
-Scenario('User can make zoom call via command', async (I, users, chat, dialogs) => {
+Scenario('User can make zoom call via command', async ({ I, users, chat, dialogs }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -167,7 +167,7 @@ Scenario('User can make zoom call via command', async (I, users, chat, dialogs) 
     });
 });
 
-Scenario('User can make jitsi call via command', async (I, users, chat) => {
+Scenario('User can make jitsi call via command', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -200,7 +200,7 @@ Scenario('User can make jitsi call via command', async (I, users, chat) => {
     });
 });
 
-Scenario('User can make a zoom call via command within a group', async (I, users, chat) => {
+Scenario('User can make a zoom call via command within a group', async ({ I, users, chat }) => {
     await users.create();
 
     await session('Alice', async () => {
@@ -243,7 +243,7 @@ Scenario('User can make a zoom call via command within a group', async (I, users
     });
 });
 
-Scenario('User can make a jitsi call via command within a group', async (I, users, chat) => {
+Scenario('User can make a jitsi call via command within a group', async ({ I, users, chat }) => {
     await users.create();
 
     await session('Alice', async () => {

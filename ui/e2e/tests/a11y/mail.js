@@ -13,14 +13,14 @@
 
 const { expect } = require('chai');
 
-Scenario('Mail - Vertical view w/o mail', async (I) => {
+Scenario('Mail - Vertical view w/o mail', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - Compact view w/o mail', async (I) => {
+Scenario('Mail - Compact view w/o mail', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
 
@@ -30,7 +30,7 @@ Scenario('Mail - Compact view w/o mail', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - Horizontal view w/o mail', async (I) => {
+Scenario('Mail - Horizontal view w/o mail', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
 
@@ -40,7 +40,7 @@ Scenario('Mail - Horizontal view w/o mail', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - List view w/o mail', async (I) => {
+Scenario('Mail - List view w/o mail', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
 
@@ -50,7 +50,7 @@ Scenario('Mail - List view w/o mail', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - List view unified mail w/o mail', async (I, mail) => {
+Scenario('Mail - List view unified mail w/o mail', async ({ I, mail }) => {
     I.login('app=io.ox/mail');
     await I.executeAsyncScript((done) => {
         require(['io.ox/core/api/account'], function (api) {
@@ -70,7 +70,7 @@ Scenario('Mail - List view unified mail w/o mail', async (I, mail) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - Compose window (with exceptions)', async (I) => {
+Scenario('Mail - Compose window (with exceptions)', async ({ I }) => {
     // Exceptions:
     // Typeahead missing label (critical), TinyMCE toolbar invalid role (minor issue)
     const excludes = { exclude: [['.to'], ['.mce-open'], ['.mce-toolbar']] };
@@ -87,7 +87,7 @@ Scenario('Mail - Compose window (with exceptions)', async (I) => {
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Mail - Modal Dialog - Vacation notice (with exceptions)', async (I) => {
+Scenario('Mail - Modal Dialog - Vacation notice (with exceptions)', async ({ I }) => {
     // Exceptions:
     // Checkbox has no visibel label (critical)
     const excludes = { exclude: [['.checkbox.switch.large']] };
@@ -101,7 +101,7 @@ Scenario('Mail - Modal Dialog - Vacation notice (with exceptions)', async (I) =>
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Mail - Modal Dialog - Add mail account', async (I) => {
+Scenario('Mail - Modal Dialog - Add mail account', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForElement('.mail-detail-pane');
     I.selectFolder('Inbox');
@@ -111,7 +111,7 @@ Scenario('Mail - Modal Dialog - Add mail account', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Mail - Modal Dialog - New folder (with exceptions)', async (I, mail) => {
+Scenario('Mail - Modal Dialog - New folder (with exceptions)', async ({ I, mail }) => {
     // Exceptions:
     // Input has no visibel label (critical)
     const excludes = { exclude: [['*[placeholder="New folder"]']] };
@@ -126,7 +126,7 @@ Scenario('Mail - Modal Dialog - New folder (with exceptions)', async (I, mail) =
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async (I, mail) => {
+Scenario('Mail - Modal Dialog - Permissions (with exceptions)', async ({ I, mail }) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Personal message textarea has a missing label (critical)

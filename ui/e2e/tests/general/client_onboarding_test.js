@@ -17,16 +17,16 @@ Feature('General > Client Onboarding');
 
 const { I } = inject();
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await I.haveSetting('io.ox/core//onboardingWizard', false);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C73767] Platform Availability', function (I, topbar) {
+Scenario('[C73767] Platform Availability', function ({ I, topbar }) {
 
     I.login();
     topbar.connectYourDevice();
@@ -35,7 +35,7 @@ Scenario('[C73767] Platform Availability', function (I, topbar) {
     I.see('Apple');
 });
 
-Scenario('[C73768] Device Availability', function (I, topbar) {
+Scenario('[C73768] Device Availability', function ({ I, topbar }) {
 
     I.login();
     topbar.connectYourDevice();
@@ -55,7 +55,7 @@ Scenario('[C73768] Device Availability', function (I, topbar) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73769] Application Availability', function (I, topbar) {
+Scenario('[C73769] Application Availability', function ({ I, topbar }) {
 
     I.login();
     topbar.connectYourDevice();
@@ -93,7 +93,7 @@ Scenario('[C73769] Application Availability', function (I, topbar) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73776] Mail Configuration', async function (I, users, topbar) {
+Scenario('[C73776] Mail Configuration', async function ({ I, users, topbar }) {
 
     I.login();
     topbar.connectYourDevice();

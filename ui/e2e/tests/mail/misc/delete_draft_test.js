@@ -15,18 +15,18 @@
 
 Feature('Mail > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C114958] Delete draft when closing composer', async (I, users, mail, dialogs) => {
+Scenario('[C114958] Delete draft when closing composer', async ({ I, users, mail, dialogs }) => {
     const mailListView = '.list-view.visible-selection.mail-item';
     const subject = 'Testsubject Draft';
 

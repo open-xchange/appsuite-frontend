@@ -15,17 +15,17 @@
 
 Feature('Calendar > iTIP - Alias Handling');
 
-Before(async function (users, contexts) {
+Before(async function ({ users, contexts }) {
     await users.create();
     const secondContext = await contexts.create();
     await users.create(users.getRandom(), secondContext);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C223834] iTIP mail alias handling', async function (I, users, mail, calendar) {
+Scenario('[C223834] iTIP mail alias handling', async function ({ I, users, mail, calendar }) {
     // We need two users. The organizer and the attendee
     // We put them in two contexts, so they synchronize
     // their calendars via iTIP only

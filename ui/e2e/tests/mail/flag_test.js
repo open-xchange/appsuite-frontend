@@ -14,11 +14,11 @@
 
 Feature('Mail > Flags');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -27,7 +27,7 @@ var flagged = '.mail-item .list-item .flag [title="Flagged"]',
 
 // --------------------------------------------------------------------------
 
-Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (I, mail) => {
+Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async ({ I, mail }) => {
 
     const me = getUtils();
     await me.login({ color: true, star: true });
@@ -44,7 +44,7 @@ Scenario('[C114336] Flag an E-Mail with a color flag (flaggedImplicit)', async (
     I.waitForInvisible('.list-item .color-flag');
 });
 
-Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async (I, mail) => {
+Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async ({ I, mail }) => {
 
     var me = getUtils();
     await me.login({ color: false, star: true });
@@ -55,7 +55,7 @@ Scenario('[C114337] Flag an E-Mail as Flagged/Starred (flaggedOnly)', async (I, 
     I.waitForElement(flagged);
 });
 
-Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (I, mail) => {
+Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async ({ I, mail }) => {
 
     var me = getUtils();
     await me.login({ color: true, star: true });
@@ -70,7 +70,7 @@ Scenario('[C114338] Flag an E-Mail with a color flag (flaggedAndColor)', async (
     I.waitForDetached(flagged);
 });
 
-Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor)', async (I) => {
+Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (flaggedAndColor)', async ({ I }) => {
 
     var me = getUtils();
     await me.login({ color: true, star: true }, 8);

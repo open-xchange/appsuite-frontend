@@ -17,15 +17,15 @@ const { expect } = require('chai');
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C45021] Generate simple link for sharing', async function (I, drive, dialogs) {
+Scenario('[C45021] Generate simple link for sharing', async function ({ I, drive, dialogs }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -52,7 +52,7 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
 });
 
 // TODO: shaky (element (.list-view) is not in DOM or there is no element(.list-view) with text "A subfolder" after 5 sec)
-Scenario('[C252159] Generate link for sharing including subfolders', async function (I, drive, dialogs) {
+Scenario('[C252159] Generate link for sharing including subfolders', async function ({ I, drive, dialogs }) {
     let url = null;
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -100,7 +100,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.see('Second subfolder');
 });
 
-Scenario('[C45022] Generate simple link for sharing with password', async function (I, drive, dialogs) {
+Scenario('[C45022] Generate simple link for sharing with password', async function ({ I, drive, dialogs }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
@@ -139,7 +139,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 
 // TODO: works perfect locally but breaks remotely for puppeteer and webdriver
 // Reason: With --no-sandbox, clipboard cannot be accessed
-Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive, dialogs) {
+Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function ({ I, drive, dialogs }) {
     await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -164,7 +164,7 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive,
     I.waitForText('Music');
 });
 // TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
-Scenario('[C85625] My Shares default sort order', async function (I, drive, dialogs) {
+Scenario('[C85625] My Shares default sort order', async function ({ I, drive, dialogs }) {
     function share(item) {
         I.retry(5).click(locate('li.list-item').withText(item));
         drive.shareItem();
@@ -199,14 +199,14 @@ Scenario('[C85625] My Shares default sort order', async function (I, drive, dial
 
     selectAndWait('My shares');
     I.waitForText('Testfolder', undefined, '.myshares-list');
-    expect(await I.grabTextFrom(locate('li.list-item .displayname'))).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
+    expect(await I.grabTextFromAll(locate('li.list-item .displayname'))).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
     I.click('Sort by');
     I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Date')));
     I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Descending')));
     I.pressKey('Escape');
 });
 
-Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function (I, users, drive, dialogs) {
+Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function ({ I, users, drive, dialogs }) {
     const mailListView = '.list-view.visible-selection.mail-item',
         smartDropDown = '.smart-dropdown-container.dropdown.open',
         document = '.white-page.letter.plain-text';
@@ -358,7 +358,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
     });
 });
 
-Scenario('[C45025] Create shared object with multiple users (external users) with different permissions', async function (I, users, contexts, drive, dialogs, mail, autocomplete) {
+Scenario('[C45025] Create shared object with multiple users (external users) with different permissions', async function ({ I, users, contexts, drive, dialogs, mail, autocomplete }) {
     const mailListView = '.list-view.visible-selection.mail-item';
 
     const ctx = await contexts.create();
@@ -451,7 +451,7 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
     });
 });
 
-Scenario('[C83277] Create shared object with expiration date', async function (I, users, drive, dialogs) {
+Scenario('[C83277] Create shared object with expiration date', async function ({ I, drive, dialogs }) {
     let locators = {
         toolbar: locate({ css: '.window-body.classic-toolbar-visible' }),
         textFile: locate({ css: '.list-item.selectable.file-type-txt' }),
@@ -488,7 +488,7 @@ Scenario('[C83277] Create shared object with expiration date', async function (I
     I.waitForText('document.txt', 15, '.viewer-toolbar-filename');
 });
 
-Scenario('[C110280] Personalized no-reply share mails', async function (I, users, drive, mail, dialogs) {
+Scenario('[C110280] Personalized no-reply share mails', async function ({ I, users, drive, mail, dialogs }) {
     await users.create();
 
     await session('Alice', async () => {

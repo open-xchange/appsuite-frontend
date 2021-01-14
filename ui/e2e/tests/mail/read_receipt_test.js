@@ -14,18 +14,18 @@
 
 Feature('Mail > Read Receipts');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(), // Recipient
         users.create() // Sender
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C118709] Request "read receipt"', async (I, users, settings, mail) => {
+Scenario('[C118709] Request "read receipt"', async ({ I, users, settings, mail }) => {
     const [recipient, sender] = users;
     I.login('app=io.ox/settings', { user: recipient });
     // 	As the recipient, we'll turn on notifications about requested read receipts

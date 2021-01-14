@@ -15,15 +15,15 @@
 
 Feature('Settings');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C110279] Primary mail account name can be changed', async function (I, dialogs) {
+Scenario('[C110279] Primary mail account name can be changed', async function ({ I, dialogs }) {
     const name = 'Räuber Hotzenplotz';
     await I.haveFolder({ title: 'Personal', module: 'mail', parent: 'default0/INBOX' });
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/settings/accounts');

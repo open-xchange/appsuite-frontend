@@ -16,11 +16,11 @@ const path = require('path');
 
 Feature('Middleware > Mail authenticity');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -36,7 +36,7 @@ while (files.length) {
     testMails.add([files.splice(0, 9)]);
 }
 
-Data(testMails).Scenario('[C244757] SPF, DKIM, DMARC, DMARC Policy matrix', async function (I, users, mail, current) {
+Data(testMails).Scenario('[C244757] SPF, DKIM, DMARC, DMARC Policy matrix', async function ({ I, users, mail, current }) {
     let [user] = users;
     const mails = current.testMails.map(m => {
         return I.haveMail({ folder: 'default0/INBOX', path: path.join('e2e/media/mails/authenticity', m) }, { user });

@@ -15,15 +15,15 @@
 
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7865] Configure to show/hide declined appointments', async (I) => {
+Scenario('[C7865] Configure to show/hide declined appointments', async ({ I }) => {
     I.login('app=io.ox/calendar');
 
     I.clickToolbar('New appointment');

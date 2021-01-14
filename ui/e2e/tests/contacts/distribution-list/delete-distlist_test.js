@@ -13,17 +13,17 @@
 
 Feature('Contacts > Distribution List > Delete');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 const util = require('./util');
 
-Scenario('[C7379] Single distribution list', async function (I, contacts, dialogs) {
+Scenario('[C7379] Single distribution list', async function ({ I, contacts, dialogs }) {
     const display_name = util.uniqueName('C7379'),
         listElement = { css: '[aria-label="' + display_name + '"]' };
     await I.haveContact({ display_name: display_name, folder_id: await I.grabDefaultFolder('contacts'), mark_as_distributionlist: true });
@@ -39,7 +39,7 @@ Scenario('[C7379] Single distribution list', async function (I, contacts, dialog
     I.dontSee(listElement);
 });
 
-Scenario('[C7378] Multiple distribution lists', async function (I, search, contacts, dialogs) {
+Scenario('[C7378] Multiple distribution lists', async function ({ I, search, contacts, dialogs }) {
     const display_name = util.uniqueName('C7378'),
         defaultFolder = await I.grabDefaultFolder('contacts'),
         distributionLists = [];

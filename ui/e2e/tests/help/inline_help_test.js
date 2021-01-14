@@ -12,15 +12,15 @@
 
 Feature('General > Inline help');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Open the help app in a floating window', async function (I, topbar) {
+Scenario('Open the help app in a floating window', async function ({ I, topbar }) {
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '.io-ox-mail-window' }, 5);
 
@@ -36,7 +36,7 @@ Scenario('Open the help app in a floating window', async function (I, topbar) {
     I.waitForDetached('.io-io-help-window', 5);
 });
 
-Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
+Scenario('Open the help app in a modal', async function ({ I, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
     mail.newMail();
@@ -55,7 +55,7 @@ Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
     I.waitForDetached('.modal-dialog');
 });
 
-Scenario('Check help window for supposed language', function (I, topbar) {
+Scenario('Check help window for supposed language', function ({ I, topbar }) {
 
     // check major languages
     var languages = {
