@@ -215,20 +215,18 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                 return { items: items, index: items.index(el) };
             },
 
-            onFocus: function () {
-                if (document.activeElement !== this.el) return;
-                console.log('onFocus?');
+            onFocus: function (e) {
+                if (e.currentTarget !== this.el) return;
                 // forward focus to first item
-                this.$el.attr('tabindex', -1);
                 var f = this.find('[tabindex="0"]:first');
-                this.select(f.index, f.items);
+                this.focus(f.index, f.items);
             },
 
-            onBlur: function () {
-                if ($.contains(this.el, document.activeElement)) return;
+            onBlur: function (e) {
+                if (e.currentTarget !== this.el) return;
                 // make sure an inner or the outer element is in tab order
                 var f = this.find('[tabindex="0"]:first');
-                this.$el.attr('tabindex', Math.min(f.index, 0));
+                this.$el.attr('tabindex', f.index >= 0 ? -1 : 0);
             },
 
             onKeydown: function (e) {
