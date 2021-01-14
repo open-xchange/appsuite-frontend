@@ -384,7 +384,7 @@ define('io.ox/mail/compose/model', [
 
         save: function (silent, force) {
             // yes use a proper check for true here, force might be a reference to the model, when called by backbone
-            if (!force === true && (this.destroyed || this.paused)) return $.when();
+            if (force !== true && (this.destroyed || this.paused)) return $.when();
             var prevAttributes = this.prevAttributes,
                 attributes = this.toJSON();
             // remove pending inline images from content
