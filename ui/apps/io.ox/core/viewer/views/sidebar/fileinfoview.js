@@ -21,9 +21,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/capabilities',
     'io.ox/core/viewer/util',
     'io.ox/backbone/mini-views/copy-to-clipboard',
+    'io.ox/core/collection',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, FilesAPI, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, CopyToClipboardView, settings, gt) {
+], function (PanelBaseView, Ext, FilesAPI, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, CopyToClipboardView, Collection, settings, gt) {
 
     'use strict';
 
@@ -38,9 +39,15 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
     function openShareDialog(e) {
         e.preventDefault();
-        var model = e.data.model;
-        require(['io.ox/files/share/permissions'], function (controller) {
-            controller.showByModel(model);
+        var baton = e.data.baton;
+        require(['io.ox/files/actions/share', 'io.ox/files/util'], function (ShareAction, FilesUtil) {
+            var collection = new Collection(baton.data);
+            collection.getProperties();
+            baton.collection = collection;
+            baton.isViewer = baton.options.isViewer;
+
+            var options = { hasLinkSupport: FilesUtil.isShareable('link', baton) };
+            ShareAction.invite([baton.model], options);
         });
     }
 
@@ -210,7 +217,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                                 $('<a href="#">').text(
                                     model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
                                 )
-                                .on('click', { model: model }, openShareDialog) :
+                                .on('click', { baton: baton }, openShareDialog) :
                                 $.txt('-')
                         )
                     );

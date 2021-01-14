@@ -39,6 +39,31 @@ define('io.ox/files/util', [
         return $.Deferred().resolve();
     }
 
+    function getFolderId(baton) {
+        var folderId;
+        if (baton.collection.has('one')) {
+
+            if (baton.models && baton.models.length > 0) {
+                var selectedModel = baton.models[0];
+                folderId = selectedModel.isFolder() ? selectedModel.get('id') : selectedModel.get('folder_id');
+            }
+
+            if (!folderId) {
+                var data = baton.first();
+                folderId = baton.collection.has('folders') ? data.id : data.folder_id;
+                if (!folderId) {
+                    folderId = data.folder_id && data.folder_id !== 'folder' ? data.folder_id : data.id;
+                }
+            }
+
+        } else if (baton.app) {
+            // use current folder
+            folderId = baton.app.folder.get();
+        }
+
+        return folderId;
+    }
+
     return {
 
         /**
@@ -360,6 +385,50 @@ define('io.ox/files/util', [
             if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = !capabilities.has('spreadsheet') && guestCapabilities.indexOf('spreadsheet') > 0; }
             if (fileModel.isPresentation()) { canOpenInFederatedContext = !capabilities.has('presentation') && guestCapabilities.indexOf('presentation') > 0; }
             return canOpenInFederatedContext;
+        },
+
+        isCurrentVersion: function (baton) {
+            // folder tree folder, always current version
+            if (!baton.collection.has('some')) return true;
+            // drive folder, always current version
+            if (baton.collection.has('folders')) return true;
+            // single selection
+            if (baton.collection.has('one') && baton.first().current_version !== false) return true;
+            // multi selection
+            if (baton.collection.has('multiple') && baton.array().every(function (file) { return file.current_version !== false; })) return true;
+            // default
+            return false;
+        },
+
+        // check if this is a contact not a file, happens when contact is send as vcard
+        isContact: function (baton) {
+            return _(baton.first()).has('internal_userid');
+        },
+
+        /**
+         * Checks if the collection inside an event is shareable
+         * @param {Event} e
+         *  Event to check the collection
+         * @param {String} type
+         *  Type of the sharing to check ("invite" or "link")
+         * @returns {boolean}
+         *  Whether the elements inside the collection are shareable
+         */
+        isShareable: function (type, baton) {
+            // not possible for multi-selection
+            if (baton.collection.has('multiple')) return false;
+            if (this.isContact(baton)) return false;
+            if (baton.isViewer && !this.isCurrentVersion(baton)) return false;
+            // Links aren't possible for encrypted files
+            if (type === 'link' && baton.first() && new api.Model(baton.first()).isEncrypted()) return false;
+            // get folder id
+            var id = getFolderId(baton);
+            if (!id) return false;
+            // general capability and folder check
+            var model = folderAPI.pool.getModel(id);
+            if (!model.isShareable()) return false;
+            if (model.is('trash')) return false;
+            return type === 'invite' ? model.supportsInviteGuests() : true;
         }
     };
 });

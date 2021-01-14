@@ -41,7 +41,8 @@ define('io.ox/core/viewer/views/sidebarview', [
                 fixed: true,
                 closable: baton.options.closable,
                 disableFolderInfo: !!(baton.options.opt && baton.options.opt.disableFolderInfo),
-                viewerEvents: baton.context.viewerEvents
+                viewerEvents: baton.context.viewerEvents,
+                isViewer: baton.context.isViewer
             };
 
             this.append(new FileInfoView(fileInfoOpt).render().el);
