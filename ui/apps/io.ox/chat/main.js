@@ -414,6 +414,9 @@ define('io.ox/chat/main', [
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
             this.scrollToMessage(cid);
+            _.defer(function () {
+                a11y.getTabbable(this.$body).first().focus();
+            }.bind(this));
         },
 
         // we offer this via command because it's needed at different places, e.g. messages and file overview
