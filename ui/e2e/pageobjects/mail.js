@@ -22,7 +22,7 @@ module.exports = {
     },
     selectMail(text) {
         const item = locate('.list-view li.list-item').withText(text);
-        I.waitForElement(item);
+        I.waitForElement(item, 30);
         I.wait(0.5);
         I.click(item);
         I.waitForFocus('.list-view li.list-item.selected');
