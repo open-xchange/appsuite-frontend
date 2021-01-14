@@ -110,7 +110,7 @@ define('io.ox/mail/compose/model', [
         },
 
         initialPatch: function () {
-            this.requestSave = _.throttle(this.save.bind(this, false), settings.get('autoSaveAfter', 15000), { leading: false });
+            this.requestSave = _.throttle(this.save.bind(this, false, undefined), settings.get('autoSaveAfter', 15000), { leading: false });
             this.on('change', this.requestSave);
 
             // explicitly call save here to push the initial changes of the ui (quoting/from/bcc) to the composition space
