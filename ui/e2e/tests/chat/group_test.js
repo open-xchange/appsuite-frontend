@@ -13,7 +13,7 @@
 
 Feature('Chat > Group chats');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Leave and view a group and get re-added', async (I, users, chat, dialogs) => {
+Scenario('Leave and view a group and get re-added', async ({ I, users, chat, dialogs }) => {
     await users.create();
 
     const groupTitle = 'Test Group';
@@ -103,7 +103,7 @@ Scenario('Leave and view a group and get re-added', async (I, users, chat, dialo
     });
 });
 
-Scenario.skip('Update group profile picture and name', async (I, dialogs, users, chat) => {
+Scenario.skip('Update group profile picture and name', async ({ I, dialogs, users, chat }) => {
     await users.create();
 
     const groupTitle = 'Test Group';

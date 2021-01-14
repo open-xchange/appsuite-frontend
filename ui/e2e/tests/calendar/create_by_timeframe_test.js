@@ -18,15 +18,15 @@ const expect = require('chai').expect;
 
 Feature('Calendar > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7433] Create appointment by marking some timeframe', async (I, calendar) => {
+Scenario('[C7433] Create appointment by marking some timeframe', async ({ I, calendar }) => {
     const apnt_subject = 'C7433-' + Math.random().toString(36).substring(7);
     const apnt_location = 'C7433-' + Math.random().toString(36).substring(7);
 

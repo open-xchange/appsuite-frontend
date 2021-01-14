@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Presence');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -24,7 +24,7 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -35,7 +35,7 @@ const presenceStates = [
     { status: 'Invisible', value: 'invisible', class: 'offline' }
 ];
 
-Scenario('Presence state is shown and can be changed', async function (I) {
+Scenario('Presence state is shown and can be changed', async function ({ I }) {
     const checkStatus = (statusToClick, valueToCheck, classToCheck) => {
         I.say(`Check: ${statusToClick}`);
         I.clickDropdown(statusToClick);
@@ -59,7 +59,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
     });
 });
 
-Scenario('Presence state is shown in mails', async function (I, users, mail) {
+Scenario('Presence state is shown in mails', async function ({ I, users, mail }) {
     const [user1] = users,
         checkStatus = (statusToClick, classToCheck) => {
             I.say(`Check: ${statusToClick}`);
@@ -90,12 +90,12 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     // Check presence in mail detail
     I.waitForVisible('.mail-detail .presence.online');
 
-    presenceStates.forEach((state) => {
+    presenceStates.forEach(state => {
         checkStatus(state.status, state.class);
     });
 });
 
-Scenario('Presence state is shwon in call history', async function (I, users) {
+Scenario('Presence state is shwon in call history', async function ({ I, users }) {
     const [user1] = users;
     const { primaryEmail, display_name } = user1.userdata;
 
@@ -112,7 +112,7 @@ Scenario('Presence state is shwon in call history', async function (I, users) {
     I.waitForVisible('.call-history .dropdown-menu .presence.online');
 });
 
-Scenario('Check presence state of new user', (I, users) => {
+Scenario('Check presence state of new user', ({ I, users }) => {
     const [user1, user2] = users;
 
     session('userA', () => {
@@ -147,7 +147,7 @@ Scenario('Check presence state of new user', (I, users) => {
     });
 });
 
-Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', (I, dialogs) => {
+Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', ({ I, dialogs }) => {
     I.login();
 
     // verify presence icon is there

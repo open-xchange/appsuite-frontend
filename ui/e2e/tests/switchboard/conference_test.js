@@ -17,7 +17,7 @@ const moment = require('moment');
 
 Feature('Switchboard > Conference');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -25,7 +25,7 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -57,7 +57,7 @@ const removeConference = () => {
     I.dontSeeElement('.fa.fa-video-camera');
 };
 
-Scenario('Create appointment with zoom conference', async (I, users, calendar) => {
+Scenario('Create appointment with zoom conference', async ({ I, users, calendar }) => {
 
     const [user1, user2] = users;
 
@@ -93,7 +93,7 @@ Scenario('Create appointment with zoom conference', async (I, users, calendar) =
     });
 });
 
-Scenario('Creating never ending recurring appointment with zoom conference', (I, calendar) => {
+Scenario('Creating never ending recurring appointment with zoom conference', ({ I, calendar }) => {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -110,7 +110,7 @@ Scenario('Creating never ending recurring appointment with zoom conference', (I,
 });
 
 // TODO: bugfix needed
-Scenario.skip('[OXUIB-397] Appointment with zoom conference can be changed into a series', (I, calendar) => {
+Scenario.skip('[OXUIB-397] Appointment with zoom conference can be changed into a series', ({ I, calendar }) => {
 
     // Create normal appointment with zoom conference
     I.login('app=io.ox/calendar');
@@ -140,7 +140,7 @@ Scenario.skip('[OXUIB-397] Appointment with zoom conference can be changed into 
     I.waitForVisible('.appointment .recurrence-flag');
 });
 
-Scenario('Appointment series with zoom conference can be changed into a single appointment', (I, calendar, dialogs) => {
+Scenario('Appointment series with zoom conference can be changed into a single appointment', ({ I, calendar, dialogs }) => {
 
     // Create recurring appointment with zoom conference
     I.login('app=io.ox/calendar');
@@ -173,7 +173,7 @@ Scenario('Appointment series with zoom conference can be changed into a single a
     I.dontSee('Join Zoom meeting', '.io-ox-sidepopup');
 });
 
-Scenario('Remove zoom conference from series exception', (I, calendar, dialogs) => {
+Scenario('Remove zoom conference from series exception', ({ I, calendar, dialogs }) => {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -217,7 +217,7 @@ Scenario('Remove zoom conference from series exception', (I, calendar, dialogs) 
 
 });
 
-Scenario('Remove zoom conference from appointment series and check exception', async (I, calendar, dialogs) => {
+Scenario('Remove zoom conference from appointment series and check exception', async ({ I, calendar, dialogs }) => {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();

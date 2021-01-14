@@ -2,15 +2,15 @@
 
 Feature('Tasks > Edit');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7756] Check Task printview ', async (I, tasks, users) => {
+Scenario('[C7756] Check Task printview ', async ({ I, tasks, users }) => {
     // Create preconditions
     const folder = await I.grabDefaultFolder('tasks');
     const task1 = { folder_id: folder, title: 'C7756 - task 1', note: 'Do something', priority: 2, status: 1 };

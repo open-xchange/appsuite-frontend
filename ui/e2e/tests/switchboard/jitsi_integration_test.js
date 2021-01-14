@@ -18,7 +18,7 @@ const jitsiHost = 'https://meet.k3s.os.oxui.de';
 
 Feature('Switchboard > Jitsi');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -32,7 +32,7 @@ Before(async (users) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -42,7 +42,7 @@ const waitAndSwitchTab = () => {
     I.switchToNextTab();
 };
 
-Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dialogs) => {
+Scenario('[OXUIB-442] Calling contact via jitsi', async ({ I, users, contacts, dialogs }) => {
     const [user1, user2] = users;
     let meetingURL;
 
@@ -81,7 +81,7 @@ Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dia
     });
 });
 //needs MR-542
-Scenario.skip('Create call and check call history for jitsi', async (I, users, contacts, dialogs) => {
+Scenario.skip('Create call and check call history for jitsi', async ({ I, users, contacts, dialogs }) => {
     const [user1, user2] = users;
 
     session('userB', () => {
@@ -160,7 +160,7 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     });
 });
 
-Scenario('[J2] Create call from call history and check call history after hang up for jitsi', async (I, users, dialogs) => {
+Scenario('[J2] Create call from call history and check call history after hang up for jitsi', async ({ I, users, dialogs }) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
 
@@ -221,7 +221,7 @@ Scenario('[J2] Create call from call history and check call history after hang u
     });
 });
 
-Scenario('Create appointment with jitsi conference', async (I, users, calendar) => {
+Scenario('Create appointment with jitsi conference', async ({ I, users, calendar }) => {
 
     const [user1, user2] = users;
     let meetingURL;
@@ -261,7 +261,7 @@ Scenario('Create appointment with jitsi conference', async (I, users, calendar) 
     });
 });
 
-Scenario('[OXUIB-443] Zoom settings are not shown when only jitsi is enabled', (I, settings) => {
+Scenario('[OXUIB-443] Zoom settings are not shown when only jitsi is enabled', ({ I, settings }) => {
 
     I.login('app=io.ox/settings');
     settings.waitForApp();

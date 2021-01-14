@@ -14,16 +14,16 @@
 
 Feature('Contacts > Folder');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85620] Global address book is the default folder - switch capability for user', async function (I, users) {
+Scenario('[C85620] Global address book is the default folder - switch capability for user', async function ({ I, users }) {
 
     // Make sure user has the global address book enabled
     await users[0].hasCapability('gab');
@@ -55,7 +55,7 @@ Scenario('[C85620] Global address book is the default folder - switch capability
     });
 });
 
-Scenario('[C85620] Global address book is the default folder - check first login', async function (I, users) {
+Scenario('[C85620] Global address book is the default folder - check first login', async function ({ I, users }) {
 
     // Make sure user has the global address book enabled
     await users[1].doesntHaveCapability('gab');
@@ -74,7 +74,7 @@ Scenario('[C85620] Global address book is the default folder - check first login
     });
 });
 
-Scenario('[C7355] - Create a new private folder', function (I, contacts) {
+Scenario('[C7355] - Create a new private folder', function ({ I, contacts }) {
     const folderName = 'C7355';
 
     I.login('app=io.ox/contacts');
@@ -84,7 +84,7 @@ Scenario('[C7355] - Create a new private folder', function (I, contacts) {
 
 });
 
-Scenario('[C7356] - Create a new public folder ', function (I, users, contacts) {
+Scenario('[C7356] - Create a new public folder ', function ({ I, users, contacts }) {
     const folderName = 'C7356';
 
     I.login('app=io.ox/contacts');

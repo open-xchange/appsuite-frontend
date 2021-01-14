@@ -13,7 +13,7 @@
 
 Feature('Chat > Layout');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Add chat to favorites', async (I, users, chat) => {
+Scenario('Add chat to favorites', async ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
@@ -55,7 +55,7 @@ Scenario('Add chat to favorites', async (I, users, chat) => {
     I.waitForElement('.ox-chat .left-navigation li[aria-label="Favorites"] .chat-list li');
 });
 
-Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat) => {
+Scenario('Toggle unread bubble in the app suite toolbar', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -73,7 +73,7 @@ Scenario('Toggle unread bubble in the app suite toolbar', async (I, users, chat)
     });
 });
 
-Scenario('Increasing unreadCounter that gets reset on opening the chats', async (I, users, contexts, chat, dialogs) => {
+Scenario('Increasing unreadCounter that gets reset on opening the chats', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -163,7 +163,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
     await context.remove();
 });
 
-Scenario('Check layouts: compact, standard and detailed', async (I, users, contexts, chat, dialogs) => {
+Scenario('Check layouts: compact, standard and detailed', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);

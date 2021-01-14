@@ -13,17 +13,17 @@
 
 Feature('Contacts > Distribution List > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 const util = require('./util');
 
-Scenario('External mail address', function (I, contacts) {
+Scenario('External mail address', function ({ I, contacts }) {
     const name = 'Testlist',
         mail = 'test@tester.com';
 
@@ -42,7 +42,7 @@ Scenario('External mail address', function (I, contacts) {
     I.waitForElement(`.contact-detail .participant-email [href="mailto:${mail}"]`);
 });
 
-Scenario('[C7372] Create new distribution list', async function (I, users, contacts) {
+Scenario('[C7372] Create new distribution list', async function ({ I, users, contacts }) {
     const display_name = util.uniqueName('C7372');
 
     await Promise.all([

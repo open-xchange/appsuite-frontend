@@ -15,7 +15,7 @@
 
 Feature('Portal');
 
-Before(async (users, contexts) => {
+Before(async ({ users, contexts }) => {
     const ctx = await contexts.create();
 
     await Promise.all([
@@ -23,12 +23,12 @@ Before(async (users, contexts) => {
         users.create(users.getRandom(), ctx)
     ]);
 });
-After(async (users, contexts) => {
+After(async ({ users, contexts }) => {
     await users.removeAll();
     await contexts[1].remove();
 });
 
-Scenario('[C7495] Quota update', async (I, users) => {
+Scenario('[C7495] Quota update', async ({ I, users }) => {
 
     const assert = require('chai').assert;
 

@@ -15,11 +15,11 @@ const moment = require('moment');
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -50,7 +50,7 @@ function check(I, count) {
     I.waitNumberOfVisibleElements('.widget[aria-label="Recently changed files"] ul li', count, 40);
 }
 
-Scenario('[C7494] Refresh widgets', async (I, users, portal) => {
+Scenario('[C7494] Refresh widgets', async ({ I, users, portal }) => {
     const [user] = users;
 
     await I.haveSetting({

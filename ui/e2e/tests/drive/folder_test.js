@@ -36,7 +36,7 @@ function sharedFolder(folderName, parent, users) {
     };
 }
 
-Before(async (I, users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create(),
@@ -45,13 +45,13 @@ Before(async (I, users) => {
     await users[0].context.doesntHaveCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // Note: The title of this test, does not really reflect what is tested here
 // A better title would be something like: Public files: Upload and new actions not shown in root folder
-Scenario('[C8374] Public files: Add a file', (I, drive) => {
+Scenario('[C8374] Public files: Add a file', ({ I, drive }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.selectFolder('Public files');
@@ -66,7 +66,7 @@ Scenario('[C8374] Public files: Add a file', (I, drive) => {
 
 // Note: The title of this test, does not really reflect what is tested here (again)
 // A better title would be something like: Public files: Moving files to root folder not possible
-Scenario('[C8375] Public files: Move a file', async (I, drive, dialogs) => {
+Scenario('[C8375] Public files: Move a file', async ({ I, drive, dialogs }) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
@@ -83,7 +83,7 @@ Scenario('[C8375] Public files: Move a file', async (I, drive, dialogs) => {
     I.waitForElement('.modal-footer .btn[data-action="ok"][disabled]');
 });
 
-Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
+Scenario('[C8376] Add a subfolder', async ({ I, drive, dialogs }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -98,7 +98,7 @@ Scenario('[C8376] Add a subfolder', async (I, drive, dialogs) => {
     I.waitForText('Testfolder', 5, '.file-list-view');
 });
 
-Scenario('[C8377] Invite a person', async (I, users, drive, dialogs) => {
+Scenario('[C8377] Invite a person', async ({ I, users, drive, dialogs }) => {
     function share() {
         I.clickToolbar('Share');
         dialogs.waitForVisible();
@@ -185,7 +185,7 @@ Scenario('[C8377] Invite a person', async (I, users, drive, dialogs) => {
 
 });
 
-Scenario('[C8378] Invite a group', async (I, users, drive, dialogs) => {
+Scenario('[C8378] Invite a group', async ({ I, users, drive, dialogs }) => {
     // Testrail description:
     // 1. Go to Drive
     // 2. Choose a folder and click the gear button (Context Menu)
@@ -233,7 +233,7 @@ Scenario('[C8378] Invite a group', async (I, users, drive, dialogs) => {
     }
 });
 
-Scenario('[C8379] Add a file', async (I, users, drive) => {
+Scenario('[C8379] Add a file', async ({ I, users, drive }) => {
     // Testrail description:
     // No rights to upload a file, "Viewer" role
     // 1. Try to upload a file (Denied of missing permission)
@@ -244,7 +244,7 @@ Scenario('[C8379] Add a file', async (I, users, drive) => {
     I.dontSee('New', '.classic-toolbar');
 });
 
-Scenario('[C8381] Lock a file', async (I, users, drive) => {
+Scenario('[C8381] Lock a file', async ({ I, users, drive }) => {
     // Testrail description:
     // Shared or public folder with other member
     // 1. Choose a file (Popup window)
@@ -266,7 +266,7 @@ Scenario('[C8381] Lock a file', async (I, users, drive) => {
     I.waitForText('document.txt (Locked)');
 });
 
-Scenario('[C8382] Delete a file', async (I, users, drive) => {
+Scenario('[C8382] Delete a file', async ({ I, users, drive }) => {
     // Testrail description:
     // Shared or public folder with other member
     // 1. Select a file
@@ -286,7 +286,7 @@ Scenario('[C8382] Delete a file', async (I, users, drive) => {
     I.dontSee('document.txt');
 });
 
-Scenario('[C8383] Unlock a file', async (I, users, drive) => {
+Scenario('[C8383] Unlock a file', async ({ I, users, drive }) => {
     // Testrail description:
     // 1. Choose a locked file
     // 2. "More"-- > "Unlock" (File is unlocked)
@@ -310,7 +310,7 @@ Scenario('[C8383] Unlock a file', async (I, users, drive) => {
     I.dontSee('Locked');
 });
 
-Scenario('[C8385] Uninvite a person', async (I, users, drive) => {
+Scenario('[C8385] Uninvite a person', async ({ I, users, drive }) => {
     // Testrail description:
     // Person is invited to the folder
     // 1. Choose a folder
@@ -344,7 +344,7 @@ Scenario('[C8385] Uninvite a person', async (I, users, drive) => {
     });
 });
 
-Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
+Scenario('[C8386] Uninvite a group', async ({ I, users, drive, dialogs }) => {
     // Testrail description
     // A group has permission in the folder
     // 1. Choose a folder
@@ -409,7 +409,7 @@ Scenario('[C8386] Uninvite a group', async (I, users, drive, dialogs) => {
 
 });
 
-Scenario('[C8387] Rename a folder', async (I, drive, dialogs) => {
+Scenario('[C8387] Rename a folder', async ({ I, drive, dialogs }) => {
     // Testrail description:
     // A custom folder in Drive exists.
     // 1. Switch to drive, select a non -default folder
@@ -442,7 +442,7 @@ Scenario('[C8387] Rename a folder', async (I, drive, dialogs) => {
 
 });
 
-Scenario('[C8388] Delete a folder', async (I, drive, dialogs) => {
+Scenario('[C8388] Delete a folder', async ({ I, drive, dialogs }) => {
     // Testrail description:
     // A custom folder exists in Drive
     // 1. Choose a custom folder
@@ -474,7 +474,7 @@ Scenario('[C8388] Delete a folder', async (I, drive, dialogs) => {
     });
 });
 
-Scenario('[C8389] Move a folder', async (I, drive) => {
+Scenario('[C8389] Move a folder', async ({ I, drive }) => {
     // Testrail description:
     // A folder hierarchy e.g.: My files Subfolder a SubSubFolder 1 Subfolder b
     // 1. Choose a folder
@@ -514,7 +514,7 @@ Scenario('[C8389] Move a folder', async (I, drive) => {
 });
 
 
-Scenario('Folder contextmenu opening and closing', (I, drive) => {
+Scenario('Folder contextmenu opening and closing', ({ I, drive }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.selectFolder('Documents');
@@ -524,7 +524,7 @@ Scenario('Folder contextmenu opening and closing', (I, drive) => {
     I.waitForDetached('.smart-dropdown-container');
 });
 
-Scenario('[C8390] Folder tree', async (I, drive) => {
+Scenario('[C8390] Folder tree', async ({ I, drive }) => {
     // Testrail description:
     // A folder tree with some items in it
     // 1. Go to My files (Subfolders including virtual folders are displayed in the drive main view)

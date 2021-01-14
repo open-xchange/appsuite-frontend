@@ -15,17 +15,17 @@
 
 Feature('General > Connect your device wizard');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // new connect your device wizard, see OXUI-793
 
-Scenario('Show available setup scenarios based on capabilites', async (I, topbar, users) => {
+Scenario('Show available setup scenarios based on capabilites', async ({ I, topbar, users }) => {
 
     I.login();
     I.refreshPage();
@@ -79,7 +79,7 @@ Scenario('Show available setup scenarios based on capabilites', async (I, topbar
 
 });
 
-Scenario('Progressbar updates on selection and navigation', async (I, topbar) => {
+Scenario('Progressbar updates on selection and navigation', async ({ I, topbar }) => {
 
     I.login();
     I.refreshPage();
@@ -111,7 +111,7 @@ Scenario('Progressbar updates on selection and navigation', async (I, topbar) =>
     });
 });
 
-Scenario('Generate QR codes for app downloads', async (I, topbar) => {
+Scenario('Generate QR codes for app downloads', async ({ I, topbar }) => {
 
     I.login('app=io.ox/mail&cap=mobile_mail_app');
     I.refreshPage();
@@ -141,7 +141,7 @@ Scenario('Generate QR codes for app downloads', async (I, topbar) => {
     });
 });
 
-Scenario('Change product names and check for different platforms', async (I, topbar) => {
+Scenario('Change product names and check for different platforms', async ({ I, topbar }) => {
 
     const mailApp = 'Awesome Mail App';
     const driveApp = 'Awesome Drive App';

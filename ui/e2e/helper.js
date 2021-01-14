@@ -214,7 +214,6 @@ class MyHelper extends Helper {
 
         const helper = this.helpers['Puppeteer'];
         const { page } = helper;
-
         const [src] = await helper._locate(srcSelector);
         const [target] = await helper._locate(targetSelector);
         const srcBB = await src.boundingBox();

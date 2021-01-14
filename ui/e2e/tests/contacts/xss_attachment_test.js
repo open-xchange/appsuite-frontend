@@ -13,15 +13,15 @@
 
 Feature('Contacts');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('adds an malicious attachment to a contact', async function (I, contacts) {
+Scenario('adds an malicious attachment to a contact', async function ({ I, contacts }) {
     const folder = await I.grabDefaultFolder('contacts');
     const { id } = await I.haveContact({ folder_id: folder, first_name: 'Evil', last_name: 'Knivel' });
     await I.haveAttachment(

@@ -14,7 +14,7 @@ const moment = require('moment');
 
 Feature('Calendar > Create');
 
-Before(async function (I, users) {
+Before(async function ({ I, users }) {
     await Promise.all([
         users.create(),
         users.create(),
@@ -27,12 +27,12 @@ Before(async function (I, users) {
     }, { user })));
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: very shaky
-Scenario.skip('Create appointments with participants who will accept/decline/accept tentative', async function (I, users, calendar, dialogs) {
+Scenario.skip('Create appointments with participants who will accept/decline/accept tentative', async function ({ I, users, calendar, dialogs }) {
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({

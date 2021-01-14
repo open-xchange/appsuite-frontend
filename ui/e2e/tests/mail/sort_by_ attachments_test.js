@@ -10,19 +10,19 @@
 * @author Christoph Kopp <christoph.kopp@open-xchange.com>
 */
 
-/// <reference path="../../../steps.d.ts" />
+/// <reference path="../../steps.d.ts" />
 
 Feature('Mail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C237339] Sort mails by attachments', async function (I, users, mail) {
+Scenario('[C237339] Sort mails by attachments', async function ({ I, users, mail }) {
     const [user] = users;
     await user.hasConfig('com.openexchange.imap.attachmentMarker.enabled', 'true');
 

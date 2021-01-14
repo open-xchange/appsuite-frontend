@@ -13,13 +13,13 @@
 
 const { expect } = require('chai');
 
-Scenario('Drive - List view w/o files', async (I) => {
+Scenario('Drive - List view w/o files', async ({ I }) => {
     I.login('app=io.ox/files');
     I.waitForElement('.file-list-view.complete');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Drive - Icon view w/o files', async (I) => {
+Scenario('Drive - Icon view w/o files', async ({ I }) => {
     I.login('app=io.ox/files');
     I.waitForText('View', undefined, '.classic-toolbar[aria-label^="Drive toolbar"]');
     I.clickToolbar('View');
@@ -28,7 +28,7 @@ Scenario('Drive - Icon view w/o files', async (I) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Drive - Tiles view w/o files', async (I) => {
+Scenario('Drive - Tiles view w/o files', async ({ I }) => {
     I.login('app=io.ox/files');
     I.waitForText('View');
     I.clickToolbar('View');

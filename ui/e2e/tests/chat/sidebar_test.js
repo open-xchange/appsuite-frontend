@@ -12,7 +12,7 @@
 /// <reference path="../../steps.d.ts" />
 Feature('Chat > Sidebar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -20,12 +20,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Show all files', (I, users, chat) => {
+Scenario('Show all files', ({ I, users, chat }) => {
     const scrollpaneLocator = '.ox-chat .chat-rightside .scrollpane';
 
     I.login({ user: users[0] });

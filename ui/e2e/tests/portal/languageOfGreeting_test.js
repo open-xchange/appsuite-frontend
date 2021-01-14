@@ -13,14 +13,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7496] Language of Greeting', async (I, topbar) => {
+Scenario('[C7496] Language of Greeting', async ({ I, topbar }) => {
 
     const expect = require('chai').expect;
 

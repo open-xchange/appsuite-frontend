@@ -13,7 +13,7 @@
 
 Feature('Chat > SMTP');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Receive email notifications from private chats', async (I, users, chat) => {
+Scenario('Receive email notifications from private chats', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -58,7 +58,7 @@ Scenario('Receive email notifications from private chats', async (I, users, chat
     });
 });
 
-Scenario('Receive email notifications from groups', async (I, users, chat) => {
+Scenario('Receive email notifications from groups', async ({ I, users, chat }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();
@@ -88,7 +88,7 @@ Scenario('Receive email notifications from groups', async (I, users, chat) => {
 });
 
 // unskip when CAS-330 is resolved
-Scenario.skip('Do not receive email notifications from a private chat', async (I, users, chat) => {
+Scenario.skip('Do not receive email notifications from a private chat', async ({ I, users, chat }) => {
     await session('Bob', async () => {
         I.login({ user: users[1] });
         I.click('~Settings');
@@ -119,7 +119,7 @@ Scenario.skip('Do not receive email notifications from a private chat', async (I
     });
 });
 
-Scenario.skip('Do only receive email notifications from private chats', async (I, users, chat) => {
+Scenario.skip('Do only receive email notifications from private chats', async ({ I, users, chat }) => {
     I.login({ user: users[1] });
     I.click('~Settings');
     I.clickDropdown('Settings');
@@ -153,7 +153,7 @@ Scenario.skip('Do only receive email notifications from private chats', async (I
     I.seeNumberOfVisibleElements('.mail-item .list-item.selectable', 1);
 });
 
-Scenario.skip('Receive email notifications from channels', async (I, users, contexts, chat, dialogs) => {
+Scenario.skip('Receive email notifications from channels', async ({ I, users, contexts, chat, dialogs }) => {
     const context = await contexts.create();
     context.hasCapability('chat');
     const alice = await users.create(users.getRandom(), context);
@@ -208,7 +208,7 @@ Scenario.skip('Receive email notifications from channels', async (I, users, cont
     });
 });
 
-Scenario.skip('Answering a notification will inject text to a chat', async (I, users, chat, mail) => {
+Scenario.skip('Answering a notification will inject text to a chat', async ({ I, users, chat, mail }) => {
     await session('Alice', async () => {
         I.login({ user: users[0] });
         chat.openChat();

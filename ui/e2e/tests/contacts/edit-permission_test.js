@@ -2,19 +2,19 @@
 
 Feature('Contacts > Edit');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
-Scenario('[C7365] Edit permission ', async (I, contacts, users, dialogs) => {
+Scenario('[C7365] Edit permission ', async ({ I, contacts, users, dialogs }) => {
 
     // #1 Login, open address book
     I.login('app=io.ox/contacts');

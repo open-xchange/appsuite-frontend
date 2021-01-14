@@ -13,11 +13,11 @@
 
 Feature('Accessibility');
 
-BeforeSuite(async function (users) {
+BeforeSuite(async function ({ users }) {
     await users.create();
 });
 
-AfterSuite(async function (users) {
+AfterSuite(async function ({ users }) {
     await users.removeAll();
 });
 

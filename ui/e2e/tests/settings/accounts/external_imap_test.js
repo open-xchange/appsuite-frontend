@@ -15,15 +15,15 @@
 
 Feature('Custom mail account');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7836] Add custom mail account (IMAP)', async (I, users, mail, settings, dialogs, contexts) => {
+Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, settings, dialogs, contexts }) => {
     const secondContext = await contexts.create();
     await users.create(users.getRandom(), secondContext);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');

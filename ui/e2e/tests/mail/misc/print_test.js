@@ -15,15 +15,15 @@
 
 Feature('Mail > Print');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C44997] Print a E-Mail', async (I, users, mail) => {
+Scenario('[C44997] Print a E-Mail', async ({ I, mail }) => {
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c44997.eml' });
 
     // 1. Go to Mail -> Compose

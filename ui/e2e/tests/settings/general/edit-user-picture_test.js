@@ -16,11 +16,11 @@ const { I, contacts } = inject();
 
 Feature('Settings > Basic > User picture');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -51,7 +51,7 @@ function editPhotoStandalone() {
     I.waitForVisible('.modal.edit-picture');
 }
 
-Scenario('User starts without picture', async function (I, dialogs, contacts, mail) {
+Scenario('User starts without picture', async function ({ I, dialogs, contacts, mail }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -81,7 +81,7 @@ Scenario('User starts without picture', async function (I, dialogs, contacts, ma
     I.click('Discard');
 });
 
-Scenario('User can upload/remove picture', async function (I, contacts, mail, dialogs) {
+Scenario('User can upload/remove picture', async function ({ I, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -125,7 +125,7 @@ Scenario('User can upload/remove picture', async function (I, contacts, mail, di
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can upload/remove picture (standalone version)', async function (I, contacts, mail, dialogs) {
+Scenario('User can upload/remove picture (standalone version)', async function ({ I, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -195,7 +195,7 @@ Scenario('User can upload/remove picture (standalone version)', async function (
     I.waitForVisible('.edit-picture.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, contacts, mail, dialogs) {
+Scenario('User can rotate her/his picture', async function ({ I, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 

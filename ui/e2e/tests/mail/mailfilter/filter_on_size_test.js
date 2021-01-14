@@ -14,15 +14,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7798] Filter mail on size', async function (I, users, mail, mailfilter) {
+Scenario('[C7798] Filter mail on size', async function ({ I, users, mail, mailfilter }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

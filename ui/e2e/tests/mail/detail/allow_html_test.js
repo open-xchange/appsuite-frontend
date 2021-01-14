@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7816] HTML/Plain-text mail', async (I, users, mail) => {
+Scenario('[C7816] HTML/Plain-text mail', async ({ I, users, mail }) => {
 
     var icke = users[0].userdata.email1;
 

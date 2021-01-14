@@ -14,18 +14,18 @@
 
 Feature('Tasks > Delete');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create(),
         users.create()
     ]);
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7753] Delete single Task', async function (I, users, tasks, dialogs) {
+Scenario('[C7753] Delete single Task', async function ({ I, users, tasks, dialogs }) {
     const testrailID = 'C7753';
     const testrailName = 'Delete single Task';
 
@@ -55,7 +55,7 @@ Scenario('[C7753] Delete single Task', async function (I, users, tasks, dialogs)
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7754] Delete several Task at the same time', async function (I, users, tasks, dialogs) {
+Scenario('[C7754] Delete several Task at the same time', async function ({ I, users, tasks, dialogs }) {
     const testrailID = 'C7754',
         testrailName = 'Delete several Task at the same time',
         taskDefaultFolder = await I.grabDefaultFolder('tasks', { user: users[0] }),
@@ -80,7 +80,7 @@ Scenario('[C7754] Delete several Task at the same time', async function (I, user
     I.waitForText('Empty', 5, '.vgrid');
 });
 
-Scenario('[C7755] Delete recurring Task', async function (I, tasks, dialogs) {
+Scenario('[C7755] Delete recurring Task', async function ({ I, tasks, dialogs }) {
     const testrailID = 'C7755',
         testrailName = 'Delete recurring Task';
 

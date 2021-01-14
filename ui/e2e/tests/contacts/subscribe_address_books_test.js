@@ -14,18 +14,18 @@
 
 Feature('Contacts > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C308518] Subscribe / Unsubscribe public address book', async (I, contacts, dialogs, users) => {
+Scenario('[C308518] Subscribe / Unsubscribe public address book', async ({ I, contacts, dialogs, users }) => {
 
     const toggleAddressBook = (state) => {
         const checkBoxLocator = locate('input[type="checkbox"]').inside(locate('.list-group-item').withText('All my friends'));

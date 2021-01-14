@@ -14,15 +14,15 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
+Scenario('[C276001] Change Quicklaunch limit', async ({ I }) =>{
     await I.haveSetting('io.ox/core//apps/quickLaunchCount', 5);
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     I.waitForVisible({ css: 'div[data-point="io.ox/core/settings/detail/view"]' });
@@ -48,7 +48,7 @@ Scenario('[C276001] Change Quicklaunch limit', async (I) =>{
     });
 });
 
-Scenario('[C256960] Configure quick launch icons', async (I) =>{
+Scenario('[C256960] Configure quick launch icons', async ({ I }) =>{
     await Promise.all([
         I.haveSetting('io.ox/core//logoAction', 'https://www.open-xchange.com/'),
         I.haveSetting('io.ox/core//apps/quickLaunchCount', 5),
@@ -68,7 +68,7 @@ Scenario('[C256960] Configure quick launch icons', async (I) =>{
     I.seeCurrentUrlEquals('https://www.open-xchange.com/');
 });
 
-Scenario('[C256960] Logo Action points to autostart app', async (I, calendar, mail) =>{
+Scenario('[C256960] Logo Action points to autostart app', async ({ I, calendar, mail }) =>{
     await Promise.all([
         I.haveSetting('io.ox/core//logoAction', 'autoStart') // AutoStart defaults to mail app
     ]);

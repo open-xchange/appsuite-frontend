@@ -12,16 +12,16 @@
 
 Feature('Tours > Getting started');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // skip for now until pipeline can handle the tour plugin
-Scenario.skip('Getting started tour', async function (I, topbar) {
+Scenario.skip('Getting started tour', async function ({ I, topbar }) {
 
     I.login();
     topbar.tours();

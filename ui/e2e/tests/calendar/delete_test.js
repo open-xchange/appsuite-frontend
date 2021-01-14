@@ -16,7 +16,7 @@ const moment = require('moment');
 
 Feature('Calendar > Delete');
 
-Before(async (I, users) => {
+Before(async ({ I, users }) => {
     await users.create();
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -24,11 +24,11 @@ Before(async (I, users) => {
     });
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7466] Delete one appointment of an series', async function (I, calendar, dialogs) {
+Scenario('[C7466] Delete one appointment of an series', async function ({ I, calendar, dialogs }) {
     const testrailID = 'C7466';
     const ariaLabel = `~${testrailID}, ${testrailID}`;
 
@@ -73,7 +73,7 @@ Scenario('[C7466] Delete one appointment of an series', async function (I, calen
     I.waitForElement(ariaLabel, 5);
 });
 
-Scenario('[C7468] Delete an appointment', async function (I, calendar) {
+Scenario('[C7468] Delete an appointment', async function ({ I, calendar }) {
     const testrailID = 'C7468';
     const ariaLabel = `~${testrailID}, ${testrailID}`;
     await I.haveAppointment({
@@ -97,7 +97,7 @@ Scenario('[C7468] Delete an appointment', async function (I, calendar) {
     I.waitForDetached(ariaLabel);
 });
 
-Scenario('[C7469] Delete a whole-day appointment', async function (I, calendar) {
+Scenario('[C7469] Delete a whole-day appointment', async function ({ I, calendar }) {
     const testrailID = 'C7469';
     const ariaLabel = `~${testrailID}, ${testrailID}`;
 

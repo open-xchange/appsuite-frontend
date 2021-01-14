@@ -14,14 +14,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7485] Disable a widget', async (I, users, dialogs) => {
+Scenario('[C7485] Disable a widget', async ({ I, users, dialogs }) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{

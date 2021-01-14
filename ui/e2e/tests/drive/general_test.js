@@ -19,15 +19,15 @@ const fs = require('fs'),
 
 Feature('Drive > General');
 
-Before(async (I, users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8362] Add note', (I, drive) => {
+Scenario('[C8362] Add note', ({ I, drive }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
@@ -44,7 +44,7 @@ Scenario('[C8362] Add note', (I, drive) => {
 });
 
 // Bug: File input is not selectable (display: none), which is also a pot. a11y bug
-Scenario('[C8364] Upload new file', (I, drive) => {
+Scenario('[C8364] Upload new file', ({ I, drive }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('Upload');
@@ -56,7 +56,7 @@ Scenario('[C8364] Upload new file', (I, drive) => {
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
-Scenario('[C8366] Edit description', async (I, drive, dialogs) => {
+Scenario('[C8366] Edit description', async ({ I, drive, dialogs }) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -109,7 +109,7 @@ const checkIfFoldersExist = (I, layout) => {
     }
 };
 
-Scenario('[C8368] View change @bug', async (I, drive) => {
+Scenario('[C8368] View change @bug', async ({ I, drive }) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -143,7 +143,7 @@ const searchFor = (I, query) => {
     I.waitForDetached('.busy-indicator.io-ox-busy');
 };
 
-Scenario('[C8369] Search', async (I, drive) => {
+Scenario('[C8369] Search', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
@@ -166,7 +166,7 @@ Scenario('[C8369] Search', async (I, drive) => {
     I.waitNumberOfVisibleElements('.file-list-view .list-item', 3);
 });
 
-Scenario('[C8371] Delete file', async (I, drive) => {
+Scenario('[C8371] Delete file', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
     await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
     I.login('app=io.ox/files');
@@ -185,7 +185,7 @@ Scenario('[C8371] Delete file', async (I, drive) => {
     I.waitForDetached(locate('li.list-item').withText('document.txt'));
 });
 
-Scenario('[C45039] Breadcrumb navigation', async (I, drive) => {
+Scenario('[C45039] Breadcrumb navigation', async ({ I, drive }) => {
     const parent = await I.haveFolder({ title: 'Folders', module: 'infostore', parent: await I.grabDefaultFolder('infostore') });
     await Promise.all([
         I.haveFolder({ title: 'subfolder1', module: 'infostore', parent }),
@@ -212,7 +212,7 @@ const checkFileOrder = (I, files) => {
     files.forEach((name, index) => { I.see(name, '.list-item:nth-child(' + (index + 2) + ')'); });
 };
 
-Scenario('[C45040] Sort files', async (I, drive) => {
+Scenario('[C45040] Sort files', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
     await Promise.all([
@@ -259,7 +259,7 @@ Scenario('[C45040] Sort files', async (I, drive) => {
     checkFileOrder(I, ['testdocument.rtf', 'testpresentation.ppsm', 'testdocument.odt', 'document.txt']);
 });
 
-Scenario('[C45041] Select files', async (I, drive) => {
+Scenario('[C45041] Select files', async ({ I, drive }) => {
     const testFolder = await I.haveFolder({ title: 'Selecttest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
         filePath = 'e2e/media/files/0kb/',
         files = await readdir(filePath);
@@ -287,7 +287,7 @@ Scenario('[C45041] Select files', async (I, drive) => {
     I.dontSeeElementInDOM('.file-list-view .list-item.selected');
 });
 
-Scenario('[C45042] Filter files', async (I, drive) => {
+Scenario('[C45042] Filter files', async ({ I, drive }) => {
     // BUG: This menu should be grouped as it has 2 sets of menuitemradios
     // to make matters worse there are two "All" menuitems without a relation
     // to a group.
@@ -339,7 +339,7 @@ Scenario('[C45042] Filter files', async (I, drive) => {
 });
 
 // Bug: File input is not selectable (display: none), which is also a pot. a11y bug
-Scenario('[Bug 63288] Cancel upload does not work in drive', async (I, drive) => {
+Scenario('[Bug 63288] Cancel upload does not work in drive', async ({ I, drive }) => {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('Upload');

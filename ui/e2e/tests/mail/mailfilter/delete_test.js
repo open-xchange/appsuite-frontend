@@ -14,17 +14,17 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7789] Delete filter rule @contentReview', async function (I, users, dialogs) {
+Scenario('[C7789] Delete filter rule @contentReview', async function ({ I, users, dialogs }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });

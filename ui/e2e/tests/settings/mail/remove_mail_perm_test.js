@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7771] Permanently remove deleted mails', async (I, users, mail, dialogs) => {
+Scenario('[C7771] Permanently remove deleted mails', async ({ I, users, mail, dialogs }) => {
     const user = users[0];
 
     await I.haveMail({

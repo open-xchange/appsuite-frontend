@@ -16,16 +16,16 @@ const moment = require('moment');
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7763] Configure notification area', async (I, users) => {
+Scenario('[C7763] Configure notification area', async ({ I, users }) => {
 
     var userA = users[0], userB = users[1];
 

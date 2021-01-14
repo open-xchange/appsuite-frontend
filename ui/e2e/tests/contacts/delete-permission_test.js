@@ -2,18 +2,18 @@
 
 Feature('Contacts > Edit');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7368] Delete permission ', async (I, contacts, users, dialogs) => {
+Scenario('[C7368] Delete permission ', async ({ I, contacts, users, dialogs }) => {
     // Login, open address book
     I.login('app=io.ox/contacts');
     contacts.waitForApp();

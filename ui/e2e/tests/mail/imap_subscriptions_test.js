@@ -42,15 +42,15 @@ const goToMail = (I) => {
 
 Feature('Settings > Mail > IMAP subscriptions');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[7783] Unsubscribe folder', async (I) => {
+Scenario('[7783] Unsubscribe folder', async ({ I }) => {
     await prepare(I);
 
     changeSubscription(I, true);
@@ -58,7 +58,7 @@ Scenario('[7783] Unsubscribe folder', async (I) => {
     I.dontSee('Krawall');
 });
 
-Scenario('[7784] Subscribe folder', async (I) => {
+Scenario('[7784] Subscribe folder', async ({ I }) => {
     await prepare(I);
 
     changeSubscription(I);

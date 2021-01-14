@@ -16,15 +16,15 @@ const expect = require('chai').expect;
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7819] Color quotes on reply', async (I, users, mail) => {
+Scenario('[C7819] Color quotes on reply', async ({ I, users, mail }) => {
 
     var icke = users[0].userdata.email1;
 

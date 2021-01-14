@@ -14,15 +14,15 @@
 
 Feature('Mail > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[Bug 68343] Emails are not sent as HTML and text', async (I, users, mail) => {
+Scenario('[Bug 68343] Emails are not sent as HTML and text', async ({ I, users, mail }) => {
 
     await I.haveSetting({
         'io.ox/mail': {

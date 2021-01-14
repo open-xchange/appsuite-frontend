@@ -13,15 +13,15 @@
 
 Feature('Contacts > Delete');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7366] Multiple contacts', async function (I, search, contacts, dialogs) {
+Scenario('[C7366] Multiple contacts', async function ({ I, search, contacts, dialogs }) {
     const testrailID = 'C7366';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',
@@ -50,7 +50,7 @@ Scenario('[C7366] Multiple contacts', async function (I, search, contacts, dialo
     I.dontSee('C7367, C7367');
 });
 
-Scenario('[C7367] Single Contact', async function (I, contacts, dialogs) {
+Scenario('[C7367] Single Contact', async function ({ I, contacts, dialogs }) {
     const testrailID = 'C7367',
         displayName = testrailID + ', ' + testrailID,
         contact = {

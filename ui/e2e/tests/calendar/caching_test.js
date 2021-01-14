@@ -14,16 +14,16 @@ const moment = require('moment');
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
-Scenario('Create never ending appointment and check display in several views', async function (I, calendar, dialogs) {
+Scenario('Create never ending appointment and check display in several views', async function ({ I, calendar, dialogs }) {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();

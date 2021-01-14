@@ -14,15 +14,15 @@
 /// <reference path="../../steps.d.ts" />
 Feature('General > Configure quick launchers');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C287801] Configure quick launchers', function (I, mail, dialogs) {
+Scenario('[C287801] Configure quick launchers', function ({ I, mail, dialogs }) {
     I.login();
     mail.waitForApp();
 

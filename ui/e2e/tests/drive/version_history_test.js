@@ -14,15 +14,15 @@
 
 Feature('Drive > General');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8365] Version history', async (I, drive) => {
+Scenario('[C8365] Version history', async ({ I, drive }) => {
     var fs = require('fs');
 
     let timestamp1 = Math.round(+new Date() / 1000);

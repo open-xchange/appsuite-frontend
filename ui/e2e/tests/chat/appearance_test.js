@@ -12,17 +12,17 @@
 /// <reference path="../../steps.d.ts" />
 Feature('Chat > Appearance');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Open, close and toggle chat', (I, chat) => {
+Scenario('Open, close and toggle chat', ({ I, chat }) => {
     I.login();
     chat.openChat();
     I.waitForElement('.io-ox-windowmanager-sticky-panel .ox-chat');

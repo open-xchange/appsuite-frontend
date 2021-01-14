@@ -17,16 +17,16 @@ const moment = require('moment');
 
 Feature('Mail > Drive Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users, mail) {
+Scenario('[C85691] Cloud icon is used for drive-mail', async function ({ I, users, mail }) {
     I.login('app=io.ox/mail');
     mail.newMail();
 
@@ -44,7 +44,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users,
     I.waitForElement('.fa-cloud-download.is-shared-attachement');
 });
 
-Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail) => {
+Scenario('[C85685] Send drive-mail to internal recipient', async ({ I, users, mail }) => {
     const [batman, robin] = users;
 
     // 1. Go to Mail -> Compose
@@ -115,7 +115,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail
     // TODO: check if a download helper is feasible
 });
 
-Scenario('[C85687] Send drive-mail with expiry date', async (I, users, mail, dialogs, drive) => {
+Scenario('[C85687] Send drive-mail with expiry date', async ({ I, users, mail, dialogs, drive }) => {
     const [batman, comissioner_gordon] = users;
 
     // Go to Mail -> Compose
@@ -201,7 +201,7 @@ Scenario('[C85687] Send drive-mail with expiry date', async (I, users, mail, dia
     // Omitted: Check that the link actually expires after one day.
 });
 
-Scenario('[C85689] Send drive-mail with an attachment below the threshold', async (I, users, mail, drive) => {
+Scenario('[C85689] Send drive-mail with an attachment below the threshold', async ({ I, users, mail, drive }) => {
     const [batman, comissioner_gordon] = users;
     await batman.hasConfig('com.openexchange.mail.compose.share.threshold', '' + (3 * 1024 * 1024)); // 3MB limit
     await batman.hasConfig('com.openexchange.mail.compose.share.enabled', 'true');
@@ -260,7 +260,7 @@ Scenario('[C85689] Send drive-mail with an attachment below the threshold', asyn
     });
 });
 
-Scenario('[C85688] Send drive-mail with an attachment above the threshold', async (I, users, mail, drive) => {
+Scenario('[C85688] Send drive-mail with an attachment above the threshold', async ({ I, users, mail, drive }) => {
     const [batman, comissioner_gordon] = users;
     await batman.hasConfig('com.openexchange.mail.compose.share.threshold', '' + (1 * 1024 * 1024)); // 1MB limit
     await batman.hasConfig('com.openexchange.mail.compose.share.enabled', 'true');
@@ -329,7 +329,7 @@ Scenario('[C85688] Send drive-mail with an attachment above the threshold', asyn
     I.waitForElement(locate('.list-view li.list-item').withText(batFile));
 });
 
-Scenario('[C85684] Feature name is configurable', async (I, users, mail, drive) => {
+Scenario('[C85684] Feature name is configurable', async ({ I, users, mail, drive }) => {
     const [batman, robin] = users;
     await batman.hasConfig('com.openexchange.mail.compose.share.name', 'Bat Mail');
     // Go to Mail -> Compose
@@ -384,7 +384,7 @@ Scenario('[C85684] Feature name is configurable', async (I, users, mail, drive) 
 
 });
 
-Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
+Scenario('[C85690] Expire date can be forced', async function ({ I, users, mail }) {
 
     I.login('app=io.ox/mail');
     mail.waitForApp();
@@ -422,7 +422,7 @@ Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
     I.waitForText('Plus Ultra!');
 });
 
-Scenario('[C85686] Send drive-mail to external recipient', async (I, users, mail, drive) => {
+Scenario('[C85686] Send drive-mail to external recipient', async ({ I, users, mail, drive }) => {
     const [batman, comissioner_gordon] = users;
 
     // Go to Mail -> Compose

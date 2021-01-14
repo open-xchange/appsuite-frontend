@@ -13,15 +13,15 @@
 
 Feature('Tasks');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('check actions', async function (I, tasks, dialogs) {
+Scenario('check actions', async function ({ I, tasks, dialogs }) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     tasks.newTask();
@@ -56,7 +56,7 @@ Scenario('check actions', async function (I, tasks, dialogs) {
     I.waitForDetached('.modal-dialog');
 });
 
-Scenario('[XSS] [OXUIB-401] No malicious code execution in mail reminders', async function (I, tasks) {
+Scenario('[XSS] [OXUIB-401] No malicious code execution in mail reminders', async function ({ I, tasks }) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     tasks.newTask();

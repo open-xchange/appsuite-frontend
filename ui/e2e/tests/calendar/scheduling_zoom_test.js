@@ -17,15 +17,15 @@ const expect = require('chai').expect;
 
 Feature('Calendar > Scheduling');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C244795] Zoom levels in scheduling view', async (I, users) => {
+Scenario('[C244795] Zoom levels in scheduling view', async ({ I, users }) => {
 
     // create appointment (today)
     var format = 'YMMDD[T]HHmmss',

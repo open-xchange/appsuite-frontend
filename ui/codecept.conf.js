@@ -105,7 +105,7 @@ module.exports.config = {
         toolbar: './e2e/widgetobjects/toolbar',
         topbar: './e2e/widgetobjects/topbar'
     },
-    bootstrap: async function (done) {
+    bootstrap: async () => {
         // setup chai
         var chai = require('chai');
         chai.config.includeStack = true;
@@ -165,12 +165,11 @@ module.exports.config = {
             testRunContext = await contexts.create(ctxData);
         } catch (err) {
             console.error(`Could not create context ${JSON.stringify(ctxData, null, 4)}.\nError: ${err.faultstring}`);
-            done(err);
+            throw new Error(err.message);
         }
 
         if (typeof testRunContext.id !== 'undefined') helperConfig.contextId = testRunContext.id;
         await seleniumReady.catch(err => console.err(err));
-        done();
 
     },
     teardown: async function () {

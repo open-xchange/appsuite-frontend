@@ -13,7 +13,7 @@
 
 Feature('Chat > Typing notifications');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -21,12 +21,12 @@ Before(async (users) => {
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('chat');
     await users.removeAll();
 });
 
-Scenario('Typing notifications will appear and stop on message sent', async (I, users, chat) => {
+Scenario('Typing notifications will appear and stop on message sent', async ({ I, users, chat }) => {
     const message1 = 'I will only type some words';
     const message2 = ' and then I will write a lot of words and send it immediately. The typing notification should stop as soon I press "Enter".';
 
@@ -64,7 +64,7 @@ Scenario('Typing notifications will appear and stop on message sent', async (I, 
     });
 });
 
-Scenario('Typing notifications will appear for multiple users typing', async (I, users, chat) => {
+Scenario('Typing notifications will appear for multiple users typing', async ({ I, users, chat }) => {
     await users.create();
     const message = 'This is a long message and will take a while to type in. So Alice has enough time to check if there is a typing notification.';
 

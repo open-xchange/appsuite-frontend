@@ -15,16 +15,16 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, drive, dialogs) {
+Scenario('[C45032] Edit Permissions at "My shares"', async function ({ I, users, drive, dialogs }) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -83,6 +83,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
     session('Alice', () => {
         I.click('Edit share');
         I.waitForText('Share folder');
+        I.waitForText('Details', 5, locate('.permissions-view .row').at(2));
         I.click('Details', locate('.permissions-view .row').at(2));
         I.clickDropdown('Create objects and subfolders');
 
@@ -118,7 +119,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function (I, users, d
 });
 
 // TODO: shaky, failed (10 runs on 2019-11-28)
-Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users, drive, dialogs) {
+Scenario('[C107063] Revoke Permissions at "My shares"', async function ({ I, users, drive, dialogs }) {
     session('Alice', () => {
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -178,7 +179,7 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function (I, users
     });
 });
 
-Scenario('[C73919] Copy a shared file to another folder', async function (I, users, drive, dialogs) {
+Scenario('[C73919] Copy a shared file to another folder', async function ({ I, users, drive, dialogs }) {
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');

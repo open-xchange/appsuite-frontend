@@ -15,7 +15,7 @@ Feature('Chat > Channels');
 
 let context;
 
-Before(async (users, contexts) => {
+Before(async ({ users, contexts }) => {
     context = await contexts.create();
     await context.hasCapability('chat');
 
@@ -25,13 +25,12 @@ Before(async (users, contexts) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
     await context.remove();
 });
 
-// TODO: Unskip when CAS-335 is resolved
-Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs, users) => {
+Scenario.skip('Update channel profile picture and name', async ({ I, chat, dialogs, users }) => {
     const [alice, bob] = users;
     // Check initial photo: Empty | Initial name: Announcements
     await session('Alice', async () => {
@@ -137,7 +136,7 @@ Scenario.skip('Update channel profile picture and name', async (I, chat, dialogs
 });
 
 // TODO: Unskip when CAS-335 is resolved
-Scenario.skip('Cannot create or edit channel to have the same name', async (I, dialogs, chat) => {
+Scenario.skip('Cannot create or edit channel to have the same name', async ({ I, dialogs, chat }) => {
     const channelTitle = 'Only one';
     const alternativeTitle = 'Another one';
 
@@ -177,7 +176,7 @@ Scenario.skip('Cannot create or edit channel to have the same name', async (I, d
     I.waitForText('A channel with the same name already exists', 5, '.io-ox-alert-error');
 });
 
-Scenario('Preview, join and leave a channel', async (I, users, chat) => {
+Scenario('Preview, join and leave a channel', async ({ I, users, chat }) => {
     const [alice, bob] = users;
     const name = `${bob.get('given_name')} ${bob.get('sur_name')} `;
 

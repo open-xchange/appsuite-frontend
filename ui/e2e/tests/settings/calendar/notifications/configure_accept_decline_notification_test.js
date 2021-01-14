@@ -14,7 +14,7 @@
 
 Feature('Settings > Calendar');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await Promise.all([
         users.create(),
         users.create(),
@@ -22,7 +22,7 @@ Before(async function (users) {
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -100,20 +100,20 @@ const createAppointment = async (subject, participants) => {
             I.dontSee('tentatively accepted');
         }
     },
-    deleteAppointment = (subject) =>{
+    deleteAppointment = subject => {
         const { I, calendar } = inject();
         I.say('Delete old appointment to get a clean slate');
         I.openApp('Calendar', { perspective: 'week:week' });
         calendar.waitForApp();
         I.waitForText(subject);
-        I.click(subject);
+        I.click(locate('.appointment').withText(subject));
         I.waitForVisible('.io-ox-sidepopup');
         calendar.deleteAppointment();
         I.waitForDetached('.io-ox-sidepopup');
         I.waitForDetached('.page.current .appointment');
     };
 
-Scenario('[C7871] Configure accept/decline notification for creator', async (I, users, settings) => {
+Scenario('[C7871] Configure accept/decline notification for creator', async ({ I, users, settings }) => {
     const [userA, userB] = users;
     const subject = 'C7871';
 
@@ -168,7 +168,7 @@ Scenario('[C7871] Configure accept/decline notification for creator', async (I, 
     });
 });
 
-Scenario('[C7872] Configure accept/decline for participant', async (I, users, settings) => {
+Scenario('[C7872] Configure accept/decline for participant', async ({ I, users, settings }) => {
     const [userA, userB, userC] = users,
         subject = '[C7872]';
 
@@ -210,6 +210,7 @@ Scenario('[C7872] Configure accept/decline for participant', async (I, users, se
     });
 
     await session('userA', async () => {
+        I.waitForText(subject);
         await deleteAppointment(subject);
 
         I.say('As userA create appointment again with all participants.');

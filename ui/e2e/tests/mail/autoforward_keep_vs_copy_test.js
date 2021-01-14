@@ -12,15 +12,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule with copy statement is handled correctly', function (I, dialogs) {
+Scenario('checks if an auto forward rule with copy statement is handled correctly', function ({ I, dialogs }) {
 
     I.haveMailFilterRule({
         'rulename': 'autoforward',
@@ -49,7 +49,7 @@ Scenario('checks if an auto forward rule with copy statement is handled correctl
     I.waitForDetached('.modal-dialog');
 });
 
-Scenario('checks if an auto forward rule with keep statement is handled correctly', function (I, dialogs) {
+Scenario('checks if an auto forward rule with keep statement is handled correctly', function ({ I, dialogs }) {
     I.haveMailFilterRule({
         'rulename': 'autoforward',
         'actioncmds': [
@@ -78,7 +78,7 @@ Scenario('checks if an auto forward rule with keep statement is handled correctl
     I.waitForDetached('.modal-dialog');
 });
 
-Scenario('checks if an auto forward rule with keep statement is written correctly', function (I, users, dialogs) {
+Scenario('checks if an auto forward rule with keep statement is written correctly', function ({ I, users, dialogs }) {
     let [user] = users;
 
     user.hasConfig('com.openexchange.mail.filter.blacklist.actions', 'copy');
@@ -109,7 +109,7 @@ Scenario('checks if an auto forward rule with keep statement is written correctl
     I.waitForVisible({ css: '[data-action="edit-auto-forward"] .fa-toggle-on' });
 });
 
-Scenario('checks if an auto forward rule with copy statement is written correctly', function (I, dialogs) {
+Scenario('checks if an auto forward rule with copy statement is written correctly', function ({ I, dialogs }) {
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');

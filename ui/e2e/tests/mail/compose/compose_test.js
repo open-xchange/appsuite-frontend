@@ -15,15 +15,15 @@ const expect = require('chai').expect;
 
 Feature('Mail Compose');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Compose and discard with/without prompts', async function (I, users, mail) {
+Scenario('Compose and discard with/without prompts', async function ({ I, users, mail }) {
     const [user] = users;
 
     // preparations
@@ -112,7 +112,7 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
 });
 
-Scenario('Compose mail with different attachments', async function (I, users, mail) {
+Scenario('Compose mail with different attachments', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
@@ -181,7 +181,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
     I.see('2 attachments'); // has 2 attachments as one of the attachments is inline
 });
 
-Scenario('Compose with inline image, which is removed again', async function (I, users, mail) {
+Scenario('Compose with inline image, which is removed again', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
@@ -211,7 +211,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.dontSeeElement('.attachments');
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive, dialogs) {
+Scenario('Compose with drivemail attachment and edit draft', async function ({ I, users, mail, drive, dialogs }) {
     const [user] = users;
     const user2 = await users.create();
 
@@ -306,7 +306,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
 });
 
-Scenario('Compose mail with vcard and read receipt', async function (I, users, mail) {
+Scenario('Compose mail with vcard and read receipt', async function ({ I, users, mail }) {
     const user2 = await users.create();
 
     I.login('app=io.ox/mail');
@@ -343,7 +343,7 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users, m
     // I.see('Read acknowledgement', '.mail-detail-pane');
 });
 
-Scenario('Compose mail, refresh and continue work at restore point', async function (I, users, mail) {
+Scenario('Compose mail, refresh and continue work at restore point', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'text');

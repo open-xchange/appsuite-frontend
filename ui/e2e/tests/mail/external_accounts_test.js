@@ -14,15 +14,15 @@
 /// <reference path="../../steps.d.ts" />
 Feature('Mail > External Accounts');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C125352] No mail oauth service available', function (I, mail) {
+Scenario('[C125352] No mail oauth service available', function ({ I, mail }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 

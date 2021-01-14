@@ -17,15 +17,15 @@ const expect = require('chai').expect;
 
 Feature('Mail > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8408] Try to run a script in search', async function (I, mail, search) {
+Scenario('[C8408] Try to run a script in search', async function ({ I, mail, search }) {
     I.login();
     mail.waitForApp();
     I.click(search.locators.box);
@@ -39,25 +39,7 @@ Scenario('[C8408] Try to run a script in search', async function (I, mail, searc
     expect(await I.grabHTMLFrom({ xpath: '//body' })).to.not.equal('I am a hacker');
 });
 
-Scenario('Supports delayed autoselect', async function (I, mail, search) {
-
-    I.login('app=io.ox/mail');
-    mail.waitForApp();
-    var query = 'my-input';
-
-    I.say('enter query');
-    I.click(search.locators.box);
-    I.waitForVisible(search.locators.field);
-    I.fillField(search.locators.field, query);
-
-    I.dontSeeElement('.autocomplete-item');
-    I.pressKey('Enter');
-
-    I.say('check created token');
-    I.waitForText(query, 2, '.token-label');
-});
-
-Scenario('Disable cache for search results (OXUIB-252)', async (I, users, search, mail) => {
+Scenario('Disable cache for search results (OXUIB-252)', async ({ I, search, mail }) => {
 
     // Precondition: Some emails are in the inbox- and in a subfolder and have the subject "test".
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c8402_1.eml' });

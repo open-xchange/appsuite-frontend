@@ -15,7 +15,7 @@
 
 Feature('General > Federated Sharing');
 
-Before(async function (users, contexts) {
+Before(async function ({ users, contexts }) {
     const ctxs = await Promise.all([
         contexts.create({ id: process.env.CONTEXT_ID }),
         contexts.create({ id: process.env.CONTEXT_ID + 1 })
@@ -26,7 +26,7 @@ Before(async function (users, contexts) {
     ]);
 });
 
-Scenario.skip('TODO', async function (I, users, drive, mail) {
+Scenario.skip('TODO', async function ({ I, users, drive, mail }) {
     const owner = users[0];
     I.login('app=io.ox/files', { owner });
     drive.waitForApp();

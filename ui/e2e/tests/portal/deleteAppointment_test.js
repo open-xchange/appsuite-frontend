@@ -13,14 +13,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7491] Delete an appointment', async (I, dialogs) => {
+Scenario('[C7491] Delete an appointment', async ({ I, dialogs }) => {
     // set settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
