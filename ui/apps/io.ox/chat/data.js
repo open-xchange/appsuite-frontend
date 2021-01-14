@@ -1086,7 +1086,7 @@ define('io.ox/chat/data', [
 
         refresh: function () {
             $.when.apply($,
-                _([data.chats, data.channels])
+                _([data.channels])
                     .map(function (collection) {
                         collection.expired = true;
                         collection.trigger('expire');
