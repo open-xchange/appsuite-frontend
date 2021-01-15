@@ -187,6 +187,9 @@ define('io.ox/calendar/toolbar', [
             dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
 
             setTimeout(function () {
+                // in case we get fast multiple renderings of the toolbar, the dropdown might already be disposed.
+                // TODO reduce those rerenderings, so this doesn't happen (or happens less often) in the first place. To fragile so close to release, so leave it as is ... for now (who am I kidding?)
+                if (dropdown.model === null) return;
                 updatePrintLink.call(dropdown, baton);
                 updateCheckboxOption.call(dropdown);
                 updateColorOption.call(dropdown);
