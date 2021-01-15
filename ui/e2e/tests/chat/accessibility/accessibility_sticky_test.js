@@ -13,17 +13,17 @@
 
 Feature('ChatAccessibility');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
     await users[0].context.hasCapability('chat');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.only('Check Tab Navigation in sticky mode', async (I, mail, dialogs) => {
+Scenario.only('Check Tab Navigation in sticky mode', async ({ I, mail, dialogs }) => {
 
     function pressTab(times) {
         for (let i = 0; i < times; i++) {

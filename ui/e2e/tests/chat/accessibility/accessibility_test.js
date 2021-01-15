@@ -17,7 +17,7 @@ Feature('ChatAccessibility');
 
 let context;
 
-Before(async (users, contexts) => {
+Before(async ({ users, contexts }) => {
     context = await contexts.create();
     await context.hasCapability('chat');
 
@@ -28,12 +28,12 @@ Before(async (users, contexts) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
     await context.remove();
 });
 
-Scenario.skip('Check accessibility of the chat in sticky mode', async (I, contexts, users, chat, dialogs) => {
+Scenario.skip('Check accessibility of the chat in sticky mode', async ({ I, users, chat, dialogs }) => {
     const [alice, bob, charlie] = users;
     const groupTitle = 'Test Group';
     const channelTitle = 'Test Channel';
@@ -94,7 +94,7 @@ Scenario.skip('Check accessibility of the chat in sticky mode', async (I, contex
     await context.remove();
 });
 
-Scenario.skip('Check accessibility of the chat in floating mode', async (I, contexts, users, chat, dialogs) => {
+Scenario.skip('Check accessibility of the chat in floating mode', async ({ I, users, chat, dialogs }) => {
     const [alice, bob, charlie] = users;
     const groupTitle = 'Test Group';
     const channelTitle = 'Test Channel';
