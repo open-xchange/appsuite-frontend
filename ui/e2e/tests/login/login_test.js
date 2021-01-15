@@ -124,7 +124,7 @@ Scenario('[OXUIB-74] Redirect during autologin using LGI-0016 error', async func
 });
 
 
-Scenario('[OXUIB-651] Login not possible with Chrome and umlauts in username', async function (I) {
+Scenario('[OXUIB-651] Login not possible with Chrome and umlauts in username', async function ({ I }) {
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
