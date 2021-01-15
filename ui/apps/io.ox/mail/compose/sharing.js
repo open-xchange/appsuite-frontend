@@ -229,6 +229,10 @@ define('io.ox/mail/compose/sharing', [
             var sharedAttachments = this.model.get('sharedAttachments');
             if (mailSettings.get('compose/shareAttachments/forceAutoDelete', false)) sharedAttachments.autodelete = true;
             this.sharingModel.set(sharedAttachments);
+
+            require(['io.ox/mail/actions/attachmentQuota'], function (attachmentQuota) {
+                if (!attachmentQuota.checkQuota(this.model)) this.model.set('sharedAttachments', { enabled: false });
+            }.bind(this));
         },
 
         syncToMailModel: function (options) {

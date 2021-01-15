@@ -60,16 +60,9 @@ define('io.ox/mail/compose/extensions', [
     var attachmentUploadHelper = function (model, files) {
         // also support events
         files = files.target ? files.target.files : files;
-        var self = this,
-            attachmentCollection = model.get('attachments'),
-            accumulatedSize = attachmentCollection.filter(function (m) {
-                var size = m.get('size');
-                return typeof size !== 'undefined';
-            })
-            .map(function (m) { return m.get('size'); })
-            .reduce(function (m, n) { return m + n; }, 0);
+        var self = this;
 
-        if (attachmentQuota.checkQuota(files, accumulatedSize)) {
+        if (attachmentQuota.checkQuota(model, files)) {
             //#. %s is a list of filenames separeted by commas
             //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
             self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.name; }).join(', ')));

@@ -442,21 +442,35 @@ define('io.ox/mail/compose/view', [
         id: 'image-loader',
         index: 200,
         perform: function (baton) {
-            var self = this;
+            var self = this,
+                space = baton.model.get('id');
+
             if (this.config.get('editorMode') !== 'html') return;
             baton.options.imageLoader = {
                 upload: function (file) {
-                    var attachment = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
+                    var attachment = new Attachments.Model({ filename: file.name, size: file.size, uploaded: 0, contentDisposition: 'INLINE' }),
                         def = new $.Deferred();
-                    composeUtil.uploadAttachment({
-                        model: self.model,
-                        filename: file.name,
-                        origin: { file: file },
-                        attachment: attachment,
-                        contentDisposition: 'inline'
+
+                    require(['io.ox/mail/actions/attachmentQuota'], function (attachmentQuota) {
+                        if (!attachmentQuota.checkQuota(self.model, [], attachment.get('size'))) {
+                            var $editor = self.view.$el.find('iframe').contents().find('#tinymce');
+                            $editor.children().remove();
+                            $editor.append(self.model._previousAttributes.content);
+                            composeAPI.space.attachments.remove(space, attachment.get('id'));
+                            return def.reject();
+                        }
+
+                        composeUtil.uploadAttachment({
+                            model: self.model,
+                            filename: file.name,
+                            origin: { file: file },
+                            attachment: attachment,
+                            contentDisposition: 'inline'
+                        });
+                        attachment.once('upload:complete', def.resolve);
+                        self.model.attachFiles([attachment]);
                     });
-                    attachment.once('upload:complete', def.resolve);
-                    self.model.attachFiles([attachment]);
+
                     return def;
                 },
                 getUrl: function (response) {

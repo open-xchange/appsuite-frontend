@@ -20,51 +20,80 @@ define('io.ox/mail/actions/attachmentQuota', [
 
     'use strict';
 
-    function checkQuota(file, accumulatedSize) {
+    function accumulate(attachmentCollection, type) {
+        return attachmentCollection.filter(function (m) {
+            var size = m.get('size') || m.get('origin').file.size;
+            return typeof size !== 'undefined' && m.get('contentDisposition') === type;
+        })
+        .map(function (m) { return m.get('size') || m.get('origin').file.size; })
+        .reduce(function (m, n) { return m + n; }, 0);
+    }
+
+    function checkQuota(model, file, inlineImageSize) {
         var list = file,
             properties = coreSettings.get('properties'),
-            total = accumulatedSize || 0,
-            maxFileSize,
-            quota,
+            attachmentCollection = model.get('attachments'),
+            accumulatedSizeOfAttached = accumulate(attachmentCollection, 'ATTACHMENT'),
+            accumulatedSizeOfInline = accumulate(attachmentCollection, 'INLINE'),
+            total = (accumulatedSizeOfAttached + accumulatedSizeOfInline) || 0,
+            mailSize = model.get('content').replace(/src="data:image[^"]*"/g, '').length,
             autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments'),
+            useDrive = model.get('sharedAttachments').enabled,
+            maxFileSize,
+            maxMailSize,
+            quota,
             result = {};
-
-        if (!list.length) return;
 
         maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
         quota = autoPublish ? -1 : properties.attachmentQuota;
+        maxMailSize = autoPublish ? -1 : require('settings!io.ox/mail').get('compose/maxMailSize');
+        inlineImageSize = inlineImageSize || 0;
 
-        _.find(list, function (item) {
-            var fileTitle = item.filename || item.name || item.subject,
-                fileSize = item.file_size || item.size;
-            if (fileSize) {
-                total += fileSize;
+        if ((list && list.length) || inlineImageSize) {
+            _.find(list, function (item) {
+                var fileTitle = item.filename || item.name || item.subject,
+                    fileSize = item.file_size || item.size;
+                if (fileSize) {
+                    total += fileSize;
 
-                if (quota > 0 && total > quota) {
-                    result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the total attachment size limit of %2$s', fileTitle, strings.fileSize(quota));
-                    result.reason = 'filesize';
-                    return true;
-                }
-
-                if (maxFileSize > 0 && fileSize > maxFileSize) {
-                    result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize));
-                    result.reason = 'filesize';
-                    return true;
-                }
-                if (autoPublish) {
-                    if (properties.infostoreMaxUploadSize > 0 && fileSize > properties.infostoreMaxUploadSize) {
-                        result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s', fileTitle, strings.fileSize(properties.infostoreMaxUploadSize));
-                        result.reason = 'filesizeAutoPublish';
+                    if (quota > 0 && total > quota) {
+                        result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the total attachment size limit of %2$s', fileTitle, strings.fileSize(quota));
+                        result.reason = 'filesize';
                         return true;
                     }
-                    if (properties.infostoreQuota > 0 && (total > (properties.infostoreQuota - properties.infostoreUsage))) {
-                        result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the infostore quota limit of %2$s', fileTitle, strings.fileSize(properties.infostoreQuota));
-                        result.reason = 'quotaAutoPublish';
+
+                    if (maxFileSize > 0 && fileSize > maxFileSize) {
+                        result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize));
+                        result.reason = 'filesize';
                         return true;
                     }
+
+                    if (autoPublish || useDrive) {
+                        if (properties.infostoreMaxUploadSize > 0 && fileSize > properties.infostoreMaxUploadSize) {
+                            result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the attachment publication maximum file size of %2$s', fileTitle, strings.fileSize(properties.infostoreMaxUploadSize));
+                            result.reason = 'filesizeAutoPublish';
+                            return true;
+                        }
+                    }
                 }
+            });
+        }
+
+        if ((autoPublish || useDrive) && properties.infostoreQuota > 0 && (accumulatedSizeOfAttached > (properties.infostoreQuota - (properties.infostoreUsage || 0)))) {
+            result.error = gt('The attachment cannot be uploaded because it exceeds the infostore quota limit of %2$s', strings.fileSize(properties.infostoreQuota));
+            result.reason = 'quotaAutoPublish';
+            return true;
+        }
+
+        total += inlineImageSize + mailSize - (useDrive ? accumulatedSizeOfAttached : 0);
+        if (maxMailSize > 0 && total > maxMailSize) {
+            if (model.changed && model.changed.sharedAttachments && model.changed.sharedAttachments.enabled === false) {
+                result.error = gt('The uploaded attachment exceeds the maximum email size of %1$s', strings.fileSize(maxMailSize));
+            } else {
+                result.error = gt('The file cannot be uploaded because it exceeds the maximum email size of %1$s', strings.fileSize(maxMailSize));
             }
-        });
+            result.reason = 'mailsize';
+        }
 
         if (result.error) {
             notifications.yell('error', result.error);
