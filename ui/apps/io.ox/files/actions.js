@@ -62,19 +62,6 @@ define('io.ox/files/actions', [
         return /^(owncloud|webdav|nextcloud)$/.test(data.folder_id.split(':')[0]);
     }
 
-    function isCurrentVersion(baton) {
-        // folder tree folder, always current version
-        if (!baton.collection.has('some')) return true;
-        // drive folder, always current version
-        if (baton.collection.has('folders')) return true;
-        // single selection
-        if (baton.collection.has('one') && baton.first().current_version !== false) return true;
-        // multi selection
-        if (baton.collection.has('multiple') && baton.array().every(function (file) { return file.current_version !== false; })) return true;
-        // default
-        return false;
-    }
-
     function isEmpty(baton) {
         return _.isEmpty(baton.data);
     }
@@ -92,11 +79,6 @@ define('io.ox/files/actions', [
         // locally added but not yet uploaded, 'description only' items
         if (data.group === 'localFile') return false;
         return isFile(data);
-    }
-
-    // check if this is a contact not a file, happens when contact is send as vcard
-    function isContact(baton) {
-        return _(baton.first()).has('internal_userid');
     }
 
     function createFilePickerAndUpload(baton, type) {
@@ -298,7 +280,7 @@ define('io.ox/files/actions', [
         collection: 'some',
         matches: function (baton) {
             if (baton.collection.has('multiple')) return baton.array().every(isDriveFile);
-            if (isContact(baton)) return false;
+            if (util.isContact(baton)) return false;
             return isDriveFile(baton.first());
         },
         action: function (baton) {
@@ -357,7 +339,7 @@ define('io.ox/files/actions', [
             if (isEmpty(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (isTrash(baton)) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return baton.array().reduce(function (memo, obj) {
                 return memo || obj.file_size > 0;
             }, false);
@@ -379,7 +361,7 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (baton.standalone) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -481,8 +463,8 @@ define('io.ox/files/actions', [
         matches: function (baton) {
             if (isEmpty(baton)) return false;
             if (isTrash(baton)) return false;
-            if (isContact(baton)) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (util.isContact(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -498,7 +480,7 @@ define('io.ox/files/actions', [
             if (isTrash(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (fromMailCompose(baton)) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             // shortcuts
             if (baton.collection.has('folders')) return baton.collection.has('rename:folder');
             if (baton.collection.has('modify')) return true;
@@ -548,7 +530,7 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (!folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata')) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             if (baton.collection.has('modify')) return true;
             return pUtil.hasObjectWritePermissions(baton.first());
         },
@@ -784,57 +766,6 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
-    function getFolderId(baton) {
-        var folderId;
-        if (baton.collection.has('one')) {
-
-            if (baton.models && baton.models.length > 0) {
-                var selectedModel = baton.models[0];
-                folderId = selectedModel.isFolder() ? selectedModel.get('id') : selectedModel.get('folder_id');
-            }
-
-            if (!folderId) {
-                var data = baton.first();
-                folderId = baton.collection.has('folders') ? data.id : data.folder_id;
-                if (!folderId) {
-                    folderId = data.folder_id && data.folder_id !== 'folder' ? data.folder_id : data.id;
-                }
-            }
-
-        } else if (baton.app) {
-            // use current folder
-            folderId = baton.app.folder.get();
-        }
-
-        return folderId;
-    }
-
-    /**
-     * Checks if the collection inside an event is shareable
-     * @param {Event} e
-     *  Event to check the collection
-     * @param {String} type
-     *  Type of the sharing to check ("invite" or "link")
-     * @returns {boolean}
-     *  Whether the elements inside the collection are shareable
-     */
-    function isShareable(type, baton) {
-        // not possible for multi-selection
-        if (baton.collection.has('multiple')) return false;
-        if (isContact(baton)) return false;
-        if (baton.isViewer && !isCurrentVersion(baton)) return false;
-        // Links aren't possible for encrypted files
-        if (type === 'link' && baton.first() && new api.Model(baton.first()).isEncrypted()) return false;
-        // get folder id
-        var id = getFolderId(baton);
-        if (!id) return false;
-        // general capability and folder check
-        var model = folderAPI.pool.getModel(id);
-        if (!model.isShareable()) return false;
-        if (model.is('trash')) return false;
-        return type === 'invite' ? model.supportsInviteGuests() : true;
-    }
-
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
     new Action('io.ox/files/actions/editShare', {
         matches: function (baton) {
@@ -848,7 +779,7 @@ define('io.ox/files/actions', [
             ox.load(['io.ox/files/actions/share']).done(function (action) {
                 var models = _.isArray(baton.models) ? baton.models : [baton.models], elem;
                 if (models && models.length) {
-                    var options = { hasLinkSupport: isShareable('link', baton) };
+                    var options = { hasLinkSupport: util.isShareable('link', baton) };
                     elem = baton.app.mysharesListView.$el.find('.list-item.selected');
                     if (elem.length) {
                         action.invite(models, options);
@@ -863,11 +794,11 @@ define('io.ox/files/actions', [
         capabilities: 'invite_guests || share_links',
         collection: '!multiple',
         matches: function (baton) {
-            return isShareable('invite', baton) || isShareable('link', baton);
+            return util.isShareable('invite', baton) || util.isShareable('link', baton);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var options = { hasLinkSupport: isShareable('link', baton) };
+                var options = { hasLinkSupport: util.isShareable('link', baton) };
                 if (baton.models && baton.models.length) {
                     // share selected file
                     action.invite(baton.models, options);
@@ -1144,7 +1075,7 @@ define('io.ox/files/actions', [
 
             if (isTrash(baton)) return false;
             if (baton.originFavorites) return false;
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
@@ -1187,7 +1118,7 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/favorites/remove', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
-            if (baton.isViewer && !isCurrentVersion(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
