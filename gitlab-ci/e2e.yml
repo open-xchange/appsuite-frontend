@@ -23,6 +23,8 @@ run e2e tests:
     CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
     FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
+    MIN_SUCCESS: 1
+    MAX_RERUNS: 5
     # services configuration
     SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
     # gitlab config
@@ -34,7 +36,9 @@ run e2e tests:
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
     - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
-    - yarn e2e
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filter')" ./e2e/suites/job$CI_NODE_INDEX.json > ./build/e2e/enabledTests.txt
+    - while read line; do echo $line && npx ./e2e/customRerun.js "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/enabledTests.txt
+    - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
   parallel: 20
   # reasonable timeout, enforce better partitioning
   timeout: 30 minutes
@@ -49,7 +53,6 @@ run e2e tests:
     - changes:
         - ui/**/*
       when: on_success
-      allow_failure: true
   retry:
     max: 2
     when:
@@ -105,9 +108,8 @@ merge filter report and rerun:
     # ignore any failing tests
     - yarn e2e -i || true
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/filter_report.json > ./build/e2e/filter_failed_tests.txt
-    - unset FILTER_SUITE
-    - while read line; do echo $line && npx ./e2e/customRerun.js "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filter')" ./build/e2e/filter_report.json failed > ./build/e2e/filter_failed_tests.txt
+    - while read line; do echo $line >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
     - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
   tags:
     - e2e
