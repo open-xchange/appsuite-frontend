@@ -79,7 +79,7 @@ define('io.ox/chat/views/channelList', [
                 .append($('<div class="info">').text(gt('There are no channels yet')));
         },
         renderItem: function (model) {
-            var isMember = model.isMember(),
+            var isMember = model.isMember() || false,
                 numberOfMembers =  (model.get('members') && Object.keys(model.get('members')) || []).length;
 
             return $('<li class="channel">')
