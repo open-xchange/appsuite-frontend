@@ -276,3 +276,56 @@ Scenario('[C73919] Copy a shared file to another folder', async function ({ I, u
     I.see('Shares', '.detail-pane');
     I.dontSee('This file is shared with others', '.detail-pane');
 });
+
+Scenario('[DOCS-3066] Sharing link area is visible for decrypted files and invisible for encrypted files on click details view "This file is shared with others"', async function ({ I, users, drive, dialogs }) {
+
+    const folder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.waitForText('document.txt', 5, '.file-list-view');
+    I.click(locate('.list-view li').withText('document.txt'));
+
+    I.waitForText('Share');
+    I.clickToolbar('Share');
+    dialogs.waitForVisible();
+    I.click('~Select contacts');
+    I.waitForElement('.modal .list-view.address-picker li.list-item');
+    I.fillField('Search', users[1].get('name'));
+    I.waitForText(users[1].get('name'), 5, '.address-picker');
+    I.waitForText(users[1].get('primaryEmail'));
+    I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
+    dialogs.clickButton('Select');
+    I.waitForElement(locate('.permissions-view .row').at(1));
+    dialogs.clickButton('Share');
+    I.waitForDetached('.modal-dialog');
+    I.click(locate('.list-view li').withText('document.txt'));
+    I.waitForText('This file is shared with others', 5, '.detail-pane');
+
+    I.click('This file is shared with others', '.detail-pane');
+    dialogs.waitForVisible();
+    I.waitForElement('.access-select');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.rightClick(locate('.list-view li').withText('document.txt'));
+    I.waitForText('Rename', 5, '.smart-dropdown-container.dropdown.open');
+    I.click('Rename', '.smart-dropdown-container.dropdown.open');
+    dialogs.waitForVisible();
+    I.fillField('.modal input', 'document.txt.pgp');
+    dialogs.clickButton('Rename');
+    I.waitForText('Yes');
+    dialogs.clickButton('Yes');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForText('document.txt.pgp', 5, '.file-list-view');
+    I.click(locate('.list-view li').withText('document.txt.pgp'));
+    I.waitForText('This file is shared with others', 5, '.detail-pane');
+    I.click('This file is shared with others', '.detail-pane');
+    dialogs.waitForVisible();
+    I.dontSeeElementInDOM('.access-select');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.logout();
+});
