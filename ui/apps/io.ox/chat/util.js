@@ -204,7 +204,6 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                     .on('click', this.options.selector, this.onClick.bind(this));
             },
 
-
             getItems: function () {
                 return this.$el.find(this.options.selector);
             },
@@ -268,7 +267,20 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                 this.change(f.index, { tabindex: true, focus: false, select: true, event: false }, f.items);
             },
 
+            dodge: function (currIndex) {
+                var items = this.getItems();
+
+                // if list is empty, restore tabindex on list
+                if (!items.length) {
+                    this.$el.attr('tabindex', 0);
+                    return;
+                }
+
+                this.change(currIndex, { tabindex: true, focus: true, select: true });
+            },
+
             change: function (index, options, items) {
+                console.log('a11y change');
                 items = items || this.getItems();
                 index = Math.max(0, Math.min(index, items.length - 1));
                 var $el = items.eq(index);

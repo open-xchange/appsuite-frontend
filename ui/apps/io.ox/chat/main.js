@@ -278,9 +278,22 @@ define('io.ox/chat/main', [
         },
 
         closeChat: function () {
+            var prevState = JSON.parse(this.state).view,
+                fallback = a11y.getTabbable(this.$body).first(),
+                refocus;
+
             this.setState({ view: 'empty' });
+
+            // try to restore focus
             if (settings.get('mode') === 'sticky') {
-                this.$body.find('.accessible-list [tabindex=0]').focus();
+                if (prevState === 'chat') {
+                    refocus = this.$body.find('.accessible-list [tabindex=0]');
+                } else {
+                    var navigation = this.$body.find('.navigation-actions button');
+                    refocus = navigation.eq(['channels', 'files', 'history'].indexOf(prevState));
+                }
+                if (!refocus) refocus = fallback;
+                refocus.focus();
             }
         },
 
@@ -385,9 +398,13 @@ define('io.ox/chat/main', [
         },
 
         unsubscribeChat: function (roomId) {
-            var model = data.chats.get(roomId);
+            var model = data.chats.get(roomId),
+                listIndex = this.$body.find('[data-cid="' + $.escape(roomId) + '"]').index();
+
             if (!model) return;
-            model.toggleRecent();
+            model.toggleRecent().then(function () {
+                this.$body.find('.accessible-list').data('plugin').dodge(listIndex);
+            }.bind(this));
             this.closeChat();
         },
 
