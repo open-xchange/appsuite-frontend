@@ -1,10 +1,10 @@
-# Robert Krátký <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Robert Krátký <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Antje Faber, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-31 19:12+0100\n"
+"PO-Revision-Date: 2021-01-15 15:50+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -3350,9 +3350,9 @@ msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
 "prefer a conversiom in a closed group, please create a group chat."
 msgstr ""
-"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii"
-" „Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte"
-" skupinový rozhovor."
+"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii "
+"„Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte "
+"skupinový rozhovor."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3368,7 +3368,8 @@ msgid ""
 "The chat could not be saved since the name exceeds the length limit of %1$s "
 "characters"
 msgstr ""
-"Chat se nepodařilo uložit, protože název překračuje povolenou délku %1$s znaků"
+"Chat se nepodařilo uložit, protože název překračuje povolenou délku %1$s "
+"znaků"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Changes to this chat could not be saved."
@@ -3516,6 +3517,10 @@ msgstr "Zahájit nový rozhovor"
 msgid "Start conversation"
 msgstr "Zahájit rozhovor"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Soukromý rozhovor se nepodařilo vytvořit."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Opustit rozhovor"
@@ -3619,7 +3624,7 @@ msgstr "Možnosti zobrazení"
 msgid "Select last chat on start"
 msgstr "Při startu vybrat poslední aktivní rozhovor"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Seskupit rozhovory podle druhu"
@@ -3778,6 +3783,16 @@ msgstr "Změnil(a) jste název skupiny na „%1$s“"
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s změnil(a) název skupiny na „%2$s“"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Tento rozhovor jste smazal(a)."
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Uživatel(ka) „%1$s“ tento rozhovor smazal(a)."
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
@@ -3939,6 +3954,14 @@ msgstr "Opustit kanál"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Připojit se ke kanálu"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Smazat kanál"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Smazat rozhovor"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6431,6 +6454,11 @@ msgstr "Úkoly"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Rozhovor"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Poznámky"
 
@@ -7357,6 +7385,11 @@ msgstr "Publikace"
 msgid "Subscriptions"
 msgstr "Odběry"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "neznámá doména"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -7376,8 +7409,8 @@ msgid ""
 "You unsubscribed from all folders on \"%1$s\". Those folders will be removed "
 "from your account."
 msgstr ""
-"Odhlásil(a) jste se od všech sdílených složek na „%1$s“. Tyto složky budou"
-" odstraněny z vašeho účtu."
+"Odhlásil(a) jste se od všech sdílených složek na „%1$s“. Tyto složky budou "
+"odstraněny z vašeho účtu."
 
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
@@ -8166,8 +8199,9 @@ msgid ""
 "sharing process, and to facilitate the sharing of files between contexts and "
 "other deployments."
 msgstr ""
-"Dialogová okna pro sdílení byla aktualizována, aby se celý proces zjednodušil"
-" a aby bylo možné sdílet soubory mezi kontexty a dalšími instalacemi."
+"Dialogová okna pro sdílení byla aktualizována, aby se celý proces "
+"zjednodušil a aby bylo možné sdílet soubory mezi kontexty a dalšími "
+"instalacemi."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Improved \"Connect your device\" Wizard"
@@ -8178,8 +8212,8 @@ msgid ""
 "The \"Connect your device\" wizard now features simplified device selection, "
 "as well as the use of QR codes to make setting up your device even easier."
 msgstr ""
-"Průvodce pro připojení zařízení nyní nabízí zjednodušené vybrání zařízení a"
-" také využití QR kódů pro ještě snazší nastavení."
+"Průvodce pro připojení zařízení nyní nabízí zjednodušené vybrání zařízení a "
+"také využití QR kódů pro ještě snazší nastavení."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "%1$s Usability"
@@ -8208,8 +8242,8 @@ msgid ""
 "Email drafts are now automatically saved in the drafts folder and are "
 "therefore available on all your devices by default."
 msgstr ""
-"Koncepty zpráv jsou nyní automaticky ukládány ve složce konceptů, takže jsou"
-" automaticky k dispozici na všech vašich zařízeních."
+"Koncepty zpráv jsou nyní automaticky ukládány ve složce konceptů, takže jsou "
+"automaticky k dispozici na všech vašich zařízeních."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Navigation Improvements"
@@ -8217,8 +8251,8 @@ msgstr "Zlepšení v navigaci"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
 "Vrchní navigační oblast byla nově navržena, aby poskytla snazší přístup k"
 " modulům, nápovědě a nastavení."
@@ -8229,15 +8263,15 @@ msgstr "Audio a video"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
 "Tato verze přichází s možností video a audio rozhovorů s dalšími lidmi. Tyto"
 " lze plánovat v rámci schůzky v kalendáři nebo spontánně zahájit z nástrojové"
-" lišty, kontaktů a dalších míst. Pro usnadnění jsme také do nástrojové lišty"
-" přidali indikátor stavu."
+" lišty, kontaktů, výchozího pohledu a dalších míst. Pro usnadnění jsme také"
+" do nástrojové lišty přidali indikátor stavu."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8245,14 +8279,15 @@ msgstr "Rozhovory v %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
 "V této verzi si v nástrojové liště všimnete ikony s bublinou pro rozhovory"
-" (chaty). Tato otevře nový sloupec pro rozhovory a umožní vám psát zprávy"
-" dalším uživatelům OX App Suite. Rozhovory lze zahájit ze sloupce pro"
-" rozhovory, kontaktů nebo hlavního okna."
+" (chaty) Tato otevře nové okno pro rozhovory a umožní vám psát zprávy dalším"
+" uživatelům OX App Suite. Rozhovory lze zahájit ze sloupce pro rozhovory,"
+" kontaktů nebo hlavního okna."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8404,8 +8439,12 @@ msgid "Change who has access?"
 msgstr "Změnit, kdo má přístup?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
-msgstr "Přesouváte položku ze sdílené složky. Uživatelé přijdou o přístup."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
+msgstr ""
+"Přesouváte jednu nebo více položek, které jsou sdílené s dalšími lidmi. Tito"
+" uživatelé tím přijdou o přístup."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9582,13 +9621,17 @@ msgid "Failed to connect."
 msgstr "Spojení selhalo."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Příručka"
+msgid "Configure manually"
+msgstr "Nastavit ručně"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr "Automatické nastavení selhalo. Přejete si nastavit svůj účet ručně?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Heslo zadané s e-mailovou adresou %1$s není platné"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9810,13 +9853,10 @@ msgid "Drop here to import this email"
 msgstr "Upusťte zde pro importování této zprávy"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Žádný předmět"
 
@@ -10407,8 +10447,8 @@ msgid ""
 "This draft was changed outside of this window. To prevent possible loss of "
 "data please continue editing in that other tab or browser."
 msgstr ""
-"Koncept byl změněn mimo toto okno. Abyste předešli možné ztrátě dat,"
-" pokračujte v editaci v záložce nebo prohlížeči, kde došlo ke změně."
+"Koncept byl změněn mimo toto okno. Abyste předešli možné ztrátě dat, "
+"pokračujte v editaci v záložce nebo prohlížeči, kde došlo ke změně."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -12857,8 +12897,8 @@ msgid ""
 "Please note: After downloading you will have to enable the profile in the "
 "Settings app to complete the installation."
 msgstr ""
-"Poznámka: pro dokončení instalace po stažení budete muset profil zapnout v"
-" nastavení aplikace."
+"Poznámka: pro dokončení instalace po stažení budete muset profil zapnout v "
+"nastavení aplikace."
 
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -12898,8 +12938,8 @@ msgid ""
 "If an automatic configuration is not possible, please use the following "
 "information to manually set up your mail account:"
 msgstr ""
-"Pokud není možná automatická konfigurace, proveďte pro přípravu svého"
-" poštovního účtu ručně následující nastavení:"
+"Pokud není možná automatická konfigurace, proveďte pro přípravu svého "
+"poštovního účtu ručně následující nastavení:"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Incoming Server Settings (IMAP)"
@@ -15120,13 +15160,6 @@ msgstr "Nové zprávy"
 msgid "You have new mail"
 msgstr "Máte nové zprávy"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Zpráva od %1$s: %2$s"
-
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
@@ -15841,6 +15874,46 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Vrchní navigační oblast byla nově navržena, aby poskytla snazší přístup k "
+#~ "modulům, nápovědě a nastavení."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Tato verze přichází s možností video a audio rozhovorů s dalšími lidmi. "
+#~ "Tyto lze plánovat v rámci schůzky v kalendáři nebo spontánně zahájit z "
+#~ "nástrojové lišty, kontaktů a dalších míst. Pro usnadnění jsme také do "
+#~ "nástrojové lišty přidali indikátor stavu."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "V této verzi si v nástrojové liště všimnete ikony s bublinou pro "
+#~ "rozhovory (chaty). Tato otevře nový sloupec pro rozhovory a umožní vám "
+#~ "psát zprávy dalším uživatelům OX App Suite. Rozhovory lze zahájit ze "
+#~ "sloupce pro rozhovory, kontaktů nebo hlavního okna."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr "Přesouváte položku ze sdílené složky. Uživatelé přijdou o přístup."
+
+#~ msgid "Manual"
+#~ msgstr "Příručka"
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Zpráva od %1$s: %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Přihlásit sdílené kalendáře"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-12 05:33+0100\n"
+"PO-Revision-Date: 2021-01-08 11:42+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -3517,6 +3517,10 @@ msgstr "Starta ny konversation"
 msgid "Start conversation"
 msgstr "Starta konversation"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Kunde inte skapa privat chat."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Lämna chat"
@@ -3620,7 +3624,7 @@ msgstr "Visningsalternativ"
 msgid "Select last chat on start"
 msgstr "Välj senaste chatt vid start"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Gruppchattar efter typ"
@@ -3775,6 +3779,16 @@ msgstr "Du ändra gruppens titel till \"%1$s\""
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s ändrade gruppens titel till \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Du radera chatten"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Denna chat raderades av \"%1$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
@@ -3936,6 +3950,14 @@ msgstr "Lämna kanal"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Anslut till kanal"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Radera kanal"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Radera chat"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6419,6 +6441,11 @@ msgstr "Uppgifter"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Chat"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Anteckningar"
 
@@ -7352,6 +7379,11 @@ msgstr "Publikationer"
 msgid "Subscriptions"
 msgstr "Prenumerationer"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "okänd domän"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8212,11 +8244,11 @@ msgstr "Navigeringsförbättringar"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
-"Det översta navigeringsområdet har gjorts om för att göra det lättare att "
-"komma åt moduler, hjälp och inställningar."
+"Det övre navigeringsområdet om gjorts om för att göra det lättare att komma "
+"åt program, hjälp och inställningar."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8224,16 +8256,15 @@ msgstr "Ljud och video"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"Den här utgåvan gör det möjligt att ha video- eller ljudchatt med andra "
-"användare. Detta kan schemaläggas inom ett kalendermöte, eller startas "
-"spontant från verktygsfältet, kontakter, halo och andra logiska platser. För "
-"att hjälpa till har vi också lagt till en närvaroindikator till "
-"verktygsfältet."
+"Den här utgåvan gör det möjligt att hålla video- eller ljudsamtal med andra "
+"personer. Detta kan schemaläggas i ett kalendermöte, eller startas direkt "
+"från kontakter, halovyn och andra logiska platser. För att underlätta detta "
+"har vi också lagt till en närvaroindikator."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8241,14 +8272,15 @@ msgstr "Chatt för %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"Med den här utgåvan kommer du att lägga märke till en ny chattbubbla-ikon i "
-"verktygsfältet. Detta öppnar det nya chattfältet och låter dig skriva "
-"meddelanden till andra användare av OX programsvit. Chattar kan startas från "
-"chattfältet, kontakter eller halo."
+"Med denna utgåva kommer du upptäcka en ny chatbubblaikon i menyraden. Den "
+"öppnar det nya chatfönstret, och låter dig skriva meddelanden till en annan "
+"OX App Suite-användare. Chattar kan startas från chatfönstret, kontakter "
+"eller halovyn."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8400,9 +8432,12 @@ msgid "Change who has access?"
 msgstr "Ändra vem som har åtkomst?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
 msgstr ""
-"Du flyttar ett objekt ut ur en delad mapp. Folk kommer att förlora åtkomst."
+"Du flyttar ett eller flera objekt som delas med andra. De andra användarna "
+"kommer att förlora åtkomst."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9577,14 +9612,18 @@ msgid "Failed to connect."
 msgstr "Kunde inte ansluta."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Handbok"
+msgid "Configure manually"
+msgstr "Konfigurera manuellt"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr ""
 "Autokonfiguration misslyckades. Vill du konfigurera ditt konto manuellt?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Angivet lösenord för e-postadressen %1$s är felaktigt"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9806,13 +9845,10 @@ msgid "Drop here to import this email"
 msgstr "Släpp här för att importera meddelandet"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Inget ämne"
 
@@ -15109,13 +15145,6 @@ msgstr "Nya meddelanden"
 msgid "You have new mail"
 msgstr "Du har ny e-post"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Meddelande från %1$s, %2$s"
-
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
@@ -15830,6 +15859,48 @@ msgstr "Bjud in till %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Lägg till på %s"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Det översta navigeringsområdet har gjorts om för att göra det lättare att "
+#~ "komma åt moduler, hjälp och inställningar."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Den här utgåvan gör det möjligt att ha video- eller ljudchatt med andra "
+#~ "användare. Detta kan schemaläggas inom ett kalendermöte, eller startas "
+#~ "spontant från verktygsfältet, kontakter, halo och andra logiska platser. "
+#~ "För att hjälpa till har vi också lagt till en närvaroindikator till "
+#~ "verktygsfältet."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "Med den här utgåvan kommer du att lägga märke till en ny chattbubbla-ikon "
+#~ "i verktygsfältet. Detta öppnar det nya chattfältet och låter dig skriva "
+#~ "meddelanden till andra användare av OX programsvit. Chattar kan startas "
+#~ "från chattfältet, kontakter eller halo."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Du flyttar ett objekt ut ur en delad mapp. Folk kommer att förlora "
+#~ "åtkomst."
+
+#~ msgid "Manual"
+#~ msgstr "Handbok"
+
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Meddelande från %1$s, %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Prenumerera på delade kalendrar"

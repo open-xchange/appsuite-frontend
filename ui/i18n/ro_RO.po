@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-03 17:35+0200\n"
+"PO-Revision-Date: 2021-01-14 19:42+0200\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -3471,7 +3471,7 @@ msgstr "Ceva nu a funcționat corect. Încercați din nou."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be hidden. Please try again."
-msgstr "Chatul nu a putut fi ascuns. Încercați din nou."
+msgstr "Chat-ul nu a putut fi ascuns. Încercați din nou."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be reactivated. Please try again."
@@ -3479,15 +3479,15 @@ msgstr "Chat-ul nu a putut fi reactivat. Încercați din nou."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be started."
-msgstr "Chatul nu a putut fi pornit."
+msgstr "Chat-ul nu a putut fi pornit."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be updated."
-msgstr "Chatul nu a putut fi actualizat."
+msgstr "Chat-ul nu a putut fi actualizat."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The chat could not be loaded."
-msgstr "Chatul nu a putut fi încărcat."
+msgstr "Chat-ul nu a putut fi încărcat."
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
 msgid "The channel could not be left."
@@ -3499,7 +3499,7 @@ msgstr "Grupul nu a putut fi părăsit."
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat"
-msgstr "Începeți chatul"
+msgstr "Începeți chat-ul"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Recent chat messages"
@@ -3536,6 +3536,10 @@ msgstr "Începe o conversație nouă"
 #: apps/io.ox/chat/views/newConversation.js
 msgid "Start conversation"
 msgstr "Începe conversația"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Imposibil de creat chat-ul privat."
 
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
@@ -3640,7 +3644,7 @@ msgstr "Vizualizare opţiuni"
 msgid "Select last chat on start"
 msgstr "Selectați ultima conversație la pornire"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Chat-uri de grup după tip"
@@ -3799,6 +3803,16 @@ msgstr "Ați schimbat titlul grupului în \"%1$s\""
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s a schimbat titlul grupului în \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Ați șters acest chat"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Acest chat a fost șters de \"%1$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
@@ -3961,6 +3975,14 @@ msgstr "Părăsește canalul"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Alăturați-vă canalului"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Șterge canalul"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Șterge chat-ul"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6468,6 +6490,11 @@ msgstr "Sarcini"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Chat"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Notițe"
 
@@ -7402,6 +7429,11 @@ msgstr "Publicații"
 msgid "Subscriptions"
 msgstr "Abonamente"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "Domeniu necunoscut"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8265,11 +8297,11 @@ msgstr "Îmbunătățiri ale navigării"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
 "Zona de navigare din partea de sus a fost reproiectată pentru a facilita "
-"accesarea modulelor, a ajutorului și a setărilor."
+"accesarea aplicațiilor, a ajutorului și a setărilor."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8277,16 +8309,16 @@ msgstr "Audio și video"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"Această versiune vine cu capacitatea de a organiza chat-uri video sau audio "
-"cu alte persoane. Acest lucru poate fi programat pintr-o rezervare de "
-"calendar sau poate fi pornit spontan de la bara de instrumente, contacte, "
-"halo sau alte locuri. Pentru a ajuta am adăugat, de asemenea, un indicator "
-"de prezență în bara de instrumente."
+"Această versiune vine cu capacitatea de a organiza un apel video sau audio "
+"cu alte persoane. Acest lucru poate fi programat într-o rezervare de "
+"calendar sau poate fi pornit direct de la persoane de contact, vizualizarea "
+"halo sau alte locuri. Pentru a vă ajuta, am adăugat, de asemenea, un "
+"indicator de prezență."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8294,14 +8326,15 @@ msgstr "Chat pentru %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"Cu această versiune veți observa o nouă pictogramă de bule de chat în bara "
-"de instrumente. Aceasta deschide noua bară de chat și vă permite să scrieți "
-"mesaje oricărui alt utilizator OX App Suite. Chat-urile pot fi inițiate din "
-"bara de chat, contacte sau halo."
+"Cu această versiune veți observa o nouă pictogramă de chat în bara de meniu. "
+"Aceasta deschide noua fereastră de chat și vă permite să scrieți mesaje "
+"oricărui alt utilizator OX App Suite. Chat-urile pot fi inițiate din "
+"fereastra de chat, din contacte sau din vizualizarea halo."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8454,9 +8487,12 @@ msgid "Change who has access?"
 msgstr "Schimbați cine are acces?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
 msgstr ""
-"Mutați un element dintr-un dosar partajat. Unele persoane vor pierde accesul."
+"Mutați unul sau mai multe elemente care sunt partajate cu alte persoane. "
+"Aceste persoane vor pierde accesul."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9644,13 +9680,17 @@ msgid "Failed to connect."
 msgstr "Eroare de conexiune."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Manual"
+msgid "Configure manually"
+msgstr "Configurare manuală"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr "Configurarea automată a eșuat. Doriți să vă configurați manual contul?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Parola furnizată pentru adresa de e-mail %1$s este incorectă"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9874,13 +9914,10 @@ msgid "Drop here to import this email"
 msgstr "Glisați aici pentru a importa acest e-mail"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Niciun subiect"
 
@@ -15236,13 +15273,6 @@ msgstr "Mesaje noi"
 msgid "You have new mail"
 msgstr "Aveți mesaje noi"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Mesaj de la %1$s, %2$s"
-
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
@@ -15961,6 +15991,49 @@ msgstr "Invită la %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Zona de navigare din partea de sus a fost reproiectată pentru a facilita "
+#~ "accesarea modulelor, a ajutorului și a setărilor."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Această versiune vine cu capacitatea de a organiza chat-uri video sau "
+#~ "audio cu alte persoane. Acest lucru poate fi programat pintr-o rezervare "
+#~ "de calendar sau poate fi pornit spontan de la bara de instrumente, "
+#~ "contacte, halo sau alte locuri. Pentru a ajuta am adăugat, de asemenea, "
+#~ "un indicator de prezență în bara de instrumente."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "Cu această versiune veți observa o nouă pictogramă de bule de chat în "
+#~ "bara de instrumente. Aceasta deschide noua bară de chat și vă permite să "
+#~ "scrieți mesaje oricărui alt utilizator OX App Suite. Chat-urile pot fi "
+#~ "inițiate din bara de chat, contacte sau halo."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Mutați un element dintr-un dosar partajat. Unele persoane vor pierde "
+#~ "accesul."
+
+#~ msgid "Manual"
+#~ msgstr "Manual"
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Mesaj de la %1$s, %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Abonare calendare partajate"
