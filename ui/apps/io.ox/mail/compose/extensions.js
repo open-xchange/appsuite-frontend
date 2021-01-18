@@ -511,7 +511,7 @@ define('io.ox/mail/compose/extensions', [
         optionsmenu: (function () {
             return function (baton) {
                 var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">').attr('aria-label', gt('Options')).append(
-                    $('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('Options'))
+                    $($.icon('fa-bars', false, 'bars')).attr('title', gt('Options'))
                 );
                 var dropdown = new Dropdown({
                     tagName: 'li',
@@ -807,7 +807,7 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
                         .attr('aria-label', gt('Add local file'))
                         .append(
-                            $('<i class="fa fa-paperclip" aria-hidden="true">')
+                            $($.icon('fa-paperclip', false, 'paperclip'))
                                 .attr('title', gt('Add local file')))
                         .on('click', function () {
                             //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
@@ -856,7 +856,7 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" tabindex="-1">')
                         .attr('aria-label', gt('Add from Drive'))
                         .append(
-                            $('<i class="fa fa-cloud" aria-hidden="true">')
+                            $($.icon('fa-cloud', false, 'cloud'))
                             .attr('title', gt('Add from Drive'))
                         )
                         .on('click', openFilePicker.bind(this, baton.model))
@@ -870,7 +870,7 @@ define('io.ox/mail/compose/extensions', [
             var parent = this,
                 floatingView = baton.app.get('window').floating,
                 node = $('<a href="#" role="button" tabindex="0">')
-                    .append($('<i class="fa fa-font" aria-hidden="true">'))
+                    .append($.icon('fa-font', false, 'font'))
                     .on('click', function () {
                         if (parent.hasClass('disabled')) return;
                         baton.config.set('toolbar', !baton.config.get('toolbar'));

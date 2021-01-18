@@ -924,6 +924,22 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
         left: auto;
     }
 
+    .list-view-control {
+        .secondary-toolbar {
+            line-height: inherit;
+            .breadcrumb-view { height: 100%; }
+        }
+        // prevent second menuitem from getting moved to a new line
+        .dropdown-container {
+            display: flex;
+            height: 100%;
+            .dropdown-caret {
+                position: relative;
+                top: 2px;
+            }
+        }
+    }
+
     .viewer-sidebar {
         padding: 0;
         background-color: #f5f5f5;

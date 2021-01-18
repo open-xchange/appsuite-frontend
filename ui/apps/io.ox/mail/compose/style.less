@@ -84,18 +84,26 @@
             border: 1px transparent solid;
 
             // baseline icons
-            i.fa-font      { font-size: 20px; }
-            i.fa-paperclip { font-size: 21px; }
-            i.fa-cloud     { font-size: 22px; }
-            i.fa-bars      { font-size: 16px; }
+            a svg.font      { height: 20px; width: 28px; }
+            a svg.paperclip { height: 21px; width: 29px; }
+            a svg.cloud     { height: 22px; width: 31px; }
+            a svg.bars      { height: 16px; width: 22px; }
 
             // style icons
             & > a {
+                display: block;
+                padding-top: 4px;
+                // some backwards compatibility for non svg icons
                 & > i.fa {
                     width: 1.4em;
+                    margin-top: -4px;
+                }
+                & > .fa {
+                    width: 28px;
                     text-align: center;
                     line-height: 32px;
                     color:black;
+                    vertical-align: middle;
                 }
 
                 &:focus {
@@ -133,6 +141,10 @@
         .mail-input { flex: 1; }
         // padding is applied via .recipient-actions
         &.sender, &.recipient { padding-right: 0 };
+        &.sender .dropdown-caret {
+            top: 2px;
+            position: relative;
+        }
     }
 
     .mail-compose-fields {

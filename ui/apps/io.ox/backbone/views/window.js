@@ -157,16 +157,16 @@ define('io.ox/backbone/views/window', [
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
             var controls = [];
-            if (this.model.get('stickable')) controls.push($('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Stick to the right side')).append($('<i class="fa fa-window-maximize fa-rotate-90" aria-hidden="true">').attr('title', gt('Stick to the right side'))));
+            if (this.model.get('stickable')) controls.push($('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Stick to the right side')).append($($.icon('fa-window-maximize', false, 'fa-rotate-90')).attr('title', gt('Stick to the right side'))));
             if (this.model.get('resizable')) {
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="minimize" tabindex="-1">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))));
+                controls.push($('<button type="button" class="btn btn-link" data-action="minimize" tabindex="-1">').attr('aria-label', gt('Minimize')).append($($.icon('fa-window-minimize')).attr('title', gt('Minimize'))));
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal));
+                controls.push($('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($($.icon('fa-window-compress')).attr('title', gt('Shrink'))).toggleClass('hidden', isNormal));
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal));
+                controls.push($('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($($.icon('fa-window-expand')).attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal));
             }
-            if (this.model.get('closable')) controls.push($('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))));
+            if (this.model.get('closable')) controls.push($('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($($.icon('fa-times')).attr('title', gt('Close'))));
             // Remove tabindex attribute from first attribute to make it tabable
             if (controls.length > 0) controls[0].removeAttr('tabindex');
             return $('<div class="controls" role="toolbar">').append(controls);

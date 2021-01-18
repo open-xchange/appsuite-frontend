@@ -156,7 +156,7 @@ define('io.ox/switchboard/extensions', [
                         $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                         .prop('disabled', !hasOptions)
                         .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
+                            $('<div class="icon-container">').append($.icon('fa-phone', false, 'call-icon')),
                             $.txt(gt.pgettext('verb', 'Call')),
                             hasOptions ? $('<i class="fa fa-caret-down" aria-hidden="true">') : $()
                         ),
@@ -188,7 +188,7 @@ define('io.ox/switchboard/extensions', [
                 actionsUtil.invoke(action, e.data.baton);
             })
             .append(
-                $('<i class="fa" aria-hidden="true">').addClass(icon),
+                $('<div class="icon-container">').append($.icon(icon)),
                 $.txt(label)
             );
         actionsUtil.checkAction(action, baton).then(function () {
@@ -334,7 +334,7 @@ define('io.ox/switchboard/extensions', [
                     // Call
                     $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
+                            $('<div class="icon-container">').append($.icon('fa-phone')),
                             $('<div>').text(title)
                         )
                         .on('click', function () {

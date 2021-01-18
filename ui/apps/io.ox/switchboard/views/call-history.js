@@ -63,7 +63,7 @@ define('io.ox/switchboard/views/call-history', [
                     .on('click', this.onOpen.bind(this))
                     .one('click', this.onFirstOpen.bind(this))
                     .append(
-                        $('<i class="fa fa-phone" aria-hidden="true">'),
+                        $.icon('fa-phone'), //.attr$('<i class="fa fa-phone" aria-hidden="true">'),
                         this.$indicator = $('<svg height="8" width="8" class="indicator" focusable="false" aria-hidden="true"><circle cx="4" cy="4" r="4"></svg>')
                     ),
                 this.$ul = $('<ul class="dropdown-menu dropdown-menu-right" role="menu">').append(

@@ -148,7 +148,8 @@ legend {
     & > .dropdown {
         display: inline-block;
     }
-    .fa:first-child {
+    // work with icons and svg
+    .icon-container, .fa:first-child:not(svg) {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -161,8 +162,11 @@ legend {
         font-size: 16px;
         margin: 0 auto;
     }
-    i.fa.fa-phone {
-        font-size: 24px;
+    .icon-container svg {
+        height: 16px;
+    }
+    [data-action="join"] svg, .icon-container svg.call-icon {
+        height: 24px;
     }
     .btn-link:hover:not(:disabled), .btn-link:focus {
         outline: 0;
@@ -177,7 +181,7 @@ legend {
         button {
             display: flex;
             align-items: center;
-            i.fa { margin-right: 8px; }
+            i.fa, .icon-container { margin-right: 8px; }
         }
     }
 }

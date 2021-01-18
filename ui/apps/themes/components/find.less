@@ -105,8 +105,13 @@
             .action {
                 pointer-events: auto;
                 color: @action-color;
-                padding-right: 1.645em;
+                padding-right: 23px;
                 height: 100%;
+
+                svg {
+                    vertical-align: middle;
+                    margin-top: -2px;
+                }
 
                 &:hover { color: @link-color; }
                 &:focus {
@@ -143,6 +148,7 @@
         }
         .search-box-filter { display: none; }
         flex: 0 1 auto;
+        height: 2.5rem;
     }
 
     /**

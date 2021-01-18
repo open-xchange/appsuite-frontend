@@ -1777,14 +1777,14 @@ define('io.ox/core/desktop', [
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search'),
                                     'id': baton.data.id
-                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
+                                }).append($.icon('fa-search'))
                                 .tooltip(),
                             // cancel/reset
                             $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Cancel search'),
                                     'aria-label': gt('Cancel search')
-                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+                                }).append($.icon('fa-times-circle'))
                                 .tooltip()
                         );
                     }

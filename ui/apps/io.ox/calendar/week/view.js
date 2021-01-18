@@ -539,7 +539,7 @@ define('io.ox/calendar/week/view', [
                     var startTimezone = moment(self.model.get('startDate')).tz(coreSettings.get('timezone')),
                         endTimezone = moment(self.model.get('startDate')).add(Math.max(0, self.model.get('numColumns') - 1), 'days').endOf('day').tz(coreSettings.get('timezone'));
 
-                    dropdown.$el.find('.dropdown-label').empty().append(startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
+                    dropdown.$el.find('.dropdown-label').empty().append(startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(), $.icon('fa-caret-down', false, 'dropdown-caret'));
                     dropdown.$ul.empty();
                     render();
                 });

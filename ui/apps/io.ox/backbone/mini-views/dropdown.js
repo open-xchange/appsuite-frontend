@@ -431,7 +431,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // label
                     $('<span class="dropdown-label">').append(label),
                     // caret
-                    this.options.caret ? $.icon('fa-caret-down') : []
+                    this.options.caret ? $.icon('fa-caret-down', false, 'dropdown-caret') : []
                 ),
                 this.$ul
             );

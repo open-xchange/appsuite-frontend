@@ -28,6 +28,7 @@ define('io.ox/core/main/icons', [
         // just some sugar
         jQuery.fn.extend({
             appendIcon: function (id) {
+                console.log('append id', id);
                 return $(this).append(icons[id]);
             }
         });
