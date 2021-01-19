@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-18 22:48+1000\n"
+"PO-Revision-Date: 2021-01-18 17:22+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -3297,9 +3297,9 @@ msgstr "群组名字"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
-"其他用户可以在\"所有频道\"下查找并加入您的频道。如果您喜欢在封闭组中进行对"
+"其他用户能够在\"所有频道\"下查找并加入您的频道。如果您喜欢在封闭组中进行对"
 "话，请创建群聊。"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
@@ -3463,6 +3463,10 @@ msgstr "开始新的对话"
 msgid "Start conversation"
 msgstr "开始对话"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "不能创建私聊。"
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "离开聊天"
@@ -3479,24 +3483,29 @@ msgstr "离开"
 msgid "The file could not be loaded."
 msgstr "不能加载该文件。"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "不能从最爱移除聊天。请再试。"
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "不能将聊天添加到最爱。请再试。"
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "新建"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "私人聊天"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "群聊"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "频道"
 
@@ -3511,8 +3520,8 @@ msgid "All files"
 msgstr "所有文件"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "历史"
@@ -3530,9 +3539,7 @@ msgstr "群聊"
 msgid "Channels"
 msgstr "频道"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "聊天"
 
@@ -3548,12 +3555,6 @@ msgstr "不能连接。请稍后再试。"
 msgid "New Chat"
 msgstr "新聊天"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "分离窗口"
-
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
 msgstr "图片"
@@ -3566,7 +3567,7 @@ msgstr "查看选项"
 msgid "Select last chat on start"
 msgstr "在开始时选择上次聊天"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "按类型分组聊天"
@@ -3719,6 +3720,16 @@ msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s将组标题更改为\"%2$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "您删除了此聊天"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "此聊天已被\"%1$s\" 删除"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
 msgstr "将组描述更改为\"%1$s\""
 
@@ -3752,6 +3763,14 @@ msgstr "未知系统消息：%1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s 和 %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "关闭聊天"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "分离窗口"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "文本文件"
@@ -3782,12 +3801,6 @@ msgid "Add members"
 msgstr "添加会员"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "关闭聊天"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "尚未有频道"
 
@@ -3807,6 +3820,10 @@ msgstr "加入"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "聊天动作"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "滚动到最新消息"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -3877,6 +3894,14 @@ msgid "Join channel"
 msgstr "加入频道"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "删除频道"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "删除聊天"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -3916,6 +3941,10 @@ msgid "Create private chat"
 msgstr "创建私人聊天"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "加载动画"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "下载文件"
 
@@ -3947,6 +3976,11 @@ msgstr "尚未有存档聊天"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "打开"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "移除成员"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -6323,6 +6357,11 @@ msgstr "任务"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "聊天"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "笔记"
 
@@ -7229,6 +7268,11 @@ msgstr "发布"
 msgid "Subscriptions"
 msgstr "订阅"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "未知域名"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8060,9 +8104,9 @@ msgstr "导航改进"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
-msgstr "顶部导航区域经过重新设计，使访问模块、帮助和设置更加容易。"
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
+msgstr "顶部导航区域经过重新设计，以便更轻松地访问应用、帮助和设置。"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8070,14 +8114,14 @@ msgstr "音频和视频"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"此版本具有与其他人进行视频或音频聊天的能力。这可以在日历约会中安排，也可以从"
-"工具栏、联系人、光晕和其他逻辑位置自发启动。为了帮助我们还将一个状态指示器添"
-"加到工具栏中。"
+"此版本具有与其他人员进行视频或音频通话的能力。这能够在日历约会中安排，也可以"
+"直接从联系人、光晕视图和其他逻辑位置启动。为了帮助您，我们添加了一个状态指示"
+"器。"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8085,13 +8129,14 @@ msgstr "聊天%1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"在此版本中，您会注意到工具栏中出现一个新的聊天气泡图标。这将打开新的聊天栏，"
-"并允许您向任何其他 OX 应用套件用户写入消息。可以从聊天栏、联系人或光环中煽动"
-"聊天。"
+"到了这个版本，你会发现在菜单栏里有一个新的聊天气泡图标。这将打开新的聊天窗"
+"口，并允许您向任何其他 OX 应用套件用户写入消息。可以从聊天窗口、联系人或光晕"
+"视图引发聊天。"
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8242,8 +8287,10 @@ msgid "Change who has access?"
 msgstr "更改谁有权访问？"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
-msgstr "您要将项目从共享文件夹中移动。人们将失去访问机会。"
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
+msgstr "您正在移动一个或多个与其他人员共享的项目。这些人将失去访问权限。"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -8844,11 +8891,6 @@ msgstr "外部用户"
 msgid "Internal users"
 msgstr "内部用户"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "请设置密码"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9386,13 +9428,17 @@ msgid "Failed to connect."
 msgstr "连接失败。"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "手动"
+msgid "Configure manually"
+msgstr "手动配置"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr "自动配置失败。您要手动配置您的户口吗？"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "提供电子邮件地址 %1$s 的密码不正确"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9614,13 +9660,10 @@ msgid "Drop here to import this email"
 msgstr "拖放到这里以导入此邮件"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "无主题"
 
@@ -10172,10 +10215,16 @@ msgstr "在服务器上找不到邮件草稿。它此时应被发送或删除。
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"此草稿已在此窗口之外更改。为防止数据丢失，请继续在其他选项卡或浏览器中编辑。"
+"此草稿已在别的选项卡或浏览器中更改。请继续编辑最新版本。如果在此期间已关闭该"
+"选项卡，您能在此还原最近的草稿。"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "还原草稿"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10429,38 +10478,17 @@ msgstr "保存中..."
 msgid "Saved %s"
 msgstr "保存成功 %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr "您将要放弃此消息。是否要删除相关草稿？"
+msgid "Save draft"
+msgstr "保存草稿"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr "此电子邮件尚未发送。您能够保存草稿以在以后处理。"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
 msgstr "删除草稿"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "丢弃消息"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "保留草稿"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "保存为草稿"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "您确定要删除这个草稿吗？"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "您真的想丢弃您的消息吗？"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10584,8 +10612,8 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "无法添加该文件夹，因为链接无效。"
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
-msgstr "这种类型的链接不受支持，无法添加。"
+msgid "This type of link is unsupported and can't be added."
+msgstr "不支持这种类型的链接，不能添加。"
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid ""
@@ -14422,10 +14450,6 @@ msgid "Create new group"
 msgstr "创建新群组"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "移除成员"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -14784,13 +14808,6 @@ msgstr "新邮件"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "You have new mail"
 msgstr "您有新邮件"
-
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "来自 %1$s 的电子邮件：%2$s"
 
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -15488,6 +15505,87 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "其他用户可以在\"所有频道\"下查找并加入您的频道。如果您喜欢在封闭组中进行对"
+#~ "话，请创建群聊。"
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr "您要将项目从共享文件夹中移动。人们将失去访问机会。"
+
+#~ msgid "Please set password"
+#~ msgstr "请设置密码"
+
+#~ msgid "Manual"
+#~ msgstr "手动"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "此草稿已在此窗口之外更改。为防止数据丢失，请继续在其他选项卡或浏览器中编"
+#~ "辑。"
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr "您将要放弃此消息。是否要删除相关草稿？"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "删除草稿"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "丢弃消息"
+
+#~ msgid "Keep draft"
+#~ msgstr "保留草稿"
+
+#~ msgid "Save as draft"
+#~ msgstr "保存为草稿"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "您确定要删除这个草稿吗？"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "您真的想丢弃您的消息吗？"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "这种类型的链接不受支持，无法添加。"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr "顶部导航区域经过重新设计，使访问模块、帮助和设置更加容易。"
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "此版本具有与其他人进行视频或音频聊天的能力。这可以在日历约会中安排，也可以"
+#~ "从工具栏、联系人、光晕和其他逻辑位置自发启动。为了帮助我们还将一个状态指示"
+#~ "器添加到工具栏中。"
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "在此版本中，您会注意到工具栏中出现一个新的聊天气泡图标。这将打开新的聊天"
+#~ "栏，并允许您向任何其他 OX 应用套件用户写入消息。可以从聊天栏、联系人或光环"
+#~ "中煽动聊天。"
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "来自 %1$s 的电子邮件：%2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "订阅共享日历"

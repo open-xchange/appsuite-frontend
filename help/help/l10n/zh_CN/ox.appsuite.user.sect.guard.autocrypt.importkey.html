@@ -1,0 +1,91 @@
+<html lang="zh_cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.3.1. 导入Autocrypt钥</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="用户向导&gt;">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. 加密带有Autocrypt的电子邮件交谈">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. 加密带有Autocrypt的电子邮件交谈">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="13.3.2. 管理Autocrypt钥">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">下一页</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">以<span class="phrase">Guard</span>加密数据</h1>
+<h2 class="sr-only">加密带有Autocrypt的电子邮件交谈</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">13.3.1. 导入Autocrypt钥</h3></div></div></div>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">在进阶<span class="phrase">Guard</span>设置里，您能够定义Autocrypt钥要否自动导入。您可以设置以下选项：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">所有接收的Autocrypt钥会自动导入。</p>
+<p role="presentation">一个自动导入的钥会这样使用：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">一个到此联系人的外送消息能够一次钥加密。</p></li>
+<li class="listitem"><p role="presentation">一个来自此联系人的外来消息之签名，将不会以此钥核实。即是：它不能在发送人为真实和消息内容传送完成而没有中途更改时核实。</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">对于每一个接收的Autocrypt钥，您将会被询问要否导入此钥。将会显示Autocrypt的详细以允许您检查它的有效性。如果您导入钥，它将会被视为已核实。一个已核实钥将会这样使用：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">一个到此联系人的外送消息能够一次钥加密。</p></li>
+<li class="listitem"><p role="presentation">来自此联系人的外来消息之签名，将会以钥核实。如果核实成功，发送人为真实和消息内容为未经修改。</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">如何定义如何导入Autocrypt：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">单击<span class="guibutton"><strong>设置</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span> 。单击<span class="guibutton"><strong>设定</strong></span>。</p></li>
+<li class="step"><p role="presentation">在边栏里单击<span class="guibutton"><strong>保安</strong></span>。单击<span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>。</p></li>
+<li class="step"><p role="presentation">启用<span class="guibutton"><strong>显示进阶设置</strong></span>。将会显示用作管理与Autocrypt设置的项目。</p></li>
+<li class="step"><p role="presentation"><span class="guibutton"><strong>Autocrypt</strong></span>之下会以以下方式处置：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">要导入Autocrypt钥，启用<span class="guibutton"><strong>搜寻外来电子邮件页眉里的钥</strong></span>。</p></li>
+<li class="listitem">
+<p role="presentation">如果您启用<span class="guibutton"><strong>不用询问直接导入autocrypt钥</strong></span>，将会自动导入Autocrypt钥。</p>
+<p role="presentation">如果<span class="guibutton"><strong>显示进阶设置</strong></span>为停用，这就是默认设置。</p>
+</li>
+<li class="listitem"><p role="presentation">如果您停用<span class="guibutton"><strong>不用询问直接导入autocrypt钥</strong></span>，您将会被询问要否导入钥。会显示钥详细以让您能够检查钥的有效性。如果您接受钥，它将会被视为已核实。</p></li>
+</ul>
+            </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey">
+        </p>
+<p class="title">相关主题：</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">导入Autocrypt钥</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">管理Autocrypt钥</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">传送Autocrypt钥给其他客户端</a></p></li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">母主题：<a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">加密带有Autocrypt的电子邮件交谈</a></p>
+</div>
+          </div>
+        </body>
+</html>

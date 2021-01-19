@@ -1,0 +1,72 @@
+<html lang="zh_cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.2.3. 外部收件人如何能够读取一个已加密电子邮件？</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="用户向导&gt;">
+<link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="13.2. 加密电子邮件交谈">
+<link rel="prev" href="ox.appsuite.user.sect.guard.email.send.html" title="13.2.2. 发送已加密电子邮件">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.incoming.html" title="13.2.4. 使用一个过滤规则，以加密外来电子邮件">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.send.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.incoming.html">下一页</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">以<span class="phrase">Guard</span>加密数据</h1>
+<h2 class="sr-only">加密电子邮件交谈</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.email.external">
+<div class="titlepage"><div><div><h3 class="title">13.2.3. 外部收件人如何能够读取一个已加密电子邮件？</h3></div></div></div>
+<p id="ox.appsuite.user.concept.guard.email.external">您也可以发送已加密电子邮件给不是组件用户的外部收件人。在添加一个外部收件人时，Guard 检查此收件人是否有一个公钥可用于此电子邮件。视结果而定，Guard 使用不同步骤以发送已加密的电子邮件：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">如果收件人有一个公钥：</p>
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">将会使用此钥加密发送消息。收件人能以他/她的私钥读取该消息。</p></li></ul>
+<p role="presentation">
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">如果收件人没有公钥：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">如果外部用户已经有一个访客户口，他/她将会收到一个带有到他/她访客户口链接的电子邮件。登录时，他/她能够在访客页面上读取已加密电子邮件。他/她能够从此页面发送一个已加密电子邮件。</p></li>
+<li class="listitem">
+<p role="presentation">如果没有方访客户口，会创建一个访客用户。外部收件人将会接收有一个连到访客页的链接和自动创建密码的电子邮件。用户登录到访客页。然后他/她能创建一个自己的密码。</p>
+<p role="presentation">视配置而定，自动创建的密码和到访客页的链接，将会分别以电子邮件发送。</p>
+</li>
+<li class="listitem"><p role="presentation">视配置而定，访客户口电子邮件将会在指定的天数后删除。</p></li>
+</ul>
+<p role="presentation">外部收件人可以发送一个已加密回复到已加密电子邮件去。可是不可能添加额外收件人。</p>
+</li>
+</ul>
+<p>
+      </p>
+<p>
+        </p>
+<p class="title">相关主题：</p>
+<ul class="itemizedlist" id="ox.appsuite.user.related.guard.email.external" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">读取加密电子邮件</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">发送已加密电子邮件</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.email.external">母主题：<a class="xref" href="ox.appsuite.user.sect.guard.email.html">加密电子邮件交谈</a></p>
+</div>
+          </div>
+        </body>
+</html>

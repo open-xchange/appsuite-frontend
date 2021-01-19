@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-11 10:55+0000\n"
+"PO-Revision-Date: 2021-01-16 16:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -3354,7 +3354,7 @@ msgstr "Имя группы"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
 "Другие пользователи могут найти ваш канал и присоединиться к нему в разделе "
 "«Все каналы». Если вы предпочитаете общение в закрытой группе, создайте "
@@ -3525,6 +3525,10 @@ msgstr "Начать новую беседу"
 msgid "Start conversation"
 msgstr "Начать беседу"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Не удалось создать приватный чат."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Выйти из чата"
@@ -3541,24 +3545,29 @@ msgstr "Выйти"
 msgid "The file could not be loaded."
 msgstr "Не удалось загрузить файл."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "Не удалось удалить чат из избранного. Пожалуйста, попробуйте еще раз."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "Чат не удалось добавить в избранное. Пожалуйста, попробуйте еще раз."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Создать"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Приватный чат"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Групповой чат"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Канал"
 
@@ -3573,8 +3582,8 @@ msgid "All files"
 msgstr "Все файлы"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "История"
@@ -3592,9 +3601,7 @@ msgstr "Групповые чаты"
 msgid "Channels"
 msgstr "Каналы"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Чаты"
 
@@ -3610,12 +3617,6 @@ msgstr "Невозможно подключиться. Пожалуйста, п�
 msgid "New Chat"
 msgstr "Новый Чат"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Отсоединить окно"
-
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
 msgstr "Изображение"
@@ -3628,7 +3629,7 @@ msgstr "Посмотреть варианты"
 msgid "Select last chat on start"
 msgstr "Выбрать последний чат при запуске"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Групповые чаты по типу"
@@ -3789,6 +3790,16 @@ msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s изменил(а) заголовок группы на \"%2$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Вы удалили этот чат"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Этот чат был удален пользователем «%1$s»"
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
 msgstr "Вы изменили описание группы на \"%1$s\""
 
@@ -3822,6 +3833,14 @@ msgstr "Неизвестное системное сообщение: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s и %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Закрыть чат"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Отсоединить окно"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Текстовый файл"
@@ -3852,12 +3871,6 @@ msgid "Add members"
 msgstr "Добавить участников"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Закрыть чат"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Каналов пока нет"
 
@@ -3879,6 +3892,10 @@ msgstr "Присоединиться"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Действия Чатов"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Прокрутите до последнего сообщения"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -3951,6 +3968,14 @@ msgid "Join channel"
 msgstr "Присоединиться к каналу"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Удалить канал"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Удалить чат"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
@@ -3990,6 +4015,10 @@ msgid "Create private chat"
 msgstr "Создать приватный чат"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Загрузить анимацию"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Скачать файл"
 
@@ -4021,6 +4050,11 @@ msgstr "Архивных чатов пока нет"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Открыть"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Удалить участника"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -6444,6 +6478,11 @@ msgstr "Задачи"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Чат"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Заметки"
 
@@ -7375,6 +7414,11 @@ msgstr "Публикации"
 msgid "Subscriptions"
 msgstr "Подписки"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "неизвестный Домен"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8240,11 +8284,11 @@ msgstr "Улучшения Навигации"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
 "Верхняя область навигации была переработана, чтобы упростить доступ к "
-"модулям, справке и настройкам."
+"приложениям, справке и настройкам."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8252,15 +8296,15 @@ msgstr "Аудио и Видео"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"В этом выпуске есть возможность проводить видео- или аудиочат с другими "
-"людьми. Чат можно запланировать в рамках календарной встречи или начать "
-"сразу с панели инструментов, контактов, ореола или других мест. Чтобы "
-"помочь, мы также добавили индикатор присутствия на панель инструментов."
+"В этом релизе есть возможность проводить видео- или аудиовызовы с другими "
+"людьми. Вызовы можно запланировать в календаре или запустить непосредственно "
+"из контактов, ореола и других логических мест. Чтобы помочь, мы также "
+"добавили индикатор присутствия."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8268,14 +8312,15 @@ msgstr "Чат для %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"В этом выпуске вы увидите новый всплывающий значок чата на панели "
-"инструментов. Он позволяет открыть новую панель чата и отправлять сообщения "
-"другим пользователям OX App Suite. Чаты можно запускать из панели чата, "
-"контактов или ореола."
+"В этом релизе вы увидите новый значок всплывающего чата в строке меню. "
+"Значок открывает новое окно чата и позволяет писать сообщения любому другому "
+"пользователю OX App Suite. Чаты можно запускать из окна чата, контактов или "
+"ореола."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8426,8 +8471,12 @@ msgid "Change who has access?"
 msgstr "Изменить, у кого есть доступ?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
-msgstr "Вы перемещаете элемент из общей папки. Люди потеряют доступ."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
+msgstr ""
+"Вы перемещаете один или несколько элементов, к которым предоставлен доступ "
+"другим людям. Эти люди потеряют доступ."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9061,11 +9110,6 @@ msgstr "Внешние пользователи"
 msgid "Internal users"
 msgstr "Внутренние пользователи"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Пожалуйста, установите пароль"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9609,8 +9653,8 @@ msgid "Failed to connect."
 msgstr "Ошибка подключения."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Вручную"
+msgid "Configure manually"
+msgstr "Настроить вручную"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
@@ -9618,6 +9662,10 @@ msgid ""
 msgstr ""
 "Ошибка автоматической конфигурации. Хотите настроить вашу учетную запись "
 "вручную?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Предоставленный пароль для адреса электронной почты %1$s неверен"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9840,13 +9888,10 @@ msgid "Drop here to import this email"
 msgstr "Перетащите сюда для импорта сообщения"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Без темы"
 
@@ -10426,11 +10471,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"Этот черновик был изменен в другой вкладке или в другом браузере. "
+"Пожалуйста, продолжайте редактировать самую последнюю версию. Если Вы успели "
+"закрыть эту вкладку, то Вы можете восстановить самый последний черновик."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Восстановить черновик"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10693,39 +10744,19 @@ msgstr "Сохранение..."
 msgid "Saved %s"
 msgstr "Сохранено %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr ""
-"Вы собираетесь удалить это сообщение. Вы хотите удалить связанный черновик?"
+msgid "Save draft"
+msgstr "Сохранить черновик"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr ""
+"Это письмо не было отправлено. Вы можете сохранить черновик для дальнейшей "
+"работы."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
 msgstr "Удалить черновик"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Удалить сообщение"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Оставить черновик"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Сохранить как черновик"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Вы действительно хотите удалить этот черновик?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Вы действительно хотите удалить это сообщение?"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10851,7 +10882,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Папка не может быть добавлена, потому что ссылка недействительна."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Этот тип ссылки не поддерживается и не может быть добавлен."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14789,10 +14820,6 @@ msgid "Create new group"
 msgstr "Создать группу"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Удалить участника"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15158,13 +15185,6 @@ msgstr "Новые сообщения"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "You have new mail"
 msgstr "У вас есть новые сообщения"
-
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Почта от %1$s: %2$s"
 
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
@@ -15877,6 +15897,94 @@ msgstr "Пригласить на %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Добавить в %s"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Другие пользователи могут найти ваш канал и присоединиться к нему в "
+#~ "разделе «Все каналы». Если вы предпочитаете общение в закрытой группе, "
+#~ "создайте групповой чат."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr "Вы перемещаете элемент из общей папки. Люди потеряют доступ."
+
+#~ msgid "Please set password"
+#~ msgstr "Пожалуйста, установите пароль"
+
+#~ msgid "Manual"
+#~ msgstr "Вручную"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Вы собираетесь удалить это сообщение. Вы хотите удалить связанный "
+#~ "черновик?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Удалить черновик"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Удалить сообщение"
+
+#~ msgid "Keep draft"
+#~ msgstr "Оставить черновик"
+
+#~ msgid "Save as draft"
+#~ msgstr "Сохранить как черновик"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Вы действительно хотите удалить этот черновик?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Вы действительно хотите удалить это сообщение?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Этот тип ссылки не поддерживается и не может быть добавлен."
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Верхняя область навигации была переработана, чтобы упростить доступ к "
+#~ "модулям, справке и настройкам."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "В этом выпуске есть возможность проводить видео- или аудиочат с другими "
+#~ "людьми. Чат можно запланировать в рамках календарной встречи или начать "
+#~ "сразу с панели инструментов, контактов, ореола или других мест. Чтобы "
+#~ "помочь, мы также добавили индикатор присутствия на панель инструментов."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "В этом выпуске вы увидите новый всплывающий значок чата на панели "
+#~ "инструментов. Он позволяет открыть новую панель чата и отправлять "
+#~ "сообщения другим пользователям OX App Suite. Чаты можно запускать из "
+#~ "панели чата, контактов или ореола."
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Почта от %1$s: %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Подписать совместные календари"

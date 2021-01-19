@@ -1,11 +1,11 @@
-# Vincenzo Reale <vincenzo@workshop-chapina.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Vincenzo Reale <vincenzo@workshop-chapina.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Monica Raggioli <monica@workshop-chapina.com>, 2011, 2012.
 # Antje Faber, 2011, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-19 07:32+0100\n"
+"PO-Revision-Date: 2021-01-08 11:20+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.com>\n"
 "Language-Team: Italian <it@workshop-chapina.it>\n"
 "Language: it_IT\n"
@@ -3365,8 +3365,8 @@ msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
 "prefer a conversiom in a closed group, please create a group chat."
 msgstr ""
-"Altri utenti possono trovare e unirsi al tuo canale in \"Tutti i canali\". Se"
-" preferisci una conversazione in un gruppo chiuso, crea una chat di gruppo."
+"Altri utenti possono trovare e unirsi al tuo canale in \"Tutti i canali\". "
+"Se preferisci una conversazione in un gruppo chiuso, crea una chat di gruppo."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3535,6 +3535,10 @@ msgstr "Avvia nuova conversazione"
 msgid "Start conversation"
 msgstr "Avvia conversazione"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Impossibile creare la chat privata."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Abbandona la chat"
@@ -3638,7 +3642,7 @@ msgstr "Opzioni di visualizzazione"
 msgid "Select last chat on start"
 msgstr "Seleziona l'ultima chat all'avvio"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Raggruppa le chat per tipo"
@@ -3793,6 +3797,16 @@ msgstr "Hai cambiato il titolo del gruppo in \"%1$s\""
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s ha cambiato il titolo del gruppo in \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Hai eliminato questa chat"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Questa chat è stata eliminata da \"%1$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
@@ -3954,6 +3968,14 @@ msgstr "Abbandona il canale"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Entra nel canale"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Elimina canale"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Elimina chat"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6450,6 +6472,11 @@ msgstr "Attività"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Chat"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Note"
 
@@ -7392,6 +7419,11 @@ msgstr "Pubblicazioni"
 msgid "Subscriptions"
 msgstr "Sottoscrizioni"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "Dominio sconosciuto"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -7411,8 +7443,8 @@ msgid ""
 "You unsubscribed from all folders on \"%1$s\". Those folders will be removed "
 "from your account."
 msgstr ""
-"Hai annullato la sottoscrizione a tutte le cartelle su \"%1$s\". Tali"
-" cartelle saranno rimosse dal tuo account."
+"Hai annullato la sottoscrizione a tutte le cartelle su \"%1$s\". Tali "
+"cartelle saranno rimosse dal tuo account."
 
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Sync via DAV"
@@ -8206,9 +8238,9 @@ msgid ""
 "sharing process, and to facilitate the sharing of files between contexts and "
 "other deployments."
 msgstr ""
-"Le finestre di dialogo di condivisione sono state notevolmente aggiornate per"
-" semplificare l'intero processo di condivisione e per facilitare la"
-" condivisione di file tra contesti e altre distribuzioni."
+"Le finestre di dialogo di condivisione sono state notevolmente aggiornate "
+"per semplificare l'intero processo di condivisione e per facilitare la "
+"condivisione di file tra contesti e altre distribuzioni."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Improved \"Connect your device\" Wizard"
@@ -8219,11 +8251,9 @@ msgid ""
 "The \"Connect your device\" wizard now features simplified device selection, "
 "as well as the use of QR codes to make setting up your device even easier."
 msgstr ""
-"La procedura guidata \"Collega il tuo dispositivo\" ora offre una selezione"
-" semplificata "
-"del dispositivo, nonché l'uso di codici QR per rendere la configurazione del"
-" dispositivo "
-"ancora più semplice."
+"La procedura guidata \"Collega il tuo dispositivo\" ora offre una selezione "
+"semplificata del dispositivo, nonché l'uso di codici QR per rendere la "
+"configurazione del dispositivo ancora più semplice."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "%1$s Usability"
@@ -8240,10 +8270,9 @@ msgid ""
 "sharing dialogs have also been simplified and search performance was "
 "improved."
 msgstr ""
-"%1$s ora offre la possibilità di trascinare e rilasciare le cartelle del"
-" desktop in %1$s. Anche le "
-"finestre di condivisione sono state semplificate e le prestazioni di ricerca"
-" sono state migliorate."
+"%1$s ora offre la possibilità di trascinare e rilasciare le cartelle del "
+"desktop in %1$s. Anche le finestre di condivisione sono state semplificate e "
+"le prestazioni di ricerca sono state migliorate."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Saving Email Drafts"
@@ -8254,9 +8283,9 @@ msgid ""
 "Email drafts are now automatically saved in the drafts folder and are "
 "therefore available on all your devices by default."
 msgstr ""
-"Le bozze dei messaggi di posta sono ora salvate automaticamente nella"
-" cartella delle bozze e sono quindi disponibili su tutti i tuoi dispositivi"
-" in modo predefinito."
+"Le bozze dei messaggi di posta sono ora salvate automaticamente nella "
+"cartella delle bozze e sono quindi disponibili su tutti i tuoi dispositivi "
+"in modo predefinito."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Navigation Improvements"
@@ -8264,11 +8293,12 @@ msgstr "Miglioramenti alla navigazione"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
-"L'area di navigazione in alto è stata ridisegnata per rendere più facile"
-" l'accesso ai moduli, alla guida e alle impostazioni."
+"L'area di navigazione in alto è stata ridisegnata per consentire l'accesso"
+" alle applicazioni, alla guida e "
+"impostazioni più facili."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8276,19 +8306,18 @@ msgstr "Audio e video"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"Questa versione include la possibilità di tenere una chat video o audio con"
-" altre persone. "
-"Questo può essere pianificato all'interno di un appuntamento del calendario o"
-" avviato "
-"direttamente dalla barra degli strumenti, dai contatti, dalla vista Aura e da"
-" altre posizioni "
-"logiche. Per aiutare abbiamo anche aggiunto un indicatore di presenza alla"
-" barra degli strumenti."
+"Questa versione include la possibilità di tenere una chiamata video o audio"
+" con altre persone. "
+"Ciò può essere pianificato all'interno di un appuntamento del calendario o"
+" avviato direttamente "
+"dai contatti, dalla vista Aura e da altre posizioni logiche. Per aiutare"
+" abbiamo anche aggiunto "
+"un indicatore di presenza."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8296,17 +8325,17 @@ msgstr "Chat per %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"Con questa versione noterai una nuova icona a fumetto nella barra degli"
-" strumenti. "
-"Questa apre la nuova barra della chat e ti consente di scrivere messaggi a"
+"Con questa versione noterai una nuova icona a fumetto nella barra dei menu. "
+"Questa apre la nuova finestra di chat e ti consente di scrivere messaggi a"
 " qualsiasi "
-"altro utente di OX App Suite. Le chat possono essere avviate dalla barra"
-" della chat, dai "
-"contatti o dalla vista Aura."
+"altro utente di OX App Suite. Le chat possono essere avviate dalla finestra"
+" della chat, "
+"dai contatti o dalla vista Aura."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8459,10 +8488,12 @@ msgid "Change who has access?"
 msgstr "Vuoi cambiare chi ha accesso?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
 msgstr ""
-"Stai spostando un elemento da una cartella condivisa. Le persone perderanno"
-" l'accesso."
+"Stai spostando uno o più elementi condivisi con altre persone. Queste persone"
+" perderanno l'accesso."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9641,8 +9672,8 @@ msgid "Failed to connect."
 msgstr "Connessione non riuscita."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Manuale"
+msgid "Configure manually"
+msgstr "Configura manualmente"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
@@ -9650,6 +9681,11 @@ msgid ""
 msgstr ""
 "Configurazione automatica non riuscita. Vuoi davvero configurare il tuo "
 "account manualmente?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr ""
+"La password fornita per l'indirizzo di posta elettronica %1$s non è corretta"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9872,13 +9908,10 @@ msgid "Drop here to import this email"
 msgstr "Rilascia qui per importare questo messaggio"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Nessun oggetto"
 
@@ -10475,9 +10508,9 @@ msgid ""
 "This draft was changed outside of this window. To prevent possible loss of "
 "data please continue editing in that other tab or browser."
 msgstr ""
-"Questa bozza è stata modificata al di fuori di questa finestra. Per evitare"
-" la possibile perdita di dati, continua a modificare in quell'altra scheda o"
-" browser."
+"Questa bozza è stata modificata al di fuori di questa finestra. Per evitare "
+"la possibile perdita di dati, continua a modificare in quell'altra scheda o "
+"browser."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10890,8 +10923,8 @@ msgid ""
 "The folder is currently unavailable and cannot be added. Please try again "
 "later."
 msgstr ""
-"La cartella non è attualmente disponibile e non può essere aggiunta. Riprova"
-" più tardi."
+"La cartella non è attualmente disponibile e non può essere aggiunta. Riprova "
+"più tardi."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder cannot be added because the link is invalid."
@@ -10908,8 +10941,8 @@ msgid ""
 "This folder has been shared with another user. You are not allowed to add "
 "this folder."
 msgstr ""
-"Questa cartella è stata condivisa con un altro utente. Non sei autorizzato ad"
-" aggiungere questa cartella."
+"Questa cartella è stata condivisa con un altro utente. Non sei autorizzato "
+"ad aggiungere questa cartella."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder was added successfully."
@@ -12940,8 +12973,8 @@ msgid ""
 "Please note: After downloading you will have to enable the profile in the "
 "Settings app to complete the installation."
 msgstr ""
-"Nota: dopo lo scaricamento dovrai abilitare il profilo nell'applicazione"
-" Impostazioni per completare l'installazione."
+"Nota: dopo lo scaricamento dovrai abilitare il profilo nell'applicazione "
+"Impostazioni per completare l'installazione."
 
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -12957,7 +12990,6 @@ msgstr "Scarica %1$s per Windows"
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#| msgid "%s client for Windows"
 msgid "%1$s for Windows"
 msgstr "%1$s per Windows"
 
@@ -12984,8 +13016,8 @@ msgid ""
 "If an automatic configuration is not possible, please use the following "
 "information to manually set up your mail account:"
 msgstr ""
-"Se una configurazione automatica non è possibile, utilizza le seguenti"
-" informazioni per configurare manualmente il tuo account di posta:"
+"Se una configurazione automatica non è possibile, utilizza le seguenti "
+"informazioni per configurare manualmente il tuo account di posta:"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Incoming Server Settings (IMAP)"
@@ -15242,13 +15274,6 @@ msgstr "Nuovi messaggi di posta"
 msgid "You have new mail"
 msgstr "Hai nuovi messaggi di posta"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Messaggio di posta da %1$s, %2$s"
-
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
@@ -15972,6 +15997,51 @@ msgstr "Invita a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Aggiungi su %s"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "L'area di navigazione in alto è stata ridisegnata per rendere più facile "
+#~ "l'accesso ai moduli, alla guida e alle impostazioni."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Questa versione include la possibilità di tenere una chat video o audio "
+#~ "con altre persone. Questo può essere pianificato all'interno di un "
+#~ "appuntamento del calendario o avviato direttamente dalla barra degli "
+#~ "strumenti, dai contatti, dalla vista Aura e da altre posizioni logiche. "
+#~ "Per aiutare abbiamo anche aggiunto un indicatore di presenza alla barra "
+#~ "degli strumenti."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "Con questa versione noterai una nuova icona a fumetto nella barra degli "
+#~ "strumenti. Questa apre la nuova barra della chat e ti consente di "
+#~ "scrivere messaggi a qualsiasi altro utente di OX App Suite. Le chat "
+#~ "possono essere avviate dalla barra della chat, dai contatti o dalla vista "
+#~ "Aura."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Stai spostando un elemento da una cartella condivisa. Le persone "
+#~ "perderanno l'accesso."
+
+#~ msgid "Manual"
+#~ msgstr "Manuale"
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Messaggio di posta da %1$s, %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Sottoscrivi calendari condivisi"
