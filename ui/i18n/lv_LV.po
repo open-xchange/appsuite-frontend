@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-05 12:46+0200\n"
+"PO-Revision-Date: 2021-01-19 16:18+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -3525,6 +3525,10 @@ msgstr "Sākt jaunu sarunu"
 msgid "Start conversation"
 msgstr "Sākt sarunu"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Privāto tērzēšanu nevarēja izveidot."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Atstāt tērzēšanu"
@@ -3628,7 +3632,7 @@ msgstr "Rādīt opcijas"
 msgid "Select last chat on start"
 msgstr "Uzsākot izvēlēties pēdējo tērzēšanu"
 
-#. label of checkbox to enable/dsiable grouping chats by type
+#. label of checkbox to enable/disable grouping chats by type
 #: apps/io.ox/chat/settings/pane.js module:io.ox/chat
 msgid "Group chats by type"
 msgstr "Grupu tērzēšanas pēc tipa"
@@ -3787,6 +3791,16 @@ msgstr "Jūs esat nomainījis grupas nosaukumu uz \"%1$s\""
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "%1$s changed the group title to \"%2$s\""
 msgstr "%1$s ir nomainījis grupas nosaukumu uz \"%2$s\""
+
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "You deleted this chat"
+msgstr "Jūs izdzēsāt šo tērzēšanu"
+
+#. %1$s: name of a chat participant
+#. %2$s: the new title
+#: apps/io.ox/chat/system-message.js module:io.ox/chat
+msgid "This chat has been deleted by \"%1$s\""
+msgstr "Šo tērzēšanu izdzēsa \"%1$s\""
 
 #: apps/io.ox/chat/system-message.js module:io.ox/chat
 msgid "You changed the group description to \"%1$s\""
@@ -3949,6 +3963,14 @@ msgstr "Pamest kanālu"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Join channel"
 msgstr "Pievienoties kanālam"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete channel"
+msgstr "Dzēst kanālu"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Delete chat"
+msgstr "Dzēst sarunu"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
@@ -6443,6 +6465,11 @@ msgstr "Uzdevumi"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 msgctxt "app"
+msgid "Chat"
+msgstr "Tērzēšana"
+
+#: apps/io.ox/core/main/apps.js module:io.ox/core
+msgctxt "app"
 msgid "Notes"
 msgstr "Piezīmes"
 
@@ -7375,6 +7402,11 @@ msgstr "Publikācijas"
 msgid "Subscriptions"
 msgstr "Abonementi"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "nezināms domēns"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8234,10 +8266,10 @@ msgstr "Navigācijas uzlabojumi"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"The top navigation area has been redesigned to make accessing modules, help "
-"and settings easier."
+"The top navigation area has been redesigned to make accessing apps, help and "
+"settings easier."
 msgstr ""
-"Augšējā navigācijas josla ir pārveidota lai atvieglotu piekļuvi moduļiem, "
+"Augšējā navigācijas zona ir pārveidota, lai atvieglotu piekļuvi programmām, "
 "palīdzībai un iestatījumiem."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
@@ -8246,15 +8278,15 @@ msgstr "Audio un video"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"This release comes with the ability to hold a video or audio chat with other "
+"This release comes with the ability to hold a video or audio call with other "
 "people. This can be scheduled within a calendar appointment, or started "
-"spontaneously from the toolbar, contacts, halo and other logical places. To "
-"help we have also added a presence indicator to the toolbar."
+"directly from contacts, the halo view and other logical places. To help we "
+"have also added a presence indicator."
 msgstr ""
-"Šī versija ievieš iespējas veikt audio un video tērzēšanas ar cistām "
-"personām. Tērzēšanas var tikt ieplānotas kalendāra mītiņos vai uzsāktas "
-"tūlītēji, izmantojot rīkjoslu, kontaktu kartiņas, 'halo' un citas loģiskas "
-"vietas sistēmā. Rīkjoslā ir arī ietverts klātbūtnes indikators."
+"Šī versija nodrošina iespēju veikt video vai audio zvanus ar citām personām. "
+"To var ieplānot kalendāra mītiņos vai uzsākt tieši no kontaktpersonām, halo "
+"skata un citām loģiskām vietām. Lai palīdzētu esam arī pievienojuši "
+"klātbūtnes indikatoru."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8262,14 +8294,15 @@ msgstr "Tērzēšana priekš %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
-"With this release you will notice a new chat bubble icon in the toolbar. "
-"This opens the new chat bar and lets you write messages to any other OX App "
-"Suite user. Chats can be instigated from the chat bar, contacts or halo."
+"With this release you will notice a new chat bubble icon in the menu bar. "
+"This opens the new chat window and lets you write messages to any other OX "
+"App Suite user. Chats can be instigated from the chat window, contacts or "
+"halo view."
 msgstr ""
-"Sākot ar šo versiju jūs rīkjoslā ievērosiet jaunu tērzēšanas burbuli. Tas "
-"atver jaunu tērzēšanas joslu un atļauj rakstīt ziņojumus jebkuram OX App "
-"Suite lietotājam. Tērzēšanas var tiky uzsāktas no tērzēšanas joslas, "
-"kontaktu kartiņas vai 'halo'."
+"Sākot ar šo versiju jūs ievērosit arī jaunu tērzēšanas burbuli izvēļņu "
+"rīkjoslā. Tas atver jaunu tērzēšanas logu un ļauj rakstīt un sūtīt ziņojumus "
+"jebkuram cita, OX App Suite lietotājam. Tērzēšanas var uzsākt no tērzēšanu "
+"loga, kontaktpersonas vai halo skata."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8420,10 +8453,12 @@ msgid "Change who has access?"
 msgstr "Vai mainīt kam ir piekļuve?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
 msgstr ""
-"Jūs pārvietojat vienumu ārpus koplietojuma mapes. Personas zaudēs piekļuvi "
-"tam."
+"Jūs pārvietojat vienumus, kuri tiek koplietoti ar citām personām. Rezultātā "
+"šīs personas zaudēs piekļuvi."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9611,8 +9646,8 @@ msgid "Failed to connect."
 msgstr "Kļūda pieslēdzoties."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Manuāli"
+msgid "Configure manually"
+msgstr "Konfigurēt manuāli"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
@@ -9620,6 +9655,10 @@ msgid ""
 msgstr ""
 "Automātiskā konfigurēšana neizdevās. Vai vēlaties konfigurēt savu kontu "
 "manuāli?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Norādītā e-pasta adreses %1$s parole nav pareiza"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9841,13 +9880,10 @@ msgid "Drop here to import this email"
 msgstr "Lai importētu e-pastu, pārvelciet to šeit"
 
 #. $1$s is the subject of an email
-#. %1$s mail sender
-#. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 #: apps/io.ox/mail/main.js apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
-#, c-format
 msgid "No subject"
 msgstr "Nav temata"
 
@@ -12905,7 +12941,6 @@ msgstr "Lejupielādēt %1$s for Windows"
 
 #. 1$s name of the product, usually OX Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
-#| msgid "%s client for Windows"
 msgid "%1$s for Windows"
 msgstr "%1$s for Windows"
 
@@ -15162,13 +15197,6 @@ msgstr "Jaunās vēstules"
 msgid "You have new mail"
 msgstr "Jums ir jauns pasts"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
-#, c-format
-msgid "Mail from %1$s, %2$s"
-msgstr "Vēstule no %1$s, %2$s"
-
 #. %1$s task title
 #: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 #, c-format
@@ -15883,6 +15911,48 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Augšējā navigācijas josla ir pārveidota lai atvieglotu piekļuvi moduļiem, "
+#~ "palīdzībai un iestatījumiem."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Šī versija ievieš iespējas veikt audio un video tērzēšanas ar cistām "
+#~ "personām. Tērzēšanas var tikt ieplānotas kalendāra mītiņos vai uzsāktas "
+#~ "tūlītēji, izmantojot rīkjoslu, kontaktu kartiņas, 'halo' un citas "
+#~ "loģiskas vietas sistēmā. Rīkjoslā ir arī ietverts klātbūtnes indikators."
+
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "Sākot ar šo versiju jūs rīkjoslā ievērosiet jaunu tērzēšanas burbuli. Tas "
+#~ "atver jaunu tērzēšanas joslu un atļauj rakstīt ziņojumus jebkuram OX App "
+#~ "Suite lietotājam. Tērzēšanas var tiky uzsāktas no tērzēšanas joslas, "
+#~ "kontaktu kartiņas vai 'halo'."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Jūs pārvietojat vienumu ārpus koplietojuma mapes. Personas zaudēs "
+#~ "piekļuvi tam."
+
+#~ msgid "Manual"
+#~ msgstr "Manuāli"
+
+#, c-format
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Vēstule no %1$s, %2$s"
 
 #~ msgid "Subscribe shared calendars"
 #~ msgstr "Abonēt koplietojamos kalendārus"
