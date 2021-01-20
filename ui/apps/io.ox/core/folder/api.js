@@ -906,8 +906,9 @@ define('io.ox/core/folder/api', [
                         .chain()
                         .map(makeObject)
                         .filter(function (folder) {
+                            var isAdmin = !!new Bitmask(folder.own_rights).get('admin');
                             // read access?
-                            if (!util.can('read', folder) && !util.can('change:permissions', folder)) return false;
+                            if (!util.can('read', folder) && !util.can('change:permissions', folder) && !isAdmin) return false;
                             // otherwise
                             return true;
                         })
