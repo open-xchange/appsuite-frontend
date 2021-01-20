@@ -1335,6 +1335,12 @@
             }
         }
 
+        &.edit-mode {
+            .editor-container, textarea {
+                background-color: #FEF4DE;
+            }
+        }
+
         .jump-down {
             position: absolute;
             top: -60px;
@@ -1671,7 +1677,7 @@
 
 .accessible-list {
 
-    [aria-selected]:hover {
+    [aria-selected="false"]:hover {
         background-color: #eee;
     }
 
