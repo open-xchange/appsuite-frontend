@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-08 11:42+0100\n"
+"PO-Revision-Date: 2021-01-18 04:40+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -3349,10 +3349,10 @@ msgstr "Gruppnamn"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
 "Andra användare kan hitta och ansluta till din kanal under \"Alla kanaler\". "
-"Om du vill ha en konversation inom en sluten grupp, skapa en gruppchatt."
+"Om du hellre vill ha en konversation i en sluten grupp, skapa en gruppchatt."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3537,24 +3537,29 @@ msgstr "Lämna"
 msgid "The file could not be loaded."
 msgstr "Filen kunde inte läsas in."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "Chatten kunde inte flyttas från favoriter. Försök igen."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "Chatten kunde inte läggas till favoriter. Försök igen."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Nytt"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Privat chat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Grupp-chat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Kanal"
 
@@ -3569,8 +3574,8 @@ msgid "All files"
 msgstr "Alla filer"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Historik"
@@ -3588,9 +3593,7 @@ msgstr "Gruppchattar"
 msgid "Channels"
 msgstr "Kanaler"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Chattar"
 
@@ -3605,12 +3608,6 @@ msgstr "Kan inte ansluta. Försök igen senare."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Ny chat"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Koppla loss fönster"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3824,6 +3821,14 @@ msgstr "Okänt systemmeddelande: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s och %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Stäng chat"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Koppla loss fönster"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Textfil"
@@ -3854,12 +3859,6 @@ msgid "Add members"
 msgstr "Lägg till medlemmar"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Stäng chat"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Det finns inga kanaler ännu"
 
@@ -3880,6 +3879,10 @@ msgstr "Delta"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Chat-åtgärder"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Rulla till nyaste meddelande"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4001,6 +4004,10 @@ msgid "Create private chat"
 msgstr "Skapa privat chat"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Läs in animering"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Ladda ned fil"
 
@@ -4032,6 +4039,11 @@ msgstr "Det finns inga arkiverade chattar än"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Öppna"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Ta bort medlem"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -9061,11 +9073,6 @@ msgstr "Externa användare"
 msgid "Internal users"
 msgstr "Interna användare"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Ange lösenord"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -10432,11 +10439,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Detta utkast ändrades utanför det här fönstret. För att förhindra "
-"dataförlust, fortsätt redigera i den andra fliken eller webbläsaren."
+"Detta utkast har ändrats i en annan flik eller webbläsare. Fortsätt redigera "
+"den nyaste versionen. Om du redan har stängt den fliken kan du återställa "
+"det senaste utkastet här."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Återställ utkast"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10696,40 +10709,19 @@ msgstr "Sparar..."
 msgid "Saved %s"
 msgstr "Sparade %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
+msgid "Save draft"
+msgstr "Spara utkast"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "This email has not been sent. You can save the draft to work on later."
 msgstr ""
-"Du är på väg att förkasta det här meddelandet. Vill du också radera det "
-"associerade utkastet?"
+"Meddelandet har inte skickats. Du kan spara utkastet för att fortsätta "
+"skriva senare."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
 msgid "Delete draft"
-msgstr "Ta bort utkast"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Kasta meddelande"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Behåll utkast"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Spara som utkast"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Vill du verkligen ta bort utkastet?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Vill du verkligen kasta meddelandet?"
+msgstr "Radera utkast"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10855,7 +10847,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Mappen kan inte läggas till eftersom länken är ogiltig."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Den här länktypen stöds inte och kan inte läggas till."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14776,10 +14768,6 @@ msgid "Create new group"
 msgstr "Skapa ny grupp"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Ta bort medlem"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15859,6 +15847,54 @@ msgstr "Bjud in till %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Lägg till på %s"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Andra användare kan hitta och ansluta till din kanal under \"Alla kanaler"
+#~ "\". Om du vill ha en konversation inom en sluten grupp, skapa en "
+#~ "gruppchatt."
+
+#~ msgid "Please set password"
+#~ msgstr "Ange lösenord"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Detta utkast ändrades utanför det här fönstret. För att förhindra "
+#~ "dataförlust, fortsätt redigera i den andra fliken eller webbläsaren."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Du är på väg att förkasta det här meddelandet. Vill du också radera det "
+#~ "associerade utkastet?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Ta bort utkast"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Kasta meddelande"
+
+#~ msgid "Keep draft"
+#~ msgstr "Behåll utkast"
+
+#~ msgid "Save as draft"
+#~ msgstr "Spara som utkast"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Vill du verkligen ta bort utkastet?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Vill du verkligen kasta meddelandet?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Den här länktypen stöds inte och kan inte läggas till."
 
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "

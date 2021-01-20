@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-15 15:50+0100\n"
+"PO-Revision-Date: 2021-01-18 09:13+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -3346,13 +3346,16 @@ msgid "Group name"
 msgstr "Název skupiny"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
+#| msgid ""
+#| "Other users can find and join your channel under \"All channels\". If you "
+#| "prefer a conversiom in a closed group, please create a group chat."
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
-"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii "
-"„Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte "
-"skupinový rozhovor."
+"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii"
+" „Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte"
+" skupinový rozhovor."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3537,24 +3540,31 @@ msgstr "Přestat sledovat"
 msgid "The file could not be loaded."
 msgstr "Soubor se nepodařilo nahrát."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#| msgid "The chat could not be reactivated. Please try again."
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "Rozhovor se nepodařilo odstranit z oblíbených. Zkuste to znovu."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+#| msgid "The chat could not be hidden. Please try again."
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "Rozhovor se nepodařilo přidat do oblíbených. Zkuste to znovu."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Nový"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Soukromý rozhovor"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Skupinový rozhovor"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Kanál"
 
@@ -3569,8 +3579,8 @@ msgid "All files"
 msgstr "Všechny soubory"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Historie"
@@ -3588,9 +3598,7 @@ msgstr "Skupinové rozhovory"
 msgid "Channels"
 msgstr "Kanály"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Rozhovory"
 
@@ -3605,12 +3613,6 @@ msgstr "Nepodařilo se připojit. Zkuste to znovu později."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Nový rozhovor"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Odpojit okno"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3828,6 +3830,14 @@ msgstr "Neznámá systémová zpráva: „%1$s“"
 msgid "%1$s and %2$s"
 msgstr "%1$s a %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Zavřít rozhovor"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Odpojit okno"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Textový soubor"
@@ -3858,12 +3868,6 @@ msgid "Add members"
 msgstr "Přidat členy"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Zavřít rozhovor"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Zatím žádné kanály"
 
@@ -3885,6 +3889,11 @@ msgstr "Připojit se"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Činnosti rozhovoru"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#| msgid "You have no new messages"
+msgid "Scroll to newest message"
+msgstr "Přejít na nejnovější zprávu"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4005,6 +4014,11 @@ msgid "Create private chat"
 msgstr "Založit soukromý rozhovor"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+#| msgid "Confirmation"
+msgid "Load animation"
+msgstr "Nahrát animaci"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Stáhnout soubor"
 
@@ -4036,6 +4050,11 @@ msgstr "Zatím žádné archivované rozhovory"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Otevřít"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Odstranit člena"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -8254,8 +8273,8 @@ msgid ""
 "The top navigation area has been redesigned to make accessing apps, help and "
 "settings easier."
 msgstr ""
-"Vrchní navigační oblast byla nově navržena, aby poskytla snazší přístup k"
-" modulům, nápovědě a nastavení."
+"Vrchní navigační oblast byla nově navržena, aby poskytla snazší přístup k "
+"modulům, nápovědě a nastavení."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8268,10 +8287,10 @@ msgid ""
 "directly from contacts, the halo view and other logical places. To help we "
 "have also added a presence indicator."
 msgstr ""
-"Tato verze přichází s možností video a audio rozhovorů s dalšími lidmi. Tyto"
-" lze plánovat v rámci schůzky v kalendáři nebo spontánně zahájit z nástrojové"
-" lišty, kontaktů, výchozího pohledu a dalších míst. Pro usnadnění jsme také"
-" do nástrojové lišty přidali indikátor stavu."
+"Tato verze přichází s možností video a audio rozhovorů s dalšími lidmi. Tyto "
+"lze plánovat v rámci schůzky v kalendáři nebo spontánně zahájit z nástrojové "
+"lišty, kontaktů, výchozího pohledu a dalších míst. Pro usnadnění jsme také "
+"do nástrojové lišty přidali indikátor stavu."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8284,10 +8303,10 @@ msgid ""
 "App Suite user. Chats can be instigated from the chat window, contacts or "
 "halo view."
 msgstr ""
-"V této verzi si v nástrojové liště všimnete ikony s bublinou pro rozhovory"
-" (chaty) Tato otevře nové okno pro rozhovory a umožní vám psát zprávy dalším"
-" uživatelům OX App Suite. Rozhovory lze zahájit ze sloupce pro rozhovory,"
-" kontaktů nebo hlavního okna."
+"V této verzi si v nástrojové liště všimnete ikony s bublinou pro rozhovory "
+"(chaty) Tato otevře nové okno pro rozhovory a umožní vám psát zprávy dalším "
+"uživatelům OX App Suite. Rozhovory lze zahájit ze sloupce pro rozhovory, "
+"kontaktů nebo hlavního okna."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8443,8 +8462,8 @@ msgid ""
 "You are moving one or more items that are shared with other people. These "
 "people will lose access."
 msgstr ""
-"Přesouváte jednu nebo více položek, které jsou sdílené s dalšími lidmi. Tito"
-" uživatelé tím přijdou o přístup."
+"Přesouváte jednu nebo více položek, které jsou sdílené s dalšími lidmi. Tito "
+"uživatelé tím přijdou o přístup."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9070,11 +9089,6 @@ msgstr "Externí uživatelé"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Interní uživatelé"
-
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Prosím, nastavte heslo"
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
@@ -10444,11 +10458,19 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Koncept byl změněn mimo toto okno. Abyste předešli možné ztrátě dat, "
-"pokračujte v editaci v záložce nebo prohlížeči, kde došlo ke změně."
+"Tento koncept byl změněn v jiném okně nebo prohlížeči. Pokračujte v úpravách"
+" nejnovější verze. Pokud jste druhé okno mezitím zavřeli, obnovte poslední"
+" verzi zde."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+#| msgctxt "dialog"
+#| msgid "Delete draft"
+msgid "Restore draft"
+msgstr "Obnovit koncept"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10709,39 +10731,20 @@ msgstr "Ukládám..."
 msgid "Saved %s"
 msgstr "Uloženo: %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr ""
-"Chystáte se zrušit tuto zprávu. Opravdu chcete smazat příslušný koncept?"
+#| msgid "Save as draft"
+msgid "Save draft"
+msgstr "Uložit koncept"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr "Zpráva nebyla odeslána. Koncept můžete uložit a pokračovat později."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#| msgctxt "dialog"
+#| msgid "Delete draft"
 msgid "Delete draft"
 msgstr "Smazat koncept"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Zahodit zprávu"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Ponechat koncept"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Uložit jako koncept"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Opravdu chcete smazat tento koncept?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Opravdu chcete zprávu zahodit?"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10865,7 +10868,8 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Složku nelze přidat, protože je odkaz neplatný."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+#| msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Tento druh odkazu není podporovaný a nelze tedy přidat."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14791,10 +14795,6 @@ msgid "Create new group"
 msgstr "Vytvořit novou skupinu"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Odstranit člena"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15875,6 +15875,35 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#~ msgid "Please set password"
+#~ msgstr "Prosím, nastavte heslo"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Koncept byl změněn mimo toto okno. Abyste předešli možné ztrátě dat, "
+#~ "pokračujte v editaci v záložce nebo prohlížeči, kde došlo ke změně."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Chystáte se zrušit tuto zprávu. Opravdu chcete smazat příslušný koncept?"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Zahodit zprávu"
+
+#~ msgid "Keep draft"
+#~ msgstr "Ponechat koncept"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Opravdu chcete smazat tento koncept?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Opravdu chcete zprávu zahodit?"
+
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "
 #~ "help and settings easier."
@@ -15911,7 +15940,6 @@ msgstr "Přidat do %s"
 #~ msgid "Manual"
 #~ msgstr "Příručka"
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "Zpráva od %1$s: %2$s"
 
@@ -15995,20 +16023,17 @@ msgstr "Přidat do %s"
 #~ msgid "Send link"
 #~ msgstr "Poslat odkaz"
 
-#, c-format
 #~ msgid "Sharing link created for %1$d item"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Odkaz pro sdílení jedné položky vytvořen"
 #~ msgstr[1] "Odkaz pro sdílení %1$d položek vytvořen"
 #~ msgstr[2] "Odkaz pro sdílení %1$d položek vytvořen"
 
-#, c-format
 #~| msgid "Sharing link created for file \"%1$s\""
 #~| msgid_plural "Sharing link created for %2$d items"
 #~ msgid "Sharing link created for file \"%1$s\""
 #~ msgstr "Odkaz pro sdílení souboru „%1$s“ vytvořen"
 
-#, c-format
 #~| msgid "Sharing link created for folder \"%1$s\""
 #~| msgid_plural "Sharing link created for %2$d items"
 #~ msgid "Sharing link created for folder \"%1$s\""
@@ -26741,9 +26766,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "You have edit rights."
 #~ msgstr "Máte práva k upravování."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Nemáte žádné nové zprávy"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Znovu jste autorizovali tento účet."

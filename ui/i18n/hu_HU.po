@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-13 20:34+0100\n"
+"PO-Revision-Date: 2021-01-18 12:01+0100\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -3299,7 +3299,7 @@ msgstr "Csoportnév"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr "Más felhasználók megtalálhatják és csatlakozhatnak csatornájához az \"Összes csatorna\" alatt. Ha inkább a zárt csoportban történő beszélgetést részesíti előnyben, akkor hozzon létre egy csoportos csevegést."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
@@ -3483,24 +3483,29 @@ msgstr "Elhagyás"
 msgid "The file could not be loaded."
 msgstr "A fájl betöltése nem sikerült."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "A csevegést nem lehetett eltávolítani a kedvencek közül. Kérem, próbálja meg újra."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "A csevegést nem lehetett hozzáadni a kedvencekhez. Kérem, próbálja meg újra."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Új"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Privát csevegés"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Csoportos csevegés"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Csatorna"
 
@@ -3515,8 +3520,8 @@ msgid "All files"
 msgstr "Összes fájl"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Történelem"
@@ -3534,9 +3539,7 @@ msgstr "Csoportos csevegések"
 msgid "Channels"
 msgstr "Csatornák"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Csevegések"
 
@@ -3551,12 +3554,6 @@ msgstr "Nem tud csatlakozni. Kérem, próbálja újra később."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Új csevegés"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Ablak leválasztása"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3770,6 +3767,14 @@ msgstr "Ismeretlen rendszerüzenet: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s és %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Csevegés bezárása"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Ablak leválasztása"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Szöveges fájl"
@@ -3800,12 +3805,6 @@ msgid "Add members"
 msgstr "Tagok hozzáadása"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Csevegés bezárása"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Még nincsenek csatornák"
 
@@ -3826,6 +3825,10 @@ msgstr "Csatlakozás"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Csevegés műveletek"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Görgetés a legújabb üzenethez"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -3943,6 +3946,10 @@ msgid "Create private chat"
 msgstr "Privát csevegés létrehozása"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Animáció betöltése"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Fájl letöltése"
 
@@ -3974,6 +3981,11 @@ msgstr "Még nincsenek archivált csevegések"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Megnyitás"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Tag eltávolítása"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -8846,11 +8858,6 @@ msgstr "Külső felhasználók"
 msgid "Internal users"
 msgstr "Belső felhasználók"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Adjon meg jelszót"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -10172,9 +10179,14 @@ msgstr "A piszkozat nem található a kiszolgálón. Időközben elküldték vag
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
-msgstr "Ezt a vázlatot ezen az ablakon kívül módosították. Az adatvesztés elkerülése érdekében, folytassa a szerkesztést a másik lapon vagy böngészőben."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
+msgstr "Ezt a piszkozatot egy másik lapon vagy böngészőben módosította. Kérjük, folytassa a legújabb verzió szerkesztését. Ha időközben bezárta azt a lapot, itt visszaállíthatja a legfrissebb vázlatot."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Piszkozat visszaállítása"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10428,38 +10440,17 @@ msgstr "Mentés..."
 msgid "Saved %s"
 msgstr "%s mentve"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr "Az eldobott üzenettel együtt törli a kapcsolódó piszkozatot is?"
+msgid "Save draft"
+msgstr "Piszkozat mentése"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr "Ezt az e-mailt még nem küldte el. Elmentheti piszkozatként, hogy később tovább dolgozzon rajta."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
 msgstr "Piszkozat törlése"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Üzenet elvetése"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Piszkozat megtartása"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Mentés piszkozatként"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Biztos, hogy törölni szeretné a piszkozatot?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Valóban eldobja az üzenetet?"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10583,7 +10574,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "A mappát nem lehet hozzáadni, mert a hivatkozás érvénytelen."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Ez a hivatkozás nem támogatott, ezért nem adható hozzá."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14401,10 +14392,6 @@ msgid "Create new group"
 msgstr "Új csoport létrehozása"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Tag eltávolítása"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15455,6 +15442,54 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Más felhasználók megtalálhatják és csatlakozhatnak csatornájához az "
+#~ "\"Összes csatorna\" alatt. Ha inkább a zárt csoportban történő "
+#~ "beszélgetést részesíti előnyben, akkor hozzon létre egy csoportos "
+#~ "csevegést."
+
+#~ msgid "Please set password"
+#~ msgstr "Adjon meg jelszót"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Ezt a vázlatot ezen az ablakon kívül módosították. Az adatvesztés "
+#~ "elkerülése érdekében, folytassa a szerkesztést a másik lapon vagy "
+#~ "böngészőben."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr "Az eldobott üzenettel együtt törli a kapcsolódó piszkozatot is?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Piszkozat törlése"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Üzenet elvetése"
+
+#~ msgid "Keep draft"
+#~ msgstr "Piszkozat megtartása"
+
+#~ msgid "Save as draft"
+#~ msgstr "Mentés piszkozatként"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Biztos, hogy törölni szeretné a piszkozatot?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Valóban eldobja az üzenetet?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Ez a hivatkozás nem támogatott, ezért nem adható hozzá."
 
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "

@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-09 15:47-0300\n"
-"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
+"PO-Revision-Date: 2021-01-18 10:24-0300\n"
+"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
 "Language-Team: Portuguese <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3354,7 +3354,7 @@ msgstr "Nome do grupo"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
 "Outros usuários podem encontrar e entrar no seu canal dentro de \"Todos os "
 "canais\". Se você prefere uma conversa em um grupo fechado, crie um bate-"
@@ -3543,24 +3543,29 @@ msgstr "Deixar"
 msgid "The file could not be loaded."
 msgstr "O arquivo não pôde ser carregado."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "O bate-papo não pôde ser excluído dos favoritos. Tente novamente."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "O bate-papo não pôde ser adicionado aos favoritos. Tente novamente."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Novo"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Bate-papo privado"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Bate-papo em grupo"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Canal"
 
@@ -3575,8 +3580,8 @@ msgid "All files"
 msgstr "Todos os arquivos"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Histórico"
@@ -3594,9 +3599,7 @@ msgstr "Bate-papos em grupo"
 msgid "Channels"
 msgstr "Canais"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Bate-papos"
 
@@ -3611,12 +3614,6 @@ msgstr "Não foi possível conectar. Tente novamente mais tarde."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Novo bate-papo"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Separar janela"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3830,6 +3827,14 @@ msgstr "Mensagem de sistema desconhecida: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s e %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Fechar bate-papo"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Separar janela"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Arquivo de texto"
@@ -3860,12 +3865,6 @@ msgid "Add members"
 msgstr "Adicionar membros"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Fechar bate-papo"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Ainda não há canais"
 
@@ -3886,6 +3885,10 @@ msgstr "Junte-se"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Ações de bate-papo"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Rolar para a mensagem mais nova"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4007,6 +4010,10 @@ msgid "Create private chat"
 msgstr "Criar um bate-papo privado"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Carregar animação"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Baixar arquivo"
 
@@ -4038,6 +4045,11 @@ msgstr "Ainda não há bate-papos arquivados"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Abrir"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Excluir membro"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -6113,7 +6125,7 @@ msgstr "Adicionar conta de armazenamento"
 #. opens a dialog to manage shared or public folders
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Manage Shares"
-msgstr "Gerenciar compartilhamentos "
+msgstr "Gerenciar compartilhamentos"
 
 #. shown when a download of mail data is requested (has header "Included folders ...")
 #. shown when a download of (cloud) drive files is requested (has header "Included folders ...")
@@ -8269,8 +8281,8 @@ msgid ""
 "The top navigation area has been redesigned to make accessing apps, help and "
 "settings easier."
 msgstr ""
-"A área de navegação superior foi redesenhada para facilitar o acesso a"
-" aplicativos, ajuda e configurações."
+"A área de navegação superior foi redesenhada para facilitar o acesso a "
+"aplicativos, ajuda e configurações."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8283,10 +8295,10 @@ msgid ""
 "directly from contacts, the halo view and other logical places. To help we "
 "have also added a presence indicator."
 msgstr ""
-"Esta versão vem com a capacidade de realizar uma chamada de vídeo ou áudio"
-" com outras pessoas. Isso pode ser agendado em um compromisso do calendário"
-" ou iniciado diretamente nos contatos, na visualização do halo e em outros"
-" locais lógicos. Para ajudar, também adicionamos um indicador de presença."
+"Esta versão vem com a capacidade de realizar uma chamada de vídeo ou áudio "
+"com outras pessoas. Isso pode ser agendado em um compromisso do calendário "
+"ou iniciado diretamente nos contatos, na visualização do halo e em outros "
+"locais lógicos. Para ajudar, também adicionamos um indicador de presença."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8299,10 +8311,10 @@ msgid ""
 "App Suite user. Chats can be instigated from the chat window, contacts or "
 "halo view."
 msgstr ""
-"Com esta versão, você notará um novo ícone de bolha de bate-papo na barra de"
-" menu. Isso abre a nova janela de bate-papo e permite que você escreva"
-" mensagens para qualquer outro usuário do OX App Suite. Os bate-papos podem"
-" ser iniciados na janela de bate-papo, contatos ou visualização em halo."
+"Com esta versão, você notará um novo ícone de bolha de bate-papo na barra de "
+"menu. Isso abre a nova janela de bate-papo e permite que você escreva "
+"mensagens para qualquer outro usuário do OX App Suite. Os bate-papos podem "
+"ser iniciados na janela de bate-papo, contatos ou visualização em halo."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8457,8 +8469,8 @@ msgid ""
 "You are moving one or more items that are shared with other people. These "
 "people will lose access."
 msgstr ""
-"Você está movendo um ou mais itens que são compartilhados com outras pessoas."
-" Essas pessoas perderão o acesso."
+"Você está movendo um ou mais itens que são compartilhados com outras "
+"pessoas. Essas pessoas perderão o acesso."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9081,11 +9093,6 @@ msgstr "Usuários externos"
 msgid "Internal users"
 msgstr "Usuários internos"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Defina a senha"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9262,7 +9269,7 @@ msgstr "Convidar pessoas"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Invite as: "
-msgstr "Convidar como:"
+msgstr "Convidar como: "
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Invitation message (optional)"
@@ -10462,11 +10469,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Este rascunho foi alterado fora desta janela. Para prevenir a possível perda "
-"de dados, continue editando na outra aba ou navegador."
+"Este rascunho foi alterado em outra aba ou navegador. Continue editando a "
+"versão mais recente. Se você fechou a aba, pode restaurar o rascunho mais "
+"recente aqui."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Restaurar rascunho"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10728,40 +10741,19 @@ msgstr "Salvando..."
 msgid "Saved %s"
 msgstr "Salvo %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr ""
-"Você está prestes a descartar esta mensagem. Deseja excluir o rascunho "
-"relacionado?"
+msgid "Save draft"
+msgstr "Salvar rascunho"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr ""
+"Este e-mail não foi enviado. Você pode salvar o rascunho para trabalhar mais "
+"tarde."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
 msgstr "Excluir rascunho"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Descartar mensagem"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Manter rascunho"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Salvar como rascunho"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Deseja realmente excluir este rascunho?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Deseja realmente descartar sua mensagem?"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10887,7 +10879,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "A pasta não pode ser adicionada pois o link é inválido."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Este tipo de link não é suportado e não pode ser adicionado."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14832,10 +14824,6 @@ msgid "Create new group"
 msgstr "Criar novo grupo"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Excluir membro"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15920,6 +15908,54 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Outros usuários podem encontrar e entrar no seu canal dentro de \"Todos "
+#~ "os canais\". Se você prefere uma conversa em um grupo fechado, crie um "
+#~ "bate-papo em grupo."
+
+#~ msgid "Please set password"
+#~ msgstr "Defina a senha"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Este rascunho foi alterado fora desta janela. Para prevenir a possível "
+#~ "perda de dados, continue editando na outra aba ou navegador."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Você está prestes a descartar esta mensagem. Deseja excluir o rascunho "
+#~ "relacionado?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Excluir rascunho"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Descartar mensagem"
+
+#~ msgid "Keep draft"
+#~ msgstr "Manter rascunho"
+
+#~ msgid "Save as draft"
+#~ msgstr "Salvar como rascunho"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Deseja realmente excluir este rascunho?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Deseja realmente descartar sua mensagem?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Este tipo de link não é suportado e não pode ser adicionado."
 
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "
