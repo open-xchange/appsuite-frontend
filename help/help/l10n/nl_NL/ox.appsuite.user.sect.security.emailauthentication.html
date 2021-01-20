@@ -1,0 +1,79 @@
+<html lang="nl">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.3. E-mailauthenticiteit weergeven</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Gebruikershandleiding">
+<link rel="up" href="ox.appsuite.user.chap.security.html" title="Hoofdstuk 12. Gegevensbeveiliging">
+<link rel="prev" href="ox.appsuite.user.sect.security.emaillinkedimages.html" title="12.2. Extern Gekoppelde Afbeeldingen in E-mailberichten">
+<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Een Whitelist gebruiken">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigatie Aan/Uit</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Terug</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Begin</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhoudsopgave</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.whitelist.html">Volgende</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Gegevensbeveiliging</h1>
+<div class="sect1" id="ox.appsuite.user.sect.security.emailauthentication">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.3. E-mailauthenticiteit weergeven</h2></div></div></div>
+<a class="indexterm" name="id-1.13.7.2"></a><a class="indexterm" name="id-1.13.7.3"></a><p id="ox.appsuite.user.concept.security.emailauthentication">Voor inkomende e-mails controleert de server of de e-mail daadwerkelijk afkomstig is van het opgegeven verzendadres. De controle wordt uitgevoerd om onwettige e-mails te identificeren. De e-mailauthenticatie levert een van de volgende resultaten op: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">De e-mail is geclassificeerd als potentieel gevaarlijk. In de detailweergave wordt de afzender in rode letterkleur weergegeven.</p></li>
+<li class="listitem"><p role="presentation">De authenticiteit kan niet met zekerheid worden geverifieerd. In de detailweergave wordt de afzender in gele lettertypekleur weergegeven.</p></li>
+<li class="listitem"><p role="presentation">De verificatie is geslaagd. In de detailweergave wordt de afzender in groene letterkleur weergegeven.</p></li>
+<li class="listitem"><p role="presentation">De verificatie was succesvol. De e-mail is verzonden vanaf een betrouwbaar adres.</p></li>
+</ul>
+<p>Afhankelijk van de configuratie kunt u de e-mails definiëren waarvoor de authenticiteit wordt weergegeven.</p>
+<div class="task" id="ox.appsuite.user.task.security.emailauthentication">
+<p class="title">Hoe de e-mails te definiëren waarvoor de authenticiteit wordt weergegeven:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klik op het <span class="guibutton"><strong>Instellingen</strong></span> pictogram<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>aan de rechterkant van de menubalk. Klik op <span class="guibutton"><strong>Instellingen</strong></span>.</p></li>
+<li class="step"><p role="presentation">Klik in de zijbalk op <span class="guibutton"><strong>Beveiliging</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kies een item uit het <span class="guibutton"><strong>E-mailauthenticiteit weergeven</strong></span> selectievak in het hoofdgebied.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Uitgeschakeld</strong></span>. Er wordt geen authenticiteit weergegeven. Als een hoster de e-mail die is verzonden vanaf het adres van de hoster echter als betrouwbaar markeert, wordt deze authenticiteit weergegeven.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Alleen verdachte en niet-geclassificeerde e-mails</strong></span>. Toont de authenticiteit van de volgende e-mails:<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">E-mails die geclassificeerd zijn als potentieel gevaarlijk.</p></li>
+<li class="listitem"><p role="presentation">E-mails waarvan de authenticiteit niet met zekerheid kan worden geverifieerd</p></li>
+</ul>
+                </p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Alle E-mails</strong></span>. Geeft de authenticiteit weer voor alle E-mails.</p></li>
+</ul>
+          </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.security.emailauthentication">      
+      </p>
+<p class="title">Zie ook:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Automatisch afmelden</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Extern Gekoppelde Afbeeldingen in E-mailberichten</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Een Whitelist gebruiken</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Toon of meld af van actieve clients</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Extra Wachtwoorden gebruiken voor Applicaties</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">E-mailberichten tonen</a></p></li>
+</ul>
+<p>
+    </p>
+<p id="ox.appsuite.user.parent.security.emailauthentication">Overkoepelend thema: <a class="xref" href="ox.appsuite.user.chap.security.html"><i>Gegevensbeveiliging</i></a></p>
+</div>
+          </div>
+        </body>
+</html>

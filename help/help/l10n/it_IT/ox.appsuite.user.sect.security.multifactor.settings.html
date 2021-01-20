@@ -1,0 +1,133 @@
+<html lang="it">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.7.1. Configurare i metodi di verifica</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Manuale utente">
+<link rel="up" href="ox.appsuite.user.sect.security.multifactor.html" title="12.7. Autenticazione multifattore">
+<link rel="prev" href="ox.appsuite.user.sect.security.multifactor.html" title="12.7. Autenticazione multifattore">
+<link rel="next" href="ox.appsuite.user.sect.security.multifactor.authenticator.html" title="12.7.2. Verificare un accesso utilizzando un'applicazione di autenticazione">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Cambiar la navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.security.multifactor.html">Indietro</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Partenza</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Sommario</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.multifactor.authenticator.html">Avanti</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Sicurezza dei dati</h1>
+<h2 class="sr-only">Autenticazione multifattore</h2>
+<div class="sect2" id="ox.appsuite.user.sect.security.multifactor.settings">
+<div class="titlepage"><div><div><h3 class="title">12.7.1. Configurare i metodi di verifica</h3></div></div></div>
+<a class="indexterm" name="id-1.13.11.7.2"></a><a class="indexterm" name="id-1.13.11.7.3"></a><p id="ox.appsuite.user.concept.security.multifactor.settings">Prima di poter utilizzare la verifica in due fasi per l'accesso successivo, è necessario configurare i metodi di verifica aggiuntivi desiderati. Sono disponibili le seguenti opzioni:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Configurare i metodi di verifica.</p></li>
+<li class="listitem">
+<p role="presentation">Non appena avete configurato un metodo di verifica iniziale, è necessario impostare un metodo di ripristino. Il ripristino serve ad es. nel caso in cui si perda il dispositivo utilizzato per l'autenticazione.</p>
+<p role="presentation">In questo caso, è possibile accedere al groupware utilizzando il metodo di ripristino.</p>
+</li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.security.multifactor.settings">
+<p class="title">Come configurare i metodi di verifica:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">Fare clic anche sull'icona <span class="guibutton"><strong>Impostazioni</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.multifactor.settings"><img src="../../images/appsuite_user_icon_settings.png"></span> a destra della barra dei menu. Fare clic su <span class="guibutton"><strong>Impostazioni</strong></span>.</p>
+<p role="presentation">Fare clic su <span class="guibutton"><strong>Sicurezza</strong></span> nella barra laterale. Fare clic su <span class="guibutton"><strong>Verifica in due fasi</strong></span>.</p>
+</li>
+<li class="step">
+<p role="presentation">Fare clic su <span class="guibutton"><strong>Aggiungi opzioni di verifica</strong></span> nell'area di visualizzazione.</p>
+<p role="presentation">Si aprirà la finestra <span class="guilabel"><strong>Aggiungi opzioni di verifica</strong></span>. In base alla configurazione, sono offerti diversi metodi di verifica.</p>
+</li>
+<li class="step">
+<p role="presentation">Configurare una verifica utilizzando l'applicazione di autenticazione:</p>
+<ol type="a" class="substeps">
+<li class="step">
+<p role="presentation">Installare un'applicazione Google Authenticator o compatibile sul dispositivo mobile che si desidera utilizzare per la verifica.</p>
+<p role="presentation">Avviare l'applicazione.</p>
+</li>
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Google Authenticator o compatibile</strong></span> nella finestra <span class="guilabel"><strong>Aggiungi opzione di verifica</strong></span>.</p></li>
+<li class="step"><p role="presentation">La finestra <span class="guilabel"><strong>Registrazione autenticatore</strong></span> visualizza un codice QR. Analizza il codice con l'applicazione Authenticator sul dispositivo mobile.</p></li>
+<li class="step"><p role="presentation">L'applicazione sul dispositivo mobile visualizza un codice. Digitare questo codice nella finestra <span class="guilabel"><strong>Registrazione autenticatore</strong></span>. Fare clic su <span class="guibutton"><strong>OK</strong></span>.</p></li>
+</ol>
+<p role="presentation">Quando si configura il metodo di verifica iniziale, sarà visualizzata la finestra <span class="guilabel"><strong>Aggiungi opzione di ripristino</strong></span>. Nelle istruzioni seguenti, imparerete ad <a class="link" href="ox.appsuite.user.sect.security.multifactor.settings.html#ox.appsuite.user.task.security.multifactor.settings.recovery">aggiungere un metodo di autenticazione</a>.</p>
+</li>
+<li class="step">
+<p role="presentation">Configura una verifica con una chiave di sicurezza:</p>
+<p role="presentation">Nota: in base al browser, questo metodo di autenticazione potrebbe non essere supportato.</p>
+<ol type="a" class="substeps">
+<li class="step"><p role="presentation">Collegare la propria workstation con la chiave di sicurezza. In base alla chiave di sicurezza, è utilizzata una connessione USB o wireless.</p></li>
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Yubikey, Google Security Key o dispositivo FIDO compatible</strong></span> nella finestra <span class="guilabel"><strong>Aggiungi opzione di verifica</strong></span>.</p></li>
+<li class="step"><p role="presentation">Attivare la propria chiave di sicurezza, ad es. premendo un pulsante sulla chiave di sicurezza.</p></li>
+</ol>
+<p role="presentation">Quando si configura il metodo di verifica iniziale, sarà visualizzata la finestra <span class="guilabel"><strong>Aggiungi opzione di ripristino</strong></span>. Nelle istruzioni seguenti, imparerete ad <a class="link" href="ox.appsuite.user.sect.security.multifactor.settings.html#ox.appsuite.user.task.security.multifactor.settings.recovery">aggiungere un metodo di autenticazione</a>.</p>
+</li>
+<li class="step">
+<p role="presentation">Configurare una tramite messaggio di testo:</p>
+<ol type="a" class="substeps">
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Codice tramite messaggio di testo</strong></span> nella finestra <span class="guilabel"><strong>Aggiungi opzione di verifica</strong></span>.</p></li>
+<li class="step"><p role="presentation">Si aprirà la finestra <span class="guilabel"><strong>Aggiungi dispositivo multifattore</strong></span>. Digitare il numero del proprio cellulare.</p></li>
+<li class="step"><p role="presentation">Appena dopo, si riceverà un messaggio di testo con un codice. Digitare questo codice nella finestra <span class="guilabel"><strong>Codice di conferma</strong></span>. Fare clic su <span class="guibutton"><strong>OK</strong></span>.</p></li>
+</ol>
+<p role="presentation">Dopo aver configurato il metodo iniziale di verifica, si aprirà la finestra <span class="guilabel"><strong>Aggiungi opzioni di ripristino</strong></span>. Nelle istruzioni seguenti, imparerete ad <a class="link" href="ox.appsuite.user.sect.security.multifactor.settings.html#ox.appsuite.user.task.security.multifactor.settings.recovery">aggiungere un metodo di ripristino</a>.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.security.multifactor.settings.recovery">
+<p class="title">Come aggiungere un metodo di ripristino nella finestra <span class="guilabel"><strong>Aggiungi opzione di ripristino</strong></span>:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">Configurare un ripristino tramite messaggio di testo:</p>
+<p role="presentation">Nota: quando si seleziona la verifica tramite messaggio di testo come metodo di verifica iniziale, è necessario digitare un altro dispositivo mobile per un ripristino tramite messaggio di testo.</p>
+<ol type="a" class="substeps">
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Codice tramite messaggio di testo</strong></span>.</p></li>
+<li class="step"><p role="presentation">Si aprirà la finestra <span class="guilabel"><strong>Aggiungi dispositivo multifattore</strong></span>. Digitare il numero di telefono del proprio dispositivo mobile che si desidera utilizzare per un ripristino.</p></li>
+<li class="step"><p role="presentation">Appena dopo, si riceverà un messaggio di testo con un codice. Digitare questo codice nella finestra <span class="guilabel"><strong>Codice di conferma</strong></span>. Fare clic su <span class="guibutton"><strong>OK</strong></span>.</p></li>
+</ol>
+</li>
+<li class="step">
+<p role="presentation">Configurare un ripristino tramite codice di ripristino:</p>
+<ol type="a" class="substeps">
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Codice di backup per accedere al tuo account</strong></span>.</p></li>
+<li class="step"><p role="presentation">Si aprirà la finestra <span class="guilabel"><strong>Codice di ripristino</strong></span>. Visualizza un codice che può essere utilizzato per il ripristino.</p></li>
+<li class="step">
+<p role="presentation">Per stampare il codice di ripristino, fare clic su <span class="guibutton"><strong>Stampa</strong></span>.</p>
+<p role="presentation">Per salvare il codice di ripristino come file di testo, fare clic su <span class="guibutton"><strong>Scarica</strong></span>. In caso di ripristino, è possibile importare il codice di ripristino da questo file di testo.</p>
+</li>
+</ol>
+</li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.security.multifactor.setup">      
+        </p>
+<p class="title">Argomenti correlati:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.multifactor.authenticator.html">Verificare un accesso utilizzando un'applicazione di autenticazione</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.multifactor.securitykey.html">Verificare l'accesso con una chiave di sicurezza</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.multifactor.sms.html">Verificare l'accesso con un codice SMS</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.multifactor.manage.html">Gestire i metodi di verifica</a></p></li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.security.multifactor.setup">Argomento principale <a class="xref" href="ox.appsuite.user.sect.security.multifactor.html">Autenticazione multifattore</a></p>
+</div>
+          </div>
+        </body>
+</html>

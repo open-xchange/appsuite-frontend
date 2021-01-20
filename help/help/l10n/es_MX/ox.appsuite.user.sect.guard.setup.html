@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.1. Configuración de Guard</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Guía del usuario">
+<link rel="up" href="ox.appsuite.user.chap.guard.html" title="Chapter 13. Cifrar datos con Guard">
+<link rel="prev" href="ox.appsuite.user.chap.guard.html" title="Chapter 13. Cifrar datos con Guard">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.html" title="13.2. Cifrado de conversaciones de correo">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.guard.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Cifrar datos con <span class="phrase">Guard</span>
+</h1>
+<div class="sect1" id="ox.appsuite.user.sect.guard.setup">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">13.1. Configuración de <span class="phrase">Guard</span>
+</h2></div></div></div>
+<a class="indexterm" name="id-1.14.6.2"></a><p id="ox.appsuite.user.concept.guard.usage.setup.securitykeys">Antes de poder usar <span class="phrase">Guard</span>, se han de aplicar algunos ajustes básicos:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Hay que introducir una contraseña de seguridad de <span class="phrase">Guard</span> que se usa para cifrar datos y para acceder a datos cifrados.</p></li>
+<li class="listitem"><p role="presentation">Introduzca una dirección de correo secundaria que se utilizará si olvida su contraseña de seguridad de <span class="phrase">Guard</span>. En ese caso, use la función para restablecer la contraseña de seguridad de <span class="phrase">Guard</span>. Se le enviará una nueva contraseña. Por razones de seguridad, es altamente recomendable introducir una dirección de correo secundario para este fin. En caso contrario, la nueva contraseña se enviaría a su cuenta de correo del software colaborativo. </p></li>
+</ul>
+<p>Hay dos opciones para configurar los ajustes básicos:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Definir los ajustes básicos mientras se utiliza la función de cifrado por primera vez.</p></li>
+<li class="listitem"><p role="presentation">Definir los ajustes básicos en la configuración del software colaborativo antes de usar la función de cifrado.</p></li>
+</ul>
+<p> 
+    </p>
+<div class="task" id="ox.appsuite.user.task.guard.setup.implicit">
+<p class="title">Cómo definir los ajustes básicos al utilizar la función de cifrado por primera vez:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Active la función de cifrado al redactar un correo, cifrar un archivo o subir un archivo nuevo, presionando en el icono <span class="guibutton"><strong>Cifrar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.setup.implicit"><img src="../../images/guard_user_icon_encrypt.png"></span> .</p></li>
+<li class="step"><p role="presentation">Seguidamente se le pedirá que introduzca una contraseña de seguridad de <span class="phrase">Guard</span> y una dirección de correo secundaria. Introduzca los datos.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.setup.setting">
+<p class="title">Cómo definir los ajustes básicos antes de usar el cifrado por primera vez:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Presione el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.setup.setting"><img src="../../images/appsuite_user_icon_settings.png"></span>. Presione <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
+<li class="step">
+<p role="presentation">Presione en <span class="guibutton"><strong>Seguridad</strong></span> en la barra lateral. Presione en <span class="phrase"><span class="guibutton"><strong>Seguridad de Guard</strong></span></span>.</p>
+<p role="presentation">Cuando se abren por primera vez los ajustes de seguridad de <span class="phrase">Guard</span>, se abre la ventana <span class="phrase"><span class="guilabel"><strong>Crear claves de seguridad de Guard</strong></span></span>.</p>
+</li>
+<li class="step">
+<p role="presentation">En el campo <span class="guibutton"><strong>Contraseña</strong></span>, introduzca la contraseña que quiera usar para cifrar sus datos.</p>
+<p role="presentation">Confirme la contraseña en el campo <span class="guibutton"><strong>Verificar</strong></span> introduciéndola de nuevo. </p>
+</li>
+<li class="step"><p role="presentation">En el campo <span class="guibutton"><strong>Introduzca nuevo correo secundario</strong></span>, introduzca la dirección de correo que se usará para recibir una contraseña provisional para el restablecimiento de su contraseña de seguridad de <span class="phrase">Guard</span>.</p></li>
+<li class="step"><p role="presentation">Presione <span class="guibutton"><strong>Aceptar</strong></span>.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.parent.guard.usage.setup.securitykeys">Tema superior: <a class="xref" href="ox.appsuite.user.chap.guard.html"><i>Cifrar datos con <span class="phrase">Guard</span></i></a></p>
+</div>
+          </div>
+        </body>
+</html>

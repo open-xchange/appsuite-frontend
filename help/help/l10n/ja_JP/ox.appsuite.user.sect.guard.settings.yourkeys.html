@@ -1,0 +1,154 @@
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7.2. 自分の鍵を管理する</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="ユーザ ガイド">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard設定">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. パスワード管理">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. 公開鍵を管理する">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">ナビゲーションを表示</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">戻る</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">次へ</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+<span class="phrase">Guard</span>を使ってデータの暗号化</h1>
+<h2 class="sr-only">
+<span class="phrase">Guard</span>設定</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
+<div class="titlepage"><div><div><h3 class="title">13.7.2. 自分の鍵を管理する</h3></div></div></div>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys"><span class="phrase"><span class="guilabel"><strong>Guard セキュリティ設定</strong></span></span> ページで、次のことができます：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">自分の鍵を表示する、詳細を表示する</p></li>
+<li class="listitem">
+<p role="presentation">新規鍵の追加</p>
+<p role="presentation">複数の鍵を所有している場合、どの鍵を現在の鍵にするか指定できます。現在の鍵はデータの暗号化に使用されます。</p>
+</li>
+<li class="listitem">
+<p role="presentation">ユーザIDの追加</p>
+<p role="presentation">追加のユーザIDを鍵に追加すると、鍵を複数のメール アカウントに使用できます。</p>
+</li>
+<li class="listitem"><p role="presentation">鍵をダウンロード</p></li>
+<li class="listitem"><p role="presentation">鍵を削除する</p></li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
+<p class="title">自分の鍵を表示、または鍵を現在の鍵にする方法：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation"><span class="guibutton"><strong>詳細</strong></span>下の<span class="guibutton"><strong>詳細設定を表示</strong></span>チェックボックスを有効にします。</p>
+<p role="presentation"><span class="guibutton"><strong>鍵</strong></span>下の<span class="guilabel"><strong>あなたの鍵</strong></span>をクリックします。<span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウが開きます。</p>
+<p role="presentation">
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">既存の鍵が表示されます。各鍵にはマスター鍵とサブ鍵があります。<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">特に、マスター鍵はメールの署名に使用されます。</p></li>
+<li class="listitem"><p role="presentation">サブ鍵は、メールおよびファイルの暗号化および復号化に使用されます。</p></li>
+</ul>
+                  </p></li>
+<li class="listitem"><p role="presentation">目的によって、<span class="phrase">Guard</span>は自動でマスター鍵かサブ鍵を使用します。</p></li>
+</ul>
+            </p>
+</li>
+<li class="step"><p role="presentation">あなたの鍵リストに複数の鍵がある場合、現在の鍵を指定することができます。それには、主な鍵の横の<span class="guibutton"><strong>現在</strong></span>のチェックボックスを有効にします。この後、現在の鍵が暗号化に使用されます。</p></li>
+<li class="step"><p role="presentation">鍵の詳細を表示するには、<span class="guibutton"><strong>詳細</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>をクリックします。<span class="guilabel"><strong>鍵の詳細</strong></span>ウィンドウが開きます。鍵の署名を見るには、<span class="guibutton"><strong>署名</strong></span>をクリックします。</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
+<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで新しい鍵を追加する方法：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation"><span class="guibutton"><strong>追加</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>をクリックします。<span class="guilabel"><strong>鍵の追加</strong></span> ウィンドウが開きます。</p></li>
+<li class="step">
+<p role="presentation">次のようなオプションの機能があります。<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">秘密鍵の追加には、<span class="guibutton"><strong>秘密鍵をアップロードする</strong></span>をクリックします。秘密鍵を含むファイルを選択してください。<span class="guilabel"><strong>秘密鍵のアップロード</strong></span>ウィンドウが開きます。</p>
+<p role="presentation">新しい鍵のアップロードには、<span class="phrase">Guard</span>セキュリティパスワードを入力してください。新しい鍵用の新しいパスワードを入力します。</p>
+</li>
+<li class="listitem"><p role="presentation">公開鍵の追加の場合、<span class="guibutton"><strong>公開鍵のみを追加する</strong></span>をクリックします。公開鍵を含むファイルを選択してください。</p></li>
+<li class="listitem">
+<p role="presentation">新しい鍵ペアを作成する場合は、<span class="guibutton"><strong>新しい鍵を作成する</strong></span>をクリックします。<span class="phrase"><span class="guilabel"><strong>Guardセキュリティ鍵作成</strong></span></span>ウィンドウが開きます。</p>
+<p role="presentation">新しい鍵用のパスワードを入力します。パスワードを確認してください。</p>
+<p role="presentation">新しい鍵にはマスター鍵と該当するサブ鍵があります。</p>
+</li>
+</ul>
+            </p>
+<p role="presentation">新しい鍵はあなたの鍵リストの一番上に入力されます。新しい鍵が現在の鍵になります。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
+<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで追加のユーザIDを追加する方法：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation"><span class="guibutton"><strong>編集</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>をクリックします。<span class="guilabel"><strong>ユーザID追加</strong></span>ウィンドウが開きます。</p></li>
+<li class="step">
+<p role="presentation">ユーザID名を入力します。この鍵に使用したいメールアドレスを入力します。</p>
+<p role="presentation">鍵のパスワードを入力してください。</p>
+<p role="presentation"><span class="guibutton"><strong>OK</strong></span>をクリックします。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
+<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで鍵をダウンロードする方法：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation"><span class="guibutton"><strong>ダウンロード</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>をクリックします。</p></li>
+<li class="step">
+<p role="presentation">秘密鍵のみをダウンロードするか、公開鍵のみをダウンロードするか、どちらもダウンロードするかを指定します。</p>
+<p role="presentation"><span class="phrase"><strong>注意：</strong></span>あなたの秘密鍵は暗号化された形式でダウンロードされます。しかし、秘密鍵は公開でアクセスできるシステムにダウンロードすべきではありません。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.delete">
+<p class="title"><span class="guilabel"><strong>あなたの鍵</strong></span>ウィンドウで鍵を削除する方法：</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>警告:</strong></span>秘密鍵を削除すると、この鍵で暗号化されたオブジェクトを復号化することはできません。迷っている場合は、鍵を削除せず、無効にしてください。無効になった鍵は暗号化に使用できません。しかし、この鍵で暗号化されたオブジェクトは復号化できます。</p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation"><span class="guibutton"><strong>削除</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span> をクリックします。<span class="guilabel"><strong>秘密鍵の削除</strong></span>ウィンドウが開きます。</p></li>
+<li class="step"><p role="presentation">次のようなオプションの機能があります。<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">秘密鍵を無効にするには、<span class="guibutton"><strong>無効</strong></span>をクリックします。</p>
+<p role="presentation">鍵を無効にすると、使用できません。しかし、この鍵で暗号化されたオブジェクトは復号化できます。そのため、鍵を削除するよりは無効化することをお勧めします。</p>
+<p role="presentation">秘密鍵用のパスワードを入力します。必要であれば、鍵を無効にする理由を選択します。</p>
+<p role="presentation"><span class="guibutton"><strong>無効</strong></span>をクリックします。</p>
+</li>
+<li class="listitem">
+<p role="presentation">秘密鍵を削除するには、<span class="guibutton"><strong>削除</strong></span>をクリックします。</p>
+<p role="presentation"><span class="phrase"><strong>警告:</strong></span>秘密鍵を削除すると、この鍵で暗号化されたオブジェクトを復号化することはできません。</p>
+<p role="presentation">秘密鍵用のパスワードを入力します。</p>
+<p role="presentation"><span class="guibutton"><strong>削除</strong></span> ボタンをクリックします。</p>
+</li>
+</ul>マスター鍵を削除すると、対応するサブ鍵も削除されます。</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.settings.yourkeys">
+        </p>
+<p class="title">関連トピック</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">公開鍵を管理する</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">パスワード管理</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">親記事：<a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span>設定</a></p>
+</div>
+          </div>
+        </body>
+</html>

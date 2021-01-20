@@ -1,0 +1,79 @@
+<html lang="it">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.3. Mostrare l'autenticità dei messaggi</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Manuale utente">
+<link rel="up" href="ox.appsuite.user.chap.security.html" title="Capitolo 12. Sicurezza dei dati">
+<link rel="prev" href="ox.appsuite.user.sect.security.emaillinkedimages.html" title="12.2. Immagini collegate esternamente nei messaggi di posta">
+<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Utilizzare una lista bianca">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Cambiar la navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Indietro</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Partenza</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Sommario</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.whitelist.html">Avanti</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Sicurezza dei dati</h1>
+<div class="sect1" id="ox.appsuite.user.sect.security.emailauthentication">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.3. Mostrare l'autenticità dei messaggi</h2></div></div></div>
+<a class="indexterm" name="id-1.13.7.2"></a><a class="indexterm" name="id-1.13.7.3"></a><p id="ox.appsuite.user.concept.security.emailauthentication">Per i messaggi di posta in arrivo, il server controlla se il messaggio ha origine effettivamente dall'indirizzo di posta mittente fornito. Il controllo è eseguito per identificare messaggi non legittimi. Il controllo dell'autenticità dei messaggi di posta fornisce uno dei seguenti risultati:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Il messaggio è classificato come potenzialmente pericoloso. Nella vista dettagliata, il mittente è visualizzato con un carattere di colore rosso.</p></li>
+<li class="listitem"><p role="presentation">L'autenticità non può essere verificata completamente. Nella vista dettagliata, il mittente è visualizzato con un carattere di colore giallo.</p></li>
+<li class="listitem"><p role="presentation">La verifica è avvenuta correttamente. Nella vista dettagliata, il mittente è visualizzato con un carattere di colore verde.</p></li>
+<li class="listitem"><p role="presentation">La verifica è avvenuta correttamente. Il messaggio è stato inviato da un indirizzo considerato affidabile.</p></li>
+</ul>
+<p>In base alla configurazione, è possibile specificare i messaggi per i quali sarà visualizzata l'autenticità.</p>
+<div class="task" id="ox.appsuite.user.task.security.emailauthentication">
+<p class="title">Come definire i messaggi per i quali sarà visualizzata l'autenticità:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic anche sull'icona <span class="guibutton"><strong>Impostazioni</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span> a destra della barra dei menu. Fare clic su <span class="guibutton"><strong>Impostazioni</strong></span>.</p></li>
+<li class="step"><p role="presentation">Nella barra laterale, fare clic su <span class="guibutton"><strong>Sicurezza</strong></span>.</p></li>
+<li class="step"><p role="presentation">Selezionare una voce dal menu a tendina <span class="guibutton"><strong>Mostra l'autenticità del messaggio</strong></span> nell'area di visualizzazione.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Disabilitata</strong></span>. Nessuna autenticità è visualizzata. Se tuttavia un fornitore del servizio marca il messaggio inviato dall'indirizzo del fornitore come fidato, questa autenticità sarà visualizzata.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Solo messaggi sospetti o non classificati</strong></span>. Visualizza l'autenticità per i messaggi seguenti:<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Messaggi che sono classificati come potenzialmente pericolosi.</p></li>
+<li class="listitem"><p role="presentation">Messaggi di posta la cui autenticità non può essere verificata in modo definitivo</p></li>
+</ul>
+                </p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Tutti i messaggi</strong></span>. Visualizza l'autenticità per tutti i messaggi.</p></li>
+</ul>
+          </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.security.emailauthentication">      
+      </p>
+<p class="title">Argomenti correlati:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Chiudere automaticamente la sessione</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Immagini collegate esternamente nei messaggi di posta</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utilizzare una lista bianca</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Visualizzare o uscire dai client attivi</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Utilizzare password aggiuntive per le applicazioni</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Visualizzare i messaggi di posta</a></p></li>
+</ul>
+<p>
+    </p>
+<p id="ox.appsuite.user.parent.security.emailauthentication">Argomento principale: <a class="xref" href="ox.appsuite.user.chap.security.html"><i>Sicurezza dei dati</i></a></p>
+</div>
+          </div>
+        </body>
+</html>

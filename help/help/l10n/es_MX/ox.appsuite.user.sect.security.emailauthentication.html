@@ -1,0 +1,79 @@
+<html lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.3. Visualización de la autenticidad del correo</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Guía del usuario">
+<link rel="up" href="ox.appsuite.user.chap.security.html" title="Capítulo 12. Seguridad de los datos">
+<link rel="prev" href="ox.appsuite.user.sect.security.emaillinkedimages.html" title="12.2. Imágenes vinculadas externamente en correos">
+<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Uso de una lista blanca">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Cambiar la navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Atrás</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.whitelist.html">Siguiente</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Seguridad de los datos</h1>
+<div class="sect1" id="ox.appsuite.user.sect.security.emailauthentication">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.3. Visualización de la autenticidad del correo</h2></div></div></div>
+<a class="indexterm" name="id-1.13.7.2"></a><a class="indexterm" name="id-1.13.7.3"></a><p id="ox.appsuite.user.concept.security.emailauthentication">El servidor comprueba si, en cada correo entrante, dicho correo se ha originado en la dirección de remite correspondiente. La comprobación se hace para detectar correos ilícitos. La comprobación de autenticidad del correo proporciona uno de los siguientes resultados:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">El correo se clasifica como potencialmente peligroso. En la vista de detalle, el remitente se muestra con color de fuente rojo.</p></li>
+<li class="listitem"><p role="presentation">La autenticidad no se puede verificar de forma definitiva. En la vista de detalle, el remitente se muestra en color de fuente amarillo.</p></li>
+<li class="listitem"><p role="presentation">La verificación ha sido satisfactoria. En la vista de detalle, el remitente se muestra en color de fuente verde.</p></li>
+<li class="listitem"><p role="presentation">La verificación ha sido satisfactoria. El correo se envió desde una dirección confiable.</p></li>
+</ul>
+<p>Dependiendo de la configuración, puede definir los correos cuya autenticidad se debe mostrar.</p>
+<div class="task" id="ox.appsuite.user.task.security.emailauthentication">
+<p class="title">Cómo definir los correos electrónicos para los que se muestra la autenticidad:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Presione el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>de la parte derecha de la barra de menús. Presione <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
+<li class="step"><p role="presentation">En la barra lateral, presione en <span class="guibutton"><strong>Seguridad</strong></span>.</p></li>
+<li class="step"><p role="presentation">Seleccione un elemento de la lista desplegable <span class="guibutton"><strong>Mostrar autenticidad del correo electrónico</strong></span> en el área de visualización.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Desactivado</strong></span>. No se muestra la autenticidad. Sin embargo, si un proveedor de servicios de alojamiento marca el correo electrónico enviado desde la dirección del proveedor de servicios como confiable, se mostrará dicha autenticidad.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Solo correos electrónicos sospechosos e inclasificables</strong></span>. Muestra la autenticidad de los siguientes correos electrónicos:<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Correos electrónicos que están clasificados como potencialmente peligrosos.</p></li>
+<li class="listitem"><p role="presentation">Correos electrónicos cuya autenticidad no se puede verificar definitivamente</p></li>
+</ul>
+                </p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Todos los correos electrónicos</strong></span>. Muestra la autenticidad de todos los correos electrónicos.</p></li>
+</ul>
+          </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.security.emailauthentication">      
+      </p>
+<p class="title">Temas relacionados:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Cierre de sesión automático</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Imágenes vinculadas externamente en correos</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Uso de una lista blanca</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Mostrar o cerrar sesión en clientes activos</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Uso de contraseñas adicionales para aplicaciones</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Visualización de correos electrónicos</a></p></li>
+</ul>
+<p>
+    </p>
+<p id="ox.appsuite.user.parent.security.emailauthentication">Tema superior: <a class="xref" href="ox.appsuite.user.chap.security.html"><i>Seguridad de los datos</i></a></p>
+</div>
+          </div>
+        </body>
+</html>

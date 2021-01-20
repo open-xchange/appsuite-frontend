@@ -1,0 +1,154 @@
+<html lang="it">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7.2. Gestire le proprie chiavi</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Manuale utente">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Impostazioni di Guard">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. Gestione delle password">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Gestire le chiavi pubbliche">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Cambiar la navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">Indietro</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Partenza</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Sommario</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Avanti</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Cifrare dati con <span class="phrase">Guard</span>
+</h1>
+<h2 class="sr-only">Impostazioni di <span class="phrase">Guard</span>
+</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
+<div class="titlepage"><div><div><h3 class="title">13.7.2. Gestire le proprie chiavi</h3></div></div></div>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Nella pagina <span class="phrase"><span class="guilabel"><strong>Impostazioni di sicurezza di Guard</strong></span></span>, è possibile:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">visualizzare le proprie chiavi, visualizzare i dettagli</p></li>
+<li class="listitem">
+<p role="presentation">aggiungere nuove chiavi</p>
+<p role="presentation">Se si dispone di più chiavi, è possibile definire quale chiave dovrebbe essere quella corrente. La chiave corrente viene utilizzata per cifrare i dati.</p>
+</li>
+<li class="listitem">
+<p role="presentation">aggiungere gli ID utente</p>
+<p role="presentation">Quando si aggiungono ulteriori ID utente a una chiave, è possibile utilizzare la chiave per più account di posta elettronica.</p>
+</li>
+<li class="listitem"><p role="presentation">scaricare le chiavi</p></li>
+<li class="listitem"><p role="presentation">eliminare le chiavi</p></li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
+<p class="title">Come visualizzare le proprie chiavi o rendere una chiave quella corrente:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">Abilitare la casella di selezione <span class="guibutton"><strong>Mostra impostazioni avanzate</strong></span> sotto <span class="guibutton"><strong>Avanzate</strong></span>.</p>
+<p role="presentation">Fare clic su <span class="guibutton"><strong>Le tue chiavi</strong></span> sotto <span class="guilabel"><strong>Chiavi</strong></span>. Si aprirà la finestra <span class="guilabel"><strong>Le tue chiavi</strong></span>.</p>
+<p role="presentation">
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Sono visualizzate le proprie chiavi esistenti. Ogni chiave consiste di una chiave principale e di una sottochiave.<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Tra le altre cose, la chiave principale è utilizzata per firmare i propri messaggi di posta elettronica.</p></li>
+<li class="listitem"><p role="presentation">La sottochiave è utilizzata per cifrare e decifrare i messaggi di posta e i file.</p></li>
+</ul>
+                  </p></li>
+<li class="listitem"><p role="presentation">In base ai requisiti, <span class="phrase">Guard</span> utilizza automaticamente la chiave principale o la sottochiave. </p></li>
+</ul>
+            </p>
+</li>
+<li class="step"><p role="presentation">Se il proprio elenco di chiavi contiene più di una chiave, è possibile definire la chiave corrente. Per fare ciò, abilitare la casella di selezione <span class="guibutton"><strong>Attuale</strong></span> accanto alla chiave. Da questo momento, la chiave corrente sarà utilizzata per la cifratura.</p></li>
+<li class="step"><p role="presentation">Per visualizzare i dettagli di una chiave, fare clic sull'icona <span class="guibutton"><strong>Dettagli</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Si aprirà la finestra <span class="guilabel"><strong>Dettagli chiave</strong></span>. Per visualizzare le firme della chiave, fare clic su <span class="guibutton"><strong>Firme</strong></span>.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
+<p class="title">Come aggiungere una nuova chiave nella finestra <span class="guilabel"><strong>Le tue chiavi</strong></span>:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Aggiungi</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>. Si aprirà la finestra <span class="guilabel"><strong>Aggiunta chiavi</strong></span>.</p></li>
+<li class="step">
+<p role="presentation">Si hanno le seguenti opzioni:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Per aggiungere una chiave privata, fare clic su <span class="guibutton"><strong>Carica chiave privata</strong></span>. Selezionare un file contenente una chiave privata. Si aprirà la finestra <span class="guilabel"><strong>Carica chiavi private</strong></span>.</p>
+<p role="presentation">Per caricare la nuova chiave, digitare la propria password di sicurezza <span class="phrase">Guard</span>. Digitare una nuova password per la nuova chiave.</p>
+</li>
+<li class="listitem"><p role="presentation">Per aggiungere una chiave pubblica, fare clic su <span class="guibutton"><strong>Carica solo la chiave pubblica</strong></span>. Selezionare un file contenente una chiave pubblica. </p></li>
+<li class="listitem">
+<p role="presentation">Per creare una nuova coppia di chiavi, fare clic su <span class="guibutton"><strong>Crea nuove chiavi</strong></span>. Si aprirà la finestra <span class="phrase"><span class="guilabel"><strong>Crea chiavi di sicurezza di Guard</strong></span></span>.</p>
+<p role="presentation">Digitare una password per la nuova chiave. Confermare la password.</p>
+<p role="presentation">La nuova chiave consiste di una chiave principale e di una sottochiave corrispondente.</p>
+</li>
+</ul>
+            </p>
+<p role="presentation">La nuova chiave sarà inserita in cima all'elenco delle proprie chiavi. La nuova chiave diventa la chiave corrente.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
+<p class="title">Come aggiungere un ID utente aggiuntivo nella finestra <span class="guilabel"><strong>Le tue chiavi</strong></span>:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Modifica</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>. Si aprirà la finestra <span class="guilabel"><strong>Aggiungi ID utente</strong></span>.</p></li>
+<li class="step">
+<p role="presentation">Digitare un nome per l'ID utente. Digitare l'indirizzo di posta che si desidera utilizzare per questa chiave.</p>
+<p role="presentation">Digitare la propria password per questa chiave.</p>
+<p role="presentation">Fare clic su <span class="guibutton"><strong>OK</strong></span>.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
+<p class="title">Come scaricare una chiave nella finestra <span class="guilabel"><strong>Le tue chiavi</strong></span>:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Scarica</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>.</p></li>
+<li class="step">
+<p role="presentation">Specificare se scaricare solo la chiave privata, la propria chiave pubblica o entrambe le chiavi.</p>
+<p role="presentation"><span class="phrase"><strong>Attenzione:</strong></span> la propria chiave privata sarà scaricata in forma cifrata. Non si dovrebbe, tuttavia, scaricare la propria chiave privata su un sistema accessibile pubblicamente.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.delete">
+<p class="title">Come eliminare una chiave nella finestra <span class="guilabel"><strong>Le tue chiavi</strong></span>:</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Avviso:</strong></span> se si elimina una chiave privata, non sarà più possibile decifrare gli oggetti che sono stati cifrati con questa chiave. Se non si è sicuri, non si dovrebbe eliminare la chiave, ma revocarla. Una chiave revocata non può più essere utilizzata per cifrare, ma consente ancora di decifrare gli oggetti che sono stati cifrati con questa chiave.</p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Elimina</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. Si aprirà la finestra <span class="guilabel"><strong>Elimina chiave privata</strong></span>.</p></li>
+<li class="step"><p role="presentation">Sono disponibili le seguenti opzioni:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Per revocare una chiave privata, fare clic su <span class="guibutton"><strong>Revoca</strong></span>. </p>
+<p role="presentation">Se si revoca una chiave, questa non sarà più utilizzata, ma sarà ancora possibile decifrare gli oggetti che sono stati cifrati con questa chiave. Per questo motivo, revocare una chiave è meglio che eliminarla.</p>
+<p role="presentation">Digitare la password della chiave privata. Se richiesto, selezionare un motivo per la revoca della chiave.</p>
+<p role="presentation">Fare clic su <span class="guibutton"><strong>Revoca</strong></span>.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Per eliminare una chiave privata, fare clic su <span class="guibutton"><strong>Elimina</strong></span>. </p>
+<p role="presentation"><span class="phrase"><strong>Avviso:</strong></span> se si elimina una chiave privata, non sarà più possibile decifrare gli oggetti cifrati con questa chiave. </p>
+<p role="presentation">Digitare la password della chiave privata.</p>
+<p role="presentation">Fare clic sul pulsante <span class="guibutton"><strong>Elimina</strong></span>.</p>
+</li>
+</ul>Se si elimina una chiave principale, sarà eliminata anche la sottochiave corrispondente.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.settings.yourkeys">
+        </p>
+<p class="title">Argomenti correlati:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Gestire le chiavi pubbliche</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Gestione delle password</a></p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">Argomento principale: <a class="xref" href="ox.appsuite.user.sect.guard.settings.html">Impostazioni di <span class="phrase">Guard</span></a></p>
+</div>
+          </div>
+        </body>
+</html>

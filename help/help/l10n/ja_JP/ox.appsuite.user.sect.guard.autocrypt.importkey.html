@@ -1,0 +1,92 @@
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.3.1. Autocrypt鍵をインポートする</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="ユーザ ガイド">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. Autocryptを使ってメールのやり取りを暗号化する">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. Autocryptを使ってメールのやり取りを暗号化する">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="13.3.2. Autocrypt鍵を管理する">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">ナビゲーションを表示</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">戻る</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">次へ</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+<span class="phrase">Guard</span>を使ってデータの暗号化</h1>
+<h2 class="sr-only">Autocryptを使ってメールのやり取りを暗号化する</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">13.3.1. Autocrypt鍵をインポートする</h3></div></div></div>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey"> <span class="phrase">Guard</span> 詳細設定では、Autocrypt鍵を自動でインポートするるかどうかを定義できます。ここでは、次の設定ができます。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">受信したすべてのAutocrypt鍵は、自動でインポートされます。</p>
+<p role="presentation">自動でインポートされた鍵は次のように使用します：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">この連絡先に送られるメッセージは、この鍵で暗号化できます。</p></li>
+<li class="listitem"><p role="presentation">この連絡先からの受信メールの署名は鍵で確認されません。つまり、送信者は本物かどうか、メッセージの内容が変更されずに転送されたかどうか確認できません。</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+<li class="listitem">
+<p role="presentation">受信した各Autocrypt鍵について、この鍵をインポートするかどうかたずねられます。Autocrypt鍵の詳細が表示されると、その信頼性も確認できます。鍵をインポートする場合、確認済みとなります。確認済みの鍵は次のように使用されます：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">この連絡先に送られるメッセージは、この鍵で暗号化できます。</p></li>
+<li class="listitem"><p role="presentation">この連絡先からの受信メッセージの署名は、鍵の使用で確認します。確認ができると、送信者が本物で、メッセージの内容は変更されていないことになります。</p></li>
+</ul>
+<p role="presentation"> 
+            </p>
+</li>
+</ul>
+<p>
+      </p>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">Autocrypt鍵のインポート方法の定義の仕方：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation"><span class="guibutton"><strong>設定</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>をクリックします。<span class="guibutton"><strong>設定</strong></span>をクリックします。</p></li>
+<li class="step"><p role="presentation">サイドバーの<span class="guibutton"><strong>セキュリティ</strong></span>をクリックします。<span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>をクリックします。</p></li>
+<li class="step"><p role="presentation"><span class="guibutton"><strong>詳細設定を表示</strong></span>を有効にします。鍵の管理アイテムとAutocrypt設定アイテムが表示されます。</p></li>
+<li class="step"><p role="presentation"><span class="guibutton"><strong>Autocrypt</strong></span>の下で次のように行います：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Autocrypt鍵をインポートするには、<span class="guibutton"><strong>ヘッダーですべての受信メールの鍵を検索</strong></span>を有効にします。</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>許可を求めずにAutoCrypt鍵をインポート</strong></span>を有効にすると、Autocrypt鍵が自動でインポートされます。</p>
+<p role="presentation"><span class="guibutton"><strong>詳細設定を表示</strong></span>が無効の場合、これがデフォルト設定になります。</p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>許可を求めずにAutoCrypt鍵をインポート</strong></span>を無効にすると、鍵をインポートするかどうかたずねられます。鍵の詳細が表示されるので、鍵の信頼性を確認できます。鍵を承諾すると、確認済みとなります。</p></li>
+</ul>
+            </p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey">
+        </p>
+<p class="title">関連トピック</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Autocrypt鍵をインポートする</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt鍵を管理する</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Autocrypt鍵を他のクライエントへの転送</a></p></li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">親記事：<a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">Autocryptを使ってメールのやり取りを暗号化する</a></p>
+</div>
+          </div>
+        </body>
+</html>

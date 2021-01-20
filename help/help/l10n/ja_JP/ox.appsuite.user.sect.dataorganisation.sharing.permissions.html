@@ -1,0 +1,130 @@
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>11.2.8. 利用できる権限について</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="ユーザ ガイド">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.2. 共有データ">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html" title="11.2.7. 他のユーザの共有にアクセスする">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html" title="11.2.9. 権限に大文字を使用">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">ナビゲーションを表示</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">戻る</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">次へ</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">データの整理と共有</h1>
+<h2 class="sr-only">共有データ</h2>
+<div class="sect2" id="ox.appsuite.user.sect.dataorganisation.sharing.permissions">
+<div class="titlepage"><div><div><h3 class="title">11.2.8. 利用できる権限について</h3></div></div></div>
+<a class="indexterm" name="id-1.12.5.20.2"></a><p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions">一定の組み合わせの権限を簡単に付与できるよう、次のような既定の特定ユーザロールが用意されています。ユーザロールは一定の組み合わせの権限で構成されます。詳細な権限を付与することも可能です。そのような権限は、オブジェクトの共有で付与できます。</p>
+<p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions.administrator"></p>
+<h4 class="title">管理者：フォルダーの所有者</h4>
+<p><a class="indexterm" name="id-1.12.5.20.4.2"></a>フォルダーの管理者には、対象のフォルダーに関するすべての権限が付与されます。所有者は他のユーザに対象のフォルダーに関する権限を付与できます。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">フォルダー権限：オブジェクトとサブフォルダーを作成、フォルダー名を変更</p></li>
+<li class="listitem"><p role="presentation">オブジェクト権限：すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
+</ul>
+<p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions.viewer"></p>
+<h4 class="title">ビューア：読み取り権限</h4>
+<p><a class="indexterm" name="id-1.12.5.20.5.2"></a>ビューアは全ての既存のオブジェクトを閲覧できます。他の権限はありません。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">フォルダー権限：フォルダーを表示</p></li>
+<li class="listitem"><p role="presentation">オブジェクト権限：全てのオブジェクトを閲覧</p></li>
+</ul>
+<p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions.editor"></p>
+<h4 class="title">レビューア：制限された編集権限</h4>
+<p><a class="indexterm" name="id-1.12.5.20.6.2"></a>レビューアは既存のオブジェクトを読んだり、編集したりできます。しかし、レビューアは新規オブジェクトの作成はできません。レビューアはオブジェクトの削除はできません。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">フォルダー権限：フォルダーを表示</p></li>
+<li class="listitem"><p role="presentation">オブジェクト権限：全てのオブジェクトの閲覧、全てのオブジェクトの編集</p></li>
+</ul>
+<p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions.author"></p>
+<h4 class="title">作成者：全編集権限</h4>
+<p><a class="indexterm" name="id-1.12.5.20.7.2"></a>作成者は、既存オブジェクトの変更または削除、新規オブジェクトの作成および変更、そして、サブフォルダーの作成ができます。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">フォルダー権限：オブジェクトとサブフォルダーを作成</p></li>
+<li class="listitem"><p role="presentation">オブジェクト権限：すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
+</ul>
+<p id="ox.appsuite.user.concept.dataorganisation.sharing.permissions.detail"></p>
+<h4 class="title">詳細な権限</h4>
+<p>各ユーザロールの既定の権限は変更することができます。次の権限を付与できます：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">フォルダ</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">フォルダーを表示</p></li>
+<li class="listitem"><p role="presentation">オブジェクトを作成</p></li>
+<li class="listitem"><p role="presentation">オブジェクトとサブフォルダーを作成</p></li>
+</ul>
+<p role="presentation">
+              </p>
+</li>
+<li class="listitem">
+<p role="presentation">読み取り権限</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">なし</p></li>
+<li class="listitem"><p role="presentation">自分のオブジェクトのみを表示</p></li>
+<li class="listitem"><p role="presentation">すべてのオブジェクトを表示</p></li>
+</ul>
+</li>
+<li class="listitem">
+<p role="presentation">書き込み権限</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">なし</p></li>
+<li class="listitem"><p role="presentation">自分のオブジェクトのみを編集</p></li>
+<li class="listitem"><p role="presentation">すべてのオブジェクトを編集</p></li>
+</ul>
+</li>
+<li class="listitem">
+<p role="presentation">削除権限</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">なし</p></li>
+<li class="listitem"><p role="presentation">自分のオブジェクトのみを削除</p></li>
+<li class="listitem"><p role="presentation">すべてのオブジェクトを削除</p></li>
+</ul>
+</li>
+</ul>
+<p>
+        </p>
+<p id="ox.appsuite.user.related.dataorganisation.sharing.permissions">
+        </p>
+<p class="title">関連トピック</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">権限に大文字を使用</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">権限の用途</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html">共有データ</a></p></li>
+<li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.share.html">共有データ</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">他のユーザの共有にアクセスする</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.edit.html">共有ファイルを編集する</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.resend.html">招待を再送する</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.remove.html">共有の削除</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html"><span class="phrase">ドライブ</span>アプリケーションで共有ファイルを開く、または編集する</a></p>
+</li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.dataorganisation.sharing.permissions">親記事：<a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html">共有データ</a></p>
+</div>
+          </div>
+        </body>
+</html>
