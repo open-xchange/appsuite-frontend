@@ -166,7 +166,7 @@ define('io.ox/core/tk/text-editor', [
         // hint: does not detects the cite block
         this.getContentParts = function () {
             var content = this.getContent(),
-                isForwardUnquoted = opt.view.model.get('mode') === 'forward' && mailSettings.get('forwardunquoted', false),
+                isForwardUnquoted = opt.view.model.type === 'forward' && mailSettings.get('forwardunquoted', false),
                 index = content.indexOf(isForwardUnquoted ? '----' : '\n> ');
             // make sure that the quote part does not start with \n
             if (index >= 0) index++;
