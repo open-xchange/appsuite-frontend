@@ -107,8 +107,6 @@ define('io.ox/mail/actions', [
         matches: function (baton) {
             // get first mail
             var data = baton.first();
-            // Can't edit encrypted E-mail
-            if (data && data.security_info && data.security_info.encrypted) return false;
             // must be draft folder
             return data && isDraftMail(data);
         },
@@ -130,8 +128,6 @@ define('io.ox/mail/actions', [
         matches: function (baton) {
             // get first mail
             var data = baton.first();
-            // Can't edit encrypted E-mail
-            if (data && data.security_info && data.security_info.encrypted) return;
             // must be draft folder
             return data && isDraftMail(data);
         },
