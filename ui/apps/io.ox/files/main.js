@@ -263,7 +263,7 @@ define('io.ox/files/main', [
                         password: function () {
                             if (!/^(LGI-0025)$/.test(accountError.code)) return;
                             // improve error message
-                            this.$('.info-text').text('The password was changed recently. Please enter the new password.');
+                            this.$('.info-text').text(gt('The password was changed recently. Please enter the new password.'));
                             // fallback
                             if (!this.account) return;
                             // input
