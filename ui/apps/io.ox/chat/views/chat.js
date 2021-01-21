@@ -58,7 +58,7 @@ define('io.ox/chat/views/chat', [
 
             // we create the scrollpane early to pass it along the view chain
             // this is just an optimization for better lazyload behavior (aka less flickering)
-            this.$scrollpane = $('<div class="scrollpane" tabindex="0">').lazyloadScrollpane();
+            this.$scrollpane = $('<div class="scrollpane scrollable" tabindex="0">').lazyloadScrollpane();
             this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages, scrollpane: this.$scrollpane });
 
             this.listenTo(this.model, {

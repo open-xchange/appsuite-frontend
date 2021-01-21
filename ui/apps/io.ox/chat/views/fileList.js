@@ -38,7 +38,7 @@ define('io.ox/chat/views/fileList', [
                     yell('error', gt('Files could not be loaded.'));
                 });
             });
-            this.$scrollpane = $('<div class="scrollpane">').lazyloadScrollpane();
+            this.$scrollpane = $('<div class="scrollpane scrollable" tabindex="0">').lazyloadScrollpane();
         },
 
         render: function () {
