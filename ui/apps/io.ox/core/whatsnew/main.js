@@ -32,33 +32,35 @@ define('io.ox/core/whatsnew/main', [
     if (capabilities.has('guest') || meta.getFeatures().length === 0) return;
 
     var showDialog = function () {
-        var dialog = new ModalDialog({
-            point: 'tours/whatsnew/dialog',
-            title: gt('What\'s new in this version'),
-            // yes em, this is about 500px but scales with text zoom so we don't have problems with 200% text zoom support
-            width: '36em'
-        })
-        .extend({
-            featurelist: function () {
-                var featurelist = _(meta.getFeatures()).map(function (feature) {
-                    return $('<li>').append(
-                        $('<span class="feature-name">').text(feature.name + ':'),
-                        $('<span >').text(feature.description)
+        var def = new $.Deferred(),
+            dialog = new ModalDialog({
+                point: 'tours/whatsnew/dialog',
+                title: gt('What\'s new in this version'),
+                // yes em, this is about 500px but scales with text zoom so we don't have problems with 200% text zoom support
+                width: '36em'
+            })
+            .extend({
+                featurelist: function () {
+                    var featurelist = _(meta.getFeatures()).map(function (feature) {
+                        return $('<li>').append(
+                            $('<span class="feature-name">').text(feature.name + ':'),
+                            $('<span >').text(feature.description)
+                        );
+                    });
+
+                    this.$el.addClass('whats-new-dialog');
+                    this.$body.append(
+                        $('<ul class="list-unstyled">').append(featurelist)
                     );
-                });
+                }
 
-                this.$el.addClass('whats-new-dialog');
-                this.$body.append(
-                    $('<ul class="list-unstyled">').append(featurelist)
-                );
-            }
-
-        })
-        // no attribute adds close button with cancel action
-        .addButton()
-        .on('close', function () {
-            settings.set('whatsNew/lastSeenVersion', meta.getLatestVersion()).save();
-        });
+            })
+            // no attribute adds close button with cancel action
+            .addButton()
+            .on('close', function () {
+                settings.set('whatsNew/lastSeenVersion', meta.getLatestVersion()).save();
+                def.resolve();
+            });
 
         if (meta.getLink()) {
             dialog
@@ -68,6 +70,7 @@ define('io.ox/core/whatsnew/main', [
                 });
         }
         dialog.open();
+        return def;
     };
 
     // dropdown link
@@ -93,11 +96,11 @@ define('io.ox/core/whatsnew/main', [
     if (autoStart) {
         new Stage('io.ox/core/stages', {
             id: 'whatsnewdialog',
-            index: 1100,
+            // just keep the index before the tours, see OXUIB-665
+            index: 950,
             run: function () {
                 if (_.device('karma')) return $.when();
-                showDialog();
-                return $.when();
+                return showDialog();
             }
         });
     }
