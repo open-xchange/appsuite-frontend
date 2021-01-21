@@ -334,7 +334,7 @@ define('io.ox/files/share/share-settings', [
         showSettingsDialog: function (shareSettingsView) {
             var dialog = new ModalDialog({
                 async: true,
-                title: 'Sharing options',
+                title: gt('Sharing options'),
                 width: 350,
                 smartphoneInputFocus: true
             });

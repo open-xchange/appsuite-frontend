@@ -557,7 +557,7 @@ define('io.ox/files/share/permissions', [
                 model.set('bits', bits);
 
                 var newEntity = new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
-                newEntity.find('.display_name').append($('<div class="added">').text('ADDED'));
+                newEntity.find('.display_name').append($('<div class="added">').text(gt('ADDED')));
                 return this.$el.prepend(newEntity);
             },
 
