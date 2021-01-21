@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-13 20:42+0100\n"
-"Last-Translator: Tim <tim@workshop-chapina.com>\n"
+"PO-Revision-Date: 2021-01-17 20:47+0100\n"
+"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 19.12.3\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3368,11 +3368,12 @@ msgstr "Groepsnaam"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
-"Andere gebruikers kunnen uw kanaal vinden en lid worden van uw kanaal onder "
-"\"Alle kanalen\". Als u de voorkeur geeft aan een gesprek in een gesloten "
-"groep, maak dan een groepschat aan."
+"Andere gebruikers kunnen uw kanaal vinden en lid worden van uw kanaal onder"
+" \"Alle kanalen\". Als u "
+"de voorkeur geeft aan een gesprek in een gesloten groep, maak dan een"
+" groepschat aan."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3560,24 +3561,33 @@ msgstr "Verlaten"
 msgid "The file could not be loaded."
 msgstr "Het bestand kon niet worden geladen."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr ""
+"De chat kan niet verwijderd worden uit favorieten. Probeer het alstublieft"
+" nog eens."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr ""
+"De chat kan niet toegevoegd worden in favorieten. Probeer het alstublieft nog"
+" eens."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Nieuw"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Privéchat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Groepschat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Kanaal"
 
@@ -3592,8 +3602,8 @@ msgid "All files"
 msgstr "Alle bestanden"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Geschiedenis"
@@ -3611,9 +3621,7 @@ msgstr "Groepschats"
 msgid "Channels"
 msgstr "Kanalen"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Chats"
 
@@ -3628,12 +3636,6 @@ msgstr "Kan niet verbinden. Probeert u het alstublieft opnieuw."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Nieuwe chat"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Venster loskoppelen"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3847,6 +3849,14 @@ msgstr "Onbekend systeembericht: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s en %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Chat sluiten"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Venster loskoppelen"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Tekstbestand"
@@ -3877,12 +3887,6 @@ msgid "Add members"
 msgstr "Leden toevoegen"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Chat sluiten"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Er zijn nog geen kanalen"
 
@@ -3903,6 +3907,10 @@ msgstr "Deelnemen"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Chatacties"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Scroll naar het nieuwste bericht"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4024,6 +4032,10 @@ msgid "Create private chat"
 msgstr "Privéchat aanmaken"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Animatie inladen"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Bestand downloaden"
 
@@ -4055,6 +4067,11 @@ msgstr "Er zijn nog geen gearchiveerde chats"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Openen"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Verwijder deelnemer"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -8305,8 +8322,8 @@ msgid ""
 "The top navigation area has been redesigned to make accessing apps, help and "
 "settings easier."
 msgstr ""
-"Het bovenste navigatiegebied is opnieuw ontworpen om toegang tot apps, hulp"
-" en instellingen te vergemakkelijken."
+"Het bovenste navigatiegebied is opnieuw ontworpen om toegang tot apps, hulp "
+"en instellingen te vergemakkelijken."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8320,11 +8337,9 @@ msgid ""
 "have also added a presence indicator."
 msgstr ""
 "Deze release biedt de mogelijkheid om een video- of audiogesprek met andere "
-"mensen te voeren. Dit kan worden gepland binnen een kalenderafspraak, of"
-" rechtstreeks "
-"vanuit contacten, de halo-weergave en andere logische plaatsen. Om te helpen"
-" hebben "
-"we ook een aanwezigheidsindicator toegevoegd."
+"mensen te voeren. Dit kan worden gepland binnen een kalenderafspraak, of "
+"rechtstreeks vanuit contacten, de halo-weergave en andere logische plaatsen. "
+"Om te helpen hebben we ook een aanwezigheidsindicator toegevoegd."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Chat for %1$s"
@@ -8337,12 +8352,10 @@ msgid ""
 "App Suite user. Chats can be instigated from the chat window, contacts or "
 "halo view."
 msgstr ""
-"Met deze release zul je een nieuw chatballonpictogram in de menubalk"
-" opmerken. "
-"Dit opent het nieuwe chatvenster en laat je berichten schrijven naar elke"
-" andere OX "
-"App Suite-gebruiker. Chats kunnen worden gestart vanuit het chatvenster,"
-" contacten of halo-weergave."
+"Met deze release zul je een nieuw chatballonpictogram in de menubalk "
+"opmerken. Dit opent het nieuwe chatvenster en laat je berichten schrijven "
+"naar elke andere OX App Suite-gebruiker. Chats kunnen worden gestart vanuit "
+"het chatvenster, contacten of halo-weergave."
 
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
@@ -8498,8 +8511,8 @@ msgid ""
 "You are moving one or more items that are shared with other people. These "
 "people will lose access."
 msgstr ""
-"U verplaatst één of meer items die met andere mensen zijn gedeeld. Deze"
-" mensen raken de toegang kwijt."
+"U verplaatst één of meer items die met andere mensen zijn gedeeld. Deze "
+"mensen raken de toegang kwijt."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9129,11 +9142,6 @@ msgstr "Externe gebruikers"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Interne gebruikers"
-
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Stel uw wachtwoord in"
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
@@ -10515,12 +10523,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Dit concept is buiten dit venster gewijzigd. Ga door met bewerken op dat "
-"andere tabblad of in die andere browser om mogelijk gegevensverlies te "
-"voorkomen."
+"Dit concept is aangepast in een andere tab of browser. Ga alstublieft verder"
+" met de meest recente versie. Als u die tab in de tussentijd heeft gesloten,"
+" kan u hier het meest recente concept hier openen."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Concept herstellen"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10783,40 +10796,19 @@ msgstr "Opslaan..."
 msgid "Saved %s"
 msgstr "%s opgeslagen"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
+msgid "Save draft"
+msgstr "Concept opslaan"
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "This email has not been sent. You can save the draft to work on later."
 msgstr ""
-"U staat op het punt dit bericht te verwijderen. Wilt u het gerelateerde "
-"concept verwijderen?"
+"Dit e-mailbericht is niet verzonden. U kan het concept opslaan om er later"
+" verder aan te werken."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
 msgid "Delete draft"
-msgstr "Verwijderen concept"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Bericht weggooien"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Concept behouden"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Als concept opslaan"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Weet u zeker dat u dit concept te verwijderen?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Weet u zeker dat u uw onvoltooide bericht wilt weggooien?"
+msgstr "Concept verwijderen"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10945,8 +10937,9 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "De map kan niet worden toegevoegd omdat de link ongeldig is."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
-msgstr "Dit type link wordt niet ondersteund en kan niet worden toegevoegd."
+msgid "This type of link is unsupported and can't be added."
+msgstr ""
+"Een link van dit type wordt niet ondersteund en kan niet worden toegevoegd."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid ""
@@ -14898,10 +14891,6 @@ msgid "Create new group"
 msgstr "Nieuwe groepen aanmaken"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Verwijder deelnemer"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15990,6 +15979,55 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Andere gebruikers kunnen uw kanaal vinden en lid worden van uw kanaal "
+#~ "onder \"Alle kanalen\". Als u de voorkeur geeft aan een gesprek in een "
+#~ "gesloten groep, maak dan een groepschat aan."
+
+#~ msgid "Please set password"
+#~ msgstr "Stel uw wachtwoord in"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Dit concept is buiten dit venster gewijzigd. Ga door met bewerken op dat "
+#~ "andere tabblad of in die andere browser om mogelijk gegevensverlies te "
+#~ "voorkomen."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "U staat op het punt dit bericht te verwijderen. Wilt u het gerelateerde "
+#~ "concept verwijderen?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Verwijderen concept"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Bericht weggooien"
+
+#~ msgid "Keep draft"
+#~ msgstr "Concept behouden"
+
+#~ msgid "Save as draft"
+#~ msgstr "Als concept opslaan"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Weet u zeker dat u dit concept te verwijderen?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Weet u zeker dat u uw onvoltooide bericht wilt weggooien?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Dit type link wordt niet ondersteund en kan niet worden toegevoegd."
 
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "

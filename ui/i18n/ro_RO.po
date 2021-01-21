@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-14 19:42+0200\n"
+"PO-Revision-Date: 2021-01-18 20:06+0200\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -3367,7 +3367,7 @@ msgstr "Nume grup"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
 "Alți utilizatori pot găsi și se pot alătura canalul tău în \"Toate canalele"
 "\". Dacă preferați o conversație într-un grup închis, vă rugăm să creați un "
@@ -3511,7 +3511,7 @@ msgstr "Deschide chat"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Start chat with participants"
-msgstr "Începeți chatul cu participanții"
+msgstr "Începeți chat-ul cu participanții"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 msgid "Reply via chat"
@@ -3557,24 +3557,29 @@ msgstr "Părăsește"
 msgid "The file could not be loaded."
 msgstr "Fișierul nu a putut fi încărcat."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "Chat-ul nu a putut fi eliminat din preferate. Încercați din nou."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "Chat-ul nu a putut fi adăugat la preferate. Încercați din nou."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Nou"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Chat privat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Grup de chat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Canal"
 
@@ -3589,8 +3594,8 @@ msgid "All files"
 msgstr "Toate fișierele"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Istoric"
@@ -3608,9 +3613,7 @@ msgstr "Chat-uri de grup"
 msgid "Channels"
 msgstr "Canale"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Chat-uri"
 
@@ -3625,12 +3628,6 @@ msgstr "Imposibil de conectat. Încercați din nou mai târziu."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Chat nou"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Detașează fereastra"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3848,6 +3845,14 @@ msgstr "Mesaj de sistem necunoscut: %1$s"
 msgid "%1$s and %2$s"
 msgstr "%1$s și %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Închidere chat"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Detașează fereastra"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Fișier text"
@@ -3878,12 +3883,6 @@ msgid "Add members"
 msgstr "Adaugă membri"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Închidere chat"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Nu există încă canale"
 
@@ -3905,6 +3904,10 @@ msgstr "Participă"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Acțiuni de chat"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Defilați la cel mai nou mesaj"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -4026,6 +4029,10 @@ msgid "Create private chat"
 msgstr "Creează chat privat"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Încarcă animația"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Descărcă fișierul"
 
@@ -4057,6 +4064,11 @@ msgstr "Încă nu există chaturi arhivate"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Deschide"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Elimină membrul"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -9129,11 +9141,6 @@ msgstr "Utilizatori externi"
 msgid "Internal users"
 msgstr "Utilizatori interni"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Setați parola"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -10506,11 +10513,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Această schiță a fost modificată în afara acestei ferestre. Pentru a preveni "
-"posibila pierdere de date, continuați editarea în acea altă filă sau browser."
+"Această schiță a fost modificată într-o altă filă sau browser. Vă rugăm să "
+"continuați editarea celei mai recente versiuni. Dacă ați închis fila între "
+"timp, puteți restaura cea mai recentă schiță de aici."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Restaurează schiță"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10776,38 +10789,19 @@ msgstr "Se salvează..."
 msgid "Saved %s"
 msgstr "%s a fost salvat"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr "Sunteți pe cale să renunțați la acest mesaj. Ștergeți schița corelată?"
+msgid "Save draft"
+msgstr "Salvează schiță"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr ""
+"Acest e-mail nu a fost trimis. Aveți posibilitatea să salvați schița pentru "
+"a o continua mai târziu."
+
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
 msgstr "Șterge schița"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Renunță la messaj"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Păstrează schița"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
-msgstr "Salvează ca schiță"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Sigur doriți să ștergeți această schiță?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Sigur doriți să renunțați la acest mesaj?"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10933,7 +10927,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Dosarul nu poate fi adăugat, deoarece linkul nu este valid."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Acest tip de legătură nu este acceptat și nu poate fi adăugat."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14900,10 +14894,6 @@ msgid "Create new group"
 msgstr "Creează un grup nou"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Elimină membrul"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15992,6 +15982,36 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
+#~ msgid "Please set password"
+#~ msgstr "Setați parola"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Această schiță a fost modificată în afara acestei ferestre. Pentru a "
+#~ "preveni posibila pierdere de date, continuați editarea în acea altă filă "
+#~ "sau browser."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Sunteți pe cale să renunțați la acest mesaj. Ștergeți schița corelată?"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Renunță la messaj"
+
+#~ msgid "Keep draft"
+#~ msgstr "Păstrează schița"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Sigur doriți să ștergeți această schiță?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Sigur doriți să renunțați la acest mesaj?"
+
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "
 #~ "help and settings easier."
@@ -16031,7 +16051,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Manual"
 #~ msgstr "Manual"
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "Mesaj de la %1$s, %2$s"
 
@@ -16115,18 +16134,15 @@ msgstr "Adaugă pe %s"
 #~ msgid "Send link"
 #~ msgstr "Trimite legătura"
 
-#, c-format
 #~ msgid "Sharing link created for %1$d item"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Legătura de partajare creată pentru un element"
 #~ msgstr[1] "Legături de partajare create pentru %1$d elemente"
 #~ msgstr[2] "Legături de partajare create pentru %1$d de elemente"
 
-#, c-format
 #~ msgid "Sharing link created for file \"%1$s\""
 #~ msgstr "Legătura de partajare creată pentru fișierul \"%1$s\""
 
-#, c-format
 #~ msgid "Sharing link created for folder \"%1$s\""
 #~ msgstr "Legătura de partajare creată pentru dosarul \"%1$s\""
 
@@ -24221,9 +24237,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "You have edit rights."
 #~ msgstr "Aveți drepturi de editare."
-
-#~ msgid "You have no new messages"
-#~ msgstr "Nu aveți niciun mesaj nou"
 
 #~ msgid "You have reauthorized this account."
 #~ msgstr "Ați autorizat din nou acest cont."

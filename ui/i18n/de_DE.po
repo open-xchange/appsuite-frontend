@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-15 10:42+0100\n"
+"PO-Revision-Date: 2021-01-21 14:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -9206,6 +9206,10 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "HINZUGEFÜGT"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Aktuelle Rolle"
 
@@ -9357,12 +9361,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Möchten Sie wirklich alle Änderungen verwerfen?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Jeder im Internet mit dem Link kann die Datei anzeigen."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Link kopieren"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Jeder im Internet mit dem Link kann die Datei anzeigen."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9418,6 +9422,10 @@ msgstr "Einladungsoptionen"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Benachrichtigung per E-Mail senden"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Freigabeoptionen"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -21611,10 +21619,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Freigabelink für Ordner \"%1$d\" wurde erstellt"
 #~ msgstr[1] "Freigabelink für %1$d Objekte wurde erstellt"
-
-#, fuzzy
-#~ msgid "Sharing options"
-#~ msgstr "Freigabeoptionen"
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"

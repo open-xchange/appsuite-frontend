@@ -35,11 +35,13 @@ Scenario('[RD001] Refresh draft folder on change', async function ({ I, mail }) 
     I.login('app=io.ox/mail');
     mail.waitForApp();
     I.selectFolder('Drafts');
+    I.waitForVisible(locate('.folder.selected').withText('Drafts'));
+    I.waitForInvisible('.leftside [data-ref="io.ox/mail/listview"] .busy-indicator', 5);
 
     // creates space (inital save)
     I.say('1. creates space (inital save)');
     mail.newMail();
-    I.waitForText('No subject');
+    I.waitForText('No subject', 10, '.leftside [data-ref="io.ox/mail/listview"]');
 
     // update space
     I.say('2. update space');

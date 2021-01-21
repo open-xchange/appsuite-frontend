@@ -427,7 +427,7 @@ define('io.ox/calendar/main', [
                         password: function () {
                             if (!/^(LGI-0025)$/.test(accountError.code)) return;
                             // improve error message
-                            this.$('.info-text').text('The password was changed recently. Please enter the new password.');
+                            this.$('.info-text').text(gt('The password was changed recently. Please enter the new password.'));
                             // fallback
                             if (_.isEmpty(this.config)) return console.warn('Could not find com.openexchange.calendar.config in folder data');
                             // input

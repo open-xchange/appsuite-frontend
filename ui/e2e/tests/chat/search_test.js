@@ -58,9 +58,9 @@ Scenario('Search for a user and a private chat', async ({ I, users, chat }) => {
     chat.openChat();
     I.waitForText('New Chat', 30);
 
-    I.waitForElement('~Search or start new chat', 3, '.ox-chat');
+    I.waitForElement('~Search or start new chat', 5, '.ox-chat');
     I.fillField('~Search or start new chat', users[1].userdata.given_name);
-    I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 3, '.ox-chat');
+    I.waitForElement(`.search-result li[data-email="${users[1].userdata.email1}"]`, 5, '.ox-chat');
     I.click(`.search-result li[data-email="${users[1].userdata.email1}"]`, '.ox-chat');
     I.waitForElement('.ox-chat .controls');
     chat.sendMessage('Hey!');

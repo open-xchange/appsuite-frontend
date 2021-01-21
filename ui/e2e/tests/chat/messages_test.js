@@ -137,7 +137,7 @@ Scenario('Edit a sent message', async ({ I, users, chat }) => {
         I.fillField('~Message', 'How ');
         I.pressKey('Enter');
         I.waitForText('How are you?', chatLocator);
-        I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
+        I.waitNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
     });
 
     await session('Bob', async () => {
@@ -146,7 +146,7 @@ Scenario('Edit a sent message', async ({ I, users, chat }) => {
         I.waitForText('User', 30, '.ox-chat');
         I.click(locate('.ox-chat li').withText('User'));
         I.waitForText('How are you?', chatLocator);
-        I.seeNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
+        I.waitNumberOfVisibleElements(locate('.messages span').withText('Edited').inside(chatLocator), 2);
     });
 });
 

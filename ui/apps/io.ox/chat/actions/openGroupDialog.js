@@ -137,7 +137,7 @@ define('io.ox/chat/actions/openGroupDialog', [
                             ),
                             isChannel ? $.txt(gt('Other users can find and join your channel under "All channels". If you prefer a conversation in a closed group, please create a group chat.')) : [],
                             $('<div class="form-group hidden">').append(
-                                $('<label class="control-label">').attr('for', guidDescription).text('Description'),
+                                $('<label class="control-label">').attr('for', guidDescription).text(gt('Description')),
                                 new mini.TextView({ id: guidDescription, model: this.model, name: 'description' }).render().$el
                             )
                         )

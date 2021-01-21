@@ -501,6 +501,8 @@ Scenario('[C110280] Personalized no-reply share mails', async function ({ I, use
         I.pressKey('Enter');
         I.waitForText(users[1].userdata.sur_name, 5, '.modal-dialog .permissions-view');
         dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
+        I.waitForNetworkTraffic();
     });
 
     await session('Bob', async () => {

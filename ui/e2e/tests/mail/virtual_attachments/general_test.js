@@ -155,9 +155,9 @@ Scenario('[C125297] Attachments are linked to mails', async ({ I, drive }) => {
     });
 
     // Open Dropdown and select 'view' to to open detail-view
-    within(locate('.list-item').last(), () => {
+    within('~Files', () => {
         I.waitForText('testpresentation.ppsm');
-        I.rightClick('testpresentation.ppsm');
+        I.rightClick(locate('.file-type-ppt').withText('testpresentation'));
     });
     I.clickDropdown('View');
 

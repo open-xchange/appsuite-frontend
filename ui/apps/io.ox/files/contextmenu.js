@@ -89,7 +89,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'list',
         index: 40,
         section: 30,
-        sectionTitle: 'Layout',
+        sectionTitle: gt('Layout'),
         title: gt('List'),
         checkmarkFn: layoutEnabled.bind('list'),
         ref: 'io.ox/files/actions/layout-list'
@@ -99,7 +99,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'icon',
         index: 50,
         section: 30,
-        sectionTitle: 'Layout',
+        sectionTitle: gt('Layout'),
         title: gt('Icons'),
         checkmarkFn: layoutEnabled.bind('icon'),
         ref: 'io.ox/files/actions/layout-icon'
@@ -109,7 +109,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'title',
         index: 60,
         section: 30,
-        sectionTitle: 'Layout',
+        sectionTitle: gt('Layout'),
         title: gt('Tiles'),
         checkmarkFn: layoutEnabled.bind('tile'),
         ref: 'io.ox/files/actions/layout-tile'
@@ -120,7 +120,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'checkbox',
         index: 70,
         section: 40,
-        sectionTitle: 'Options',
+        sectionTitle: gt('Options'),
         title: gt('Checkboxes'),
         checkmarkFn: viewOptionEnabled.bind('checkboxes'),
         ref: 'io.ox/files/actions/view-checkboxes'
@@ -130,7 +130,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'folderview',
         index: 80,
         section: 40,
-        sectionTitle: 'Options',
+        sectionTitle: gt('Options'),
         title: gt('Folder view'),
         checkmarkFn: viewOptionEnabled.bind('folderview'),
         ref: 'io.ox/files/actions/view-folderview'
@@ -140,7 +140,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
         id: 'file-detail',
         index: 90,
         section: 40,
-        sectionTitle: 'Options',
+        sectionTitle: gt('Options'),
         title: gt('File details'),
         checkmarkFn: viewOptionEnabled.bind('details'),
         ref: 'io.ox/files/actions/view-details'
