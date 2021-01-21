@@ -1056,6 +1056,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async ({ I, calen
     I.scrollTo('.page.current .timeslot:nth-child(23)');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
     I.waitForVisible('.appointment:not(.resizing) .appointment-content');
+    I.waitForDetached('.appointment.io-ox-busy');
     I.wait(0.1);
     I.retry(5).click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
@@ -1065,6 +1066,7 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async ({ I, calen
     I.scrollTo('.page.current .timeslot:nth-child(28)');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
     I.waitForVisible('.page.current .appointment:not(.resizing) .appointment-content');
+    I.waitForDetached('.appointment.io-ox-busy');
     I.wait(0.1);
     I.retry(5).click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');

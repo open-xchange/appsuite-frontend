@@ -308,6 +308,7 @@ Scenario('[C7768] Edit signature', async ({ I, mail, dialogs }) => {
 
     mail.newMail();
 
+    I.waitForVisible(mail.locators.compose.options);
     I.click(mail.locators.compose.options);
     I.clickDropdown('Newsignaturename');
 

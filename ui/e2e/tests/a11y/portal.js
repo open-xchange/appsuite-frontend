@@ -21,8 +21,7 @@ Scenario('Portal - View with empty standard tiles', async ({ I }) => {
     I.waitForText('My tasks');
     I.waitForText('Birthdays');
     I.waitForText('My latest files');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForDetached('.fa-spin.fa-refresh');
+    I.waitForNetworkTraffic();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
