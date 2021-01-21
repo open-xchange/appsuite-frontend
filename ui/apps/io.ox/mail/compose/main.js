@@ -310,8 +310,22 @@ define('io.ox/mail/compose/main', [
                 isConcurrentEditing = /^(MSGCS-0010)$/.test(e.code),
                 // consider flags set by plugins (guard for example)
                 isCritical = e.critical;
+
             // critical errors: pause app
-            if (isMissing || isConcurrentEditing || isCritical) return app.pause(e);
+            if (isConcurrentEditing || isCritical) return app.pause(e);
+
+            // space deleted: pause app or remove taskbar item
+            if (isMissing) {
+                var taskbarmodel = _.find(ox.ui.floatingWindows.models, function (model) {
+                        return model.get('cid') === app.cid;
+                    }),
+                    isMinimized = taskbarmodel && taskbarmodel.get('minimized');
+
+                return isMinimized ?
+                    taskbarmodel.trigger('close') :
+                    app.pause(e);
+            }
+            // all other errors
             require(['io.ox/core/yell'], function (yell) {
                 yell(e);
             });
