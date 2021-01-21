@@ -3,6 +3,17 @@ const { getConfig, printError } = require('codeceptjs/lib/command/utils');
 const fsPath = require('path');
 
 class CodeceptRerunner extends Codecept {
+
+    constructor(config, options) {
+        super(config, options);
+        this.configRerun = this.config.rerun || {};
+        this.minSuccess = this.configRerun.minSuccess || 1;
+        this.maxReruns = this.configRerun.maxReruns || 1;
+        this.successCounter = 0;
+        this.rerunsCounter = 0;
+        this.testSuccessCounter = {};
+    }
+
     async runOnce(test) {
         container.createMocha();
         const mocha = container.mocha();
@@ -19,7 +30,9 @@ class CodeceptRerunner extends Codecept {
         await new Promise(resolve => mocha.loadFiles(resolve));
         mocha.suite.suites.forEach(suite => {
             suite.tests = suite.tests.filter(test => {
-                return !this.lastRun || this.lastRun[test.title] === 'failed';
+                return !this.lastRun ||
+                this.lastRun[test.title] === 'failed' ||
+                (this.lastRun[test.title] === 'passed' && this.testSuccessCounter[test.title] < this.minSuccess);
             });
         });
         const failures = await new Promise(resolve => mocha.run(resolve));
@@ -27,6 +40,7 @@ class CodeceptRerunner extends Codecept {
         mocha.suite.suites.forEach((suite) => {
             suite.tests.forEach(test => {
                 this.lastRun[test.title] = test.state || 'failed';
+                if (test.state === 'passed') this.testSuccessCounter[test.title] ? this.testSuccessCounter[test.title]++ : this.testSuccessCounter[test.title] = 1;
             });
         });
         if (failures > 0) {
@@ -35,29 +49,24 @@ class CodeceptRerunner extends Codecept {
     }
 
     async runTests(test) {
-        const configRerun = this.config.rerun || {};
-        const minSuccess = configRerun.minSuccess || 1;
-        const maxReruns = configRerun.maxReruns || 1;
-        if (minSuccess > maxReruns) throw new Error('minSuccess must be less than maxReruns');
-        if (maxReruns === 1) {
+        if (this.minSuccess > this.maxReruns) throw new Error('minSuccess must be less than maxReruns');
+        if (this.maxReruns === 1) {
             await this.runOnce(test);
             return;
         }
-        let successCounter = 0;
-        let rerunsCounter = 0;
-        while (rerunsCounter < maxReruns && successCounter < minSuccess) {
-            rerunsCounter++;
+        while (this.rerunsCounter < this.maxReruns && this.successCounter < this.minSuccess) {
+            this.rerunsCounter++;
             try {
                 await this.runOnce(test);
-                successCounter++;
-                output.success(`\nProcess run ${rerunsCounter} of max ${maxReruns}, success runs ${successCounter}/${minSuccess}\n`);
+                this.successCounter++;
+                output.success(`\nProcess run ${this.rerunsCounter} of max ${this.maxReruns}, success runs ${this.successCounter}/${this.minSuccess}\n`);
             } catch (e) {
-                output.error(`\nFail run ${rerunsCounter} of max ${maxReruns}, success runs ${successCounter}/${minSuccess} \n`);
+                output.error(`\nFail run ${this.rerunsCounter} of max ${this.maxReruns}, success runs ${this.successCounter}/${this.minSuccess} \n`);
             }
 
         }
-        if (successCounter < minSuccess) {
-            throw new Error(`Flaky tests detected! ${successCounter} success runs achieved instead of ${minSuccess} success runs expected`);
+        if (this.successCounter < this.minSuccess) {
+            throw new Error(`Flaky tests detected! ${this.successCounter} success runs achieved instead of ${this.minSuccess} success runs expected`);
         }
     }
 
