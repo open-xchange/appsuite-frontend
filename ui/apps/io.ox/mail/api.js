@@ -1710,8 +1710,8 @@ define('io.ox/mail/api', [
                 columns: '600,654,655',
                 sort: '661',
                 order: 'desc',
-                unseen: !!api.allUnseenMessagesFolder,
-                deleted: !api.allUnseenMessagesFolder,
+                unseen: !api.allUnseenMessagesFolder,
+                deleted: !!api.allUnseenMessagesFolder,
                 timezone: 'utc'
             }
         });
@@ -1730,8 +1730,8 @@ define('io.ox/mail/api', [
                     columns: http.defaultColumns.mail.unseen,
                     sort: '661',
                     order: 'desc',
-                    unseen: !!api.allUnseenMessagesFolder,
-                    deleted: !api.allUnseenMessagesFolder,
+                    unseen: !api.allUnseenMessagesFolder,
+                    deleted: !!api.allUnseenMessagesFolder,
                     timezone: 'utc'
                 };
             }
