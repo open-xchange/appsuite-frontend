@@ -34,14 +34,18 @@ Scenario('[RD001] Refresh draft folder on change', async function ({ I, mail }) 
 
     I.login('app=io.ox/mail');
     mail.waitForApp();
-    I.selectFolder('Drafts');
+    I.waitForText('Drafts');
+    I.click('~Drafts');
+    mail.waitForApp();
+    I.waitForInvisible(locate('.folder.selected').withText('Inbox'), 10);
     I.waitForVisible(locate('.folder.selected').withText('Drafts'));
     I.waitForInvisible('.leftside [data-ref="io.ox/mail/listview"] .busy-indicator', 5);
+    I.waitForText('Empty', 5, '.leftside [data-ref="io.ox/mail/listview"]');
 
     // creates space (inital save)
     I.say('1. creates space (inital save)');
     mail.newMail();
-    I.waitForText('No subject', 10, '.leftside [data-ref="io.ox/mail/listview"]');
+    I.waitForText('No subject', 15, '.leftside [data-ref="io.ox/mail/listview"]');
 
     // update space
     I.say('2. update space');
@@ -67,7 +71,10 @@ Scenario('[RD002] Restore open space on "edit draft"', async function ({ I, mail
     // check: draft and taskbar item
     I.login('app=io.ox/mail');
     mail.waitForApp();
-    I.selectFolder('Drafts');
+    I.retry(3).click('~Drafts');
+    mail.waitForApp();
+    I.waitForInvisible(locate('.folder.selected').withText('Inbox'), 10);
+    I.waitForVisible(locate('.folder.selected').withText('Drafts'));
     I.waitForText('No subject', 10, '.list-view .list-item');
     I.seeElement(taskbaritem);
 
@@ -93,7 +100,10 @@ Scenario('[RD002] Restore open space on "edit draft"', async function ({ I, mail
     I.say('3. restore maximized taskbar item ');
     I.login('app=io.ox/mail');
     mail.waitForApp();
-    I.selectFolder('Drafts');
+    I.retry(3).click('~Drafts');
+    mail.waitForApp();
+    I.waitForInvisible(locate('.folder.selected').withText('Inbox'), 10);
+    I.waitForVisible(locate('.folder.selected').withText('Drafts'));
     I.waitForText('No subject', 10, '.list-view .list-item');
     mail.selectMail('No subject');
     I.click(taskbaritem);

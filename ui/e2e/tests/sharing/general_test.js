@@ -488,21 +488,27 @@ Scenario('[C83277] Create shared object with expiration date', async function ({
     I.waitForText('document.txt', 15, '.viewer-toolbar-filename');
 });
 
-Scenario('[C110280] Personalized no-reply share mails', async function ({ I, users, drive, mail, dialogs }) {
-    await users.create();
+Scenario('[C110280] Personalized no-reply share mails', async function ({ I, users, drive, mail, dialogs, autocomplete }) {
+    await Promise.all([
+        users.create(),
+        users[0].hasAccessCombination('drive'),
+        users[0].hasConfig('com.openexchange.share.notification.usePersonalEmailAddress', true)
+    ]);
 
     await session('Alice', async () => {
-        I.login('app=io.ox/files');
+        I.login('app=io.ox/files', { user: users[0] });
         drive.waitForApp();
         I.clickToolbar('Share');
         dialogs.waitForVisible();
         I.waitForElement(locate('input').withAttr({ 'placeholder': 'Name or email address' }), '.modal-dialog');
-        I.fillField(locate('input').withAttr({ 'placeholder': 'Name or email address' }), users[1].userdata.primaryEmail);
+        I.fillField(locate('input').withAttr({ 'placeholder': 'Name or email address' }), users[1].userdata.sur_name);
+        I.waitForVisible(autocomplete.locators.suggestion);
         I.pressKey('Enter');
         I.waitForText(users[1].userdata.sur_name, 5, '.modal-dialog .permissions-view');
+        I.fillField('.form-control.message-text', 'Hello');
+        I.seeInField('.form-control.message-text', 'Hello');
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
-        I.waitForNetworkTraffic();
     });
 
     await session('Bob', async () => {

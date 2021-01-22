@@ -239,7 +239,7 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     // reply to that mail
-    I.click('Reply');
+    I.retry(5).clickToolbar('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
     I.wait(1);
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {

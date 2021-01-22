@@ -57,7 +57,7 @@ define('io.ox/chat/views/channelList', [
                     $('<h2>').text(gt('All channels'))
                 ),
                 new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: gt('All channels') }).render(new ext.Baton()).$el,
-                $('<div class="scrollpane" tabindex="-1">').append(
+                $('<div class="scrollpane scrollable" tabindex="0">').append(
                     $('<ul>').append(
                         channels.length > 0 ? channels.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
                     )
