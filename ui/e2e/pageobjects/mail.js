@@ -36,7 +36,7 @@ module.exports = {
     },
     newMail() {
         I.waitForText('Compose', 5, '.io-ox-mail-window .classic-toolbar-container');
-        I.clickToolbar('Compose');
+        I.clickToolbar('~Compose new email');
         I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     },

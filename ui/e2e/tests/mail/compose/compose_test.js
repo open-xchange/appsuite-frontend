@@ -151,7 +151,9 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
     I.say('📢 add inline image', 'blue');
     I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 2);
-
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForVisible('img');
+    });
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     mail.send();

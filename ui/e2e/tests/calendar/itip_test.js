@@ -159,17 +159,17 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     const ctx = await contexts.create();
     await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with attachment with User#B
-    const startDate = moment().startOf('hour').add(1, 'hour');
-    const endDate = moment().startOf('hour').add(3, 'hour');
+    const startDate = moment().add(1, 'day').startOf('day').add(8, 'hours');
+    const endDate = startDate.clone().add(2, 'hours');
     I.login('app=io.ox/calendar', { user: users[0] });
     calendar.waitForApp();
     calendar.newAppointment();
     I.fillField('Subject', 'MySubject');
     await calendar.setDate('startDate', startDate);
     await calendar.setDate('endDate', endDate);
-    I.fillField(calendar.locators.starttime, startDate.format('h:MM A'));
+    I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
     I.clearField(calendar.locators.endtime);
-    I.fillField(calendar.locators.endtime, endDate.format('h:MM A'));
+    I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
     await calendar.addParticipant(users[1].userdata.primaryEmail, false);
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
@@ -186,15 +186,12 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.waitForText('Accept');
     I.waitForText('Tentative');
     I.waitForText('Decline');
-    I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+    I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
     I.click('Accept');
     I.waitForText('You have accepted the appointment');
     // 4.) User#B: Download and verify the appointment
-    I.openApp('Calendar');
+    I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
-    calendar.switchView('Week');
-    I.waitForInvisible('.page.current .workweek');
-    I.waitForVisible('.page.current .week');
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
     I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
@@ -219,11 +216,8 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.click('Accept changes');
     I.waitForInvisible('.mail-detail-frame');
     // 7.) User#A: Download and verify the appointment
-    I.openApp('Calendar');
+    I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
-    calendar.switchView('Week');
-    I.waitForInvisible('.page.current .workweek');
-    I.waitForVisible('.page.current .week');
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
     I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
