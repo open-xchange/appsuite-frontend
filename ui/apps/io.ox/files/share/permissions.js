@@ -851,7 +851,7 @@ define('io.ox/files/share/permissions', [
     ext.point(POINT_DIALOG + '/share-settings').extend({
         id: 'who-can-share',
         index: 100,
-        draw: function (linkModel) {
+        draw: function (linkModel, isFile) {
             var guid;
             linkModel.set('access', linkModel.hasUrl() ? 1 : 0);
 
@@ -870,9 +870,10 @@ define('io.ox/files/share/permissions', [
                 select.append(option);
             });
 
+            var label = isFile ? gt('Who can access this file?') : gt('Who can access this folder?');
             this.append(
                 $('<div class="access-select"></div>').append(
-                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(gt('Who can access this folder?')),
+                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(label),
                     $('<div>').addClass('row vertical-align-center').append($('<div>').addClass('form-group col-sm-6').append(select.attr('id', guid)))
                 )
             );
@@ -988,7 +989,7 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.setPermissionPreSelectionView(permissionPreSelection);
             if (options.hasLinkSupport !== false) {
-                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
+                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model, objModel.isFile());
             }
 
             publicLink.model.on('change:access', function (model) {
