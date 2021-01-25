@@ -280,7 +280,6 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
             },
 
             change: function (index, options, items) {
-                console.log('a11y change');
                 items = items || this.getItems();
                 index = Math.max(0, Math.min(index, items.length - 1));
                 var $el = items.eq(index);

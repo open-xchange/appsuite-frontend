@@ -546,24 +546,24 @@ define('io.ox/chat/main', [
                                 //#. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
                                 $('<li class="dropdown-header" role="separator">').append('<span aria-hidden="true">').text(gt('New')),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
-                                    .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
+                                        .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.id })
                                         .text(gt('Private chat'))
                                 ),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id })
                                         .text(gt('Group chat'))
                                 ),
                                 $('<li role="presentation">').append(
-                                    $('<a href="#" role="menuitem">')
+                                    $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
                                         .attr({ 'data-cmd': 'edit-group-chat', 'data-id': this.model.id, 'data-type': 'channel' })
                                         .text(gt('Channel'))
                                 )
                             )
                         )
                     ),
-                    new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: 'Chat actions' }).render(new ext.Baton()).$el,
+                    new ToolbarView({ point: 'io.ox/chat/list/toolbar', title: gt('Chat actions') }).render(new ext.Baton()).$el,
                     new searchView().render().$el,
                     this.getLeftNavigation(),
                     // recent, all channels, all files
