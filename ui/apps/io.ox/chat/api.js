@@ -39,8 +39,11 @@ define('io.ox/chat/api', [
     };
 
     function refreshJWT(payload) {
-        var def = new $.Deferred();
+        var def = new $.Deferred(),
+            timeout = setTimeout(def.reject, 5000);
         switchboardApi.socket.emit('jwt-sign', payload || {}, function (jwt) {
+            if (def.state() !== 'pending') return;
+            clearTimeout(timeout);
             ox.switchboardJwt = jwt;
             def.resolve(jwt);
         });
