@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-14 12:17+0200\n"
+"PO-Revision-Date: 2021-01-21 21:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -9160,6 +9160,10 @@ msgid "Group"
 msgstr "Skupina"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "PRIDANÝ"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Aktuálna rola"
 
@@ -9311,12 +9315,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Skutočne chcete zahodiť všetky zmeny?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Ktokoľvek na internete s týmto odkazom môžete zobraziť súbor."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Skopírovať odkaz"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Ktokoľvek na internete s týmto odkazom môžete zobraziť súbor."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9372,6 +9376,10 @@ msgstr "Možnosti pozvánky"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Poslať upozornenie emailom"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Možnosti zdieľania"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-16 16:49+0000\n"
+"PO-Revision-Date: 2021-01-23 12:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -9151,6 +9151,10 @@ msgid "Group"
 msgstr "Группа"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "Добавлен(а)"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Текущая роль"
 
@@ -9302,13 +9306,13 @@ msgid "Do you really want to discard all changes?"
 msgstr "Вы действительно хотите отменить все изменения?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Copy link"
+msgstr "Скопировать ссылку"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr ""
 "Любой пользователь Интернета, у которого есть ссылка, может просмотреть файл."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Copy link"
-msgstr "Скопировать ссылку"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9364,6 +9368,10 @@ msgstr "Варианты приглашения"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Отправить уведомление по электронной почте"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Варианты предоставления доступа"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"

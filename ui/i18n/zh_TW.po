@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-14 21:41+0800\n"
+"PO-Revision-Date: 2021-01-22 00:08+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -8961,6 +8961,10 @@ msgid "Group"
 msgstr "組"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "新增"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "目前角色"
 
@@ -9112,12 +9116,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "您確定要捨棄所有變更嗎？"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "網路上任何擁有此連結的人都可以檢視檔案。"
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "複製連結"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "網路上任何擁有此連結的人都可以檢視檔案。"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9173,6 +9177,10 @@ msgstr "邀請選項"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "傳送通知郵件"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "分享選項"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"

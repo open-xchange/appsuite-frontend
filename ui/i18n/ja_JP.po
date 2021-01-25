@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-14 09:05+0100\n"
+"PO-Revision-Date: 2021-01-21 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -8907,6 +8907,10 @@ msgid "Group"
 msgstr "グループ"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "追加済"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "現在のロール"
 
@@ -9058,12 +9062,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "すべての変更を破棄しますか？"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "インターネット上のリンクのある人はファイルを閲覧できます。"
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "リンクをコピー"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "インターネット上のリンクのある人はファイルを閲覧できます。"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9119,6 +9123,10 @@ msgstr "招待オプション"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "メールで通知を送信"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "共有オプション"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"

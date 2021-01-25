@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-14 21:53+0300\n"
+"PO-Revision-Date: 2021-01-21 19:13+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -9098,6 +9098,10 @@ msgid "Group"
 msgstr "Grup"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "EKLENDİ"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Geçerli rol"
 
@@ -9249,12 +9253,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Değişikliklerinizi silmek istediğinizden emin misiniz?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Bu bağlantıya sahip olan herkes dosyayı görüntüleyebilir."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Bağlantıyı kopyala"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Bu bağlantıya sahip olan herkes dosyayı görüntüleyebilir."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9310,6 +9314,10 @@ msgstr "Davet seçenekleri"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "E-postayla bildirim gönder"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Paylaşım seçenekleri"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
