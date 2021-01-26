@@ -139,7 +139,26 @@ define('io.ox/core/folder/node', [
             this.options.open = false;
             // update collection
             if (this.collection) {
+                // remove old listeners
+                this.stopListening(this.collection);
+                this.stopListening(api, 'create:' + String(previous).replace(/\s/g, '_'));
+
+                // change collection
                 this.collection = api.pool.getCollection(id);
+
+                // add new listeners
+                this.listenTo(this.collection, {
+                    'add':     this.onAdd,
+                    'remove':  this.onRemove,
+                    'change:subscribed': this.onReset,
+                    'reset':   this.onReset,
+                    'sort':    this.onSort
+                });
+                this.listenTo(api, 'create:' + String(id).replace(/\s/g, '_'), function () {
+                    this.open = true;
+                    this.onChangeSubFolders();
+                });
+
                 this.isReset = false;
                 this.reset();
             }
