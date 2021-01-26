@@ -145,7 +145,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
             var input = e.target,
                 file = input.files[0];
             // check for valid image type. especially, svg is not allowed (see Bug 50748)
-            if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
+            if (file && !/(jpg|jpeg|gif|bmp|png|webp)/i.test(file.type)) {
                 return notifications.yell('error', gt('The file type "%1$s" cannot be used as a contact photo. Supported file types are JPEG, GIF, BMP, and PNG.', file.type));
             }
             // may happen if a user first selects a picture and then when trying to choose a new one presses cancel
