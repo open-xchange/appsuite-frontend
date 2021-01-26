@@ -50,6 +50,11 @@ define('io.ox/mail/compose/actions/save', [
             perform: extensions.waitForPendingUploads
         },
         {
+            id: 'wait-for-pending-delete-requests',
+            index: 250,
+            perform: extensions.waitForPendingDeleteRequests
+        },
+        {
             id: 'remove-unused-inline-images',
             index: 300,
             perform: extensions.removeUnusedInlineImages
