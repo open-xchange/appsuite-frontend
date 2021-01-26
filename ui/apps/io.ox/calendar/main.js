@@ -1016,7 +1016,7 @@ define('io.ox/calendar/main', [
             } else {
                 // shared section wasn't fetched yet. Do it now.
                 folderAPI.flat({ module: 'calendar' }).done(function (sections) {
-                    addFolderSupport(sections.shared[0]);
+                    addFolderSupport((sections.shared[0] || {}).id);
                 });
             }
         } else {

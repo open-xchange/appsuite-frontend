@@ -13,9 +13,10 @@
 
 define('io.ox/contacts/actions/invite', [
     'io.ox/contacts/api',
+    'io.ox/core/capabilities',
     'io.ox/calendar/util',
     'io.ox/contacts/util'
-], function (api, calendarUtil, util) {
+], function (api, capabilities, calendarUtil, util) {
 
     'use strict';
 
@@ -99,20 +100,37 @@ define('io.ox/contacts/actions/invite', [
 
         def.done(function (participants) {
 
-            require(['io.ox/calendar/edit/main', 'settings!io.ox/calendar'], function (m, calendarSettings) {
-                m.getApp().launch().done(function () {
-                    var refDate = moment().startOf('hour').add(1, 'hours'),
-                        attendees = [];
-                    _.each(participants, function (user) {
-                        attendees.push(calendarUtil.createAttendee(user));
-                    });
-                    this.create({
+            require(['io.ox/calendar/edit/main', 'io.ox/core/folder/api'], function (m, folderAPI) {
+
+                $.when(launchApp(), getDefaultFolder()).done(function (calendar, folderId) {
+                    var app = calendar,
+                        refDate = moment().startOf('hour').add(1, 'hours'),
+                        attendees = _.map(participants, function (participant) {
+                            return calendarUtil.createAttendee(participant);
+                        });
+
+                    app.create({
                         attendees: attendees,
-                        folder_id: calendarSettings.get('chronos/defaultFolderId'),
+                        folder: folderId,
                         startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
                         endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
                     });
                 });
+
+                function getDefaultFolder() {
+                    if (!capabilities.has('guest')) return folderAPI.getDefaultFolder('calendar');
+                    // guest case
+                    var alreadyFetched = folderAPI.getFlatCollection('calendar', 'shared').fetched;
+                    return alreadyFetched ?
+                        folderAPI.getFlatCollection('calendar', 'shared').models[0].get('id') :
+                        folderAPI.flat({ module: 'calendar' }).then(function (sections) {
+                            return (sections.shared[0] || {}).id;
+                        });
+                }
+
+                function launchApp() {
+                    return m.getApp().launch().then(function () { return this; });
+                }
             });
         });
 
