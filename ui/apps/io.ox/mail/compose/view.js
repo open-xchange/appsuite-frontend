@@ -268,7 +268,7 @@ define('io.ox/mail/compose/view', [
                 this.data('view')
                     .divider()
                     .header(gt('Options'))
-                    .option('vcard', 1, gt('Attach Vcard'), { prefix: gt('Options'), toggleValue: 0 })
+                    .option('vcard', true, gt('Attach Vcard'), { prefix: gt('Options') })
                     .option('requestReadReceipt', true, gt('Request read receipt'), { prefix: gt('Options') });
             }
         },
@@ -595,6 +595,11 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.config, 'change:signatureId', this.setSignature);
             this.listenTo(this.config, 'change:signatures', this.updateSignatures);
             this.listenTo(this.config, 'change:signature', this.redrawSignature);
+
+            this.model.initialized.then(function () {
+                var attachments = this.model.get('attachments');
+                this.listenTo(attachments, 'remove', this.onRemoveAttachment);
+            }.bind(this));
 
             var mailto, params, self = this;
             // triggered by mailto?
@@ -936,8 +941,12 @@ define('io.ox/mail/compose/view', [
 
         toggleEditorMode: function () {
 
-            var self = this, content;
+            var self = this, content,
+                signature = this.config.get('signature');
 
+            if (signature) {
+                this.config.set('signatureId', '');
+            }
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
@@ -961,7 +970,7 @@ define('io.ox/mail/compose/view', [
                     this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
                     this.app.getWindowNode().trigger('scroll');
                 }
-
+                if (signature) this.config.set('signatureId', signature.id);
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;
@@ -969,9 +978,20 @@ define('io.ox/mail/compose/view', [
             }.bind(this));
         },
 
+        onRemoveAttachment: function (model) {
+            if (model.get('origin') === 'VCARD') {
+                this.config.set('vcard', false);
+            }
+        },
+
         onAttachVcard: function () {
-            if (this.config.get('vcard') === 1) this.model.attachVCard();
-            this.config.set('vcard', 0);
+            if (this.config.get('vcard')) {
+                this.model.attachVCard();
+            } else {
+                var attachments = this.model.get('attachments'),
+                    model = attachments.findWhere({ origin: 'VCARD' });
+                if (model) attachments.remove(model);
+            }
         },
 
         syncMail: function () {

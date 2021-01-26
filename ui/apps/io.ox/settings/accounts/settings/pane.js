@@ -49,7 +49,6 @@ define('io.ox/settings/accounts/settings/pane', [
 
                         return $.when(api.getAll(), accountAPI.getStatus()).done(function (accounts, status) {
                             collection.reset(keychainModel.wrap(accounts).models);
-
                             status = status[0];
                             for (var id in status) {
                                 // to avoid double ids the collection has the account type as prefix see Bug 50219
@@ -132,6 +131,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
                 this.updateListAndStatuses();
                 this.listenTo(api, 'refresh.all refresh.list', this.updateListAndStatuses);
+                this.listenTo(accountAPI, 'account:recovered', this.updateListAndStatuses.bind(this));
             }
         },
         {

@@ -147,15 +147,12 @@ define('plugins/notifications/mail/register', [
             } else {
                 api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
                     var from = data.from || [['', '']],
-                        //#. %1$s mail sender
-                        //#. %2$s mail subject
-                        //#, c-format
-                        message = gt('Mail from %1$s, %2$s', util.getDisplayName(from[0]), data.subject || gt('No subject'));
-                    desktopNotifications.show({
-                        title: gt('New mail'),
-                        body: message,
-                        icon: iconPath
-                    });
+                        message = {
+                            email: from[0][1],
+                            displayname: util.getDisplayName(from[0]),
+                            subject: data.subject || gt('No subject')
+                        };
+                    newMailDesktopNotification(message);
                 });
             }
 
