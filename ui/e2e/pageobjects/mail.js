@@ -46,6 +46,7 @@ module.exports = {
         I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
     },
     send() {
+        I.waitForClickable('.btn[data-action="send"]');
         I.click('Send');
         I.wait(0.5);
         I.waitToHide('.io-ox-mail-compose-window');

@@ -321,11 +321,10 @@ Scenario('[DOCS-3066] Sharing link area is visible for decrypted files and invis
     I.waitForText('document.txt.pgp', 5, '.file-list-view');
     I.click(locate('.list-view li').withText('document.txt.pgp'));
     I.waitForText('This file is shared with others', 5, '.detail-pane');
-    I.click('This file is shared with others', '.detail-pane');
+    I.retry(3).click('This file is shared with others', '.detail-pane');
     dialogs.waitForVisible();
     I.dontSeeElementInDOM('.access-select');
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
-    I.logout();
 });

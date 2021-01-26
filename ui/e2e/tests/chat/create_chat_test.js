@@ -355,10 +355,7 @@ Scenario('Create new group chat from appointment', async ({ I, dialogs, calendar
         });
         I.login('app=io.ox/calendar&perspective=week', { user: user1 });
         calendar.waitForApp();
-
         I.waitForText(subject, 5, '.appointment');
-        chat.openChat();
-        I.waitForVisible('.ox-chat');
         I.retry(5).click(subject, '.appointment');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForVisible('~More actions', '.io-ox-sidepopup');

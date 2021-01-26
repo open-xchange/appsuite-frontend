@@ -57,8 +57,7 @@ Scenario('Create recurring appointments with one participant', async function ({
     I.waitForDetached('.modal-dialog');
 
     // add user 1
-    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
-    I.pressKey('Enter');
+    await calendar.addParticipant(users[1].userdata.primaryEmail, true);
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
 
@@ -80,8 +79,9 @@ Scenario('Create recurring appointments with one participant', async function ({
     // login new user1 for accept
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
+    I.waitForNetworkTraffic();
 
-    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.waitForText('Load appointments until', 10, calendar.locators.listview);
     I.click('Load appointments until');
     I.waitForVisible(locate('.appointment').withText('test recurring').inside('.list-view').at(5).as('Appointment 5'));
     I.seeNumberOfElements('.list-view .appointment .title', 5);
@@ -161,7 +161,7 @@ Scenario('Create recurring appointments with one participant', async function ({
     I.waitForVisible(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
     I.seeNumberOfElements(locate('.title').withText('test recurring edit new').inside('.list-view-control'), 1);
 
-    I.click(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
+    I.retry(3).click(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
     //edit exeption
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
@@ -187,7 +187,7 @@ Scenario('Create recurring appointments with one participant', async function ({
     I.waitForDetached('.modal-dialog');
 
     I.waitForVisible(locate('.title').withText('test recurring edit').inside('.list-view-control'));
-    I.seeNumberOfElements(locate('.title').withText('test recurring edit').inside('.list-view-control'), 3);
+    I.waitNumberOfVisibleElements(locate('.title').withText('test recurring edit').inside('.list-view-control'), 3);
 
 
     // check in Month view
@@ -211,7 +211,7 @@ Scenario('Create recurring appointments with one participant', async function ({
     I.waitForText('Load appointments until', 5, calendar.locators.listview);
     I.click('Load appointments until');
     I.waitForText('test recurring edit', 5, calendar.locators.listview);
-    I.seeNumberOfElements('.list-view .appointment .title', 4);
+    I.waitNumberOfVisibleElements('.list-view .appointment .title', 4);
 
     I.retry(5).click(locate('.list-item.appointment').withText('test recurring edit'));
 
@@ -239,11 +239,10 @@ Scenario('Create recurring appointments with one participant', async function ({
     dialogs.clickButton('Change appointment');
     I.waitForText('Change confirmation status', 5, dialogs.locators.header);
     dialogs.clickButton('Tentative');
-
     I.waitForDetached('.modal-dialog', 5);
     I.waitForVisible('.list-view .appointment');
-    I.seeNumberOfElements('.list-view .appointment .tentative', 1);
-    I.seeNumberOfElements('.list-view .appointment .declined', 2);
+    I.waitNumberOfVisibleElements('.list-view .appointment .tentative', 1);
+    I.waitNumberOfVisibleElements('.list-view .appointment .declined', 2);
 });
 
 

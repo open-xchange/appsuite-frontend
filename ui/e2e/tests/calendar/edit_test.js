@@ -542,11 +542,12 @@ Scenario('[C274409] Change organizer of series with internal attendees', async (
         rrule: 'FREQ=DAILY;COUNT=5'
     });
     I.login('app=io.ox/calendar');
-
+    calendar.waitForApp();
     I.waitForText('Testsubject');
     I.waitForEnabled(locate('.appointment').at(2));
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
+    I.waitForText('Details', 5, '.io-ox-sidepopup');
     I.retry(5).click('Details');
     I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 
@@ -575,12 +576,15 @@ Scenario('[C274409] Change organizer of series with internal attendees', async (
     I.wait(0.3);
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
     I.waitForVisible('.io-ox-sidepopup');
+    I.waitForText('Details', 5, '.io-ox-sidepopup');
     I.retry(5).click('Details');
     I.waitForText(`${users[1].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
     I.click('~Close', '.io-ox-sidepopup');
 
-    I.click('.appointment');
+    I.waitForEnabled(locate('.appointment').at(1));
+    I.click(locate('.appointment').at(1));
     I.waitForVisible('.io-ox-sidepopup');
+    I.waitForText('Details', 5, '.io-ox-sidepopup');
     I.retry(5).click('Details');
     I.waitForText(`${users[0].userdata.display_name}`, 5, '.io-ox-sidepopup .details .organizer');
 });
