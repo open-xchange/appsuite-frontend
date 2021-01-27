@@ -23,6 +23,7 @@ define('io.ox/onboarding/register', [
     ext.point('io.ox/core/appcontrol/right/settings').extend({
         id: 'connect-wizard',
         index: 200,
+        enabled: capabilities.has('client-onboarding'),
         extend: function () {
             if (_.device('smartphone') || !settings.get('onboardingWizard')) return;
 
@@ -37,7 +38,7 @@ define('io.ox/onboarding/register', [
     ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'connect-wizard-mobile',
         index: 120,
-        enable: capabilities.has('client-onboarding'),
+        enabled: capabilities.has('client-onboarding'),
         extend: function () {
             if (!_.device('smartphone') || !settings.get('onboardingWizard')) return;
 
