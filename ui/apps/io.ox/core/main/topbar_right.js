@@ -299,6 +299,7 @@ define('io.ox/core/main/topbar_right', [
     ext.point('io.ox/core/appcontrol/right/settings').extend({
         id: 'onboarding',
         index: 200,
+        enabled: capabilities.has('client-onboarding'),
         extend: function () {
             if (_.device('smartphone') || settings.get('onboardingWizard')) return;
             extensions.onboarding.apply(this, arguments);
@@ -415,7 +416,7 @@ define('io.ox/core/main/topbar_right', [
     ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'onboarding-mobile',
         index: 120,
-        enable: capabilities.has('client-onboarding'),
+        enabled: capabilities.has('client-onboarding'),
         extend: function () {
             if (!_.device('smartphone') || settings.get('onboardingWizard')) return;
             extensions.onboarding.apply(this, arguments);
