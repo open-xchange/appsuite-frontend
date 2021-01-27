@@ -116,11 +116,8 @@ define('io.ox/core/links', [
         var data = $(this).data();
         if (data.id) {
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail', 'io.ox/core/folder/api']).done(function (dialogs, api, view, folderApi) {
-                // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
-                var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
-                if (_.device('chrome')) {
-                    sidepopup.setTarget(document.body);
-                }
+                var sidepopup = new dialogs.SidePopup({ arrow: true, tabTrap: true });
+
                 sidepopup.show(e, function (popup) {
                     popup.busy();
                     // fix special id format
