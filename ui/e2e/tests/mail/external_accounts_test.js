@@ -11,8 +11,6 @@
  *
  */
 
-const util = require('@open-xchange/codecept-helper/src/util');
-
 /// <reference path="../../steps.d.ts" />
 Feature('Mail > External Accounts');
 
@@ -37,26 +35,8 @@ Scenario('[C125352] No mail oauth service available', function ({ I, mail }) {
 });
 
 Scenario('[OXUIB-225] Password recovery for account passwords after password change', async ({ I, dialogs, users }) => {
-    const { httpClient, session } = await util.getSessionForUser();
-    const [user] = users;
-    const mailDomain = user.get('primaryEmail').replace(/.*@/, '');
-    const imapServer = user.get('imapServer') === 'localhost' ? mailDomain : user.get('imapServer');
-    const smtpServer = user.get('smtpServer') === 'localhost' ? mailDomain : user.get('smtpServer');
-    const account = {
-        name: 'My External',
-        primary_address: `${user.get('primaryEmail').replace(/@.*/, '')}+ext@${mailDomain}`,
-        login: user.get('imapLogin'),
-        password: user.get('password'),
-        mail_url: `${user.get('imapSchema')}${imapServer}:${user.get('imapPort')}`,
-        transport_url: `${user.get('smtpSchema')}${smtpServer}:${user.get('smtpPort')}`,
-        transport_auth: 'none'
-    };
-    await httpClient.put('/appsuite/api/account', account, {
-        params: {
-            action: 'new',
-            session: session
-        }
-    });
+    await I.haveMailAccount({ extension: 'ext' });
+
     I.login();
     // Check for the external account being registered
     I.waitForText('My External');
