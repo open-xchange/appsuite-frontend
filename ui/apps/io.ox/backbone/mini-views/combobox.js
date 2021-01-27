@@ -194,7 +194,7 @@ define('io.ox/backbone/mini-views/combobox', [
         },
 
         highlighter: function (item, query) {
-            query = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+            query = '(?<!\\w)' + query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
             return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
             });
