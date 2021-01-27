@@ -536,7 +536,7 @@ define('io.ox/core/tk/tokenfield', [
                     allowEditing: o.allowEditing,
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
-                    inputType: this.options.inputtype || 'email',
+                    inputType: this.options.inputtype || 'text',
                     isMail: o.isMail,
                     minWidth: 0
                 });
