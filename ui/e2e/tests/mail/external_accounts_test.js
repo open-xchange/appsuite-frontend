@@ -35,7 +35,7 @@ Scenario('[C125352] No mail oauth service available', function ({ I, mail }) {
 });
 
 Scenario('[OXUIB-225] Password recovery for account passwords after password change', async ({ I, dialogs, users }) => {
-    await I.haveMailAccount({ extension: 'ext' });
+    await I.haveMailAccount({ name: 'My External', extension: 'ext' });
 
     I.login();
     // Check for the external account being registered
