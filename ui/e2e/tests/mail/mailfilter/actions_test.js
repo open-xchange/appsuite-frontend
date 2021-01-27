@@ -124,7 +124,7 @@ Scenario('[C7803] Redirect filtered mail', async function ({ I, users, mailfilte
 
 });
 
-Scenario('[C7804] Move to Folder filtered mail', async function ({ I, users, mailfilter }) {
+Scenario('[C7804] Move to Folder filtered mail', async function ({ I, users, mailfilter, mail, dialogs }) {
 
     const folder = 'TestCase0389';
 
@@ -139,31 +139,35 @@ Scenario('[C7804] Move to Folder filtered mail', async function ({ I, users, mai
     mailfilter.newRule('TestCase0389');
     mailfilter.addSubjectCondition('TestCase0389');
     mailfilter.addSimpleAction('File into');
-
     I.click('Select folder');
     I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
+    dialogs.waitForVisible();
     I.click('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow');
     I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`);
     I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.click('Select');
+    dialogs.clickButton('Select');
+    I.waitForDetached('.folder-picker-dialog');
+    I.waitForText('File into', 5, '.actions .filter-settings-view');
+    I.seeInField('.actions .filter-settings-view [name="into"]', `INBOX/${folder}`);
 
     mailfilter.save();
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
+    mail.newMail();
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0389');
+    I.seeInField('.io-ox-mail-compose [name="subject"]', 'TestCase0389');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-
-    I.click('Send');
+    mail.send();
 
     I.waitForVisible('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);

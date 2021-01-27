@@ -244,6 +244,7 @@ Scenario('Create appointment with jitsi conference', async ({ I, users, calendar
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
         I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         meetingURL = await I.grabCurrentUrl();
@@ -254,6 +255,7 @@ Scenario('Create appointment with jitsi conference', async ({ I, users, calendar
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
         I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         let url = await I.grabCurrentUrl();

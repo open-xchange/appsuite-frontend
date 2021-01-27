@@ -206,9 +206,8 @@ Scenario('[C85625] My Shares default sort order', async function ({ I, drive, di
     I.pressKey('Escape');
 });
 
-Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function ({ I, users, drive, dialogs }) {
-    const mailListView = '.list-view.visible-selection.mail-item',
-        smartDropDown = '.smart-dropdown-container.dropdown.open',
+Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function ({ I, users, mail, drive, dialogs, autocomplete }) {
+    const smartDropDown = '.smart-dropdown-container.dropdown.open',
         document = '.white-page.letter.plain-text';
 
     await Promise.all([
@@ -218,10 +217,9 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
     ]);
 
     function addUser(user) {
-        I.wait(0.2); // gentle wait for auto complete
         I.fillField('input[placeholder="Name or email address"]', user.userdata.primaryEmail);
         I.waitForElement('.participant-wrapper');
-        I.pressKey('Enter');
+        autocomplete.selectFirst();
         I.waitForText(user.userdata.name, 5, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
     }
 
@@ -229,16 +227,13 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         I.waitForElement(locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
         I.click(curRole, locate('.permission.row').withAttr({ 'aria-label': `${user.userdata.sur_name}, User, Internal user.` }));
         I.waitForText(targetRole, 5, smartDropDown);
-        I.click(targetRole, smartDropDown);
+        I.clickDropdown(targetRole);
     }
 
     function openDocument() {
         I.openApp('Mail');
-        I.waitForElement(mailListView);
-        within(mailListView, () => {
-            I.waitForText(users[0].userdata.name);
-            I.click(users[0].userdata.name, '.list-item.selectable');
-        });
+        mail.waitForApp();
+        mail.selectMail(users[0].userdata.name);
 
         I.waitForElement('.mail-detail-frame');
         within({ frame: '.mail-detail-frame' }, () => {
@@ -267,7 +262,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         I.waitForText('document.txt');
         I.rightClick(locate('.filename').withText('document.txt'));
         I.waitForText('Share / Permissions', 5, smartDropDown);
-        I.click('Share / Permissions', smartDropDown);
+        I.clickDropdown('Share / Permissions');
 
         I.waitForElement('.modal-dialog');
         within('.modal-dialog', () => {
@@ -284,7 +279,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         dialogs.clickButton('Share');
     });
 
-    session('Charlie', () => {
+    await session('Charlie', () => {
         I.login('app=io.ox/files', { user: users[2] });
         I.dontSee('document.txt');
 
@@ -293,7 +288,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         editDocument('here is charlie', { save: false });
     });
 
-    session('Dave', () => {
+    await session('Dave', () => {
         I.login('app=io.ox/files', { user: users[3] });
         I.dontSee('document.txt');
 
@@ -302,12 +297,12 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         editDocument('here is dave', { save: true });
     });
 
-    session('Charlie', () => {
+    await session('Charlie', () => {
         I.click('Save', '.io-ox-editor-window .window-footer');
         I.fillField('.io-ox-editor textarea.content', 'here is charlie again');
     });
 
-    session('Bob as Viewer', () => {
+    await session('Bob as Viewer', () => {
         I.login('app=io.ox/files', { user: users[1] });
         I.dontSee('document.txt');
 
@@ -316,7 +311,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         I.dontSee('Edit', '.viewer-toolbar');
     });
 
-    session('Alice', () => {
+    await session('Alice', () => {
         // set charlies rights to viewer rights
         I.rightClick(locate('.filename').withText('document.txt'));
         I.waitForText('Share / Permissions', 5, smartDropDown);
@@ -324,9 +319,10 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
         setRights('Reviewer', 'Viewer', users[2]);
         dialogs.clickButton('Share');
+        I.waitForNetworkTraffic();
     });
 
-    session('Charlie', () => {
+    await session('Charlie', () => {
         I.click('Save', '.io-ox-editor-window .window-footer');
 
         I.waitForElement('.io-ox-alert-error');
@@ -335,23 +331,24 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
         });
     });
 
-    session('Alice', () => {
+    await session('Alice', () => {
         I.rightClick(locate('.filename').withText('document.txt'));
-        I.waitForText('Share / Permissions', 5, smartDropDown);
-        I.click('Share / Permissions', smartDropDown);
+        I.clickDropdown('Share / Permissions');
 
         // revoke access of dave
         I.waitForElement('button[title="Actions"]', locate('.permission.row').withAttr({ 'aria-label': `${users[3].userdata.sur_name}, User, Internal user.` }));
         I.click('button[title="Actions"]', locate('.permission.row').withAttr({ 'aria-label': `${users[3].userdata.sur_name}, User, Internal user.` }));
         I.waitForText('Revoke access', 5, '.smart-dropdown-container.dropdown.open');
-        I.click('Revoke access', '.smart-dropdown-container.dropdown.open');
+        I.clickDropdown('Revoke access');
+        I.waitNumberOfVisibleElements('.permission.row', 2);
         dialogs.clickButton('Share');
+        I.waitForNetworkTraffic();
     });
 
-    session('Dave', () => {
+    await session('Dave', () => {
         openDocument();
 
-        I.waitForElement('.io-ox-alert-error');
+        I.waitForElement('.io-ox-alert-error', 10);
         within('.io-ox-alert-error', () => {
             I.waitForText('You do not have the appropriate permissions to read the document.');
         });

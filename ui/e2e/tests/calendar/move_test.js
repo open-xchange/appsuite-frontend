@@ -24,7 +24,7 @@ After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Move appointment to different folder', async function ({ I, dialogs }) {
+Scenario('Move appointment to different folder', async function ({ I, dialogs, calendar }) {
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const startDate = moment().startOf('day').add(10, 'hours').format('YYYYMMDD[T]HHmmss');
     const endDate   = moment().startOf('day').add(11, 'hours').format('YYYYMMDD[T]HHmmss');
@@ -47,6 +47,7 @@ Scenario('Move appointment to different folder', async function ({ I, dialogs })
     const defaultFolderNode = locate({ css: `.folder[data-id="${folder}"]` }).as('Default folder');
 
     I.login('app=io.ox/calendar');
+    calendar.waitForApp();
     I.waitForVisible(defaultFolderNode);
 
     I.say('Open Sideboard');
@@ -75,7 +76,8 @@ Scenario('Move appointment to different folder', async function ({ I, dialogs })
     I.waitForElement(defaultFolderNode.find({ css: '.color-label:not(.selected)' }).as('Deselected checkbox'));
 
     I.say('Check');
+    calendar.waitForApp();
     I.waitForVisible('.weekview-container.week .appointment');
-    I.seeElement('.weekview-container.week .appointment');
-    I.seeElement({ css: '[aria-label^="New calendar"][aria-checked="true"]' });
+    I.waitForElement('.weekview-container.week .appointment');
+    I.waitForElement({ css: '[aria-label^="New calendar"][aria-checked="true"]' });
 });

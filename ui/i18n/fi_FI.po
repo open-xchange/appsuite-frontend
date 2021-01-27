@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-05 17:29+0200\n"
+"PO-Revision-Date: 2021-01-25 14:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -590,8 +590,8 @@ msgstr "Online -ohje: %1$s"
 #: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -1748,6 +1748,7 @@ msgstr "Toistumissääntöä muutettiin automaattisesti."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js
@@ -1987,11 +1988,12 @@ msgstr "Zoomaa pois"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/contacts apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/find/extensions-facets.js apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/sharing.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Valinnat"
@@ -2233,6 +2235,11 @@ msgstr "Kansiot"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
 msgstr "Kalenteritilivirhe"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "Salasana vaihdettiin äskettäin. Anna uusi salasana."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
@@ -2591,6 +2598,7 @@ msgid "View"
 msgstr "Näytä"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Layout"
@@ -3337,7 +3345,7 @@ msgstr "Ryhmän nimi"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
-"prefer a conversiom in a closed group, please create a group chat."
+"prefer a conversation in a closed group, please create a group chat."
 msgstr ""
 "Muut käyttäjät voivat löytää kanavasi ja liittyä siihen \"Kaikki kanavat\" -"
 "valinnan kautta. Jos haluat keskustella suljetussa ryhmässä, luo "
@@ -3505,6 +3513,10 @@ msgstr "Aloita uusi keskustelu"
 msgid "Start conversation"
 msgstr "Aloita keskustelu"
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "Private chat could not be created."
+msgstr "Yksityistä keskustelua ei voitu luoda."
+
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/chat.js
 msgid "Leave chat"
 msgstr "Poistu keskustelusta"
@@ -3521,24 +3533,29 @@ msgstr "Lähde"
 msgid "The file could not be loaded."
 msgstr "Tiedostoa ei voitu ladata."
 
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be removed from favorites. Please try again."
+msgstr "Keskustelua ei voitu poistaa suosikeista. Yritä uudelleen."
+
+#: apps/io.ox/chat/main.js module:io.ox/chat
+msgid "The chat could not be added to favorites. Please try again."
+msgstr "Keskustelua ei voitu lisätä suosikkeihin. Yritä uudelleen."
+
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
 #: module:io.ox/files
 msgid "New"
 msgstr "Uusi"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Private chat"
 msgstr "Yksityinen keskustelu"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Group chat"
 msgstr "Ryhmäkeskustelu"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/empty.js
-#: apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "Channel"
 msgstr "Kanava"
 
@@ -3553,8 +3570,8 @@ msgid "All files"
 msgstr "Kaikki tiedostot"
 
 #. A list (history) of older chats, like the browser history of visited sites
-#. Used for chats this time, not for mail threads
 #. Used for a list of olders/recent chats
+#. Used for chats this time, not for mail threads
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/views/history.js
 msgid "History"
 msgstr "Keskusteluhistoria"
@@ -3572,9 +3589,7 @@ msgstr "Ryhmäkeskustelut"
 msgid "Channels"
 msgstr "Kanavat"
 
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
+#: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/chat/toolbar.js
 msgid "Chats"
 msgstr "Keskustelut"
 
@@ -3589,12 +3604,6 @@ msgstr "Yhdistäminen ei onnistu. Yritä myöhemmin uudelleen."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "New Chat"
 msgstr "Uusi keskustelu"
-
-#: apps/io.ox/chat/main.js module:io.ox/chat
-#: apps/io.ox/chat/views/channelList.js apps/io.ox/chat/views/chat.js
-#: apps/io.ox/chat/views/fileList.js apps/io.ox/chat/views/history.js
-msgid "Detach window"
-msgstr "Irrota ikkuna"
 
 #: apps/io.ox/chat/notifications.js module:io.ox/chat
 msgid "Picture"
@@ -3808,6 +3817,14 @@ msgstr "Tuntematon järjestelmäviesti: $1%s"
 msgid "%1$s and %2$s"
 msgstr "%1$s ja %2$s"
 
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat apps/io.ox/chat/views/chat.js
+msgid "Close chat"
+msgstr "Sulje keskustelu"
+
+#: apps/io.ox/chat/toolbar.js module:io.ox/chat
+msgid "Detach window"
+msgstr "Irrota ikkuna"
+
 #: apps/io.ox/chat/util.js module:io.ox/chat
 msgid "Text file"
 msgstr "Tekstitiedosto"
@@ -3838,12 +3855,6 @@ msgid "Add members"
 msgstr "Lisää jäseniä"
 
 #: apps/io.ox/chat/views/channelList.js module:io.ox/chat
-#: apps/io.ox/chat/views/chat.js apps/io.ox/chat/views/fileList.js
-#: apps/io.ox/chat/views/history.js
-msgid "Close chat"
-msgstr "Sulje keskustelu"
-
-#: apps/io.ox/chat/views/channelList.js module:io.ox/chat
 msgid "There are no channels yet"
 msgstr "Kanavia ei ole vielä olemassa"
 
@@ -3864,6 +3875,10 @@ msgstr "Liity"
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Keskustelutoimenpiteet"
+
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Scroll to newest message"
+msgstr "Vieritä uusimpaan viestiin"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
@@ -3983,6 +3998,10 @@ msgid "Create private chat"
 msgstr "Luo yksityinen keskustelu"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
+msgid "Load animation"
+msgstr "Lataa animaatio"
+
+#: apps/io.ox/chat/views/file.js module:io.ox/chat
 msgid "Download file"
 msgstr "Lataa tiedosto"
 
@@ -4014,6 +4033,11 @@ msgstr "Arkistoituja keskusteluja ei ole vielä olemassa"
 #: apps/io.ox/chat/views/history.js module:io.ox/chat
 msgid "Open"
 msgstr "Avaa"
+
+#: apps/io.ox/chat/views/members.js module:io.ox/chat
+#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
+msgid "Remove member"
+msgstr "Poista jäsen"
 
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 msgid "Messages are delivered by email."
@@ -7356,6 +7380,11 @@ msgstr "Julkaisut"
 msgid "Subscriptions"
 msgstr "Tilaukset"
 
+#. text used when no domain name is given (like google.com etc)
+#: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
+msgid "unknown Domain"
+msgstr "tuntematon domain"
+
 #. %1$s domain like google.com etc, may also be a list of domains
 #: apps/io.ox/core/sub/sharedFolders.js module:io.ox/calendar
 msgid "Shared folders from \"%1$s\""
@@ -8401,9 +8430,12 @@ msgid "Change who has access?"
 msgstr "Muuttaa käyttöoikeuksien haltijoita?"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
-msgid "You are moving an item out of a shared folder. People will lose access."
+msgid ""
+"You are moving one or more items that are shared with other people. These "
+"people will lose access."
 msgstr ""
-"Olet siirtämässä kohdetta pois jaetusta kansiosta. Ihmiset menettävät pääsyn."
+"Olet siirtämässä vähintään yhtä kohdetta, joka on jaettu muiden kanssa. Nämä "
+"ihmiset menettävät pääsyn."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "File has been moved"
@@ -9025,11 +9057,6 @@ msgstr "Ulkopuoliset käyttäjät"
 msgid "Internal users"
 msgstr "Sisäiset käyttäjät"
 
-#: apps/io.ox/files/share/model.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Please set password"
-msgstr "Aseta salasanasi"
-
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9069,6 +9096,10 @@ msgstr "Sisäinen käyttäjä"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Ryhmä"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "Lisätty"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
@@ -9222,12 +9253,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Haluatko varmasti hylätä kaikki muutokset?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Kuka tahansa Internetissä, jolla on linkki, voi tarkastella tiedostoa."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Kopioi linkki"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Kuka tahansa Internetissä, jolla on linkki, voi tarkastella tiedostoa."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9283,6 +9314,10 @@ msgstr "Kutsuvalinnat"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Lähetä ilmoitus sähköpostitse"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Jakamisvaihtoehdot"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -9575,8 +9610,8 @@ msgid "Failed to connect."
 msgstr "Yhdistäminen epäonnistui."
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-msgid "Manual"
-msgstr "Manuaalinen"
+msgid "Configure manually"
+msgstr "Määritä manuaalisesti"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid ""
@@ -9584,6 +9619,10 @@ msgid ""
 msgstr ""
 "Automaattinen konfigurointi epäonnistui. Haluatko konfiguroida tilisi "
 "manuaalisesti?"
+
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+msgid "The provided password for the email address %1$s is incorrect"
+msgstr "Sähköpostiosoitteen salasana on %1$s virheellinen"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -10388,11 +10427,17 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
-"This draft was changed outside of this window. To prevent possible loss of "
-"data please continue editing in that other tab or browser."
+"This draft has been changed in another tab or browser. Please continue "
+"editing the most recent version. If you have closed that tab in the "
+"meantime, you can restore the most recent draft here."
 msgstr ""
-"Tätä luonnosta muutettiin tämän ikkunan ulkopuolella. Voit estää tietojen "
-"menettämisen jatkamalla muokkaamista toisessa välilehdessä tai selaimessa."
+"Tätä luonnosta on muutettu toisessa välilehdessä tai selaimessa. Jatka "
+"uusimman version muokkaamista. Jos olet sulkenut välilehden sillä välin, "
+"voit palauttaa viimeisimmät luonnokset täällä."
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Restore draft"
+msgstr "Palauta luonnos"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Save and close"
@@ -10651,39 +10696,19 @@ msgstr "Tallennetaan..."
 msgid "Saved %s"
 msgstr "Tallennettu %s"
 
-#. When closing compose the user decides to keep the related draft or delete it as well.
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid ""
-"You are about to discard this message. Do you want to delete the related "
-"draft?"
-msgstr ""
-"Olet hylkäämäsi tämän viestin. Haluatko poistaa siihen liittyvän luonnoksen?"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Delete draft"
-msgstr "Poista luonnos"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgctxt "dialog"
-msgid "Discard message"
-msgstr "Hylkää viesti"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Keep draft"
-msgstr "Säilytä luonnos"
-
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Save as draft"
+msgid "Save draft"
 msgstr "Tallenna luonnos"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to delete this draft?"
-msgstr "Haluatko varmasti poistaa tämä luonnoksen?"
+msgid "This email has not been sent. You can save the draft to work on later."
+msgstr ""
+"Tätä sähköpostia ei ole lähetetty. Voit tallentaa luonnoksen myöhemmin "
+"työstettäväksi."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Do you really want to discard your message?"
-msgstr "Haluatko varmasti hylätä viestisi?"
+msgid "Delete draft"
+msgstr "Poista luonnos"
 
 #. This is a prefix of a copied draft and will be removed
 #. This string must equal the prefix, which is prepended before the subject on copy
@@ -10789,10 +10814,6 @@ msgid "Please enter the password."
 msgstr "Anna salasana."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "The password was changed recently. Please enter the new password."
-msgstr "Salasana vaihdettiin äskettäin. Anna uusi salasana."
-
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder cannot be added because it was removed by the owner."
 msgstr "Kansiota ei voi lisätä, koska omistaja on poistanut sen."
 
@@ -10809,7 +10830,7 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Kansiota ei voi lisätä, koska linkki ei kelpaa."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "This type of link and is unsupported and can't be added."
+msgid "This type of link is unsupported and can't be added."
 msgstr "Tämäntyyppistä linkkiä ei tueta, eikä sitä voi lisätä."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -14729,10 +14750,6 @@ msgid "Create new group"
 msgstr "Luo uusi ryhmä"
 
 #: apps/plugins/administration/groups/settings/members.js module:io.ox/core
-msgid "Remove member"
-msgstr "Poista jäsen"
-
-#: apps/plugins/administration/groups/settings/members.js module:io.ox/core
 msgid ""
 "This dialog is limited to %1$d entries and this group exceeds this "
 "limitation. Therefore, some entries are not listed."
@@ -15813,6 +15830,63 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Muut käyttäjät voivat löytää kanavasi ja liittyä siihen \"Kaikki kanavat"
+#~ "\" -valinnan kautta. Jos haluat keskustella suljetussa ryhmässä, luo "
+#~ "ryhmäkeskustelu."
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Olet siirtämässä kohdetta pois jaetusta kansiosta. Ihmiset menettävät "
+#~ "pääsyn."
+
+#~ msgid "Please set password"
+#~ msgstr "Aseta salasanasi"
+
+#~ msgid "Manual"
+#~ msgstr "Manuaalinen"
+
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Tätä luonnosta muutettiin tämän ikkunan ulkopuolella. Voit estää tietojen "
+#~ "menettämisen jatkamalla muokkaamista toisessa välilehdessä tai selaimessa."
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Olet hylkäämäsi tämän viestin. Haluatko poistaa siihen liittyvän "
+#~ "luonnoksen?"
+
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Poista luonnos"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Hylkää viesti"
+
+#~ msgid "Keep draft"
+#~ msgstr "Säilytä luonnos"
+
+#~ msgid "Save as draft"
+#~ msgstr "Tallenna luonnos"
+
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Haluatko varmasti poistaa tämä luonnoksen?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Haluatko varmasti hylätä viestisi?"
+
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Tämäntyyppistä linkkiä ei tueta, eikä sitä voi lisätä."
 
 #~ msgid ""
 #~ "The top navigation area has been redesigned to make accessing modules, "

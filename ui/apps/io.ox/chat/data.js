@@ -856,7 +856,7 @@ define('io.ox/chat/data', [
                     formData = new FormData();
 
                 formData.append('json', JSON.stringify(_.extend(data, hiddenAttr)));
-                if (icon) formData.append('icon', icon);
+                if (icon !== undefined) formData.append('icon', icon);
 
                 options.data = formData;
                 options.processData = false;
