@@ -13,14 +13,16 @@
 
 define('plugins/portal/client-onboarding/register', [
     'io.ox/core/extensions',
+    'settings!io.ox/core',
     'gettext!plugins/portal'
-], function (ext, gt) {
+], function (ext, settings, gt) {
 
     'use strict';
 
-    var id, type, title;
+    var id, type, title,
+        wizard = settings.get('onboardingWizard', true);
     id = type = 'client-onboarding';
-    title = gt('Connect your Device');
+    title = gt('Connect your device');
 
     ext.point('io.ox/portal/widget').extend({ id: id });
 
@@ -75,9 +77,15 @@ define('plugins/portal/client-onboarding/register', [
                     )
                     // listener
                     .on('click', function () {
-                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                            wizard.run();
-                        });
+                        if (wizard) {
+                            require(['io.ox/onboarding/main'], function (wizard) {
+                                wizard.load();
+                            });
+                        } else {
+                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                                wizard.run();
+                            });
+                        }
                     })
             );
         }
