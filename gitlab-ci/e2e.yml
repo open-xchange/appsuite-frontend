@@ -52,7 +52,7 @@ run e2e tests:
         - ui/**/*
       when: on_success
   retry:
-    max: 2
+    max: 10
     when:
       - runner_system_failure
 
@@ -119,7 +119,7 @@ merge filter report and rerun:
         - ui/**/*
       when: always
   retry:
-    max: 2
+    max: 10
     when:
       - runner_system_failure
 
