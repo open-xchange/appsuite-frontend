@@ -13,6 +13,16 @@
 
 const { expect } = require('chai');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 function axeReport(folder, label) {
     this.login(['app=io.ox/settings', 'folder=virtual/settings/' + folder]);
     this.waitForText(label, 5, '.settings-detail-pane h1');

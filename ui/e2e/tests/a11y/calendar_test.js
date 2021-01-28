@@ -14,6 +14,16 @@
 const { expect } = require('chai');
 const moment = require('moment');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 const options = {
     rules: {
         'scrollable-region-focusable': { enabled: false }, // [MODERATE] Ensure that scrollable region has keyboard access

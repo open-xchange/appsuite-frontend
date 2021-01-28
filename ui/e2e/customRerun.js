@@ -94,6 +94,7 @@ class CodeceptRerunner extends Codecept {
         customRunner.loadTests('./e2e/tests/**/*_test.js');
         // run tests
         await customRunner.run();
+        process.exitCode = 0;
     } catch (err) {
         printError(err);
         process.exitCode = 1;

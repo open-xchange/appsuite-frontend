@@ -13,6 +13,16 @@
 
 const { expect } = require('chai');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 Scenario('Contacts - List view w/o contact', async ({ I, contacts }) => {
     I.login('app=io.ox/contacts');
     contacts.waitForApp();

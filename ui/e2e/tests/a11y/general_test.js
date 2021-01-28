@@ -7,9 +7,11 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author David Bauer <david.bauer@open-xchange.com>
+ * @author Maik Schäfer <maik.schaefer@open-xchange.com>
  */
 /// <reference path="../../steps.d.ts" />
+
+const { expect } = require('chai');
 
 Feature('Accessibility');
 
@@ -21,13 +23,12 @@ AfterSuite(async function ({ users }) {
     await users.removeAll();
 });
 
-require('./login');
-require('./mail');
-require('./contacts');
-require('./calendar');
-require('./drive');
-require('./portal');
-require('./tasks');
-require('./settings');
-require('./general');
-require('./toolbar');
+Scenario('General - Connection indicator', async function ({ I, mail }) {
+    I.login();
+    mail.waitForApp();
+    I.executeScript(function () {
+        ox.trigger('connection:down');
+    });
+    expect(await I.grabAxeReport()).to.be.accessible;
+});
+
