@@ -170,7 +170,9 @@ define('io.ox/chat/main', [
                         button: gt('Start conversation'),
                         point: 'io.ox/contacts/addressbook-popup-single'
                     }
-                );
+                ).on('cancel', function () {
+                    a11y.getTabbable(self.$body).first().focus();
+                });
             });
         },
 
@@ -179,6 +181,8 @@ define('io.ox/chat/main', [
             require(['io.ox/chat/actions/openGroupDialog'], function (openGroupDialog) {
                 openGroupDialog(_(data).pick('id', 'type')).then(function (id) {
                     self.showChat(id);
+                }, function () {
+                    a11y.getTabbable(self.$body).first().focus();
                 });
             });
         },
