@@ -188,7 +188,6 @@ define('io.ox/calendar/toolbar', [
 
             setTimeout(function () {
                 // in case we get fast multiple renderings of the toolbar, the dropdown might already be disposed.
-                // TODO reduce those rerenderings, so this doesn't happen (or happens less often) in the first place. To fragile so close to release, so leave it as is ... for now (who am I kidding?)
                 if (dropdown.model === null) return;
                 updatePrintLink.call(dropdown, baton);
                 updateCheckboxOption.call(dropdown);
@@ -228,6 +227,8 @@ define('io.ox/calendar/toolbar', [
                 toolbarView.selection = null;
                 this.updateToolbar(selection);
             };
+
+            app.toolbarView = toolbarView;
         }
     });
 
@@ -238,6 +239,8 @@ define('io.ox/calendar/toolbar', [
             app.updateToolbar([]);
             // update toolbar on selection change
             app.listView.on('selection:change', function () {
+                // prevent unneeded redraws if new selection matches current selection
+                if (_.isEqual(_.compact((app.toolbarView.selection || '').split(',').sort()), _.compact(getSelection(app).sort()))) return;
                 app.updateToolbar(getSelection(app));
             });
             // folder change
