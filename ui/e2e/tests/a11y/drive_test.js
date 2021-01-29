@@ -13,6 +13,16 @@
 
 const { expect } = require('chai');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 Scenario('Drive - List view w/o files', async ({ I }) => {
     I.login('app=io.ox/files');
     I.waitForElement('.file-list-view.complete');

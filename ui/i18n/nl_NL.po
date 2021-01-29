@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-17 20:47+0100\n"
-"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
+"PO-Revision-Date: 2021-01-29 10:41+0100\n"
+"Last-Translator: Tim <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -595,8 +595,8 @@ msgstr "Online help: %1$s"
 #: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -1760,6 +1760,7 @@ msgstr "Uw herhalingsregel is automatisch aangepast."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js
@@ -2004,11 +2005,12 @@ msgstr "Uitzoomen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/contacts apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/find/extensions-facets.js apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/sharing.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Opties"
@@ -2252,6 +2254,11 @@ msgstr "Mappen"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
 msgstr "Agenda-account fout"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "Het wachtwoord is onlangs gewijzigd. Voer het nieuwe wachtwoord in."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
@@ -2616,6 +2623,7 @@ msgid "View"
 msgstr "Weergave"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Layout"
@@ -3370,10 +3378,9 @@ msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
 "prefer a conversation in a closed group, please create a group chat."
 msgstr ""
-"Andere gebruikers kunnen uw kanaal vinden en lid worden van uw kanaal onder"
-" \"Alle kanalen\". Als u "
-"de voorkeur geeft aan een gesprek in een gesloten groep, maak dan een"
-" groepschat aan."
+"Andere gebruikers kunnen uw kanaal vinden en lid worden van uw kanaal onder "
+"\"Alle kanalen\". Als u de voorkeur geeft aan een gesprek in een gesloten "
+"groep, maak dan een groepschat aan."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3564,14 +3571,14 @@ msgstr "Het bestand kon niet worden geladen."
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "The chat could not be removed from favorites. Please try again."
 msgstr ""
-"De chat kan niet verwijderd worden uit favorieten. Probeer het alstublieft"
-" nog eens."
+"De chat kan niet verwijderd worden uit favorieten. Probeer het alstublieft "
+"nog eens."
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
 msgid "The chat could not be added to favorites. Please try again."
 msgstr ""
-"De chat kan niet toegevoegd worden in favorieten. Probeer het alstublieft nog"
-" eens."
+"De chat kan niet toegevoegd worden in favorieten. Probeer het alstublieft "
+"nog eens."
 
 #. title of a dropdown. This text is followed by 'Private chat', 'Group chat' and 'Public channel'
 #: apps/io.ox/chat/main.js module:io.ox/chat apps/io.ox/files/toolbar.js
@@ -9184,6 +9191,10 @@ msgid "Group"
 msgstr "Groep"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "TOEGEVOEGD"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Huidige rol"
 
@@ -9335,12 +9346,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Wilt u echt alle wijzigingen ongedaan maken?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Iedereen op internet met de link kan het bestand bekijken."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Link kopiëren"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Iedereen op internet met de link kan het bestand bekijken."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9396,6 +9407,10 @@ msgstr "Uitnodiging opties"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Verstuur kennisgevingen via e-mail"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Delen opties"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -10527,9 +10542,9 @@ msgid ""
 "editing the most recent version. If you have closed that tab in the "
 "meantime, you can restore the most recent draft here."
 msgstr ""
-"Dit concept is aangepast in een andere tab of browser. Ga alstublieft verder"
-" met de meest recente versie. Als u die tab in de tussentijd heeft gesloten,"
-" kan u hier het meest recente concept hier openen."
+"Dit concept is aangepast in een andere tab of browser. Ga alstublieft verder "
+"met de meest recente versie. Als u die tab in de tussentijd heeft gesloten, "
+"kan u hier het meest recente concept hier openen."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Restore draft"
@@ -10803,8 +10818,8 @@ msgstr "Concept opslaan"
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "This email has not been sent. You can save the draft to work on later."
 msgstr ""
-"Dit e-mailbericht is niet verzonden. U kan het concept opslaan om er later"
-" verder aan te werken."
+"Dit e-mailbericht is niet verzonden. U kan het concept opslaan om er later "
+"verder aan te werken."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Delete draft"
@@ -10914,10 +10929,6 @@ msgstr "Sleep het EML bestand hierheen om deze te importeren"
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Please enter the password."
 msgstr "Voer uw wachtwoord in."
-
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "The password was changed recently. Please enter the new password."
-msgstr "Het wachtwoord is onlangs gewijzigd. Voer het nieuwe wachtwoord in."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder cannot be added because it was removed by the owner."

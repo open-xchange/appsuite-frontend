@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-18 10:24-0300\n"
-"Last-Translator: Luiz Fernando Ranghetti <luiz@workshop-chapina.com>\n"
+"PO-Revision-Date: 2021-01-29 10:42+0100\n"
+"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
 "Language-Team: Portuguese <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -594,8 +594,8 @@ msgstr "Ajuda online: %1$s"
 #: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -1755,6 +1755,7 @@ msgstr "Sua regra de recorrência foi alterada automaticamente."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js
@@ -1999,11 +2000,12 @@ msgstr "Reduzir"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/contacts apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/find/extensions-facets.js apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/sharing.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Opções"
@@ -2247,6 +2249,11 @@ msgstr "Pastas"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
 msgstr "Erro na conta do calendário"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "A senha foi alterada recentemente. Insira a nova senha."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
@@ -2609,6 +2616,7 @@ msgid "View"
 msgstr "Visualização"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Layout"
@@ -9134,6 +9142,10 @@ msgid "Group"
 msgstr "Grupo"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "ADICIONADO"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Papel atual"
 
@@ -9285,12 +9297,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Deseja realmente descartar todas as alterações?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Qualquer um na Internet com o link pode visualizar o arquivo."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Copiar link"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Qualquer um na Internet com o link pode visualizar o arquivo."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9346,6 +9358,10 @@ msgstr "Opções de convite"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Enviar notificação por e-mail"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Opções de compartilhamento"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -10857,10 +10873,6 @@ msgstr "Solte arquivo EML aqui para importar"
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Please enter the password."
 msgstr "Insira a senha."
-
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "The password was changed recently. Please enter the new password."
-msgstr "A senha foi alterada recentemente. Insira a nova senha."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder cannot be added because it was removed by the owner."

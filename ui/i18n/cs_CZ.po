@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-18 09:13+0100\n"
+"PO-Revision-Date: 2021-01-29 10:40+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Lokalize 20.08.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -595,8 +595,8 @@ msgstr "Nápověda online: %1$s"
 #: apps/io.ox/files/actions/delete-previous-versions.js
 #: apps/io.ox/files/actions/delete.js apps/io.ox/files/contextmenu.js
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js
-#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/contextmenu.js apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/contextmenu.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 #: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
 #: apps/io.ox/multifactor/settings/views/deleteMultifactorView.js
@@ -1749,6 +1749,7 @@ msgstr "Vaše pravidlo pro opakování bylo automaticky změněno."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions/edit-description.js
@@ -1989,11 +1990,12 @@ msgstr "Oddálit"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts apps/io.ox/files/toolbar.js module:io.ox/files
-#: apps/io.ox/find/extensions-facets.js module:io.ox/core
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/view.js
-#: apps/io.ox/mail/toolbar.js apps/io.ox/settings/personalData/settings/pane.js
+#: module:io.ox/contacts apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/toolbar.js module:io.ox/files
+#: apps/io.ox/find/extensions-facets.js apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail apps/io.ox/mail/compose/sharing.js
+#: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Volby"
@@ -2233,6 +2235,11 @@ msgstr "Složky"
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Calendar account error"
 msgstr "Chyba kalendářního účtu"
+
+#: apps/io.ox/calendar/main.js module:io.ox/calendar apps/io.ox/files/main.js
+#: module:io.ox/files apps/io.ox/mail/invitations/register.js module:io.ox/mail
+msgid "The password was changed recently. Please enter the new password."
+msgstr "Vaše heslo se nedávno změnilo. Zadejte své nové heslo."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 msgid "Try again"
@@ -2590,6 +2597,7 @@ msgid "View"
 msgstr "Zobrazit"
 
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Layout"
@@ -3346,16 +3354,13 @@ msgid "Group name"
 msgstr "Název skupiny"
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
-#| msgid ""
-#| "Other users can find and join your channel under \"All channels\". If you "
-#| "prefer a conversiom in a closed group, please create a group chat."
 msgid ""
 "Other users can find and join your channel under \"All channels\". If you "
 "prefer a conversation in a closed group, please create a group chat."
 msgstr ""
-"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii"
-" „Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte"
-" skupinový rozhovor."
+"Ostatní uživatelé mohou váš kanál najít a připojit se k němu v kategorii "
+"„Všechny kanály“. Dáváte-li přednost konverzaci v uzavřené skupině, vytvořte "
+"skupinový rozhovor."
 
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 msgid "Create chat"
@@ -3541,12 +3546,10 @@ msgid "The file could not be loaded."
 msgstr "Soubor se nepodařilo nahrát."
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
-#| msgid "The chat could not be reactivated. Please try again."
 msgid "The chat could not be removed from favorites. Please try again."
 msgstr "Rozhovor se nepodařilo odstranit z oblíbených. Zkuste to znovu."
 
 #: apps/io.ox/chat/main.js module:io.ox/chat
-#| msgid "The chat could not be hidden. Please try again."
 msgid "The chat could not be added to favorites. Please try again."
 msgstr "Rozhovor se nepodařilo přidat do oblíbených. Zkuste to znovu."
 
@@ -3891,7 +3894,6 @@ msgid "Chat actions"
 msgstr "Činnosti rozhovoru"
 
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-#| msgid "You have no new messages"
 msgid "Scroll to newest message"
 msgstr "Přejít na nejnovější zprávu"
 
@@ -4014,7 +4016,6 @@ msgid "Create private chat"
 msgstr "Založit soukromý rozhovor"
 
 #: apps/io.ox/chat/views/file.js module:io.ox/chat
-#| msgid "Confirmation"
 msgid "Load animation"
 msgstr "Nahrát animaci"
 
@@ -9131,6 +9132,10 @@ msgid "Group"
 msgstr "Skupina"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "ADDED"
+msgstr "PŘIDÁNO"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Aktuální role"
 
@@ -9282,12 +9287,12 @@ msgid "Do you really want to discard all changes?"
 msgstr "Opravdu chcete zahodit své změny?"
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-msgid "Anyone on the internet with the link can view the file."
-msgstr "Soubor může zobrazit kdokoliv na internetu, kdo má odkaz."
-
-#: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Copy link"
 msgstr "Kopírovat odkaz"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the file."
+msgstr "Soubor může zobrazit kdokoliv na internetu, kdo má odkaz."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9343,6 +9348,10 @@ msgstr "Možnosti pozvánky"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Send notification by email"
 msgstr "Poslat oznámení e-mailem"
+
+#: apps/io.ox/files/share/share-settings.js module:io.ox/files
+msgid "Sharing options"
+msgstr "Možnosti sdílení"
 
 #: apps/io.ox/files/upload/dropzone.js module:io.ox/files
 msgid "Drop files or folders here to upload"
@@ -10462,13 +10471,11 @@ msgid ""
 "editing the most recent version. If you have closed that tab in the "
 "meantime, you can restore the most recent draft here."
 msgstr ""
-"Tento koncept byl změněn v jiném okně nebo prohlížeči. Pokračujte v úpravách"
-" nejnovější verze. Pokud jste druhé okno mezitím zavřeli, obnovte poslední"
-" verzi zde."
+"Tento koncept byl změněn v jiném okně nebo prohlížeči. Pokračujte v úpravách "
+"nejnovější verze. Pokud jste druhé okno mezitím zavřeli, obnovte poslední "
+"verzi zde."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-#| msgctxt "dialog"
-#| msgid "Delete draft"
 msgid "Restore draft"
 msgstr "Obnovit koncept"
 
@@ -10732,7 +10739,6 @@ msgid "Saved %s"
 msgstr "Uloženo: %s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#| msgid "Save as draft"
 msgid "Save draft"
 msgstr "Uložit koncept"
 
@@ -10741,8 +10747,6 @@ msgid "This email has not been sent. You can save the draft to work on later."
 msgstr "Zpráva nebyla odeslána. Koncept můžete uložit a pokračovat později."
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#| msgctxt "dialog"
-#| msgid "Delete draft"
 msgid "Delete draft"
 msgstr "Smazat koncept"
 
@@ -10850,10 +10854,6 @@ msgid "Please enter the password."
 msgstr "Zadejte své heslo."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-msgid "The password was changed recently. Please enter the new password."
-msgstr "Vaše heslo se nedávno změnilo. Zadejte své nové heslo."
-
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "The folder cannot be added because it was removed by the owner."
 msgstr "Složku nelze přidat, protože ji vlastník odstranil."
 
@@ -10868,7 +10868,6 @@ msgid "The folder cannot be added because the link is invalid."
 msgstr "Složku nelze přidat, protože je odkaz neplatný."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#| msgid "This type of link and is unsupported and can't be added."
 msgid "This type of link is unsupported and can't be added."
 msgstr "Tento druh odkazu není podporovaný a nelze tedy přidat."
 

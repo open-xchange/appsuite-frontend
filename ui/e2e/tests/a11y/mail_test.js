@@ -13,6 +13,16 @@
 
 const { expect } = require('chai');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 Scenario('Mail - Vertical view w/o mail', async ({ I }) => {
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');

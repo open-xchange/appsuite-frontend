@@ -13,6 +13,16 @@
 
 const { expect } = require('chai');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 Scenario('Portal - View with empty standard tiles', async ({ I, portal }) => {
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false } });
     I.login('app=io.ox/portal');
