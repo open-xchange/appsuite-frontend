@@ -253,7 +253,7 @@ define('io.ox/chat/main', [
                     view.scrollToBottom();
                     if (state.roomId) {
                         this.resetCount(state.roomId, state.model);
-                        this.$body.find('.accessible-list').data('plugin').set(state.roomId);
+                        this.resetTabindex(state.roomId);
                         settings.set('lastRoomId', state.roomId).save();
                     }
                     break;
@@ -399,7 +399,8 @@ define('io.ox/chat/main', [
 
         unsubscribeChat: function (roomId) {
             var model = data.chats.get(roomId),
-                listIndex = this.$body.find('[data-cid="' + $.escape(roomId) + '"]').index();
+                listItem = this.$leftside.find('[data-cid="' + $.escape(roomId) + '"]'),
+                listIndex = this.$leftside.find('[data-cid]').index(listItem);
 
             if (!model) return;
             model.toggleRecent().then(function () {
@@ -410,15 +411,18 @@ define('io.ox/chat/main', [
 
         resubscribeChat: function (roomId) {
             var model = data.chats.get(roomId);
-            model.toggleRecent().then(
-                this.showChat.bind(this, roomId)
-            );
+            model.toggleRecent().then(function () {
+                this.showChat(roomId);
+                this.resetTabindex(roomId);
+            }.bind(this));
         },
 
         toggleFavorite: function (roomId) {
             var model = data.chats.get(roomId);
             if (model) {
-                model.toggleFavorite().catch(function () {
+                model.toggleFavorite().then(function success() {
+                    this.resetTabindex(roomId);
+                }.bind(this), function fail() {
                     if (model.isFavorite()) yell('error', gt('The chat could not be removed from favorites. Please try again.'));
                     else yell('error', gt('The chat could not be added to favorites. Please try again.'));
                 });
@@ -439,6 +443,10 @@ define('io.ox/chat/main', [
         // we offer this via command because it's needed at different places, e.g. messages and file overview
         download: function (data) {
             api.downloadFile(data.url);
+        },
+
+        resetTabindex: function (roomId) {
+            _.defer(function () { this.$body.find('.accessible-list').data('plugin').set(roomId); }.bind(this));
         },
 
         getCurrentMessageCid: function () {
