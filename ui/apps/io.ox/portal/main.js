@@ -251,7 +251,7 @@ define('io.ox/portal/main', [
                         // add remove icon
                         baton.model.get('protectedWidget') ? [] :
                             $('<a href="#" role="button" class="disable-widget">').attr('aria-label', gt('Disable widget')).append(
-                                $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Disable widget'))
+                                $.icon('fa-times', gt('Disable widget'))
                             ),
                         // title span
                         $('<span class="title">').text('\u00A0')

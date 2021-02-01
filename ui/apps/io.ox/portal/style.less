@@ -270,9 +270,13 @@
             text-decoration: none;
             cursor: pointer;
 
-            .fa-times { color: rgba(0, 0, 0, 0.55); }
+            svg {
+                color: rgba(0, 0, 0, 0.55);
+                vertical-align: middle;
+                margin-top: -2px;
+            }
 
-            &:hover .fa-times { color: rgba(0, 0, 0, 0.55); }
+            &:hover svg { color: rgba(0, 0, 0, 0.55); }
 
             &:focus {
                 background-color: rgba(0, 0, 0, 0.10);
