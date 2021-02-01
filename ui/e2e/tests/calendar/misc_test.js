@@ -48,8 +48,8 @@ Scenario('[C207509] Year view', async ({ I, calendar }) => {
     I.login(['app=io.ox/calendar&perspective=year']);
     calendar.waitForApp();
     // Expected Result: The year view displays each day of the year separated in month.
-    I.seeNumberOfElements('.year-view .month-container', 12);
-    let calenderWeeks = await I.grabTextFrom('.year-view tbody td.cw');
+    I.waitNumberOfVisibleElements('.year-view .month-container', 12);
+    let calenderWeeks = await I.grabTextFromAll('.year-view tbody td.cw');
     calenderWeeks.map(weekString => parseInt(weekString, 10));
     calenderWeeks = new Set(calenderWeeks);
     expect(calenderWeeks.size).to.be.within(52, 53);
@@ -110,7 +110,7 @@ Scenario('[C207509] Year view', async ({ I, calendar }) => {
             daysLocator = locate('td')
                 .after('.cw')
                 .inside('.year-view-container'),
-            { 0: firstWeek, length: l, [l - 1]: lastWeek } = _(await I.grabTextFrom(daysLocator)).chunk(7);
+            { 0: firstWeek, length: l, [l - 1]: lastWeek } = _(await I.grabTextFromAll(daysLocator)).chunk(7);
         expect(`${firstWeek.indexOf('1')}`).to.equal(startDay);
         expect(`${lastWeek.indexOf('31')}`).to.equal(endDay);
     };

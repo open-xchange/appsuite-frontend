@@ -13,7 +13,17 @@
 
 const { expect } = require('chai');
 
-Scenario('General - Connection indicator', async function (I, mail) {
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
+Scenario('General - Connection indicator', async function ({ I, mail }) {
     I.login();
     mail.waitForApp();
     I.executeScript(function () {

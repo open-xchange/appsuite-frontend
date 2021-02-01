@@ -101,7 +101,7 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
     I.see('testing is fun', '.workweek .appointment .title-container');
     I.see('testing is awesome', '.workweek .appointment .title-container');
     //see if appointment colors still drawn with customized color (See Bug 65410)
-    const appointmentColors = (await I.grabCssPropertyFrom('.workweek .appointment', 'backgroundColor'))
+    const appointmentColors = (await I.grabCssPropertyFromAll('.workweek .appointment', 'backgroundColor'))
         // webdriver resolves with rgba, puppeteer with rgb for some reason
         .map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
     expect(appointmentColors).to.deep.equal(['rgba(55, 107, 39, 1)', 'rgba(57, 109, 123, 1)']);
