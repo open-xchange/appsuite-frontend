@@ -185,9 +185,13 @@
 
 #io-ox-windowmanager .io-ox-windowmanager-sticky-panel{
     top: 0;
+    // needed to make transition work correctly when search is expanded
+    max-height: 100%;
 }
 
 #io-ox-windowmanager.io-ox-find-active .io-ox-windowmanager-sticky-panel{
-    transition: top .2s;
+    transition: max-height .2s, top .2s;
     top: 40px;
+    // prevents views from sticking out the bottom
+    max-height: calc(~"100% - 40px");
 }
