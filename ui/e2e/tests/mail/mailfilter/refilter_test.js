@@ -13,11 +13,11 @@
 
 Feature('Mailfilter > Apply to folder');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -70,7 +70,7 @@ function checkForFilteredMail(I) {
 }
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C290529] Refilter mails in INBOX folder', async (I, users, dialogs) => {
+Scenario('[C290529] Refilter mails in INBOX folder', async ({ I, users, dialogs }) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);
@@ -85,7 +85,7 @@ Scenario('[C290529] Refilter mails in INBOX folder', async (I, users, dialogs) =
     checkForFilteredMail(I);
 });
 //TODO: I see "foobar", ".subject" fails, stale element reference
-Scenario('[C290530] Create and apply new filter rule', async (I, users, dialogs) => {
+Scenario('[C290530] Create and apply new filter rule', async ({ I, users, dialogs }) => {
     const [user] = users;
     await setup(I, user);
     extendedLogin(I);
@@ -119,7 +119,7 @@ Scenario('[C290530] Create and apply new filter rule', async (I, users, dialogs)
     checkForFilteredMail(I);
 });
 
-Scenario('[C290531] Edit and apply existing filter rule', async (I, users, dialogs) => {
+Scenario('[C290531] Edit and apply existing filter rule', async ({ I, users, dialogs }) => {
     const [user] = users;
     await setup(I, user);
     await sampleRule(I);

@@ -13,15 +13,15 @@ const { expect } = require('chai');
 
 Feature('General > Help');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
+Scenario('Hide and show Help topics based on user capabilities', async function ({ I, users, contacts }) {
 
     const checkIfDisplayNone = async (capability) => {
         I.waitForElement(`.listitem.cap-${capability}`);

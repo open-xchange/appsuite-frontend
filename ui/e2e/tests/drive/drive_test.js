@@ -17,15 +17,15 @@ const path = require('path');
 
 Feature('Drive');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7886] Enable hidden folders and files', async function (I, drive) {
+Scenario('[C7886] Enable hidden folders and files', async function ({ I, drive }) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await Promise.all([
         I.haveSetting('io.ox/files//showHidden', true),
@@ -50,7 +50,7 @@ Scenario('[C7886] Enable hidden folders and files', async function (I, drive) {
     I.dontSeeElement(locate('.filename').withText('.hiddenfile.dat').inside('.list-view'));
 });
 
-Scenario('[C7887] Disable hidden folders and files', async function (I, drive) {
+Scenario('[C7887] Disable hidden folders and files', async function ({ I, drive }) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await Promise.all([
         I.haveSetting('io.ox/files//showHidden', false),
@@ -73,7 +73,7 @@ Scenario('[C7887] Disable hidden folders and files', async function (I, drive) {
     I.seeElement(locate('.filename').withText('.hiddenfile.dat').inside('.list-view'));
 });
 
-Scenario('[C45046] Upload new version', async function (I, drive) {
+Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     //Generate TXT file for upload
     let timestamp1 = Math.round(+new Date() / 1000).toString();
     const filePath = path.resolve(global.output_dir, 'C45046.txt');
@@ -105,7 +105,7 @@ Scenario('[C45046] Upload new version', async function (I, drive) {
     I.waitForDetached('.io-ox-viewer', 30);
 });
 
-Scenario('[C45048] Edit description', async function (I, drive, dialogs) {
+Scenario('[C45048] Edit description', async function ({ I, drive, dialogs }) {
     await I.haveFile(await I.grabDefaultFolder('infostore'), { content: 'file', name: 'C45048.txt' });
 
     I.login('app=io.ox/files');
@@ -125,7 +125,7 @@ Scenario('[C45048] Edit description', async function (I, drive, dialogs) {
     I.see('C45048', '.io-ox-viewer .description');
 });
 
-Scenario('[C45052] Delete file', async function (I, users, drive, dialogs) {
+Scenario('[C45052] Delete file', async function ({ I, users, drive, dialogs }) {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
     I.login('app=io.ox/files', { user: users[0] });
     drive.waitForApp();
@@ -139,7 +139,7 @@ Scenario('[C45052] Delete file', async function (I, users, drive, dialogs) {
     I.waitForDetached(locate('.filename').withText('testdocument.odt'));
 });
 
-Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
+Scenario('[C45061] Delete file versions', async function ({ I, drive, dialogs }) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
@@ -173,7 +173,7 @@ Scenario('[C45061] Delete file versions', async function (I, drive, dialogs) {
     I.waitForText('Versions (4)', 5, '.io-ox-viewer .viewer-fileversions');
 });
 
-Scenario('[C45062] Change current file version', async function (I, drive) {
+Scenario('[C45062] Change current file version', async function ({ I, drive }) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
@@ -203,7 +203,7 @@ Scenario('[C45062] Change current file version', async function (I, drive) {
     I.waitForText('file 4', 5, '.plain-text');
 });
 
-Scenario('[C45063] Delete current file version', async function (I, drive, dialogs) {
+Scenario('[C45063] Delete current file version', async function ({ I, drive, dialogs }) {
     //Generate TXT file for upload
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 

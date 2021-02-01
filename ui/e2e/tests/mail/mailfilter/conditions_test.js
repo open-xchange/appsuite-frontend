@@ -14,18 +14,18 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7792] Filter mail on sender', async (I, users, mail, mailfilter) => {
+Scenario('[C7792] Filter mail on sender', async ({ I, users, mail, mailfilter }) => {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -56,7 +56,7 @@ Scenario('[C7792] Filter mail on sender', async (I, users, mail, mailfilter) => 
 
 });
 
-Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail, mailfilter) {
+Scenario('[C7793] Filter mail on any recipient', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -87,7 +87,7 @@ Scenario('[C7793] Filter mail on any recipient', async function (I, users, mail,
 
 });
 
-Scenario('[C7794] Filter mail on to-field', async function (I, users, mail, mailfilter) {
+Scenario('[C7794] Filter mail on to-field', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -118,7 +118,7 @@ Scenario('[C7794] Filter mail on to-field', async function (I, users, mail, mail
 
 });
 
-Scenario('[C7795] Filter mail on subject', async function (I, users, mail, mailfilter) {
+Scenario('[C7795] Filter mail on subject', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -148,7 +148,7 @@ Scenario('[C7795] Filter mail on subject', async function (I, users, mail, mailf
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail, mailfilter) {
+Scenario('[C7796] Filter mail on cc-field', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -181,7 +181,7 @@ Scenario('[C7796] Filter mail on cc-field', async function (I, users, mail, mail
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7797] Filter mail on header', async function (I, users, mail, mailfilter) {
+Scenario('[C7797] Filter mail on header', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -218,7 +218,7 @@ Scenario('[C7797] Filter mail on header', async function (I, users, mail, mailfi
     I.waitForElement('.vsplit .flag_1', 30);
 });
 
-Scenario('[C7800] Filter mail on envelope', async function (I, users, mail, mailfilter) {
+Scenario('[C7800] Filter mail on envelope', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

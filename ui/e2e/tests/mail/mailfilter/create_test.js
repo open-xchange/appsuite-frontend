@@ -14,17 +14,17 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7787] Add filter rule', async function (I, users, mail, dialogs) {
+Scenario('[C7787] Add filter rule', async function ({ I, users, mail, dialogs }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -146,7 +146,7 @@ function createFilterRule(I, name, condition, comparison, value, flag, skipCondi
 
 }
 
-Scenario('[C7810] Filter mail using contains', async function (I, users) {
+Scenario('[C7810] Filter mail using contains', async function ({ I, users }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -187,7 +187,7 @@ Scenario('[C7810] Filter mail using contains', async function (I, users) {
     I.waitForElement(locate('.list-item-row').withChild(':not(.flag_1)').withText('xxxTestCase0395xxx'));
 });
 
-Scenario('[C7811] Filter mail using is exactly', async function (I, users) {
+Scenario('[C7811] Filter mail using is exactly', async function ({ I, users }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -229,7 +229,7 @@ Scenario('[C7811] Filter mail using is exactly', async function (I, users) {
 
 });
 
-Scenario('[C7812] Filter mail using matches', async function (I, users) {
+Scenario('[C7812] Filter mail using matches', async function ({ I, users }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -271,7 +271,7 @@ Scenario('[C7812] Filter mail using matches', async function (I, users) {
 
 });
 
-Scenario('[C7813] Filter mail using regex', async function (I, users) {
+Scenario('[C7813] Filter mail using regex', async function ({ I, users }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -313,7 +313,7 @@ Scenario('[C7813] Filter mail using regex', async function (I, users) {
 
 });
 
-Scenario('Filter mail by size Filter mail using IsBiggerThan', async function (I, users, mail) {
+Scenario('Filter mail by size Filter mail using IsBiggerThan', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -364,7 +364,7 @@ Scenario('Filter mail by size Filter mail using IsBiggerThan', async function (I
     I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0400'), 30);
 });
 
-Scenario('Filter mail using validated size', async function (I) {
+Scenario('Filter mail using validated size', async function ({ I }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     });
@@ -399,7 +399,7 @@ Scenario('Filter mail using validated size', async function (I) {
     I.waitForElement(disabledButton);
 });
 
-Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
+Scenario('[C7815] Filter mail using IsSmallerThan', async function ({ I, users }) {
     let [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -435,7 +435,7 @@ Scenario('[C7815] Filter mail using IsSmallerThan', async function (I, users) {
     I.waitForElement(locate('.list-item-row').withChild('.flag_1').withText('TestCase0401'), 30);
 });
 
-Scenario('[C83386] Create mail filter based on mail', async function (I, users, mail, dialogs) {
+Scenario('[C83386] Create mail filter based on mail', async function ({ I, users, mail, dialogs }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[0] });
@@ -513,7 +513,7 @@ Scenario('[C83386] Create mail filter based on mail', async function (I, users, 
 
 });
 
-Scenario('[C274412] Filter mail by size', async function (I, users, mail, dialogs) {
+Scenario('[C274412] Filter mail by size', async function ({ I, users, mail, dialogs }) {
     function createOrEditFilterRule(I, name, oldSize, newSize, edit) {
         I.openApp('Settings', { folder: 'virtual/settings/io.ox/mailfilter' });
         I.waitForText('Mail Filter Rules', 30, '.settings-detail-pane h1');

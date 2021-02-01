@@ -14,15 +14,15 @@
 
 Feature('Portal > Functions');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7493] Order widgets', async function (I, portal) {
+Scenario('[C7493] Order widgets', async function ({ I, portal }) {
 
     I.login('app=io.ox/portal');
     portal.waitForApp();
@@ -39,7 +39,7 @@ Scenario('[C7493] Order widgets', async function (I, portal) {
     I.see('Inbox', '.widgets .widget:nth-child(2) h2');
 });
 
-Scenario('[C7473] Drag some portal-tiles', async function (I, portal) {
+Scenario('[C7473] Drag some portal-tiles', async function ({ I, portal }) {
 
     I.login('app=io.ox/portal');
     portal.waitForApp();

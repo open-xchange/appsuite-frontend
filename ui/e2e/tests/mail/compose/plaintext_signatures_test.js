@@ -15,11 +15,11 @@ const expect = require('chai').expect;
 
 Feature('Mail Compose > Plaintext signatures');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
     signatures.forEach(signature => {
         delete signature.id;
@@ -81,7 +81,7 @@ function getTestMail(user) {
     };
 }
 
-Scenario('Compose new mail with signature above correctly placed and changed', async function (I, mail) {
+Scenario('Compose new mail with signature above correctly placed and changed', async function ({ I, mail }) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -125,7 +125,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Compose new mail with signature below correctly placed initially', async function (I, mail) {
+Scenario('Compose new mail with signature below correctly placed initially', async function ({ I, mail }) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -148,7 +148,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with plaintext signature above correctly placed and changed', async function (I, users, mail) {
+Scenario('Reply to mail with plaintext signature above correctly placed and changed', async function ({ I, users, mail }) {
     let [user] = users;
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
@@ -204,7 +204,7 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with signature below correctly placed initially', async function (I, users, mail) {
+Scenario('Reply to mail with signature below correctly placed initially', async function ({ I, users, mail }) {
     let [user] = users;
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
@@ -238,7 +238,7 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Add and replace signatures with special characters', async function (I, mail) {    // at leat one that had to be escaped in a regex
+Scenario('Add and replace signatures with special characters', async function ({ I, mail }) {    // at leat one that had to be escaped in a re }gex
     // at leat one that had to be escaped in a regex
     const first = 'Very original? ...or clever signature?',
         second = 'Super original and fabulous signature';
@@ -275,7 +275,7 @@ Scenario('Add and replace signatures with special characters', async function (I
     I.dontSeeInField({ css: 'textarea.plain-text' }, first);
 });
 
-Scenario('[OXUIB-177] Change signature and toggle editor mode', async (I, mail) => {
+Scenario('[OXUIB-177] Change signature and toggle editor mode', async ({ I, mail }) => {
 
     const first = 'My first signature';
     const second = 'My second signature';

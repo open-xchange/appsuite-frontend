@@ -15,16 +15,16 @@
 
 Feature('Settings > Mail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7779] Mail formatting', async function (I, users, mail) {
+Scenario.skip('[C7779] Mail formatting', async function ({ I, users, mail }) {
 
     const [user] = users;
 

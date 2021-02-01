@@ -2,15 +2,15 @@
 
 Feature('Login > Switch translations');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7338] on form login page', function (I) {
+Scenario('[C7338] on form login page', function ({ I }) {
     I.amOnPage('ui');
     I.setCookie({ name: 'locale', value: 'en_US' });
     I.refreshPage();
@@ -20,7 +20,7 @@ Scenario('[C7338] on form login page', function (I) {
     I.waitForText('Nome utente');
 });
 
-Scenario('[OXUI-700] for guest users with password', async (I, users, dialogs) => {
+Scenario('[OXUI-700] for guest users with password', async ({ I, users, dialogs }) => {
     await users.create();
     I.login('app=io.ox/files');
     const myfiles = locate('.folder-tree .folder-label').withText('My files');

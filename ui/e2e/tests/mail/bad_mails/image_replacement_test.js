@@ -16,15 +16,15 @@ const expect = require('chai').expect;
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C101622] Aggressive image replacements', async (I, mail) => {
+Scenario('[C101622] Aggressive image replacements', async ({ I, mail }) => {
 
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
@@ -64,7 +64,7 @@ Scenario('[C101622] Aggressive image replacements', async (I, mail) => {
     });
 });
 
-Scenario('[OXUIB-134] XSS after loading external images automatically', async (I, mail) => {
+Scenario('[OXUIB-134] XSS after loading external images automatically', async ({ I, mail }) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
         I.haveSetting('io.ox/mail//allowHtmlImages', true),
@@ -85,7 +85,7 @@ Scenario('[OXUIB-134] XSS after loading external images automatically', async (I
     });
 });
 
-Scenario('[OXUIB-39] XSS after loading external images on demand', async (I, mail) => {
+Scenario('[OXUIB-39] XSS after loading external images on demand', async ({ I, mail }) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
         I.haveSetting('io.ox/mail//allowHtmlImages', false),

@@ -14,15 +14,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7799] Filter mail on mailing list', async (I, users, mail, mailfilter) => {
+Scenario('[C7799] Filter mail on mailing list', async ({ I, users, mail, mailfilter }) => {
 
     const user = users[0];
 

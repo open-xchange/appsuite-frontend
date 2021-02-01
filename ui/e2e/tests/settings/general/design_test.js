@@ -14,15 +14,15 @@
 const moment = require('moment');
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C244801] Set design', async (I) => {
+Scenario('[C244801] Set design', async ({ I }) => {
 
     // dusk
     await I.haveSetting({ 'io.ox/core': { design: 'dusk' } });

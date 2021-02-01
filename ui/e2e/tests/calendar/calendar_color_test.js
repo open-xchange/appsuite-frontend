@@ -15,15 +15,15 @@ const moment = require('moment');
 
 Feature('Calendar');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Create appointment and check if the color is correctly applied and removed', async function (I, users, calendar) {
+Scenario('Create appointment and check if the color is correctly applied and removed', async function ({ I, users, calendar }) {
     const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({
@@ -86,7 +86,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 
 });
 
-Scenario('Changing calendar color should change appointment color that uses calendar color', async function (I, users, calendar) {
+Scenario('Changing calendar color should change appointment color that uses calendar color', async function ({ I, users, calendar }) {
     const folder = await calendar.defaultFolder();
     const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';

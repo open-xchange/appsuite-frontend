@@ -24,20 +24,20 @@ actions.add(['Decline', 'declined', 'declined', 'You declined this appointment']
 
 Feature('Calendar > iTIP');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create(users.getRandom(), { id: process.env.CONTEXT_ID + 50 })
     ]);
 });
 
-After(async (contexts, users) => {
+After(async ({ contexts, users }) => {
     await Promise.all([
         users.removeAll(),
         contexts.removeAll()
     ]);
 });
-Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current) {
+Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail, users, current }) {
     // 1.) User#A: Create an appointment with User#B
     const startDate = moment().startOf('hour').add(1, 'hour');
     const endDate = moment().startOf('hour').add(3, 'hour');
@@ -149,7 +149,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     });
 });
 
-Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar) {
+Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail, calendar }) {
     // 1.) User#A: Create an appointment with attachment with User#B
     const startDate = moment().startOf('hour').add(1, 'hour');
     const endDate = moment().startOf('hour').add(3, 'hour');
@@ -230,7 +230,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.seeFileContentsEqualReferenceFile(path.resolve(global.codecept_dir, 'e2e/media/files/generic/testdocument.odt'));
 });
 
-Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {
+Scenario('[C241126] iTIP mails without appointment reference', async function ({ I, mail, calendar }) {
     // 1.) Import the attached mail 'mail3.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_3.eml' });
     // 2.) Read the mail3

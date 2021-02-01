@@ -15,15 +15,15 @@ const expect = require('chai').expect;
 
 Feature('Portal');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('add and remove Inbox widget', async function (I, portal, dialogs) {
+Scenario('add and remove Inbox widget', async function ({ I, portal, dialogs }) {
     I.login('app=io.ox/portal');
     portal.waitForApp();
     I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin', 20);

@@ -17,12 +17,12 @@ const expect = require('chai').expect;
 
 Feature('Calendar > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -51,7 +51,7 @@ const createAppointment = ({ subject, folder, startTime, color }) => {
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 };
 
-Scenario('[C264519] Create appointments with colors in public folder', async function (I, users, calendar, dialogs) {
+Scenario('[C264519] Create appointments with colors in public folder', async function ({ I, users, calendar, dialogs }) {
     const folderLocator = locate({ css: 'div.folder-node' }).withAttr({ title: 'New calendar' });
     const selectInsideFolder = (node) => locate(node).inside(folderLocator);
 

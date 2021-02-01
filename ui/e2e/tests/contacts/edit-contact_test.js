@@ -13,15 +13,15 @@
 
 Feature('Contacts > Edit');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7361] Edit partial data of a contact', async function (I, contacts) {
+Scenario('[C7361] Edit partial data of a contact', async function ({ I, contacts }) {
     // ensure unchchanged field values are not affected
     const testrailID = 'C7361';
 
@@ -57,7 +57,7 @@ Scenario('[C7361] Edit partial data of a contact', async function (I, contacts) 
     I.waitForText('+3913371337', 5, '.contact-detail');
 });
 
-Scenario('[C7362] Edit full data of a contact', async function (I, contacts) {
+Scenario('[C7362] Edit full data of a contact', async function ({ I, contacts }) {
     // ensure all fields are changed
     const testrailID = 'C7362';
     //Create Contact
@@ -211,7 +211,7 @@ Scenario('[C7362] Edit full data of a contact', async function (I, contacts) {
     I.dontSee('testrailID');
 });
 
-Scenario('Client-side validation returns visual feedback', async function (I, contacts) {
+Scenario('Client-side validation returns visual feedback', async function ({ I, contacts }) {
     //Create Contact
     const contact = {
         display_name: 'Dunphy, Phil',
@@ -248,7 +248,7 @@ Scenario('Client-side validation returns visual feedback', async function (I, co
     I.waitForElement('.io-ox-contacts-edit-window');
 });
 
-Scenario('[C7360] Discard modification', async function (I, contacts) {
+Scenario('[C7360] Discard modification', async function ({ I, contacts }) {
     const phone = '+4917113371337';
     const testrailID = 'C7360';
     const contact = {
@@ -280,7 +280,7 @@ Scenario('[C7360] Discard modification', async function (I, contacts) {
     I.dontSee('Holger');
 });
 
-Scenario('[C7358] Remove contact picture', async function (I, search, contacts, dialogs) {
+Scenario('[C7358] Remove contact picture', async function ({ I, search, contacts, dialogs }) {
     const expect = require('chai').expect;
     const testrailID = 'C7358';
     const phone = '+4917113371337';
@@ -336,7 +336,7 @@ Scenario('[C7358] Remove contact picture', async function (I, search, contacts, 
     I.waitForVisible('.rightside .contact-photo.empty');
 });
 
-Scenario('[C7363] Add files to a contact', async function (I, contacts) {
+Scenario('[C7363] Add files to a contact', async function ({ I, contacts }) {
     const testrailID = 'C7363',
         display_name = testrailID + ', ' + testrailID;
     const contact = {

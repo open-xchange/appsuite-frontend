@@ -13,18 +13,18 @@
 
 Feature('General > Floating windows');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 const { expect } = require('chai');
 
-Scenario('Opening multiple windows', async function (I, users, calendar, dialogs) {
+Scenario('Opening multiple windows', async function ({ I, users, calendar, dialogs }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 

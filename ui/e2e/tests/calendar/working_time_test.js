@@ -12,15 +12,15 @@
 
 Feature('Calendar');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Change working time and check in weekview', async function (I, calendar, settings) {
+Scenario('Change working time and check in weekview', async function ({ I, calendar, settings }) {
 
     I.login('app=io.ox/calendar&perspective=week:workweek');
     calendar.waitForApp();

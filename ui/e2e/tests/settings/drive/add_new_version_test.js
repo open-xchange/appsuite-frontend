@@ -14,15 +14,15 @@
 
 Feature('Settings > Drive');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C283259] Adding files with identical names - Add new version', async (I, settings, drive) => {
+Scenario('[C283259] Adding files with identical names - Add new version', async ({ I, settings, drive }) => {
 
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.rtf');

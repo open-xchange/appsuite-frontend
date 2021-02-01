@@ -14,17 +14,17 @@
 
 Feature('Mail > Reply/Forward');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // Recipient
     await users.create(); // Sender
     await users.create(); // CC
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7401] Mark multiple mails as read or unread', async (I, users) => {
+Scenario('[C7401] Mark multiple mails as read or unread', async ({ I, users }) => {
     // We need six mails in the Inbox, but then we'll work with five of them
     var i = 0, mails = [];
     for (i = 0; i < 5; i++) {
@@ -78,7 +78,7 @@ Scenario('[C7401] Mark multiple mails as read or unread', async (I, users) => {
     }
 });
 
-Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
+Scenario('[C7402] Mark one single mail as read or unread', async ({ I, users }) => {
     // Preparation
 
     // We need one mail in the Inbox
@@ -114,7 +114,7 @@ Scenario('[C7402] Mark one single mail as read or unread', async (I, users) => {
         locate('.list-item').withText('Hail Eris'))); // List
 });
 
-Scenario('[C8818] Reply all', async (I, users) => {
+Scenario('[C8818] Reply all', async ({ I, users }) => {
     const [recipient, sender, cc] = users;
 
     // Preparation

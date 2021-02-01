@@ -13,7 +13,7 @@
 
 Feature('Mail Compose > Tokenfield/Typeahed');
 
-Before(async function (I, users) {
+Before(async function ({ I, users }) {
     await users.create();
     const user = users[0];
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -33,11 +33,11 @@ Before(async function (I, users) {
     });
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Add without typeahead', async (I, mail) => {
+Scenario('Add without typeahead', async ({ I, mail }) => {
     I.login('app=io.ox/mail');
     mail.newMail();
 
@@ -53,7 +53,7 @@ Scenario('Add without typeahead', async (I, mail) => {
     }
 });
 
-Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
+Scenario('Add typeahed suggestion via autoselect', async ({ I, users, mail }) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
@@ -142,7 +142,7 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
 //     }
 // });
 
-Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
+Scenario('Add typeahead suggestion via keyboard', async ({ I, users, mail }) => {
     const [user] = users;
     const suggestions = locate({ css: '.tt-dropdown-menu' }).as('Suggestion dropdown');
 
@@ -186,7 +186,7 @@ Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
     }
 });
 
-Scenario('Add typeahead suggestion via mouse', async (I, users, mail) => {
+Scenario('Add typeahead suggestion via mouse', async ({ I, users, mail }) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');

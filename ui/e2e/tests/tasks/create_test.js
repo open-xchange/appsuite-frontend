@@ -13,16 +13,16 @@
 
 Feature('Tasks > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: broken for last 5 runs (one hour missmatch between edit- and detail-view), see Bug 68542
-Scenario.skip('create complete task', async function (I, tasks) {
+Scenario.skip('create complete task', async function ({ I, tasks }) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     tasks.newTask();

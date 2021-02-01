@@ -14,14 +14,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7487] Remove a mail', async (I, users, portal, mail, dialogs) => {
+Scenario('[C7487] Remove a mail', async ({ I, users, portal, mail, dialogs }) => {
     let [user] = users;
     await I.haveMail({
         attachments: [{

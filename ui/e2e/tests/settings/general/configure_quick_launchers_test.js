@@ -15,15 +15,15 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C287803] Configure quick launchers', function (I) {
+Scenario('[C287803] Configure quick launchers', function ({ I }) {
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)
     I.waitForElement({ css: 'select[name="language"]' });

@@ -14,16 +14,16 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7786] Set auto-forward', async function (I, users, mail, dialogs) {
+Scenario('[C7786] Set auto-forward', async function ({ I, users, mail, dialogs }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[0] });

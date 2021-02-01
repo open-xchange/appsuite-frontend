@@ -17,18 +17,18 @@ const { expect } = require('chai');
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // Sender
     await users.create(); // Recipient
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('Use default font style for new mails', async function (I, users, mail) {
+Scenario('Use default font style for new mails', async function ({ I, users, mail }) {
 
     let [sender] = users;
 
@@ -48,7 +48,7 @@ Scenario('Use default font style for new mails', async function (I, users, mail)
     });
 });
 
-Scenario('Use default font style in replies', async function (I, users, mail) {
+Scenario('Use default font style in replies', async function ({ I, users, mail }) {
 
     let [sender] = users;
 
@@ -82,7 +82,7 @@ Scenario('Use default font style in replies', async function (I, users, mail) {
     });
 });
 
-Scenario('[C7392] Send mail with different text highlighting', async function (I, users, mail) {
+Scenario('[C7392] Send mail with different text highlighting', async function ({ I, users, mail }) {
 
     const selectInline = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -232,7 +232,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function (I
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function (I, users, mail) {
+Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function ({ I, users, mail }) {
 
     let [sender, recipient] = users;
 
@@ -302,7 +302,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function (I, users, mail) {
+Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function ({ I, users, mail }) {
 
     let [sender, recipient] = users;
 
@@ -375,7 +375,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     });
 });
 
-Scenario('[C7394] Send mail with different text alignments', async function (I, users, mail) {
+Scenario('[C7394] Send mail with different text alignments', async function ({ I, users, mail }) {
 
     const selectAlignment = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -463,7 +463,7 @@ Scenario('[C7394] Send mail with different text alignments', async function (I, 
     });
 });
 
-Scenario('[C7395] Send mail with text indentations', async function (I, users, mail) {
+Scenario('[C7395] Send mail with text indentations', async function ({ I, users, mail }) {
 
     let [sender, recipient] = users;
 
@@ -553,7 +553,7 @@ Scenario('[C7395] Send mail with text indentations', async function (I, users, m
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts', async function (I, users, mail) {
+Scenario('[C7396] Send mail with different text fonts', async function ({ I, users, mail }) {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));
@@ -682,7 +682,7 @@ Scenario('[C7396] Send mail with different text fonts', async function (I, users
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles', async function (I, users, mail) {
+Scenario('[C7397] Send mail with different text styles', async function ({ I, users, mail }) {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -789,7 +789,7 @@ Scenario('[C7397] Send mail with different text styles', async function (I, user
     });
 });
 
-Scenario('[C7398] Send mail with different text sizes', async function (I, users, mail) {
+Scenario('[C7398] Send mail with different text sizes', async function ({ I, users, mail }) {
 
     const selectFontSize = (action) => {
         I.click(locate('button').inside('~Font Sizes'));
@@ -893,7 +893,7 @@ function getRGBValue(toConvert) {
     return toConvert;
 }
 
-Scenario('[C7399] Send mail with different text colours', async function (I, users, mail) {
+Scenario('[C7399] Send mail with different text colours', async function ({ I, users, mail }) {
 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));
@@ -1039,7 +1039,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function (I, users, mail) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function ({ I, users, mail }) {
 
     let [sender, recipient] = users;
 
@@ -1107,7 +1107,7 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
     });
 });
 
-Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function (I, users, mail) {
+Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function ({ I, users, mail }) {
 
     let [sender, recipient] = users;
 

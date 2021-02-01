@@ -16,16 +16,16 @@
 
 Feature('Mail > Drive Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users, mail) {
+Scenario('[C85691] Cloud icon is used for drive-mail', async function ({ I, users, mail }) {
     I.login('app=io.ox/mail');
     mail.newMail();
 
@@ -43,7 +43,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function (I, users,
     I.waitForElement('.fa-cloud-download.is-shared-attachement');
 });
 
-Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail) => {
+Scenario('[C85685] Send drive-mail to internal recipient', async ({ I, users, mail }) => {
     const [batman, robin] = users;
 
     // 1. Go to Mail -> Compose
@@ -114,7 +114,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async (I, users, mail
     // TODO: check if a download helper is feasible
 });
 
-Scenario('[C85690] Expire date can be forced', async function (I, users, mail) {
+Scenario('[C85690] Expire date can be forced', async function ({ I, users, mail }) {
 
     I.login('app=io.ox/mail');
     mail.waitForApp();

@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C101617] Mail with <strike> element </strike>', async (I, mail) => {
+Scenario('[C101617] Mail with <strike> element </strike>', async ({ I, mail }) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
         I.haveMail({

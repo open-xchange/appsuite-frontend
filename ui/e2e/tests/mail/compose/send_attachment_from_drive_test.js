@@ -14,15 +14,15 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // Sender
     await users.create(); // Recipient
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7391] Send mail with attachment from Drive', async (I, users, mail) => {
+Scenario('[C7391] Send mail with attachment from Drive', async ({ I, users, mail }) => {
     let [sender, recipient] = users;
     // Log in and navigate to mail app
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

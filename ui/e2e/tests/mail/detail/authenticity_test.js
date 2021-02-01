@@ -14,16 +14,16 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: configure e2e test server for authenticity
-Scenario.skip('Authenticity', async (I) => {
+Scenario.skip('Authenticity', async ({ I }) => {
 
     await I.haveMail({
         folder: 'default0/INBOX',

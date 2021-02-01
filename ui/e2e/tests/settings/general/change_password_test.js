@@ -14,16 +14,16 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // Password changes only for App Suite. So no login with the updated password is possible anymore.
-Scenario.skip('[C7764] Change password', async (I, users) => {
+Scenario.skip('[C7764] Change password', async ({ I, users }) => {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/core']);
     // wait for form (the button we're interesting in has no meta data)

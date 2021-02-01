@@ -12,15 +12,15 @@
 
 Feature('General > Code Loading');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[XSS] [OXUIB-400] No malicious code execution when code loading fails', async function (I, drive) {
+Scenario('[XSS] [OXUIB-400] No malicious code execution when code loading fails', async function ({ I, drive }) {
     I.login('app=io.ox/files:foo,xx/../../xxx");document.write("XSS");//');
     // will fail if xss was succesfull -> page is overwritten
     drive.waitForApp();

@@ -15,15 +15,15 @@
 
 Feature('Tasks');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C273807] Download infected file', async function (I) {
+Scenario.skip('[C273807] Download infected file', async function ({ I }) {
     const folder = await I.grabDefaultFolder('tasks');
     const { id } = await I.haveTask({ folder_id: folder, title: 'My Subject', note: 'My Description' });
 

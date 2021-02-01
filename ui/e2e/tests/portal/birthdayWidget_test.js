@@ -16,14 +16,14 @@ const _ = require('underscore');
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7492] Birthday', async (I) => {
+Scenario('[C7492] Birthday', async ({ I }) => {
 
     // Create a contact with birthday
     const contactFolderID = await I.grabDefaultFolder('contacts');

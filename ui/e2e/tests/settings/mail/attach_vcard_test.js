@@ -39,16 +39,16 @@ const openMail = (I, subject) => {
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 
-Scenario('[C7775] Append vCard when sending mail', async (I, users) => {
+Scenario('[C7775] Append vCard when sending mail', async ({ I, users }) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     const user = users[0];
 

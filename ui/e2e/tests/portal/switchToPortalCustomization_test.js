@@ -14,14 +14,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7474] Switch to portal customization', (I) => {
+Scenario('[C7474] Switch to portal customization', ({ I }) => {
     I.login('app=io.ox/portal');
     I.waitForText('Customize this page');
     I.click('Customize this page');

@@ -14,16 +14,16 @@
 /// <reference path="../../../steps.d.ts" />
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 
-Scenario('[C7869] Set new start and end of working time', async function (I) {
+Scenario('[C7869] Set new start and end of working time', async function ({ I }) {
     const workingStartTime = '7:00 AM';
     const workingEndTime = '9:00 AM';
 

@@ -17,15 +17,15 @@ const { expect } = require('chai');
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C45021] Generate simple link for sharing', async function (I, drive, dialogs) {
+Scenario('[C45021] Generate simple link for sharing', async function ({ I, drive, dialogs }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -46,7 +46,7 @@ Scenario('[C45021] Generate simple link for sharing', async function (I, drive, 
 });
 
 // TODO: shaky (element (.list-view) is not in DOM or there is no element(.list-view) with text "A subfolder" after 5 sec)
-Scenario('[C252159] Generate link for sharing including subfolders', async function (I, drive, dialogs) {
+Scenario('[C252159] Generate link for sharing including subfolders', async function ({ I, drive, dialogs }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -87,7 +87,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.see('Second subfolder');
 });
 
-Scenario('[C45022] Generate simple link for sharing with password', async function (I, drive, dialogs) {
+Scenario('[C45022] Generate simple link for sharing with password', async function ({ I, drive, dialogs }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
@@ -118,7 +118,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 
 // TODO: works perfect locally but breaks remotely for puppeteer and webdriver
 // Reason: With --no-sandbox, clipboard cannot be accessed
-Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive, dialogs) {
+Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function ({ I, drive, dialogs }) {
     await I.allowClipboardRead();
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -143,7 +143,7 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function (I, drive,
     I.waitForText('Music');
 });
 // TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
-Scenario('[C85625] My Shares default sort order', async function (I, drive, dialogs) {
+Scenario('[C85625] My Shares default sort order', async function ({ I, drive, dialogs }) {
     function share(item) {
         I.retry(5).click(locate('li.list-item').withText(item));
         drive.shareItem('Create sharing link');
@@ -182,7 +182,7 @@ Scenario('[C85625] My Shares default sort order', async function (I, drive, dial
     I.pressKey('Escape');
 });
 
-Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function (I, contexts, users, drive, dialogs) {
+Scenario('[C45026] Edit shared object with multiple users and modify the permissions for a specific user', async function ({ I, users, drive, dialogs }) {
     const mailListView = '.list-view.visible-selection.mail-item',
         smartDropDown = '.smart-dropdown-container.dropdown.open',
         document = '.white-page.letter.plain-text';

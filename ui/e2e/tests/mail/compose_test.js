@@ -13,17 +13,17 @@
 
 Feature('Mail Compose');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // https://testrail.open-xchange.com/index.php?/cases/view/7382
 // TODO: shaky, failed (10 runs on 2019-11-28)
-Scenario.skip('Compose plain text mail', function (I, users, mail) {
+Scenario.skip('Compose plain text mail', function ({ I, users, mail }) {
     const [user] = users;
     // 0) log in to settings and set compose mode to html
     I.login('app=io.ox/settings', { user });

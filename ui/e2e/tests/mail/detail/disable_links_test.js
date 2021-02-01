@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C114335] Links in emails can be disabled on a per-folder basis', async (I, users) => {
+Scenario('[C114335] Links in emails can be disabled on a per-folder basis', async ({ I, users }) => {
 
     var icke = users[0].userdata.email1;
 

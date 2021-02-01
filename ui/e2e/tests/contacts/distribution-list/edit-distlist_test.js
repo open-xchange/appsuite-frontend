@@ -14,17 +14,17 @@
 
 Feature('Contacts > Distribution List > Edit');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 var util = require('./util');
 
-Scenario('Add an existing distribution list', async function (I, contacts, dialogs) {
+Scenario('Add an existing distribution list', async function ({ I, contacts, dialogs }) {
     const title = 'test distribution list one';
 
     I.login('app=io.ox/contacts');
@@ -93,7 +93,7 @@ Scenario('Add an existing distribution list', async function (I, contacts, dialo
     I.see('test distribution list two');
 });
 
-Scenario('[C7373] Update members', async function (I, users, contacts) {
+Scenario('[C7373] Update members', async function ({ I, users, contacts }) {
     await Promise.all([
         users.create(),
         users.create()
@@ -151,7 +151,7 @@ Scenario('[C7373] Update members', async function (I, users, contacts) {
     I.see('john.doe@open-xchange.com');
 });
 
-Scenario('[C7374] Change name', async function (I, users, contacts) {
+Scenario('[C7374] Change name', async function ({ I, users, contacts }) {
     await users.create();
     const testrailID = 'C7374',
         display_name = await util.createDistributionList(I, users, testrailID),
@@ -184,7 +184,7 @@ Scenario('[C7374] Change name', async function (I, users, contacts) {
     });
 });
 
-Scenario('[C7375] Move list', async function (I, users, contacts, dialogs) {
+Scenario('[C7375] Move list', async function ({ I, users, contacts, dialogs }) {
     await users.create();
     const testrailID = 'C7375',
         display_name = await util.createDistributionList(I, users, testrailID);
@@ -217,7 +217,7 @@ Scenario('[C7375] Move list', async function (I, users, contacts, dialogs) {
     });
 });
 
-Scenario('[C7377] Copy list', async function (I, users, contacts, dialogs) {
+Scenario('[C7377] Copy list', async function ({ I, users, contacts, dialogs }) {
     await users.create();
     const testrailID = 'C7377',
         display_name =  await util.createDistributionList(I, users, testrailID);

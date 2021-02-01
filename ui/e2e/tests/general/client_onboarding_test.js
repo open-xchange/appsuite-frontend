@@ -15,15 +15,15 @@
 
 Feature('General > Client Onboarding');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C73767] Platform Availability', function (I) {
+Scenario('[C73767] Platform Availability', function ({ I }) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
@@ -38,7 +38,7 @@ Scenario('[C73767] Platform Availability', function (I) {
     I.see('Apple');
 });
 
-Scenario('[C73768] Device Availability', function (I) {
+Scenario('[C73768] Device Availability', function ({ I }) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
@@ -64,7 +64,7 @@ Scenario('[C73768] Device Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73769] Application Availability', function (I) {
+Scenario('[C73769] Application Availability', function ({ I }) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');
@@ -108,7 +108,7 @@ Scenario('[C73769] Application Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73776] Mail Configuration', async function (I, users) {
+Scenario('[C73776] Mail Configuration', async function ({ I, users }) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');

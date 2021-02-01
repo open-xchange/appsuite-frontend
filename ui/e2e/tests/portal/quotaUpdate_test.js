@@ -15,14 +15,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7495] Quota update', async (I, users, contexts) => {
+Scenario('[C7495] Quota update', async ({ I, users, contexts }) => {
 
     const assert = require('chai').assert;
 

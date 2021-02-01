@@ -12,15 +12,15 @@
 
 Feature('Mailfilter > Blacklist');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C163019] Blacklist mail filter actions', async (I, users, dialogs) => {
+Scenario('[C163019] Blacklist mail filter actions', async ({ I, users, dialogs }) => {
     const [user] = users;
     await I.haveMailFilterRule({
         'rulename': 'TestCaseC163019',
@@ -52,7 +52,7 @@ Scenario('[C163019] Blacklist mail filter actions', async (I, users, dialogs) =>
     I.see('There is no rule defined');
 });
 
-Scenario('[C163020] Blacklist mail filter tests', async (I, users, dialogs) => {
+Scenario('[C163020] Blacklist mail filter tests', async ({ I, users, dialogs }) => {
     const [user] = users;
     await I.haveMailFilterRule({
         rulename: 'TestCaseC163020',
@@ -80,7 +80,7 @@ Scenario('[C163020] Blacklist mail filter tests', async (I, users, dialogs) => {
     I.see('There is no rule defined');
 });
 
-Scenario('[C163021] Blacklist mail filter comparisons', async (I, users, dialogs) => {
+Scenario('[C163021] Blacklist mail filter comparisons', async ({ I, users, dialogs }) => {
     const [user] = users;
     await I.haveMailFilterRule({
         rulename: 'TestCaseC163021',
@@ -109,7 +109,7 @@ Scenario('[C163021] Blacklist mail filter comparisons', async (I, users, dialogs
     I.see('There is no rule defined');
 });
 
-Scenario('[C163022] Blacklist mail filter comparison only for a specfic test', async (I, users, dialogs) => {
+Scenario('[C163022] Blacklist mail filter comparison only for a specfic test', async ({ I, users, dialogs }) => {
     const [user] = users;
     await I.haveMailFilterRule({
         rulename: 'TestCaseC163022',

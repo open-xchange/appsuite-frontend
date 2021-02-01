@@ -14,11 +14,11 @@ const moment = require('moment');
 
 Feature('Portal');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -34,7 +34,7 @@ async function goToDate(I, date) {
     I.retry(5).click({ css: `td[aria-label*="${day}"` });
 }
 
-Scenario('Create new appointment and check display in portal widget', async function (I, portal, calendar, dialogs) {
+Scenario('Create new appointment and check display in portal widget', async function ({ I, portal, calendar, dialogs }) {
     // add one day to secure that the appointment will be in the future
     const day = moment().startOf('day').add('1', 'day').add('1', 'hour');
 

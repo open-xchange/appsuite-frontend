@@ -14,11 +14,11 @@
 
 Feature('Calendar > Import');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -256,7 +256,7 @@ examples.add(['[C104276] Import emClient iCal', 'yahoo_2016_full', function (I) 
     I.seeNumberOfElements(fulltime, 1);
 }]);
 
-Data(examples).Scenario('Import Calendar data', async (I, current, users, dialogs) => {
+Data(examples).Scenario('Import Calendar data', async ({ I, current, users, dialogs }) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForText('My calendars');
     I.waitForText('Birthdays');
