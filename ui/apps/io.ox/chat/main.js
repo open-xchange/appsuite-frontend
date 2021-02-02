@@ -415,10 +415,12 @@ define('io.ox/chat/main', [
 
         resubscribeChat: function (roomId) {
             var model = data.chats.get(roomId);
-            model.toggleRecent().then(function () {
-                this.showChat(roomId);
-                this.resetTabindex(roomId);
-            }.bind(this));
+
+            if (model.isActive()) return this.showChat(roomId);
+
+            model.toggleRecent().then(
+                this.showChat.bind(this, roomId)
+            );
         },
 
         toggleFavorite: function (roomId) {
