@@ -276,7 +276,8 @@ define('io.ox/chat/util', ['gettext!io.ox/chat'], function (gt) {
                     return;
                 }
 
-                this.change(currIndex, { tabindex: true, focus: false, select: false });
+                this.change(currIndex, { tabindex: true, focus: true, select: false });
+                resetSelected(items);
             },
 
             change: function (index, options, items) {

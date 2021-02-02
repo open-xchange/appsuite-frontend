@@ -299,7 +299,7 @@ define('io.ox/chat/main', [
             // try to restore focus
             if (settings.get('mode', 'sticky') === 'sticky') {
                 if (prevState === 'chat') {
-                    refocus = this.$body.find('.accessible-list [tabindex=0]');
+                    refocus = this.$body.find('.accessible-list [tabindex=0]').attr('aria-selected', false);
                 } else {
                     var navigation = this.$body.find('.navigation-actions button');
                     refocus = navigation.eq(['channels', 'files', 'history'].indexOf(prevState));
