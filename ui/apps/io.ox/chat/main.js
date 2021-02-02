@@ -208,7 +208,7 @@ define('io.ox/chat/main', [
             var chat = data.chats.findPrivateRoom(cmd.email);
 
             if (chat) {
-                if (!chat.get('active')) this.resubscribeChat(chat.get('roomId'));
+                if (!chat.get('active')) return this.resubscribeChat(chat.get('roomId'));
                 return this.showChat(chat.get('roomId'));
             }
 
