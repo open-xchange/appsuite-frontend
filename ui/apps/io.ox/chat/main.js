@@ -289,7 +289,7 @@ define('io.ox/chat/main', [
             this.setState({ view: 'empty' });
 
             // try to restore focus
-            if (settings.get('mode') === 'sticky') {
+            if (settings.get('mode', 'sticky') === 'sticky') {
                 if (prevState === 'chat') {
                     refocus = this.$body.find('.accessible-list [tabindex=0]');
                 } else {
