@@ -68,8 +68,8 @@ module.exports = actor({
     },
 
     waitForNetworkTraffic() {
-        this.waitForDetached('.fa-spin.fa-refresh');
-        this.waitForVisible({ css: 'a.apptitle[aria-label="Refresh"]' });
+        this.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        this.waitForVisible({ css: '#io-ox-refresh-icon a.apptitle[aria-label="Refresh"]' });
     },
 
     // Use the next two helpers together. Example that checks for old toolbar to be removed/redrawn after folder change:
@@ -96,9 +96,9 @@ module.exports = actor({
     },
 
     triggerRefresh() {
-        this.clickToolbar('.fa-spin-paused.fa-refresh');
-        this.waitForDetached('.fa-spin.fa-refresh');
-        this.waitForVisible({ css: 'a.apptitle[aria-label="Refresh"]' });
+        this.clickToolbar('#io-ox-refresh-icon .fa-spin-paused');
+        this.waitForDetached('#io-ox-refresh-icon .fa-spin');
+        this.waitForVisible({ css: '#io-ox-refresh-icon a.apptitle[aria-label="Refresh"]' });
     },
 
     async grabBackgroundImageFrom(selector) {
