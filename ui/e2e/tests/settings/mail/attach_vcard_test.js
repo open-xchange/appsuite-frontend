@@ -33,8 +33,8 @@ const openMail = (I, subject) => {
     I.waitForText(subject, 10, '.list-item.selectable');
     I.retry(5).click(subject, '.list-item.selectable');
     // wait for everything being loaded
-    I.waitForVisible('.fa-refresh.fa-spin');
-    I.waitForDetached('.fa-refresh.fa-spin');
+    I.waitForVisible('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
 };
 
 Feature('Settings > Mail');
@@ -68,8 +68,8 @@ Scenario('[C7775] Append vCard when sending mail', async ({ I, users }) => {
     goToMailAndSendMail(I, user, 'Katalog von Pearl');
     I.waitForVisible('~Refresh');
     I.click('~Refresh');
-    I.waitForVisible('.fa-refresh.fa-spin');
-    I.waitForDetached('.fa-refresh.fa-spin');
+    I.waitForVisible('#io-ox-refresh-icon .fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
     openMail(I, 'Katalog von Pearl');
     I.dontSee('1 attachment');
 });

@@ -82,9 +82,9 @@ Scenario('[C7406] - Delete several E-Mails', async function ({ I, mail, users })
     I.selectFolder('Trash');
     let loopcounter = 0;
     while (await I.grabNumberOfVisibleElements('.mail-item .list-item') !== 2) {
-        I.waitForElement('.fa-spin-paused.fa-refresh');
+        I.waitForElement('#io-ox-refresh-icon  .fa-spin-paused');
         I.click('#io-ox-refresh-icon');
-        I.waitForElement('.fa-spin-paused.fa-refresh');
+        I.waitForElement('#io-ox-refresh-icon  .fa-spin-paused');
         I.wait(1);
         loopcounter++;
         if (loopcounter === 15) {

@@ -165,7 +165,7 @@ Scenario('add and removes Mail Filter Rules', async function ({ I, dialogs }) {
     dialogs.clickButton('Save');
     I.waitForDetached('.io-ox-mailfilter-edit .modal-dialog');
     // wait for requests to settle
-    I.waitForDetached('.fa-refresh.fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
     I.waitNumberOfVisibleElements('.settings-detail-pane li.settings-list-item', 1);
 
     // open the saved rule
@@ -198,7 +198,7 @@ Scenario('add and removes Mail Filter Rules', async function ({ I, dialogs }) {
     dialogs.clickButton('Save');
     I.waitForDetached('.io-ox-mailfilter-edit .modal-dialog');
     // wait for requests to settle
-    I.waitForDetached('.fa-refresh.fa-spin');
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin');
     I.waitNumberOfVisibleElements('.settings-detail-pane li.settings-list-item', 1);
 
     // open the saved rule

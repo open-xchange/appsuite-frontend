@@ -26,7 +26,7 @@ After(async function ({ users }) {
 Scenario('add and remove Inbox widget', async function ({ I, portal, dialogs }) {
     I.login('app=io.ox/portal');
     portal.waitForApp();
-    I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin', 20);
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin', 20);
 
     let oldWidgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     portal.addWidget('Inbox');

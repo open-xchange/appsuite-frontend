@@ -65,7 +65,7 @@ const createAppointment = async (subject, participants) => {
         const { I, calendar, dialogs } = inject();
         if (!open) {
             calendar.waitForApp();
-            I.waitForDetached('.fa-spin.fa-refresh');
+            I.waitForDetached('#io-ox-refresh-icon .fa-spin');
             I.waitForText(subject, 5, '.page.current .appointment');
             I.click(subject);
         }

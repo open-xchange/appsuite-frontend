@@ -154,15 +154,15 @@ Scenario('remove mail from thread', async ({ I, users }) => {
     I.waitForFunction(() => window.$('.mail-detail').length === 2);
 
     // make sure nothing is currently loading
-    I.waitForElement('.fa-refresh.fa-spin-paused');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin-paused');
 
     I.waitForElement('.mail-detail.expanded [data-toolbar]');
     I.click('Delete', '.mail-detail.expanded [data-toolbar]');
 
     // wait for refresh here, because the middleware needs to send new data
     // should really happen within 1s
-    I.waitForElement('.fa-refresh.fa-spin', 1);
-    I.waitForElement('.fa-refresh.fa-spin-paused');
+    I.waitForElement('#io-ox-refresh-icon .fa-spin', 1);
+    I.waitForElement('#io-ox-refresh-icon .fa-spin-paused');
     // give listview a moment to update
     I.wait(0.5);
 
