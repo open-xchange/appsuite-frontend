@@ -201,7 +201,7 @@ define([
                     model
                 });
                 const el = view.render().$el;
-                expect(el.find('.icon i.fa-question').length, 'number of font-awesome questionmark icons').to.equal(1);
+                expect($(el.find('.icon svg text')).text(), 'text of font-awesome questionmark icons').to.equal('\uf128');
             });
 
             it('should call ox.launch for apps "path" attribute', function () {
