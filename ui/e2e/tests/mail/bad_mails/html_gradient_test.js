@@ -9,9 +9,9 @@
  *
  * @author Philipp Schumacher <philipp.schumacher@open-xchange.com>
  */
-///  <reference path="../../steps.d.ts" />
+///  <reference path="../../../steps.d.ts" />
 
-Scenario('[C101616] HTML gradient', async function (I, users, mail) {
+Scenario('[C101616] HTML gradient', async function ({ I, users, mail }) {
     const [user] = users;
     await Promise.all([
         I.haveMail({

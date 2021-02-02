@@ -175,7 +175,7 @@ Scenario('[C85625] My Shares default sort order', async function ({ I, drive, di
 
     selectAndWait('My shares');
     I.waitForText('Testfolder', undefined, '.myshares-list');
-    expect(await I.grabTextFrom(locate('li.list-item .displayname'))).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
+    expect(await I.grabTextFromAll(locate('li.list-item .displayname'))).to.deep.equal(['Testfolder', 'testpresentation.ppsm', 'testdocument.rtf', 'document.txt']);
     I.click('Sort by');
     I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Date')));
     I.seeElement(locate('i.fa-check').inside(locate('.dropdown a').withText('Descending')));

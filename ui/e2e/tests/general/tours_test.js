@@ -21,7 +21,7 @@ After(async function ({ users }) {
 });
 
 // skip for now until pipeline can handle the tour plugin
-Scenario('Getting started tour', async function ({ I }) {
+Scenario.skip('Getting started tour', async function ({ I }) {
 
     I.login();
     I.waitForVisible('#io-ox-topbar-dropdown-icon');

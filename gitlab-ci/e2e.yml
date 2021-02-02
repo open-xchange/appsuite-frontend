@@ -148,7 +148,7 @@ generate e2e report:
       - ui/build/allure-report
     expire_in: 1 day
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e.*)$/'
       changes:
         - ui/**/*
       when: always
@@ -173,7 +173,7 @@ publish e2e report:
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e.*)$/'
       changes:
         - ui/**/*
       when: always

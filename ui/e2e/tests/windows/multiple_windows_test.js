@@ -54,8 +54,8 @@ Scenario('Opening multiple windows', async function ({ I, users, calendar, dialo
     // wait until compose window is active
     I.waitForVisible('.io-ox-mail-compose-window.active');
 
-    const composeIndex = await I.grabCssPropertyFrom('.io-ox-mail-compose-window', 'zIndex');
-    const sidePopupIndizes = await I.grabCssPropertyFrom('.io-ox-sidepopup', 'zIndex');
+    const composeIndex = await I.grabCssPropertyFromAll('.io-ox-mail-compose-window', 'zIndex');
+    const sidePopupIndizes = await I.grabCssPropertyFromAll('.io-ox-sidepopup', 'zIndex');
     sidePopupIndizes.map(s => Number.parseInt(s, 10)).forEach(function (sidePopupIndex) {
         expect(Number.parseInt(composeIndex, 10)).to.be.above(sidePopupIndex);
     });

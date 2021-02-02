@@ -25,7 +25,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
 
     const checkIfDisplayNone = async (capability) => {
         I.waitForElement(`.listitem.cap-${capability}`);
-        const displayProperties = await I.grabCssPropertyFrom(locate(`.listitem.cap-${capability}`), 'display');
+        const displayProperties = await I.grabCssPropertyFromAll(locate(`.listitem.cap-${capability}`), 'display');
         const result = displayProperties.every(displayProperty => displayProperty === 'none');
         expect(result, `expected ${capability} section to be hidden`).to.be.true;
     };

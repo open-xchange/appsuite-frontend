@@ -28,7 +28,7 @@ After(async ({ users }) => {
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('Use default font style for new mails', async function ({ I, users, mail }) {
+Scenario('Use default font style for new mails', async ({ I, users, mail }) => {
 
     let [sender] = users;
 
@@ -48,7 +48,7 @@ Scenario('Use default font style for new mails', async function ({ I, users, mai
     });
 });
 
-Scenario('Use default font style in replies', async function ({ I, users, mail }) {
+Scenario('Use default font style in replies', async ({ I, users, mail }) => {
 
     let [sender] = users;
 
@@ -82,7 +82,7 @@ Scenario('Use default font style in replies', async function ({ I, users, mail }
     });
 });
 
-Scenario('[C7392] Send mail with different text highlighting', async function ({ I, users, mail }) {
+Scenario('[C7392] Send mail with different text highlighting', async ({ I, users, mail }) => {
 
     const selectInline = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -221,9 +221,9 @@ Scenario('[C7392] Send mail with different text highlighting', async function ({
         expect(attrs).to.be.empty;
         I.waitForElement(locate('strong').withText(textBold));
         I.waitForElement(locate('em').withText(textItalic));
-        attrs = await I.grabCssPropertyFrom(locate('span').withText(textUnderline), 'textDecoration');
+        attrs = await I.grabCssPropertyFromAll(locate('span').withText(textUnderline), 'textDecoration');
         expect(attrs.join()).to.include('underline');
-        expect((await I.grabCssPropertyFrom(locate('span').withText(textStrikethrough), 'textDecoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFromAll(locate('span').withText(textStrikethrough), 'textDecoration')).join()).to.include('line-through');
         I.waitForElement(locate('sup').withText(textSuperscript));
         I.waitForElement(locate('sub').withText(textSubscript));
         I.waitForElement(locate('code').withText(textCode));
@@ -232,7 +232,7 @@ Scenario('[C7392] Send mail with different text highlighting', async function ({
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async function ({ I, users, mail }) {
+Scenario('[C7393] Send mail with bullet point and numbering - bullet points', async ({ I, users, mail }) => {
 
     let [sender, recipient] = users;
 
@@ -302,7 +302,7 @@ Scenario('[C7393] Send mail with bullet point and numbering - bullet points', as
     });
 });
 
-Scenario('[C7393] Send mail with bullet point and numbering - numbering', async function ({ I, users, mail }) {
+Scenario('[C7393] Send mail with bullet point and numbering - numbering', async ({ I, users, mail }) => {
 
     let [sender, recipient] = users;
 
@@ -375,9 +375,9 @@ Scenario('[C7393] Send mail with bullet point and numbering - numbering', async 
     });
 });
 
-Scenario('[C7394] Send mail with different text alignments', async function ({ I, users, mail }) {
+Scenario('[C7394] Send mail with different text alignments', async ({ I, users, mail }) => {
 
-    const selectAlignment = (action) => {
+    const selectAlignment = action => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
         I.waitForElement((locate('span').withText('Alignment')).inside('.mce-floatpanel'));
         I.click(locate('span.mce-text').withText('Alignment'));
@@ -463,7 +463,7 @@ Scenario('[C7394] Send mail with different text alignments', async function ({ I
     });
 });
 
-Scenario('[C7395] Send mail with text indentations', async function ({ I, users, mail }) {
+Scenario('[C7395] Send mail with text indentations', async ({ I, users, mail }) => {
 
     let [sender, recipient] = users;
 
@@ -553,7 +553,7 @@ Scenario('[C7395] Send mail with text indentations', async function ({ I, users,
     });
 });
 
-Scenario('[C7396] Send mail with different text fonts', async function ({ I, users, mail }) {
+Scenario('[C7396] Send mail with different text fonts', async ({ I, users, mail }) => {
 
     const selectFont = (action) => {
         I.click(locate('button').inside('~Font Family'));
@@ -670,19 +670,19 @@ Scenario('[C7396] Send mail with different text fonts', async function ({ I, use
         const styleWebdings = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textWebdings), 'fontFamily');
 
         expect(styleDefault).to.be.empty;
-        expect(styleArial[styleArial.length - 1]).to.include('arial');
-        expect(styleArialBlack[styleArialBlack.length - 1]).to.include('arial black');
-        expect(styleComicSansMS[styleComicSansMS.length - 1]).to.include('comic sans ms');
-        expect(styleCourierNew[styleCourierNew.length - 1]).to.include('courier new');
-        expect(styleHelvetica[styleHelvetica.length - 1]).to.include('helvetica');
-        expect(styleTerminal[styleTerminal.length - 1]).to.include('terminal');
-        expect(styleVerdana[styleVerdana.length - 1]).to.include('verdana');
-        expect(styleWebdings[styleWebdings.length - 1]).to.include('webdings');
+        expect(styleArial).to.include('Arial');
+        expect(styleArialBlack).to.include('arial black');
+        expect(styleComicSansMS).to.include('comic sans ms');
+        expect(styleCourierNew).to.include('courier new');
+        expect(styleHelvetica).to.include('helvetica');
+        expect(styleTerminal).to.include('terminal');
+        expect(styleVerdana).to.include('verdana');
+        expect(styleWebdings).to.include('webdings');
     });
 });
 
 // combined with [C7383] Compose HTML mail
-Scenario('[C7397] Send mail with different text styles', async function ({ I, users, mail }) {
+Scenario('[C7397] Send mail with different text styles', async ({ I, users, mail }) => {
 
     const selectHeading = (action) => {
         I.click(locate('button').withChild(locate('span').withText('Formats')));
@@ -789,7 +789,7 @@ Scenario('[C7397] Send mail with different text styles', async function ({ I, us
     });
 });
 
-Scenario('[C7398] Send mail with different text sizes', async function ({ I, users, mail }) {
+Scenario('[C7398] Send mail with different text sizes', async ({ I, users, mail }) => {
 
     const selectFontSize = (action) => {
         I.click(locate('button').inside('~Font Sizes'));
@@ -865,12 +865,11 @@ Scenario('[C7398] Send mail with different text sizes', async function ({ I, use
 
     I.waitForVisible({ css: 'iframe.mail-detail-frame' });
     await within({ frame: '.mail-detail-frame' }, async () => {
-        const last = el => el[el.length - 1];
-        const defaultSize = last(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'fontSize'));
-        const size13 = last(await I.grabCssPropertyFrom(locate('span').withText(text13pt), 'fontSize'));
-        const size16 = last(await I.grabCssPropertyFrom(locate('span').withText(text16pt), 'fontSize'));
-        const size36 = last(await I.grabCssPropertyFrom(locate('span').withText(text36pt), 'fontSize'));
-        const size8 = last(await I.grabCssPropertyFrom(locate('span').withText(text8pt), 'fontSize'));
+        const defaultSize = await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'fontSize');
+        const size13 = await I.grabCssPropertyFrom(locate('span').withText(text13pt), 'fontSize');
+        const size16 = await I.grabCssPropertyFrom(locate('span').withText(text16pt), 'fontSize');
+        const size36 = await I.grabCssPropertyFrom(locate('span').withText(text36pt), 'fontSize');
+        const size8 = await I.grabCssPropertyFrom(locate('span').withText(text8pt), 'fontSize');
         const sizes = [];
 
         expect(defaultSize).to.equal('13px');
@@ -893,7 +892,7 @@ function getRGBValue(toConvert) {
     return toConvert;
 }
 
-Scenario('[C7399] Send mail with different text colours', async function ({ I, users, mail }) {
+Scenario('[C7399] Send mail with different text colours', async ({ I, users, mail }) => {
 
     const selectColor = (action) => {
         I.click(locate('.mce-open').inside('~Text color'));
@@ -974,11 +973,11 @@ Scenario('[C7399] Send mail with different text colours', async function ({ I, u
         const rgbAqua = '0,255,255';
         const rgbLime = '0,255,0';
 
-        const valueDefault = getRGBValue(await I.grabCssPropertyFrom(locate('div').withText(defaultText), 'color'));
-        const valueRed = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(redText), 'color'));
-        const valueAqua = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(aquaText), 'color'));
-        const valueLime = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(limeText), 'color'));
-        const valueBlack = getRGBValue(await I.grabCssPropertyFrom(locate('span').withText(blackText), 'color'));
+        const valueDefault = getRGBValue(await I.grabCssPropertyFromAll(locate('div').withText(defaultText), 'color'));
+        const valueRed = getRGBValue(await I.grabCssPropertyFromAll(locate('span').withText(redText), 'color'));
+        const valueAqua = getRGBValue(await I.grabCssPropertyFromAll(locate('span').withText(aquaText), 'color'));
+        const valueLime = getRGBValue(await I.grabCssPropertyFromAll(locate('span').withText(limeText), 'color'));
+        const valueBlack = getRGBValue(await I.grabCssPropertyFromAll(locate('span').withText(blackText), 'color'));
 
         expect(valueDefault).to.include(rgbBlack);
         expect(valueRed).to.include(rgbRed);
@@ -1039,7 +1038,7 @@ const selectFontSize = (I, fontSize) => {
     I.click(locate('span.mce-text').withText(fontSize));
     I.waitForInvisible('.mce-floatpanel');
 };
-Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async function ({ I, users, mail }) {
+Scenario('[C7400] Send mail with multiple different text formatting - set before writting', async ({ I, users, mail }) => {
 
     let [sender, recipient] = users;
 
@@ -1098,16 +1097,16 @@ Scenario('[C7400] Send mail with multiple different text formatting - set before
         const rgbRed = '255,0,0';
         const rgbYellow = '255,255,0';
 
-        expect((await I.grabCssPropertyFrom(span, 'textDecoration')).join()).to.include('line-through');
-        expect((await I.grabCssPropertyFrom(span, 'fontFamily')).join()).to.include('courier new');
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'backgroundColor'))).to.include(rgbYellow);
+        expect((await I.grabCssPropertyFromAll(span, 'textDecoration')).join()).to.include('line-through');
+        expect((await I.grabCssPropertyFromAll(span, 'fontFamily')).join()).to.include('courier new');
+        expect(getRGBValue(await I.grabCssPropertyFromAll(span, 'color'))).to.include(rgbRed);
+        expect(getRGBValue(await I.grabCssPropertyFromAll(span, 'backgroundColor'))).to.include(rgbYellow);
         expect(await I.grabCssPropertyFrom(span, 'textAlign')).to.include('center');
-        expect((await I.grabCssPropertyFrom(span, 'fontSize')).join()).to.include('13');
+        expect((await I.grabCssPropertyFromAll(span, 'fontSize')).join()).to.include('13');
     });
 });
 
-Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async function ({ I, users, mail }) {
+Scenario('[C7400] Send mail with multiple different text formatting - set after writting', async ({ I, users, mail }) => {
 
     let [sender, recipient] = users;
 
@@ -1171,11 +1170,11 @@ Scenario('[C7400] Send mail with multiple different text formatting - set after 
         const rgbRed = '255,0,0';
         const rgbYellow = '255,255,0';
 
-        expect((await I.grabCssPropertyFrom(span, 'textDecoration')).join()).to.include('line-through');
-        expect((await I.grabCssPropertyFrom(span, 'fontFamily')).join()).to.include('courier new');
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'color'))).to.include(rgbRed);
-        expect(getRGBValue(await I.grabCssPropertyFrom(span, 'backgroundColor'))).to.include(rgbYellow);
+        expect(await I.grabCssPropertyFrom(span, 'textDecoration')).to.include('line-through');
+        expect(await I.grabCssPropertyFrom(span, 'fontFamily')).to.include('courier new');
+        expect(getRGBValue(await I.grabCssPropertyFromAll(span, 'color'))).to.include(rgbRed);
+        expect(getRGBValue(await I.grabCssPropertyFromAll(span, 'backgroundColor'))).to.include(rgbYellow);
         expect(await I.grabCssPropertyFrom(span, 'textAlign')).to.include('center');
-        expect((await I.grabCssPropertyFrom(span, 'fontSize')).join()).to.include('13');
+        expect(await I.grabCssPropertyFrom(span, 'fontSize')).to.include('13');
     });
 });

@@ -64,7 +64,7 @@ Scenario.skip('[C85634] Enable/disable tabbed inbox', function ({ I }) {
     I.seeElement('.classic-toolbar.categories');
 });
 
-Scenario('[C85626] Mail categories can be renamed', function (I) {
+Scenario('[C85626] Mail categories can be renamed', function ({ I }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -86,7 +86,7 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
     I.seeTextEquals('C85626-02', SELECTORS.toolbar + ' [data-id="uc2"] .category-name');
 });
 
-Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
+Scenario('[C85626] Categories can be enabled or disabled', function ({ I, mail }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');

@@ -239,7 +239,7 @@ Scenario('[C236832] Navigate by using the mini calendar in folder tree', async (
 
     // Expected Result: The whole month is displayed
     const daysLocator = locate('td').after('.cw').inside('.window-sidepanel .date-picker .grid');
-    const days = new Set(await I.grabTextFrom(daysLocator));
+    const days = new Set(await I.grabTextFromAll(daysLocator));
 
     expect(days.size).to.equal(31);
     _.range(1, 32).forEach(day => expect(days.has(`${day}`)).to.be.true);

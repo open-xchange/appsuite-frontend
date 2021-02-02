@@ -171,7 +171,7 @@ Scenario('[C7742] Mark Task as Undone', async function ({ I, tasks }) {
     I.waitForText('Not started', 5, '.tasks-detailview .badge-notstarted');
 });
 
-Scenario('[C7743] Move single Task', async function ({ I, tasks }, dialogs) {
+Scenario('[C7743] Move single Task', async function ({ I, tasks, dialogs }) {
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7743',
         testrailName = 'Move single Task',
@@ -274,7 +274,7 @@ Scenario('[C7745] Mark several Task as Undone at the same time', async function 
     }
 });
 
-Scenario('[C7746] Move several tasks to an other folder at the same time', async function ({ I, tasks }, dialogs) {
+Scenario('[C7746] Move several tasks to an other folder at the same time', async function ({ I, tasks, dialogs }) {
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7746',
         testrailName = 'Move several tasks to an other folder at the same time',
@@ -369,7 +369,7 @@ Scenario('[C7748] Remove an attachment from a Task', async function ({ I, tasks 
     I.waitForDetached('.tasks-detailview .attachments-container', 30);
 });
 
-Scenario('[C7749] Edit existing Task as participant', async function ({ I, users }, tasks) {
+Scenario('[C7749] Edit existing Task as participant', async function ({ I, users, tasks }) {
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7749',
         testrailName = 'Edit existing Task as participant';
@@ -405,7 +405,7 @@ Scenario('[C7749] Edit existing Task as participant', async function ({ I, users
     I.waitForText(testrailID + ' - 2', 5, '.tasks-detailview .title');
 });
 
-Scenario('[C7750] Edit existing Task in a shared folder', async function ({ I, users }, tasks) {
+Scenario('[C7750] Edit existing Task in a shared folder', async function ({ I, users, tasks }) {
     await I.haveSetting('io.ox/core//autoOpenNotification', false);
     const testrailID = 'C7750',
         testrailName = 'Edit existing Task in a shared folder',
