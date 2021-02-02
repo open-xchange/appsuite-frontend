@@ -100,9 +100,17 @@ define('io.ox/chat/main', [
 
         setState: function (state, payload) {
             var stringified = JSON.stringify(state);
-            if (this.state === stringified) return;
+            if (this.state === stringified) return this.setStateFocus(state);
             this.state = stringified;
             this.onChangeState(_.extend(state, payload));
+        },
+
+        setStateFocus: function (state) {
+            if (state.view === 'chat') {
+                this.$rightside.find('textarea').trigger('focus');
+            } else {
+                a11y.getTabbable(this.$rightside).first().focus();
+            }
         },
 
         onStick: function () {
@@ -263,15 +271,15 @@ define('io.ox/chat/main', [
                     break;
                 case 'history':
                     this.$rightside.append(new History().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 case 'channels':
                     this.$rightside.append(new ChannelList().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 case 'files':
                     this.$rightside.append(new FileList().render().$el);
-                    a11y.getTabbable(this.$rightside).first().focus();
+                    this.setStateFocus(state);
                     break;
                 // no default
             }
