@@ -141,7 +141,7 @@ define([
                 // first action uses title
                 expect(this.toolbar.$('[data-action="io.ox/test/toolbar/actions/one"]').text()).to.equal('One');
                 // second uses icon
-                expect(this.toolbar.$('[data-action="io.ox/test/toolbar/actions/two"] > i.fa').length).to.equal(1);
+                expect(this.toolbar.$('[data-action="io.ox/test/toolbar/actions/two"] > svg.fa').length).to.equal(1);
             });
 
             it('marks actions as disabled', function () {
