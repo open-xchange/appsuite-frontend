@@ -58,6 +58,14 @@ define('io.ox/onboarding/main', [
         });
     }
 
+    function getMailConfig() {
+        var configModel = new Backbone.Model();
+        getOnbboardingConfig('display/mailmanual').then(function (data) {
+            configModel.set('data', data);
+        });
+        return configModel;
+    }
+
     function getCalendarConfig() {
         var configModel = new Backbone.Model();
         getOnbboardingConfig('display/davmanual').then(function (data) {
@@ -88,10 +96,10 @@ define('io.ox/onboarding/main', [
     var scenarios = {
         'windows': {
             'drive': function () { return new views.DownloadView({ link: settings.get('windows/driveapp/url') }); },
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true }); }
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); }
         },
         'android': {
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true }); },
+            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); },
             'mailapp': function () {
                 if (_.device('smartphone')) {
                     return new views.MobileDownloadView({
@@ -128,7 +136,7 @@ define('io.ox/onboarding/main', [
             }
         },
         'macos': {
-            'mailsync': function () { return new views.DownloadConfigView({ type: 'mail' }); },
+            'mailsync': function () { return new views.DownloadConfigView({ type: 'mail', config: getMailConfig() }); },
             'addressbook': function () { return new views.DownloadConfigView({ type: 'carddav', config: getContactsConfig() }); },
             'calendar': function () { return new views.DownloadConfigView({ type: 'caldav', config: getCalendarConfig() }); },
             'drive': function () {
@@ -145,13 +153,15 @@ define('io.ox/onboarding/main', [
                 if (_.device('smartphone')) {
                     return new views.DownloadConfigView({
                         type: 'mail',
-                        userData: config.userData
+                        userData: config.userData,
+                        config: getMailConfig()
                     });
                 }
                 return new views.DownloadQrView({
                     type: 'mail',
                     title: util.titles.ios.mailsync,
-                    description: gt('Please scan this code with your phone\'s camera:')
+                    description: gt('Please scan this code with your phone\'s camera:'),
+                    config: getMailConfig()
                 });
             },
             'mailapp': function () {

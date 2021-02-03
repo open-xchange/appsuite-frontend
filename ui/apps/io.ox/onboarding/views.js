@@ -19,14 +19,6 @@ define('io.ox/onboarding/views', [
     'gettext!io.ox/core/onboarding'
 ], function (DisposableView, http, capabilities, util, gt) {
 
-    function getAccountData() {
-        return require(['io.ox/core/api/account']).then(function (api) {
-            return api.get(0).then(function (data) {
-                return data;
-            });
-        });
-    }
-
     function createQr(url) {
         return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
             var qr;
@@ -72,7 +64,7 @@ define('io.ox/onboarding/views', [
             // show manual config additionally
             if (this.url) return this.renderQr();
 
-            this.syncView = this.type === 'mail' ? new MailSyncView({}) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({ config: this.config }) :
                 new SyncView({ config: this.config });
 
             this.$el.busy().append(
@@ -174,7 +166,7 @@ define('io.ox/onboarding/views', [
         },
 
         render: function () {
-            this.syncView = this.type === 'mail' ? new MailSyncView({}) :
+            this.syncView = this.type === 'mail' ? new MailSyncView({ config: this.config }) :
                 new SyncView({ config: this.config });
 
             this.$el.append(
@@ -243,7 +235,7 @@ define('io.ox/onboarding/views', [
             this.userData = options.userData;
             this.type = options.title;
             this.expanded = options.expanded || false;
-            this.mailConfig = new Backbone.Model();
+            this.mailConfig = options.config;
             this.listenTo(this.mailConfig, 'change', this.updateMailConfig);
         },
 
@@ -270,7 +262,6 @@ define('io.ox/onboarding/views', [
                     ]
             );
             this.renderManualConfig();
-            this.getMailConfig();
             return this;
         },
 
@@ -319,30 +310,25 @@ define('io.ox/onboarding/views', [
             );
         },
 
-        getMailConfig: function () {
-            var self = this;
-            getAccountData().then(function (data) {
-                self.mailConfig.set(data);
-            });
-        },
 
         updateMailConfig: function () {
+            this.mailConfigData = this.mailConfig.get('data');
             this.$('.values.incoming').empty()
                 .append(
-                    $('<div class="server">').text(this.mailConfig.get('mail_server')),
-                    $('<div class="port">').text(this.mailConfig.get('mail_port')),
-                    $('<div class="username">').text(this.mailConfig.get('login')),
-                    $('<div class="connection">').text(this.mailConfig.get('mail_secure') ? 'SSL/TLS' : ''),
+                    $('<div class="server">').text(this.mailConfigData.imapServer),
+                    $('<div class="port">').text(this.mailConfigData.imapPort),
+                    $('<div class="username">').text(this.mailConfigData.imapLogin),
+                    $('<div class="connection">').text(this.mailConfigData.imapSecure ? 'SSL/TLS' : 'STARTTLS'),
                     $('<div class="pass">').text(gt('Your account password'))
                 );
             this.$('.values.outgoing').empty()
-            .append(
-                $('<div class="server">').text(this.mailConfig.get('transport_server')),
-                $('<div class="port">').text(this.mailConfig.get('transport_port')),
-                $('<div class="username">').text(this.mailConfig.get('login')),
-                $('<div class="connection">').text(this.mailConfig.get('transport_secure') ? 'SSL/TLS' : ''),
-                $('<div class="pass">').text(gt('Your account password'))
-            );
+                .append(
+                    $('<div class="server">').text(this.mailConfigData.smtpServer),
+                    $('<div class="port">').text(this.mailConfigData.smtpPort),
+                    $('<div class="username">').text(this.mailConfigData.smtpLogin),
+                    $('<div class="connection">').text(this.mailConfigData.smtpSecure ? 'SSL/TLS' : 'STARTTLS'),
+                    $('<div class="pass">').text(gt('Your account password'))
+                );
         },
 
         onToggle: function (e) {
