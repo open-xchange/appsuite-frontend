@@ -17,8 +17,8 @@ define('io.ox/onboarding/util', [
 ], function (settings, gt) {
 
     var productNames = {
-        'mail': settings.get('productNames/mail'),
-        'drive': settings.get('productNames/drive')
+        'mail': settings.get('productNames/mail', gt.pgettext('native app', 'OX Mail')),
+        'drive': settings.get('productNames/drive', gt.pgettext('native app', 'OX Drive'))
     };
 
     var titles = {
