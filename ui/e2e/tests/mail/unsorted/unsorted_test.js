@@ -196,7 +196,7 @@ Scenario('[C7386] Write mail to CC recipients', async ({ I, users, mail }) => {
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
 
-    // lgin and check with user2
+    // login and check with user2
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     mail.selectMail(testrailID);
@@ -716,8 +716,8 @@ Scenario('[C163026] Change from display name when sending a mail', async ({ I, u
     I.clickDropdown('Edit names');
 
     dialogs.waitForVisible();
-    I.waitForVisible('.modal-dialog input[title="Use custom name"]', 5); // check for checkbox to be visible
-    I.click('input[title="Use custom name"]', dialogs.locators.body);
+    I.waitForVisible('.name-overwrite-view .checkbox input[type="checkbox"]', 5); // check for checkbox to be visible
+    I.click('.name-overwrite-view .checkbox input[type="checkbox"]', dialogs.locators.body);
     I.fillField('.modal-body input[title="Custom name"]', timestamp);
     dialogs.clickButton('Edit');
     I.waitForDetached('.modal-dialog');
