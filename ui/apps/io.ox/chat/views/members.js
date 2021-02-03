@@ -36,7 +36,7 @@ define('io.ox/chat/views/members', [
         },
 
         renderEntry: function (model) {
-            if (api.isMyself(model.id)) return;
+            if (!model) return;
             return $('<li>').attr('data-id', model.id).append(
                 $('<div class="picture">').append(
                     new AvatarView({ model: model }).render().$el,
@@ -46,7 +46,7 @@ define('io.ox/chat/views/members', [
                     $('<strong>').text(model.getName()),
                     $('<span>').text(model.id)
                 ),
-                $('<div class="member-controls">').append(
+                !api.isMyself(model.id) && $('<div class="member-controls">').append(
                     $('<button class="remove">')
                         .attr('title', gt('Remove member'))
                         .append(util.svg({ icon: 'fa-times' }))
@@ -57,7 +57,15 @@ define('io.ox/chat/views/members', [
         render: function () {
             this.$el.empty().append(
                 $('<ul class="list-unstyled">').append(
-                    this.collection.map(this.renderEntry.bind(this))
+                    this.renderEntry(
+                        this.collection.find(function (entry) {
+                            return api.isMyself(entry.id);
+                        })
+                    ),
+                    this.collection.map(function (entry) {
+                        if (api.isMyself(entry.id)) return;
+                        return this.renderEntry(entry);
+                    }.bind(this))
                 )
             );
             return this;
