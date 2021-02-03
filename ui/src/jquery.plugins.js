@@ -224,26 +224,34 @@
         'fa-cog': '\uf013',
         'fa-comment': '\uf075',
         'fa-comment-o': '\uf0e5',
+        'fa-download': '\uf019',
         'fa-envelope': '\uf0e0',
         'fa-envelope-o': '\uf003',
+        'fa-external-link-square': '\uf14c',
+        'fa-eye': '\uf06e',
         'fa-font': '\uf031',
         'fa-folder-open-o': '\uf115',
+        'fa-info-circle': '\uf05a',
         'fa-mail-forward': '\uf064',
         'fa-paperclip': '\uf0c6',
+        'fa-play': '\uf04b',
         'fa-phone': '\uf095',
         'fa-question': '\uf128',
+        'fa-question-circle': '\uf059',
         'fa-refresh': '\uf021',
         'fa-reply': '\uf112',
         'fa-reply-all': '\uf122',
         'fa-search': '\uf002',
+        'fa-search-minus': '\uf010',
+        'fa-search-plus': '\uf00e',
         'fa-square-o': '\uf096',
         'fa-star': '\uf005',
+        'fa-stop': '\uf04d',
         'fa-times': '\uf00d',
         'fa-times-circle': '\uf00d',
         'fa-th-large': '\uf009',
         'fa-th': '\uf00a',
         'fa-trash-o': '\uf014',
-        'fa-question-circle': '\uf059',
         'fa-window-maximize': '\uf2d0',
         'fa-window-minimize': '\uf2d1',
         'fa-window-compress': '\uf066',
@@ -252,6 +260,8 @@
 
     $.icon = function (name, title, classList) {
         var icon = faClassHash[name] || '';
+        // give notice so devs can add missing icons
+        if (ox.debug && name && !faClassHash[name]) console.error('Svg icon not found. Please add it to the list', name, title, classList);
         title = title ? '<title>' + title + '</title>' : '';
         classList = classList ? ' ' + classList : '';
         return '<svg viewbox="0 0 100 100" class="fa fasvg ' + classList + '" aria-hidden="true">' + title + '<text x="50" y="86" text-anchor="middle">' + icon + '</text></svg>';

@@ -521,7 +521,6 @@ define('io.ox/backbone/views/actions/util', [
             tooltip = enabled !== false && (link.tooltip || (icon && title)),
             checkmarkFn = link.checkmarkFn;
         // icon vs title
-        console.log(icon);
         if (icon) $el.attr('title', title).append($.icon(icon));
         else if (title) $el.text(title);
         if (_.isFunction(checkmarkFn)) $el.prepend($('<i class="fa fa-fw" aria-hidden="true">').addClass(checkmarkFn(baton) ? 'fa-check' : 'fa-none'));

@@ -66,7 +66,7 @@ define('io.ox/files/toolbar', [
             'viewer': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-eye',
+                icon: 'fa-eye',
                 //#. used as a verb here. label of a button to view files
                 title: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
@@ -74,21 +74,21 @@ define('io.ox/files/toolbar', [
             'download': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-download',
+                icon: 'fa-download',
                 title: gt('Download'),
                 ref: 'io.ox/files/actions/download'
             },
             'download-folder': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-download',
+                icon: 'fa-download',
                 title: gt('Download'),
                 ref: 'io.ox/files/actions/download-folder'
             },
             'delete': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-trash-o',
+                icon: 'fa-trash-o',
                 title: function (baton) {
                     var model = folderApi.pool.getModel(baton.folder_id);
                     return model && folderApi.is('trash', model.toJSON()) ? gt('Delete forever') : gt('Delete');

@@ -127,7 +127,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'zoomout': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-search-minus',
+                icon: 'fa-search-minus',
                 title: gt('Zoom out'),
                 section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomout',
@@ -138,7 +138,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'zoomin': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-search-plus',
+                icon: 'fa-search-plus',
                 title: gt('Zoom in'),
                 section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
@@ -169,7 +169,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'autoplaystart': {
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
-                icon: 'fa fa-play',
+                icon: 'fa-play',
                 title: gt('Slideshow'),
                 tooltip: gt('Run slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystart',
@@ -180,7 +180,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'autoplaystop': {
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
-                icon: 'fa fa-stop',
+                icon: 'fa-stop',
                 title: gt('Stop slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystop',
                 customize: function () {
@@ -192,7 +192,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
-                icon: 'fa fa-info-circle',
+                icon: 'fa-info-circle',
                 title: gt('View details'),
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
@@ -201,7 +201,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                icon: 'fa fa-external-link-square',
+                icon: 'fa-external-link-square',
                 title: gt('Pop out standalone viewer'),
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
@@ -210,7 +210,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'help': {
                 prio: 'hi',
-                icon: 'fa fa-question-circle',
+                icon: 'fa-question-circle',
                 title: gt('Help'),
                 ref: TOOLBAR_ACTION_ID + '/help',
                 customize: function () {
@@ -229,7 +229,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'close': {
                 prio: 'hi',
                 mobile: 'hi',
-                icon: 'fa fa-times',
+                icon: 'fa-times',
                 title: gt('Close'),
                 tooltip: gt('Close viewer'),
                 ref: TOOLBAR_ACTION_ID + '/close'
@@ -255,7 +255,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: _.device('ios && ios < 12') ? 'lo' : 'hi',      // download is active in toolbar for ios >= 12 and all other devices
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     section: 'export',
                     ref: Util.getRefByModelSource('drive')
@@ -271,7 +271,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'open': {
                     prio: 'lo',
                     mobile: _.device('!ios || ios >= 12') ? 'lo' : 'hi',    // 'window.open button' active in toolbar for ios < 12, for all other devices located in the burger menu
-                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
+                    icon: _.device('ios && ios < 12') ? 'fa-download' : '',
                     title: gt('Open attachment'),
                     section: 'export',
                     ref: 'io.ox/files/actions/open'
@@ -336,7 +336,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('mail')
                 },
@@ -371,7 +371,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('pim')
                 },
@@ -401,7 +401,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     section: 'export',
                     ref: Util.getRefByModelSource('guardDrive')

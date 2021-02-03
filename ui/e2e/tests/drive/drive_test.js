@@ -96,7 +96,7 @@ Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     I.waitForText(timestamp2, 30);
     I.waitForText('Versions (2)');
     I.wait(0.2);
-    I.waitForVisible({ css: '[aria-label="Close viewer"] .fa-times' }, 10);
+    I.waitForVisible({ css: '[aria-label="Close viewer"] .fasvg' }, 10);
 
     I.retry(5).clickToolbar('~Close viewer');
     I.waitForDetached('.io-ox-viewer', 30);
