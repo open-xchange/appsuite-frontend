@@ -262,7 +262,6 @@ define('io.ox/onboarding/views', [
                     )
                 );
             }
-            console.log('expanded', this, this.expanded);
             this.$el.append(
                 this.expanded ? $('<div class="manual-container">') :
                     [
