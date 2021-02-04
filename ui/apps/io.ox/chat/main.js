@@ -105,9 +105,15 @@ define('io.ox/chat/main', [
             this.onChangeState(_.extend(state, payload));
         },
 
+        switchToFloating: function () {
+            var cid = this.getCurrentMessageCid();
+            this.model.set('sticky', false);
+            this.scrollToMessage(cid);
+        },
+
         onStick: function () {
             var cid = this.getCurrentMessageCid();
-            FloatingWindow.View.prototype.onStick.apply(this);
+            this.model.set('sticky', true);
             this.scrollToMessage(cid);
         },
 
@@ -135,7 +141,7 @@ define('io.ox/chat/main', [
                 case 'open-chat': this.resubscribeChat(data.id); break;
                 case 'unsubscribe-chat': this.unsubscribeChat(data.id); break;
                 case 'add-member': this.addMember(data.id); break;
-                case 'switch-to-floating': this.model.set('sticky', false); break;
+                case 'switch-to-floating': this.switchToFloating(); break;
                 case 'discard-app': this.hideApp(); break;
                 case 'toggle-favorite': this.toggleFavorite(data.id); break;
                 case 'download': this.download(data); break;
@@ -411,10 +417,8 @@ define('io.ox/chat/main', [
 
         toggleWindowMode: function () {
             var mode = this.model.get('sticky') ? 'sticky' : 'floating';
-            var cid = this.getCurrentMessageCid();
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
-            this.scrollToMessage(cid);
         },
 
         // we offer this via command because it's needed at different places, e.g. messages and file overview
