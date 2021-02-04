@@ -12,7 +12,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-Feature('Settings > Security > 2-Step Verification');
+Feature.skip('Settings > Security > 2-Step Verification');
 const OTPAuth = require('otpauth');
 const { I } = inject();
 
