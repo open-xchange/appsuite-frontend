@@ -65,7 +65,7 @@ Scenario('[C8402] Search in different folders', async ({ I, users }) => {
 
     // 5. Change the search folder to the subfolder
 
-    I.click('Inbox', '.classic-toolbar');
+    I.click('Inbox', '.io-ox-find .classic-toolbar [data-toggle="dropdown"]');
     I.waitForVisible('.smart-dropdown-container');
 
     I.click('More');

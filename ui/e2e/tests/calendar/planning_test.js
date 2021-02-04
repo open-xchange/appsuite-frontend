@@ -170,9 +170,9 @@ Scenario('check planning view options and minimizing behavior', async function (
     I.waitForVisible('a.control.next');
     I.waitForVisible('.fa-minus');
     I.waitForVisible('.fa-plus');
-    I.see('Options');
+    I.see('Options', '.scheduling-app-header');
 
-    I.click('Options');
+    I.click('Options', '.scheduling-app-header');
 
     I.waitForVisible({ css: '[data-name="compact"]' });
     I.waitForVisible({ css: '[data-name="showFineGrid"]' });
@@ -351,7 +351,7 @@ Scenario('[C252157] Fine grid for high zoom levels ', async function ({ I, users
     addAttendee(I, users[1].get('name'), '.freetime-view-header');
     addAttendee(I, users[2].get('name'), '.freetime-view-header');
 
-    I.click('Options');
+    I.click('Options', '.scheduling-app-header');
     I.click('Show fine grid');
     I.pressKey('Escape');
 
