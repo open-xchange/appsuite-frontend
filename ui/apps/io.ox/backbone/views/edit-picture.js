@@ -188,12 +188,14 @@ define('io.ox/backbone/views/edit-picture', [
                             // ROTATE LEFT
                             $('<button type="button" class="btn" data-action="rotate-left">').append(
                                 $('<i class="fa fa-rotate-left fa-lg">'),
-                                $.txt('Rotate left')
+                                //#. button to rotate a contact image
+                                $.txt(gt('Rotate left'))
                             ),
                             // ROTATE RIGHT
                             $('<button type="button" class="btn" data-action="rotate-right">').append(
                                 $('<i class="fa fa-rotate-right fa-lg">'),
-                                $.txt('Rotate right')
+                                //#. button to rotate a contact image
+                                $.txt(gt('Rotate right'))
                             )
                         )
                         .on('click', 'button', function (e) {
