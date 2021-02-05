@@ -99,7 +99,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
 
             this.listenTo(this.baton.member, 'add remove', function (ctx, col) {
                 var all = col.map(function (m) {
-                    if (_.isNumber(m.getContactID())) {
+                    // simple regex to check if the contact id string is a number (note: _.isNumber doesn't work for strings, parseInt has issues with mixed strings like 123abc)
+                    if (/^-?\d+$/.test(m.getContactID())) {
                         return {
                             id: m.getContactID(),
                             folder_id: m.get('folder_id'),
