@@ -404,7 +404,7 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
-
+                    tokenfieldView.$el.data('bs.tokenfield').update();
                 }).on('tokenfield:next', function () {
                     extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
                 }).on('tokenfield:removetoken', function (e) {
