@@ -26,7 +26,7 @@ define('io.ox/backbone/mini-views/alarms', [
             DISPLAY: gt('Notification'),
             AUDIO: gt('Audio'),
             EMAIL: gt('Mail'),
-            SMS: gt('SMS')
+            'X-SMS': gt('SMS')
         },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -139,7 +139,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
             this.phoneNumber = options.phoneNumber;
-            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('SMS');
+            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('X-SMS');
             this.list = $('<div class="alarm-list">');
 
             if (this.model) {
@@ -276,7 +276,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     case 'DISPLAY':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
-                    case 'SMS':
+                    case 'X-SMS':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         if (!alarm.attendees && self.phoneNumber) alarm.attendees = [{ uri: 'tel:' + self.phoneNumber }];
                         break;

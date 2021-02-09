@@ -27,6 +27,10 @@ define('io.ox/core/main/stages', [
 
     var getAutoLaunchDetails = function (str) {
         var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
+        if (/\.\./.test(app)) {
+            console.error('app names must not contain relative paths');
+            return { app: undefined };
+        }
         return { app: (/\/main$/).test(app) ? app : app + '/main', method: method, name: app.replace(/\/main$/, '') };
     };
 

@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define(function () {
-    describe('require static files', function () {
+    describe.only('require static files', function () {
         var fakeServer;
 
         function mkModule(name) {
@@ -51,7 +51,7 @@ define(function () {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
                 });
 
-                ox.serverConfig.limitRequestLine = 100;
+                ox.serverConfig.limitRequestLine = 115;
                 testModules = ['tests/longList1', 'tests/longList2', 'tests/longList3'];
                 testModules.push('tests/longList4', 'tests/longList5');
 
@@ -62,9 +62,9 @@ define(function () {
                     fakeServer.restore();
                     delete ox.serverConfig.limitRequestLine;
 
-                    expect(recordAppsLoad.calledWith(3), 'Loaded 3 modules').to.be.true;
-                    expect(recordAppsLoad.calledWith(2), 'Loaded 2 modules').to.be.true;
-                    expect(recordAppsLoad.calledTwice, 'apps/load called two times').to.be.true;
+                    expect(recordAppsLoad.firstCall.calledWith(3), 'Loaded 2 modules').to.be.true;
+                    expect(recordAppsLoad.secondCall.calledWith(2), 'Loaded 3 modules').to.be.true;
+                    expect(recordAppsLoad.callCount, 'apps/load called two times').to.equal(2);
                 });
             });
         });
