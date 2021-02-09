@@ -162,7 +162,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
     mail.selectMail('Testsubject');
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
-    I.see('3 attachments');
+    I.waitForText('3 attachments', 5, '.mail-detail-pane');
 
     // workflow 12: Reply e-mail with attachment and re-adds attachments of original mail
     I.click('Reply');
@@ -180,7 +180,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
     mail.selectMail('Testsubject');
     I.see('Testsubject', '.mail-detail-pane');
     I.waitForVisible('.attachments');
-    I.see('2 attachments'); // has 2 attachments as one of the attachments is inline
+    I.waitForText('2 attachments', 5, '.mail-detail-pane'); // has 2 attachments as one of the attachments is inline
 });
 
 Scenario('Compose with inline image, which is removed again', async function ({ I, users, mail }) {

@@ -2,7 +2,7 @@ const { I } = inject();
 
 module.exports = {
     openChat() {
-        I.waitForVisible('~Chat');
+        I.waitForVisible('~Chat', 15);
         I.retry(3).click('~Chat');
         I.waitForVisible('.ox-chat', 15);
     },
@@ -52,7 +52,7 @@ module.exports = {
     },
     sendMessage(content) {
         within('.ox-chat .chat-rightside', async () => {
-            I.waitForElement('.controls');
+            I.waitForElement('~Message');
             I.fillField('~Message', content);
             I.pressKey('Enter');
             I.waitForElement(locate('.message.myself .body').withText(content));

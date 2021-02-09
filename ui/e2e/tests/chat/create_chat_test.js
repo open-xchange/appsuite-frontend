@@ -353,7 +353,7 @@ Scenario('Create new group chat from appointment', async ({ I, dialogs, calendar
                 { entity: user3.userdata.id }
             ]
         });
-        I.login('app=io.ox/calendar&perspective=week', { user: user1 });
+        I.login('app=io.ox/calendar&perspective=week:week', { user: user1 });
         calendar.waitForApp();
         I.waitForText(subject, 5, '.appointment');
         I.retry(5).click(subject, '.appointment');

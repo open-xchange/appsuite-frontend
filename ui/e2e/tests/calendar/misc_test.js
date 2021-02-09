@@ -850,7 +850,7 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
     updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
     await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
 
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&perspective=week:week');
 
     I.waitForText(subject);
     I.click(subject);

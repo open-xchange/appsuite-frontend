@@ -21,7 +21,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8817] - Send E-Mail to contact', function ({ I, users, search, contacts }) {
+Scenario('[C8817] - Send E-Mail to contact', function ({ I, mail, users, search, contacts }) {
     const testrailID = 'C8817';
     const subject = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -37,11 +37,11 @@ Scenario('[C8817] - Send E-Mail to contact', function ({ I, users, search, conta
     I.fillField('.io-ox-mail-compose [name="subject"]', '' + testrailID + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, testrailID);
     I.seeInField({ css: 'textarea.plain-text' }, testrailID);
-    I.click('Send');
-    I.waitForElement('.fa-spin-paused');
+    mail.send();
     I.wait(1);
     I.logout();
     I.login('app=io.ox/mail', { user: users[0] });
+    mail.waitForApp();
     I.waitForElement('.list-item[aria-label*="' + testrailID + ' - ' + subject + '"]');
     I.doubleClick('.list-item[aria-label*="' + testrailID + ' - ' + subject + '"]');
     I.see(testrailID + ' - ' + subject);

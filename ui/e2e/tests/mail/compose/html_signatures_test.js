@@ -182,7 +182,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     I.say('📢 reply to that mail', 'blue');
-    I.click('Reply');
+    I.clickToolbar('Reply');
     I.waitForVisible('.io-ox-mail-compose-window .editor iframe');
     I.wait(1);
 
