@@ -41,6 +41,8 @@ Scenario('Leave and view a group and get re-added', async ({ I, users, chat, dia
 
         chat.fillNewGroupForm(groupTitle, emails);
         dialogs.clickButton('Create chat');
+        I.waitForDetached('.modal-dialog');
+
 
         chat.sendMessage('Hey group!');
     });

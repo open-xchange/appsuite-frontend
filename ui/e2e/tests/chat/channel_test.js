@@ -147,6 +147,7 @@ Scenario('Cannot create or edit channel to have the same name', async ({ I, dial
 
     chat.fillNewChannelForm(channelTitle);
     I.click(locate('button').withText('Create channel'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.waitForElement('~Close chat');
@@ -190,6 +191,7 @@ Scenario('Preview, join and leave a channel', async ({ I, users, chat }) => {
 
         chat.fillNewChannelForm(channelTitle);
         I.click(locate('button').withText('Create channel'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
 
         I.waitForElement('.ox-chat .controls');
         I.fillField('Message', 'Hello everyone!');

@@ -98,6 +98,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm(groupTitle, emails);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         chat.sendMessage('Second message');
         chat.sendMessage('Third message');
@@ -109,6 +110,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitle);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('First message');
     });
 
@@ -187,6 +189,7 @@ Scenario('Check layouts: compact, standard and detailed', async ({ I, users, con
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('Hey group!');
     chat.sendMessage('Second message');
     chat.sendMessage('Third message');
@@ -198,6 +201,8 @@ Scenario('Check layouts: compact, standard and detailed', async ({ I, users, con
     I.clickDropdown('Channel');
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
+
     chat.sendMessage('First message');
 
     // open settings

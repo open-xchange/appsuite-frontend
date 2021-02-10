@@ -42,6 +42,7 @@ Scenario.skip('Search for a word - full text', async ({ I, users, chat }) => {
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('Kairo Mumbai Berlin Lima');
     chat.sendMessage('Berlin');
 
@@ -88,6 +89,7 @@ Scenario('Search for a group name', async ({ I, users, chat }) => {
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate('.btn-primary').withText('Create chat'));
+    I.waitForDetached('.modal-dialog');
     I.waitForElement('~Close chat', 3, '.ox-chat');
     I.click('~Close chat', '.ox-chat');
 
@@ -117,6 +119,7 @@ Scenario('Search for a channel name', async ({ I, users, contexts, chat, dialogs
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitleA);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
         I.waitForElement('~Close chat', 3, '.ox-chat');
@@ -127,6 +130,7 @@ Scenario('Search for a channel name', async ({ I, users, contexts, chat, dialogs
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitleB);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
         I.waitForElement('~Close chat', 3, '.ox-chat');

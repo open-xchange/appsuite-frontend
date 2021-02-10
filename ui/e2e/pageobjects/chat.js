@@ -52,6 +52,7 @@ module.exports = {
     },
     sendMessage(content) {
         within('.ox-chat .chat-rightside', async () => {
+            I.waitForVisible('.controls');
             I.waitForElement('~Message');
             I.fillField('~Message', content);
             I.pressKey('Enter');

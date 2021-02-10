@@ -53,6 +53,7 @@ Scenario('Can change my presence state which will be updated', async ({ I, users
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm(groupTitle, emails);
         dialogs.clickButton('Create chat');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         I.click('~Close chat', '.ox-chat');
         I.waitForText('New Chat');

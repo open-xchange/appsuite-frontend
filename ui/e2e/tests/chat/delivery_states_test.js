@@ -76,6 +76,7 @@ Scenario('Update delivery states in groups', async ({ I, users, chat }) => {
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm(groupTitle, emails);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
 
         I.waitForElement('.delivery.server');
@@ -139,6 +140,7 @@ Scenario('There are no delivery states for channels', async ({ I, users, context
 
     chat.fillNewChannelForm('Channel ' + (+new Date()));
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.fillField('Message', 'Hello everyone!');

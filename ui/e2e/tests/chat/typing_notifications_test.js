@@ -77,6 +77,7 @@ Scenario('Typing notifications will appear for multiple users typing', async ({ 
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm('Test Group', [users[1].userdata.email1, users[2].userdata.email1]);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
     });
 

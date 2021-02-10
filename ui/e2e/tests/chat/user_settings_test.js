@@ -84,6 +84,7 @@ Scenario('Sort and group chats', async ({ I, users, contexts, chat, dialogs }) =
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('Hey group!');
     I.click('~Close chat', '.ox-chat');
 
@@ -94,6 +95,7 @@ Scenario('Sort and group chats', async ({ I, users, contexts, chat, dialogs }) =
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
     chat.sendMessage('First message');
+    I.waitForDetached('.modal-dialog');
     I.click('~Close chat', '.ox-chat');
 
     I.waitForText(channelTitle, 3, 'li[aria-label="Chats"] > ul > li:nth-child(1)');

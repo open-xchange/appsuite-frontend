@@ -209,6 +209,7 @@ Scenario('Create new group chat', async ({ I, users, chat, dialogs }) => {
         I.waitForDetached('.edit-picture');
         dialogs.clickButton('Create chat');
 
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         I.click('~Close chat', '.ox-chat');
         I.waitForFunction(async () => $('.chat-list .group.avatar.image').css('background-image') !== 'none', 10);
@@ -244,6 +245,8 @@ Scenario('Create new group chat from floating window via dropdown', async ({ I, 
 
     chat.fillNewGroupForm(groupTitle, emails);
     dialogs.clickButton('Create chat');
+    I.waitForDetached('.modal-dialog');
+
 
     I.waitForElement('.ox-chat .controls');
     I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
@@ -267,6 +270,7 @@ Scenario('Create new group chat from floating window via icon', async ({ I, user
 
     chat.fillNewGroupForm(groupTitle, emails);
     dialogs.clickButton('Create chat');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
@@ -355,6 +359,7 @@ Scenario('Create new group chat from appointment', async ({ I, dialogs, calendar
         });
         I.login('app=io.ox/calendar&perspective=week:week', { user: user1 });
         calendar.waitForApp();
+        chat.openChat();
         I.waitForText(subject, 5, '.appointment');
         I.retry(5).click(subject, '.appointment');
         I.waitForElement('.io-ox-sidepopup');
@@ -414,6 +419,8 @@ Scenario('Create new channel', async ({ I, users, contexts, chat, dialogs }) => 
 
         chat.fillNewChannelForm(channelTitle);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
+
 
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Hello everyone!');
@@ -447,6 +454,7 @@ Scenario('Create new channel from floating window via dropdown', async ({ I, use
 
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group-avatar.image').css('background-image') !== 'none', 10);
@@ -468,6 +476,8 @@ Scenario('Create new channel from floating window via icon', async ({ I, users, 
 
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
+
 
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);

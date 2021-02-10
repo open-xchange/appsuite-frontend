@@ -211,6 +211,7 @@ Scenario('User can make a zoom call via command within a group', async ({ I, use
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm('Test group', [users[1].userdata.email1, users[2].userdata.email1]);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         I.fillField('~Message', '/zoom');
         I.pressKey('Enter');
@@ -254,6 +255,8 @@ Scenario('User can make a jitsi call via command within a group', async ({ I, us
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm('Test group', [users[1].userdata.email1, users[2].userdata.email1]);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
+
         chat.sendMessage('Hey group!');
         I.fillField('~Message', '/jitsi');
         I.pressKey('Enter');

@@ -69,6 +69,7 @@ Scenario('Receive email notifications from groups', async ({ I, users, chat }) =
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm('Test group', [users[1].userdata.email1]);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('First message');
         I.click('~Close chat', '.ox-chat');
 
@@ -138,6 +139,7 @@ Scenario.skip('Do only receive email notifications from private chats', async ({
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm('Test group', [users[1].userdata.email1]);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('First message');
     I.click('~Close chat', '.ox-chat');
     // create private chat
@@ -171,6 +173,7 @@ Scenario.skip('Receive email notifications from channels', async ({ I, users, co
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitle);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hello everyone!');
     });
 
