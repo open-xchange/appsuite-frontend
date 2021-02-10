@@ -14,18 +14,18 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7801] Keep filtered mail', async function (I, users, mail, mailfilter) {
+Scenario('[C7801] Keep filtered mail', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -54,7 +54,7 @@ Scenario('[C7801] Keep filtered mail', async function (I, users, mail, mailfilte
     I.waitForText('C7801', 5, '.subject');
 });
 
-Scenario('[C7802] Discard filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7802] Discard filtered mail', async function ({ I, users, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -86,7 +86,7 @@ Scenario('[C7802] Discard filtered mail', async function (I, users, mailfilter) 
 
 });
 
-Scenario('[C7803] Redirect filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7803] Redirect filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -124,7 +124,7 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users, mailfilter)
 
 });
 
-Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7804] Move to Folder filtered mail', async function ({ I, users, mailfilter, mail, dialogs }) {
 
     const folder = 'TestCase0389';
 
@@ -139,31 +139,35 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailf
     mailfilter.newRule('TestCase0389');
     mailfilter.addSubjectCondition('TestCase0389');
     mailfilter.addSimpleAction('File into');
-
     I.click('Select folder');
     I.waitForVisible(locate('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow'));
 
+    dialogs.waitForVisible();
     I.click('.folder-picker-dialog [data-id="virtual/myfolders"] .folder-arrow');
     I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`, 5);
     I.click(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"]`);
     I.waitForVisible(`.folder-picker-dialog [data-id="default0/INBOX/${folder}"].selected`, 5);
     I.wait(1);
-    I.click('Select');
+    dialogs.clickButton('Select');
+    I.waitForDetached('.folder-picker-dialog');
+    I.waitForText('File into', 5, '.actions .filter-settings-view');
+    I.seeInField('.actions .filter-settings-view [name="into"]', `INBOX/${folder}`);
 
     mailfilter.save();
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose mail
-    I.clickToolbar('Compose');
+    mail.newMail();
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
     I.wait(1);
     I.fillField('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', users[0].get('primaryEmail'));
     I.fillField('.io-ox-mail-compose [name="subject"]', 'TestCase0389');
+    I.seeInField('.io-ox-mail-compose [name="subject"]', 'TestCase0389');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-
-    I.click('Send');
+    mail.send();
 
     I.waitForVisible('~Sent, 1 total. Right click for more options.', 30);
     I.wait(1);
@@ -178,7 +182,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailf
 
 });
 
-Scenario('[C7805] Reject with reason filtered mail', async function (I, users, mail, mailfilter) {
+Scenario('[C7805] Reject with reason filtered mail', async function ({ I, users, mail, mailfilter }) {
     const [user1, user2] = users;
 
     await I.haveSetting({
@@ -215,7 +219,7 @@ Scenario('[C7805] Reject with reason filtered mail', async function (I, users, m
 
 });
 
-Scenario('[C7806] Mark mail as filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7806] Mark mail as filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -247,7 +251,7 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users, mailfil
 
 });
 
-Scenario('[C7807] Tag mail with filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7807] Tag mail with filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -282,7 +286,7 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users, mailfi
 
 });
 
-Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7809] Mark mail as deleted filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

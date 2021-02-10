@@ -15,22 +15,22 @@ const expect = require('chai').expect;
 
 Feature('Portal');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('add and remove Inbox widget', async function (I, portal, dialogs) {
+Scenario('add and remove Inbox widget', async function ({ I, portal, dialogs }) {
     I.login('app=io.ox/portal');
     portal.waitForApp();
     I.waitForDetached('#io-ox-refresh-icon .fa-refresh.fa-spin', 20);
 
-    let [oldWidgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
+    let oldWidgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
     portal.addWidget('Inbox');
-    let [widgetId] = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
+    let widgetId = await I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
 
     expect(oldWidgetId).not.equal(widgetId);
     let title = await I.grabTextFrom(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .title`);

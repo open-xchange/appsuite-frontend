@@ -13,8 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 
-const moment = require('moment'),
-    path = require('path');
+const moment = require('moment');
 
 const actions = new DataTable(['buttonText', 'className', 'emailTitle', 'itipStatus']);
 // itipStatus needs to be adjusted as soon as OXUIB-206 is fixed
@@ -24,39 +23,43 @@ actions.add(['Decline', 'declined', 'declined', 'You declined this appointment']
 
 Feature('Calendar > iTIP');
 
-Before(async (users) => {
-    await Promise.all([
-        users.create(),
-        users.create(users.getRandom(), { id: process.env.CONTEXT_ID + 50 })
-    ]);
+Before(async ({ users }) => {
+    await users.create();
+
 });
 
-After(async (contexts, users) => {
-    await Promise.all([
-        users.removeAll(),
-        contexts.removeAll()
-    ]);
+After(async ({ users }) => {
+    await users.removeAll();
+
 });
-Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, users, current) {
+
+Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail, users, current, contexts }) {
+    const ctx = await contexts.create();
+    const externalUser = await users.create(users.getRandom(), ctx);
+    await Promise.all([
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: users[0] }),
+        I.haveSetting({ 'io.ox/calendar': { viewView: 'week:week' } }, { user: externalUser })
+    ]);
+
     // 1.) User#A: Create an appointment with User#B
-    const startDate = moment().startOf('hour').add(1, 'hour');
-    const endDate = moment().startOf('hour').add(3, 'hour');
-    session('Alice', async () => {
-        I.login('app=io.ox/calendar');
+    const startDate = moment().add(1, 'week').startOf('day').add(8, 'hour');
+    const endDate = moment().add(1, 'week').startOf('day').add(11, 'hour');
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar&perspective=week:week');
         calendar.waitForApp();
         calendar.newAppointment();
         I.fillField('Subject', 'MySubject');
         await calendar.setDate('startDate', startDate);
         await calendar.setDate('endDate', endDate);
-        I.fillField(calendar.locators.starttime, startDate.format('h:MM A'));
+        I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
         I.clearField(calendar.locators.endtime);
-        I.fillField(calendar.locators.endtime, endDate.format('h:MM A'));
+        I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
         await calendar.addParticipant(users[1].userdata.primaryEmail, false);
         I.click('Create');
         I.waitForDetached('.io-ox-calendar-edit-window');
     });
     // 2.) User#B: Read the iTIP mail
-    session('Bob', async () => {
+    await session('Bob', async () => {
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('New appointment: MySubject', 30);
         mail.selectMail('New appointment: MySubject');
@@ -64,24 +67,26 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForText('Accept');
         I.waitForText('Tentative');
         I.waitForText('Decline');
-        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
         // 3.) User#B: Accept the appointment
         I.click(current.buttonText);
         I.waitForText(`You have ${current.emailTitle} the appointment`);
         // 4.) User#B: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
-        calendar.switchView('Week');
+        I.waitForVisible('~Next Week');
+        I.click('~Next Week');
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
+        I.waitForEnabled('.page.current .week .appointment .title');
         I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
     });
     // 5.) User#A: Read the iTIP mail
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.openApp('Mail');
         I.waitForText(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`);
         // 6.) User#A: Accept changes
@@ -100,10 +105,11 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         // 7.) User#A: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
-        calendar.switchView('Week');
+        I.click('~Next Week');
         I.waitForInvisible('.page.current .workweek');
         I.waitForVisible('.page.current .week');
         I.waitForVisible('.page.current .week .appointment .title');
+        I.waitForEnabled('.page.current .week .appointment .title');
         I.click('.page.current .week .appointment .title');
         I.waitForElement('.io-ox-sidepopup');
         I.waitForElement(`.io-ox-sidepopup .participant a.accepted[title="${users[0].userdata.primaryEmail}"]`);
@@ -113,14 +119,14 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForElement(`.io-ox-sidepopup .participant a.declined[title="${users[0].userdata.primaryEmail}"]`);
         I.waitForElement(`.io-ox-sidepopup .participant a.${current.className}[title="${users[1].userdata.primaryEmail}"]`);
     });
-    session('Bob', () => {
+    await session('Bob', () => {
         // NO iTIP mail is sent to User#B.
         I.openApp('Mail');
         I.refreshPage();
         I.dontSee(`${users[0].userdata.display_name} declined the invitation: MySubject`);
     });
     // 10.) User#A: Delete the appointment
-    session('Alice', () => {
+    await session('Alice', () => {
         I.click('Delete');
         I.waitForText('Add a message to the notification email for the other participants');
         I.fillField('comment', 'MyComment');
@@ -129,12 +135,12 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
         I.waitForDetached('.appointment [aria-label^="MySubject"]');
     });
     // 11.) User#B: Read the iTIP mail
-    session('Bob', () => {
+    await session('Bob', () => {
         I.refreshPage(); // maybe create reload function in page object
         I.waitForText('Appointment canceled: MySubject');
         mail.selectMail('Appointment canceled: MySubject');
         I.waitForElement('.mail-detail-frame');
-        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+        I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
         I.waitForText(current.itipStatus);
         I.waitForText('MyComment');
         // 12.) User#B: Delete
@@ -149,19 +155,21 @@ Data(actions).Scenario('[C241073] OX - OX', async function (I, calendar, mail, u
     });
 });
 
-Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, calendar) {
+Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail, calendar, contexts }) {
+    const ctx = await contexts.create();
+    await users.create(users.getRandom(), ctx);
     // 1.) User#A: Create an appointment with attachment with User#B
-    const startDate = moment().startOf('hour').add(1, 'hour');
-    const endDate = moment().startOf('hour').add(3, 'hour');
+    const startDate = moment().add(1, 'day').startOf('day').add(8, 'hours');
+    const endDate = startDate.clone().add(2, 'hours');
     I.login('app=io.ox/calendar', { user: users[0] });
     calendar.waitForApp();
     calendar.newAppointment();
     I.fillField('Subject', 'MySubject');
     await calendar.setDate('startDate', startDate);
     await calendar.setDate('endDate', endDate);
-    I.fillField(calendar.locators.starttime, startDate.format('h:MM A'));
+    I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
     I.clearField(calendar.locators.endtime);
-    I.fillField(calendar.locators.endtime, endDate.format('h:MM A'));
+    I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
     await calendar.addParticipant(users[1].userdata.primaryEmail, false);
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
@@ -178,15 +186,12 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForText('Accept');
     I.waitForText('Tentative');
     I.waitForText('Decline');
-    I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:MM – ') + endDate.format('h:MM A')}`);
+    I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
     I.click('Accept');
     I.waitForText('You have accepted the appointment');
     // 4.) User#B: Download and verify the appointment
-    I.openApp('Calendar');
+    I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
-    calendar.switchView('Week');
-    I.waitForInvisible('.page.current .workweek');
-    I.waitForVisible('.page.current .week');
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
     I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
@@ -195,10 +200,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download');
-    I.amInPath(path.relative(global.codecept_dir, path.join(global.output_dir, 'downloads')));
+    I.amInPath('/build/e2e/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile(path.resolve(global.codecept_dir, 'e2e/media/files/generic/testdocument.odt'));
+    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
     I.logout();
     // 5.) User#A: Read the iTIP mail
     I.login('app=io.ox/mail', { user: users[0] });
@@ -211,11 +216,8 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.click('Accept changes');
     I.waitForInvisible('.mail-detail-frame');
     // 7.) User#A: Download and verify the appointment
-    I.openApp('Calendar');
+    I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
-    calendar.switchView('Week');
-    I.waitForInvisible('.page.current .workweek');
-    I.waitForVisible('.page.current .week');
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
     I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
@@ -224,13 +226,14 @@ Scenario('[C241128] Attachments in iTIP mails', async function (I, users, mail, 
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download');
-    I.amInPath(path.relative(global.codecept_dir, path.join(global.output_dir, 'downloads')));
+    I.amInPath('/build/e2e/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile(path.resolve(global.codecept_dir, 'e2e/media/files/generic/testdocument.odt'));
+    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+
 });
 
-Scenario('[C241126] iTIP mails without appointment reference', async function (I, users, mail, calendar) {
+Scenario('[C241126] iTIP mails without appointment reference', async function ({ I, mail, calendar }) {
     // 1.) Import the attached mail 'mail3.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_3.eml' });
     // 2.) Read the mail3
@@ -275,4 +278,40 @@ Scenario('[C241126] iTIP mails without appointment reference', async function (I
     // 10.) 'Delete'
     I.click('Delete');
     I.retry(5).dontSee('Appointment canceled: #1');
+});
+
+Scenario('[Bug 63767] Error when creating appointment from email', async function ({ I, users, mail }) {
+
+    const userMail = users[0].userdata.email1;
+
+    await I.haveMail({
+        attachments: [{
+            content: 'Blubber',
+            content_type: 'text/plain',
+            disp: 'inline'
+        }],
+        from: [['Julius Caesar', userMail]],
+        subject: 'Blub',
+        to: [['Julius Caesar', userMail]]
+    });
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    // select mail and invite to appointment
+    mail.selectMail('Blub');
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
+    I.click('~More actions', '.detail-view-header');
+    I.waitForText('Invite to appointment', '.dropdown.open .dropdown-menu');
+    I.click('Invite to appointment', '.dropdown.open .dropdown-menu');
+
+    // same as in calendar helper
+    I.waitForVisible(locate({ css: '.io-ox-calendar-edit-window' }).as('Edit Dialog'));
+    I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+    I.fillField('Subject', 'Going to the pub');
+    I.pressKey('Pagedown');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/contact_picture.png');
+    I.click('Create', '.io-ox-calendar-edit-window');
+    // there should be no backend error
+    I.waitForDetached('.io-ox-calendar-edit-window', 5);
 });

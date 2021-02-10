@@ -195,7 +195,7 @@ define('io.ox/tours/whats-new', [
     });
 
     if (settings.get('whatsNew/menuEntry', true)) {
-        ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+        ext.point('io.ox/core/appcontrol/right/account').extend({
             id: 'whats-new',
             index: 260,
             extend: function () {

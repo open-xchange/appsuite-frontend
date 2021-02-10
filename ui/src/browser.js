@@ -45,7 +45,8 @@
         firefoxIOS,
         browserLC = {},
         isTouch,
-        nativeNoopener;
+        nativeNoopener,
+        mainTab;
 
     // supported browsers
     us.browserSupport = {
@@ -231,7 +232,7 @@
     isTouch = checkTouch();
 
     // https://mathiasbynens.github.io/rel-noopener/
-    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13 || us.browser.EdgeChromium >= 72;
+    nativeNoopener = us.browser.chrome >= 72 || us.browser.safari >= 13 || us.browser.EdgeChromium >= 72 || us.browser.firefox >= 66;
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -277,6 +278,10 @@
     if (us.browser.android && display.large) display.tablet = true;
     display.desktop = !mobileOS;
     us.displayInfo = display;
+
+    // main tab? (currently just detecting the opposite case)
+    mainTab = location.href.indexOf('office?app') === -1;
+
     // extend underscore utilities
     var underscoreExtends = {
 
@@ -313,7 +318,7 @@
         },
 
         // combination of browser & display
-        device: memoize(function (condition, debug) {
+        device: memoize(function (condition) {
             // add support for language checks
             var misc = {}, locale = (ox.locale || 'en_US').toLowerCase();
             misc[locale] = true;
@@ -323,6 +328,7 @@
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);
+            misc.maintab = mainTab;
             // debug
             if (condition === 'debug' || condition === 1337) {
                 // fallback to _.extend if Object.assign does not exist
@@ -336,9 +342,6 @@
                 match = match.toLowerCase();
                 return browserLC[match] || display[match] || misc[match];
             });
-            if (debug) {
-                console.debug(condition);
-            }
             try {
                 /*eslint no-new-func: 0*/
                 return new Function('return !!(' + condition + ')')();
@@ -373,7 +376,7 @@
         // be graceful and return true here as default
         var supported = true, checked = [];
         for (var b in us.platformSupport) {
-            if (us.browser[b] && (us.browser[b] <= us.platformSupport[b])) {
+            if (us.browser[b] && (us.browser[b] < us.platformSupport[b])) {
                 supported = false;
                 checked.push(b);
             }

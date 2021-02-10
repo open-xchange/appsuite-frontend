@@ -15,15 +15,15 @@
 
 Feature('Mail > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8402] Search in different folders', async (I, users) => {
+Scenario('[C8402] Search in different folders', async ({ I, users }) => {
 
     // Precondition: Some emails are in the inbox- and in a subfolder and have the subject "test".
 

@@ -53,11 +53,6 @@ define('io.ox/core/main/apps', [
         requires: 'calendar',
         refreshable: true
     });
-    ui.createApp({
-        name: 'io.ox/calendar/edit',
-        requires: 'calendar',
-        refreshable: true
-    });
 
     // Contacts
     ui.createApp({
@@ -69,11 +64,6 @@ define('io.ox/core/main/apps', [
         searchable: true,
         settings: true,
         icon: icons['io.ox/contacts']
-    });
-    ui.createApp({
-        name: 'io.ox/contacts/edit',
-        requires: 'contacts',
-        refreshable: true
     });
     ui.createApp({
         name: 'io.ox/contacts/detail',
@@ -121,14 +111,20 @@ define('io.ox/core/main/apps', [
         icon: icons['io.ox/tasks']
     });
     ui.createApp({
-        name: 'io.ox/tasks/edit',
-        requires: 'tasks',
-        refreshable: true
-    });
-    ui.createApp({
         name: 'io.ox/tasks/detail',
         requires: 'tasks',
         refreshable: true
+    });
+
+    // Chat
+    ui.createApp({
+        id: 'io.ox/chat',
+        name: 'io.ox/chat',
+        title:  gt.pgettext('app', 'Chat'),
+        requires: 'chat',
+        device: '!smartphone',
+        settings: true,
+        icon: icons['io.ox/chat']
     });
 
     // remove debug switch, once it is out of prototype state
@@ -162,8 +158,9 @@ define('io.ox/core/main/apps', [
         name: 'io.ox/search',
         title: gt('Search'),
         requires: 'search',
+        device: 'smartphone',
         settings: false,
-        visible: false
+        icon: icons['io.ox/search']
     });
 
     // Settings

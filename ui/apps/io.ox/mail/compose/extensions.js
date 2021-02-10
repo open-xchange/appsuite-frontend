@@ -244,11 +244,11 @@ define('io.ox/mail/compose/extensions', [
 
         buttons: {
             discard: function (baton) {
-                if (_.device('!smartphone') && !baton.model.keepDraftOnClose()) return;
+                if (_.device('!smartphone')) return;
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(baton.model.keepDraftOnClose() ? gt('Delete') : gt('Discard'))
+                        .text(gt('Discard'))
                         .appendTo(this)
                 );
             },
@@ -871,7 +871,6 @@ define('io.ox/mail/compose/extensions', [
             };
         }()),
 
-        // TOOO-784: streamline
         toggleToolbar: function (baton) {
             if (_.device('smartphone')) return;
 
@@ -898,10 +897,11 @@ define('io.ox/mail/compose/extensions', [
 
             // toggle state
             status();
-            baton.config.on('change:editorMode', status);
+            baton.config.on('change:editorMode change:desktop', status);
             function status() {
-                var isTiny = baton.config.get('editorMode') !== 'text';
-                parent.toggleClass('disabled', !isTiny);
+                var isTiny = baton.config.get('editorMode') !== 'text',
+                    isDesktop = baton.config.get('desktop') === true;
+                parent.toggleClass('disabled', !isTiny || !isDesktop);
             }
 
             parent.append(node);

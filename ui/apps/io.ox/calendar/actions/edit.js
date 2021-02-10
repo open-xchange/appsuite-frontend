@@ -19,7 +19,7 @@ define('io.ox/calendar/actions/edit', [
     'use strict';
 
     return function (data) {
-        // allow editing the series on last occurence. This allows people to prolong the series by changing the rrule
+        // allow editing the series on last occurrence. This allows people to prolong the series by changing the rrule
         util.showRecurrenceDialog(data, { allowEditOnLastOccurence: true }).done(function (action) {
             if (action === 'cancel') return;
 

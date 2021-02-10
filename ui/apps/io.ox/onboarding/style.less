@@ -1,0 +1,315 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2020 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Maik Schäfer <maik.schaefer@open-xchange.com>
+ */
+
+@media (max-width: @smartphone-breakpoint) {
+    .wizard-step, #apps, #setup {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        text-align: left;
+        background-color: @white;
+        font-size: 14px;
+        padding-top: 0;
+
+        #dialog-title {
+            text-align: left;
+        }
+
+/*         .progress-steps:after{
+            left: 12px;
+        } */
+    }
+    .wizard-backdrop {
+        z-index: 999;
+    }
+}
+
+.wizard-step {
+    @border-color: #e5e5e5;
+    border-radius: 10px;
+    height: 704px;
+    width: 600px;
+    max-width: 800px;
+
+
+    .connect-wizard{
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        .wizard-header{
+            flex: 0 1 auto;
+            padding: 40px 32px 16px 32px;
+            .wizard-title {
+                font-size: 18px;
+                font-weight: bold;
+                padding: 0;
+            }
+            .close {
+                display: none;
+            }
+        }
+
+        .wizard-content {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            padding: 16px 32px;
+            overflow-y: auto;
+
+            .progress-container {
+                flex: 0 1 auto;
+                width: 100%;
+
+                    .progress-steps{
+                        position: relative;
+                        list-style: none;
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0 16px 24px 16px;
+                        margin: 0;
+
+                        &:after {
+                            content: "";
+                            height: 1px;
+                            width: ~"calc(100% - 99px)";
+                            background-color: @gray;
+                            position: absolute;
+                            top: 24px;
+                            left: 48px;
+                            z-index: -1;
+                        }
+
+                        li {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+
+                            .progress-btn {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                border: 3px solid @border-color;
+                                padding: 0;
+                                background-color: @border-color;
+                                height: 48px;
+                                width: 48px;
+                                border-radius: 100%;
+                                color: @hc-gray;
+                                font-size: 24px;
+                                font-weight: 700;
+
+                                &:focus {
+                                    outline: 0;
+                                    border-color: @blue;
+                                }
+
+                                &:disabled {
+                                    cursor: default;
+                                    opacity: inherit;
+                                }
+                            }
+
+                            &.active {
+
+                                .progress-btn {
+                                    border-color: @blue;
+                                    background: @blue;
+                                    color: white;
+                                }
+
+                                span.progress-description {
+                                    font-weight: 700;
+                                }
+                            }
+
+                            span.progress-description {
+                                text-align: center;
+                                line-height: initial;
+                                font-size: 16px;
+                                color: #333333;
+                                margin-top: 8px;
+                                white-space: nowrap;
+                            }
+                        }
+                    }
+            }
+
+            .content-container {
+                display: flex;
+                flex-direction: column;
+                flex: 1 1 auto;
+                //justify-content: center;
+
+                .description {
+                    margin: 8px 0 16px;
+
+                    p {
+                        margin-bottom: 12px;
+                    }
+
+                    .prompt {
+                        font-weight: bold;
+                    }
+                }
+
+                .content-list {
+                    list-style: none;
+                    padding: 0;
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid darken(@border-color, 20%);
+                    border-radius: 5px;
+
+                    li {
+                        min-height: 64px;
+                        text-align: center;
+                        line-height: 64px;
+                        border-bottom: 2px solid @border-color;
+
+                        .list-btn {
+                            background-color: @white;
+                            border: none;
+                            font-size: 16px;
+                            display: flex;
+                            width: 100%;
+                            align-items: center;
+                            padding: 0 16px;
+
+                            .icon-next {
+                                margin-left: auto;
+                            }
+                            .icon-btn {
+                                font-size: 20px;
+                                margin-right: 20px;
+                            }
+                        }
+                    }
+
+                    :first-child .list-btn {
+                        border-radius: 5px 5px 0 0;
+                    }
+
+                    :last-child {
+                        border: none;
+                        .list-btn {
+                            border-radius: 0 0 5px 5px;
+                        }
+                    }
+                }
+                .manual-container {
+                    margin-top: 16px;
+                }
+
+                //MailSyncView
+                .manual-description {
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                }
+
+                pre {
+                    display: flex;
+                    margin: 0 0 16px 0;
+                    font-size: 14px;
+                        .title {
+                            margin: 0 16px 0 0 ;
+                            font-weight: 700;
+                        }
+                    }
+
+                //DownloadQRView
+                .qrcode {
+                    align-self: center;
+                    margin: auto;
+                    min-height: 212px;
+                }
+                .link-info {
+                    margin: auto 0 16px 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                //DownloadView
+                .download {
+                    align-self: center;
+                    font-size: 18px;
+                    margin: 10% 0 10% 0;
+                    padding: 16px;
+                    background-color: @blue;
+                    border-color: @blue-dark;
+                    .fa-download {
+                        margin-left: 8px;
+                    }
+                }
+
+                //MobileDownloadView
+                &.mobile-download {
+                    justify-content: center;
+                    text-align: center;
+
+                    .app-icon {
+                        width: 50vw;
+                        height: 50vw;
+                        max-width: 120px;
+                        max-height: 120px;
+                        background-size: cover;
+                        margin: 0 auto;
+
+                        &.mailapp.playstore {
+                            background-image: url(@onboarding-mailapp-googleplay);
+                        }
+                        &.driveapp.playstore {
+                            background-image: url(@onboarding-mailapp-appstore);
+                        }
+                        &.mailapp.appstore {
+                            background-image: url(@onboarding-mailapp-appstore);
+                        }
+                        &.driveapp.appstore {
+                            background-image: url(@onboarding-driveapp-appstore);
+                        }
+                        &.driveapp.macappstore {
+                            background-image: url(@onboarding-driveapp-appstore);
+                        }
+                    }
+                    .store-icon {
+                        max-height: 45px;
+                    }
+                    .app-info {
+                        margin: 16px 0 32px 0;
+                        font-size: 24px;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+
+        .wizard-footer {
+            /* position: absolute;
+            bottom: 0;
+            min-height: 64px; */
+            flex: 0 1 auto;
+            padding: 16px 32px 8px;
+            width: 100%;
+            border-top: 1px solid @border-color;
+
+            .btn {
+                float: right;
+                padding: 8px 40px;
+                margin: 0 0 8px 8px;
+                background-color: @white;
+            }
+        }
+    }
+}

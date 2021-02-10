@@ -115,7 +115,7 @@ define('plugins/portal/recentfiles/register', [
                         return $('<li class="item file" tabindex="0">')
                             .data('item', file)
                             .append(
-                                $('<div class="title">').text(_.noI18n(_.ellipsis(filename), { max: 25 })), $.txt(' '),
+                                $('<div class="title">').text(_.noI18n(_.ellipsis(filename, { max: 25 }))), $.txt(' '),
                                 $('<div class="clearfix">').append(
                                     // show WHO changed it OR file size
                                     $('<span class="pull-left ellipsis">').text(

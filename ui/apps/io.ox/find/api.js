@@ -15,8 +15,9 @@ define('io.ox/find/api', [
     'io.ox/core/http',
     'io.ox/core/cache',
     'io.ox/core/api/factory',
-    'settings!io.ox/contacts'
-], function (http, cache, apiFactory, settings) {
+    'settings!io.ox/contacts',
+    'io.ox/core/api/jobs'
+], function (http, cache, apiFactory, settings, jobsAPI) {
 
     'use strict';
 
@@ -47,7 +48,8 @@ define('io.ox/find/api', [
                     method: 'PUT',
                     params: {
                         action: 'query',
-                        module: ''
+                        module: '',
+                        allow_enqueue: 'true'
                     },
                     data: {
                         facets: [],
@@ -145,10 +147,32 @@ define('io.ox/find/api', [
      * @return { deferred}   returns results
      */
     api.query = function (options) {
-        var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
+        var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options),
+            def = $.Deferred();
         // console.log('query');
         // console.log(JSON.stringify(opt.data.facets));
-        return http[opt.method](opt);
+
+        // uncomment this when you need to test long running jobs
+        // opt.data.size = 100000;
+
+        http[opt.method](opt).then(function (data) {
+            if (data && data.job) {
+                // long running job. Add to jobs list and return here
+                //#. %1$s: Folder name
+                jobsAPI.addJob({
+                    id: data.job,
+                    showIn: 'find',
+                    successCallback: def.resolve,
+                    failCallback: def.reject
+                });
+                return;
+            }
+            def.resolve(data);
+        }, function (error) {
+            def.reject(error);
+        });
+
+        return def;
     };
 
     return api;

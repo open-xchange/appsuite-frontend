@@ -90,4 +90,24 @@ input.error { border-color: #b94a48; }
     .form-group {
         position: relative;
     }
+
+    // prevent overflowing toolbar actions (customized set, OXUIB-464)
+    .tinymce-toolbar .mce-container-body.mce-flow-layout {
+        display: flex;
+        overflow: hidden;
+    }
+
+    // same style as compose
+    .mce-toolbar .mce-btn-group {
+        border-left: 0;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .mce-btn-group-visible-xs:not(:last-of-type) {
+        border-right: 1px solid #d9d9d9;
+        padding-right: 8px;
+        margin-right: 7px;
+    }
+
 }

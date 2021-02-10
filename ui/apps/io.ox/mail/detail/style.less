@@ -108,3 +108,24 @@
         background-color: @brand-primary;
     }
 }
+
+.notifications .federated-sharing {
+    // same color as .well
+    background-color: #F5F5F5;
+    .item {
+        padding: 16px 40px;
+        .password {
+            max-width: 370px;
+            margin: 16px 0;
+            &:empty { display: none; }
+        }
+        .controls {
+            display: inline-block;
+            &:empty { display: none; }
+            .btn {
+                margin-right: 8px;
+                margin-top: 8px;
+            }
+        }
+    }
+}

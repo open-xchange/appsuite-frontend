@@ -80,6 +80,7 @@ define('io.ox/backbone/views/window', [
     var taskbar = new TaskbarView().render();
 
     var WindowModel = Backbone.Model.extend({
+
         defaults: {
             minimized: false,
             active: true,
@@ -89,7 +90,11 @@ define('io.ox/backbone/views/window', [
             title: '',
             showInTaskbar: true,
             size: 'width-md', // -xs, -sm, -md, -lg,
-            wasMoved: false
+            wasMoved: false,
+            quitOnEscape: true,
+            stickable: false,
+            resizable: true,
+            closable: false
         },
 
         initialize: function (options) {
@@ -106,6 +111,7 @@ define('io.ox/backbone/views/window', [
         events: {
             'click [data-action="minimize"]':    'onMinimize',
             'click [data-action="close"]':       'onQuit',
+            'click [data-action="stick"]':       'onStick',
             'click [data-action="normalize"]':   'toggleMode',
             'click [data-action="maximize"]':    'toggleMode',
             'dblclick .floating-header':         'toggleMode',
@@ -115,12 +121,13 @@ define('io.ox/backbone/views/window', [
         },
 
         initialize: function (options) {
+
             this.options = options || {};
             this.listenTo(this, 'dispose', remove);
 
             if (!this.model) {
                 this.model = new WindowModel(
-                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode')
+                    _(this.options).pick('title', 'minimized', 'active', 'closable', 'win', 'taskbarIcon', 'width', 'height', 'showInTaskbar', 'size', 'mode', 'floating', 'sticky', 'stickable', 'resizable', 'quitOnEscape')
                 );
             }
 
@@ -132,12 +139,13 @@ define('io.ox/backbone/views/window', [
                 'change:mode': this.onChangeMode,
                 'change:minimized': this.toggle,
                 'change:count': this.onChangeCount,
+                'change:sticky': this.onChangeStickyMode,
                 'close': function () { this.$el.remove(); }
             });
             this.$body = this.options.$body || $('<div>');
             this.$body = this.$el.find('.window-container-center').length > 0 ? this.$el.find('.window-container-center') : this.$body;
             collection.add(this.model);
-            if (!this.model.get('lazy')) new TaskbarElement({ model: this.model }).render();
+            if (!this.model.get('lazy') && this.model.get('showInTaskbar')) new TaskbarElement({ model: this.model }).render();
 
             //bind some functions
             _.bindAll(this, 'drag', 'stopDrag', 'keepInWindow', 'onResize');
@@ -148,15 +156,20 @@ define('io.ox/backbone/views/window', [
 
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
-            return $('<div class="controls" role="toolbar">').append(
+            var controls = [];
+            if (this.model.get('stickable')) controls.push($('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Stick to the right side')).append($('<i class="fa fa-window-maximize fa-rotate-90" aria-hidden="true">').attr('title', gt('Stick to the right side'))));
+            if (this.model.get('resizable')) {
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="minimize">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))),
+                controls.push($('<button type="button" class="btn btn-link" data-action="minimize" tabindex="-1">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))));
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal),
+                controls.push($('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal));
                 //#. window resize
-                $('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal),
-                this.model.get('closable') ? $('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))) : ''
-            );
+                controls.push($('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal));
+            }
+            if (this.model.get('closable')) controls.push($('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))));
+            // Remove tabindex attribute from first attribute to make it tabable
+            if (controls.length > 0) controls[0].removeAttr('tabindex');
+            return $('<div class="controls" role="toolbar">').append(controls);
         },
 
         onResize: function () {
@@ -187,6 +200,8 @@ define('io.ox/backbone/views/window', [
         },
 
         keepInWindow: function (usePadding) {
+            if (!this.$el.is(':visible')) return;
+
             // maybe an event, never use padding if that's the case
             if (!_.isBoolean(usePadding)) usePadding = false;
 
@@ -299,6 +314,10 @@ define('io.ox/backbone/views/window', [
             this.model.trigger('quit');
         },
 
+        onStick: function () {
+            this.model.set('sticky', true);
+        },
+
         onKeydown: function (e) {
             this.onEscape(e);
             this.onTab(e);
@@ -307,6 +326,7 @@ define('io.ox/backbone/views/window', [
         onEscape: function (e) {
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
+            if (!this.model.get('quitOnEscape')) return;
             if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
             this.onQuit();
         },
@@ -317,10 +337,25 @@ define('io.ox/backbone/views/window', [
         },
 
         open: function () {
+            var isSticky = this.model.get('sticky') === true;
+            // special case: no app started yet (see CAS-267)
+            if (!ox.ui.windowManager.getWindows().length) {
+                $('#io-ox-windowmanager').toggle(isSticky);
+                $('#io-ox-desktop').toggle(!isSticky);
+            }
+            if (isSticky) {
+                $('#io-ox-windowmanager').append(
+                    $('<div class="io-ox-windowmanager-sticky-panel border-left" role="region">').append(this.$body)
+                );
+                checkIfSticky();
+                return this;
+            }
+            this.$('.floating-body').append(this.$body);
             $(container).append(this.$el);
             this.$el.focus();
             //if (backdrop.parents().length === 0) $('#io-ox-screens').append(backdrop);
             this.activate({ firstTime: true });
+            checkIfSticky();
             return this;
         },
 
@@ -354,7 +389,7 @@ define('io.ox/backbone/views/window', [
 
             this.$('.token-input.tt-input').trigger('updateWidth');
 
-            // save value as new preferrence for this app
+            // save value as new preference for this app
             if (_.device('desktop') && settings.get('features/floatingWindows/preferredMode/enabled', true) && this.model.get('name')) {
                 var preferences = settings.get('features/floatingWindows/preferredMode/apps', {});
                 preferences[this.model.get('name')] = this.model.get('mode');
@@ -369,6 +404,7 @@ define('io.ox/backbone/views/window', [
         toggleMode: function () {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
+            if (this.model.get('resizable') === false) return;
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
@@ -376,7 +412,7 @@ define('io.ox/backbone/views/window', [
             // no auto positioning for moved windows
             if (this.model.get('wasMoved')) return;
 
-            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because ther might be gaps due to minimized/closed windows)
+            // get occupied positions of unmoved windows (number of unmoved windows is not enough here because there might be gaps due to minimized/closed windows)
             var occupiedPositions = _(collection.filter({ minimized: false, floating: true, wasMoved: false })).chain().without(this.model).pluck('attributes').pluck('shift').value(),
                 nextValidPosition = _.difference(_.range(occupiedPositions.length), occupiedPositions)[0];
 
@@ -433,6 +469,12 @@ define('io.ox/backbone/views/window', [
             this.$header.find('h1 .count').toggle(this.model.get('count') > 0).text(this.model.get('count'));
         },
 
+        onChangeStickyMode: function () {
+            if (this.$el.is(':visible')) this.$el.detach();
+            else this.$body.closest('.io-ox-windowmanager-sticky-panel').detach();
+            this.open();
+        },
+
         minimize: function () {
             var app = ox.ui.App.getCurrentApp();
             if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
@@ -447,6 +489,8 @@ define('io.ox/backbone/views/window', [
         onMinimize: function () {
             // don't animate multiple times
             if (this.minimizing) return;
+            // doesn't have a taskbar entry, return
+            if (!this.model.get('showInTaskbar')) return;
             var self = this;
             var taskBarEl = taskbar.addByCid(this.model.cid);
             var windowWidth = this.$el.width();
@@ -467,6 +511,7 @@ define('io.ox/backbone/views/window', [
 
         toggle: function (model, minimized) {
             this.$el.toggle(!minimized);
+            checkIfSticky();
             if (minimized) return this.deactivate();
             this.activate();
             // shift window if needed (no 100% overlapping)
@@ -661,6 +706,11 @@ define('io.ox/backbone/views/window', [
 
         return taskbarItem;
     };
+
+    function checkIfSticky() {
+        // add marker class if we find a sticky non minimized window
+        $('#io-ox-screens').toggleClass('has-sticky-window', !!collection.findWhere({ sticky: true, minimized: false }));
+    }
 
     return {
         View: WindowView,

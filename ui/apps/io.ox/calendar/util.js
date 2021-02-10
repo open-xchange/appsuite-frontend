@@ -305,11 +305,11 @@ define('io.ox/calendar/util', [
 
         getFullTimeInterval: function (data, smart) {
             var length = this.getDurationInDays(data);
-            return length <= 1 && smart ? gt('Whole day') : gt.format(
+            return length <= 1 && smart ? gt('Whole day') :
                 //#. General duration (nominative case): X days
                 //#. %d is the number of days
                 //#, c-format
-                gt.ngettext('%d day', '%d days', length), length);
+                gt.ngettext('%d day', '%d days', length, length);
         },
 
         getReminderOptions: function () {
@@ -348,16 +348,16 @@ define('io.ox/calendar/util', [
                 var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', i), i);
+                        options[item.value] = gt.ngettext('%1$d minute', '%1$d minutes', i, i);
                         break;
                     case 'hours':
-                        options[item.value] = gt.format(gt.ngettext('%1$d hour', '%1$d hours', i), i);
+                        options[item.value] = gt.ngettext('%1$d hour', '%1$d hours', i, i);
                         break;
                     case 'days':
-                        options[item.value] = gt.format(gt.ngettext('%1$d day', '%1$d days', i), i);
+                        options[item.value] = gt.ngettext('%1$d day', '%1$d days', i, i);
                         break;
                     case 'weeks':
-                        options[item.value] = gt.format(gt.ngettext('%1$d week', '%1$d weeks', i), i);
+                        options[item.value] = gt.ngettext('%1$d week', '%1$d weeks', i, i);
                         break;
                     // no default
                 }
@@ -606,32 +606,63 @@ define('io.ox/calendar/util', [
 
                 // DAILY
                 case 1:
-                    //#. recurrence string
-                    //#. %1$d: numeric
-                    str = gt.npgettext('daily', 'Every day.', 'Every %1$d days.', interval, interval);
+                    str = (interval === 1) ?
+                        gt.pgettext('daily', 'Every day.') :
+                        //#. recurrence string
+                        //#. the case %1$d == 1 is handled separately and will not be used
+                        //#. %1$d: number of days per interval
+                        //#, c-format
+                        gt.npgettext('daily', 'Every %1$d day.', 'Every %1$d days.', interval, interval);
                     break;
 
                 // WEEKLY
                 case 2:
-                    // special case: weekly but all days checked
+                    // special case: weekly but all 7 days checked
                     if (days === 127) {
-                        //#. recurrence string
-                        //#. %1$d: numeric
-                        str = gt.npgettext('weekly', 'Every day.', 'Every %1$d weeks on all days.', interval, interval);
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case, weekly but every day is checked
+                            gt.pgettext('daily', 'Every day.') :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: number of weeks per interval
+                            //#, c-format
+                            gt.npgettext('weekly', 'Every %1$d week on all days.', 'Every %1$d weeks on all days.', interval, interval);
                     } else if (days === getWorkweekBitmask()) { // special case: weekly on workdays
-                        //#. recurrence string
-                        //#. %1$d: numeric
-                        str = gt.npgettext('weekly', 'On workdays.', 'Every %1$d weeks on workdays.', interval, interval);
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the weekly interval is 1 and all workdays are checked
+                            gt.pgettext('weekly', 'On workdays.') :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: number of weeks per interval
+                            //#, c-format
+                            gt.npgettext('weekly', 'Every %1$d week on workdays.', 'Every %1$d weeks on workdays.', interval, interval);
                     } else if (days === 65) {
-                        //#. recurrence string
-                        //#. %1$d: numeric
-                        str = gt.npgettext('weekly', 'Every weekend.', 'Every %1$d weeks on weekends.', interval, interval);
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the weekly interval is 1 and Sat and Sun are checked
+                            gt.pgettext('weekly', 'Every weekend.') :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: number of weeks per interval
+                            //#, c-format
+                            gt.npgettext('weekly', 'Every %1$d week on weekends.', 'Every %1$d weeks on weekends.', interval, interval);
                     } else {
-                        //#. recurrence string
-                        //#. %1$d: numeric
-                        //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                        //#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
-                        str = gt.npgettext('weekly', 'Every %2$s.', 'Every %1$d weeks on %2$s.', interval, interval, getDayString(days, { superessive: interval > 1 }));
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the weekly interval is 1
+                            //#. %1$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                            //#. day string will be in nominative form
+                            //#, c-format
+                            gt.pgettext('weekly', 'Every %1$s.', getDayString(days)) :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: number of weeks per interval
+                            //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+                            //#. day string will be in "superessive" form
+                            //#, c-format
+                            gt.npgettext('weekly', 'Every %1$d week on %2$s.', 'Every %1$d weeks on %2$s.', interval, interval, getDayString(days, { superessive: true }));
                     }
 
                     break;
@@ -639,18 +670,37 @@ define('io.ox/calendar/util', [
                 // MONTHLY
                 case 3:
                     if (days === null) {
-                        //#. recurrence string
-                        //#. %1$d: numeric, interval
-                        //#. %2$d: numeric, day in month
-                        //#. Example: Every 5 months on day 18
-                        str = gt.npgettext('monthly', 'Every month on day %2$d.', 'Every %1$d months on day %2$d.', interval, interval, day_in_month);
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the monthly interval is 1
+                            //#. %1$d: numeric, day in month
+                            //#. Example: Every month on day 18.
+                            //#, c-format
+                            gt.pgettext('monthly', 'Every month on day %1$d.', day_in_month) :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: numeric, interval
+                            //#. %2$d: numeric, day in month
+                            //#. Example: Every 5 months on day 18.
+                            //#, c-format
+                            gt.npgettext('monthly', 'Every %1$d month on day %2$d.', 'Every %1$d months on day %2$d.', interval, interval, day_in_month);
                     } else {
-                        //#. recurrence string
-                        //#. %1$d: numeric, interval
-                        //#. %2$s: count string, e.g. first, second, or last
-                        //#. %3$s: day string, e.g. Monday
-                        //#. Example Every 3 months on the second Tuesday
-                        str = gt.npgettext('monthly', 'Every month on the %2$s %3$s.', 'Every %1$d months on the %2$s %3$s.', interval, interval, getCountString(day_in_month), getDayString(days));
+                        str = (interval === 1) ?
+                            //#. recurrence string
+                            //#. special case: the monthly interval is 1
+                            //#. %1$s: count string, e.g. first, second, or last
+                            //#. %2$s: day string, e.g. Monday
+                            //#. Example Every month on the second Tuesday.
+                            //#, c-format
+                            gt.pgettext('monthly', 'Every month on the %1$s %2$s.', getCountString(day_in_month), getDayString(days)) :
+                            //#. recurrence string
+                            //#. the case %1$d == 1 is handled separately and will not be used
+                            //#. %1$d: numeric, interval
+                            //#. %2$s: count string, e.g. first, second, or last
+                            //#. %3$s: day string, e.g. Monday
+                            //#. Example Every 3 months on the second Tuesday.
+                            //#, c-format
+                            gt.npgettext('monthly', 'Every %1$d month on the %2$s %3$s.', 'Every %1$d months on the %2$s %3$s.', interval, interval, getCountString(day_in_month), getDayString(days));
                     }
 
                     break;
@@ -688,7 +738,7 @@ define('io.ox/calendar/util', [
                     lastOccurence = moment(data.until);
                 } else {
                     var tzid = data.endDate.tzid || 'UTC';
-                    // this code part expects, that the date of the last occurence is equal to the until date in the rrule.
+                    // this code part expects, that the date of the last occurrence is equal to the until date in the rrule.
                     // whereas this is not required by the RFC, all checked clients stick to that
                     // the until date is either directly on the end of the appointment or refers to the end of the same day
                     var diffToStartOfDay = that.getMoment(data.endDate).diff(that.getMoment(data.endDate).startOf('day'), 'ms');
@@ -698,7 +748,7 @@ define('io.ox/calendar/util', [
                 str = gt('The series ends on %1$s.', lastOccurence.format('l'));
             } else if (data.occurrences) {
                 var n = data.occurrences;
-                str = gt.format(gt.ngettext('The series ends after one occurrence.', 'The series ends after %1$d occurences.', n), n);
+                str = gt.ngettext('The series ends after %1$d occurrence.', 'The series ends after %1$d occurrences.', n, n);
             } else {
                 str = gt('The series never ends.');
             }
@@ -826,6 +876,12 @@ define('io.ox/calendar/util', [
             var user = _(obj.attendees).findWhere({
                 entity: id || ox.user_id
             });
+            // try extendedParameter (federated sharing)
+            if (id && !user) {
+                user = _(obj.attendees).find(function (attendee) {
+                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === id;
+                });
+            }
             if (!user) return;
             return user.comment;
         },
@@ -1291,7 +1347,7 @@ define('io.ox/calendar/util', [
         },
 
         // creates an attendee object from a user object or model and contact model or object
-        // distribution lists create an array of attendees representing the menmbers of the distribution list
+        // distribution lists create an array of attendees representing the members of the distribution list
         // used to create default participants and used by addparticipantsview
         // options can contain attendee object fields that should be prefilled (usually partStat: 'ACCEPTED')
         createAttendee: function (user, options) {
@@ -1307,13 +1363,15 @@ define('io.ox/calendar/util', [
             options = options || {};
             var attendee = {
                 cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
-                cn: user.display_name,
+                cn: user.display_name || user.cn,
                 partStat: 'NEEDS-ACTION'
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                // guests have a user id but are still considered external, so dont add an entity here (normal users have guest_created_by === 0)
-                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
+                // guests have a user id but are still considered external, so don't add an entity here (normal users have guest_created_by === 0)
+                if (!user.guest_created_by && (user.user_id !== undefined || user.contact_id) && user.type !== 5) {
+                    attendee.entity = user.user_id || user.id;
+                } else if (user.entity) attendee.entity = user.entity;
                 attendee.email = user.field && user[user.field] ? user[user.field] : (user.email1 || user.mail || user.email);
                 if (!attendee.cn) attendee.cn = attendee.email;
                 attendee.uri = 'mailto:' + attendee.email;
@@ -1335,11 +1393,19 @@ define('io.ox/calendar/util', [
             }
             // not really needed. Added just for convenience. Helps if distribution list should be created
             if (attendee.cuType === 'INDIVIDUAL' || !attendee.cuType) {
-                attendee.contact = {
-                    display_name: user.display_name,
-                    first_name: user.first_name,
-                    last_name: user.last_name
-                };
+                if (user.contact) {
+                    attendee.contact = {
+                        display_name: user.cn || user.display_name,
+                        first_name: user.contact.first_name,
+                        last_name: user.contact.last_name
+                    };
+                } else {
+                    attendee.contact = {
+                        display_name: user.display_name,
+                        first_name: user.first_name,
+                        last_name: user.last_name
+                    };
+                }
             }
             // override with predefined values if given
             return _.extend(attendee, options);

@@ -581,6 +581,14 @@ define('io.ox/contacts/main', [
                 }
             });
         },
+
+        'update:contact': function () {
+            api.on('update:contact', function (e, updated) {
+                if (_.cid(updated) === _.cid(app.currentContact)) {
+                    app.showContact(app.currentContact);
+                }
+            });
+        },
         /*
          * Folder view support
          */
@@ -782,6 +790,7 @@ define('io.ox/contacts/main', [
                 require(['io.ox/backbone/views/modal', 'io.ox/core/notifications'], function (ModalDialog) {
                     new ModalDialog({
                         point: 'io.ox/contacts/account-errors',
+                        //#. title of dialog when contact subscription needs to be recreated on error
                         title: gt('Contacts account error')
                     })
                     .extend({

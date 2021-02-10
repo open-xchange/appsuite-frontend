@@ -38,17 +38,30 @@ define('io.ox/files/toolbar', [
                 title: gt('New'),
                 dropdown: 'io.ox/files/toolbar/new'
             },
+            'upload': {
+                prio: 'hi',
+                mobile: 'hi',
+                //#. Label of a dropdown. Contains actions for uploading local items.
+                title: gt('Upload'),
+                dropdown: 'io.ox/files/toolbar/upload'
+            },
+            'share': {
+                prio: 'hi',
+                mobile: 'lo',
+                title: gt('Share'),
+                ref: 'io.ox/files/actions/invite'
+            },
             'edit': {
                 prio: 'hi',
                 mobile: 'lo',
                 title: gt('Edit'),
                 ref: 'io.ox/files/actions/editor'
             },
-            'share': {
+            'edit-federated': {
                 prio: 'hi',
                 mobile: 'lo',
-                title: gt('Share'),
-                dropdown: 'io.ox/files/toolbar/share'
+                title: gt('Edit'),
+                ref: 'io.ox/files/actions/edit-federated'
             },
             'viewer': {
                 prio: 'hi',
@@ -235,9 +248,18 @@ define('io.ox/files/toolbar', [
             );
 
             app.updateToolbar = _.debounce(function (selection) {
-                toolbarView.setSelection(selection.map(_.cid), function () {
-                    return this.getContextualData(selection, 'main');
-                }.bind(this));
+                if (this.listView.isBusy) {
+                    var dropdownToggle = toolbarView.$el.find('a[data-toggle="dropdown"]');
+                    dropdownToggle.attr('data-toggle', []).addClass('disabled');
+                    this.listView.collection.once('complete', function () {
+                        dropdownToggle.attr('data-toggle', 'dropdown').removeClass('disabled');
+
+                    });
+                } else {
+                    toolbarView.setSelection(selection.map(_.cid), function () {
+                        return this.getContextualData(selection, 'main');
+                    }.bind(this));
+                }
             }, 10);
         }
     });

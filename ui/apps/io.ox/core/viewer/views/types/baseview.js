@@ -104,6 +104,9 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function (options) {
+            var prevUrl = this.model.get('url') || (this.model.get('origData') ? this.model.get('origData').url : false);
+            if (prevUrl) return prevUrl;
+
             // turn off sharding #53731
             options = _.extend(options || {}, { noSharding: true });
 

@@ -28,11 +28,11 @@ define('io.ox/contacts/util', [
             index: 'last',
             id: 'department',
             draw: function (baton) {
-                if (baton.data.folder_id === 6 &&
+                if (String(baton.data.folder_id) === '6' &&
                     !!baton.data.department
                 ) {
                     this.append(
-                        $('<span class="department">').text(gt.format(' (%1$s) ', baton.data.department))
+                        $('<span class="department">').text(_.noI18n.format(' (%1$s) ', baton.data.department))
                     );
                 }
             }
@@ -180,7 +180,7 @@ define('io.ox/contacts/util', [
 
         getFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, false, htmlOutput);
-            return gt.format(fmt.format, fmt.params);
+            return _.noI18n.format(fmt.format, fmt.params);
         },
 
         // this gets overridden in case of ja_JP
@@ -251,7 +251,7 @@ define('io.ox/contacts/util', [
 
         getMailFullName: function (obj, htmlOutput) {
             var fmt = getFullNameFormatHelper(obj, true, htmlOutput);
-            return gt.format(fmt.format, fmt.params);
+            return _.noI18n.format(fmt.format, fmt.params);
         },
 
         /**
@@ -405,8 +405,8 @@ define('io.ox/contacts/util', [
                 if (last_name) return first(last_name);
                 if (first_name) return first(first_name);
 
-                // try mail address
-                var email = $.trim(obj.email1 || obj.email2 || obj.email3);
+                // try mail address (email without a number is used by chat, for example)
+                var email = $.trim(obj.email1 || obj.email2 || obj.email3 || obj.email);
                 if (email) return first(email);
 
                 return '';
@@ -423,7 +423,7 @@ define('io.ox/contacts/util', [
                 modulo = colors.length;
 
             return function (initials) {
-                if (!initials) return 'gray';
+                if (!initials) return colors[0];
                 return colors[initials[0].charCodeAt() % modulo];
             };
         }()),

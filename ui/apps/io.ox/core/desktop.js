@@ -27,8 +27,9 @@ define('io.ox/core/desktop', [
     'io.ox/find/main',
     'io.ox/core/main/icons',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/capabilities'
+], function (Events, FloatingWindow, ext, cache, notifications, upsell, adaptiveLoader, folderAPI, apps, findFactory, icons, coreSettings, gt, capabilities) {
 
     'use strict';
 
@@ -564,7 +565,8 @@ define('io.ox/core/desktop', [
                     },
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
-                        if (autoStart !== 'none') ox.launch(autoStart);
+                        // don't autostart mail for guests just because any other app failed. Usually doesn't work and doesn't have permission for it.
+                        if (autoStart !== 'none' && !capabilities.has('guest')) ox.launch(autoStart);
                         throw arguments;
                     }
                 );
@@ -823,100 +825,105 @@ define('io.ox/core/desktop', [
         })(),
 
         restore: function () {
-            var self = this;
-
             this.cleanupSavepoints();
+            return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, spaces) {
+                return this.restoreLoad({ list: list, spaces: spaces });
+            }.bind(this));
+        },
 
-            return $.when(this.getSavePoints(), ox.rampup.compositionSpaces).then(function (list, compositionSpaces) {
-                return $.when.apply($,
-                    _([].concat(list, compositionSpaces || [])).map(function (obj) {
-                        adaptiveLoader.stop();
-                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
-                        return ox.load(requirements).then(function (m) {
-                            var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
-                            if (obj.cid) app.cid = obj.cid;
-                            // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
-                            if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
-                                var model, win;
+        restoreLoad: function (options) {
+            var self = this,
+                list = options.list || [],
+                spaces = options.spaces || [];
+            return $.when.apply($,
+                _([].concat(list, spaces)).map(function (obj) {
+                    adaptiveLoader.stop();
+                    var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
+                    return ox.load(requirements).then(function (m) {
+                        var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
+                        if (obj.cid) app.cid = obj.cid;
+                        // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
+                        if (_.device('!smartphone') && (app.options.floating || app.options.closable)) {
+                            var model, win;
+                            if (app.options.floating) {
+                                // note: cid is stored as model property here
+                                model = new FloatingWindow.Model({ cid: obj.cid, minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
+                                win = new FloatingWindow.TaskbarElement({ model: model }).render();
+                                FloatingWindow.collection.add(model);
+                            } else {
+                                win = FloatingWindow.addNonFloatingApp(app, { lazyload: true });
+                                model = win.model;
+                            }
+                            win.listenToOnce(model, 'lazyload', function () {
+                                var oldId = obj.id;
+                                obj = _.clone(obj);
                                 if (app.options.floating) {
-                                    model = new FloatingWindow.Model({ cid: obj.cid, minimized: true, id: obj.id, title: obj.description, closable: true, lazy: true, taskbarIcon: app.options.taskbarIcon, name: app.options.name });
-                                    win = new FloatingWindow.TaskbarElement({ model: model }).render();
-                                    FloatingWindow.collection.add(model);
-                                } else {
-                                    win = FloatingWindow.addNonFloatingApp(app, { lazyload: true });
-                                    model = win.model;
-                                }
-                                win.listenToOnce(model, 'lazyload', function () {
-                                    var oldId = obj.id;
-                                    obj = _.clone(obj);
-                                    if (app.options.floating) {
-                                        // copy app options over to window model
-                                        model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
-                                        app.launch({ floatingWindowModel: model }).then(function () {
-                                            // update unique id
-                                            obj.id = this.get('uniqueID');
-                                            if (this.failRestore) return this.failRestore(obj.point);
-                                            return $.when();
-                                        }).done(function () {
-                                            // replace restore point with old id with restore point with new id (prevents duplicates)
-                                            self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
-                                                sp.push(obj);
-                                                if (obj.keepOnRestore !== false) self.setSavePoints(sp);
-                                                if (model.get('quitAfterLaunch')) model.trigger('quit');
-                                            });
-                                        }).fail(function (e) {
-                                            if (!e || e.code !== 'MSG-0032') return;
-                                            // restoreById-savepoint after draft/composition space got deleted
-                                            _.delay(function () {
-                                                ox.ui.App.removeRestorePoint(oldId);
-                                                model.trigger('close');
-                                            });
-                                        });
-                                        return;
-                                    }
-                                    app.launch().then(function () {
+                                    // copy app options over to window model
+                                    model.set(_(app.options).pick('closable', 'displayStyle', 'size', 'taskbarIcon', 'title'));
+                                    app.launch({ floatingWindowModel: model }).then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
-                                        if (this.failRestore) {
-                                            // restore
-                                            return this.failRestore(obj.point);
-                                        }
+                                        if (this.failRestore) return this.failRestore(obj.point);
                                         return $.when();
                                     }).done(function () {
                                         // replace restore point with old id with restore point with new id (prevents duplicates)
                                         self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
                                             sp.push(obj);
-                                            self.setSavePoints(sp);
+                                            if (obj.keepOnRestore !== false) self.setSavePoints(sp);
+                                            if (model.get('quitAfterLaunch')) model.trigger('quit');
+                                        });
+                                    }).fail(function (e) {
+                                        if (!e || e.code !== 'MSG-0032') return;
+                                        // restoreById-savepoint after draft/composition space got deleted
+                                        _.delay(function () {
+                                            ox.ui.App.removeRestorePoint(oldId);
+                                            model.trigger('close');
                                         });
                                     });
-                                });
-                                return $.when();
-                            }
-                            var oldId = obj.id;
-                            return app.launch().then(function () {
-                                // update unique id
-                                obj.id = this.get('uniqueID');
-                                if (this.failRestore) {
-                                    // restore
-                                    return this.failRestore(obj.point).then(function () {
-                                        app.set('restored', true);
-                                    });
+                                    return;
                                 }
-                            }).fail(function (e) {
-                                if (!e || e.code !== 'MSG-0032') return;
-                                // restoreById-savepoint after draft got deleted
-                                _.delay(function () {
-                                    ox.ui.App.removeRestorePoint(oldId);
+                                app.launch().then(function () {
+                                    // update unique id
+                                    obj.id = this.get('uniqueID');
+                                    if (this.failRestore) {
+                                        // restore
+                                        return this.failRestore(obj.point);
+                                    }
+                                    return $.when();
+                                }).done(function () {
+                                    // replace restore point with old id with restore point with new id (prevents duplicates)
+                                    self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
+                                        sp.push(obj);
+                                        self.setSavePoints(sp);
+                                    });
                                 });
                             });
+                            return $.when();
+                        }
+                        var oldId = obj.id;
+                        return app.launch().then(function () {
+                            // update unique id
+                            obj.id = this.get('uniqueID');
+                            if (this.failRestore) {
+                                // restore
+                                return this.failRestore(obj.point).then(function () {
+                                    app.set('restored', true);
+                                });
+                            }
+                        }).fail(function (e) {
+                            if (!e || e.code !== 'MSG-0032') return;
+                            // restoreById-savepoint after draft got deleted
+                            _.delay(function () {
+                                ox.ui.App.removeRestorePoint(oldId);
+                            });
                         });
-                    })
-                )
-                .done(function () {
-                    // we don't remove that savepoint now because the app might crash during restore!
-                    // in this case, data would be lost
-                    self.setSavePoints(list);
-                });
+                    });
+                })
+            )
+            .done(function () {
+                // we don't remove that savepoint now because the app might crash during restore!
+                // in this case, data would be lost
+                self.setSavePoints(list);
             });
         },
 

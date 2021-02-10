@@ -16,16 +16,16 @@ const expect = require('chai').expect;
 
 Feature('Settings > Basic > User');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
+Scenario('[C208269] Edit users contact information', async ({ I, dialogs }) => {
 
     function addContactsField(fieldType, field, input) {
         I.click({ css: `.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');
@@ -151,11 +151,11 @@ Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
     // check picture
     I.waitForElement(locate('.contact-detail h1 .last_name').withText(lastname).as('Detail view heading'));
     I.waitForVisible('.contact-photo', 1);
-    image = await I.grabBackgroundImageFrom('.contact-photo');
+    image = await I.grabBackgroundImageFrom('.contact-detail .contact-photo');
     expect(image).not.to.match(/fallback/);
     expect(image).to.match(/^url\(/);
     // also check picture in topbar
-    image = await I.grabBackgroundImageFrom('#io-ox-topbar-dropdown-icon .contact-picture');
+    image = await I.grabBackgroundImageFrom('#io-ox-topbar-account-dropdown-icon .contact-picture');
     expect(image).to.match(/^url\(/);
 
     // personal information

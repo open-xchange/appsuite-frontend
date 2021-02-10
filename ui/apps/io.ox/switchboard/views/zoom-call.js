@@ -68,7 +68,7 @@ define('io.ox/switchboard/views/zoom-call', [
         },
 
         createConnectButtons: function () {
-            return $('<div class="switchboard-actions">').append(
+            return $('<div class="action-button-rounded">').append(
                 this.createButton('default', 'cancel', 'times', gt('Cancel')),
                 this.createButton('primary', 'connect', 'plug', gt('Connect with Zoom'))
             );

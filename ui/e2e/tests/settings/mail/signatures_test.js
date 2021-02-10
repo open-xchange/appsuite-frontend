@@ -25,15 +25,15 @@ const emptyLine = '(' +
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[OXUIB-384] Image signature', async function (I, dialogs) {
+Scenario('[OXUIB-384] Image signature', async ({ I, dialogs }) => {
     await I.haveSnippet({
         content: '<div></div>',
         displayname: 'my-image-signature',
@@ -75,7 +75,7 @@ Scenario('[OXUIB-384] Image signature', async function (I, dialogs) {
 });
 
 // will probably break once MWB-290 was fixed/deployed
-Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
+Scenario('[OXUIB-199] Sanitize signature preview', async ({ I }) => {
     const body = locate({ xpath: '//body' });
     await I.haveSnippet({
         content: 'blabla<i\nmg src="foo" oner\nror="document.body.classList.add(1337)" <br>',
@@ -97,7 +97,7 @@ Scenario('[OXUIB-199] Sanitize signature preview', async function (I) {
 });
 
 // will probably break once MWB-290 was fixed/deployed
-Scenario('[OXUIB-200] Sanitize signature when editing existing', async function (I, dialogs) {
+Scenario('[OXUIB-200] Sanitize signature when editing existing', async ({ I, dialogs }) => {
     const body = locate({ xpath: '//body' });
     await I.haveSnippet({
         content: '<font color="<bo<script></script>dy><img alt=< src=foo onerror=document.body.classList.add(1337)></body>">',
@@ -119,7 +119,7 @@ Scenario('[OXUIB-200] Sanitize signature when editing existing', async function 
     expect(classlist).to.not.contain(1337);
 });
 
-Scenario('Sanitize entered signature source code', async function (I) {
+Scenario('Sanitize entered signature source code', async ({ I }) => {
 
     var dialog = locate('.mce-window');
 
@@ -156,7 +156,7 @@ Scenario('Sanitize entered signature source code', async function (I) {
     }
 });
 
-Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
+Scenario('[C7766] Create new signature', ({ I, mail, dialogs }) => {
 
     // init compose instance
     I.login(['app=io.ox/mail']);
@@ -206,7 +206,7 @@ Scenario('[C7766] Create new signature', function (I, mail, dialogs) {
 
 });
 
-Scenario('[C7767] Define signature position', async function (I, users, mail, dialogs) {
+Scenario('[C7767] Define signature position', async ({ I, users, mail, dialogs }) => {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -272,7 +272,7 @@ Scenario('[C7767] Define signature position', async function (I, users, mail, di
     });
 });
 
-Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
+Scenario('[C7768] Edit signature', async ({ I, mail, dialogs }) => {
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',
         displayname: 'Testsignaturename',
@@ -308,6 +308,7 @@ Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
 
     mail.newMail();
 
+    I.waitForVisible(mail.locators.compose.options);
     I.click(mail.locators.compose.options);
     I.clickDropdown('Newsignaturename');
 
@@ -317,7 +318,7 @@ Scenario('[C7768] Edit signature', async function (I, mail, dialogs) {
 
 });
 
-Scenario('[C7769] Delete signature', async function (I) {
+Scenario('[C7769] Delete signature', async ({ I }) => {
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',
         displayname: 'Testsignaturename',
@@ -338,7 +339,7 @@ Scenario('[C7769] Delete signature', async function (I) {
 
 });
 
-Scenario('[C7770] Set default signature', async function (I, users, mail) {
+Scenario('[C7770] Set default signature', async ({ I, users, mail }) => {
     const [user] = users;
     await I.haveMail({
         attachments: [{
@@ -378,6 +379,7 @@ Scenario('[C7770] Set default signature', async function (I, users, mail) {
     I.see('Default signature for replies or forwardings', `.settings-list-item[data-id="${snippets[2].data}"`);
 
     I.openApp('Mail');
+    mail.waitForApp();
 
     // compose a mail
     I.clickToolbar('Compose');
@@ -407,7 +409,7 @@ Scenario('[C7770] Set default signature', async function (I, users, mail) {
 
 });
 
-Scenario('[C85619] Edit signature with HTML markup', async function (I, mail, dialogs) {
+Scenario('[C85619] Edit signature with HTML markup', async ({ I, mail, dialogs }) => {
 
     await I.haveSnippet({
         content: '<p>Testsignaturecontent</p>',

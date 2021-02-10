@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.2.2. Verschlüsselte E-Mails senden</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<title>13.2.2. Verschlüsselte E-Mails senden</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="12.2. E-Mail-Kommunikation verschlüsseln">
-<link rel="prev" href="ox.appsuite.user.sect.guard.email.read.html" title="12.2.1. Verschlüsselte E-Mails lesen">
-<link rel="next" href="ox.appsuite.user.sect.guard.email.external.html" title="12.2.3. Wie lesen externe Empfänger eine verschlüsselte E-Mail?">
+<link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="13.2. E-Mail-Kommunikation verschlüsseln">
+<link rel="prev" href="ox.appsuite.user.sect.guard.email.read.html" title="13.2.1. Verschlüsselte E-Mails lesen">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.external.html" title="13.2.3. Wie lesen externe Empfänger eine verschlüsselte E-Mail?">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -34,8 +34,8 @@
   </h1>
 <h2 class="sr-only">E-Mail-Kommunikation verschlüsseln</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.email.send">
-<div class="titlepage"><div><div><h3 class="title">12.2.2. Verschlüsselte E-Mails senden</h3></div></div></div>
-<a class="indexterm" name="id-1.13.7.8.2"></a><a class="indexterm" name="id-1.13.7.8.3"></a><a class="indexterm" name="id-1.13.7.8.4"></a><a class="indexterm" name="id-1.13.7.8.5"></a><p id="ox.appsuite.user.concept.guard.email.send">Sie haben folgende Möglichkeiten:
+<div class="titlepage"><div><div><h3 class="title">13.2.2. Verschlüsselte E-Mails senden</h3></div></div></div>
+<a class="indexterm" name="id-1.14.7.8.2"></a><a class="indexterm" name="id-1.14.7.8.3"></a><a class="indexterm" name="id-1.14.7.8.4"></a><a class="indexterm" name="id-1.14.7.8.5"></a><p id="ox.appsuite.user.concept.guard.email.send">Sie haben folgende Möglichkeiten:
         </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Eine E-Mail verschlüsselt senden. Nur Sie und die Empfänger können den Inhalt der 
@@ -52,27 +52,36 @@
 <li class="step">
 <p role="presentation">Im E-Mail-Bearbeitungsfenster klicken Sie in der Schaltflächenleiste auf das Symbol <span class="guibutton"><strong>Verschlüsselung aktivieren</strong></span>
               <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.encrypt"><img src="../../images/guard_user_icon_encrypt.png"></span>. Oberhalb des E-Mail-Textes wird eine Funktionsleiste angezeigt. 
+              Ein Text in der Funktionsleiste weist darauf hin, dass die E-Mail verschlüsselt wird.
             </p>
 <p role="presentation">Symbole neben den Empfängern zeigen an, ob die Nachricht für diesen Empfänger verschlüsselt werden kann.
             Wenn Sie auf ein Symbol zeigen, wird eine Erläuterung angezeigt.</p>
 </li>
-<li class="step"><p role="presentation">Um die E-Mail zusätzlich zu signieren, klicken Sie in der Funktionsleiste auf <span class="guibutton"><strong>Optionen</strong></span>
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.sign"><img src="../../images/appsuite_user_icon_actions.png"></span>. Aktivieren Sie <span class="guibutton"><strong>Signieren</strong></span>.</p></li>
-<li class="step"><p role="presentation">Wenn in den 
-              <span class="phrase">Guard</span>-Einstellungen
-              <span class="guibutton"><strong>Erweiterte Einstellungen anzeigen</strong></span> aktiviert ist, können Sie weitere Optionen verwenden. 
-              Dazu klicken Sie in der Funktionsleiste auf <span class="guibutton"><strong>Optionen</strong></span>. Aktivieren Sie bei Bedarf die folgenden Optionen: 
+<li class="step"><p role="presentation">Um weitere Optionen zu verwenden, klicken Sie in der Funktionsleiste auf <span class="guibutton"><strong>Optionen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>.
             <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
+<p role="presentation">Um die E-Mail zusätzlich zu signieren, aktivieren Sie <span class="guibutton"><strong>E-Mail signieren</strong></span>.</p>
+<p role="presentation">Alternativ können Sie in der Schaltflächenleiste das Menü <span class="guibutton"><strong>Optionen</strong></span> 
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.sign"><img src="../../images/appsuite_user_icon_actions.png"></span> verwenden.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Damit der Empfänger die E-Mail verschlüsselt beantworten kann, benötigt er Ihren öffentlichen Schlüssel. 
+                  Bei Bedarf können Sie Ihren öffentlichen Schlüssel als Anhang senden. Dazu aktivieren Sie 
+                  <span class="guibutton"><strong>Meinen öffentlichen Schlüssel anhängen</strong></span>.</p>
+<p role="presentation">Alternativ können Sie in der Schaltflächenleiste das Menü <span class="guibutton"><strong>Optionen</strong></span> 
+                  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.email.send.publickey"><img src="../../images/appsuite_user_icon_actions.png"></span> verwenden.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Wenn in den 
+                  <span class="phrase">Guard</span>-Einstellungen
+                  <span class="guibutton"><strong>Erweiterte Einstellungen anzeigen</strong></span> aktiviert ist, können Sie das PGP-Format bestimmen.</p>
 <p role="presentation">Standardmäßig werden verschlüsselte E-Mails im Format <span class="guibutton"><strong>PGP Mime</strong></span> gesendet.
                   Einige ältere E-Mail Clients unterstützen nur PGP Inline. Wenn der Empfänger einen solchen Client verwendet, 
-                  aktivieren Sie <span class="guibutton"><strong>PGP Inline</strong></span>. 
+                  aktivieren Sie <span class="guibutton"><strong>Inline</strong></span>. 
                 </p>
-<p role="presentation">Hinweis: Wenn Sie <span class="guibutton"><strong>PGP Inline</strong></span> verwenden, können Sie keine E-Mails im HTML-Format senden.</p>
+<p role="presentation">Hinweis: Wenn Sie <span class="guibutton"><strong>Inline</strong></span> verwenden, können Sie keine E-Mails im HTML-Format senden.</p>
 </li>
-<li class="listitem"><p role="presentation">Damit der Empfänger die E-Mail verschlüsselt beantworten kann, benötigt er Ihren öffentlichen Schlüssel. 
-                  Bei Bedarf können Sie Ihren öffentlichen Schlüssel als Anhang senden. Dazu aktivieren Sie 
-                <span class="guibutton"><strong>Meinen Schlüssel anhängen</strong></span>.</p></li>
 </ul>
             </p></li>
 <li class="step">
@@ -91,13 +100,14 @@
         </p>
 <p class="title">Verwandte Themen:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Verschlüsselte E-Mails lesen</a></p></li>
 <li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.html">
-      <span class="phrase">Guard</span>-Einstellungen
-    </a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Verschlüsselte E-Mails lesen</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.external.html">Wie lesen externe Empfänger eine verschlüsselte E-Mail?</a></p>
 </li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.send.new.html">Neue E-Mail senden</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.html">
+      <span class="phrase">Guard</span>-Einstellungen
+    </a></p></li>
 </ul>
 <p>
       </p>

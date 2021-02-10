@@ -15,15 +15,15 @@
 
 Feature('Settings > Address Book');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7862] Configure display name representation', async (I, contacts) => {
+Scenario('[C7862] Configure display name representation', async ({ I, contacts }) => {
     const folder = await I.grabDefaultFolder('contacts'),
         firstName = 'Foo',
         lastName = 'Bar';

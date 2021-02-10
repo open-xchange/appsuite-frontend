@@ -25,13 +25,16 @@ define('io.ox/tasks/actions/delete', [
         ox.load(['io.ox/backbone/views/modal']).done(function (ModalDialog) {
             // build popup
             var popup = new ModalDialog({
-                //#. 'Delete task' or 'Delete tasks' as header for a modal dialog to confirm the deletion of one or more tasks.
-                title: gt.ngettext('Delete task', 'Delete tasks', numberOfTasks),
-                description: gt.ngettext(
-                    'Do you really want to delete this task?',
-                    'Do you really want to delete these tasks?',
-                    numberOfTasks
-                ),
+                // do not use "gt.ngettext" for plural without count
+                title: (numberOfTasks === 1) ?
+                    //#. header for a modal dialog to confirm the deletion of one task
+                    gt('Delete task') :
+                    //#. header for a modal dialog to confirm the deletion of multiple tasks
+                    gt('Delete tasks'),
+                // do not use "gt.ngettext" for plural without count
+                description: (numberOfTasks === 1) ?
+                    gt('Do you really want to delete this task?') :
+                    gt('Do you really want to delete these tasks?'),
                 async: true
             })
             .addCancelButton()
@@ -39,27 +42,27 @@ define('io.ox/tasks/actions/delete', [
             .on('deleteTask', function () {
                 require(['io.ox/tasks/api'], function (api) {
                     api.remove(data).done(function () {
-                        notifications.yell('success', gt.ngettext(
-                            'Task has been deleted!',
-                            'Tasks have been deleted!',
-                            numberOfTasks
-                        ));
+                        // do not use "gt.ngettext" for plural without count
+                        notifications.yell('success', (numberOfTasks === 1) ?
+                            gt('Task has been deleted') :
+                            gt('Tasks have been deleted')
+                        );
                         popup.close();
                     })
                     .fail(function (result) {
                         if (result.code === 'TSK-0019') { // task was already deleted somewhere else. everythings fine, just show info
-                            notifications.yell('info', gt('Task was already deleted!'));
+                            notifications.yell('info', gt('Task has been deleted already'));
                         } else if (result.error) {
                             // there is an error message from the backend
                             popup.idle();
                             notifications.yell('error', result.error);
                         } else {
                             // show generic error message
-                            notifications.yell('error', gt.ngettext(
-                                'The task could not be deleted.',
-                                'The tasks could not be deleted.',
-                                numberOfTasks
-                            ));
+                            // do not use "gt.ngettext" for plural without count
+                            notifications.yell('error', (numberOfTasks === 1) ?
+                                gt('The task could not be deleted.') :
+                                gt('The tasks could not be deleted.')
+                            );
                         }
                         popup.idle().close();
                     });

@@ -11,24 +11,24 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chatMember', ['io.ox/backbone/views/disposable', 'io.ox/chat/views/badge'], function (DisposableView, BadgeView) {
+define('io.ox/chat/views/chatMember', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/badge'
+], function (DisposableView, BadgeView) {
 
     'use strict';
 
     var ChatMemberView = DisposableView.extend({
 
-        tagName: 'ul',
-        className: 'members',
+        className: 'chat-members-container',
 
         initialize: function () {
-            this.listenTo(this.collection, {
-                add: this.onAdd
-            });
+            this.listenTo(this.collection, { add: this.onAdd, remove: this.onRemove });
         },
 
         render: function () {
             this.$el.append(
-                this.collection.map(this.renderMember, this)
+                $('<ul class="members">').append(this.collection.map(this.renderMember, this))
             );
             return this;
         },
@@ -39,9 +39,11 @@ define('io.ox/chat/views/chatMember', ['io.ox/backbone/views/disposable', 'io.ox
         },
 
         onAdd: function (model) {
-            this.$el.append(
-                $('<li>').append(new BadgeView({ model: model }).render().$el)
-            );
+            this.$('.members').append(this.renderMember(model));
+        },
+
+        onRemove: function (model) {
+            this.$('[data-email="' + model.get('email') + '"]').parent().remove();
         }
     });
 

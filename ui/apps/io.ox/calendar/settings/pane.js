@@ -59,7 +59,7 @@ define('io.ox/calendar/settings/pane', [
                         return _(new Array(7)).map(function (num, index) {
                             return {
                                 value: index + 1,
-                                label: gt.format(gt.ngettext('%1$d day', '%1$d days', index + 1), index + 1)
+                                label: gt.ngettext('%1$d day', '%1$d days', index + 1, index + 1)
                             };
                         });
                     }
@@ -290,6 +290,7 @@ define('io.ox/calendar/settings/pane', [
             id: 'alarms',
             index: INDEX += 100,
             render: function () {
+                if (settings.isConfigurable && !settings.isConfigurable('showPastReminders')) return;
                 this.$el.append(
                     util.fieldset(gt('Reminders'),
                         $('<div class="form-group">').append(
@@ -315,7 +316,7 @@ define('io.ox/calendar/settings/pane', [
                         subscribe.open({
                             module: 'calendar',
                             help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
-                            title: gt('Subscribe shared calendars'),
+                            title: gt('Subscribe to shared calendars'),
                             point: 'io.ox/core/folder/subscribe-shared-calendar',
                             sections: {
                                 public: gt('Public calendars'),
@@ -330,7 +331,7 @@ define('io.ox/calendar/settings/pane', [
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="subscribe-shared-calendars">')
                     .append(
-                        $.txt(gt('Subscribe shared calendars'))
+                        $.txt(gt('Subscribe to shared calendars'))
                     )
                     .on('click', openDialog)
                 );

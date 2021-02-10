@@ -239,6 +239,7 @@ define('io.ox/core/folder/extensions', [
                 module: module,
                 help: isContact ? 'ox.appsuite.user.sect.contacts.folder.displayshared.html' : 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
+                tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
@@ -366,8 +367,16 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        treeLinksFiles: function () {
+            if (ext.point('io.ox/core/foldertree/files/treelinks').list().length === 0) return;
+
+            var node = $('<ul class="list-unstyled" role="group">');
+            ext.point('io.ox/core/foldertree/files/treelinks').invoke('draw', node);
+            this.append($('<li class="links list-unstyled" role="treeitem">').append(node));
+        },
+
         addStorageAccount: (function () {
-            var links = $('<li class="links list-unstyled" role="treeitem">');
+            var node = $('<li role="presentation">');
 
             function getAvailableNonOauthServices() {
                 var services = ['nextcloud', 'webdav', 'owncloud'];
@@ -378,21 +387,17 @@ define('io.ox/core/folder/extensions', [
                 getAvailableServices().done(function (services) {
                     var availableNonOauthServices = getAvailableNonOauthServices();
                     if (services.length > 0 || availableNonOauthServices.length) {
-                        links.empty().show().append(
-                            $('<ul class="list-unstyled">').append(
-                                $('<li role="presentation">').append(
-                                    $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', { 'cap': availableNonOauthServices }, openAddStorageAccount)
-                                )
-                            )
+                        node.empty().show().append(
+                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', { 'cap': availableNonOauthServices }, openAddStorageAccount)
                         );
                     } else {
-                        links.hide();
+                        node.hide();
                     }
                 });
             }
 
             return function () {
-                this.append(links);
+                this.append(node);
 
                 require(['io.ox/core/api/filestorage'], function (filestorageApi) {
                     // remove old listeners
@@ -404,11 +409,57 @@ define('io.ox/core/folder/extensions', [
             };
         })(),
 
+        // used to manage subscribed/unsubscribed status of folders from federated shares
+        manageSubscriptions: function () {
+            var node = $('<li role="presentation">');
+            // append node now (serves as placeholder until requests return)
+            this.append(node);
+            // 10 is public folders, 15 is shared folders
+            $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (pFolders, sFolders) {
+                // check if there are folders to unsubscribe at all
+                if (_.isEmpty(pFolders) && _.isEmpty(sFolders)) return node.remove();
+
+                node.append(
+                    //#. opens a dialog to manage shared or public folders
+                    $('<a href="#" data-action="manage-subscriptions" role="treeitem">').text(gt('Manage Shares')).on('click', function () {
+                        require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
+                            subscribe.open({
+                                module: 'infostore',
+                                help: 'ox.appsuite.user.sect.drive.folder.subscribeshared.html',
+                                title: gt('Shared folders'),
+                                point: 'io.ox/core/folder/subscribe-shared-files-folders',
+                                sections: {
+                                    public: gt('Public folders'),
+                                    shared: gt('Shared folders')
+                                },
+                                refreshFolders: true,
+                                tooltip: gt('Subscribe to folder'),
+                                noSync: true,
+                                // subscribe dialog is build for flat foldertrees, add special getData function to make it work for infostore
+                                // no cache or we would overwrite folder collections with unsubscribed folders
+                                getData: function () {
+                                    return $.when(api.list(15, { all: true, cache: false }), api.list(10, { all: true, cache: false })).then(function (publicFolders, sharedFolders) {
+
+                                        return {
+                                            public: publicFolders || [],
+                                            shared: sharedFolders || []
+                                        };
+                                    });
+                                }
+                            });
+                        });
+                    })
+                );
+            }, function () {
+                node.remove();
+            });
+        },
+
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var self = this;
 
-            this.link('subscribe', gt('Subscribe address book'), function (e) {
+            this.link('subscribe', gt('Subscribe to address book'), function (e) {
                 e.data = { baton: baton };
                 openSubscriptionDialog(e);
             });
@@ -426,7 +477,7 @@ define('io.ox/core/folder/extensions', [
             var self = this;
 
             if (baton.module === 'contacts') {
-                self.link('subscribeShared', gt('Subscribe shared address book'), function (e) {
+                self.link('subscribeShared', gt('Subscribe to shared address book'), function (e) {
                     e.data = { baton: baton };
                     openSubscriptionForSharedDialog(e);
                 });
@@ -536,8 +587,8 @@ define('io.ox/core/folder/extensions', [
                 options.filter = function (id, model) {
                     // get response of previously defined filter function
                     var unfiltered = (previous ? previous.apply(this, arguments) : true);
-                    // exclude external accounts
-                    return unfiltered && !api.isExternalFileStorage(model);
+                    // exclude external accounts and trashfolder if requested
+                    return unfiltered && !api.isExternalFileStorage(model) && (!tree.options.hideTrashfolder || !api.is('trash', model.attributes));
                 };
             }
             this.append(
@@ -716,10 +767,30 @@ define('io.ox/core/folder/extensions', [
             id: 'remote-accounts',
             index: 300,
             draw: extensions.fileStorageAccounts
-        }, {
-            id: 'add-external-account',
+        },
+        {
+            id: 'tree-links-files',
             index: 400,
+            draw: extensions.treeLinksFiles
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/files/treelinks').extend(
+        {
+            id: 'add-external-account',
+            index: 100,
             draw: extensions.addStorageAccount
+        }, {
+            id: 'manage-subscriptions',
+            index: 200,
+            draw: extensions.manageSubscriptions
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/infostore/subscribe').extend(
+        {
+            id: 'root-folders',
+            draw: extensions.rootFolders
         }
     );
 
@@ -929,7 +1000,7 @@ define('io.ox/core/folder/extensions', [
                     // guests might have no default folder
                     if (!folder) return;
 
-                    this.link('shared', gt('Subscribe shared folder'), function (e) {
+                    this.link('shared', gt('Subscribe to shared folder'), function (e) {
                         e.data = { baton: baton };
                         openSubscriptionForSharedDialog(e);
                     });
@@ -1029,12 +1100,12 @@ define('io.ox/core/folder/extensions', [
         id: 'shared',
         index: 500,
         draw: function () {
-            this.link('shared', gt('Subscribe shared Calendar'), function () {
+            this.link('shared', gt('Subscribe to shared calendar'), function () {
                 require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                     subscribe.open({
                         module: 'calendar',
                         help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
-                        title: gt('Subscribe shared calendars'),
+                        title: gt('Subscribe to shared calendars'),
                         point: 'io.ox/core/folder/subscribe-shared-calendar',
                         sections: {
                             public: gt('Public calendars'),
@@ -1236,20 +1307,24 @@ define('io.ox/core/folder/extensions', [
             id: 'account-errors',
             index: 500,
             draw: function (baton) {
+                var module = baton.data.module;
 
-                if (baton.data.module === 'contacts' && baton.data.meta && baton.data.meta.errors) {
-                    baton.view.showStatusIcon(gt('The subscription could not be updated due to an error and must be recreated.'), 'click:account-error', baton.data);
+                if (!/^(calendar|contacts|infostore)$/.test(module)) return;
+
+                // contacts
+                if (module === 'contacts' && baton.data.meta && baton.data.meta.errors) {
+                    return baton.view.showStatusIcon(gt('The subscription could not be updated due to an error and must be recreated.'), 'click:account-error', baton.data);
                 }
 
-                if (!/^calendar$/.test(baton.data.module)) return;
+                // calendar and drive
+                var accountError = module === 'calendar' ?
+                    baton.data['com.openexchange.calendar.accountError'] :
+                    baton.data['com.openexchange.folderstorage.accountError'];
 
-                var accountError = baton.data['com.openexchange.calendar.accountError'];
-                if (accountError) {
-                    baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
-                    ox.trigger('http:error:' + accountError.code, accountError);
-                } else {
-                    baton.view.hideStatusIcon();
-                }
+                if (!accountError) return baton.view.hideStatusIcon();
+
+                baton.view.showStatusIcon(accountError.error, 'click:account-error', baton.data);
+                ox.trigger('http:error:' + accountError.code, accountError);
             }
         }
     );

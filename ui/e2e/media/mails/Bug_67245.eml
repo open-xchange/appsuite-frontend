@@ -1,0 +1,81 @@
+Return-Path: <mostAwesomeAddress@world.bestest>
+Delivered-To: meMyselfAndI@open-xchange.com
+Received: from mx1.open-xchange.com ([10.20.30.1])
+	by imap.open-xchange.com with LMTP
+	id gKPeLxaqkV1vIAAA3c6Kzw
+	(envelope-from <mostAwesomeAddress@world.bestest>)
+	for <meMyselfAndI@open-xchange.com>; Mon, 30 Sep 2019 09:09:10 +0200
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mx1.open-xchange.com (Postfix) with ESMTP id 9DAAA6A415
+	for <meMyselfAndI@open-xchange.com>; Mon, 30 Sep 2019 09:09:10 +0200 (CEST)
+Authentication-Results: open-xchange.com;
+	dkim=pass (2048-bit key; unprotected) header.d=world.bestest header.i=@world.bestest header.b="swO6xs91";
+	dkim-atps=neutral
+Received: from [127.0.0.1] (helo=localhost)
+	by localhost with ESMTP (eXpurgate 4.9.1)
+	(envelope-from <mostAwesomeAddress@world.bestest>)
+	id 5d91aa16-6b2e-7f000001272a-7f000001ab1e-1
+	for <meMyselfAndI@open-xchange.com>; Mon, 30 Sep 2019 09:09:10 +0200
+X-Virus-Scanned: Debian amavisd-new at 
+Received: from mx1.open-xchange.com ([127.0.0.1])
+	by localhost (mx1.open-xchange.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V1tj3nPyhRBo for <meMyselfAndI@open-xchange.com>;
+	Mon, 30 Sep 2019 09:09:09 +0200 (CEST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "smtp.world.bestest", Issuer "GTS CA 1O1" (not verified))
+	by mx1.open-xchange.com (Postfix) with ESMTPS id 0DC3B6A414
+	for <meMyselfAndI@open-xchange.com>; Mon, 30 Sep 2019 09:09:06 +0200 (CEST)
+Authentication-Results: open-xchange.com; dmarc=pass (p=none dis=none) header.from=world.bestest
+Authentication-Results: open-xchange.com; spf=pass smtp.mailfrom=mostAwesomeAddress@world.bestest
+Received: by mail-ed1-f50.google.com with SMTP id f20so7584257edv.8
+        for <meMyselfAndI@open-xchange.com>; Mon, 30 Sep 2019 00:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=world.bestest; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=49fo3/jj15NoKm5fLrmLVtMTQ0TyPn74pVKyKx1gvqY=;
+        b=swO6xs91joMA27h3+C2954Ot0eCAh2ufDFz3FZ35Kyu7m5oheqmpLOTGyfPM714ZO5
+         TuXowjp/uAhvll1zX/Nf5/gIFjEoc9sL8K38DW9oyrgGvafE8Q7tfh8Uz4EfZk/9xf6J
+         v/fLuVUFFpI1MQAPcqNSkVg1XwGzWPYpRPTm2b11pfWBMoZQhz5O5tNVnpxtAhp9FaZD
+         Vu5f0CnoW5DrVDbpY+q0qISh1My4w9yNdYtizFV8oDBIqigFE+odrRxaRvNr0xd4/DqR
+         alAbFWRZj6gKGQAYSvpuApELZoxuXE7h4onP6JkjaTHiG1njRmYfdTI1Xa1rTUOTIggv
+         99lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=49fo3/jj15NoKm5fLrmLVtMTQ0TyPn74pVKyKx1gvqY=;
+        b=hvnkTV7JqKMy7aSGY1DODwksjWQA7U75IZ10DYFPzT7tXMqG4QGe16zEew1+fnCa2M
+         H65BmCuYPGWmfbs0PJvs0XOjj6IZoDHQvUrRq8CtQP7TahYWvE9R4tp8MSpC8gqSTmgR
+         kF+I4GtzYTXepSXymRkAYb2eANIaegphZKoNrDo/ZdLTFts20UuNlSdqSgcPQV2df8OR
+         kfh9K4xadiXFOr7bh0OLquMXEFBwJR6I4oeoR7PWRf2ykm/UWvNZ5Ha6HAADD1ar7Z1H
+         zlKpH6aKRuNBSxvc2FoUdiUZeiCT7joXIAv7WueC24KS/E698bM0SQJ+etBL/bnMW2Y1
+         Xo8g==
+X-Gm-Message-State: APjAAAXDq+noWn973svuwpdy9hqutek5C/KToWfl/Ukwr8/vZLAYuOgp
+	oTYYKvmnVYc1NYtKCEvGQ8TsmZPX
+X-Google-Smtp-Source: APXvYqxFGeG3sq0iCPCRKXly2Axt5UDyOZK1F+5IrR9Lt7BNG0JgsPhmFC0q3buTWlK4XUq0XGpYwA==
+X-Received: by 2002:a05:6402:281:: with SMTP id l1mr18148352edv.40.1569827346301;
+        Mon, 30 Sep 2019 00:09:06 -0700 (PDT)
+Received: from [192.168.1.123] (85-118-77-161.mtel.net. [85.118.77.161])
+        by smtp.world.bestest with ESMTPSA id z65sm2279218ede.86.2019.09.30.00.09.05
+        for <meMyselfAndI@open-xchange.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Sep 2019 00:09:05 -0700 (PDT)
+To: =?UTF-8?Q?meMyselfAndI?= <meMyselfAndI@open-xchange.com>
+From: mostAwesomeAddress@world.bestest
+Subject: Bestest Mail Ever
+Message-ID: <bce08b62-2a2e-4a79-2622-b9a082bccaff@world.bestest>
+Date: Mon, 30 Sep 2019 10:09:06 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-purgate-ID: 151428::1569827350-00006B2E-AE00ACCC/14/0
+X-purgate-type: clean.almost-empty
+X-purgate-size: 10
+X-purgate: clean
+
+Dolle Mail

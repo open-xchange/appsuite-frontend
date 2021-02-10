@@ -18,9 +18,10 @@ define('io.ox/files/util', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/api',
     'io.ox/core/notifications',
+    'io.ox/core/api/filestorage',
     'io.ox/files/upload/main',
     'settings!io.ox/files'
-], function (api, ModalDialog, gt, capabilities, folderAPI, Notifications, Upload, settings) {
+], function (api, ModalDialog, gt, capabilities, folderAPI, Notifications, filestorageApi, Upload, settings) {
 
     'use strict';
 
@@ -36,6 +37,31 @@ define('io.ox/files/util', [
             return $.Deferred().reject();
         }
         return $.Deferred().resolve();
+    }
+
+    function getFolderId(baton) {
+        var folderId;
+        if (baton.collection.has('one')) {
+
+            if (baton.models && baton.models.length > 0) {
+                var selectedModel = baton.models[0];
+                folderId = selectedModel.isFolder() ? selectedModel.get('id') : selectedModel.get('folder_id');
+            }
+
+            if (!folderId) {
+                var data = baton.first();
+                folderId = baton.collection.has('folders') ? data.id : data.folder_id;
+                if (!folderId) {
+                    folderId = data.folder_id && data.folder_id !== 'folder' ? data.folder_id : data.id;
+                }
+            }
+
+        } else if (baton.app) {
+            // use current folder
+            folderId = baton.app.folder.get();
+        }
+
+        return folderId;
     }
 
     return {
@@ -329,6 +355,80 @@ define('io.ox/files/util', [
 
                 return false;
             });
+        },
+
+        /**
+         * Returns whether a file (type office document) can be edited in its federated guest account.
+         *
+         * @param {Object} fileModel The file model to be checked.
+         *
+         * return {Boolean} True if the file can be edited in the federated guest account
+         */
+        canEditDocFederated: function (fileModel) {
+            // early out
+            if (!fileModel) { return false; }
+            if (!fileModel.isOffice()) { return false; }
+
+            // check if file is in federated shared file account
+            if (!filestorageApi.isFederatedAccount(fileModel.getItemAccountSync())) { return false; }
+
+            var accountMeta = filestorageApi.getAccountMetaData(fileModel.getItemAccountSync());
+            var guestCapabilities = accountMeta && accountMeta.guestCapabilities;
+            var canOpenInFederatedContext = false;
+
+            // Temporary workaround for use-case 'edit federated' in 7.10.5:
+            // Use local edit when office availible, and when not, check whether
+            // it can be edited in the federated context and open the guest drive as a fallback.
+            // Therefore the e.g. "!capabilities.has('text')" check was added, remove this part
+            // below when restoring the old behavior.
+            if (fileModel.isWordprocessing()) { canOpenInFederatedContext = !capabilities.has('text') && guestCapabilities.indexOf('text') > 0; }
+            if (fileModel.isSpreadsheet()) { canOpenInFederatedContext = !capabilities.has('spreadsheet') && guestCapabilities.indexOf('spreadsheet') > 0; }
+            if (fileModel.isPresentation()) { canOpenInFederatedContext = !capabilities.has('presentation') && guestCapabilities.indexOf('presentation') > 0; }
+            return canOpenInFederatedContext;
+        },
+
+        isCurrentVersion: function (baton) {
+            // folder tree folder, always current version
+            if (!baton.collection.has('some')) return true;
+            // drive folder, always current version
+            if (baton.collection.has('folders')) return true;
+            // single selection
+            if (baton.collection.has('one') && baton.first().current_version !== false) return true;
+            // multi selection
+            if (baton.collection.has('multiple') && baton.array().every(function (file) { return file.current_version !== false; })) return true;
+            // default
+            return false;
+        },
+
+        // check if this is a contact not a file, happens when contact is send as vcard
+        isContact: function (baton) {
+            return _(baton.first()).has('internal_userid');
+        },
+
+        /**
+         * Checks if the collection inside an event is shareable
+         * @param {Event} e
+         *  Event to check the collection
+         * @param {String} type
+         *  Type of the sharing to check ("invite" or "link")
+         * @returns {boolean}
+         *  Whether the elements inside the collection are shareable
+         */
+        isShareable: function (type, baton) {
+            // not possible for multi-selection
+            if (baton.collection.has('multiple')) return false;
+            if (this.isContact(baton)) return false;
+            if (baton.isViewer && !this.isCurrentVersion(baton)) return false;
+            // Links aren't possible for encrypted files
+            if (type === 'link' && baton.first() && new api.Model(baton.first()).isEncrypted()) return false;
+            // get folder id
+            var id = getFolderId(baton);
+            if (!id) return false;
+            // general capability and folder check
+            var model = folderAPI.pool.getModel(id);
+            if (!model.isShareable()) return false;
+            if (model.is('trash')) return false;
+            return type === 'invite' ? model.supportsInviteGuests() : true;
         }
     };
 });

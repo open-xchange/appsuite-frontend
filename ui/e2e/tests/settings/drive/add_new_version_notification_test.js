@@ -14,15 +14,15 @@
 
 Feature('Settings > Drive');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C283260] Adding files with identical names - Add new version and show notification', async (I, settings, drive) => {
+Scenario('[C283260] Adding files with identical names - Add new version and show notification', async ({ I, settings, drive }) => {
 
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.rtf');
@@ -36,9 +36,9 @@ Scenario('[C283260] Adding files with identical names - Add new version and show
     drive.waitForApp();
 
     //Add file with existing name
-    I.clickToolbar('New');
-    I.waitForText('Upload files');
-    I.click('Upload files');
+    I.clickToolbar('Upload');
+    I.waitForText('File');
+    I.click('File');
     I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/generic/testdocument.rtf');
     I.waitForElement('.io-ox-alert-info');
     I.see('A new version for "testdocument.rtf" has been added.', '.io-ox-alert-info');

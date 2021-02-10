@@ -1,13 +1,13 @@
 <html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.7.2. 添加一个条件</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<title>5.8.2. 添加一个条件</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="用户向导&gt;">
-<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.7. 使用电子邮件过滤器">
-<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.7.1. 创建新规则">
-<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.7.3. 添加一个动作">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.8. 使用电子邮件过滤器">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.8.1. 创建新规则">
+<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.8.3. 添加一个动作">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,21 +32,21 @@
   <h1 class="sr-only"><span class="phrase">电子邮件</span></h1>
 <h2 class="sr-only">使用电子邮件过滤器</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
-<div class="titlepage"><div><div><h3 class="title">5.7.2. 添加一个条件</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.11.2"></a><a class="indexterm" name="id-1.6.13.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">一个条件帮助您定义哪一个电子邮件应该套用动作。您能够设定一个或多个条件。</p>
+<div class="titlepage"><div><div><h3 class="title">5.8.2. 添加一个条件</h3></div></div></div>
+<a class="indexterm" name="id-1.6.14.11.2"></a><a class="indexterm" name="id-1.6.14.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">一个条件帮助您定义哪一个电子邮件应该套用动作。您能够设定一个或多个条件。</p>
 <div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
 <p class="title">如何在 <span class="guilabel"><strong>创建新规则</strong></span> 窗口里添加一个条件：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">单击<span class="guibutton"><strong>添加条件</strong></span>。从下拉菜单作出一个选择。请注意以下事项：<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">为了使用不在列表包含的电子邮件部分，选择<span class="guibutton"><strong>标头</strong></span>。在 名称 输入字段中输入一个名称。您可以以显示源数据读取一个电子邮件标头。</p></li>
-<li class="listitem"><p role="presentation">为了考虑<span class="guibutton"><strong>密送</strong></span>部分，选择<span class="guibutton"><strong>信封 - 发送至</strong></span>。信封包括输入在<span class="guibutton"><strong>送到</strong></span>、<span class="guibutton"><strong>抄送</strong></span>、或<span class="guibutton"><strong>密送</strong></span>字段里的电子邮件收件人。</p></li>
+<li class="listitem"><p role="presentation">为了考虑<span class="guibutton"><strong>暗送</strong></span>部分，选择<span class="guibutton"><strong>信封 - 发送至</strong></span>。信封包括输入在<span class="guibutton"><strong>送到</strong></span>、<span class="guibutton"><strong>抄送</strong></span>、或<span class="guibutton"><strong>暗送</strong></span>字段里的电子邮件收件人。</p></li>
 <li class="listitem"><p role="presentation">为了在条件里使用一部分电子邮件内容，选择<span class="guibutton"><strong>内容</strong></span>。</p></li>
 <li class="listitem"><p role="presentation">为了在条件里使用收件日期，选择<span class="guibutton"><strong>当前日期</strong></span>。</p></li>
 </ul>
             </p></li>
-<li class="step"><p role="presentation">从电子邮件部分旁边的下拉菜单，选择一个准则。在输入字段里输入一个参数。</p></li>
+<li class="step"><p role="presentation">从电子邮件部分旁边的下拉菜单，选择一个准则。在输入字段中输入一个变量。</p></li>
 <li class="step">
-<p role="presentation">您可以添加更多条件。您可以指定是满足一个条件还是满足所有条件才执行操作。为此，单击<span class="guibutton"><strong>如果所有条件符合套用规则</strong></span>。</p>
+<p role="presentation">您可以添加更多条件。然后您可以指定处理动作必须符合一个还是所有条件。为此，单击<span class="guibutton"><strong>在符合所有条件时套用规则</strong></span>。</p>
 <p role="presentation">在有一个条件的一刻，您就能创建嵌套的条件。为此，单击<span class="guibutton"><strong>添加条件</strong></span>。选择<span class="guibutton"><strong>嵌套的条件</strong></span>。</p>
 <p role="presentation">要删除一个条件，单击在条件旁边的 <span class="guibutton"><strong>删除</strong></span> 图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span>。</p>
 </li>
@@ -58,7 +58,7 @@
 <li class="listitem"><p role="presentation">准则 "完全相同"</p></li>
 <li class="listitem"><p role="presentation">变量 "分钟"</p></li>
 </ul>
-<p>如是者电子邮件的主题会被核实是否与变量 ("分钟") 完全相同。如何使用主题过滤电子邮件的更多示例：</p>
+<p>如是者电子邮件的主题会被验证是否与变量 ("分钟") 完全相同。如何使用主题过滤电子邮件的更多示例：</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">准则："包含"：</p>
@@ -74,7 +74,7 @@
 <li class="listitem">
 <p role="presentation">准则："matches"</p>
 <p role="presentation">如果主题与变量中的字符完全相同，则符合条件。字符串可以包含通配符。</p>
-<p role="presentation">例如：变量为 "minutes*"。"*" 是表示任意字符的通配符。</p>
+<p role="presentation">例如：变量为 "minutes*"。*" 是表示任意字符的通配符。</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">主题 "minutes" 符合条件。</p></li>
 <li class="listitem"><p role="presentation">主题 "meeting minutes" 不符合条件。</p></li>
@@ -98,7 +98,10 @@
 <p id="ox.appsuite.user.related.email.mailfilter.condition">
         </p>
 <p class="title">上义词动作：</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">创建新规则</a></p></li></ul>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">创建新规则</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.incoming.html">使用一个过滤规则，以加密外来电子邮件</a></p></li>
+</ul>
 <p>
         </p>
 <p class="title">相关主题：</p>

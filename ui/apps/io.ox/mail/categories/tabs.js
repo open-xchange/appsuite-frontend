@@ -78,7 +78,7 @@ define('io.ox/mail/categories/tabs', [
                                 $('<span class="sr-only">').text(gt('Unread messages'))
                             )
                         ),
-                        $('<div class="category-drop-helper" aria-hidden="true">').text(gt('Drop here!'))
+                        $('<div class="category-drop-helper" aria-hidden="true">').text(gt('Drop here'))
                     )
                     .toggle(model.isEnabled())
                     .toggleClass('selected', model.get('id') === current)

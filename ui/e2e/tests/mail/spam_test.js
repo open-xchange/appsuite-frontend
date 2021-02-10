@@ -15,18 +15,18 @@
 
 Feature('Mail > Spam');
 
-Before(async function (I, users) {
+Before(async function ({ users }) {
     const user = users.getRandom();
     user.gui_spam_filter_enabled = true;
     await users.create(user);
 });
 
-After(async function (I, users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: skip can be removed as soon as https://gitlab.open-xchange.com/frontend/codecept-helpers/merge_requests/72 is released
-Scenario.skip('Mark mail in spam folder as not spam and move to inbox', async function (I, users) {
+Scenario.skip('Mark mail in spam folder as not spam and move to inbox', async function ({ I, users }) {
     let [user] = users,
         subject = 'test subject';
 
@@ -52,7 +52,7 @@ Scenario.skip('Mark mail in spam folder as not spam and move to inbox', async fu
     I.waitForVisible(locate('span').withAttr({ 'title': subject }));
 });
 
-Scenario('[C114951] Disabled links in spam mail folders', async function (I, users, mail) {
+Scenario('[C114951] Disabled links in spam mail folders', async function ({ I, users, mail }) {
 
     users[0].hasConfig('com.openexchange.mail.maliciousFolders.listing', '$Spam, default0/INBOX/Phishing');
 

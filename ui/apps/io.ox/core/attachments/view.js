@@ -131,7 +131,7 @@ define('io.ox/core/attachments/view', [
         renderSummary: function (length) {
             length = length || this.getValidModels().length;
             this.$header.find('.summary').text(
-                gt.format(gt.ngettext('%1$d attachment', '%1$d attachments', length), length)
+                gt.ngettext('%1$d attachment', '%1$d attachments', length, length)
             );
         },
 

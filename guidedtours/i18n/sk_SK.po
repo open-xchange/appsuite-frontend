@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-14 00:09+0200\n"
+"PO-Revision-Date: 2020-12-15 00:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -283,42 +283,40 @@ msgstr "Zdieľanie súborov"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
+"also collaborate on a document and set different rights."
 msgstr ""
 "Tu môžete zdieľať súbory s vašimi kolegami a externými kontaktami. Môžete "
-"tiež spolupracovať na dokumente a nastaviť rôzne prístupové práva."
+"tiež spolupracovať na dokumente a nastaviť rôzne práva."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Možnosti zdieľania"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"Vyberte si z dvoch alternatív zdieľania vašich súborov a priečinkov. Použite "
-"možnosť Pozvať ľudí ak chcete spravovať prístupové práva a umožniť pozvaným "
-"ľuďom vytvárať a upravovať súbory. Alebo môžete jednoducho získať odkaz a "
-"umožniť iným ľuďom zobraziť a stiahnuť váš súbor. Ak chcete, môžete použiť "
-"dátum skončenia platnosti odkazu alebo ho ochrániť heslom."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Spolupráca"
+msgid "Sharing option - Invite people"
+msgstr "Možnosť zdieľania - pozvať ľudí"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"Choose from two alternatives to share your files and folder. Use \"Invited "
+"people only\" if you want ot manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
 msgstr ""
-"Zdieľanie súborov pozvaním ľudí umožňuje príjemcovia nielen vytvárať a "
-"upravovať súbory, ale aj spolupracovať s vami na písaní textových dokumentov "
-"a tabuliek a to zároveň s vami."
+"Zvoľte si z dvoch alternatív zdieľania svojich súborov a priečinkov. Položku "
+"„Iba pozvaní ľudia“ použite, ak chcete spravovať prístupové práva a umožniť "
+"príjemcom vytvárať a upravovať súbory. Interní a externí účastníci s vami "
+"tiež môžu spolupracovať na dokumentoch súčasne."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing option - Everyone who has the link"
+msgstr "Možnosť zdieľania - ktokoľvek, kto má odkaz"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
+msgstr ""
+"Je tiež možné vytvoriť odkaz na zdieľanie, ktorý umožní ostatným zobraziť "
+"alebo stiahnuť vaše súbory. Ak chcete, môžete mu nastaviť dátum vypršania "
+"platnosti a ochranu heslom."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -381,8 +379,8 @@ msgid "Navigation"
 msgstr "Navigácia"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "Všetky aplikácie nájdete v menu aplikácií vpravo hore."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Všetky aplikácie nájdete v menu aplikácií vľavo hore."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -419,14 +417,14 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Zrušiť prehliadku"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
 "choose \"%s\""
 msgstr ""
 "Túto prehliadku môžete kedykoľvek znova spustiť kliknutím na ikonu účtu a "
-"zvolením „%s“."
+"zvolením \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -566,12 +564,12 @@ msgstr "Otvorenie nastavenia emailov"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Systém v pravej "
-"hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na ľavej "
-"strane."
+"Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Nastavenia v "
+"pravej hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na "
+"ľavej strane."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -742,12 +740,12 @@ msgstr "Otvorenie Pomocníka"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Ak chcete otvoriť Pomocníka, kliknite na obrázok používateľa v pravej hornej "
+"Ak chcete otvoriť Pomocníka, kliknite na ikonu Pomocníka v pravej hornej "
 "časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma Pomocníka pre "
 "aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte kliknutím na "
 "tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
@@ -866,6 +864,64 @@ msgstr ""
 "Ak chcete upraviť viacero úloh zároveň, zaškrtnite políčka na ľavej strane "
 "úloh. Ak políčka nie sú zobrazené, kliknite na Zobraziť > Zaškrtávacie "
 "políčka v pravej časti panelu nástrojov."
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "Tu môžete zdieľať súbory s vašimi kolegami a externými kontaktami. Môžete "
+#~ "tiež spolupracovať na dokumente a nastaviť rôzne prístupové práva."
+
+#~ msgid "Sharing options"
+#~ msgstr "Možnosti zdieľania"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "Vyberte si z dvoch alternatív zdieľania vašich súborov a priečinkov. "
+#~ "Použite možnosť Pozvať ľudí ak chcete spravovať prístupové práva a "
+#~ "umožniť pozvaným ľuďom vytvárať a upravovať súbory. Alebo môžete "
+#~ "jednoducho získať odkaz a umožniť iným ľuďom zobraziť a stiahnuť váš "
+#~ "súbor. Ak chcete, môžete použiť dátum skončenia platnosti odkazu alebo ho "
+#~ "ochrániť heslom."
+
+#~ msgid "Collaborating"
+#~ msgstr "Spolupráca"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "Zdieľanie súborov pozvaním ľudí umožňuje príjemcovia nielen vytvárať a "
+#~ "upravovať súbory, ale aj spolupracovať s vami na písaní textových "
+#~ "dokumentov a tabuliek a to zároveň s vami."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "Všetky aplikácie nájdete v menu aplikácií vpravo hore."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Ak chcete otvoriť nastavenia emailov, kliknite na ikonu menu Systém v "
+#~ "pravej hornej časti panela menu. Vyberte Nastavenia. Kliknite na Email na "
+#~ "ľavej strane."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Ak chcete otvoriť Pomocníka, kliknite na obrázok používateľa v pravej "
+#~ "hornej časti panela menu. Vyberte položku Pomocník. Zobrazí sa téma "
+#~ "Pomocníka pre aktuálne vybratú aplikáciu. Úplného Pomocníka zobrazíte "
+#~ "kliknutím na tlačidlo Štartovacia stránka alebo Obsah v hornej časti okna."
 
 #~ msgid "Creating new items"
 #~ msgstr "Vytváranie nových položiek"

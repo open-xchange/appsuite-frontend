@@ -25,35 +25,35 @@ define('io.ox/files/upload/main', [
             limit: 1000,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d second', '%1$d seconds', t), t);
+                return gt.ngettext('%1$d second', '%1$d seconds', t, t);
             }
         },
         {
             limit: 60,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d minute', '%1$d minutes', t), t);
+                return gt.ngettext('%1$d minute', '%1$d minutes', t, t);
             }
         },
         {
             limit: 60,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d hour', '%1$d hours', t), t);
+                return gt.ngettext('%1$d hour', '%1$d hours', t, t);
             }
         },
         {
             limit: 24,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d day', '%1$d days', t), t);
+                return gt.ngettext('%1$d day', '%1$d days', t, t);
             }
         },
         {
             limit: 7,
             message: function (t) {
                 //#. estimated upload duration
-                return gt.format(gt.ngettext('%1$d week', '%1$d weeks', t), t);
+                return gt.ngettext('%1$d week', '%1$d weeks', t, t);
             }
         }
         ],
@@ -71,14 +71,35 @@ define('io.ox/files/upload/main', [
         });
 
     function FileUpload() {
-        var totalProgress = 0,
-            totalSize = 0, //accumulated size of all files
-            currentSize = 0, //number of bytes, which are currently uploaded
+        var totalProgressQueueLength = 0, // length of the upload file queue
+            totalSizeBytes = 0, //accumulated size of all files
+            uploadedBytes = 0, //number of bytes, which are currently uploaded
             startTime, // time stamp, when the first file started uploading
             uploadCollection = new UploadCollection(),
             $el, bottomToolbar, mainView, //some dom nodes needed for the view
             self = this,
             api = filesAPI;
+
+        function handleFileUploadProgress(e, position, files, model) {
+            // update progress
+            var currentFileProgress = e.loaded / e.total;
+            // better use the provided file size and not 'loaded', or you'll have different 'units' when calculating totalSizeBytes
+            var uploadedBytesCurrentFile = files[position].file.size * currentFileProgress;
+            if (model) {
+                var loaded = model.get('loaded');
+                model.set({ progress: currentFileProgress, loaded: uploadedBytesCurrentFile });
+                // global
+                uploadedBytes += uploadedBytesCurrentFile - loaded;
+            }
+            // global
+            totalProgressQueueLength = (position + currentFileProgress) / files.length;
+
+            //update uploaded size for time estimation
+            uploadCollection.trigger('progress', {
+                progress: totalProgressQueueLength,
+                estimatedTime: getEstimatedTime()
+            });
+        }
 
         api.on('add:imp_version', function (title) {
             notifications.yell('info', gt('A new version for "%1$s" has been added.', title));
@@ -87,7 +108,11 @@ define('io.ox/files/upload/main', [
         this.calculateTotalSíze = function () {
             //update the total size for time estimation
             uploadCollection.each(function (model) {
-                totalSize += model.get('file').size;
+                // only add files that were not added to the total size already, calculateTotalSíze can be called multiple times
+                if (!model.get('counted')) {
+                    model.set({ counted: true });
+                    totalSizeBytes += model.get('file').size;
+                }
             });
 
         };
@@ -117,23 +142,7 @@ define('io.ox/files/upload/main', [
                     _.extend({ file: item.file }, item.options)
                 )
                 .progress(function (e) {
-                    // update progress
-                    var sub = e.loaded / e.total;
-
-                    if (model) {
-                        var loaded = model.get('loaded');
-                        model.set({ progress: sub, loaded: e.loaded });
-
-                        currentSize += e.loaded - loaded;
-                    }
-
-                    totalProgress = (position + sub) / files.length;
-
-                    //update uploaded size for time estimation
-                    uploadCollection.trigger('progress', {
-                        progress: totalProgress,
-                        estimatedTime: getEstimatedTime()
-                    });
+                    handleFileUploadProgress(e, position, files, model);
                 })
                 .fail(function (e) {
                     model.set({ abort: true });
@@ -149,13 +158,13 @@ define('io.ox/files/upload/main', [
             return request;
         };
 
-        this.stop = function () {
+        this.stop = function (file, position, files) {
             var requests = uploadCollection.pluck('request');
-            totalSize = 0;
-            api.trigger('stop:upload', requests);
+            totalSizeBytes = 0;
+            api.trigger('stop:upload', requests, files);
             api.trigger('refresh.all');
-            totalProgress = 0;
-            currentSize = 0;
+            totalProgressQueueLength = 0;
+            uploadedBytes = 0;
             // set abort to true to remove all files from uploadview which have not been uploaded yet
             uploadCollection.each(function (model) {
                 if (model.get('progress') !== 1) model.set('abort', true);
@@ -164,13 +173,13 @@ define('io.ox/files/upload/main', [
         };
 
         this.getTotalProgress = function () {
-            return totalProgress;
+            return totalProgressQueueLength;
         };
 
         function getEstimatedTime() {
             var time = new Date().getTime() - startTime,
-                progress = Math.min(1, currentSize / totalSize),
-                estimation = time / progress - time || 0,
+                progress = Math.min(1, uploadedBytes / totalSizeBytes),
+                estimation = time / progress - time || 0, // more or less time left
                 counter = 0;
 
             do {
@@ -228,8 +237,8 @@ define('io.ox/files/upload/main', [
             });
 
         function remove(model) {
-            currentSize -= model.get('loaded');
-            totalSize -= model.get('file').size;
+            uploadedBytes -= model.get('loaded');
+            totalSizeBytes -= model.get('file').size;
             uploadCollection.remove(model);
         }
 
@@ -252,19 +261,26 @@ define('io.ox/files/upload/main', [
                 ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));
                 bottomToolbar.append($el);
             }.bind(this))
-            .on('progress', function (e, def, file) {
+            .on('progress', function (e, def, file, positon, files) {
+
+                var queueLength = files && files.length;
+
+                $('.upload-wrapper').find('.items-left').text(
+                    //#. number of left files to complete the upload
+                    gt('%1$s Files left', queueLength - positon)
+                );
+
                 $('.upload-wrapper').find('.file-name').text(
                     //#. the name of the file, which is currently uploaded (might be shortended by '...' on missing screen space )
                     gt('Uploading "%1$s"', file.file.name)
                 );
             })
             .on('stop', function () {
-                mainView.removeClass('toolbar-bottom-visible');
                 // if something went wrong before the start (filesize to big etc.) there is no $el
-                if ($el) {
-                    $el.remove();
-                }
+                if (mainView) { mainView.removeClass('toolbar-bottom-visible'); }
+                if ($el) { $el.remove(); }
             });
+
         this.update = upload.createQueue(_.extend({}, this, {
             progress: function (item, position, files) {
 
@@ -278,21 +294,7 @@ define('io.ox/files/upload/main', [
                         version_comment: item.options.version_comment
                     })
                     .progress(function (e) {
-                        // update progress
-                        var sub = e.loaded / e.total;
-                        if (model) {
-                            var loaded = model.get('loaded');
-                            model.set({ progress: sub, loaded: e.loaded });
-
-                            currentSize += e.loaded - loaded;
-                        }
-
-                        totalProgress = (position + sub) / files.length;
-                        //update uploaded size for time estimation
-                        uploadCollection.trigger('progress', {
-                            progress: totalProgress,
-                            estimatedTime: getEstimatedTime()
-                        });
+                        handleFileUploadProgress(e, position, files, model);
                     })
                     .fail(function (e) {
                         model.set({ abort: true });
@@ -336,7 +338,10 @@ define('io.ox/files/upload/main', [
         draw: function (baton) {
             this.append(
                 $('<div class="upload-title">').append(
-                    $('<div class="estimated-time">'),
+                    $('<div class="time-container">').append(
+                        $('<span class="estimated-time">'),
+                        $('<span class="items-left">')
+                    ),
                     $('<div class="file-name">')
                 ),
                 $('<div class="upload-details">').append(

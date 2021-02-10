@@ -940,12 +940,6 @@
             return tmp;
         },
 
-        noI18n: (function () {
-            return !_.url.hash('debug-i18n') ? _.identity : function (text) {
-                return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
-            };
-        }()),
-
         updateFavicons: function (path) {
             path = path || ox.base + '/apps/themes/' + ox.theme + '/';
             var icons = {
@@ -970,8 +964,81 @@
         }
     });
 
-    _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {
+    // debug I18N functionality
+    _.DEBUG_I18N = !!_.url.hash('debug-i18n');
+
+    _.mixin({
+        noI18n: _.DEBUG_I18N ? function (text) {
+            return '\u200b' + (_.isString(text) ? text.replace(/[\u200b\u200c]/g, '') : text) + '\u200c';
+        } : function (text) { return text; } // do not pollute `_.identity` with new properties (see below)
+    });
+
+    /**
+     * In "debug-i18n" mode, strips the translation markers from the passed
+     * string. Useful if a translated string needs to be used for any data
+     * processing instead of being displayed in the GUI (e.g. the translated
+     * default name "Unnamed" for a new file to be created via a server call).
+     *
+     * @param {string} text
+     *  The text to be stripped (e.g.: "\u200bUnnamed\u200c").
+     *
+     * @returns {string}
+     *  The stripped text (e.g.: "Unnamed").
+     */
+    _.noI18n.fix = _.DEBUG_I18N ? function (text) {
         return text.replace(/^\u200b|\u200c$/g, '');
+    } : _.identity;
+
+    /**
+     * Similar to `_.printf`: Takes a format string and arguments to be filled
+     * for the placeholders. Note that this method does not do any translation
+     * by itself.
+     *
+     * @param {string} pattern
+     *  The format string to be processed, usually the result of one of the
+     *  gettext functions, or some other language-independent pattern.
+     *
+     * @param {unknwon[]} args
+     *  The arguments to be inserted for the placeholders in the format string.
+     *  In "debug-i18n" mode, the translation markers will be removed from all
+     *  arguments.
+     *
+     * @returns {string}
+     *  The processed string (enclosed in translation markers in "debug-i18n"
+     *  mode).
+     */
+    _.noI18n.format = _.DEBUG_I18N ? function (/* pattern, ...args */) {
+        return _.noI18n(_.printf.apply(_, arguments));
+    } : _.printf;
+
+    /**
+     * Similar to `_.aprintf`: Takes a format string, and returns an array with
+     * the results of one or two callback functions processing the plain text
+     * and placeholders. Useful e.g. to replace the placeholders in the format
+     * string with DOM nodes or HTML mark-up that can be passed to `$.append`
+     * and similar functions.
+     *
+     * @param {string} pattern
+     *  The format string to be processed, usually the result of one of the
+     *  gettext functions.
+     *
+     * @param {(index: number) => T1} argFn
+     *  The callback function used to process the placeholders in the pattern
+     *  string. Receives the zero-based (!) index of the placeholder (also for
+     *  indexed placeholders, e.g. the index 2 for "%3$s").
+     *
+     * @param {(text: string) => T2} [textFn=_.noI18n]
+     *  The callback function used to process the text portions between the
+     *  placeholders. If omitted, uses the `_.noI18n` function that returns the
+     *  passed text portion (enclosed in translation markers in "debug-i18n"
+     *  mode).
+     *
+     * @returns {Array<T1|T2>}
+     *  The results of the callback functions, in order of the text portions in
+     *  the passed format string.
+     */
+    _.noI18n.assemble = function (pattern, argFn, textFn) {
+        return _.aprintf(_.noI18n.fix(pattern), argFn, textFn ? _.compose(textFn, _.noI18n) : _.noI18n);
     };
 
     _.noI18n.text = function () {
@@ -982,6 +1049,11 @@
 
     _.escapeRegExp = function (s) {
         return (s || '').replace(/([$^*+?!:=.|(){}[\]\\])/g, function () { return ('\\' + arguments[1]); });
+    };
+
+    _.stripTags = function (str) {
+        if (!str) return '';
+        return String(str).replace(/<(\/(div|p)|br|img)>/gi, ' ').replace(/<.+?>/g, '');
     };
 
     _.sanitize = {

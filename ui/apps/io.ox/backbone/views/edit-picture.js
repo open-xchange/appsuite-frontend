@@ -40,9 +40,14 @@ define('io.ox/backbone/views/edit-picture', [
             })
             .inject({
                 load: function () {
+                    // used for standalone version of pictureUpload
+                    this.model.set('save', false);
                     return $.when().then(function () {
-                        var file = this.model.get('pictureFile'),
-                            imageurl = this.model.get('image1_url');
+                        var file = this.model.get('pictureFile');
+                        if (_.isFunction(file)) file = file();
+                        return file;
+                    }.bind(this)).then(function (file) {
+                        var imageurl = this.model.get('image1_url');
                         // add unique identifier to prevent caching bugs
                         if (imageurl) imageurl = imageurl + '&' + $.param({ uniq: _.now() });
                         // a) dataUrl (webcam photo)
@@ -163,7 +168,7 @@ define('io.ox/backbone/views/edit-picture', [
                             current = $body.croppie('get').zoom,
                             zoom = ((current - min) * 100 / (max - min)),
                             //#. image zoom, %1$d is the zoomlevel of the previewpicture in percent
-                            text = zoom ? gt.format('Zoom: %1$d%', zoom.toFixed(0)) :
+                            text = zoom ? gt('Zoom: %1$d%', zoom.toFixed(0)) :
                                 //#. noun. label for the zoomslider in case the zoom is undefined or 0
                                 gt('Zoom');
                         // remove 'blind spot' at range end (last step would exceed max)
@@ -225,6 +230,8 @@ define('io.ox/backbone/views/edit-picture', [
                         this.onCancel();
                         break;
                     case 'apply':
+                        // used for standalone version of pictureUpload
+                        this.model.set('save', true);
                         if (!this.$el.hasClass('empty')) return this.onApply();
                         // use existing image was removed so update model
                         if (this.model.get('image1_url')) this.trigger('reset');

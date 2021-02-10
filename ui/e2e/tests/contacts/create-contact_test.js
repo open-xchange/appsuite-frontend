@@ -13,15 +13,15 @@
 
 Feature('Contacts > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7354] With all available fields filled', function (I, contacts) {
+Scenario('[C7354] With all available fields filled', function ({ I, contacts }) {
     I.login('app=io.ox/contacts');
 
     contacts.waitForApp();
@@ -152,7 +152,7 @@ Scenario('[C7354] With all available fields filled', function (I, contacts) {
     I.see('a comment in the comment field');
 });
 
-Scenario('Dirtycheck on creating contact', function (I, contacts) {
+Scenario('Dirtycheck on creating contact', function ({ I, contacts }) {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();

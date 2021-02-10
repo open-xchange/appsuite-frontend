@@ -14,15 +14,15 @@
 /// <reference path="../../../steps.d.ts" />
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C248441] Configure to show/hide birthday calendar', async function (I) {
+Scenario('[C248441] Configure to show/hide birthday calendar', async function ({ I }) {
     I.login();
     I.openApp('Settings', { folder: 'virtual/settings/io.ox/calendar' });
 

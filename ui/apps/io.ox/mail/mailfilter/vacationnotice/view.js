@@ -97,7 +97,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             },
             getDurationString: function () {
                 var duration = this.model.getDuration();
-                return duration > 0 ? gt.ngettextf('%1$d day', '%1$d days', duration) : '';
+                return duration > 0 ? gt.ngettext('%1$d day', '%1$d days', duration, duration) : '';
             },
             getTimeFrameError: function () {
                 var error = this.model.validate();

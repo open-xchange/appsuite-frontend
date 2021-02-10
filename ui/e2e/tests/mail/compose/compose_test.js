@@ -15,15 +15,15 @@ const expect = require('chai').expect;
 
 Feature('Mail Compose');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Compose and discard with/without prompts', async function (I, users, mail) {
+Scenario('Compose and discard with/without prompts', async function ({ I, users, mail }) {
     const [user] = users;
 
     // preparations
@@ -38,11 +38,12 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
     I.login('app=io.ox/mail');
+    mail.waitForApp();
 
     // workflow 1: Compose & discard
     mail.newMail();
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
     I.waitForDetached('.io-ox-mail-compose');
 
     // workflow 3: Compose & discard with signature and vcard
@@ -54,11 +55,12 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     I.waitForText('Default signature for new messages');
     I.selectOption('Default signature for new messages', 'My signature');
     // yep, this seems useless, but when you have no default signature set, the default compose signature will be used
-    // if you have unset (explicitedly checked no signature) the reply/forward signature. no signature will be selected on reply
+    // if you have unset (explicitly checked no signature) the reply/forward signature. no signature will be selected on reply
     I.selectOption('Default signature for replies or forwards', 'My signature');
     I.selectOption('Default signature for replies or forwards', 'No signature');
 
     I.openApp('Mail');
+    mail.waitForApp();
     mail.newMail();
 
     let text = await I.grabValueFrom({ css: 'textarea.plain-text' });
@@ -66,14 +68,14 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
     expect(text).to.contain('My unique signature content');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
     I.click(mail.locators.compose.close);
-    I.see('Do you really want to discard your message?');
-    I.click('Discard message');
+    I.see('This email has not been sent. You can save the draft to work on later.');
+    I.click('Delete draft');
 
     // workflow 5: Compose with to, subject, some text, then send
     mail.newMail();
@@ -107,10 +109,10 @@ Scenario('Compose and discard with/without prompts', async function (I, users, m
         '> Testcontent'
     ));
     I.click(mail.locators.compose.close);
-    I.dontSee('Do you really want to discard your message?');
+    I.dontSee('This email has not been sent. You can save the draft to work on later.');
 });
 
-Scenario('Compose mail with different attachments', async function (I, users, mail) {
+Scenario('Compose mail with different attachments', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
@@ -119,7 +121,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
 
     // create textfile in drive
     I.clickToolbar('New');
-    I.click('Add note');
+    I.click('Note');
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
@@ -149,7 +151,9 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
     I.say('📢 add inline image', 'blue');
     I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 2);
-
+    within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
+        I.waitForVisible('img');
+    });
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject');
     mail.send();
@@ -179,7 +183,7 @@ Scenario('Compose mail with different attachments', async function (I, users, ma
     I.see('2 attachments'); // has 2 attachments as one of the attachments is inline
 });
 
-Scenario('Compose with inline image, which is removed again', async function (I, users, mail) {
+Scenario('Compose with inline image, which is removed again', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'html');
@@ -209,7 +213,7 @@ Scenario('Compose with inline image, which is removed again', async function (I,
     I.dontSeeElement('.attachments');
 });
 
-Scenario('Compose with drivemail attachment and edit draft', async function (I, users, mail, drive, dialogs) {
+Scenario('Compose with drivemail attachment and edit draft', async function ({ I, users, mail, drive, dialogs }) {
     const [user] = users;
     const user2 = await users.create();
 
@@ -228,7 +232,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.say('Create textfile in drive');
     drive.waitForApp();
     I.clickToolbar('New');
-    I.click('Add note');
+    I.clickDropdown('Note');
     I.waitForVisible('.io-ox-editor');
     I.fillField('Title', 'Testdocument.txt');
     I.fillField('Note', 'Some content');
@@ -256,7 +260,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
     I.fillField('Subject', 'Testsubject #1');
     I.click(mail.locators.compose.close);
     dialogs.waitForVisible();
-    dialogs.clickButton('Save as draft');
+    dialogs.clickButton('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');
 
     I.selectFolder('Drafts');
@@ -304,7 +308,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function (I, 
 
 });
 
-Scenario('Compose mail with vcard and read receipt', async function (I, users, mail) {
+Scenario('Compose mail with vcard and read receipt', async function ({ I, users, mail }) {
     const user2 = await users.create();
 
     I.login('app=io.ox/mail');
@@ -334,14 +338,14 @@ Scenario('Compose mail with vcard and read receipt', async function (I, users, m
 
     // I.login('app=io.ox/mail');
 
-    // TODO check read aknowledgement
+    // TODO check read acknowledgement
     // I.waitForVisible({ css: 'li.unread' }); // wait for one unread mail
     // I.click({ css: 'li.unread' });
     // I.waitForVisible('.mail-detail-pane .subject');
     // I.see('Read acknowledgement', '.mail-detail-pane');
 });
 
-Scenario('Compose mail, refresh and continue work at restore point', async function (I, users, mail) {
+Scenario('Compose mail, refresh and continue work at restore point', async function ({ I, users, mail }) {
     const [user] = users;
 
     await I.haveSetting('io.ox/mail//messageFormat', 'text');

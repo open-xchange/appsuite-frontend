@@ -40,7 +40,8 @@ define('io.ox/core/settings/defaults', function () {
         showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
-        }
+        },
+        onboardingWizard: true
     };
 
 });

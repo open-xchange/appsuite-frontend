@@ -15,16 +15,16 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users, dialogs) => {
+Scenario('[C83383] mail folders using “Permisions” dialog', async ({ I, users, dialogs }) => {
     const busystate = locate('.modal modal-body.invisible');
     // Alice shares a mail folder
     I.login('app=io.ox/mail');
@@ -47,7 +47,7 @@ Scenario('[C83383] mail folders using “Permisions” dialog', async (I, users,
     I.waitForElement(locate('.permissions-view .row').at(2));
     I.click('Author');
     I.clickDropdown('Viewer');
-
+    I.fillField('.form-control.message-text', 'Hello');
     dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 

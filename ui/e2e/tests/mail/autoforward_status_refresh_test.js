@@ -12,15 +12,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('checks if an auto forward rule is correctly listed after a status update', function (I, dialogs) {
+Scenario('checks if an auto forward rule is correctly listed after a status update', function ({ I, dialogs }) {
 
     I.haveMailFilterRule({
         'rulename': 'autoforward',
@@ -52,7 +52,7 @@ Scenario('checks if an auto forward rule is correctly listed after a status upda
     I.waitForElement('.io-ox-mailfilter-settings .settings-list-item.disabled');
 });
 
-Scenario('checks if an avacation notice rule is correctly listed after a status update', function (I, users, dialogs) {
+Scenario('checks if an avacation notice rule is correctly listed after a status update', function ({ I, users, dialogs }) {
     let [user] = users;
 
     I.haveMailFilterRule({

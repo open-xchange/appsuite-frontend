@@ -386,7 +386,7 @@ define('io.ox/core/cache', [
                     for (id in target) {
                         if (data[id] !== undefined) {
                             changed = changed || !_.isEqual(target[id], data[id]);
-                            target[id] = data[id];
+                            if (id !== 'last_modified') target[id] = data[id];
                         }
                     }
                     if (changed) {
@@ -443,9 +443,10 @@ define('io.ox/core/cache', [
 
             return get(cid).then(function (co) {
                 if (co !== null && co[prop] !== data[prop]) {
-                    return remove(cid);
+                    remove(cid);
+                    return true;
                 }
-                return $.when();
+                return false;
             });
         };
     };

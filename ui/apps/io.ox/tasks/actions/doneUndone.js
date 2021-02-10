@@ -29,14 +29,16 @@ define('io.ox/tasks/actions/doneUndone', [
                 percent_completed: 0,
                 date_completed: null
             };
-            message = gt.ngettext('Task marked as undone', 'Tasks marked as undone', data.length);
+            // do not use "gt.ngettext" for plural without count
+            message = (data.length === 1) ? gt('Task marked as undone') : gt('Tasks marked as undone');
         } else {
             mods = {
                 status: 3,
                 percent_completed: 100,
                 date_completed: _.now()
             };
-            message = gt.ngettext('Task marked as done', 'Tasks marked as done', data.length);
+            // do not use "gt.ngettext" for plural without count
+            message = (data.length === 1) ? gt('Task marked as done') : gt('Tasks marked as done');
         }
 
         api.updateMultiple(data, mods).then(

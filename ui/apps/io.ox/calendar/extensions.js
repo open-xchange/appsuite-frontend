@@ -62,7 +62,10 @@ define('io.ox/calendar/extensions', [
                 var model = baton.model,
                     folderModel = folderAPI.pool.getModel(model.get('folder')),
                     folder = folderModel.toJSON(),
-                    folderId = model.get('folder');
+                    folderId = model.get('folder'),
+                    // in week view all day appointments are 20px high, no space to show the location too, so it can be dismissed
+                    skipLocation = !model.get('location') || (baton.view && baton.view.mode && baton.view.mode.indexOf('week') === 0 && util.isAllday(model)),
+                    contentNode = $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model));
 
                 // cleanup classes to redraw correctly
                 this.removeClass('free modify private disabled needs-action accepted declined tentative');
@@ -84,20 +87,22 @@ define('io.ox/calendar/extensions', [
                     if (canModifiy) this.addClass('modify');
                     this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf));
                 }
+                if (skipLocation) {
+                    contentNode.append(
+                        util.returnIconsByType(model).type,
+                        model.get('summary') ? $('<div class="title">').text(_.noI18n(model.get('summary'))) : ''
+                    );
+                } else {
+                    contentNode.append(
+                        $('<div class="title-container">').append(
+                            util.returnIconsByType(model).type,
+                            model.get('summary') ? $('<div class="title">').text(_.noI18n(model.get('summary'))) : ''
+                        ),
+                        $('<div class="location">').text(_.noI18n(model.get('location')))
+                    );
+                }
 
-                this
-                    .append(
-                        $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model)).append(
-                            $('<div class="title-container">').append(
-                                util.returnIconsByType(model).type,
-                                model.get('summary') ? $('<div class="title">').text(gt.format('%1$s', model.get('summary') || '\u00A0')) : ''
-                            ),
-                            model.get('location') ? $('<div class="location">').text(model.get('location') || '\u00A0') : ''
-                        )
-                    )
-                    .attr({
-                        'data-extension': 'default'
-                    });
+                this.append(contentNode).attr({ 'data-extension': 'default' });
             };
         }())
     });

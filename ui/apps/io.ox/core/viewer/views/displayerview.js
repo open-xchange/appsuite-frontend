@@ -38,6 +38,24 @@ define('io.ox/core/viewer/views/displayerview', [
         }
     }
 
+    /**
+     * Applies the attributes NamedNodeMap, as returned by 'Element.attributes' to the given DOM element.
+     *
+     * @param {DOM} element
+     *  The DOM element to apply the attributes to.
+     *
+     * @param {NamedNodeMap} attributes
+     *  The attributes to apply
+     */
+    function setAttributes(element, attributes) {
+        if (!attributes || !attributes.length) { return; }
+
+        for (var attr, i = 0; i < attributes.length; i++) {
+            attr = attributes.item(i);
+            element.setAttribute(attr.name, attr.value);
+        }
+    }
+
     // show every image one time or repeat loop [loopEndlessly, loopOnceOnly]
     var IS_LOOP_ONCE_ONLY;
     // delay for autoplay between slides (milliseconds)
@@ -78,6 +96,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = [];
             // map of the slide duplicate Backbone Views
             this.slideDuplicateViews = {};
+            // map of the indicies of temporary versions displayed
+            this.temporaryVersions = {};
             // local array of loaded slide indices.
             this.loadedSlides = [];
             // number of slides to be prefetched in the left/right direction of the active slide (minimum of 1 required)
@@ -111,7 +131,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.listenTo(this.viewerEvents, 'viewer:zoom:out:swiper', this.onZoomOut);
 
             // listen to version change events
-            this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
+            this.listenTo(FilesAPI, 'add:version remove:version change:version', this.onModelChangeVersion.bind(this));
+
             // listen to version display events
             this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayVersion.bind(this));
 
@@ -444,6 +465,50 @@ define('io.ox/core/viewer/views/displayerview', [
         },
 
         /**
+         * Replaces the slide content view defined by the slideViews array and the index
+         * with a new view rendered from the given model.
+         * Unloads and disposes the current view instance.
+         * Prefetches the new view if the previous one was prefefetched.
+         *
+         * @param {BaseView[]} slideViews
+         *  The array of the slide content view.
+         *
+         * @param {Number} index
+         *  The index of the view to be replaced in the slideViews array.
+         *
+         * @param {FilesAPI.Model} model
+         *  The model to render the new view with.
+         *
+         * @returns {jQuery.Promise}
+         *  A promise that is resolved when the new view is created.
+         */
+        replaceView: function (slideViews, index, model) {
+            // the slide view instance
+            var slideView = slideViews[index];
+            // when called for duplicate views, there may be no instance
+            if (!slideView) { return $.when(); }
+
+            var isSlideViewPrefetched = slideView.isPrefetched;
+            var slideNode = slideView.el;
+            var slideNodeAttrs = slideNode && slideNode.attributes;
+
+            return this.createView(model, { el: slideNode }).then(function (view) {
+                if (self.disposed) { return; }
+
+                // transfer attributes to new view
+                setAttributes(view.el, slideNodeAttrs);
+
+                // prefetch new view, if old one was prefetched
+                if (isSlideViewPrefetched) {
+                    view.prefetch({ priority: 1 });
+                }
+
+                // set new view instance
+                slideViews[index] = view;
+            });
+        },
+
+        /**
          * Load the given slide index and additionally number of neigboring slides in the given direction.
          *
          * @param {Number} slideToLoad
@@ -457,39 +522,62 @@ define('io.ox/core/viewer/views/displayerview', [
          *      'both': [4,5,6,7,8,9,10]
          */
         loadSlide: function (slideToLoad, prefetchDirection) {
-            var self = this;
-            var isDuplicate = this.isActiveSlideDuplicate();
-            var loadRange;
 
             slideToLoad = slideToLoad || 0;
 
-            loadRange = this.getSlideLoadRange(slideToLoad, this.preloadOffset, prefetchDirection);
+            var self = this;
+            var slidePromise = null;
+            var duplicatePromise = null;
+            var isDuplicate = this.isActiveSlideDuplicate();
+            var loadRange = this.getSlideLoadRange(slideToLoad, this.preloadOffset, prefetchDirection);
+            var model = this.collection.at(slideToLoad);
 
-            // prefetch data of the slides within the preload offset range
-            _.each(loadRange, function (slideIndex) {
-                var prefetchParam;
+            // check the slide to load for different version
+            if (this.temporaryVersions[slideToLoad]) {
 
-                if (!self.isSlideLoaded(slideIndex)) {
-                    prefetchParam = { priority: self.getPrefetchPriority(slideIndex) };
+                _.without(this.loadedSlides, slideToLoad);
 
-                    // prefetch original slide
-                    self.slideViews[slideIndex].prefetch(prefetchParam);
+                if (slideToLoad in this.temporaryVersions) {
+                    delete this.temporaryVersions[slideToLoad];
+                }
 
-                    // prefetch duplicate slide
-                    if (self.slideDuplicateViews[slideIndex]) {
-                        self.slideDuplicateViews[slideIndex].prefetch(prefetchParam);
+                slidePromise = this.replaceView(this.slideViews, slideToLoad, model);
+                duplicatePromise = this.replaceView(this.slideDuplicateViews, slideToLoad, model);
+
+            } else {
+                slidePromise = $.when();
+                duplicatePromise = $.when();
+            }
+
+            $.when(slidePromise, duplicatePromise).then(function () {
+                if (self.disposed) { return; }
+
+                // prefetch data of the slides within the preload offset range
+                _.each(loadRange, function (slideIndex) {
+                    var prefetchParam;
+
+                    if (!self.isSlideLoaded(slideIndex)) {
+                        prefetchParam = { priority: self.getPrefetchPriority(slideIndex) };
+
+                        // prefetch original slide
+                        self.slideViews[slideIndex].prefetch(prefetchParam);
+
+                        // prefetch duplicate slide
+                        if (self.slideDuplicateViews[slideIndex]) {
+                            self.slideDuplicateViews[slideIndex].prefetch(prefetchParam);
+                        }
+
+                        self.loadedSlides.push(slideIndex);
                     }
+                });
 
-                    self.loadedSlides.push(slideIndex);
+                // show active slide
+                if (isDuplicate) {
+                    self.slideDuplicateViews[slideToLoad].show();
+                } else {
+                    self.slideViews[slideToLoad].show();
                 }
             });
-
-            // show active slide
-            if (isDuplicate && this.slideDuplicateViews[slideToLoad]) {
-                this.slideDuplicateViews[slideToLoad].show();
-            } else {
-                this.slideViews[slideToLoad].show();
-            }
         },
 
         /**
@@ -521,25 +609,24 @@ define('io.ox/core/viewer/views/displayerview', [
         /**
          * Handles file version change events.
          *
-         * @param {FilesAPI.Model} model
-         *   The changed model.
+         * @param {Object} fileDesc
+         *   The changed file descriptor.
          */
-        onModelChangeVersion: function (model) {
-            this.updateModelAndDisplayVersionDebounced(model);
+        onModelChangeVersion: function (fileDesc) {
+            this.updateModelAndDisplayVersionDebounced(fileDesc);
         },
 
         /**
          * Updates the file model data and renders the slide content.
          *
-         * @param {FilesAPI.Model} model
-         *   The file model object.
-         *
-         * @param {Object} [versionData]
-         *  The JSON representation of the version to display (optional).
+         * @param {Object} fileDesc
+         *   The file descriptor to get the model from.
          */
-        updateModelAndDisplayVersion: function (model) {
+        updateModelAndDisplayVersion: function (fileDesc) {
             // reload model data bypassing the cache
-            FilesAPI.get(model.toJSON(), { cache: false }).then(function () {
+            FilesAPI.get(fileDesc, { cache: false }).then(function (file) {
+                var model = FilesAPI.pool.get('detail').get(_.cid(file));
+                this.viewerEvents.trigger('viewer:displayeditem:change', model);
                 this.displayVersion(model);
             }.bind(this));
         },
@@ -587,79 +674,18 @@ define('io.ox/core/viewer/views/displayerview', [
                 return;
             }
 
-            // applies the attributes NamedNodeMap, as returned by Element.attributes to the given DOM element
-            function setAttributes(element, attributes) {
-                if (!attributes || !attributes.length) { return; }
-
-                for (var attr, i = 0; i < attributes.length; i++) {
-                    attr = attributes.item(i);
-                    element.setAttribute(attr.name, attr.value);
-                }
-            }
-
             var self = this;
-
-            var index = this.collection.indexOf(model);
-
-            // the slide view
-            var slideView = this.slideViews[index];
-            var isSlideViewPrefetched = slideView.isPrefetched;
-            var slideNode = slideView.el;
-            var slideNodeAttrs = slideNode && slideNode.attributes;
-            var slidePromise;
-
-            // a possible duplicate slide view
-            var duplicateView = this.slideDuplicateViews[index];
-            var isDuplicateViewPrefetched = Boolean(duplicateView && duplicateView.isPrefetched);
-            var duplicateNode = (duplicateView && duplicateView.el) || null;
-            var duplicateNodeAttrs = duplicateNode && duplicateNode.attributes;
-            var isActiveDuplicate = Boolean(duplicateView && this.isActiveSlideDuplicate());
-            var duplicatePromise;
-
+            var index = this.collection.indexOf(this.collection.get(model.cid));
+            var isActiveDuplicate = this.isActiveSlideDuplicate();
             // the model to create the new view type from
             var versionModel = (versionData) ? new FilesAPI.Model(versionData) : model;
 
-            // unload current slide content and dispose the view instance
-            slideView.unload().dispose();
-
-            slidePromise = this.createView(versionModel, { el: slideNode }).then(function (view) {
-                if (self.disposed) { return; }
-
-                // transfer attributes to new view
-                setAttributes(view.el, slideNodeAttrs);
-
-                // prefetch new view, if old one was prefetched
-                if (isSlideViewPrefetched) {
-                    view.prefetch({ priority: 1 });
-                }
-
-                // set new view instance
-                self.slideViews[index] = view;
-            });
-
-            if (duplicateView) {
-
-                // unload current duplicate slide content and dispose the view instance
-                duplicateView.unload().dispose();
-
-                duplicatePromise = this.createView(versionModel, { el: duplicateNode }).then(function (view) {
-                    if (self.disposed) { return; }
-
-                    // transfer attributes to new view
-                    setAttributes(view.el, duplicateNodeAttrs);
-
-                    // prefetch new duplicate view, if old one was prefetched
-                    if (isDuplicateViewPrefetched) {
-                        view.prefetch({ priority: 1 });
-                    }
-
-                    // set new view instance
-                    self.slideDuplicateViews[index] = view;
-                });
-
-            } else {
-                duplicatePromise = $.when();
+            if (model.get('version') !== versionModel.get('version')) {
+                this.temporaryVersions[index] = versionModel.get('version');
             }
+
+            var slidePromise = this.replaceView(this.slideViews, index, versionModel);
+            var duplicatePromise = this.replaceView(this.slideDuplicateViews, index, versionModel);
 
             $.when(slidePromise, duplicatePromise).then(function () {
                 if (self.disposed) { return; }
@@ -713,6 +739,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     //#. this will only be shown for more than one item
                     //#. %1$d - position of current item
                     //#. %2$d - total amount of items
+                    //#, c-format
                     gt.ngettext(
                         '%1$d of %2$d item',
                         '%1$d of %2$d items',
@@ -1057,6 +1084,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = [];
             this.slideDuplicateViews = {};
             this.loadedSlides = [];
+            this.temporaryVersions = {};
 
             if (this.collection.isEmpty()) {
                 // close viewer we don't have any files to show
@@ -1112,6 +1140,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.slideViews = [];
                 this.slideDuplicateViews = {};
                 this.loadedSlides = [];
+                this.temporaryVersions = {};
 
                 // remove old slides
                 this.swiper.removeAllSlides();
@@ -1169,6 +1198,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.slideViews = [];
                 this.slideDuplicateViews = {};
                 this.loadedSlides = [];
+                this.temporaryVersions = {};
 
                 // create new slides
                 this.createSlides()
@@ -1367,7 +1397,11 @@ define('io.ox/core/viewer/views/displayerview', [
                 }
             });
 
-            this.loadedSlides = cachedRange;
+            // don't remove from this.temporaryVersions because the view is not discarded
+
+            // build intersection to assure that the (newly calculated) cachedRange array
+            // doesn't override slides that have not yet been loaded.
+            this.loadedSlides = _.intersection(this.loadedSlides, cachedRange);
         },
 
         onDispose: function () {
@@ -1390,6 +1424,7 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideDuplicateViews = null;
             this.lastSwiperZoomMode = null;
             this.carouselRoot = null;
+            this.temporaryVersions = null;
 
             this.canAutoplayImages = null;
             this.imageFileRegistry = null;

@@ -12,21 +12,21 @@
 
 Feature('General > Code Loading');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[XSS] [OXUIB-400] No malicious code execution when code loading fails', async function (I, drive) {
+Scenario('[XSS] [OXUIB-400] No malicious code execution when code loading fails', async function ({ I, drive }) {
     I.login('app=io.ox/files:foo,xx/../../xxx");document.write("XSS");//');
     // will fail if xss was succesfull -> page is overwritten
     drive.waitForApp();
 });
 
-Scenario('[OXUIB-645] XSS using script code as module at app loader', async function (I, drive) {
+Scenario('[OXUIB-645] XSS using script code as module at app loader', async function ({ I, drive }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
@@ -41,7 +41,8 @@ Scenario('[OXUIB-645] XSS using script code as module at app loader', async func
     drive.shareItem();
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
     I.waitForNetworkTraffic();
-    let url = await I.grabValueFrom('.public-link-url-input');
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     url = new URL(url);
     I.click('Share', '.modal');
     I.waitToHide('.modal');

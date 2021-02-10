@@ -2,6 +2,7 @@
 *.sublime-*
 .idea
 .env
+.eslintcache
 *~
 *.swp
 *.kate-swp

@@ -11,7 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/avatar', ['io.ox/backbone/views/disposable', 'io.ox/contacts/util'], function (DisposableView, util) {
+define('io.ox/chat/views/avatar', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/contacts/util',
+    'io.ox/contacts/api',
+    'io.ox/core/api/user'
+], function (DisposableView, util, contactsAPI, userAPI) {
 
     'use strict';
 
@@ -19,8 +24,10 @@ define('io.ox/chat/views/avatar', ['io.ox/backbone/views/disposable', 'io.ox/con
 
         className: 'avatar initials',
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options || {};
             this.listenTo(this.model, 'change:first_name change:last_name', this.onChangeName);
+            if (this.model.get('id') === ox.user_id) this.listenTo(contactsAPI, 'reset:image update:image', this.onUpdateUser.bind(this));
         },
 
         render: function () {
@@ -28,11 +35,24 @@ define('io.ox/chat/views/avatar', ['io.ox/backbone/views/disposable', 'io.ox/con
             return this;
         },
 
+        onUpdateUser: function () {
+            userAPI.get(this.model.get('id')).then(function (data) {
+                this.model.set('image', data.number_of_images > 0);
+                this.update();
+            }.bind(this));
+        },
+
         update: function () {
-            var data = this.model.pick('id', 'first_name', 'last_name', 'image');
-            this.$el
-                .text(data.image ? '' : util.getInitials(data))
-                .css('background-image', data.image ? 'url(api/image/user/picture?id=' + data.id + '&width=96&height=96&scaleType=cover)' : null);
+            var data = this.model.pick('email', 'first_name', 'last_name', 'image');
+            var initials = util.getInitials(data);
+            this.$el.addClass(util.getInitialsColor(initials));
+            if (!data.image) {
+                this.$el.append(
+                    '<svg viewbox="0 0 48 48"><text x="24" y="28" text-anchor="middle">' + _.escape(initials) + '</text></svg>'
+                );
+            } else {
+                this.$el.css('background-image', 'url(api/contacts/picture?action=get&email=' + encodeURIComponent(data.email) + '&width=96&height=96&scaleType=cover)');
+            }
         },
 
         onChangeName: function () {

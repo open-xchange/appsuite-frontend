@@ -80,8 +80,10 @@ module.exports = function (grunt) {
             'precore.js'
         ],
         uglifySkipList = [
-            'apps/pdfjs-dist/build/pdf.js',
-            'apps/pdfjs-dist/build/pdf.worker.js'
+            // as long as we support IE11, we need the ES5 legacy version,
+            // which doesn't offer minifyed versions
+            // 'apps/pdfjs-dist/build/pdf.js',
+            // 'apps/pdfjs-dist/build/pdf.worker.js'
         ],
         ignoreList = uglifySkipList.concat(largeFiles).map(function (f) { return '!' + f; });
     grunt.config(

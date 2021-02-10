@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.5. Displaying or Terminating Sessions</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<title>12.5. Display or sign out from active clients</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
-<link rel="up" href="ox.appsuite.user.chap.security.html" title="Chapter 11. Data Security">
-<link rel="prev" href="ox.appsuite.user.sect.security.whitelist.html" title="11.4. Using a Whitelist">
-<link rel="next" href="ox.appsuite.user.sect.security.multifactor.html" title="11.6. Multi-Factor Authentication">
+<link rel="up" href="ox.appsuite.user.chap.security.html" title="Chapter 12. Data Security">
+<link rel="prev" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Using a Whitelist">
+<link rel="next" href="ox.appsuite.user.sect.security.apppasswords.html" title="12.6. Using Additional Passwords for Applications">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,14 +25,14 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.security.whitelist.html">Prev</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.multifactor.html">Next</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.security.apppasswords.html">Next</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">Data Security</h1>
 <div class="sect1" id="ox.appsuite.user.sect.security.sessions">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">11.5. Displaying or Terminating Sessions</h2></div></div></div>
-<a class="indexterm" name="id-1.12.9.2"></a><a class="indexterm" name="id-1.12.9.3"></a><p id="ox.appsuite.user.orientation.security.sessions">You can be logged in to your groupware account with different devices on various clients simultaneously, e.g. with desktop browsers, E-Mail clients, tablets, smartphones. With each login, an active <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.session">session</a> is created on the groupware server. On the following occasions it can make sense to list active sessions and to terminate them if required:</p>
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.5. Display or sign out from active clients</h2></div></div></div>
+<a class="indexterm" name="id-1.13.9.2"></a><a class="indexterm" name="id-1.13.9.3"></a><p id="ox.appsuite.user.orientation.security.sessions">You can be signed in to your groupware account with different clients on various devices simultaneously, e.g. with desktop browsers, E-Mail clients, tablets, smartphones. With each login, an active <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.session">session</a> is created on the groupware server. On the following occasions it can make sense to list active sessions and to terminate them if required:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">You want to check whether you are logged in to a certain device or client.</p></li>
 <li class="listitem"><p role="presentation">You want to log our from a certain device.</p></li>
@@ -42,19 +42,19 @@
     </p>
 <p id="ox.appsuite.user.concept.security.sessions">The following options exist:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">display all active sessions</p></li>
+<li class="listitem"><p role="presentation">display all active clients</p></li>
 <li class="listitem"><p role="presentation">terminate single sessions</p></li>
 <li class="listitem"><p role="presentation">terminate all sessions except the current one</p></li>
 </ul>
 <p>
     </p>
 <div class="task" id="ox.appsuite.user.task.security.sessions">
-<p class="title">How to edit the active sessions:</p>
+<p class="title">How to edit the active clients:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Settings</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.sessions.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>on the right side of the menu bar.</p></li>
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Settings</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.sessions.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>on the right side of the menu bar. Click on <span class="guibutton"><strong>Settings</strong></span>.</p></li>
 <li class="step">
 <p role="presentation">In the sidebar, click on <span class="guibutton"><strong>Security</strong></span>. Click on <span class="guibutton"><strong>Active clients</strong></span>.</p>
-<p role="presentation">All active sessions are listed in the display area.</p>
+<p role="presentation">In the display area, all devices will be listed which you are currently signed in with.</p>
 </li>
 <li class="step"><p role="presentation">In order to terminate sessions, do one of the following:<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">In order to terminate a single session, click on <span class="guibutton"><strong>Sign out</strong></span> next to the client.</p></li>
@@ -71,6 +71,7 @@
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Externally Linked Images in E-Mails</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emailauthentication.html">Showing the E-Mail Authenticity</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Using a Whitelist</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Using Additional Passwords for Applications</a></p>
 </li></ul>
 <p>
     </p>

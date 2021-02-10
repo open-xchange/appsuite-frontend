@@ -402,7 +402,8 @@
                     // used to be the default value from apache documentation, but turned out not to work
                     // in all cases. See OXUIB-383 for reference.
                     limit = ox.serverConfig.limitRequestLine || 6000,
-                    requests = [], url, modules = module.split(',');
+                    requests = [], url, modules = module.split(','),
+                    oxsep = '\n/*:oxsep:*/\n';
 
                 while (modules.length > 0) {
                     url = base;
@@ -419,13 +420,13 @@
                     .then(function () {
                         return requests.map(function (res) {
                             return res.responseText;
-                        }).join('/*:oxsep:*/');
+                        }).join(oxsep);
                     })
                     .done(function (concatenatedText) {
                         runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
                         // Chop up the concatenated modules and put them into file cache
-                        _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
+                        _(concatenatedText.split(oxsep)).each(function (moduleText) {
                             (function () {
                                 var name = null;
                                 var match = moduleText.match(/define(\.async)?\(([^,]+),/);

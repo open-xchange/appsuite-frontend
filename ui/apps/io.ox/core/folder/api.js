@@ -60,6 +60,15 @@ define('io.ox/core/folder/api', [
                 if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
+                // shared folders that have createdfrom data available
+                if (util.is('shared', item) && item.created_from && userAPI.checkForName(item.created_from)) {
+                    //#. %1$s is the folder owner
+                    //#. %2$s is the folder title
+                    item.display_title = gt('%1$s: %2$s', userAPI.checkForName(item.created_from), item.title);
+                    return false;
+                }
+                // there is no user 0, that is just a dummy
+                if (item.created_by === 0) return false;
                 // any shared folder that has no name yet
                 return item.display_title === undefined && util.is('shared', item);
             }),
@@ -77,8 +86,8 @@ define('io.ox/core/folder/api', [
 
             _(renameItems).each(function (item) {
                 if (item.id === String(calSettings.get('chronos/defaultFolderId')) || item.title === gt('Calendar')) {
-                    item.display_title = contactUtil.getFullName(hash[item.created_by]) || gt('Default calendar');
-                } else {
+                    item.display_title = contactUtil.getFullName(hash[item.created_by] || {}) || gt('Default calendar');
+                } else if (hash[item.created_by]) {
                     //#. %1$s is the folder owner
                     //#. %2$s is the folder title
                     item.display_title = gt('%1$s: %2$s', contactUtil.getFullName(hash[item.created_by]), item.title);
@@ -195,6 +204,10 @@ define('io.ox/core/folder/api', [
         isAdmin: function () {
             var bits = new Bitmask(this.get('own_rights'));
             return !!bits.get('admin');
+        },
+
+        getAccountDisplayName: function () {
+            return filestorageApi.getAccountDisplayName(this.get('account_id'));
         },
 
         supportsInternalSharing: function () {
@@ -691,7 +704,7 @@ define('io.ox/core/folder/api', [
     function list(id, options) {
 
         id = String(id);
-        options = _.extend({ all: false, cache: true }, options);
+        options = _.extend({ all: false, cache: true, force: false }, options);
 
         // already cached?
         var collectionId = getCollectionId(id, options.all),
@@ -729,7 +742,8 @@ define('io.ox/core/folder/api', [
                 altNames: true,
                 parent: id,
                 timezone: 'UTC',
-                tree: tree(id)
+                tree: tree(id),
+                forceRetry: options.force
             },
             appendColumns: true
         })
@@ -789,7 +803,7 @@ define('io.ox/core/folder/api', [
         do {
             result.push(data = pool.getModel(current).toJSON());
             current = data.folder_id;
-            done = String(current) === '1';
+            done = String(current) === '1' || current === id;
         } while (current && !done);
 
         // resolve in reverse order (root > folder)
@@ -860,7 +874,7 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-        options = _.extend({ module: undefined, cache: true }, options);
+        options = _.extend({ module: undefined, cache: true, force: false }, options);
         if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
@@ -891,9 +905,10 @@ define('io.ox/core/folder/api', [
             params: {
                 action: 'allVisible',
                 altNames: true,
-                content_type: module,
+                content_type: module === 'contacts' ? 'contact' : module,
                 timezone: 'UTC',
                 tree: 1,
+                forceRetry: !!options.force,
                 all: !!options.all
             }
         })
@@ -906,9 +921,8 @@ define('io.ox/core/folder/api', [
                         .chain()
                         .map(makeObject)
                         .filter(function (folder) {
-                            var isAdmin = !!new Bitmask(folder.own_rights).get('admin');
                             // read access?
-                            if (!util.can('read', folder) && !util.can('change:permissions', folder) && !isAdmin) return false;
+                            if (!util.can('read', folder) && !util.can('change:permissions', folder)) return false;
                             // otherwise
                             return true;
                         })
@@ -988,10 +1002,11 @@ define('io.ox/core/folder/api', [
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
-                // trigger event
+                // trigger events
                 if (!options.silent) {
                     api.trigger('update update:' + id, id, newId, model.toJSON());
                     if ('permissions' in changes) api.trigger('change:permissions', id);
+                    if ('subscribed' in changes) api.trigger('change:subscription', id, changes);
                 }
                 // fetch subfolders of parent folder to ensure proper order after rename/move
                 if (id !== newId || changes.title || changes.folder_id) {

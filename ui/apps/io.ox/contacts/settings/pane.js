@@ -157,7 +157,7 @@ define('io.ox/contacts/settings/pane', [
                         subscribe.open({
                             module: 'contacts',
                             help: 'ox.appsuite.user.sect.contacts.folder.displayshared.html',
-                            title: gt('Shared address books'),
+                            title: gt('Subscribe to shared address books'),
                             point: 'io.ox/core/folder/subscribe-shared-address-books',
                             sections: {
                                 public: gt('Public address books'),
@@ -172,7 +172,7 @@ define('io.ox/contacts/settings/pane', [
                 baton.$el.append(
                     $('<button type="button" class="btn btn-default" data-action="subscribe-shared-address-books">')
                     .append(
-                        $.txt(gt('Subscribe shared address books'))
+                        $.txt(gt('Subscribe to shared address books'))
                     )
                     .on('click', openDialog)
                 );

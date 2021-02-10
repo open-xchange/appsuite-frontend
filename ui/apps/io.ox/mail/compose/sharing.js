@@ -32,28 +32,28 @@ define('io.ox/mail/compose/sharing', [
 
         switch (unit) {
             case 'm':
-                text = gt.format(gt.ngettext('%1$d minute', '%1$d minutes', count), count);
+                text = gt.ngettext('%1$d minute', '%1$d minutes', count, count);
                 value = count * 60000;
                 break;
             case 'h':
-                text = gt.format(gt.ngettext('%1$d hour', '%1$d hours', count), count);
+                text = gt.ngettext('%1$d hour', '%1$d hours', count, count);
                 value = count * 3600000;
                 break;
             case 'd':
-                text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                text = gt.ngettext('%1$d day', '%1$d days', count, count);
                 value = count * 86400000;
                 break;
             case 'w':
-                text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                text = gt.ngettext('%1$d week', '%1$d weeks', count, count);
                 value = count * 604800000;
                 break;
             case 'M':
-                text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                text = gt.ngettext('%1$d month', '%1$d months', count, count);
                 // we just assume 30 days here
                 value = count * 2592000000;
                 break;
             case 'y':
-                text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                text = gt.ngettext('%1$d year', '%1$d years', count, count);
                 // 365 days
                 value = count * 31536000000;
                 break;
@@ -208,21 +208,18 @@ define('io.ox/mail/compose/sharing', [
             this.listenTo(this.model.get('attachments'), 'add remove reset change:size', this.updateVisibility);
             this.listenTo(this.model, 'change:sharedAttachments', this.syncToSharingModel);
             this.listenTo(this.sharingModel, 'change:enabled', this.updateVisibility);
-            this.listenTo(this.sharingModel, 'change:enabled', this.syncToMailModel);
+            this.listenTo(this.sharingModel, 'change:enabled', _.partial(this.syncToMailModel, { instant: true }));
         },
 
         updateVisibility: function () {
             if (!this.optionsButton) return;
 
-            if (!this.model.saving && mailSettings.get('compose/shareAttachments/threshold', 0) > 0) {
-                var actualAttachmentSize = this.model.get('attachments').getSize();
-                if (actualAttachmentSize > mailSettings.get('compose/shareAttachments/threshold', 0) && this.sharingModel.get('enabled') === false) {
-                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
-                    this.sharingModel.set('enabled', true);
-                }
+            if (!this.model.saving && this.model.exceedsThreshold()) {
+                //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
+                this.sharingModel.set('enabled', true);
             }
-            // offer option t ocactivate when attachments are present
+            // offer option to activate when attachments are present
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
             this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));
@@ -234,10 +231,12 @@ define('io.ox/mail/compose/sharing', [
             this.sharingModel.set(sharedAttachments);
         },
 
-        syncToMailModel: function () {
+        syncToMailModel: function (options) {
+            var opt = _.extend({ instant: false }, options);
 
             if (!this.sharingModel.get('enabled')) {
-                return this.model.set('sharedAttachments', { enabled: false });
+                this.model.set('sharedAttachments', { enabled: false });
+                return opt.instant ? this.model.save() : undefined;
             }
 
             var obj =  this.sharingModel.toJSON(),
@@ -245,6 +244,7 @@ define('io.ox/mail/compose/sharing', [
             // don't save password if the field is empty or disabled.
             if (!this.sharingModel.get('usepassword') || _.isEmpty(this.sharingModel.get('password'))) blacklist.push('password');
             this.model.set('sharedAttachments', _.omit(obj, blacklist));
+            return opt.instant ? this.model.save() : undefined;
         },
 
         render: function () {

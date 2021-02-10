@@ -15,39 +15,30 @@
 
 Feature('General > Client Onboarding');
 
-Before(async (users) => {
+const { I } = inject();
+
+Before(async ({ users }) => {
     await users.create();
+    await I.haveSetting('io.ox/core//onboardingWizard', false);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C73767] Platform Availability', function (I) {
+Scenario('[C73767] Platform Availability', function ({ I, topbar }) {
 
     I.login();
-    I.waitForVisible('#io-ox-topbar-dropdown-icon');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible(locate('a')
-        .withAttr({ 'data-action': 'client-onboarding' })
-        .inside('#topbar-settings-dropdown'));
-    I.click('Connect your Device', '#topbar-settings-dropdown');
-    I.waitForText('Please select the platform of your device.');
+    topbar.connectYourDevice();
     I.see('Windows');
     I.see('Android');
     I.see('Apple');
 });
 
-Scenario('[C73768] Device Availability', function (I) {
+Scenario('[C73768] Device Availability', function ({ I, topbar }) {
 
     I.login();
-    I.waitForVisible('#io-ox-topbar-dropdown-icon');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible(locate('a')
-        .withAttr({ 'data-action': 'client-onboarding' })
-        .inside('#topbar-settings-dropdown'));
-    I.click('Connect your Device', '#topbar-settings-dropdown');
-    I.waitForText('Please select the platform of your device.');
+    topbar.connectYourDevice();
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
     I.see('iPhone');
@@ -64,16 +55,10 @@ Scenario('[C73768] Device Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73769] Application Availability', function (I) {
+Scenario('[C73769] Application Availability', function ({ I, topbar }) {
 
     I.login();
-    I.waitForVisible('#io-ox-topbar-dropdown-icon');
-    I.click('#io-ox-topbar-dropdown-icon');
-    I.waitForVisible(locate('a')
-        .withAttr({ 'data-action': 'client-onboarding' })
-        .inside('#topbar-settings-dropdown'));
-    I.click('Connect your Device', '#topbar-settings-dropdown');
-    I.waitForText('Please select the platform of your device.');
+    topbar.connectYourDevice();
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
     I.click('iPhone');
@@ -108,19 +93,12 @@ Scenario('[C73769] Application Availability', function (I) {
     I.see('Laptop + PC');
 });
 
-Scenario('[C73776] Mail Configuration', async function (I, users) {
+Scenario('[C73776] Mail Configuration', async function ({ I, users, topbar }) {
 
     I.login();
-    I.waitForVisible('#io-ox-topbar-dropdown-icon');
-    // let some time to render here, site is still loading up
-    I.waitForElement({ css: '#io-ox-topbar-dropdown-icon [data-action="client-onboarding"]' }, 15);
-    I.click('#io-ox-topbar-dropdown-icon');
-
-    I.waitForVisible(locate('a')
-        .withAttr({ 'data-action': 'client-onboarding' })
-        .inside('#topbar-settings-dropdown'));
-    I.clickDropdown('Connect your Device');
-    I.waitForText('Please select the platform of your device.');
+    topbar.connectYourDevice();
+    // lazy load for user data requires "slower" user interaction
+    I.wait(1);
     I.click('Apple');
     I.waitForText('What type of device do you want to configure?');
     I.click('iPhone');

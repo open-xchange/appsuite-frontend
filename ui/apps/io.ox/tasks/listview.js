@@ -12,12 +12,15 @@
  */
 
 define('io.ox/tasks/listview', [
-    'io.ox/tasks/common-extensions',
     'io.ox/core/extensions',
+    'io.ox/mail/util',
+    'gettext!io.ox/tasks',
     'less!io.ox/tasks/style'
-], function (extensions, ext) {
+], function (ext, mailUtil, gt) {
 
     'use strict';
+
+    // used for "old" mobile search result only
 
     ext.point('io.ox/tasks/listview/item').extend({
         id: 'default',
@@ -25,8 +28,6 @@ define('io.ox/tasks/listview', [
             ext.point('io.ox/tasks/listview/item/default').invoke('draw', this, baton);
         }
     });
-
-    /* default */
 
     ext.point('io.ox/tasks/listview/item/default').extend({
         id: 'row1',
@@ -38,20 +39,6 @@ define('io.ox/tasks/listview', [
         }
     });
 
-    ext.point('io.ox/tasks/listview/item/default/row1').extend({
-        id: 'date',
-        index: 100,
-        draw: extensions.compactdate
-    });
-
-    ext.point('io.ox/tasks/listview/item/default/row1').extend({
-        id: 'title',
-        index: 200,
-        draw: extensions.title
-    });
-
-    //ROW2
-
     ext.point('io.ox/tasks/listview/item/default').extend({
         id: 'row2',
         index: 200,
@@ -62,10 +49,41 @@ define('io.ox/tasks/listview', [
         }
     });
 
+    ext.point('io.ox/tasks/listview/item/default/row1').extend({
+        id: 'date',
+        index: 100,
+        draw: function (baton) {
+            var data = baton.data, t = data.end_time || data.start_time || data.last_modified;
+            if (!_.isNumber(t)) return;
+            this.append(
+                $('<time class="date">')
+                .attr('datetime', moment(t).toISOString())
+                .text(mailUtil.getDateTime(t, { fulldate: false, smart: false }))
+            );
+        }
+    });
+
+    ext.point('io.ox/tasks/listview/item/default/row1').extend({
+        id: 'title',
+        index: 200,
+        draw: function (baton) {
+            this.append(
+                $('<div class="title">').text(
+                    baton.data.title
+                )
+            );
+        }
+    });
+
     ext.point('io.ox/tasks/listview/item/default/row2').extend({
         id: 'progress',
         index: 100,
-        draw: extensions.progress
+        draw: function (baton) {
+            this.append(
+                $('<div class="prog">').append(
+                    gt('Progress') + ': ' + (baton.data.percent_completed || 0) + '%'
+                )
+            );
+        }
     });
-
 });

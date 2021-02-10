@@ -130,7 +130,7 @@
             <div id="io-ox-screens" class="abs">
                 <!-- window manager -->
                 <div id="io-ox-windowmanager" class="abs" style="display: none">
-                    <div id="io-ox-windowmanager-pane" class="atb"></div>
+                    <div id="io-ox-windowmanager-pane"></div>
                 </div>
                 <!-- empty desktop -->
                 <div id="io-ox-desktop" class="abs"></div>
@@ -172,7 +172,7 @@
                                                         <div class="row username">
                                                             <div class="form-group col-xs-12">
                                                                 <label for="io-ox-login-username" data-i18n="User name">User name</label>
-                                                                <input type="text" id="io-ox-login-username" name="username" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" data-i18n="User name">
+                                                                <input type="text" id="io-ox-login-username" name="username" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" data-i18n="User name" autocomplete="username">
                                                             </div>
                                                         </div>
                                                         <div class="row password">
@@ -181,13 +181,13 @@
                                                                 <div class="text-right" id="io-ox-forgot-password">
                                                                     <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
                                                                 </div>
-                                                                <input type="password" id="io-ox-login-password" name="password" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" data-i18n="Password">
+                                                                <input type="password" id="io-ox-login-password" name="password" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" data-i18n="Password" autocomplete="current-password">
                                                             </div>
                                                         </div>
                                                         <div class="row password-retype">
                                                             <div class="form-group col-xs-12">
                                                                 <label for="io-ox-retype-password" class="sr-only" data-i18n="Confirm new password"></label>
-                                                                <input type="password" id="io-ox-retype-password" name="password2" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" data-i18n-attr="placeholder">
+                                                                <input type="password" id="io-ox-retype-password" name="password2" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" data-i18n-attr="placeholder" autocomplete="new-password">
                                                             </div>
                                                         </div>
                                                         <div class="row options">

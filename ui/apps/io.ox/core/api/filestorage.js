@@ -35,15 +35,17 @@ define('io.ox/core/api/filestorage', [
         idsCache = [],
         //utility function to add to idsCache
         addToIdsCache = function (accounts) {
-            var services = ['googledrive', 'dropbox', 'boxcom', 'onedrive'];
+            // xox cross ox / xctx cross context
+            // there are integers behind those that represent module numbers (8 is files for example) so make sure to check fuzzy enough
+            var services = ['googledrive', 'dropbox', 'boxcom', 'onedrive', 'xox', 'xctx'];
 
             ext.point('io.ox/core/filestorage/service-list').invoke('customize', services);
 
             _(accounts).each(function (account) {
                 account = !!account.get ? account.toJSON() : account;
-                if (_(services).indexOf(account.filestorageService) !== -1) {
-                    idsCache.push(account.qualifiedId);
-                }
+                _(services).each(function (service) {
+                    if (account.filestorageService && account.filestorageService.indexOf(service) === 0) idsCache.push(account.qualifiedId);
+                });
             });
             // we don't want duplicates
             idsCache = _.uniq(idsCache);
@@ -51,7 +53,7 @@ define('io.ox/core/api/filestorage', [
         api = {
             // if the api is ready to use or rampup function must be called
             rampupDone: false,
-            // if the rampup failed, because server does not support external storages etc this attribute is true, so you don't call rampup again everytime
+            // if the rampup failed, because server does not support external storages etc this attribute is true, so you don't call rampup again every time
             rampupFailed: false,
             // always call this function if the rampupDone attribute is false or api will function incorrectly see comments above
             rampup: function () {
@@ -181,6 +183,7 @@ define('io.ox/core/api/filestorage', [
                     return accountsCache;
                 });
             },
+
             // returns a model of the file storage account
             getAccount: function (options, useCache) {
                 useCache = _.defaultValue(useCache, true);
@@ -400,7 +403,40 @@ define('io.ox/core/api/filestorage', [
                     }
                 }
                 return isExternal;
+            },
+
+            //mainly for federated sharing
+
+            getAllGuestUserIdentifier: function () {
+                // works with the cache to be synchronous, please keep it this way
+                return _.compact(_(accountsCache.pluck('metadata')).map(function (entry) { return entry && entry.guestUserIdentifier; }));
+            },
+
+            getAccountMetaData: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                return account ? account.get('metadata') : null;
+            },
+
+            getAccountUrl: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                var accountConf = account ? account.get('configuration') : null;
+                return accountConf ? accountConf.url : null;
+            },
+
+            isFederatedAccount: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var accountMeta = api.getAccountMetaData(accountId);
+                return accountMeta ? _.has(accountMeta, 'guestUserIdentifier') : null;
+            },
+
+            getAccountDisplayName: function (accountId) {
+                // works with the cache to be synchronous, please keep it this way
+                var account = accountsCache.findWhere({ qualifiedId: accountId });
+                return account ? account.get('displayName') : null;
             }
+
         };
 
     // add event support

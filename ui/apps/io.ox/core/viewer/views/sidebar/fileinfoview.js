@@ -13,15 +13,18 @@
 define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/viewer/views/sidebar/panelbaseview',
     'io.ox/core/extensions',
+    'io.ox/files/api',
     'io.ox/core/folder/api',
     'io.ox/core/api/user',
     'io.ox/core/util',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
     'io.ox/core/viewer/util',
+    'io.ox/backbone/mini-views/copy-to-clipboard',
+    'io.ox/core/collection',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, settings, gt) {
+], function (PanelBaseView, Ext, FilesAPI, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, CopyToClipboardView, Collection, settings, gt) {
 
     'use strict';
 
@@ -36,9 +39,15 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
     function openShareDialog(e) {
         e.preventDefault();
-        var model = e.data.model;
-        require(['io.ox/files/share/permissions'], function (controller) {
-            controller.showByModel(model);
+        var baton = e.data.baton;
+        require(['io.ox/files/actions/share', 'io.ox/files/util'], function (ShareAction, FilesUtil) {
+            var collection = new Collection(baton.data);
+            collection.getProperties();
+            baton.collection = collection;
+            baton.isViewer = baton.options.isViewer;
+
+            var options = { hasLinkSupport: FilesUtil.isShareable('link', baton) };
+            ShareAction.invite([baton.model], options);
         });
     }
 
@@ -53,9 +62,23 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         if (disableLink) return $.txt(name);
 
         var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
-        return $('<a href="#" target="_blank" style="word-break: break-all">')
-            .attr('href', link)
-            .text(name);
+
+        var copyLinkButton = new CopyToClipboardView({
+            className: 'copy-link',
+            content: link,
+            label: gt('Private link: Only people who have access to the file/folder can use it. Use it to point to members of your organization to this file/folder.'),
+            iconClass: 'fa fa-link',
+            events: {
+                'click': function () {
+                    this.$el.tooltip('hide');
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell({ type: 'success', message: gt('The link has been copied to the clipboard.') });
+                    });
+                }
+            }
+        });
+
+        return [$('<span style="word-break: break-all">').text(name), copyLinkButton.render().$el];
     }
 
     function createDateString(date) {
@@ -74,19 +97,30 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var model = baton.model;
             var options = baton.options || {};
-            var modifiedBy = model.get('modified_by');
             var dateString = createDateString(model.get('last_modified'));
             var folder_id = model.get('folder_id');
             var media = model.get('media') || {};
             var dl = $('<dl>');
             var isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
+
             dl.append(
                 // filename
                 $('<dt>').text(gt('Name')),
                 $('<dd class="file-name">').append(
                     renderFileName(model, options)
-                ),
+                )
+            );
+
+            if (model.isSharedFederatedSync()) {
+                dl.append(
+                    //#. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
+                    $('<dt>').text(gt('Location')),
+                    $('<dd class="host-name">').text(model.getAccountDisplayNameSync())
+                );
+            }
+
+            dl.append(
                 // size
                 $('<dt>').text(gt('Size')),
                 $('<dd class="size">').text(ViewerUtil.renderItemSize(model))
@@ -151,7 +185,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),
-                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNode(modifiedBy))
+                        $('<span class="modifiedBy">').append(document.createTextNode('\u200B')).append(UserAPI.getTextNodeExtended(model.attributes, 'modified'))
                     )
                 );
 
@@ -183,9 +217,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                                 $('<a href="#">').text(
                                     model.isFile() ? gt('This file is shared with others') : gt('This folder is shared with others')
                                 )
-                                .on('click', { model: model }, openShareDialog) :
+                                .on('click', { baton: baton }, openShareDialog) :
                                 $.txt('-')
                         )
+                    );
+                }
+
+                if (model.isSharedFederatedSync() && model.getAccountError()) {
+                    var errorString = model.getAccountError().error || '';
+                    dl.append(
+                        $('<dt>').text(gt('Error')),
+                        $('<dd class="host-name">').text(errorString)
                     );
                 }
             } else {
@@ -279,6 +321,8 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             this.setPanelHeader(gt('Details'));
             // attach event handlers
             this.listenTo(this.model, 'change:media change:cid change:filename change:title change:com.openexchange.file.sanitizedFilename change:file_size change:last_modified change:folder_id change:object_permissions change:permissions', this.render);
+            // listen to version display events
+            this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayTempVersion.bind(this));
         },
 
         render: function () {
@@ -297,6 +341,19 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             }
 
             return this;
+        },
+
+        /**
+         * Handles display temporary file version events.
+         *
+         * @param {Object} versionData
+         *   The JSON representation of the version.
+         */
+        onDisplayTempVersion: function (versionData) {
+            if (!versionData) { return; }
+
+            this.model = new FilesAPI.Model(versionData);
+            this.render();
         },
 
         /**

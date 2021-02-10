@@ -143,6 +143,24 @@ define('io.ox/core/links', [
                 });
             });
         } else {
+            //  if the calendar app was already started and this folder is not in the folder list, it's either invalid or our data is outdated. Get current data to be sure.
+            if (data.folder && ox.ui.apps.get('io.ox/calendar').get('state') === 'running') {
+                require(['io.ox/core/folder/api'], function (api) {
+                    if ((api.pool.collections['flat/event/private'] && api.pool.collections['flat/event/private'].has(data.folder)) ||
+                    (api.pool.collections['flat/event/shared'] && api.pool.collections['flat/event/shared'].has(data.folder)) ||
+                    (api.pool.collections['flat/event/public'] && api.pool.collections['flat/event/public'].has(data.folder))) {
+
+                        openFolder('io.ox/calendar/main', data.folder);
+                        return;
+                    }
+                    // open folder no matter the result. Will at least open the correct app and show the default folder
+                    api.flat({ module: 'event', cache: false }).always(function () {
+                        openFolder('io.ox/calendar/main', data.folder);
+                    });
+                });
+                return;
+            }
+
             openFolder('io.ox/calendar/main', data.folder);
         }
     };

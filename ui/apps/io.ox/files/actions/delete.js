@@ -34,17 +34,15 @@ define('io.ox/files/actions/delete', [
         // delete files
         api.remove(_(items).invoke('toJSON')).fail(function (e) {
             if (e && e.code && e.code === 'IFO-0415') {
-                notifications.yell('error', gt.ngettext(
-                    'This file has not been deleted, as it is locked by its owner.',
-                    'These files have not been deleted, as they are locked by their owner.',
-                    list.length
-                ));
+                // do not use "gt.ngettext" for plural without count
+                notifications.yell('error', (list.length === 1) ?
+                    gt('This file has not been deleted, as it is locked by its owner.') :
+                    gt('These files have not been deleted, as they are locked by their owner.')
+                );
             } else {
-                notifications.yell('error', gt.ngettext(
-                    'This file has not been deleted',
-                    'These files have not been deleted',
-                    list.length
-                ) + '\n' + e.error);
+                // do not use "gt.ngettext" for plural without count
+                var msg = (list.length === 1) ? gt('This file has not been deleted') : gt('These files have not been deleted');
+                notifications.yell('error', _.noI18n(msg + '\n' + e.error));
             }
 
             api.trigger('reload:listview');
@@ -59,15 +57,15 @@ define('io.ox/files/actions/delete', [
     return function (list) {
         list = _.isArray(list) ? list : [list];
 
-        var deleteNotice = gt.ngettext(
-                'Do you really want to delete this item?',
-                'Do you really want to delete these items?',
-                list.length
-            ),
-            shareNotice = gt.ngettext('This file (or folder) is shared with others. It won\'t be available for them any more.',
-                'Some files/folder are shared with others. They won\'t be available for them any more.',
-                list.length
-            );
+        // do not use "gt.ngettext" for plural without count
+        var deleteNotice = (list.length === 1) ?
+            gt('Do you really want to delete this item?') :
+            gt('Do you really want to delete these items?');
+
+        // do not use "gt.ngettext" for plural without count
+        var shareNotice = (list.length === 1) ?
+            gt('This file or folder is shared with others. It will not be available for them anymore.') :
+            gt('Some files or folders are shared with others. They will not be available for them anymore.');
 
         function isShared() {
             var result = _.findIndex(list, function (model) {
@@ -78,7 +76,11 @@ define('io.ox/files/actions/delete', [
         }
 
         //#. 'Delete item' and 'Delete items' as a header of a modal dialog to confirm to delete files from drive.
-        new ModalDialog({ title: gt.ngettext('Delete item', 'Delete items', list.length), description: isShared() ? shareNotice : deleteNotice })
+        new ModalDialog({
+            // do not use "gt.ngettext" for plural without count
+            title: (list.length === 1) ? gt('Delete item') : gt('Delete items'),
+            description: isShared() ? shareNotice : deleteNotice
+        })
             .addCancelButton()
             .addButton({ label: gt('Delete'), action: 'delete' })
             .on('delete', function () {

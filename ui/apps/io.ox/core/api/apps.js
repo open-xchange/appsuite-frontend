@@ -19,13 +19,18 @@ define('io.ox/core/api/apps', [
 ], function (ext, manifests, capabilities, settings) {
 
     'use strict';
-    var defaultList = ['io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
+
+    var defaultList = [
+        'io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
         'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
     ];
 
     // move app to defaultList, once it is out of prototype state
     if (ox.debug) defaultList.push('io.ox/notes');
+
+    if (_.device('smartphone')) defaultList.push('io.ox/search');
+    if (!_.device('smartphone')) defaultList.push('io.ox/chat');
 
     function validApp(app) { return app && !this.blacklist[app.id]; }
 
@@ -46,6 +51,8 @@ define('io.ox/core/api/apps', [
             this.launcher = new LauncherCollection(defaultList);
             if (settings.contains('apps/list')) {
                 var list = settings.get('apps/list').split(',');
+                if (_.device('smartphone') && !_(list).contains('io.ox/search')) list.push('io.ox/search');
+                if (!_.device('smartphone') && !_(list).contains('io.ox/chat')) list.push('io.ox/chat');
                 this._launcher = new LauncherCollection(list);
             } else {
                 this._launcher = this.launcher;
@@ -55,6 +62,9 @@ define('io.ox/core/api/apps', [
                 args[0] = 'launcher:' + args[0];
                 this.trigger.apply(this, args);
             }, this);
+        },
+        getByCID: function (cid) {
+            return _.findWhere(this.models, { cid: cid });
         },
         forLauncher: function getAppsForLauncher() {
             return _.filter(this._launcher.map(this.get.bind(this)), validApp, this);

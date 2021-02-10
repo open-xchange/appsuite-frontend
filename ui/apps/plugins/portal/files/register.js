@@ -39,7 +39,7 @@ define('plugins/portal/files/register', [
                     'aria-label': title + ', ' + gt('Disable widget')
                 });
                 $node.find('.content.pointer').attr({
-                    'aria-label': gt.format('Press [enter] to jump to %1$s', title)
+                    'aria-label': gt('Press [enter] to jump to %1$s', title)
                 });
             }
 
@@ -99,7 +99,7 @@ define('plugins/portal/files/register', [
             var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename;
             //#. %1$s is a filename
             var content = $('<div class="content pointer" tabindex="0" role="button">')
-                .attr('aria-label', gt.format('Press [enter] to jump to %1$s', filename)),
+                .attr('aria-label', gt('Press [enter] to jump to %1$s', filename)),
                 data, options, url;
 
             if (_.isEmpty(filename)) {

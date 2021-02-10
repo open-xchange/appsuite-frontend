@@ -12,19 +12,18 @@
 
 /// <reference path="../../../../steps.d.ts" />
 const moment = require('moment');
-const crypto = require('crypto');
 
 Feature('Settings > Calendar');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7873] Configure incoming invitation mails to be deleted after accepting or declining', async function (I, users) {
+Scenario('[C7873] Configure incoming invitation mails to be deleted after accepting or declining', async function ({ I, users }) {
 
     // Creates the .eml source for an invitation mail
     // Options are:
@@ -121,7 +120,9 @@ Test
     I.waitForInvisible('Erisian Dialectic', 2);
 
     // Change the setting
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
 
     I.waitForElement(locate('.folder[aria-label=Calendar]'));
     I.click(locate('.folder[aria-label=Calendar]'));

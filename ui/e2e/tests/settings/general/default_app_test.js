@@ -14,15 +14,15 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7761] Define default app after login', async (I) => {
+Scenario('[C7761] Define default app after login', async ({ I }) => {
 
     // Calendar
     await I.haveSetting({ 'io.ox/core': { autoStart: 'io.ox/calendar/main' } });

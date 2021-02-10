@@ -7,24 +7,25 @@
 }
 
 .appPasswords .appPermDiv {
-    text-overflow: ellipsis;
-    overflow: hidden;
     width: 50%;
+    label {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: 0px;
+    }
 }
 
 .appPasswords .appLoginDiv {
-    width: 35%;
+    width: ~"calc(50% - 53px)";;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    padding: 16px 0px;
 }
 
 .appPasswords .appListControls {
-    width: 15%
-}
-
-.appPasswords .appDelete {
-    float: right
+    width: 53px
 }
 
 .help-block.appHelpBlock {

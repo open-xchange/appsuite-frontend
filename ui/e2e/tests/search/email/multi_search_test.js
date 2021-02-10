@@ -10,16 +10,16 @@
  * @author Ejaz Ahmed <ejaz.ahmed@open-xchange.com>
  *
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 Feature('Mail > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -40,7 +40,7 @@ function getTestMail(from, to, opt) {
     };
 }
 
-Scenario('[C8407] Perform a multi search', async function (I, users, mail, search) {
+Scenario('[C8407] Perform a multi search', async function ({ I, users, mail, search }) {
     const [user1, user2] = users;
 
     await I.haveMail(getTestMail(user1, user2, { subject: 'test 123', content: '' }));
@@ -64,7 +64,7 @@ Scenario('[C8407] Perform a multi search', async function (I, users, mail, searc
     I.waitForInvisible('.list-view [data-index="1"]');
 });
 
-Scenario('[C8406] Delete a string from multi search', async function (I, users, mail, search) {
+Scenario('[C8406] Delete a string from multi search', async function ({ I, users, mail, search }) {
     const [user1, user2] = users;
 
     await I.haveMail(getTestMail(user1, user2, { subject: 'test 123', content: '' }));

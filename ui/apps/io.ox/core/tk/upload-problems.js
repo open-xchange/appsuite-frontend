@@ -23,15 +23,20 @@ define('io.ox/core/tk/upload-problems', [
 
     api.report = function (files, errors) {
         var def = $.Deferred();
-        new ModalDialog({ title: gt.ngettext('Unable to upload file', 'Unable to upload files', files.length), width: '600px' })
+        new ModalDialog({
+            // do not use "gt.ngettext" for plural without count
+            title: (files.length === 1) ? gt('Unable to upload file') : gt('Unable to upload files'),
+            width: '600px'
+        })
             .build(function () {
                 this.$el.addClass('upload-problems');
                 this.$body.append(
-                    $('<span>').append(gt.ngettext(
-                        'We encountered an issue for your upload',
-                        'We encountered some issues for your upload',
-                        errors.length
-                    )),
+                    $('<span>').append(
+                        // do not use "gt.ngettext" for plural without count
+                        (errors.length === 1) ?
+                            gt('We encountered an issue for your upload') :
+                            gt('We encountered some issues for your upload')
+                    ),
                     $('<ul style="margin-top: 8px;" class="list-unstyled list-group">')
                         .append(
                             errors.map(function (obj) {

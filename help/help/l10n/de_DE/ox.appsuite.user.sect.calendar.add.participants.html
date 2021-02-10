@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>7.4.6. Teilnehmer oder Ressourcen hinzufügen</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<title>7.4.7. Teilnehmer oder Ressourcen hinzufügen</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Termine anlegen">
-<link rel="prev" href="ox.appsuite.user.sect.calendar.add.alarms.html" title="7.4.5. Terminerinnerung verwenden">
-<link rel="next" href="ox.appsuite.user.sect.calendar.add.attachments.html" title="7.4.7. Anhänge hinzufügen">
+<link rel="prev" href="ox.appsuite.user.sect.calendar.add.alarms.html" title="7.4.6. Terminerinnerung verwenden">
+<link rel="next" href="ox.appsuite.user.sect.calendar.add.attachments.html" title="7.4.8. Anhänge hinzufügen">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -34,8 +34,8 @@
   </h1>
 <h2 class="sr-only">Termine anlegen</h2>
 <div class="sect2" id="ox.appsuite.user.sect.calendar.add.participants">
-<div class="titlepage"><div><div><h3 class="title">7.4.6. Teilnehmer oder Ressourcen hinzufügen</h3></div></div></div>
-<a class="indexterm" name="id-1.8.9.12.2"></a><div class="task" id="ox.appsuite.user.task.calendar.add.participants">
+<div class="titlepage"><div><div><h3 class="title">7.4.7. Teilnehmer oder Ressourcen hinzufügen</h3></div></div></div>
+<a class="indexterm" name="id-1.8.9.13.2"></a><div class="task" id="ox.appsuite.user.task.calendar.add.participants">
 <p class="title">So fügen Sie im Terminbearbeitungsfenster Teilnehmer oder Ressourcen hinzu:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p role="presentation">Geben Sie unterhalb von <span class="guibutton"><strong>Teilnehmer</strong></span> in das Eingabefeld ein: Die E-Mail-Adresse des Teilnehmers, 
@@ -47,6 +47,15 @@
                   </p></li>
 </ul>
             </p></li>
+<li class="step"><p role="presentation">Je nach Konfiguration können Sie bestimmen, dass Teilnehmer den Termin später bearbeiten können. Dazu aktivieren Sie 
+              das Kontrollfeld <span class="guibutton"><strong>Teilnehmer können Änderungen vornehmen</strong></span>.
+              Beachten Sie diese Hinweise:
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Bei Terminen in öffentlichen Ordnern oder bei Terminen mit externen Teilnehmern ist diese Option nicht verfügbar.</p></li>
+<li class="listitem"><p role="presentation">Das Kontrollfeld ist nur für den Organisator des Termins verfügbar. Alle Änderungen werden im Namen des Organisators vorgenommen.</p></li>
+<li class="listitem"><p role="presentation">Ein Teilnehmer kann andere Teilnehmer hinzufügen, aber nicht entfernen. Ein Teilnehmer kann sich nicht selbst aus dem Termin entfernen.</p></li>
+</ul>
+            </p></li>
 <li class="step">
 <p role="presentation">
               Um Teilnehmer oder Ressourcen zu entfernen, klicken Sie neben dem Namen auf das Symbol <span class="guibutton"><strong>Entfernen</strong></span>
@@ -54,40 +63,37 @@
             </p>
 <p role="presentation">Standardmäßig werden Sie beim Anlegen des Termins als Organisator eingetragen. Wenn Sie den Termin in einem öffentlichen Kalender 
               anlegen, können Sie den Organisator aus dem Termin entfernen. Dazu klicken Sie neben dem Organisator auf das Symbol <span class="guibutton"><strong>Entfernen</strong></span>
-              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.add.participants.removeorganizor"><img src="../../images/appsuite_user_icon_trash.png"></span>.</p>
+              <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.add.participants.removeorganizor"><img src="../../images/appsuite_user_icon_trash.png"></span>.
+            </p>
 </li>
 </ol></div>
 <div class="taskrelated">
-          <p>Alle Teilnehmer werden über den neuen Termin per E-Mail benachrichtigt.</p>
+          <p>Ergebnisse:
+            </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Alle Teilnehmer erhalten eine Termineinladung.</p></li>
+<li class="listitem"><p role="presentation">Wenn ein Teilnehmer den Termin bestätigt, wird der Termin in seinem Kalender eingetragen.</p></li>
+<li class="listitem"><p role="presentation">Wenn ein externer Teilnehmer seine Teilnahme bestätigt, erhalten Sie eine E-Mail. In dieser E-Mail
+                  müssen Sie die Terminänderung bestätigen, damit der externe Teilnehmer in Ihrem Termin eingetragen wird.</p></li>
+</ul>
+<p>
+          </p>
         </div>
 </div>
 <p id="ox.appsuite.user.tip.calendar.add.participants">
         Tipp: Um verfügbare Zeiten der Teilnehmer und Ressourcen zu finden, können
         Sie die <a class="link" href="ox.appsuite.user.sect.calendar.add.scheduling.html">Planungsansicht verwenden</a>. 
       </p>
-<p id="ox.appsuite.user.options.calendar.add.participants">Je nach Konfiguration können Sie bestimmen, dass Teilnehmer den Termin später bearbeiten können. Dazu aktivieren Sie 
-        das Kontrollfeld <span class="guibutton"><strong>Teilnehmer können Änderungen vornehmen</strong></span>.
-        Beachten Sie diese Hinweise:
-        </p>
-<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Bei Terminen in öffentlichen Ordnern oder bei Terminen mit externen Teilnehmern ist diese Option nicht verfügbar.</p></li>
-<li class="listitem"><p role="presentation">Das Kontrollfeld ist nur für den Organisator des Termins verfügbar.</p></li>
-<li class="listitem"><p role="presentation">Ein Teilnehmer kann andere Teilnehmer hinzufügen, aber nicht entfernen.</p></li>
-<li class="listitem"><p role="presentation">Ein Teilnehmer sich nicht selbst aus dem Termin entfernen.</p></li>
-<li class="listitem"><p role="presentation">Alle Änderungen werden im Namen des Organisators vorgenommen.</p></li>
-</ul>
-<p>
-      </p>
 <p id="ox.appsuite.user.related.calendar.add.participants">
         </p>
-<p class="title">Übergeordnete Aktion:</p>
+<p class="title">Übergeordnete Aktionen:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html">Neuen Termin anlegen</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.edit.html">Termine bearbeiten</a></p>
 </li></ul>
 <p>
         </p>
-<p class="title">Untergeordnete Funktion:</p>
+<p class="title">Untergeordnete Aktionen:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation" class="cap-webmail"><a class="xref" href="ox.appsuite.user.sect.email.send.addressbook.html">Kontakte aus einem Adressbuch wählen</a></p></li></ul>
 <p>
       </p>

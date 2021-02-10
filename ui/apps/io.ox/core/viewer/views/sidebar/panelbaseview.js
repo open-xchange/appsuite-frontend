@@ -36,6 +36,8 @@ define('io.ox/core/viewer/views/sidebar/panelbaseview', [
             // ensure we have options
             options = _.extend({ fixed: false }, options);
 
+            this.viewerEvents = options.viewerEvents || null;
+
             if (options.fixed) {
                 // static variant
                 this.$el.append(

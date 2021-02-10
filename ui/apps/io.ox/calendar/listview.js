@@ -12,12 +12,27 @@
  */
 
 define('io.ox/calendar/listview', [
-    'io.ox/calendar/common-extensions',
     'io.ox/core/extensions',
+    'io.ox/core/util',
+    'gettext!io.ox/calendar',
     'less!io.ox/calendar/style'
-], function (extensions, ext) {
+], function (ext, coreUtil, gt) {
 
     'use strict';
+
+    // used for "old" mobile search result only
+
+    function getTitle(baton, options) {
+        options = options || {};
+        var data = baton.data.event || baton.data,
+            result = _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
+
+        if (options.parse) {
+            result = coreUtil.urlify(result);
+        }
+
+        return result;
+    }
 
     ext.point('io.ox/calendar/listview/item').extend({
         id: 'default',
@@ -39,18 +54,6 @@ define('io.ox/calendar/listview', [
         }
     });
 
-    ext.point('io.ox/calendar/listview/item/default/row1').extend({
-        id: 'interval',
-        index: 100,
-        draw: extensions.interval
-    });
-
-    ext.point('io.ox/calendar/listview/item/default/row1').extend({
-        id: 'title',
-        index: 200,
-        draw: extensions.title
-    });
-
     ext.point('io.ox/calendar/listview/item/default').extend({
         id: 'row2',
         index: 200,
@@ -61,15 +64,45 @@ define('io.ox/calendar/listview', [
         }
     });
 
+    ext.point('io.ox/calendar/listview/item/default/row1').extend({
+        id: 'interval',
+        index: 100,
+        draw: function (baton) {
+            var tmp = $('<div>');
+            ext.point('io.ox/calendar/detail/date').invoke('draw', tmp, baton);
+            this.append(
+                $('<span class="interval">').append(tmp.find('.interval').html())
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/listview/item/default/row1').extend({
+        id: 'title',
+        index: 200,
+        draw: function (baton) {
+            this.append($('<div class="title">').text(getTitle(baton)));
+        }
+    });
+
     ext.point('io.ox/calendar/listview/item/default/row2').extend({
         id: 'location',
         index: 100,
-        draw: extensions.location
+        draw: function (baton) {
+            this.append(
+                $('<span class="location">').text(baton.data.location)
+            );
+        }
     });
 
     ext.point('io.ox/calendar/listview/item/default/row2').extend({
         id: 'day',
         index: 200,
-        draw: extensions.day
+        draw: function (baton) {
+            var tmp = $('<div>');
+            ext.point('io.ox/calendar/detail/date').invoke('draw', tmp, baton);
+            this.append(
+                $('<span class="day">').append(tmp.find('.day').html())
+            );
+        }
     });
 });

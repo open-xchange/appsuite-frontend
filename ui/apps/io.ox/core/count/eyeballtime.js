@@ -13,7 +13,7 @@
 
 define('io.ox/core/count/eyeballtime', [
     'io.ox/core/count/api',
-    'io.ox/core/count/active'
+    'io.ox/core/active'
 ], function (api, isActive) {
 
     'use strict';

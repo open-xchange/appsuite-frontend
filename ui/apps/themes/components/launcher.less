@@ -297,10 +297,16 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
     }
 
+    #io-ox-topleftbar,
+    #io-ox-topleftbar > ul,
+    #io-ox-topleftbar > ul > li,
+    #io-ox-topleftbar > ul > li > a,
     #io-ox-toprightbar,
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul > li,
-    #io-ox-toprightbar > ul > li > a {
+    #io-ox-toprightbar > ul > li > a,
+    #io-ox-toprightbar > ul > li > button,
+    {
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
@@ -308,12 +314,13 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         margin: 0;
     }
 
+    #io-ox-topleftbar,
     #io-ox-toprightbar {
         padding-right: 12px; // break alignment on purpose
         // more space needed on smartphones
         .smartphone & { padding-right: 0}
         .launcher {
-            & > a {
+            & > a, & > button {
                 padding: 16px 11px;
                 cursor: pointer;
                 font-size: 18px;
@@ -344,6 +351,91 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     }
 }
 
+#topbar-account-dropdown .user {
+    @sidelength: 64px;
+
+    padding: 3px 20px;
+    display: flex;
+    width: 100%;
+
+    .action { //, .action:hover, .action:focus {
+        display: flex;
+        padding: 0;
+        background: none;
+    }
+
+    .user-picture-container {
+        margin-right: 16px;
+        width: @sidelength;
+    }
+
+    .user-picture {
+        .flex-center;
+        .picture(@sidelength, @sidelength);
+        background-color: #eee;
+        color: rgba(0, 0, 0, 0.60);
+        font-size: 20px;
+        font-weight: bold;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, 0.50);
+
+        .fa { display: none; }
+    }
+
+    // overwrites dropdown defaults
+    // .action:hover, .action:focus { background: none; }
+
+    // unset user image
+    .action:hover, .action:focus {
+        .fa { display: block; }
+        .initials { display: none; }
+    }
+
+    // box shadow outline
+    .action:focus .user-picture {
+        box-shadow: 0 0 8px 2px @link-color;
+        &[style] {
+            box-shadow: 0 0 8px 2px @link-color, 0 0 0 2px white inset;
+        }
+    }
+
+    .text-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        // overflow handling
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        .name {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .name, .mail {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .smartphone & {
+        .user-picture-container {
+            width: 48px;
+        }
+        .user-picture {
+            width: 48px;
+            height: 48px;
+        }
+        .action {
+            flex-direction: column;
+            justify-content: center;
+        }
+        .text-container {
+            text-align: left;
+        }
+        width: auto;
+    }
+}
 // Fix for IE dropdown width calculation see OXUIB-184
 .ie11 .launcher-dropdown.dropdown-menu {
     width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2 !important;
@@ -469,6 +561,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                     .stroke-c1 { stroke: @app-color-mail; }
                     .fill-c1 { fill: @app-color-mail; }
                 }
+                &.app-icon-chat {
+                    color: @app-color-chat;
+                    .stroke-c1 { stroke: @app-color-chat; }
+                    .fill-c1 { fill: @app-color-chat; }
+                }
                 &.app-icon-calendar {
                     color: @app-color-calendar;
                     .stroke-c1 { stroke: @app-color-calendar; }
@@ -563,6 +660,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     // reduce spacings to fit topbar on really small devices
     .smartphone #io-ox-appcontrol {
         #io-ox-topsearch { margin-right: 0; }
+        #io-ox-topleftbar .launcher > a { padding: 16px 9px; }
         #io-ox-toprightbar .launcher > a { padding: 16px 9px; }
         #io-ox-launcher > button.launcher-btn { width: 44px; }
     }

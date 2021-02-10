@@ -81,7 +81,7 @@ define('io.ox/files/upload/view', [
                     .addClass('upload-entry')
                     .append(
                         $('<div class="file-name">').text(this.model.get('file').name),
-                        $('<div class="file-size">').text(gt.format('%1$s\u00A0', strings.fileSize(this.model.get('file').size))),
+                        $('<div class="file-size">').text(_.noI18n(strings.fileSize(this.model.get('file').size) + '\u00A0')),
                         removeIcon,
                         $('<div class="progress">').addClass(this.model.get('progress') < 1 ? '' : 'invisible').append(
                             $('<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">')
@@ -128,6 +128,7 @@ define('io.ox/files/upload/view', [
                     fileUpload.collection.each(function (model) {
                         //remove all change listeners from the models in the collection
                         model.off('change:progress');
+                        model.off('change:abort');
                     });
                 })
                 .open();

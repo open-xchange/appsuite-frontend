@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
+Scenario('[C7776] Insert the original email text to a reply', async ({ I, users, mail }) => {
     const user = users[0];
     const listview = locate('.list-view-control').as('List View');
 
@@ -35,6 +35,7 @@ Scenario('[C7776] Insert the original email text to a reply', async (I, users, m
     }, { user });
 
     I.login('app=io.ox/mail', { user });
+    mail.waitForApp();
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');
@@ -51,6 +52,7 @@ Scenario('[C7776] Insert the original email text to a reply', async (I, users, m
     I.click('Insert the original email text to a reply');
 
     I.openApp('Mail');
+    mail.waitForApp();
     I.waitForText('plain text', 5, listview);
     I.click('.list-item.selectable', listview);
     I.waitForVisible('h1.subject');

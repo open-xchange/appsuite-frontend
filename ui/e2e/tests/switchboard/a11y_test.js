@@ -17,16 +17,16 @@ const moment = require('moment');
 
 Feature('Accessibility > Switchboard');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Switchboard - Call history', async (I) => {
+Scenario('Switchboard - Call history', async ({ I }) => {
 
     const primaryEmail = 'someone@schmalzgollum.com';
     const display_name = 'someone';
@@ -34,35 +34,33 @@ Scenario('Switchboard - Call history', async (I) => {
 
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
-    await I.executeScript((mail, name) => {
-        return require(['io.ox/switchboard/views/call-history']).then(function (ch) {
-            ch.add(
-                [
-                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
-                    { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
-                ]
-            );
-        });
-    }, primaryEmail, display_name);
+    await I.executeScript((mail, name) => require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+        ch.add(
+            [
+                { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: true, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: false, name: name, type: 'zoom' },
+                { email: mail, incoming: true, missed: true, name: name, type: 'zoom' }
+            ]
+        );
+    }), primaryEmail, display_name);
     I.waitForVisible('~Call history');
     I.click('~Call history');
     I.waitForVisible('.dropdown.open');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Presence', async (I) => {
+Scenario('Switchboard - Presence', async ({ I }) => {
 
     I.login();
-    I.waitForVisible('~Support');
-    I.click('~Support');
+    I.waitForVisible('~My account');
+    I.click('~My account');
     I.waitForVisible('.dropdown.open');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Call dialog', async (I, dialogs) => {
+Scenario('Switchboard - Call dialog', async ({ I, dialogs }) => {
 
     const primaryEmail = 'someone@schmalzgollum.com';
     const display_name = 'someone';
@@ -70,11 +68,9 @@ Scenario('Switchboard - Call dialog', async (I, dialogs) => {
 
     I.login('app=io.ox/mail');
     I.waitForText('Empty', 5, '.list-view');
-    await I.executeScript((mail, name) => {
-        return require(['io.ox/switchboard/views/call-history']).then(function (ch) {
-            ch.add({ email: mail, incoming: true, missed: true, name: name, type: 'zoom' });
-        });
-    }, primaryEmail, display_name);
+    await I.executeScript((mail, name) => require(['io.ox/switchboard/views/call-history']).then(function (ch) {
+        ch.add({ email: mail, incoming: true, missed: true, name: name, type: 'zoom' });
+    }), primaryEmail, display_name);
 
     I.waitForVisible('~Call history');
     I.click('~Call history');
@@ -86,7 +82,7 @@ Scenario('Switchboard - Call dialog', async (I, dialogs) => {
 
 });
 
-Scenario('Switchboard - Addressbook', async (I, users, contacts) => {
+Scenario('Switchboard - Addressbook', async ({ I, users, contacts }) => {
 
     I.login('app=io.ox/contacts');
     I.waitForElement('.io-ox-contacts-window');
@@ -94,12 +90,12 @@ Scenario('Switchboard - Addressbook', async (I, users, contacts) => {
     I.waitForVisible('.io-ox-contacts-window .tree-container');
 
     contacts.selectContact(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Calendar', async (I, calendar) => {
+Scenario('Switchboard - Calendar', async ({ I, calendar }) => {
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
 
@@ -127,11 +123,11 @@ Scenario('Switchboard - Calendar', async (I, calendar) => {
     I.waitForVisible('.appointment');
     I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
-    I.waitForText('Join Zoom meeting', 5, '.io-ox-sidepopup .switchboard-actions');
+    I.waitForText('Join Zoom meeting', 5, '.io-ox-sidepopup .action-button-rounded');
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Switchboard - Call history keyboard navigation', async (I, settings) => {
+Scenario('Switchboard - Call history keyboard navigation', async ({ I, settings }) => {
 
     const mail = 'someone@testsomething.com';
     const name = 'someone';

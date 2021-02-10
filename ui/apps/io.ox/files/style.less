@@ -115,6 +115,7 @@
     .file-type-txt    &:before { content: '\f0f6'; }                  // fa-edit
     .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
     .file-type-folder &:before { content: '\f07b'; color: #808080; }  // fa-folder - 4% reduced luminance compared to the file-type-icon to compensate the percived grey value (filled vs. outline) a bit
+    .file-type-error  &:before { content: '\f071'; color: #000000; }
 }
 
 .file-list-view, .myshares-list, .myfavorites-list {
@@ -572,7 +573,6 @@
                 .folder-name {
                     width: 100%;
                     text-overflow: ellipsis;
-                    white-space: nowrap;
                     overflow: hidden;
                     padding: 10px;
                 }
@@ -728,16 +728,32 @@
 
     .upload-title {
         margin-bottom: 8px;
+        overflow: hidden;
 
-        .file-name,
-        .estimated-time {
+        .file-name {
             white-space: nowrap;
             font-weight: 300;
             .ellipsis();
         }
 
-        .estimated-time {
-            font-style: italic;
+        .time-container {
+            display: flex;
+
+            .estimated-time {
+                font-style: italic;
+                white-space: nowrap;
+                font-weight: 300;
+            }
+
+            .items-left {
+                padding-left: 15px;
+                white-space: nowrap;
+                font-weight: 300;
+                font-style: italic;
+                margin-left: auto;
+                order: 2;
+                .ellipsis();
+            }
         }
     }
 
@@ -923,7 +939,17 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
 
         .wrapper { padding: 0 16px; }
 
-        .sidebar-panel-body { padding: 12px 0 5px 0; }
+        .sidebar-panel-body {
+
+            padding: 12px 0 5px 0;
+
+            .copy-link {
+                float: right;
+                padding: 0;
+                border: 0;
+                color: @link-color;
+            }
+        }
 
         .sidebar-panel .sidebar-panel-heading { border-bottom: none; }
 

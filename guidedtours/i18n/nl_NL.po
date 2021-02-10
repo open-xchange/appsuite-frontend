@@ -1,20 +1,20 @@
 # Ivar Snaaijer <ivar@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020.
-# Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 # Tim van Oosten <tim@workshop-chapina.com>, 2020.
+# Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-27 15:01+0200\n"
-"Last-Translator: Ivar Snaaijer <ivar@workshop-chapina.com>\n"
-"Language-Team: Dutch <nl@workshop-chapina.com>\n"
+"PO-Revision-Date: 2020-12-15 21:58+0100\n"
+"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.04.3\n"
+"X-Generator: Lokalize 19.12.3\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -189,7 +189,7 @@ msgstr ""
 "Welkom in uw cloudopslag app. Deze Rondleiding laat u uw nieuwe online-"
 "opslagoplssing zien. Uw enkele toegangspunt voor bestanden in al uw online-"
 "opslagaccounts. Hiervandaan kan u bestanden uploaden, opslaan, delen en "
-"synchroniseren met verschillende apparaten."
+"synchroniseren met verschillende apparaten. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -205,7 +205,7 @@ msgstr ""
 "Aan de linkerkant ziet u de mappenboom. Deze toont uw mappenstructuur en "
 "hiermee kan u navigeren naar de specifieke mappen en submappen. Om uw leven "
 "eenvoudiger te maken hebben we alvast mappen toegevoegd voor Documenten, "
-"Muziek, Afbeeldingen en Video's"
+"Muziek, Afbeeldingen en Video's."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder content"
@@ -287,44 +287,40 @@ msgstr "Bestanden delen"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
+"also collaborate on a document and set different rights."
 msgstr ""
-"Hiervandaan kan u ook bestanden delen met collega's en externe contacten. U "
-"kan ook samenwerken aan één document en verschillende toegangsrechten "
-"instellen."
+"Hier kan u bestanden delen met uw collega's en externe contacten. U kan ook"
+" deelnemen met een document en verschillende rechten instellen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Opties voor het delen"
+msgid "Sharing option - Invite people"
+msgstr "Deel-optie - Mensen uitnodigingen"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
+"Choose from two alternatives to share your files and folder. Use \"Invited "
+"people only\" if you want ot manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
 msgstr ""
-"Kies uit twee alternatieven om uw bestanden of mappen te delen. Gebruik "
-"Mensen uitnodigen als u toegangsrechten wilt beheren en de ontvangers "
-"toestaan bestanden toe te voegen en te bewerken. Of u geeft alleen een link "
-"zodat anderen uw bestand kunnen zien en downloaden. Gebruik eventueel een "
-"vervaldatum en een wachtwoord opgeven als u dat wilt."
+"Kies uit twee alternatieven om uw bestanden en mappen te delen. Gebruik"
+" \"Alleen genodigden\" als u de rechten wilt beheren en deelnemers het recht"
+" te geven bestanden te maken en bewerken. Interne en externe deelnemers"
+" kunnen ook op het zelfde moment met u samenwerken aan documenten."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Samenwerken"
+msgid "Sharing option - Everyone who has the link"
+msgstr "Deel-optie - Iedereen die de link heeft"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
 msgstr ""
-"Bestanden delen door mensen uit te nodigen geeft de ontvangers niet alleen "
-"de mogelijkheid om de bestanden te bewerken en nieuwe aan te maken. Interne "
-"en externe deelnemers kunnen ook tegelijk met u samenwerken aan "
-"tekstbestanden en rekenbladen."
+"Het is ook mogelijk om een link te delen om anderen uw bestanden te laten"
+" zien of downloaden. U kan een verloopdatum opgeven en wachtwoordbeveiliging"
+" toevoegen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -382,16 +378,16 @@ msgstr "Welkom bij %s"
 msgid ""
 "This tour will give you a quick introduction to the product in five steps."
 msgstr ""
-"Deze rondleiding zal u in vijf stappen een snelle introductie van het product"
-" geven."
+"Deze rondleiding zal u in vijf stappen een snelle introductie van het "
+"product geven."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Navigation"
 msgstr "Navigatie"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "In het appmenu rechtsboven vindt u alle apps."
+msgid "All apps can be found in the app menu on the top left."
+msgstr "Alle apps kunt u vinden in het app-menu in de linkerbovenhoek."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -402,8 +398,8 @@ msgid ""
 "Your personal data can be changed in the account dropdown. You can also sign "
 "out from there."
 msgstr ""
-"Uw persoonlijke data kan worden aangepast in het accountmenu. U kunt daar ook"
-" afmelden."
+"Uw persoonlijke data kan worden aangepast in het accountmenu. U kunt daar "
+"ook afmelden."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Settings"
@@ -427,14 +423,14 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Rondleiding annuleren"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
 "choose \"%s\""
 msgstr ""
-"U kunt altijd deze rondleiding hervatten door op het accountpictogram te"
-" klikken en \"%s\" te kiezen"
+"U kunt altijd deze rondleiding hervatten door op het accountpictogram te "
+"klikken en \"%s\" te kiezen"
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -582,12 +578,12 @@ msgstr "De e-mailinstellingen openen"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Om de e-mailinstellingen te openen moet u op het Systeem menu pictogram "
-"klikken in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik op e-"
-"mail aan de linkerkant."
+"Om de e-mailinstellingen te openen klikt u op het Instellingenmenu pictogram "
+"in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik op Mail aan "
+"de linkerzijde."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -729,8 +725,8 @@ msgid ""
 "To open the settings, click on the settings icon on the upper right side of "
 "the menu bar."
 msgstr ""
-"Om de instellingen te openen klikt u op het instellingenpictogram in de"
-" rechterbovenhoek van de menubalk."
+"Om de instellingen te openen klikt u op het instellingenpictogram in de "
+"rechterbovenhoek van de menubalk."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -762,14 +758,14 @@ msgstr "De help oproepen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Om help te openen, klikt u op het gebruiker pictogram in de rechterbovenhoek "
-"van de menubalk. Kies help. De helptekst voor de gekozen app wordt getoond. "
-"Om de volledige help door te lezen klikt u op de Startpagina of de "
+"Om help te openen, klikt u op het help pictogram in de rechterbovenhoek van "
+"de menubalk. Kies help. De helptekst voor de gekozen app wordt getoond. Om "
+"de volledige help door te lezen klikt u op de Startpagina of de "
 "Inhoudsopgave aan de bovenkant van het scherm."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -885,6 +881,65 @@ msgstr ""
 "Om meerdere taken in één keer te bewerken moet u het selectievakje aan de "
 "linkerzijde van de taak inschakelen. Als de selectievakjes niet worden "
 "getoond, kan u het pictogram aan de linker onderkant klikken."
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "Hiervandaan kan u ook bestanden delen met collega's en externe contacten. "
+#~ "U kan ook samenwerken aan één document en verschillende toegangsrechten "
+#~ "instellen."
+
+#~ msgid "Sharing options"
+#~ msgstr "Opties voor het delen"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "Kies uit twee alternatieven om uw bestanden of mappen te delen. Gebruik "
+#~ "Mensen uitnodigen als u toegangsrechten wilt beheren en de ontvangers "
+#~ "toestaan bestanden toe te voegen en te bewerken. Of u geeft alleen een "
+#~ "link zodat anderen uw bestand kunnen zien en downloaden. Gebruik "
+#~ "eventueel een vervaldatum en een wachtwoord opgeven als u dat wilt."
+
+#~ msgid "Collaborating"
+#~ msgstr "Samenwerken"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "Bestanden delen door mensen uit te nodigen geeft de ontvangers niet "
+#~ "alleen de mogelijkheid om de bestanden te bewerken en nieuwe aan te "
+#~ "maken. Interne en externe deelnemers kunnen ook tegelijk met u "
+#~ "samenwerken aan tekstbestanden en rekenbladen."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "In het appmenu rechtsboven vindt u alle apps."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Om de e-mailinstellingen te openen moet u op het Systeem menu pictogram "
+#~ "klikken in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik "
+#~ "op e-mail aan de linkerkant."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Om help te openen, klikt u op het gebruiker pictogram in de "
+#~ "rechterbovenhoek van de menubalk. Kies help. De helptekst voor de gekozen "
+#~ "app wordt getoond. Om de volledige help door te lezen klikt u op de "
+#~ "Startpagina of de Inhoudsopgave aan de bovenkant van het scherm."
 
 #~ msgid "Creating new items"
 #~ msgstr "Nieuwe items aanmaken"

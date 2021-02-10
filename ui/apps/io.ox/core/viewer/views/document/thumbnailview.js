@@ -13,8 +13,10 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
     'io.ox/backbone/views/disposable',
     'io.ox/core/capabilities',
     'io.ox/core/tk/doc-converter-utils',
-    'io.ox/core/viewer/util'
-], function (DisposableView, Capabilities, DocConverterUtils, Util) {
+    'io.ox/core/viewer/views/types/typesutil',
+    'io.ox/core/viewer/util',
+    'io.ox/files/api'
+], function (DisposableView, Capabilities, DocConverterUtils, TypesUtil, Util, FilesAPI) {
 
     'use strict';
 
@@ -34,6 +36,11 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             this.listenTo(this.viewerEvents, 'viewer:sidebar:scroll', this.refreshThumbnails);
             // listen to window resize
             this.listenTo(this.viewerEvents, 'viewer:resize', this.refreshThumbnails);
+            // listen to version display events
+            this.listenTo(this.viewerEvents, 'viewer:display:version', this.onDisplayTempVersion.bind(this));
+            // listen to display item change
+            this.listenTo(this.viewerEvents, 'viewer:displayeditem:change', this.setModel);
+
             this.thumbnailLoadDef = Util.createAbortableDeferred($.noop);
             this.thumbnailImages = [];
         },
@@ -41,13 +48,13 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
         render: function () {
             var self = this;
 
-            if (!Capabilities.has('document_preview')) {
-                return this;
-            }
+            if (!Capabilities.has('document_preview')) { return this; }
+            if (!TypesUtil.isDocumentType(this.model)) { return this; }
 
-            this.$el.busy({ immediate: true });
+            this.$el.empty().busy({ immediate: true });
             function beginConvertSuccess(convertData) {
                 self.convertData = convertData;
+                self.thumbnailImages = [];
                 _.times(convertData.pageCount, function (pageNumber) {
                     var thumbnailNode = self.createThumbnailNode(pageNumber);
                     self.$el.append(thumbnailNode);
@@ -65,6 +72,7 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
                 .done(beginConvertSuccess)
                 .fail(beginConvertError)
                 .always(beginConvertFinished);
+
             return this;
         },
 
@@ -211,6 +219,29 @@ define('io.ox/core/viewer/views/document/thumbnailview', [
             this.thumbnailLoadDef.done(function (convertData) {
                 this.loadThumbnails(convertData);
             }.bind(this));
+        },
+
+        /**
+         * Sets a new model and renders accordingly.
+         *
+         * @param {FilesAPI.Model} model.
+         *  The new model.
+         */
+        setModel: function (model) {
+            this.model = model || null;
+            this.$el.parent().find('.viewer-sidebar-tabs').toggleClass('hidden', !TypesUtil.isDocumentType(this.model));
+            this.render();
+        },
+
+        /**
+         * Handles display temporary file version events.
+         *
+         * @param {Object} versionData
+         *   The JSON representation of the version.
+         */
+        onDisplayTempVersion: function (versionData) {
+            var model = (versionData) ? new FilesAPI.Model(versionData) : null;
+            this.setModel(model);
         },
 
         onDispose: function () {

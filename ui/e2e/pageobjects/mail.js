@@ -22,6 +22,13 @@ module.exports = {
     },
     selectMail(text) {
         const item = locate('.list-view li.list-item').withText(text);
+        I.waitForElement(item, 30);
+        I.wait(0.5);
+        I.click(item);
+        I.waitForFocus('.list-view li.list-item.selected');
+    },
+    selectMailByIndex(index) {
+        const item = locate('.list-view li.list-item').withAttr({ 'data-index': index.toString() });
         I.waitForElement(item);
         I.wait(0.5);
         I.click(item);
@@ -29,7 +36,7 @@ module.exports = {
     },
     newMail() {
         I.waitForText('Compose', 5, '.io-ox-mail-window .classic-toolbar-container');
-        I.clickToolbar('Compose');
+        I.clickToolbar('~Compose new email');
         I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
         I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     },
@@ -39,6 +46,7 @@ module.exports = {
         I.waitForText(ext.toUpperCase(), 5, '.inline-items.preview');
     },
     send() {
+        I.waitForClickable('.btn[data-action="send"]');
         I.click('Send');
         I.wait(0.5);
         I.waitToHide('.io-ox-mail-compose-window');

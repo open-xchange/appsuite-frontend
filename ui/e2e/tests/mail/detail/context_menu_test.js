@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C248438] Context menu can be opened by right click', async (I, users, mail, dialogs) => {
+Scenario('[C248438] Context menu can be opened by right click', async ({ I, users, mail, dialogs }) => {
 
     const icke = users[0].userdata.email1,
         subject = 'Context menu can be opened by right click';

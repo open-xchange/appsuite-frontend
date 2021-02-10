@@ -13,7 +13,7 @@
 
 Feature('Mail Compose > Tokenfield/Typeahed');
 
-Before(async function (I, users) {
+Before(async function ({ I, users }) {
     await users.create();
     const user = users[0];
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -33,11 +33,11 @@ Before(async function (I, users) {
     });
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Add without typeahead', async (I, mail) => {
+Scenario('Add without typeahead', async ({ I, mail }) => {
     I.login('app=io.ox/mail');
     mail.newMail();
 
@@ -53,7 +53,7 @@ Scenario('Add without typeahead', async (I, mail) => {
     }
 });
 
-Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
+Scenario('Add typeahed suggestion via autoselect', async ({ I, users, mail }) => {
     const [user] = users;
     const firstname = user.get('display_name');
     const surname = user.get('sur_name');
@@ -106,43 +106,7 @@ Scenario('Add typeahed suggestion via autoselect', async (I, users, mail) => {
     }
 });
 
-// see bug 65012 for details and why this test still breaks
-// Scenario('Add typeahed suggestion via autoselect (ignoring mouse hovered item)', async (I, users) => {
-//     const [user] = users;
-//     const surname = user.get('sur_name');
-//     const label = `User ${surname}`;
-
-//     I.login('app=io.ox/mail');
-
-//     I.waitForText('Compose');
-//     I.click('Compose');
-//     I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
-//     I.wait(1);
-
-//     // startsWith: surname (3 suggestions)
-//     await addToken(surname, 'Enter', label);
-//     await addToken(surname, 'Tab', label);
-
-//     async function addToken(query, key, result) {
-//         // enter term, wait for typeahead and hit key
-//         I.fillField('To', query);
-//         I.waitForElement('.tt-dropdown-menu .tt-suggestion .participant-name');
-//         // hack: simulate hover
-//         await I.executeScript(async () => { $('.tt-dropdown-menu .tt-suggestion:last').addClass('tt-cursor'); });
-//         I.waitForElement('.tt-dropdown-menu .tt-cursor', 3);
-//         // create and check token
-//         I.pressKey(key);
-//         I.waitForText(result, 2, '.tokenfield.to');
-//         I.waitForInvisible('.tt-dropdown-menu');
-//         I.dontSee('Sister', '.tokenfield.to');
-//         I.dontSee('Brother', '.tokenfield.to');
-//         // reset
-//         I.pressKey(['Command', 'a']);
-//         I.pressKey('Backspace');
-//     }
-// });
-
-Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
+Scenario('Add typeahead suggestion via keyboard', async ({ I, users, mail }) => {
     const [user] = users;
     const suggestions = locate({ css: '.tt-dropdown-menu' }).as('Suggestion dropdown');
 
@@ -186,7 +150,7 @@ Scenario('Add typeahead suggestion via keyboard', async (I, users, mail) => {
     }
 });
 
-Scenario('Add typeahead suggestion via mouse', async (I, users, mail) => {
+Scenario('Add typeahead suggestion via mouse', async ({ I, users, mail }) => {
     const [user] = users;
 
     I.login('app=io.ox/mail');

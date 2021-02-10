@@ -87,7 +87,10 @@ define('io.ox/mail/common-extensions', [
             //#. %1$s - color name, used to describe a mail that has a color flag
             if (baton.data.color_label && settings.get('features/flag/color')) parts.push(gt('Color %1$s', flagPicker.colorName(baton.data.color_label)));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.date));
-            if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
+            if (size > 1) {
+                // although "size" is greater than 1, "gt.ngettext" must be used to produce correct plural forms for some languages!
+                parts.push(gt.ngettext('Thread contains %1$d message', 'Thread contains %1$d messages', size, size));
+            }
             if (data.attachment) parts.push(gt('has attachments'));
 
             a11yLabel = parts.join(', ') + '.';
@@ -663,6 +666,7 @@ define('io.ox/mail/common-extensions', [
 
                 view.listenTo(view.collection, 'add remove reset', view.renderInlineLinks);
                 view.listenTo(baton.model, 'change:imipMail', view.renderInlineLinks);
+                view.listenTo(baton.model, 'change:sharingMail', view.renderInlineLinks);
                 view.renderInlineLinks();
 
                 if (!reuse) {
@@ -783,7 +787,7 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item disabled-links">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Enable Links')),
-                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam!')),
+                        $('<div class="comment">').text(gt('Links have been disabled to protect you against potential spam')),
                         $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
@@ -823,7 +827,7 @@ define('io.ox/mail/common-extensions', [
                 this.append(
                     $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam')),
                         $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
                     )
                 );
@@ -921,7 +925,7 @@ define('io.ox/mail/common-extensions', [
             function draw(model) {
                 this.find('.disposition-notification').remove();
 
-                // skip? (cancaled or already returned)
+                // skip? (canceled or already returned)
                 if (skip[model.cid]) return;
                 // has proper attribute? (only available if message was unseen on fetch)
                 if (!util.hasUnsendReadReceipt(model.toJSON())) return;

@@ -138,10 +138,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             id: 'wait-for-pending-images',
             index: 100,
             perform: function (baton) {
+                // touch devices: support is limited to 'lists', 'autolink', 'autosave'
                 var editor = baton.view.editor.tinymce();
                 baton.data.content = baton.view.editor.getContent({ format: 'html' });
                 if (!editor || !editor.plugins.oximage) return $.when();
-                var ids = $('img[data-pending="true"]', editor.getElement()).map(function () {
+                var ids = $('img[data-pending="true"]', editor.getContent()).map(function () {
                         return $(this).attr('data-id');
                     }),
                     deferreds = editor.plugins.oximage.getPendingDeferreds(ids);
@@ -447,9 +448,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         childOptions: {
                             titleAttribute: 'displayname',
                             customize: function (model) {
-                                var preview = sanitize(model.get('content'));
+                                var preview = sanitize(model.get('content') || model.get('error'));
                                 this.$('.list-item-controls').append(
-                                    listutils.controlsEdit(),
+                                    model.has('error') ? [] : listutils.controlsEdit(),
                                     listutils.controlsDelete()
                                 );
                                 this.$el.append(
@@ -499,6 +500,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     });
 
                 function makeOption(model) {
+                    if (model.has('error')) return;
                     return $('<option>').attr({ 'value': model.get('id') }).text(model.get('displayname'));
                 }
 

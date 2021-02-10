@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-22 18:23+0300\n"
+"PO-Revision-Date: 2020-12-13 22:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -56,9 +56,9 @@ msgid ""
 "Participants. To avoid appointment conflicts, click on Find a free time at "
 "the upper right side."
 msgstr ""
-"Muita osallistujia kutsuaksesi, syötä heidän nimensä kenttään Osallistujat "
-"osiossa. Välttääksesi päällekkäisiä tapaamisia, napsauta oikealta Löydä "
-"vapaa aika."
+"Jos haluat kutsua muita osallistujia, kirjoita heidän nimensä Osallistujat-"
+"kenttään. Välttääksesi tapaamisristiriidat klikkaa \"Etsi vapaa aika\" "
+"oikeasta yläkulmasta."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Using the reminder function"
@@ -153,8 +153,8 @@ msgid ""
 "To send an email to the contact, click on an email address or on Send email "
 "in the toolbar."
 msgstr ""
-"Lähettääksesi sähköpostin käyttäen yhteystietoa, napsauta "
-"sähköpostiosoitetta tai työkalupalkista Lähetä sähköposti."
+"Voit lähettää sähköpostiviestin yhteystietoa käyttäen napsauttamalla "
+"sähköpostiosoitetta tai valitsemalla työkaluriviltä Lähetä sähköposti."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
@@ -166,9 +166,9 @@ msgid ""
 "the contacts. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
-"Useamman yhteystiedon muokkaamiseksi, aktivoi valintaruudut yhteystietojen "
-"vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
-"Valintaruudut työkalupalkin oikeasta reunasta."
+"Jos haluat muokata useita yhteystietoja kerralla, ota käyttöön valintaruudut "
+"yhteystietojen vasemmalla puolella. Jos valintaruudut eivät ole näkyvissä, "
+"valitse Näytä > Valintaruudut työkalupalkin oikeasta reunasta."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app"
@@ -277,44 +277,42 @@ msgstr "Jaa tiedostoja"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
+"also collaborate on a document and set different rights."
 msgstr ""
-"Voit jakaa tiedostojasi kollegojesi ja ulkoisten kontaktiesi kanssa tätä "
+"Voit jakaa tiedostojasi työtovereidesi ja ulkoisten kontaktiesi kanssa tätä "
 "kautta. Voit myös tehdä asiakirjayhteistyötä ja määrittää erilaisia "
 "käyttöoikeuksia."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Jakamisvaihtoehdot"
+msgid "Sharing option - Invite people"
+msgstr "Jakamisvaihtoehto - Kutsu ihmisiä"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
+"Choose from two alternatives to share your files and folder. Use \"Invited "
+"people only\" if you want ot manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
 msgstr ""
-"Valitse tiedostojesi ja kansioidesi jakaminen kahdesta vaihtoehdosta. "
-"Valitse 'Kutsu osallistujia' jos haluat hallinnoida käyttöoikeuksia ja "
-"sallia vastaanottajien luoda ja muokata tiedostoja. Tai hanki linkki, jotta "
-"muut voivat katsella ja ladata tiedostosi. Voit halutessasi käyttää "
-"umpeutumisaikaa ja salasanasuojausta."
+"Voit jakaa tiedostot ja kansion valitsemalla kahdesta vaihtoehdosta. Käytä "
+"vain kutsuttuja käyttäjiä, jos haluat hallita käyttöoikeuksia ja sallia "
+"vastaanottajien luoda ja muokata tiedostoja. Sisäiset ja ulkoiset "
+"osallistujat voivat myös tehdä kanssasi yhteistyötä asiakirjojen kanssa "
+"samanaikaisesti."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Yhteistyöskentely"
+msgid "Sharing option - Everyone who has the link"
+msgstr "Jakamisvaihtoehto - Kaikki, joilla on linkki"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
 msgstr ""
-"Tiedostojen jakaminen kutsumalla osallistujia ei ainoastaan tarjoa "
-"vastaanottajille mahdollisuutta luoda ja muokata tiedostoja. Sisäiset ja "
-"ulkoiset osallistujat voivat myös tehdä yhteistyötä kanssasi "
-"tekstitiedostojen ja taulukko-ohjelmien kanssa samanaikaisesti."
+"On myös mahdollista saada jakamislinkki, jonka avulla muut voivat "
+"tarkastella tai ladata tiedostojasi. Voit käyttää vanhentumispäivämäärää ja "
+"salasanasuojausta, jos haluat."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -378,9 +376,10 @@ msgid "Navigation"
 msgstr "Navigointi"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
+msgid "All apps can be found in the app menu on the top left."
 msgstr ""
-"Kaikki sovellukset ovat oikeassa yläkulmassa olevassa sovellusvalikossa."
+"Kaikki sovellukset löytyvät vasemmassa yläkulmassa olevasta "
+"sovellusvalikosta."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -417,7 +416,7 @@ msgstr ""
 msgid "Cancel tour"
 msgstr "Peruuta opastus"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -564,12 +563,12 @@ msgstr "Sähköpostiasetusten avaaminen"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Avaa sähköpostiasetukset napsauttamalla järjestelmävalikon kuvaketta "
-"valikkopalkin oikeassa yläreunassa. Valitse Asetukset. Napsauta Sähköposti "
-"vasemmalla."
+"Voit avata sähköpostiasetukset napsauttamalla valikkorivin oikeassa "
+"yläkulmassa olevaa Asetukset-valikkokuvaketta. Valitse Asetukset. Klikkaa "
+"vasemmalla puolella Mail."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -613,8 +612,8 @@ msgid ""
 "Then the next time you log in, you will have to verify your identitity by "
 "entering the number sent to your phone."
 msgstr ""
-"Kirjautuessasi sisään seuraavan kerran, sinun on todistettava "
-"henkilöllisyytesi antamalla puhelimeesi lähetetty numero."
+"Kun seuraavan kerran kirjaudut sisään, sinun on vahvistettava "
+"henkilöllisyytesi syöttämällä puhelimeesi lähetetty numero."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Removing"
@@ -662,9 +661,7 @@ msgstr "Yksityiskohtien katselu"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
-msgstr ""
-"Nähdäksesi yksityiskohtaiset tiedot, napsauta kyseistä kohtaa "
-"sovellusikkunassa."
+msgstr "Voit lukea tiedot napsauttamalla kyseistä kohtaa sovellusikkunassa."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Drag and drop"
@@ -738,15 +735,15 @@ msgstr "Ohjeen avaaminen"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Avaa tuki klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
-"Valitse Tuki. Näkyviin tulee tuki valittuna olevalle sovellukselle. Jos "
-"haluat selata tukea kokonaisuudessaan, klikkaa aloitussivua tai "
-"sisällysluetteloa ikkunan yläosassa."
+"Avaa ohje napsauttamalla valikkorivin oikeassa yläkulmassa olevaa "
+"ohjekuvaketta. Valitse Ohje. Näyttöön tulee valitun sovelluksen ohje. Voit "
+"selata koko ohjetta napsauttamalla ikkunan yläosassa Aloitussivua tai "
+"Sisällysluetteloa."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -764,7 +761,7 @@ msgstr ""
 msgid ""
 "To sign out, click the logout icon on the upper right side of the menu bar."
 msgstr ""
-"Kirjaudu ulos klikkaamalla uloskirjautumiskuvaketta valintapalkin oikeassa "
+"Kirjaudu ulos napsauttamalla uloskirjautumiskuvaketta valintapalkin oikeassa "
 "yläreunassa."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -773,8 +770,7 @@ msgstr "Uuden tehtävän luominen"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
-msgstr ""
-"Luodaksesi uusi tehtävä, napsauta työkalupalkista Uusi > Luo uusi tehtävä."
+msgstr "Voit luoda uuden tehtävän  napsauttamalla työkalupalkista Uusi."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -846,7 +842,8 @@ msgstr "Tehtävien lajittelu"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "Lajitellaksesi tehtäviä napsauta Lajittele. Valitse lajitteluperuste."
+msgstr ""
+"Voit lajitella tehtäviä napsauttamalla Lajittele. Valitse lajitteluperuste."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -861,6 +858,66 @@ msgstr ""
 "Useamman tehtävän muokkaamiseksi, aktivoi valintaruutuja tehtävien "
 "vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
 "Valintaruudut työkalupalkin oikeasta reunasta."
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "Voit jakaa tiedostojasi kollegojesi ja ulkoisten kontaktiesi kanssa tätä "
+#~ "kautta. Voit myös tehdä asiakirjayhteistyötä ja määrittää erilaisia "
+#~ "käyttöoikeuksia."
+
+#~ msgid "Sharing options"
+#~ msgstr "Jakamisvaihtoehdot"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "Valitse tiedostojesi ja kansioidesi jakaminen kahdesta vaihtoehdosta. "
+#~ "Valitse 'Kutsu osallistujia' jos haluat hallinnoida käyttöoikeuksia ja "
+#~ "sallia vastaanottajien luoda ja muokata tiedostoja. Tai hanki linkki, "
+#~ "jotta muut voivat katsella ja ladata tiedostosi. Voit halutessasi käyttää "
+#~ "umpeutumisaikaa ja salasanasuojausta."
+
+#~ msgid "Collaborating"
+#~ msgstr "Yhteistyöskentely"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "Tiedostojen jakaminen kutsumalla osallistujia ei ainoastaan tarjoa "
+#~ "vastaanottajille mahdollisuutta luoda ja muokata tiedostoja. Sisäiset ja "
+#~ "ulkoiset osallistujat voivat myös tehdä yhteistyötä kanssasi "
+#~ "tekstitiedostojen ja taulukko-ohjelmien kanssa samanaikaisesti."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Kaikki sovellukset ovat oikeassa yläkulmassa olevassa sovellusvalikossa."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Avaa sähköpostiasetukset napsauttamalla järjestelmävalikon kuvaketta "
+#~ "valikkopalkin oikeassa yläreunassa. Valitse Asetukset. Napsauta "
+#~ "Sähköposti vasemmalla."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Avaa tuki klikkaamalla käyttäjäkuvaa valintapalkin oikeassa yläosassa. "
+#~ "Valitse Tuki. Näkyviin tulee tuki valittuna olevalle sovellukselle. Jos "
+#~ "haluat selata tukea kokonaisuudessaan, klikkaa aloitussivua tai "
+#~ "sisällysluetteloa ikkunan yläosassa."
 
 #~ msgid "Creating new items"
 #~ msgstr "Uusien kohteiden luonti"

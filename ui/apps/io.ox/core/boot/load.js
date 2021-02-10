@@ -100,28 +100,26 @@ define('io.ox/core/boot/load', [
         run: function () {
             // guests don't have webmail for example
             if (!capabilities.has('webmail')) return;
+            ox.ui.spaces = ox.ui.spaces || {};
 
+            // TODO-859: review loading behaviour
             ox.rampup.compositionSpaces = $.when(
-                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta' } }),
-                require(['gettext!io.ox/mail'])
-            ).then(function (data, gt) {
+                http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta,security' } }),
+                require(['gettext!io.ox/mail']),
+                require(['io.ox/mail/compose/api'])
+            ).then(function (data, gt, composeAPI) {
                 var list = _(data).first() || [];
-                return list.map(function (compositionSpace) {
-                    var cid;
-                    if (compositionSpace.meta && compositionSpace.meta.editFor) {
-                        var editFor = compositionSpace.meta.editFor;
-                        cid = _.cid({ id: editFor.originalId, folder: editFor.originalFolderId });
-                        cid = 'io.ox/mail/compose:' + cid + ':edit';
-                    }
+                list = composeAPI.space.process(list);
+                return list.map(function (space) {
                     return {
                         //#. $1$s is the subject of an email
-                        description: gt('Mail: %1$s', compositionSpace.subject || gt('No subject')),
+                        description: gt('Mail: %1$s', space.subject || gt('No subject')),
                         floating: true,
-                        id: compositionSpace.id + Math.random().toString(16),
-                        cid: cid,
+                        id: space.id + Math.random().toString(16),
+                        cid: space.cid,
                         keepOnRestore: false,
                         module: 'io.ox/mail/compose',
-                        point: compositionSpace.id,
+                        point: space,
                         timestamp: new Date().valueOf(),
                         ua: navigator.userAgent
                     };

@@ -201,14 +201,15 @@ define('io.ox/core/viewer/util', [
         // for folders
         } else {
             itemCount = model.get('total');
-            resultString = (_.isNumber(itemCount)) ? gt.format(gt.ngettext('1 item', '%1$d items', itemCount), itemCount) : '-';
+            resultString = _.isNumber(itemCount) ? gt.ngettext('%1$d item', '%1$d items', itemCount, itemCount) : '-';
         }
 
         return resultString;
     };
 
     var ModelSourceRefMap = {
-        drive: 'io.ox/files/actions/download',
+        // drive: 'io.ox/files/actions/download',
+        drive: 'io.ox/files/actions/downloadversion',
         mail: 'io.ox/mail/attachment/actions/download',
         compose: 'io.ox/mail/compose/actions/download',
         pim: 'io.ox/core/tk/actions/download-attachment',

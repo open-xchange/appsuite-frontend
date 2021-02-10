@@ -18,21 +18,43 @@
 
     $.fn.lazyload = function (options) {
         options = options || {};
+        var fn = applyLazyload.bind($(this).addClass('lazyload'), options);
         this.each(function () {
-            _.defer(function () {
-                // needs to be added to the node temporary. Otherwise every lazylod uses the first option passe
-                if (options.previewUrl) {
-                    this[0].previewUrl = options.previewUrl;
-                    delete options.previewUrl;
-                }
-                // look for potential scrollpane
-                (options.container || this.closest('.scrollpane, .scrollable, .tt-dropdown-menu'))
-                    .lazyloadScrollpane(options)
-                    .trigger('scroll');
-            }.bind($(this).addClass('lazyload')));
+            if (options.immediate) fn(); else _.defer(fn);
         });
         return this;
     };
+
+    // this avoid delay/flickering because the scrollpane is given
+    $.fn.fastlazyload = function ($scrollpane) {
+        var viewport = getViewport($scrollpane);
+        this.each(function () {
+            setTimeout(function (el) {
+                // get offset for each element
+                var $el = $(el).addClass('lazyload'), offset = el.getBoundingClientRect();
+                // checks
+                if (aboveViewport(viewport, offset, $el.height())) return;
+                if (leftOfViewport(viewport, offset, $el.width())) return;
+                // we assume that elements are in order, i.e. we can stop the loop if we are below or right of the viewport
+                if (belowViewport(viewport, offset) || rightOfViewport(viewport, offset)) return false;
+                // otherwise
+                $el.trigger('appear');
+            }, 0, this);
+        });
+        return this;
+    };
+
+    function applyLazyload(options) {
+        // needs to be added to the node temporary. Otherwise every lazylod uses the first option passed
+        if (options.previewUrl) {
+            this[0].previewUrl = options.previewUrl;
+            delete options.previewUrl;
+        }
+        // look for potential scrollpane
+        (options.container || this.closest('.scrollpane, .scrollable, .tt-dropdown-menu'))
+            .lazyloadScrollpane(options)
+            .trigger('scroll');
+    }
 
     // no need to call this directly
     $.fn.lazyloadScrollpane = function (options) {
@@ -79,7 +101,7 @@
             // response to add.lazyload event
             'add.lazyload': _.debounce(update, 10),
             // update on scroll stop
-            'scroll.lazyload': _.debounce(update, 300),
+            'scroll.lazyload': _.debounce(update, 200),
             // clean up on dispose
             'dispose': function () {
                 $(window).off('resize.lazyload');
@@ -127,7 +149,7 @@
                 })
                 .attr('src', node.attr('data-original'));
             };
-        // it makes sense to fetch preview urls here because it uses canvasresize. This may put too heavy load an cpu and memory otherwise
+        // it makes sense to fetc preview urls here because it uses canvasresize. This may put too heavy load an cpu and memory otherwise
         if (this.previewUrl) {
             var self = this;
             node.busy({ immediate: true });

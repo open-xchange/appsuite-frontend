@@ -15,11 +15,11 @@
 
 Feature('Mail > Move/Copy');
 
-Before(async function (I, users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (I, users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -91,7 +91,7 @@ const H = {
 };
 
 
-Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, users, mail) {
+Scenario('[C7407] Move mail from inbox to a sub-folder', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C7407',
         subject = 'C7407';
@@ -114,7 +114,7 @@ Scenario('[C7407] Move mail from inbox to a sub-folder', async function (I, user
     A.check(I, subject, folder);
 });
 
-Scenario('[C7408] Move several mails from inbox to a sub-folder', async function (I, users, mail) {
+Scenario('[C7408] Move several mails from inbox to a sub-folder', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C7408',
         subjects = ['C7408-1', 'C7408-2', 'C7408-3'];
@@ -138,7 +138,7 @@ Scenario('[C7408] Move several mails from inbox to a sub-folder', async function
     A.check(I, subjects, folder);
 });
 
-Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, users, mail) {
+Scenario('[C7409] Copy mail from inbox to a sub-folder', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C7409',
         subject = 'C7409';
@@ -162,7 +162,7 @@ Scenario('[C7409] Copy mail from inbox to a sub-folder', async function (I, user
     A.check(I, subject, folder);
 });
 
-Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function (I, users, mail) {
+Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C7410',
         subjects = ['C7410-1', 'C7410-2', 'C7410-3'];
@@ -186,7 +186,7 @@ Scenario('[C7410] Copy several mails from inbox to a sub-folder', async function
     A.check(I, subjects, folder);
 });
 
-Scenario.skip('[C114349] Create folder within move dialog', async function (I, users, mail) {
+Scenario('[C114349] Create folder within move dialog', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C114349-move',
         subject = 'C114349-move';
@@ -196,6 +196,7 @@ Scenario.skip('[C114349] Create folder within move dialog', async function (I, u
     mail.waitForApp();
 
     A.select(I, 1);
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/move');
     A.createFolderInDialog(I, subject);
     I.click('Move', '.folder-picker-dialog');
@@ -205,7 +206,7 @@ Scenario.skip('[C114349] Create folder within move dialog', async function (I, u
     A.check(I, folder, subject);
 });
 
-Scenario('[C114349] Create folder within copy dialog', async function (I, users, mail) {
+Scenario('[C114349] Create folder within copy dialog', async function ({ I, users, mail }) {
     let [user] = users,
         folder = 'C114349-copy',
         subject = 'C114349-copy';
@@ -215,6 +216,7 @@ Scenario('[C114349] Create folder within copy dialog', async function (I, users,
     mail.waitForApp();
 
     A.select(I, 1);
+    I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     A.clickMoreAction(I, '.detail-view-header', 'io.ox/mail/actions/copy');
     A.createFolderInDialog(I, subject);
     I.click('Copy', '.folder-picker-dialog');

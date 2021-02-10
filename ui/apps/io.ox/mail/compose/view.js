@@ -499,6 +499,11 @@ define('io.ox/mail/compose/view', [
             view.listenTo(baton.config, 'change:signature', view.syncMail);
             // stop cascade flow on app quit
             this.on('quit', baton.stopPropagation.bind(baton));
+            // store tinymce's device detection
+            baton.editor.once('device:non-desktop', function () {
+                baton.config.set('desktop', false);
+                baton.config.set('toolbar', false);
+            });
         }
     }, {
         id: 'content',
@@ -532,7 +537,7 @@ define('io.ox/mail/compose/view', [
         }
     }, {
         id: 'pick',
-        index: 400,
+        index: 500,
         perform: function (baton) {
             return baton.editor;
         }
@@ -587,9 +592,11 @@ define('io.ox/mail/compose/view', [
             this.listenTo(this.model, 'change', _.throttle(this.onChangeSaved.bind(this, 'dirty'), 100));
             this.listenTo(this.model, 'before:save', this.onChangeSaved.bind(this, 'saving'));
             this.listenTo(this.model, 'success:save', this.onChangeSaved.bind(this, 'saved'));
+            this.listenTo(this.model, 'change:content', this.onChangeContent);
+            this.listenTo(this.model, 'error', this.onError);
+
             this.listenTo(this.config, 'change:editorMode', this.toggleEditorMode);
             this.listenTo(this.config, 'change:vcard', this.onAttachVcard);
-            this.listenTo(this.model, 'change:content', this.onChangeContent);
 
             // handler can be found in signatures.js
             this.listenTo(this.config, 'change:signatureId', this.setSignature);
@@ -642,6 +649,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
+                    if (self.model.paused) return $.when();
                     return self.model.save();
                 }
             });
@@ -657,6 +665,10 @@ define('io.ox/mail/compose/view', [
             // easy one: when content get's removed completely set signature to 'no signature'
             if (value && value !== '<div style="" class="default-style"><br></div>') return;
             this.config.set('signatureId', '');
+        },
+
+        onError: function (e) {
+            this.app.onError(e);
         },
 
         ariaLiveUpdate: function (e, msg) {
@@ -746,6 +758,10 @@ define('io.ox/mail/compose/view', [
             node.fadeIn();
         },
 
+        isDirty: function () {
+            return !_.isEmpty(this.model.deepDiff(this.initialModel));
+        },
+
         dirty: function (state) {
             if (state === false) {
                 // update content here as the update events from the editor might be throttled
@@ -754,7 +770,8 @@ define('io.ox/mail/compose/view', [
             } else if (state === true) {
                 this.initialModel = {};
             } else {
-                return !_.isEmpty(this.model.deepDiff(this.initialModel));
+                // deprecated: use isDirty instead
+                return this.isDirty();
             }
         },
 
@@ -777,7 +794,7 @@ define('io.ox/mail/compose/view', [
         },
 
         dispose: function () {
-            // remove from queue, to prevent zombies wehn mail is currently sent
+            // remove from queue, to prevent zombies when mail is currently sent
             composeAPI.queue.remove(this.model.get('id'));
             // disable dynamic extensionpoint to trigger saveAsDraft on logout
             this.removeLogoutPoint();
@@ -787,48 +804,51 @@ define('io.ox/mail/compose/view', [
             delete this.editor;
         },
 
+        // called on app.quit
         discard: function () {
+            if (this.model.paused) return $.when();
+
+            // failRestored spaces are set to dirty at load
+            var hasChanged = this.isDirty(),
+                isEdit = !!(this.model.get('meta') || {}).editFor,
+                isEmpty = this.model.isEmpty();
+
+            // already saved/send?
+            if (this.model.destroyed) return this.clean();
+
+            // autosave latest draft
+            if (isEdit && !hasChanged) return this.saveDraft().then(this.clean.bind(this));
+
+            // delete
+            if (isEmpty || !hasChanged || this.config.get('autoDismiss')) return this.clean();
+
+            // fallback: dialog (this dialog may gets automatically dismissed)
             var self = this,
-                def = $.when(),
-                isDraft = this.model.keepDraftOnClose();
-
-            // This dialog gets automatically dismissed
-            if ((this.dirty() || isDraft) && !this.config.get('autoDismiss')) {
-                var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
-                    saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
-                    modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
-
-                if (this.app.getWindow && this.app.getWindow().floating) {
-                    this.app.getWindow().floating.toggle(true);
-                } else if (_.device('smartphone')) {
-                    this.app.getWindow().resume();
-                }
-                // button texts may become quite large in some languages (e. g. french, see Bug 35581)
-                // add some extra space
-                // TODO maybe we could use a more dynamical approach
                 def = $.Deferred();
-
-                var dialogOptions = { title: discardText, description: modalText };
-                // up to 540px because of 3 buttons, french needs this for example
-                if (!_.device('smartphone')) dialogOptions.width = '560px';
-
-                new ModalDialog(dialogOptions)
-                    .addCancelButton()
-                    .addButton({ label: saveText, action: 'savedraft', placement: 'left', className: 'btn-default' })
-                    .addButton({ label: discardText, action: 'delete' })
-                    .on('savedraft', function () {
-                        self.saveDraft().then(def.resolve, def.reject);
-                    })
-                    .on('delete', function () {
-                        var isAutoDiscard = self.config.get('autoDiscard'),
-                            editFor = self.model.get('meta').editFor;
-                        def.resolve();
-                        if (!isDraft || !isAutoDiscard || !editFor) return;
-                        // only delete autosaved drafts that are not saved manually and have a msgref
-                        mailAPI.remove([{ id: editFor.originalId, folder_id: editFor.originalFolderId }]);
-                    })
-                    .open();
+            if (this.app.getWindow && this.app.getWindow().floating) {
+                this.app.getWindow().floating.toggle(true);
+            } else if (_.device('smartphone')) {
+                this.app.getWindow().resume();
             }
+
+            new ModalDialog({
+                title: gt('Save draft'),
+                description: gt('This email has not been sent. You can save the draft to work on later.'),
+                // up to 540px because of 3 buttons, french needs this for example
+                width: _.device('smartphone') ? undefined : '560px'
+            })
+            .addCancelButton()
+            .addButton({ label: gt('Save draft'), action: 'savedraft' })
+            .addAlternativeButton({ label: gt('Delete draft'), action: 'delete' })
+            .on('savedraft', function () {
+                self.saveDraft().then(def.resolve, def.reject);
+            })
+            .on('delete', function () {
+                // draft mail gets automatically deleted once the space gets removed (real drafts)
+                // MWB-783 covers edit-case for 'rdb'
+                return def.resolve();
+            })
+            .open();
 
             return def.then(function () {
                 self.clean();

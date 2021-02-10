@@ -82,10 +82,7 @@ define('io.ox/contacts/api', [
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
                 sort: '607',
-                order: 'asc',
-                admin: function () {
-                    return settings.get('showAdmin', false);
-                }
+                order: 'asc'
             },
             list: {
                 action: 'list',
@@ -290,7 +287,9 @@ define('io.ox/contacts/api', [
             listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
-                    api.caches.get.dedust(obj, 'last_modified');
+                    api.caches.get.dedust(obj, 'last_modified').then(function (dedust) {
+                        if (dedust) api.trigger('update:contact', obj);
+                    });
                 });
                 api.trigger('list:ready');
                 return data;
@@ -753,7 +752,7 @@ define('io.ox/contacts/api', [
         function load(node, url, opt) {
             _.defer(function () {
                 // use lazyload?
-                var enableLazyload = opt.lazyload || opt.container || _.first(node.closest('.scrollpane, .scrollable, .scrollpane-lazyload'));
+                var enableLazyload = opt.lazyload || opt.container || _.first(node.closest('.scrollpane, .scrollable:not(.swiper-slide), .scrollpane-lazyload'));
 
                 if (enableLazyload) {
                     if (opt.fallback) node.css('background-image', 'url(' + fallback + ')');

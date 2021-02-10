@@ -39,6 +39,8 @@ define('io.ox/files/listview', [
 
             ListView.prototype.initialize.apply(this, arguments);
             this.contextMenu = options.contextMenu;
+            this.contextMenuRef = 'io.ox/files/listview/contextmenu';
+            this.freeSpaceContextMenuRef = 'io.ox/files/listview/contextmenu/freespace';
             this.$el.attr('aria-label', gt('List view')).addClass('file-list-view');
 
             updateSettings.call(this);
@@ -51,7 +53,11 @@ define('io.ox/files/listview', [
         },
 
         getCompositeKey: function (model) {
-            return model.isFolder() ? 'folder.' + model.get('id') : model.cid;
+            return model.isFolder() ? this.createFolderCompositeKey(model.get('id')) : model.cid;
+        },
+
+        createFolderCompositeKey: function (folderId) {
+            return 'folder.' + folderId;
         },
 
         onChange: function (model) {

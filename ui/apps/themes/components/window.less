@@ -29,11 +29,17 @@
 
 #io-ox-windowmanager {
     overflow: hidden;
+    display: flex;
 }
 
 #io-ox-windowmanager-pane {
-    left: 0;
-    width: 100%;
+    flex: 1;
+    position: relative;
+}
+
+.io-ox-windowmanager-sticky-panel {
+    flex: 0 0 auto;
+    position: relative;
 }
 
 #io-ox-taskbar-container {
@@ -344,6 +350,17 @@
         bottom: auto;
         margin-top: 8px;
         text-align: center;
+
+        // consider height of floating-header
+        .floating-window & { top: ~"calc(50% - 40px)" }
+        .block-message {
+            margin: 0 32px 16px 32px;
+            .message { margin-bottom: 32px; }
+            .actions {
+                float: right;
+                .btn + .btn { margin-left: 5px; }
+            }
+        }
     }
 
     .first { margin-top: -20px; }
@@ -430,7 +447,11 @@
                 color: @premium-toolbar-link-color;
             }
 
-            .io-ox-upsell-link { padding-top: 4px; }
+            .io-ox-upsell-link {
+                // display list-item has some issues on firefox, so use block and padding to have the same look in all browsers
+                display: block;
+                padding: 4px 16px 0 16px;
+            }
         }
     }
 }
@@ -492,10 +513,11 @@
 
 .floating-window {
     @headerHeight: 40px;
-    @headerColor: linear-gradient(0deg, #f5f5f5, #fff);
-    @headerColorInactive:#f5f5f5;
+    @headerColor: #f5f5f5;
+    @headerGradient: linear-gradient(0deg, #f5f5f5, #fff);
+    @headerColorInactive: #f5f5f5;
     @headerTextColor: #333;
-    @headerIconColor: #7a707a;
+    @headerIconColor: #707070;
 
     // needed or you move the UI when the window overlaps at the right side or bottom
     position: fixed;
@@ -524,7 +546,8 @@
         z-index: 14;
         .floating-window-content { .elevation-3(); }
         .floating-header {
-            background: @headerColor;
+            background-color: @headerColor;
+            background-image: @headerGradient;
             h1 {
                 color: @headerTextColor;
             }
@@ -574,6 +597,13 @@
         left: ~"calc(50% - 460px)";
     }
 
+    @media (min-width: 1280px) {
+        &.width-lg {
+            width: 1040px;
+            left: ~"calc(50% - 520px)";
+        }
+    }
+
     .floating-header .controls button[data-action="normal"] {
         display: none;
     }
@@ -589,12 +619,14 @@
     &.maximized {
         width: 1060px;
         height: ~"calc(100% - 72px)";
+        max-width: 100%;
         max-height: 1200px;
         top: 0px;
         left: ~"calc(50% - 530px)";
 
         @media (max-height: 750px) {
             height: 100%;
+            top: 0px !important
         }
 
         .floating-header .controls button[data-action="maximized"] {

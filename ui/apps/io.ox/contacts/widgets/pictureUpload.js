@@ -48,11 +48,28 @@ define('io.ox/contacts/widgets/pictureUpload', [
             'focus .file': 'toggleFocus',
             'blur .file': 'toggleFocus',
             'click .file': 'onClick',
-            'click .contact-photo': 'onClickContainer'
+            'click .contact-photo': 'onClickContainer',
+            'keydown .contact-photo': 'onKey'
         },
 
         initialize: function () {
             this.listenTo(this.model, 'change:pictureFileEdited', this.onChangeFile);
+        },
+
+        // standalone version
+        openDialog: function () {
+            // add hidden
+            $('body').append(this.render().$el.addClass('hidden'));
+
+            this.on('standalone:save', function () {
+                var $el = this.$el;
+                this.model.save();
+                this.dispose();
+                $el.remove();
+            }.bind(this));
+
+            // open edit dialog
+            return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
         },
 
         onClick: function (e, options) {
@@ -67,8 +84,14 @@ define('io.ox/contacts/widgets/pictureUpload', [
             return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
         },
 
+        onKey: function (e) {
+            // forward enter to click handler
+            if (e.which === 13) this.onClickContainer();
+        },
+
         removeImage: function (e) {
             if (e) e.stopImmediatePropagation();
+            this.$('input[type="file"]').val('');
             this.model.set({
                 'pictureFile': undefined,
                 'pictureFileEdited': '',
@@ -76,7 +99,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 'image1': '',
                 'image1_url': ''
             });
-            this.$('input[type="file"]').val('');
         },
 
         openFilePicker: function () {
@@ -101,7 +123,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 //#. %1$s maximum file size
                 notifications.yell('error', gt('The photo exceeds the allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
             }
-            if (!file || !(file.lastModified || file.lastModifiedDate)) return;
+            if (!file || !(file.lastModified || file.lastModifiedDate)) {
+                // webcam snapshot
+                if (this.model.get('save')) this.trigger('standalone:save');
+                return;
+            }
             // update preview
             this.$thumbnail.css('background-image', 'none').busy();
             getContent(file).done(function (file, content) {
@@ -110,6 +136,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     image1_url: '',
                     image1_data_url: content
                 });
+                // uploaded image
+                if (this.model.get('save')) this.trigger('standalone:save');
             }.bind(this));
         },
 
@@ -177,6 +205,8 @@ define('io.ox/contacts/widgets/pictureUpload', [
             this.$thumbnail.busy();
             $('<img>').attr('src', url).one('load', function () {
                 this.$thumbnail.idle().css('background-image', 'url(' + url + ')');
+            }.bind(this)).one('error', function () {
+                this.$thumbnail.idle().addClass('empty');
             }.bind(this));
         },
 

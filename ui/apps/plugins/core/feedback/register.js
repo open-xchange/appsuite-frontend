@@ -92,8 +92,8 @@ define('plugins/core/feedback/register', [
     }
 
     function toggleButtons(state) {
-        $('#io-ox-screens .feedback-button').toggle(state);
-        $('#topbar-settings-dropdown [data-action="feedback"]').parent().toggle(state);
+        $('#io-ox-screens .feedback-button').toggleClass('allowed', state);
+        $('#topbar-help-dropdown [data-action="feedback"]').parent().toggle(state);
     }
 
     function getAppOptions(useWhitelist) {
@@ -500,25 +500,42 @@ define('plugins/core/feedback/register', [
                 button = $('<button type="button">').text(gt('Feedback')).on('click', this.show)
             );
             $('#io-ox-screens').append(node);
-            if (position === 'right') node.css('bottom', button.width() + 128 + 'px');
+            if (position === 'right') {
+                // temporary inline style so width calculation is correct
+                node.css('display', 'block');
+                node.css('bottom', button.width() + 128 + 'px');
+                node.css('display', '');
+            }
         }
     };
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    function addDropdownEntry() {
+        var currentSetting = settings.get('feedback/show', 'both');
+        if (currentSetting === 'both' || currentSetting === 'topbar') {
+            this.append(
+                $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    feedback.show();
+                })
+            );
+            this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
+        }
+    }
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'feedback',
+        index: 150,
+        extend: function () {
+            if (_.device('smartphone')) return;
+            addDropdownEntry.apply(this, arguments);
+        }
+    });
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'feedback',
         index: 240,
         extend: function () {
-            var currentSetting = settings.get('feedback/show', 'both');
-            if (currentSetting === 'both' || currentSetting === 'topbar') {
-                this.append(
-                    $('<a href="#" data-action="feedback" role="menuitem" tabindex="-1">').text(gt('Give feedback'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        feedback.show();
-                    })
-                );
-                this.$ul.find('[data-action="feedback"]').parent().toggle(allowedToGiveFeedback());
-            }
+            if (!_.device('smartphone')) return;
+            addDropdownEntry.apply(this, arguments);
         }
     });
 

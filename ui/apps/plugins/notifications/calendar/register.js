@@ -154,9 +154,9 @@ define('plugins/notifications/calendar/register', [
             var minutes = [5, 10, 15, 45],
                 options = [],
                 node = this;
-            for (var i = 0; i < minutes.length; i++) {
-                options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
-            }
+            minutes.forEach(function (m) {
+                options.push([m, gt.npgettext('in', 'in %d minute', 'in %d minutes', m, m)]);
+            });
 
             require(['io.ox/core/tk/reminder-util'], function (reminderUtil) {
                 reminderUtil.draw(node, baton.model, options);

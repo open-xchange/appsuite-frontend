@@ -29,8 +29,8 @@ define('io.ox/mail/categories/train', [
             yell({
                 duration: -1,
                 message: $('<div class="content category-toast">').append(
-                    $('<p>').html(getSuccessMessage(addresses, category)),
-                    $('<p>').html(getQuestion(addresses)),
+                    $('<p>').text(getSuccessMessage(addresses, category)),
+                    $('<p>').append(getQuestion(addresses)),
                     $('<button type="button" class="btn btn-default" data-action="move-all">').text(gt('Move all messages')).on('click', function () {
                         api.train(options).fail(yell);
                         yell('close');
@@ -43,26 +43,24 @@ define('io.ox/mail/categories/train', [
     };
 
     function getSuccessMessage(addresses, category) {
-        return gt.format(
+        // do not use "gt.ngettext" for plural without count
+        return (addresses.length === 1) ?
             //#. successfully moved a message via drag&drop to another mail category (tab)
-            //#. %1$s represents the name if the target category (non-essential information: can be left out)
-            gt.ngettext('Message moved to category "%1$s".', 'Messages moved to category "%1$s".', addresses.length),
-            _.escape(category)
-        );
+            //#. %1$s represents the name of the target category
+            gt('Message moved to category "%1$s".', category) :
+            //#. %1$s represents the name of the target category
+            gt('Messages moved to category "%1$s".', category);
     }
 
     function getQuestion(addresses) {
         var uniquelist = getSenderList(addresses);
-        return gt.format(
+        // do not use "gt.ngettext" for plural without count
+        var pattern = (uniquelist.length === 1) ?
             //#. ask user to move all messages from the same sender to the mail category (tab)
             //#. %1$s represents a single email address (non-essential information: can be left out)
-            gt.ngettext(
-                'Do you want to move all messages from %1$s to that category?',
-                'Do you want to move all messages from selected senders to that category?',
-                uniquelist.length
-            ),
-            '<b>' + _.escape(uniquelist) + '</b>'
-        );
+            gt('Do you want to move all messages from %1$s to that category?') :
+            gt('Do you want to move all messages from selected senders to that category?');
+        return _.noI18n.assemble(pattern, function () { return $('<b>').text(uniquelist); }, $.txt);
     }
 
     function getSenderList(addresses) {

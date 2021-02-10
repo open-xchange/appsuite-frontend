@@ -24,11 +24,12 @@ define('io.ox/files/api', [
     'io.ox/core/extensions',
     'io.ox/core/api/jobs',
     'io.ox/core/util',
+    'io.ox/files/permission-util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, jobsAPI, util, pUtil, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -185,7 +186,7 @@ define('io.ox/files/api', [
             return (
                 this.isPgp() ||
                 // check if file has "guard" file extension
-                (/\.(grd|grd2|pgp)$/i).test(this.get('filename'))
+                api.isGuardExtension({ filename: this.get('filename') })
             );
         },
 
@@ -297,7 +298,7 @@ define('io.ox/files/api', [
             pdf:   (/^pdf$/),
             zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
             txt:   (/^(txt|md)$/),
-            guard: (/^(grd|grd2|pgp)$/)
+            guard: (/^(grd|grd2|pgp)$/i) // added case insensitive flag, was used by previous guard code that was refactored
         },
 
         supportsPreview: function () {
@@ -314,26 +315,44 @@ define('io.ox/files/api', [
         },
 
         hasWritePermissions: function () {
-            var def = $.Deferred(),
-                array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
-                myself = _(array).findWhere({ entity: ox.user_id, group: false });
+            return pUtil.hasObjectWritePermissions(this.toJSON());
+        },
 
-            // check if there is a permission for a group, the user is a member of
-            // use max permissions available
-            if (!myself || (myself && myself.bits < 2)) {
-                userAPI.get().done(function (userData) {
-                    def.resolve(array.filter(function (perm) {
-                        return perm.group === true && _.contains(userData.groups, perm.entity);
-                    }).reduce(function (acc, perm) {
-                        return acc || perm.bits >= 2;
-                    }, false));
-                }).fail(function () { def.resolve(false); });
-            } else {
-                def.resolve(!!(myself && (myself.bits >= 2)));
-            }
+        getClosestFolderModelSync: function () {
+            var folder = this.isFile() ? this.get('folder_id') : this.get('id');
+            // for some cases it must be synchronous, so check the
+            // use-case if the folder is already available in every case
+            var folderModel = folderAPI.pool.models[folder];
+            return folderModel ? folderModel : {};
+        },
 
-            return def;
+        // should be synchronous to be able to handle popup-blocker in Actions
+        getItemAccountSync: function () {
+            return this.getClosestFolderModelSync().get('account_id');
+        },
+
+        // should be synchronous to be able to handle popup-blocker in Actions
+        isSharedFederatedSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
+            return !_.isEmpty(folderModel) && folderModel.is('federated-sharing');
+        },
+
+        // note: currently no use case needed to be sync, but keep it consistent for now
+        getAccountDisplayNameSync: function () {
+            var folderModel = this.getClosestFolderModelSync();
+            return folderModel && folderModel.getAccountDisplayName();
+        },
+
+        getAccountError: function () {
+            return this.get('com.openexchange.folderstorage.accountError');
+        },
+
+        // get the parent folder regardless whether it's a file or folder
+        // note: folder fileModels have folder_id  = 'folder' (see Resolve function), so folder_id can't be used to get the parent folder
+        getParentFolder: function () {
+            return this.isFile() ? this.get('folder_id') : folderAPI.pool.getModel(this.get('id')).get('folder_id');
         }
+
     });
 
     // collection using custom models
@@ -419,14 +438,14 @@ define('io.ox/files/api', [
     // Helper functions based on file extension.
     //
 
-    // Returns the file extension, removes pgp from .xyz.pgp if present
-    api.getExtension = function (file) {
+    // @param preserveCryptoExtension: If false, it returns the file extension, removes pgp from .xyz.pgp if present
+    api.getExtension = function (file, preserveCryptoExtension) {
         var filename = file && (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title);
         var parts = String(filename || '').split('.');
         var extension;
 
         // if extension is .xyz.pgp, remove the pgp and return extension
-        if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+        if (!preserveCryptoExtension && (parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
             extension = parts[parts.length - 1].toLowerCase();
         } else if (parts.length > 1) {
             extension = parts.pop().toLowerCase();
@@ -437,6 +456,7 @@ define('io.ox/files/api', [
         return extension;
     };
 
+    // 'file' is a file descriptor, an object with file properties
     api.isText = function (file) {
         return api.Model.prototype.types.txt.test(api.getExtension(file));
     };
@@ -471,6 +491,12 @@ define('io.ox/files/api', [
 
     api.isVideo = function (file) {
         return api.Model.prototype.types.video.test(api.getExtension(file));
+    };
+
+    api.isGuardExtension = function (file) {
+        var fileExt = api.getExtension(file, true);
+        // check if file has "guard" file extension
+        return api.Model.prototype.types.guard.test(fileExt);
     };
 
     // get URL to open, download, or preview a file
@@ -577,7 +603,7 @@ define('io.ox/files/api', [
     // guess 23 is "meta"
     // 711 is "number of versions", needed for fixing Bug 52006,
     // number of versions often changes when editing files
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040';
+    var allColumns = '1,2,3,5,20,23,51,52,108,700,702,703,704,705,707,711,7040';
     var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
@@ -671,7 +697,7 @@ define('io.ox/files/api', [
                     module = 'folders';
                     params.action = 'list';
                     // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
-                    params.columns = '1,2,3,5,20,23';
+                    params.columns = '1,2,3,5,20,23,51,52';
                 }
             }
             if (virtual) {
@@ -1029,11 +1055,15 @@ define('io.ox/files/api', [
          *   Return FileDescriptor or Model List
          *  @param {Boolean} options.cache
          *   Use cache or nocache
+         *  @param {Boolean} options.errors
+         *   If false(default) and one file has an error (e.g. file not found) the promise fail and the result is an error
+         *   If true the promise not fail and returns all files. If a file has an error the object for the file is the error and
+         *   the file id.
          */
         return function (ids, options) {
 
             var uncached = ids, collection = pool.get('detail');
-            options = _.extend({ cache: true }, options);
+            options = _.extend({ cache: true, errors: false }, options);
 
             // empty?
             if (ids.length === 0) return $.when([]);
@@ -1044,21 +1074,56 @@ define('io.ox/files/api', [
             // all cached?
             if (options.fullModels && uncached.length === 0) return $.when(_(ids).map(has, collection));
             if (uncached.length === 0) return $.when(_(ids).map(getter, collection));
+            // options.erros === false. If an error in one file occurred
+            if (!options.errors) {
+                return http.fixList(uncached, http.PUT({
+                    module: 'files',
+                    params: { action: 'list', columns: allColumns, timezone: 'UTC' },
+                    data: http.simplify(uncached)
+                }))
+                .then(function (array) {
+                    // add new items to the pool
+                    _(array.filter(Boolean)).each(mergeDetailInPool);
+                    // reconstruct results
+                    if (options.fullModels) {
+                        return _(ids).map(has, collection);
+                    }
+                    return _(ids).map(getter, collection);
+                });
+            }
 
-            return http.fixList(uncached, http.PUT({
-                module: 'files',
-                params: { action: 'list', columns: allColumns, timezone: 'UTC' },
-                data: http.simplify(uncached)
-            }))
-            .then(function (array) {
-                // add new items to the pool
-                _(array.filter(Boolean)).each(mergeDetailInPool);
-                // reconstruct results
-                if (options.fullModels) {
-                    return _(ids).map(has, collection);
-                }
-                return _(ids).map(getter, collection);
-            });
+            try {
+                http.pause();
+                return $.when.apply($, _.map(ids, function (file) {
+                    return api.get(file, { cache: options.cache }).pipe(
+                        null,
+                        function fail(error) {
+                            // need to create a copy of the error, because http.resume will throw the same error if the /PUT multiple fails (see Bug 57323)
+                            error = _.extend({}, error);
+                            error.file = file;
+                            return $.when(error);
+                        }
+                    );
+                })).pipe(function () {
+                    var responses = _(arguments).toArray();
+
+                    return _.map(responses, function (response) {
+                        // add file attributes
+                        if (!!response && !response.error) {
+                            if (options.fullModels) {
+                                return has.call(collection, response);
+                            }
+                            return getter.call(collection, response);
+
+                        }
+                        return response;
+                    });
+
+                });
+            } finally {
+                http.resume();
+            }
+
         };
 
     }());
@@ -1488,9 +1553,11 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model && model.get('id') !== response.id) {
+            if (_.isObject(response) && model) {
                 model.set('id', response.id);
                 file.id = response.id;
+                model.set('com.openexchange.file.sanitizedFilename', response['com.openexchange.file.sanitizedFilename']);
+                file['com.openexchange.file.sanitizedFilename'] = response['com.openexchange.file.sanitizedFilename'];
             }
         })
         .always(_.lfo(process, prev, model))
@@ -1797,6 +1864,11 @@ define('io.ox/files/api', [
                 }
                 return currentVersion;
             });
+        },
+
+        mustEncryptNewVersion: function (previousFileModel, newFilename) {
+            var isNewFileEncrypted = api.isGuardExtension({ filename: newFilename });
+            return previousFileModel.isEncrypted() && !isNewFileEncrypted;
         }
     };
 

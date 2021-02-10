@@ -16,3 +16,7 @@ https://gold.ox.io
 ## Contribution Guide
 
 https://gitlab.open-xchange.com/frontend/core/blob/master/CONTRIBUTING.md
+
+## Node Version Problems
+
+If you have a newer version than Node 12 installed on your system please check NVM.md

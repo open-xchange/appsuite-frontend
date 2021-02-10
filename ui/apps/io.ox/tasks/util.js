@@ -508,11 +508,12 @@ define('io.ox/tasks/util', [
 
             getFullTimeInterval: function (data, smart) {
                 var length = util.getDurationInDays(data);
-                return length <= 1 && smart ? gt('Whole day') : gt.format(
+                return length <= 1 && smart ?
+                    gt('Whole day') :
                     //#. General duration (nominative case): X days
                     //#. %d is the number of days
                     //#, c-format
-                    gt.ngettext('%d day', '%d days', length), length);
+                    gt.ngettext('%d day', '%d days', length, length);
             },
 
             getDurationInDays: function (data) {
@@ -558,19 +559,19 @@ define('io.ox/tasks/util', [
                             options[item.value] = gt('No reminder');
                             break;
                         case 'minutes':
-                            options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
+                            options[item.value] = gt.ngettext('%1$d Minute', '%1$d Minutes', item.value, item.value);
                             break;
                         case 'hours':
                             i = Math.floor(item.value / 60);
-                            options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
+                            options[item.value] = gt.ngettext('%1$d Hour', '%1$d Hours', i, i);
                             break;
                         case 'days':
                             i = Math.floor(item.value / 60 / 24);
-                            options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
+                            options[item.value] = gt.ngettext('%1$d Day', '%1$d Days', i, i);
                             break;
                         case 'weeks':
                             i = Math.floor(item.value / 60 / 24 / 7);
-                            options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
+                            options[item.value] = gt.ngettext('%1$d Week', '%1$d Weeks', i, i);
                             break;
                         // no default
                     }

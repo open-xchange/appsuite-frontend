@@ -17,15 +17,15 @@ const moment = require('moment');
 
 Feature('Contacts > Import');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C104269] Import App Suite CSV', async (I, contacts, dialogs) => {
+Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
 // this scenario also covers:
 // [C104268] Import App Suite vCard
 // [C104277] Import Outlook vCard
@@ -272,7 +272,7 @@ Scenario('[C104269] Import App Suite CSV', async (I, contacts, dialogs) => {
     // ------------------------------------------------------------------
 
     function importCSV(file, type) {
-        I.click('.folder-options.contextmenu-control');
+        I.click('.folder-options.contextmenu-control', '~Contacts');
         I.clickDropdown('Import');
         dialogs.waitForVisible();
         I.selectOption('Format', type === 'csv' ? 'CSV' : 'VCARD');

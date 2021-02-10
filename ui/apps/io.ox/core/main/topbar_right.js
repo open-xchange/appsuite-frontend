@@ -40,6 +40,49 @@ define('io.ox/core/main/topbar_right', [
         }, currentApp && currentApp.get('help'));
     }
 
+    var extensions = {
+
+        about: function () {
+            this.link('about', gt('About'), function (e) {
+                e.preventDefault();
+                require(['io.ox/core/about/about'], function (about) {
+                    about.show();
+                });
+            });
+        },
+
+        onboarding: function () {
+            var device, $link, self = this;
+            if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
+            if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+
+            self.append(
+                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
+                    //#. starts the client onboarding wizard that helps users
+                    //#. to configure their devices to access/sync appsuites
+                    //#. data (f.e. install ox mail app)
+                    .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
+            );
+
+            require(['io.ox/onboarding/clients/api'], function (onboardingAPI) {
+
+                onboardingAPI.enabledDevices(device).then(function (config) {
+                    var enabled = _.device('desktop') ? true : (config[device] || false);
+
+                    $link.toggleClass('disabled ui-disabled', !enabled)
+                        .attr('aria-disabled', !enabled)
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            if (!enabled) return e.stopPropagation();
+                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                                wizard.run();
+                            });
+                        });
+                });
+            });
+        }
+    };
+
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'upsell',
         index: 50,
@@ -49,6 +92,7 @@ define('io.ox/core/main/topbar_right', [
             var view = new UpsellView({
                 tagName: 'li',
                 className: 'launcher',
+                attributes: { role: 'presentation' },
                 id: 'secondary-launcher',
                 requires: 'active_sync || caldav || carddav',
                 customize: function () {
@@ -84,24 +128,7 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'search-mobile',
-        index: 150,
-        draw: function () {
-            if (capabilities.has('search') && _.device('smartphone')) {
-                this.append(
-                    addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
-                        require(['io.ox/search/main'], function (searchapp) {
-                            searchapp.run({ reset: true });
-                        });
-                    }, gt('Search'))
-                    .attr('id', 'io-ox-search-topbar-icon')
-                );
-            }
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'refresh',
+        id: 'refresh-mobile',
         index: 200,
         draw: function () {
             if (_.device('smartphone')) return;
@@ -131,42 +158,223 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'help',
+        id: 'help-dropdown',
         index: 300,
         draw: function () {
             if (_.device('smartphone')) return;
+
+            // single item (no dropdown)
+            if (ext.point('io.ox/core/appcontrol/right/help').list().length <= 1) {
+                var helpView = new HelpLinkView({
+                    iconClass: 'fa-question launcher-icon',
+                    href: getHelp
+                });
+                if (helpView.$el.hasClass('hidden')) return;
+                return this.append(
+                    addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
+                );
+            }
+
+            // multiple items
+            var ul = $('<ul id="topbar-help-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Help'))
+                    .append('<i class="fa fa-question launcher-icon" aria-hidden="true">').attr('title', gt('Help')),
+                dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    id: 'io-ox-topbar-help-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                });
+
+            ext.point('io.ox/core/appcontrol/right/help').invoke('extend', dropdown);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'help',
+        index: 100,
+        extend: function () {
             var helpView = new HelpLinkView({
-                iconClass: 'fa-question launcher-icon',
+                attributes: {
+                    role: 'menuitem',
+                    tabindex: -1
+                },
+                //TODO-617: Label (actually context help)
+                content: gt('Help'),
                 href: getHelp
             });
+
+            // in case of disabled 'showHelpLinks' feature
             if (helpView.$el.hasClass('hidden')) return;
-            this.append(
-                addLauncher('right', helpView.render().$el.attr('tabindex', -1)).attr('id', 'io-ox-context-help-icon')
-            );
+
+            this.append(helpView.render().$el);
+        }
+    });
+
+    // 'feedback' index 150
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'divider-first',
+        index: 200,
+        extend: function () {
+            this.divider();
+        }
+    });
+
+    // 'intro-tour'  index 210
+    // 'get-started' index 250
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'divider-second',
+        index: 300,
+        extend: function () {
+            this.divider();
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/help').extend({
+        id: 'about',
+        index: 400,
+        extend: function () {
+            extensions.about.apply(this, arguments);
         }
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'settings',
+        id: 'settings-dropdown',
         index: 400,
         draw: function () {
             if (_.device('smartphone')) return;
-            this.append(
-                addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
-                    ox.launch('io.ox/settings/main');
-                }, gt('Settings'))
-                .attr('id', 'io-ox-settings-topbar-icon')
-            );
+
+            // single item (no dropdown)
+            if (ext.point('io.ox/core/appcontrol/right/settings').list().length <= 1) {
+                return this.append(
+                    addLauncher('right', $('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')), function () {
+                        ox.launch('io.ox/settings/main');
+                    }, gt('Settings'))
+                    .attr('id', 'io-ox-settings-topbar-icon')
+                );
+            }
+
+            // multiple items
+            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Settings'))
+                    .append('<i class="fa fa-cog launcher-icon" aria-hidden="true">').attr('title', gt('Settings')),
+                dropdown = new Dropdown({
+                    // have a simple model to track changes (e.g. availability)
+                    model: new Backbone.Model({}),
+                    attributes: { role: 'presentation' },
+                    tagName: 'li',
+                    id: 'io-ox-topbar-settings-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                });
+
+            ext.point('io.ox/core/appcontrol/right/settings').invoke('extend', dropdown);
+            this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/settings').extend({
+        id: 'settings',
+        index: 100,
+        extend: function () {
+            if (_.device('smartphone')) return;
+
+            this.link('settings-app', gt('Settings'), function (e) {
+                e.preventDefault();
+                return ox.launch('io.ox/settings/main');
+            });
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/settings').extend({
+        id: 'onboarding',
+        index: 200,
+        enabled: capabilities.has('client-onboarding'),
+        extend: function () {
+            if (_.device('smartphone') || settings.get('onboardingWizard')) return;
+            extensions.onboarding.apply(this, arguments);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'user',
+        index: 5,
+        extend: function () {
+
+            if (settings.get('user/internalUserEdit', true) === false) return;
+            if (capabilities.has('guest')) return;
+
+            var type = settings.get('user/hidedomainpart', false) ? 'email-localpart' : 'email',
+                container, node;
+
+            container = $('<li class="user">').append(
+                $('<a href="#" data-name="user-picture" class="action" tabindex="-1">')
+                .attr('title', gt('Change user photo'))
+                .append(
+                    node = $('<div class="user-picture-container" aria-hidden="true">')
+                ),
+                $('<div class="text-container">').append(
+                    $('<div class="name">').append(userAPI.getTextNode(ox.user_id, { type: 'name' })),
+                    $('<div class="mail">').append(userAPI.getTextNode(ox.user_id, { type: type }))
+                )
+            );
+
+            container.on('click', '.action', function (e) {
+                e.preventDefault();
+                require(['io.ox/core/settings/user'], function (user) {
+                    user.openEditPicture();
+                });
+            });
+
+            updatePicture();
+            // via global address book
+            contactAPI.on('reset:image update:image', updatePicture);
+            // via my contact data
+            userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
+            userAPI.on('update', updatePicture);
+
+            function updatePicture() {
+                node.empty().append(
+                    contactAPI.pictureHalo(
+                        $('<div class="user-picture" aria-hidden="true">')
+                        .append(
+                            $('<span class="initials">').append(
+                                userAPI.getTextNode(ox.user_id, { type: 'initials' })
+                            ),
+                            $('<i class="fa fa-camera-retro" aria-hidden="true">')
+                        ),
+                        { internal_userid: ox.user_id },
+                        { width: 40, height: 40, fallback: false }
+                    )
+                );
+            }
+
+            this.$ul.append(container);
+            this.divider();
+        }
+    });
+
+    // 'availability' index 50
+
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'upsell',
         index: 50,
         extend: function () {
+
             var view = new UpsellView({
                 tagName: 'li',
                 id: 'topbar-dropdown',
+                attributes: { 'role': 'presentation' },
                 requires: 'active_sync || caldav || carddav',
                 title: gt('Upgrade your account'),
                 customize: function () {
@@ -174,17 +382,14 @@ define('io.ox/core/main/topbar_right', [
                 }
             });
 
-            if (view.visible) {
-                this.append(
-                    view.render().$el
-                );
-                this.divider();
-            }
+            if (!view.visible) return;
+            this.$ul.append(view.render().$el);
+            this.divider();
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'refreshMobile',
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'refresh-mobile',
         index: 80,
         extend: function () {
             if (!_.device('smartphone')) return;
@@ -196,8 +401,8 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'settingsMobile',
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'settings-mobile',
         index: 90,
         extend: function () {
             if (!_.device('smartphone')) return;
@@ -208,52 +413,24 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'onboarding',
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'onboarding-mobile',
         index: 120,
+        enabled: capabilities.has('client-onboarding'),
         extend: function () {
-            if (capabilities.has('!client-onboarding')) return;
-
-            var device, $link, self = this;
-            if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
-            if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
-
-            self.append(
-                $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem" tabindex="-1">')
-                    //#. starts the client onboarding wizard that helps users
-                    //#. to configure their devices to access/sync appsuites
-                    //#. data (f.e. install ox mail app)
-                    .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
-            );
-
-            require(['io.ox/onboarding/clients/api'], function (onboardingAPI) {
-
-                onboardingAPI.enabledDevices(device).then(function (config) {
-                    var enabled = _.device('desktop') ? true : (config[device] || false);
-
-                    $link.toggleClass('disabled ui-disabled', !enabled)
-                        .attr('aria-disabled', !enabled)
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            if (!enabled) return e.stopPropagation();
-                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                                wizard.run();
-                            });
-                        });
-                });
-            });
+            if (!_.device('smartphone') || settings.get('onboardingWizard')) return;
+            extensions.onboarding.apply(this, arguments);
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'change-user-data',
         index: 150,
         extend: function () {
-
             // check if users can edit their own data (see bug 34617)
             if (settings.get('user/internalUserEdit', true) === false) return;
 
-            this.link('my-contact-data', gt('My contact data'), function (e) {
+            this.link('my-contact-data', gt('Edit personal data'), function (e) {
                 e.preventDefault();
                 require(['io.ox/core/settings/user'], function (userSettings) {
                     userSettings.openModalDialog();
@@ -262,28 +439,35 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'change-user-password',
         index: 175,
         extend: function () {
-
             if (!capabilities.has('edit_password && guest')) return;
 
+            var linkText = function (empty) { return empty ? gt('Add login password') : gt('Change login password'); };
+
             this.link('change-password',
-                settings.get('password/emptyCurrent') ? gt('Add login password') : gt('Change login password'),
+                linkText(settings.get('password/emptyCurrent')),
                 function (e) {
                     e.preventDefault();
                     require(['plugins/portal/userSettings/register'], function (userSettings) {
                         userSettings.changePassword();
                     });
                 });
+
+            this.listenTo(settings, 'change:password/emptyCurrent', function (value) {
+                this.$el.find('[data-name="change-password"]')
+                    .text(linkText(value));
+            }.bind(this));
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'app-specific-help',
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'app-specific-help-mobile',
         index: 200,
         extend: function () {
+            if (!_.device('smartphone')) return;
             //replaced by module
             var helpView = new HelpLinkView({
                 attributes: {
@@ -300,38 +484,26 @@ define('io.ox/core/main/topbar_right', [
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'divider-before-about',
-        index: 290,
-        extend: function () {
-            this.divider();
-        }
-    });
-
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
-        id: 'about',
+    ext.point('io.ox/core/appcontrol/right/account').extend({
+        id: 'about-mobile',
         index: 400,
         extend: function () {
-            this.link('about', gt('About'), function (e) {
-                e.preventDefault();
-                require(['io.ox/core/about/about'], function (about) {
-                    about.show();
-                });
-            });
+            if (!_.device('smartphone')) return;
+            extensions.about.apply(this, arguments);
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'logout',
         index: 1000,
         extend: function () {
-            this.divider();
+            //this.divider();
             // Group available signout calls here, including appsuite, Guard, etc
-            ext.point('io.ox/core/appcontrol/right/dropdown/signouts').invoke('extend', this);
+            ext.point('io.ox/core/appcontrol/right/account/signouts').invoke('extend', this);
         }
     });
 
-    ext.point('io.ox/core/appcontrol/right/dropdown/signouts').extend({
+    ext.point('io.ox/core/appcontrol/right/account/signouts').extend({
         id: 'logout',
         index: 100,
         extend: function () {
@@ -343,28 +515,28 @@ define('io.ox/core/main/topbar_right', [
     });
 
     ext.point('io.ox/core/appcontrol/right').extend({
-        id: 'dropdown',
+        id: 'account',
         index: 1000,
         draw: function () {
             var title = ox.openedInBrowserTab ?
                     gt('Sign out') :
                     //#. tooltip of dropdown menu in topbar (contact image icon)
-                    gt('Support'),
-                ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
+                    gt('My account'),
+                ul = $('<ul id="topbar-account-dropdown" class="dropdown-menu dropdown-menu-right" role="menu">'),
                 a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('aria-label', title),
                 dropdown = new Dropdown({
                     // have a simple model to track changes (e.g. availability)
                     model: new Backbone.Model({}),
                     attributes: { role: 'presentation' },
                     tagName: 'li',
-                    id: 'io-ox-topbar-dropdown-icon',
+                    id: 'io-ox-topbar-account-dropdown-icon',
                     className: 'launcher dropdown',
                     $ul: ul,
                     $toggle: a
                 });
 
             updatePicture();
-            ext.point('io.ox/core/appcontrol/right/dropdown').invoke('extend', dropdown);
+            ext.point('io.ox/core/appcontrol/right/account').invoke('extend', dropdown);
             this.append(dropdown.render().$el.find('a').attr('tabindex', -1).end());
 
             // via global address book
@@ -429,7 +601,7 @@ define('io.ox/core/main/topbar_right', [
                 if (_.device('reload') && session.isAutoLogin()) return;
 
                 // topbar action, dropdown action
-                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a').first();
+                var link = this.find('[data-action="sign-out"], #io-ox-topbar-account-dropdown-icon > a').first();
                 // popover
                 link.popover({
                     // language; not locale
@@ -464,7 +636,7 @@ define('io.ox/core/main/topbar_right', [
             // server prop
             if (!conf.enabled || !conf.remaining) return;
             // banner action, topbar action, dropdown action
-            var link = this.find('#io-ox-topbar-dropdown-icon > a');
+            var link = this.find('#io-ox-topbar-account-dropdown-icon > a');
             // popover
             link.popover({
                 //#. %1$s is the product name

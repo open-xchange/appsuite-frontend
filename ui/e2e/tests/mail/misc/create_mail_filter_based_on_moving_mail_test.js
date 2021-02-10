@@ -15,16 +15,16 @@
 
 Feature('Mail > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C83387] Create mail filter based on moving mail', async (I, users, mail, dialogs) => {
+Scenario('[C83387] Create mail filter based on moving mail', async ({ I, users, mail, dialogs }) => {
 
     // 1. Login User#A
     // 2. Go to Mail and send a mail to User#B
@@ -82,7 +82,7 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users, ma
 
     I.seeInField('#rulename', 'Move mails from ' + users[1].get('primaryEmail') + ' into folder Trash');
 
-    I.see('Address', '.tests');
+    I.see('Email address', '.tests');
     I.see('Is exactly', '.tests');
     I.seeInField({ css: '[id*="address"]' }, users[1].get('primaryEmail'));
 

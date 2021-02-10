@@ -72,6 +72,7 @@ define('io.ox/switchboard/settings/pane', [
                     util.fieldset(
                         gt('Appointments'),
                         util.checkbox('zoom/addMeetingPassword', gt('Always add a random meeting password'), settings),
+                        //#. Automatically copies the meeting link into an appointment's location field
                         util.checkbox('zoom/autoCopyToLocation', gt('Automatically copy link to location'), settings),
                         util.checkbox('zoom/autoCopyToDescription', gt('Automatically copy dial-in information to description'), settings)
                     )

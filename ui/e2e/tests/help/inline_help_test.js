@@ -12,32 +12,31 @@
 
 Feature('General > Inline help');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Open the help app in a floating window', async function (I) {
+Scenario('Open the help app in a floating window', async function ({ I, topbar }) {
     I.login('app=io.ox/mail');
-    I.waitForVisible({ css: '[data-app-name="io.ox/mail"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-mail-window' }, 5);
 
-    I.click('~Online help');
+    topbar.help();
     I.waitForVisible('.io-ox-help-window', 5);
     I.see('OX App Suite Help');
 
     // ensure that if you click help for the same active app only one window will open for that
-    I.click('~Online help');
-    I.waitForVisible('.io-ox-help-window', 5);
+    topbar.help();
     I.seeNumberOfElements('.io-ox-help-window', 1);
 
     I.click('~Close', '.io-ox-help-window');
     I.waitForDetached('.io-io-help-window', 5);
 });
 
-Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
+Scenario('Open the help app in a modal', async function ({ I, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
     mail.newMail();
@@ -56,7 +55,7 @@ Scenario('Open the help app in a modal', async function (I, mail, dialogs) {
     I.waitForDetached('.modal-dialog');
 });
 
-Scenario('Check help window for supposed language', function (I) {
+Scenario('Check help window for supposed language', function ({ I, topbar }) {
 
     // check major languages
     var languages = {
@@ -94,8 +93,7 @@ Scenario('Check help window for supposed language', function (I) {
         I.waitForVisible('#settings-language', 5);
 
         //open help window
-        I.click('.io-ox-context-help');
-        I.waitForElement('.io-ox-help-window');
+        topbar.help();
 
         //check language in help window
         I.waitForElement(locate('.inline-help-iframe').withAttr({ src: languages[id][0] }).inside('.io-ox-help-window'), 10);

@@ -45,7 +45,7 @@ define('io.ox/mail/compose/main', [
             var self = this;
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
-                if (baton.data && baton.data.id) baton.model.restored = true;
+                baton.model.restored = !!(baton.data && baton.data.id);
                 return self.model.initialized;
             });
         }
@@ -173,13 +173,6 @@ define('io.ox/mail/compose/main', [
             this.model.set('bcc', mailUtil.parseRecipients(settings.get('autobcc'), { localpart: false }));
         }
     }, {
-        id: 'auto-discard',
-        index: INDEX += 100,
-        perform: function () {
-            // disable auto remove on discard for draft mails
-            this.config.set('autoDiscard', !this.config.is('edit'));
-        }
-    }, {
         id: 'set-mail',
         index: INDEX += 100,
         perform: function () {
@@ -199,6 +192,15 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             this.view.dirty(!!this.model.restored);
             this.model.initialPatch();
+        }
+    }, {
+        id: 'update-cid',
+        index: INDEX += 100,
+        perform: function () {
+            // fallback case: clone of actually deleted space
+            this.listenTo(this.model, 'change:id', function () {
+                this.cid = getAppCID(this.model.toJSON()) || this.cid;
+            }.bind(this));
         }
     }, {
         id: 'finally',
@@ -222,9 +224,25 @@ define('io.ox/mail/compose/main', [
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
+            // update app cid for proper matching of draft/space
+            this.cid = this.model.get('cid');
             this.trigger('ready');
         }
     });
+
+    function getAppCID(data) {
+        data = data || {};
+        // use space id (restore case)
+        var id = data.id, mailref;
+        // edit case: prefer "space" instead of "id/folder"
+        if (data.type === 'edit' && data.original) {
+            mailref = _.cid({ id: data.original.id, folder: data.original.folderId });
+            id = ox.ui.spaces[mailref] || mailref;
+        }
+        // fallback: backbone default
+        if (!id) return;
+        return 'io.ox/mail/compose:' + id + ':edit';
+    }
 
     // multi instance pattern
     function createInstance() {
@@ -252,24 +270,30 @@ define('io.ox/mail/compose/main', [
         });
 
         app.failRestore = function (point) {
-            var data = { id: point };
-            if (_.isObject(point)) {
-                // common case: mail is already a draft. So we can just edit it
-                if (point.restoreById) {
-                    return app.open({ type: 'edit', original: { folderId: point.folder_id, id: point.id, security: point.security } });
-                }
-                // create composition space from old restore point
-                data = _(point).pick('to', 'cc', 'bcc', 'subject');
-                if (point.from && point.from[0]) data.from = point.from[0];
-                if (point.attachments && point.attachments[0]) {
-                    data.content = point.attachments[0].content;
-                    data.contentType = point.attachments[0].content_type;
-                }
-                data.meta = {};
-                data.meta.security = point.security;
-                data.requestRqe = point.disp_notification_to;
-                data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
+            var data;
+            if (!_.isObject(point)) {
+                return app.open(data);
             }
+
+            // duck check: real draft
+            if (point.meta) {
+                return app.open(_(point).pick('id', 'meta', 'security'));
+            }
+            // common case: mail is already a draft. So we can just edit it
+            if (point.restoreById) {
+                return app.open({ type: 'edit', original: { folderId: point.folder_id, id: point.id, security: point.security } });
+            }
+            // backward compatibility: create composition space from old restore point
+            data = _(point).pick('to', 'cc', 'bcc', 'subject');
+            if (point.from && point.from[0]) data.from = point.from[0];
+            if (point.attachments && point.attachments[0]) {
+                data.content = point.attachments[0].content;
+                data.contentType = point.attachments[0].content_type;
+            }
+            data.meta = {};
+            data.meta.security = point.security;
+            data.requestRqe = point.disp_notification_to;
+            data.priority = ['high', 'medium', 'low'][(data.priority || 1) - 1];
             return app.open(data);
         };
 
@@ -277,15 +301,106 @@ define('io.ox/mail/compose/main', [
             return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
+        app.onError = function (e) {
+            e = e || {};
+            var isMissing = /^(UI-SPACEMISSING|MSGCS-0007)$/.test(e.code),
+                isConcurrentEditing = /^(MSGCS-0010)$/.test(e.code),
+                // consider flags set by plugins (guard for example)
+                isCritical = e.critical;
+            // critical errors: pause app
+            if (isMissing || isConcurrentEditing || isCritical) return app.pause(e);
+            require(['io.ox/core/yell'], function (yell) {
+                yell(e);
+            });
+        };
+
+        app.pause = function (e) {
+            var error = _.extend({ code: 'unknown', error: gt('An error occurred. Please try again.') }, e);
+            // custom mappings
+            switch (error.code) {
+                case 'UI-SPACEMISSING':
+                case 'MSGCS-0007':
+                    error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
+                    break;
+                case 'MSGCS-0010':
+                    error.message = gt('This draft has been changed in another tab or browser. Please continue editing the most recent version. If you have closed that tab in the meantime, you can restore the most recent draft here.');
+                    break;
+                default:
+                    break;
+            }
+            // app is in error state now
+            app.error = error;
+            if (this.model) this.model.paused = true;
+            // reset potential 'Saving...' message
+            if (this.view) this.view.inlineYell('');
+            // disable floating window and show error message
+            var win = this.get('window');
+            var model = this.model;
+            if (!win) return;
+
+            // show window-blocker dialog
+            win.busy(undefined, undefined, function () {
+
+                var container = $('<div class="block-message">').append(
+                    $('<div class="message">').text(error.message || error.error),
+                    $('<div class="actions">')
+                );
+
+                // prevents busy spinner
+                this.find('.footer').empty().append(container);
+                this.idle();
+
+                // add extra close button
+                container.find('.actions').append(
+                    $('<button type="button" class="btn btn-default btn-primary">')
+                    .text(gt('Close'))
+                    .on('click', function () { app.quit(); })
+                );
+
+                // restore action for concurrent editing
+                if (error.code === 'MSGCS-0010') {
+                    container.find('.actions').prepend(
+                        $('<button type="button" class="btn btn-default">')
+                        .text(gt('Restore draft'))
+                        .on('click', restore)
+                    );
+                }
+            });
+
+            function restore() {
+                app.quit();
+                var newapp = createInstance();
+                newapp.launch();
+                newapp.open(_(model.toJSON()).pick('id', 'meta', 'security')).done(function () {
+                    newapp.model.claim();
+                });
+            }
+        };
+
+        app.resume = function (data, force) {
+            if (!app.error) return;
+            // does not recover when concurrent editing was identified
+            if (!force && app.error && app.error.code === 'MSGCS-0010') return;
+            // reset error state
+            var failRestore = app.error.failRestore;
+            delete app.error;
+            if (this.model) delete this.model.paused;
+            // window handling
+            var win = this.get('window');
+            if (!win) return;
+            win.idle();
+            // failed on app start
+            if (!failRestore || !data) return;
+            app.failRestore(data.point);
+        };
+
         app.open = function (obj, config) {
             var def = $.Deferred();
             obj = _.extend({}, obj);
 
-            if (obj.type === 'edit') {
-                var orig = obj.original,
-                    cid = _.cid({ id: orig.id, folder: orig.folderId });
-                app.cid = 'io.ox/mail/compose:' + cid + ':' + obj.type;
-            }
+            // update app cid
+            var customCID = getAppCID(obj);
+            app.cid = customCID ? customCID : app.cid;
 
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
@@ -304,17 +419,21 @@ define('io.ox/mail/compose/main', [
                     ox.trigger('mail:' + app.model.get('meta').type + ':ready', obj, app);
                 }, function fail(e) {
                     console.error('Startup of mail compose failed', e);
-                    if (app.view) {
-                        app.view.dirty(false);
-                        app.view.removeLogoutPoint();
-                    }
-                    app.quit();
 
-                    if (e && e.error) {
-                        require(['io.ox/core/yell'], function (yell) {
-                            yell(e);
+                    // to many open spaces
+                    if (e.code === 'MSGCS-0011') {
+                        var num = e.error_params[0] || 20;
+                        e.message = gt('You cannot open more than %1$s drafts at the same time.', num);
+                        return this.quit().then(function () {
+                            require(['io.ox/core/yell'], function (yell) {
+                                yell(e);
+                            });
                         });
                     }
+
+                    // custom handlers
+                    app.onError(_.extend({ failRestore: true }, e));
+
                     def.reject(e);
                 });
             });
@@ -323,10 +442,10 @@ define('io.ox/mail/compose/main', [
 
         // destroy
         app.setQuit(function () {
-            if (app.view) return app.view.discard();
+            if (app.view && !app.error) return app.view.discard();
         });
 
-        // after view is detroyed
+        // after view is destroyed
         app.on('quit', function () {
             if (app.model) app.model.destroy();
         });
@@ -362,12 +481,8 @@ define('io.ox/mail/compose/main', [
         getApp: createInstance,
 
         reuse: function (method, data) {
-            // only reuse for draft edit
-            if (data && data.type === 'edit') {
-                var cid = _.cid({ id: data.original.id, folder: data.original.folderId });
-                return ox.ui.App.reuse('io.ox/mail/compose:' + cid + ':edit');
-            }
-            return false;
+            var customCID = getAppCID(data);
+            return customCID ? ox.ui.App.reuse(customCID) : false;
         }
     };
 });

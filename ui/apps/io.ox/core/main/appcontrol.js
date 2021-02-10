@@ -28,6 +28,16 @@ define('io.ox/core/main/appcontrol', [
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle(force);
     }
 
+    var extensions = {
+        launcher: function () {
+            var launchers = window.launchers = new LaunchersView({
+                collection: ox.ui.apps,
+                dontProcessOnMobile: true
+            });
+            this.append(launchers.render().$el);
+        }
+    };
+
     var LauncherView = Backbone.View.extend({
         tagName: 'a',
         className: 'btn btn-link lcell',
@@ -78,7 +88,10 @@ define('io.ox/core/main/appcontrol', [
                     tabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
-                ox.launch(this.model.get('path'));
+
+                // if there is a custom quicklaunch function for this app, use it. Else just use the default launch function
+                if (this.quicklaunch && this.model.quickLaunch) this.model.quickLaunch();
+                else ox.launch(this.model.get('path'));
             } else {
                 var requires = this.model.get('requires');
                 upsell.trigger({ type: 'app', id: this.model.get('id'), missing: upsell.missing(requires) });
@@ -183,7 +196,7 @@ define('io.ox/core/main/appcontrol', [
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
-            return (str + new Array(count).join(',none')).split(',').slice(0, count);
+            return ((str || 'none') + new Array(count).join(',none')).split(',').slice(0, count);
         }
     };
 
@@ -246,6 +259,7 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    // hint: shared node references so multiple view instances won't work
     var LaunchersView = Dropdown.extend({
         attributes: { role: 'presentation', dontprocessonmobile: 'true' },
         tagName: 'li',
@@ -254,7 +268,7 @@ define('io.ox/core/main/appcontrol', [
         id: 'io-ox-launcher',
         $ul: $('<ul class="launcher-dropdown dropdown-menu dropdown-menu-right" role="menu">'),
         // this should be a link. Otherwise, this can cause strange focus issues on iOS when having the cursor inside an iframe before clicking this (see Bug 63441)
-        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" tabindex="-1" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
+        $toggle: $('<a href="#" class="launcher-btn btn btn-link dropdown-toggle" tabindex="0" dontprocessonmobile="true">').attr('aria-label', gt('Navigate to:')).append($(icons.launcher).attr('title', gt('All Applications'))),
         initialize: function () {
             Dropdown.prototype.initialize.apply(this, arguments);
             this.listenTo(this.collection, 'add remove launcher:update launcher:sort', this.update);
@@ -329,28 +343,50 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // ext.point('io.ox/core/appcontrol').extend({
-    //     id: 'launcher',
-    //     index: 200,
-    //     draw: function () {
-    //         // possible setting here
-    //         var apps = ox.ui.apps.where({ hasLauncher: true });
-    //         // reverted for 7.10
-    //         //if (apps.length <= 1) return;
-    //         var launchers = window.launchers = new LaunchersView({
-    //             collection: apps
-    //         });
-    //         this.append(launchers.render().$el);
-    //     }
-    // });
-
     ext.point('io.ox/core/appcontrol').extend({
         id: 'logo',
         index: 300,
         draw: function () {
             var logo,
                 logoFileName = settings.get('logoFileName', 'logo.png'),
-                action = settings.get('logoAction', false);
+                action = settings.get('logoAction', false),
+                updateLogo = function () {
+                    // prevent multiple button wrappings of the logo, also removes the button when there is no action anymore
+                    if (logo.parent().hasClass('logo-btn')) {
+                        logo.parent().replaceWith(logo);
+                    }
+                    if ((/^https?:/).test(action)) {
+                        logo.wrap(
+                            $('<a class="btn btn-link logo-btn">').attr({
+                                href: action,
+                                target: '_blank'
+                            })
+                        );
+                    } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
+                        var tabAPI = require('io.ox/core/api/tab'),
+                            appType = action.substring(0, 'io.ox/office/portal/'.length),
+                            tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
+                        logo.wrap(
+                            $('<a class="btn btn-link logo-btn">').attr({
+                                href: tabUrl,
+                                target: '_blank'
+                            })
+                        );
+                    } else if (action) {
+                        var autoStart = settings.get('autoStart');
+                        if (action === 'autoStart') {
+                            if (autoStart === 'none') return;
+                        }
+                        logo.wrap(
+                            $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
+                                // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
+                                if (!ox.ui.apps.get(autoStart.replace(/\/main$/, ''))) return;
+                                ox.launch(autoStart);
+                            })
+                        );
+                    }
+                };
+
             this.append(
                 logo = $('<div id="io-ox-top-logo">').append(
                     $('<img>').attr({
@@ -362,37 +398,20 @@ define('io.ox/core/main/appcontrol', [
 
             if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
 
-            if ((/^https?:/).test(action)) {
-                logo.wrap(
-                    $('<a class="btn btn-link logo-btn">').attr({
-                        href: action,
-                        target: '_blank'
-                    })
-                );
-            } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
-                var tabAPI = require('io.ox/core/api/tab'),
-                    appType = action.substring(0, 'io.ox/office/portal/'.length),
-                    tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
-                logo.wrap(
-                    $('<a class="btn btn-link logo-btn">').attr({
-                        href: tabUrl,
-                        target: '_blank'
-                    })
-                );
-            } else if (action) {
-                var autoStart = settings.get('autoStart');
-                if (action === 'autoStart') {
-                    if (autoStart === 'none') return;
-                    action = autoStart;
-                }
-                logo.wrap(
-                    $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
-                        // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
-                        if (!ox.ui.apps.get(action.replace(/\/main$/, ''))) return;
-                        ox.launch(action);
-                    })
-                );
-            }
+            updateLogo();
+
+            settings.on('change:logoAction change:autoStart', updateLogo);
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol').extend({
+        id: 'left',
+        index: 350,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            var taskbar = $('<ul class="taskbar list-unstyled" role="toolbar">');
+            this.append($('<div id="io-ox-topleftbar">').append(taskbar));
+            ext.point('io.ox/core/appcontrol/left').invoke('draw', taskbar);
         }
     });
 
@@ -407,17 +426,12 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    // for 7.10
-    // move launcher to the right
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'launcher',
         index: 120,
         draw: function () {
-            var launchers = window.launchers = new LaunchersView({
-                collection: ox.ui.apps,
-                dontProcessOnMobile: true
-            });
-            this.append(launchers.render().$el);
+            if (!_.device('smartphone')) return;
+            extensions.launcher.call(this);
         }
     });
 
@@ -448,6 +462,15 @@ define('io.ox/core/main/appcontrol', [
         index: 10000,
         draw: function () {
             this.attr('role', 'banner').show();
+        }
+    });
+
+    ext.point('io.ox/core/appcontrol/left').extend({
+        id: 'launcher',
+        index: 100,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            extensions.launcher.call(this);
         }
     });
 

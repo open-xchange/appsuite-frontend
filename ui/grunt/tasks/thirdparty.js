@@ -80,7 +80,9 @@ module.exports = function (grunt) {
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.js',
                             'typeahead.js/dist/typeahead.jquery.js',
-                            'dompurify/dist/purify.min.js'
+                            'dompurify/dist/purify.min.js',
+                            'jwt-decode/build/jwt-decode.js',
+                            'mark.js/dist/jquery.mark.min.js'
                         ],
                         cwd: 'node_modules',
                         dest: 'build/static/3rd.party/'
@@ -110,16 +112,30 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'build/pdf.min.js',
-                            'build/pdf.worker.min.js',
-                            'web/images/*',
-                            'cmaps/*'
+                            'build/pdf.js',
+                            'build/pdf.worker.js'
+                            // as long as we support IE11, we need the ES5 legacy version
+                            // 'build/pdf.min.js',
+                            // 'build/pdf.worker.min.js',
+                            // 'web/images/*',
+                            // 'cmaps/*'
                         ],
-                        cwd: 'node_modules/pdfjs-dist',
+                        cwd: 'node_modules/pdfjs-dist/es5', // as long as we support IE11, we need the ES5 legacy version
                         dest: 'build/apps/pdfjs-dist/',
                         rename: function (dest, src) {
                             return dest + src.replace(/\.min.js$/, '.js');
                         }
+                    },
+                    {
+                        // as long as we support IE11, we need the ES5 legacy version
+                        // but take the cmaps and the icons from the common version
+                        expand: true,
+                        src: [
+                            'web/images/*',
+                            'cmaps/*'
+                        ],
+                        cwd: 'node_modules/pdfjs-dist',
+                        dest: 'build/apps/pdfjs-dist/'
                     },
                     {
                         expand: true,
@@ -151,6 +167,12 @@ module.exports = function (grunt) {
                         ],
                         cwd: 'node_modules/cldr-dates-modern/main/',
                         dest: 'build/apps/3rd.party/cldr-dates'
+                    },
+                    {
+                        expand: true,
+                        src: ['qrcode.js'],
+                        cwd: 'node_modules/qrcode/build',
+                        dest: 'build/static/3rd.party/qrcode'
                     }
                 ]
             }

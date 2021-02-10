@@ -1077,11 +1077,11 @@ define('io.ox/contacts/addressbook/popup', [
             // TODO: gt comment
             if (this.opt.useLabels) {
                 //#. %1$d is number of selected items (addresses/groups) in the list
-                selectionLabel = gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', length), length);
+                selectionLabel = gt.ngettext('%1$d item selected', '%1$d items selected', length, length);
                 description = gt('The selected items. Press Backspace or Delete to remove.');
             } else {
                 //#. %1$d is number of selected addresses
-                selectionLabel = gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', length), length);
+                selectionLabel = gt.ngettext('%1$d address selected', '%1$d addresses selected', length, length);
                 description = gt('The selected addresses. Press Backspace or Delete to remove.');
             }
 

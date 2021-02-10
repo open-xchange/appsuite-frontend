@@ -50,7 +50,7 @@ define('io.ox/files/actions/favorites', [
 
             if (model) {
                 models.push(model);
-                api.propagate('favorite:add', model);
+                api.propagate('favorite:add', model.toJSON());
             }
         });
 
@@ -73,7 +73,7 @@ define('io.ox/files/actions/favorites', [
 
             if (model) {
                 models.push(model);
-                api.propagate('favorite:remove', model);
+                api.propagate('favorite:remove', model.toJSON());
             }
         });
 

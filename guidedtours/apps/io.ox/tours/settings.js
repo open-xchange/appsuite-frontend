@@ -48,7 +48,7 @@ define('io.ox/tours/settings', [
             .end()
         .step()
             .title(gt('Opening the help'))
-            .content(gt('To open the help, click the user image on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
+            .content(gt('To open the help, click the help icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
             .hotspot('#topbar-settings-dropdown a.io-ox-context-help')
             .spotlight('#topbar-settings-dropdown a.io-ox-context-help')
             .referTo('#topbar-settings-dropdown')

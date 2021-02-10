@@ -37,7 +37,7 @@ define('io.ox/switchboard/extensions', [
     if (capabilities.has('guest') && settings.get('user/internalUserEdit', true) === false) return;
 
     // extend account dropdown
-    ext.point('io.ox/core/appcontrol/right/dropdown').extend({
+    ext.point('io.ox/core/appcontrol/right/account').extend({
         id: 'availability',
         index: 10,
         extend: function () {
@@ -80,7 +80,7 @@ define('io.ox/switchboard/extensions', [
         online: gt('Online'),
         absent: gt('Absent'),
         busy: gt('Busy'),
-        offline: gt('Offline')
+        invisible: gt('Invisible')
     };
 
     // extend list view in contacts
@@ -95,7 +95,7 @@ define('io.ox/switchboard/extensions', [
                     return { presence: $el };
                 },
                 set: function (data, fields) {
-                    fields.presence.toggle(data.folder_id === 6);
+                    fields.presence.toggle(String(data.folder_id) === '6');
                     var icon = presence.getPresenceIcon(data.email1);
                     fields.presence.replaceWith(icon);
                     fields.presence = icon;
@@ -112,7 +112,7 @@ define('io.ox/switchboard/extensions', [
             if (contactsAPI.looksLikeResource(baton.data)) return;
             var support = api.supports('zoom') || api.supports('jitsi');
             if (!support) return;
-            var $actions = $('<div class="switchboard-actions">');
+            var $actions = $('<div class="action-button-rounded">');
             ext.point('io.ox/contacts/detail/actions').invoke('draw', $actions, baton.clone());
             this.append(
                 presence.getPresenceString(baton.data.email1),
@@ -123,8 +123,29 @@ define('io.ox/switchboard/extensions', [
 
     ext.point('io.ox/contacts/detail/actions').extend(
         {
-            id: 'call',
+            id: 'email',
             index: 100,
+            draw: function (baton) {
+                if (!capabilities.has('webmail')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
+                );
+            }
+        },
+        {
+            id: 'chat',
+            index: 120,
+            draw: function (baton) {
+                if (!capabilities.has('chat')) return;
+                if (_.device('smartphone || !maintab')) return;
+                this.append(
+                    createButton('io.ox/chat/actions/start-chat-from-contacts', 'fa-comment', gt('Chat'), baton)
+                );
+            }
+        },
+        {
+            id: 'call',
+            index: 300,
             draw: function (baton) {
                 var $ul = $('<ul class="dropdown-menu">');
                 ext.point('io.ox/contacts/detail/actions/call').invoke('draw', $ul, baton.clone());
@@ -144,19 +165,10 @@ define('io.ox/switchboard/extensions', [
                 );
             }
         },
-        {
-            id: 'email',
-            index: 200,
-            draw: function (baton) {
-                if (!capabilities.has('webmail')) return;
-                this.append(
-                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
-                );
-            }
-        },
+
         {
             id: 'invite',
-            index: 300,
+            index: 400,
             draw: function (baton) {
                 if (!capabilities.has('calendar')) return;
                 this.append(
@@ -318,7 +330,7 @@ define('io.ox/switchboard/extensions', [
             }
             if (!match) return;
             this.append(
-                $('<div class="switchboard-actions horizontal">').append(
+                $('<div class="action-button-rounded horizontal">').append(
                     // Call
                     $('<button type="button" class="btn btn-link" data-action="join">')
                         .append(

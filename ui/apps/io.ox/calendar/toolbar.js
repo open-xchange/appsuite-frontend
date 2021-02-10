@@ -187,6 +187,9 @@ define('io.ox/calendar/toolbar', [
             dropdown.render().$el.addClass('dropdown pull-right').attr('data-dropdown', 'view');
 
             setTimeout(function () {
+                // in case we get fast multiple renderings of the toolbar, the dropdown might already be disposed.
+                // TODO reduce those rerenderings, so this doesn't happen (or happens less often) in the first place. To fragile so close to release, so leave it as is ... for now (who am I kidding?)
+                if (dropdown.model === null) return;
                 updatePrintLink.call(dropdown, baton);
                 updateCheckboxOption.call(dropdown);
                 updateColorOption.call(dropdown);
@@ -200,7 +203,8 @@ define('io.ox/calendar/toolbar', [
         index: 10000,
         setup: function (app) {
 
-            var toolbarView = new ToolbarView({ point: 'io.ox/calendar/toolbar/links', title: app.getTitle() });
+            // don't use strict mode here. We also want to update the toolbar when the selected folder changes, not only when the selection changes (permissions for the selected folder might be different)
+            var toolbarView = new ToolbarView({ point: 'io.ox/calendar/toolbar/links', title: app.getTitle(), strict: false });
 
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
                 toolbarView.$el

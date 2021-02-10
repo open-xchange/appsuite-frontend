@@ -25,35 +25,34 @@ Ensure to always use the expected data type for a setting. This table lists some
 
 # Feature toggles
 
-App Suite UI offers different feature toggles. These toggles control the
- appearance (or flavor) of different features in the UI.
+App Suite UI offers different feature toggles. These toggles control the appearance (or flavor) of different features in the UI.
 
 <config>io.ox/core//features/dedicatedLogoutButton=`<bool>`</config>
-Show a logout button at the topbar.
+Show a logout button at the topbar. Default is `false`.
 
 <config>io.ox/core//features/folderIcons=`<bool>`</config>
-Show icons in the folder tree next to folder labels.
+Show icons in the folder tree next to folder labels. Default is `false`.
 
 <config>io.ox/core//features/logoutButtonHint=`<bool>`</config>
-Shows a reminder tooltip if the user has not logged during the last page visit.
+Shows a reminder tooltip if the user has not logged during the last page visit. Default is `false`.
 
 <config>io.ox/core//features/reloginPopup=`<bool>`</config>
-Show a modal dialog to enable an inline relogin without showing the login page.
+Show a modal dialog to enable an inline relogin without showing the login page. Default is `true` (for non-oidc and non-saml environments)
 
 <config>io.ox/core//features/storeSavePoints=`<bool>`</config>
-Enable/disable restorepoints for edit dialogs.
+Enable/disable restorepoints for edit dialogs. Default is `true`.
 
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
-Enable validiation for email addresses in mail compose dialog.
+Enable validiation for email addresses in mail compose dialog. Default is `true`.
 
 <config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
-Enable validiation for phone numbers.
+Enable validiation for phone numbers. Default is `false`.
 
 <config>io.ox/core//features/windowHeaderPosition=`<string>`</config>
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
-Disable one or more settings panes via extension point ids of _io.ox/settings/pane_ and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar)
+Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar). Default is unset;
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
@@ -62,16 +61,16 @@ Enable/disable PDF preconversion of office documents on file upload and when a n
 Enable/disable PDF preconversion of office documents for mail attachments. Default is `true`.
 
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
-Enable/disable range requests support to fetch PDF rendering data in chunks. Default is 'true'.
+Enable/disable range requests support to fetch PDF rendering data in chunks. Default is `true`.
 
 ## Topbar / Apps
-
-<config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
-How many quick launch icons should appear in the Topbar by default (default: `3`)
 
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
 Default Apps for quick launcher. Comma-separated string of App IDs
 Default: `'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main'`
+
+<config>io.ox/core//apps/quickLaunchCount=`<number>`</config>
+How many quick launch icons should appear in the Topbar by default (default: `3`)
 
 <config>io.ox/core//logoFileName=`<string>`</config>
 Change the default file name for the logo in the topbar. Default (`logo.png`)
@@ -82,50 +81,35 @@ or an App ID. I.e. `https://sample.com` or `io.ox/mail/main`. Default is unset.
 
 ## Notifications
 
-<config>io.ox/core//autoOpenNotificationarea=`<bool>`</config>
-Open notification area automatically on new notification.
+<config>io.ox/core//autoOpenNotification=`<bool>`</config>
+Open notification area automatically on new notification. Default is `true`.
 
 <config>io.ox/core//notificationsHidingTimer=`<number>`</config>
-Hide notifications for n milliseconds after the user clicks on 'Notify me again later' (default is 1800000 (30 minutes)).
+Hide notifications for n milliseconds after the user clicks on 'Notify me again later' (default is `1800000` (30 minutes)).
 
 <config>io.ox/core//showDesktopNotifications=`<bool>`</config>
 Show native desktop notifications. Default `true`.
 Important: Depends also on browser settings.
 
 <config>io.ox/core//properties/contactImageMaxWidth=`<number>`</config>
-Maximum target image width when croping contact/user images in pixels (default: 500).
+Maximum target image width when croping contact/user images in pixels (default: `500`).
 
 ## Feedback dialog
 
-<config>io.ox/core//feedback/show=`<bool>`</config>
-Show one or more feedback buttons. Default value is 'both' which shows a dropdown entry in the settings menu and a button in the main content window. (topbar/side/both).
+<config>io.ox/core//feedback/show=`<string>`</config>
+Show one or more feedback buttons. Default value is `both` which shows a dropdown entry in the settings menu and a button in the main content window (topbar/side/both).
 
 <config>io.ox/core//feedback/supportlink`<string>`</config>
-Hyperlink to a support site referenced in the feedback dialog.
+Hyperlink to a support site referenced in the feedback dialog. Default is unset.
 
 <config>io.ox/core//feedback/position`<string>`</config>
 Set position of the feedback button. Default value is `right`. (`left|right`).
 
 <config>io.ox/core//feedback/showHover=`<bool>`</config>
-Show rating string on mouse hover in feedback dialog.
+Show rating string on mouse hover in feedback dialog. Default `true`.
 
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
-Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running.
-
-## Misc
-
-<config>io.ox/core//groups/limit=`<number>`</config>
-Fetch limit for groups plugin when requesting details of members. Default `1000`
-
-<config>io.ox/core//refreshInterval=`<number>`</config>
-Automatic UI refresh interval in milliseconds (default 300000 (5 minutes)).
-
-<config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
-Enables/disables download pane for additional software components in settings.
-
-<config>io.ox/core//theme=`<string>`</config>
-Current user theme. Default `default`
-
+Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running. Default `true`.
 
 <config>io.ox/core//feedback/maxFeedbacks=`<number>`</config>
 maximum number of feedbacks that are allowed in one timeframe (works with relative and absolute dates)
@@ -140,8 +124,8 @@ Default: `false`
 
 ## Mail compose: tinyMCE text editor
 
-<config>io.ox/core//maxUploadIdleTimeout</config>
-Timeout for contenteditable-editor in milliseconds when adding inline images
+<config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
+Timeout in miliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
 
 <config>io.ox/core//tinyMCE/theme_advanced_buttons1=`<string>`</config>
 List of tinyMCE toolbar actions separated by space - targets toolbar1<br>
@@ -160,7 +144,6 @@ List of availabe fonts (also used for settings pane).
 Default:
 
     "System=-apple-system,BlinkMacSystemFont,helvetica,sans-serif;Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats"
-
 
 ## Metrics
 
@@ -210,7 +193,7 @@ Analytics URL, usually `https://www.google-analytics.com/analytics.js`
 Optional mappings for custom dimensions
 
 
-### Misc
+### Metrics: Misc
 
 <config>io.ox/core//tracking/console/enabled=`<bool>`</config>
 Enables debugging console adapter that logs events to browser console.
@@ -262,18 +245,17 @@ Check new password against a regular expression (i.e. "is there at least one upp
 Required special characters for new passwords
 
 
-### Client Onboarding
+## Client Onboarding
 <config>io.ox/core//features/clientOnboardingHint/enabled=`<bool>`</config>
 Enables a hint on mobiles to inform about the onboarding Wizard (true/false)
 
 <config>io.ox/core//features/clientOnboardingHint/remaining=`<number>`</config>
 Number of times hint is beeing shown. The protection of this setting needs to be disabled in any case.
 
+## Core: Misc
 
-## Misc
-
-<config>io.ox/core//autoLogout=`<bool>`</config>
-Timeout until a user is logged out automatically if inactive
+<config>io.ox/core//autoLogout=`<number>`</config>
+Timeout (in ms) until a user is logged out automatically if inactive
 
 <config>io.ox/core//autoStart=`<string>`</config>
 First App to start after login, Default: `io.ox/mail/main`
@@ -283,6 +265,80 @@ First App to start after login on mobile devices. Default: `io.ox/mail/main`
 
 <config>io.ox/core//selectionMode=`<string>`</config>
 Specifies behavior when selecting items in mail listview. Default: `normal` ('normal'|'alternative'|'simple')
+
+<config>io.ox/core//groups/limit=`<number>`</config>
+Fetch limit for groups plugin when requesting details of members. Default `1000`
+
+<config>io.ox/core//refreshInterval=`<number>`</config>
+Automatic UI refresh interval in milliseconds. Default is `300000` (5 minutes).
+
+<config>io.ox/core//settings/downloadsDisabled=`<bool>`</config>
+Enables/disables download pane for additional software components in settings. Default `false`.
+
+<config>io.ox/core//theme=`<string>`</config>
+Current user theme. Default is `default`
+
+# Onboarding
+
+To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
+The corresponding capabilites for the different apps are:
+
+- Mail App: `webmail mobile_mail_app`
+- Drive App: `infostore`
+- Calendar/ CalDav: `calendar caldav`
+- Address Book/ CardDav: `contacts carddav`
+- Exchange Active Sync: `active_sync`
+
+<config>io.ox/core//onboardingWizard=`<bool>`</config>
+Enabled new onboarding wizard and disables the old one
+
+<config>io.ox/onboarding//productNames/mail=`<string>`</config>
+Name of the webmail product. Defaults to `OX Mail`
+
+<config>io.ox/onboarding//productNames/drive=`<string>`</config>
+Name of the drive product. Defaults to `OX Drive`
+
+<config>io.ox/onboarding//android/storeIcon=`<string>`</config>
+Path to Google Play Store icon
+
+<config>io.ox/onboarding//android/mailapp/url=`<string>`</config>
+Link to mail app in Google Play Store
+
+<config>io.ox/onboarding//android/mailapp/icon=`<string>`</config>
+Path to mail app icon for Android
+
+<config>io.ox/onboarding//android/driveapp/url=`<string>`</config>
+Link to drive app in Google Play Store
+
+<config>io.ox/onboarding//android/driveapp/icon=`<string>`</config>
+Path to drive app icon for Android
+
+<config>io.ox/onboarding//ios/storeIcon=`<string>`</config>
+Path to iOS App Store icon
+
+<config>io.ox/onboarding//ios/mailapp/url=`<string>`</config>
+Link to mail app in iOS App Store
+
+<config>io.ox/onboarding//ios/mailapp/icon=`<string>`</config>
+Path to mail app icon for iOS
+
+<config>io.ox/onboarding//ios/driveapp/url=`<string>`</config>
+Link to drive app in iOS App Store
+
+<config>io.ox/onboarding//ios/driveapp/icon=`<string>`</config>
+Path to drive app icon for iOS
+
+<config>io.ox/onboarding//macos/storeIcon=`<string>`</config>
+Path to Mac App Store icon
+
+<config>io.ox/onboarding//macos/driveapp/url=`<string>`</config>
+Link to drive app in Mac App Store
+
+<config>io.ox/onboarding//macos/driveapp/icon=`<string>`</config>
+Path to drive app icon for MacOS
+
+<config>io.ox/onboarding//windows/driveapp/url=`<string>`</config>
+Link to installation file of drive client for Windows
 
 # Portal
 
@@ -318,7 +374,7 @@ Additional data like custom description or related configuration
 Widget type like `rss` or `stickyfile`
 
 
-## Misc
+## Portal: Misc
 
 <config>io.ox/portal//mobile/summaryView=`<bool>`</config>
 User setting, show only a small summary view of each widget on smartphones
@@ -433,7 +489,7 @@ Max size of returned characters for mail reply/forward in bytes (API parameter) 
 Max size of returned characters for mail viewing in bytes. Default: `102400` (100 kB)
 
 <config>io.ox/mail//features/instantAttachmentUpload=`<bool>`</config>
-Feature toggle to enable/disable instant attachment upload. Default is 'true'
+Feature toggle to enable/disable instant attachment upload. Default is `true`
 
 ### Mail compose: Image resize
 
@@ -482,7 +538,7 @@ Mobile signature as plain text string.
 <config>io.ox/mail//compose/signatureLimit=`<number>`</config>
 Number of signatures listed in options dropdown of mail compose (default 2).
 
-## Misc
+## Mail: Misc
 
 <config>io.ox/mail//attachOriginalMessage=`<bool>`</config>
 Attach original message on touch devices
@@ -493,7 +549,7 @@ Allow enabling unified inbox for an account at the "Add Mail account" dialog
 <config>io.ox/mail//features/authenticity=`<bool>`</config>
 Enables the authenticity feature. Please note that `com.openexchange.mail.authenticity.enabled` on MW has to be turned on as well. (default: false)
 
-<-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
+<!-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
 If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
 controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
@@ -638,7 +694,7 @@ Show only working hours in scheduling view. Default `true`
 <config>io.ox/calendar//scheduling/dateRange=`<string>`</config>
 Show either one week or the complete month in the view (`week` or `month`). Default `week`
 
-## Misc
+## Calendar: Misc
 
 <config>io.ox/calendar//defaultFolderColor=`<string>`</config>
 Calendar folder color as CSS HEX string, defaults to `#CFE6FF`
@@ -678,6 +734,9 @@ Allow comments when uploaded a new version of a file. Default `true`
 
 # Tasks
 
+<config>io.ox/tasks//currencies=`<array>`</config>
+Availabe currencies in create/edit dialog. Default `['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']`
+
 <config>io.ox/tasks//notifyAcceptedDeclinedAsCreator=`<bool>`</config>
 Receive notifications when a participant accepted or declined a task created by you. Default `false`
 
@@ -692,7 +751,7 @@ Receive notifications when a task in which you participate is created, modified 
 <config>plugins/portal//oxdriveclients/appIconAsBase64=`<string>`</config>
 App icon encoded as base64 string.
 
-<config>plugins/portal//oxdriveclients/l10nImages=`<string>`</config>
+<config>plugins/portal//oxdriveclients/l10nImages=`<array>`</config>
 Array of language strings like 'en,de,es'. This will indicate which localized app store images are present. Default `['de', 'en', 'es', 'fr', 'it', 'nl']`
 
 <config>plugins/portal//oxdriveclients/linkTo/[windows|android|ios|macos]=`<string>`</config>

@@ -238,6 +238,16 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             return this;
         },
 
+        hideFooter: function () {
+            this.$('.modal-footer').hide();
+            return this;
+        },
+
+        showFooter: function () {
+            this.$('.modal-footer').show();
+            return this;
+        },
+
         // Add a button
         //
         // options:
@@ -396,7 +406,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         }
     });
 
-    function close(e) {
+    function close(e, options) {
 
         if (!this.$el) return;
 
@@ -408,7 +418,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.trigger('close');
         var previousFocus = this.previousFocus;
         this.$el.remove();
-        open.remove(this);
+        open.remove(this, options);
         if (previousFocus) previousFocus.focus();
         return this;
     }
@@ -453,7 +463,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.queue.push(dialog);
         },
 
-        remove: function (dialog) {
+        remove: function (dialog, options) {
+            if (options && options.resetDialogQueue) this.queue = [];
             this.queue = _(this.queue).without(dialog);
             if (this.queue.length) _(this.queue).last().resume();
         }

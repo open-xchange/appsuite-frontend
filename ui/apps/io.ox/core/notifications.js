@@ -119,7 +119,7 @@ define('io.ox/core/notifications', [
 
                     //#. %1$d number of notifications in notification area
                     //#, c-format
-                    self.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
+                    self.$el.attr('title', gt.ngettext('%1$d notification.', '%1$d notifications.', count, count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
                 });
 
                 subview.on('autoopen', _.bind(function () {
@@ -134,12 +134,13 @@ define('io.ox/core/notifications', [
         render: function () {
             var self = this,
                 subviews = this.model.get('subviews'),
-                cappedCount = Math.min(this.model.get('count'), 99),
+                count = this.model.get('count'),
+                cappedCount = Math.min(count, 99),
                 markedForRedraw = this.model.get('markedForRedraw');
 
             //#. %1$d number of notifications in notification area
             //#, c-format
-            this.$el.attr('title', gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', this.model.get('count')), this.model.get('count'))).find('.number').text(cappedCount + (this.model.get('count') > 100 ? '+' : ''));
+            this.$el.attr('title', gt.ngettext('%1$d notification.', '%1$d notifications.', count, count)).find('.number').text(cappedCount + (count > 100 ? '+' : ''));
             this.model.set('markedForRedraw', {});
 
             self.listNode.find('.no-news-message,.notification-area-header,.desktop-notification-info').remove();
@@ -256,7 +257,8 @@ define('io.ox/core/notifications', [
                                 var node = popup.closest('.io-ox-sidepopup');
                                 if (!_.device('smartphone')) {
                                     node.css({
-                                        right: '585px'
+                                        // adjust to dropdown position (might vary depending on active features like switchboard etc)
+                                        right: $('#io-ox-windowmanager-pane').innerWidth() - self.dropdown.$el.position().left + self.dropdown.$ul.outerWidth() - 34 + 'px'
                                     });
                                 }
                                 node.addClass('io-ox-notifications-sidepopup first');

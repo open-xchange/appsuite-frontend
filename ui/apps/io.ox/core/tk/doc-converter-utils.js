@@ -108,13 +108,12 @@ define('io.ox/core/tk/doc-converter-utils', [
         var params = {
             action: 'convertdocument',
             convert_format: 'image',
-            convert_action: 'beginconvert'
+            convert_action: 'beginconvert',
+            // only resolve if response contains page count, otherwise reject
+            reject_on_empty_page_count: true
         };
 
-        return Utils.sendConverterRequest(model, params).then(function (response) {
-            // only resolve if response contains page count, otherwise reject
-            return (response && _.isNumber(response.pageCount)) ? $.Deferred().resolve(response) : $.Deferred().reject(response);
-        });
+        return Utils.sendConverterRequest(model, params);
     };
 
     /**
@@ -175,7 +174,7 @@ define('io.ox/core/tk/doc-converter-utils', [
         // reject, if the response contains an error; otherwise resolve.
         // e.g. the document endconvert request does not return a response in case of success.
         promise = ajaxRequest.then(function (response) {
-            return (response && response.cause) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
+            return (response && response.cause) || (params.reject_on_empty_page_count && response && !_.isNumber(response.pageCount)) ? $.Deferred().reject(response) : $.Deferred().resolve(response);
         });
 
         // add an abort() method, forward invocation to AJAX request

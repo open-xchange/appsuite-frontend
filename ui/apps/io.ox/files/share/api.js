@@ -58,10 +58,14 @@ define('io.ox/files/share/api', [
             return this.has('com.openexchange.share.extended' + (this.isFolder() ? 'Permissions' : 'ObjectPermissions'));
         },
 
-        getOwner: function () {
+        getEntity: function () {
             // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
             // shared folder only have admins, no owner, because it's not possible to determine the right one
             return this.get('created_by') || (folderAPI.is('insideDefaultfolder', this.attributes) ? ox.user_id : null);
+        },
+
+        getIdentifier: function () {
+            return this.get('created_from') && this.get('created_from').identifier;
         },
 
         getDisplayName: function () {
@@ -276,7 +280,7 @@ define('io.ox/files/share/api', [
                     tree: 0,
                     all: 0,
                     altNames: true,
-                    columns: '1,2,5,20,109,700,7010',
+                    columns: '1,2,5,20,109,700,7010,7040,703,702',
                     timezone: 'UTC'
                 }
             });
@@ -290,6 +294,7 @@ define('io.ox/files/share/api', [
             var columns = [
                 'id',
                 'created_by',
+                'created_from',
                 'last_modified',
                 'title',
                 'module',
@@ -384,6 +389,22 @@ define('io.ox/files/share/api', [
                 data: { entities: [entity] },
                 appendColumns: false
             });
+        },
+
+        /**
+         * get a link to open a federated share as guest user
+         * @return { object }   a file descriptor
+         */
+        getFederatedSharingRedirectUrl: function (item) {
+
+            var baseUrl = window.ox.abs + window.ox.root;
+            var apiUrl = '/api/files?action=backwardLink';
+            var sessionParam = '&session=' + encodeURIComponent(ox.session);
+            var redirectParam = '&redirect=true';
+            var folderParam = '&folder=' + encodeURIComponent(item.folder_id);
+            var itemParam =  '&item=' + encodeURIComponent(item.id);
+
+            return baseUrl + apiUrl + sessionParam + redirectParam + folderParam + itemParam;
         }
     };
 

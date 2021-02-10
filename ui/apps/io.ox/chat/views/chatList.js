@@ -13,102 +13,125 @@
 
 define('io.ox/chat/views/chatList', [
     'io.ox/backbone/views/disposable',
-    'io.ox/chat/views/state',
-    'io.ox/chat/data'
-], function (DisposableView, StateView) {
+    'io.ox/chat/views/chatListEntry',
+    'gettext!io.ox/chat'
+], function (DisposableView, ChatListEntryView, gt) {
 
     'use strict';
 
     var ChatListView = DisposableView.extend({
 
+        tagName: 'li',
+        attributes: { role: 'treeitem' },
         className: 'chats',
 
-        initialize: function () {
+        initialize: function (options) {
+
+            this.options = _.extend({ header: gt('Chat list'), filter: _.constant(true) }, options);
+
+            // via initialize, never on prototype level
+            this.onAdd = _.debounce(this.onAdd);
+            this.onSort = _.debounce(this.onSort);
+
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:title': this.onChangeTitle,
-                'change:unseen': this.onChangeUnseen,
-                'change:modified': this.onChangeModified,
-                'change:open': this.onChangeOpen
+                'change:active': this.addOrRemove,
+                'change:favorite': this.addOrRemove,
+                'change:lastMessage': this.onChangeLastMessage,
+                'sort': this.onSort
             });
+
+            this.$el.attr('aria-label', this.options.header);
+            this.$ul = $('<ul class="chat-list" role="group">');
         },
 
         render: function () {
-            // rendering happens via onAdd
-            this.collection.fetch();
+            // render existing items
+            var items = this.getItems();
+            this.toggle(items);
+            this.$ul.append(
+                items.map(function (model) {
+                    return new ChatListEntryView({ model: model }).$el;
+                })
+            );
+            this.$el.append(
+                $('<h2 aria-hidden="true">').text(this.options.header),
+                this.$ul
+            );
             return this;
         },
 
         renderItem: function (model) {
-            return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                .attr('data-cid', model.cid)
-                .toggleClass('unseen', model.get('unseen') > 0)
-                .append(
-                    this.renderIcon(model),
-                    $('<span class="label label-default">').text(model.get('unseen')),
-                    $('<div class="title">').text(model.getTitle())
-                );
+            var node = this.getNode(model);
+            if (node.length) return node;
+            return new ChatListEntryView({ model: model }).$el;
         },
 
-        renderIcon: function (model) {
-            switch (model.get('type')) {
-                case 'private':
-                    return $('<span class="btn-icon">').append(
-                        new StateView({ model: model.getFirstMember() }).render().$el.addClass('small')
-                    );
-                case 'group':
-                    return $('<i class="fa fa-group btn-icon" aria-hidden="true">');
-                case 'channel':
-                    return $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">');
-                // no default
-            }
+        toggle: function (items) {
+            this.$el.toggle((items || this.getItems()).length > 0);
         },
 
         getItems: function () {
-            return this.collection.getOpen();
+            return _(this.collection.getActive()).filter(this.options.filter);
         },
 
         getNode: function (model) {
-            return this.$('[data-cid="' + model.cid + '"]');
+            var node = this.$('[data-cid="' + model.get('roomId') + '"]') || this.$('[data-cid="' + model.cid + '"]');
+            if (node.length === 0) node = this.$('[data-cid="' + model.cid + '"]');
+            return node;
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
-            if (this.disposed) return;
+        addOrRemove: function (model) {
+            var visible = model.isActive() && this.options.filter(model);
+            if (visible) this.onAdd(this.model, this.collection, { changes: { added: [model] } });
+            else this.onRemove(model);
+        },
 
-            this.$el.prepend(
-                options.changes.added
-                .filter(function (model) { return model.isOpen(); })
-                .map(this.renderItem, this)
-            );
-        }, 1),
+        onSort: function () {
+            if (this.disposed) return;
+            var items = this.getItems().map(this.renderItem, this);
+            if (items.length > 0) items[0].attr({ 'tabindex': 0 });
+            this.$ul.append(items);
+            this.toggle();
+        },
+
+        onAdd: function (model, collection, options) {
+            if (this.disposed) return;
+            var all = this.getItems();
+            options.changes.added
+                .filter(function (model) { return model.isActive(); })
+                .filter(this.options.filter)
+                .forEach(function (model) {
+                    var index = all.indexOf(model);
+                    if (index === 0) {
+                        this.$ul.prepend(this.renderItem(model));
+                    } else {
+                        var prevModel = all[index - 1];
+                        this.getNode(prevModel).after(this.renderItem(model));
+                    }
+                }.bind(this));
+            this.toggle();
+        },
 
         onRemove: function (model) {
             this.getNode(model).remove();
+            this.toggle();
         },
 
-        onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
-        },
-
-        onChangeUnseen: function (model) {
-            var count = model.get('unseen');
-            this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count);
-        },
-
-        onChangeModified: function (model) {
+        onChangeLastMessage: function (model) {
+            var previousMessageId = (model.previous('lastMessage') || {}).messageId,
+                currentMessageId = (model.changed.lastMessage || {}).messageId;
+            if (previousMessageId === currentMessageId) return;
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
-            this.$el.prepend(node);
+            this.$ul.prepend(node);
             if (hasFocus) node.focus();
         },
 
-        onChangeOpen: function (model, value) {
-            if (value) {
-                this.$el.prepend(this.renderItem(model));
-            } else {
-                this.onRemove(model);
-            }
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
 

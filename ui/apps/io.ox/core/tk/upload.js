@@ -399,7 +399,7 @@ define('io.ox/core/tk/upload', [
         // returned deferred resolves or get's rejected with a list of error messages
         // TODO: unit test
         this.validateFiles = function (newFiles, options) {
-            if (!options.folder || delegate.type === 'importEML') return $.when([]);
+            if (!options.folder || (delegate && delegate.type === 'importEML')) return $.when([]);
             return folderAPI.get(options.folder).then(function (folder) {
                 // no quota check
                 if (!folderAPI.is('infostore', folder)) return $.when([]);
@@ -423,10 +423,15 @@ define('io.ox/core/tk/upload', [
             var self = this,
                 newFiles = [].concat(file);
             this.validateFiles(newFiles, options).then(function () {
-                _(newFiles).each(function (file) {
-                    files.push({ file: file, options: options });
-                });
+                self.fillQueue(file, options);
                 self.queueChanged();
+            });
+        };
+
+        this.fillQueue = function (file, options) {
+            var newFiles = [].concat(file);
+            _(newFiles).each(function (file) {
+                files.push({ file: file, options: options });
             });
         };
 

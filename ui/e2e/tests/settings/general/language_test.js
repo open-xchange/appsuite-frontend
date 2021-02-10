@@ -14,15 +14,15 @@
 
 Feature('Settings > Basic');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7757] Set langugae', (I) => {
+Scenario('[C7757] Set langugae', ({ I }) => {
 
     // check major languages
     var languages = {

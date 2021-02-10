@@ -519,7 +519,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             // consider mousedown only if unselected and not in multiple-mode
             if (e.type === 'mousedown' && !this.isMultiple(e) && $(e.currentTarget).is('.selected')) return;
             // ignore clicks in multiple-mode
-            if (e.type === 'click' && this.isMultiple(e) && !isTouch) return;
+            if (e.type === 'click' && this.isMultiple(e)) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
@@ -889,13 +889,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 .on('mouseup', $.proxy(this.onMouseup, this))
                 // normal click/keyboard navigation
                 .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-                .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
+                .on('mousedown click', SELECTABLE, $.proxy(this.onClick, this))
                 // help accessing the list via keyboard if focus is outside
                 .on('focus', $.proxy(function () {
                     if (this.view.mousedown) return;
                     this.onFocus();
                 }, this))
-                .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
+                .on('click', SELECTABLE, $.proxy(function (e) {
                     if (!this.isMultiple(e)) this.triggerAction(e);
                 }, this))
                 // double click
@@ -907,7 +907,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 .on('contextmenu', function (e) { e.preventDefault(); });
 
             if (this.view.options.swipe) {
-                if (isTouch && _.device('android || ios') && _.device('smartphone') && !isLegacyWebview) {
+                if (isTouch && _.device('android || ios') && !isLegacyWebview) {
                     this.view.$el
                         .on('touchstart', SELECTABLE, this, this.onTouchStart)
                         .on('touchmove', SELECTABLE, this, this.onTouchMove)
@@ -1025,6 +1025,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         isMultiple: function () {
             // allow select/deselect via space
             return true;
+        },
+
+        isRange: function () {
+            return false;
         },
 
         onSelectionEmpty: function () {

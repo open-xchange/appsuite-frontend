@@ -89,6 +89,13 @@ define('io.ox/calendar/folder-select-support', [
             if (_.isEqual(self.folders, list)) return;
             setFolders.call(self, list);
         });
+
+        // react to folder subscription change
+        folderAPI.on('change:subscription', function (id, changes) {
+            if (changes.subscribed === false) {
+                self.remove(id);
+            }
+        });
     }
 
     FolderSelection.prototype.isSingleSelection = function () {

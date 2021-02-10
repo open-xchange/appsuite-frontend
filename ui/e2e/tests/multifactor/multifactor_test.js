@@ -26,7 +26,7 @@ function getTotp(secret) {
     return totp.generate();
 }
 
-Before(async (users) => {
+Before(async ({ users }) => {
     const user = await users.create();
     await Promise.all([
         user.context.hasCapability('multifactor'),
@@ -34,7 +34,7 @@ Before(async (users) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users[0].context.doesntHaveCapability('multifactor');
     await users.removeAll();
 });
@@ -87,7 +87,7 @@ async function handleBackup({ cancel } = {}) {
     return recovery;
 }
 
-Scenario('Add TOTP multifactor and login using', async (I, users) => {
+Scenario('Add TOTP multifactor and login using', async ({ I, users }) => {
 
     const [user] = users;
     // Login to settings
@@ -110,7 +110,7 @@ Scenario('Add TOTP multifactor and login using', async (I, users) => {
 
 });
 
-Scenario('TOTP multifactor bad entry', async (I, users) => {
+Scenario('TOTP multifactor bad entry', async ({ I, users }) => {
 
     const [user] = users;
     await user.hasConfig('com.openexchange.multifactor.maxBadAttempts', 4);
@@ -144,7 +144,7 @@ Scenario('TOTP multifactor bad entry', async (I, users) => {
 
 });
 
-Scenario('Add SMS multifactor and login using', async (I, users) => {
+Scenario('Add SMS multifactor and login using', async ({ I, users }) => {
 
     const [user] = users;
     // Login to settings
@@ -166,7 +166,7 @@ Scenario('Add SMS multifactor and login using', async (I, users) => {
 
 });
 
-Scenario('Add SMS multifactor, then lost device', async (I, users) => {
+Scenario('Add SMS multifactor, then lost device', async ({ I, users }) => {
 
     const [user] = users;
     // Login to settings
@@ -198,7 +198,7 @@ Scenario('Add SMS multifactor, then lost device', async (I, users) => {
 
 });
 
-Scenario('Add multiple multifactors, then login', async (I, users) => {
+Scenario('Add multiple multifactors, then login', async ({ I, users }) => {
 
     const [user] = users;
     // Login to settings

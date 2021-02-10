@@ -14,15 +14,15 @@
 /// <reference path="../../../steps.d.ts" />
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7866] Set all-day appointments to be marked as free', async function (I) {
+Scenario('[C7866] Set all-day appointments to be marked as free', async function ({ I }) {
 
     const freeappointmentsubject = 'Free Appt',
         reservedappointmentsubject = 'Reserved Appt',

@@ -14,14 +14,14 @@
 
 Feature('General > App Launcher');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7343] Launch "Portal" application', async function (I) {
+Scenario('[C7343] Launch "Portal" application', async function ({ I }) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -32,7 +32,7 @@ Scenario('[C7343] Launch "Portal" application', async function (I) {
     I.waitForElement('.greeting-phrase');
 });
 
-Scenario('[C7344] Launch "E-Mail" application', async function (I) {
+Scenario('[C7344] Launch "E-Mail" application', async function ({ I }) {
     I.login('app=io.ox/portal');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -43,7 +43,7 @@ Scenario('[C7344] Launch "E-Mail" application', async function (I) {
     I.waitForText('Compose');
 });
 
-Scenario('[C7345] Launch "Address Book" application', async function (I) {
+Scenario('[C7345] Launch "Address Book" application', async function ({ I }) {
     I.login('app=io.ox/portal');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -55,7 +55,7 @@ Scenario('[C7345] Launch "Address Book" application', async function (I) {
     I.seeElement('.classic-toolbar[aria-label="Address Book toolbar. Use cursor keys to navigate."]');
 });
 
-Scenario('[C7346] Launch "Calendar" application', async function (I) {
+Scenario('[C7346] Launch "Calendar" application', async function ({ I }) {
     I.login('app=io.ox/portal');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -67,7 +67,7 @@ Scenario('[C7346] Launch "Calendar" application', async function (I) {
     I.seeElement('.classic-toolbar[aria-label="Calendar toolbar. Use cursor keys to navigate."]');
 });
 
-Scenario('[C7347] Launch "Drive" application', async function (I) {
+Scenario('[C7347] Launch "Drive" application', async function ({ I }) {
     I.login('app=io.ox/portal');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -78,17 +78,19 @@ Scenario('[C7347] Launch "Drive" application', async function (I) {
     I.waitForText('My files');
 });
 
-Scenario('[C7350] Launch "Settings" application', async function (I) {
+Scenario('[C7350] Launch "Settings" application', async function ({ I }) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
-    I.waitForElement('#io-ox-settings-topbar-icon');
-    I.click('~Settings', '#io-ox-settings-topbar-icon');
+    I.waitForElement('#io-ox-topbar-settings-dropdown-icon');
+    I.click('~Settings', '#io-ox-topbar-settings-dropdown-icon');
+    I.waitForVisible('#topbar-settings-dropdown');
+    I.click('Settings', '#topbar-settings-dropdown');
     I.waitForElement('.settings-detail-pane');
     I.seeElement('.settings-detail-pane');
 });
 
-Scenario('[C7351] Trigger refresh', async function (I) {
+Scenario('[C7351] Trigger refresh', async function ({ I }) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
@@ -97,7 +99,7 @@ Scenario('[C7351] Trigger refresh', async function (I) {
     I.waitForElement('.fa-spin-paused.fa-refresh');
 });
 
-Scenario('[C234516] Launch "Tasks" application', async function (I) {
+Scenario('[C234516] Launch "Tasks" application', async function ({ I }) {
     I.login('app=io.ox/mail');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');

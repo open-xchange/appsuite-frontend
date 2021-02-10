@@ -17,8 +17,9 @@ define('io.ox/settings/accounts/views', [
     'io.ox/settings/util',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/views/disposable',
+    'io.ox/oauth/keychain',
     'gettext!io.ox/settings/accounts'
-], function (ext, settingsUtil, listUtils, DisposableView, gt) {
+], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt) {
     'use strict';
 
     var createExtpointForSelectedAccount = function (args) {
@@ -68,7 +69,8 @@ define('io.ox/settings/accounts/views', [
             getTitle: function () {
                 // mail accounts are special, displayName might be different from account name, want account name, here
                 var titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
-
+                // no translation needed, this is only a dev feature, for convenience. Those accounts are only displayed when ox.debug is set to true
+                if (/xox\d+|xctx\d+/.test(this.model.get('filestorageService'))) return 'Shared folders from ' + this.model.get(titleAttribute);
                 return this.model.get(titleAttribute);
             },
 
@@ -115,7 +117,8 @@ define('io.ox/settings/accounts/views', [
 
                 e.preventDefault();
                 var account = this.model.pick('id', 'accountType', 'folder', 'rootFolder', 'filestorageService'),
-                    self = this;
+                    self = this,
+                    parentAccountRemoved;
                 if (account.accountType === 'fileAccount') {
                     account.folder = account.rootFolder;
                 }
@@ -131,11 +134,20 @@ define('io.ox/settings/accounts/views', [
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this,
-                            req, opt;
+                            req, opt,
+                            parentModel = oauthAPI.accounts.findWhere({ serviceId: self.model.attributes.serviceId });
+
+                        function simplifyId(id) {
+                            return id.substring(id.lastIndexOf('.') + 1);
+                        }
 
                         if (account.accountType === 'fileAccount') {
                             req = 'io.ox/core/api/filestorage';
                             opt = { id: account.id, filestorageService: account.filestorageService };
+                        } else if (parentModel && parentModel.get('associations').length === 1) {
+                            opt = { id: parentModel.get('id'), accountType: simplifyId(parentModel.get('serviceId')) };
+                            req = 'io.ox/keychain/api';
+                            parentAccountRemoved = true;
                         } else {
                             // use correct api, folder API if there's a folder and account is not a mail account,
                             // keychain API otherwise
@@ -153,8 +165,12 @@ define('io.ox/settings/accounts/views', [
                                         return;
                                     }
 
-                                    self.model.collection.remove(self.model);
-                                    popup.close();
+                                    if (parentAccountRemoved) {
+                                        popup.close('', { resetDialogQueue: true });
+                                    } else {
+                                        self.model.collection.remove(self.model);
+                                        popup.close();
+                                    }
                                 },
                                 function fail() {
                                     popup.close();

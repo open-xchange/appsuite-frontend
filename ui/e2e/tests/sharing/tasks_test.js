@@ -15,20 +15,20 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: shaky (element (body) is not in DOM or there is no element(body) with text "The share you are looking for does not exist." after 30 sec)
-Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users, tasks, mail, dialogs) => {
+Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async ({ I, users, tasks, mail, dialogs }) => {
     let url;
     // Alice shares a folder with 2 tasks
-    session('Alice', async () => {
+    await session('Alice', async () => {
         I.login('app=io.ox/tasks');
         tasks.waitForApp();
 
@@ -43,7 +43,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         tasks.create();
 
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForText('Permissions for folder');
 
         I.click('~Select contacts');
@@ -55,7 +55,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
         I.waitForVisible(locate('.permissions-view .row').at(2));
-        I.click('Author');
+        I.click('Author', '.share-pane');
         I.waitForText('Viewer', '.dropdown');
         I.click('Viewer');
 
@@ -63,12 +63,17 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
+        I.clickDropdown('Share');
+        dialogs.waitForVisible();
+        I.waitForText('Invited people only', 5);
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+        url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
         url = Array.isArray(url) ? url[0] : url;
-        I.click('Close');
+        dialogs.clickButton('Share');
+        I.waitForDetached('.modal-dialog');
     });
 
     // Bob receives the share
@@ -108,7 +113,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
 
     session('Alice', () => {
         I.openFolderMenu('Tasks');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
@@ -117,10 +122,13 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.waitForDetached('.modal-dialog');
 
         I.click({ css: '.folder-tree [title="Actions for Tasks"]' });
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        I.click('Remove link');
+        I.clickDropdown('Share');
+        dialogs.waitForVisible();
+        I.waitForText('Invited people only', 5);
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        dialogs.clickButton('Cancel');
+        I.waitForDetached('.modal-dialog');
     });
 
     session('Bob', () => {

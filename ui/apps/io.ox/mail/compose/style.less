@@ -170,6 +170,7 @@
             font-size: 13px;
             line-height: 20px;
             font-weight: bold;
+            min-width: 48px;
             a { color: @maillabel; }
         }
 
@@ -376,6 +377,7 @@
                 font-size: @font-size-mobile;
                 font-weight: 400;
                 color: #aaa;
+                min-width: 48px;
             }
 
             .sender { display: none; }
@@ -412,10 +414,6 @@
             &.mce-edit-focus:focus { box-shadow: none; }
         }
 
-        .twitter-typeahead {
-            min-width: 7em;
-        }
-
         .composetoolbar-mobile {
             &:first-child { padding-left: 0; }
             padding-right: 16px;
@@ -424,6 +422,8 @@
                 margin-bottom: 4px;
                 &.signatures { margin-right: 15px; }
             }
+
+            .btn.btn-link { padding-left: 0; }
         }
 
         .mail-attachment-list {

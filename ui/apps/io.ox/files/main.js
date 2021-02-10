@@ -89,6 +89,17 @@ define('io.ox/files/main', [
             events.listenTo(events, 'refresh-file', function (parameters) {
                 api.propagate('refresh:file', _.pick(parameters, 'folder_id', 'id'));
             });
+            events.listenTo(events, 'add-file', function (parameters) {
+                api.propagate('add:file', _.pick(parameters, 'folder_id', 'id'));
+            });
+            events.listenTo(events, 'upload-file', function (parameters) {
+                var folderId = parameters ? parameters.folder_id : null;
+                if (folderId && folderId !== app.folder.get()) {
+                    api.pool.resetFolder(folderId);
+                } else {
+                    app.listView.reload();
+                }
+            });
         },
 
         /*
@@ -218,6 +229,99 @@ define('io.ox/files/main', [
             folderAPI.on('error:FILE_STORAGE-0004', function (error, id) {
                 if (!id) return;
                 folderAPI.pool.removeCollection(id, { removeModels: true });
+            });
+        },
+
+        'account-errors': function (app) {
+
+            // account errors are shown in EVERY folder that are part of that account
+            app.treeView.on('click:account-error', function (folder) {
+                var accountError = folder['com.openexchange.folderstorage.accountError'];
+                if (!accountError) return;
+
+                require(['io.ox/backbone/views/modal', 'io.ox/backbone/mini-views'], function (ModalDialog, miniViews) {
+                    new ModalDialog({
+                        model: new Backbone.Model(),
+                        point: 'io.ox/files/account-errors',
+                        //#. title of dialog when contact subscription needs to be recreated on error
+                        title: gt('Error')
+                    })
+                    .extend({
+                        default: function () {
+                            this.account = filestorageAPI.getAccountsCache().findWhere({ qualifiedId: folder.account_id });
+
+                            this.$body.append(
+                                $('<div class="form-group">').append(
+                                    $('<div class="info-text">')
+                                        .css('word-break', 'break-word')
+                                        .text(accountError.error + ' ' + accountError.error_desc)
+                                        .addClass(accountError.code.toLowerCase())
+                                )
+                            );
+                        },
+                        // password outdated
+                        password: function () {
+                            if (!/^(LGI-0025)$/.test(accountError.code)) return;
+                            // improve error message
+                            this.$('.info-text').text(gt('The password was changed recently. Please enter the new password.'));
+                            // fallback
+                            if (!this.account) return;
+                            // input
+                            var guid = _.uniqueId('form-control-label-');
+                            this.$body.append(
+                                $('<div class="form-group">').append(
+                                    $('<label>').attr('for', guid).text(gt('Password')),
+                                    new miniViews.PasswordView({
+                                        name: 'password',
+                                        model: this.model,
+                                        id: guid,
+                                        autocomplete: false,
+                                        options: { mandatory: true } }).render().$el
+                                )
+                            );
+                            // button
+                            this.addButton({ label: gt('Save'), action: 'save' })
+                                .on('save', function () {
+                                    var password = this.model.get('password'),
+                                        data = this.account.pick('id', 'filestorageService', 'displayName');
+                                    // prevent shared 'configuration' object
+                                    _.extend(data, { configuration: { url: this.account.get('configuration').url, password: password } });
+                                    filestorageAPI.updateAccount(data).fail(notifications.yell);
+                                }.bind(this));
+                        },
+                        // all other non credentials related errors
+                        refresh: function () {
+                            if (/^(LGI-0025)$/.test(accountError.code)) return;
+                            this.addButton({ label: gt('Retry'), action: 'retry' })
+                                .on('retry', function () {
+                                    folderAPI.list(10, { cache: false, force: true }).fail(notifications.yell);
+                                });
+                        },
+                        unsubscribe: function () {
+                            // currently mw does not support unsubscribe when password changed
+                            if (/^(LGI-0025)$/.test(accountError.code)) return;
+                            this.addAlternativeButton({ label: gt('Hide folder'), action: 'unsubscribe' })
+                            .on('unsubscribe', function () {
+                                folderAPI.update(folder.id, { subscribed: false }).then(function () {
+                                    folderAPI.refresh();
+                                }, function (e) {
+                                    notifications.yell(e);
+                                });
+                            });
+                        },
+                        // all permanent errors
+                        close: function () {
+                            var closeButton = this.$footer.find('[data-action="cancel"]');
+                            // is primary
+                            var isPrimary = !this.$footer.find('button:not(.pull-left)').length;
+                            if (isPrimary) closeButton.addClass('btn-primary');
+                            // should be labled as 'Cancel' for outdated password
+                            if (/^(LGI-0025)$/.test(accountError.code)) closeButton.text(gt('Cancel'));
+                        }
+                    })
+                    .addButton({ className: 'btn-default' })
+                    .open();
+                });
             });
         },
 
@@ -1045,8 +1149,13 @@ define('io.ox/files/main', [
                 }
             }, 100));
             // use throttled updates for add:file - in case many small files are uploaded
-            api.on('add:file', _.throttle(function () {
-                app.listView.reload();
+            api.on('add:file', _.throttle(function (file) {
+                // if file not in current folder displayed,
+                if (file && file.folder_id && (file.folder_id !== app.folder.get())) {
+                    api.pool.resetFolder(file.folder_id);
+                } else {
+                    app.listView.reload();
+                }
             }, 10000));
             // always refresh when the last file has finished uploading
             api.on('stop:upload', _.bind(app.listView.reload, app.listView));
@@ -1072,29 +1181,45 @@ define('io.ox/files/main', [
          */
         'select-uploaded-files': function (app) {
             // listen
-            api.on('stop:upload', function (requests) {
+            api.on('stop:upload', function (requests, files) {
                 api.collectionLoader.collection.once('reload', function () {
                     $.when.apply(this, requests).done(function () {
-                        var files,
+                        var newItemsCid,
                             listView = app.listView,
                             selection = listView.selection,
                             // selection array to select after upload
-                            items;
+                            itemsToSelect,
+                            folderCids,
+                            fileCids,
+                            newfolderIds;
 
-                        files = _(arguments).map(_.cid);
+                        // all uploaded files
+                        fileCids = _(arguments).map(_.cid);
 
-                        items = selection.getItems(function () {
+                        // get all uploaded folders,
+                        // using just the folder_ids of files doesn't work for nested empty folders
+                        newfolderIds = _.unique(_.reduce(files, function (collector, obj) {
+                            // cases to think about:
+                            //  1. upload a folder with sub folders -> uploads are added to the queue per folder, but all folders are created before
+                            //  2. add additional items to the upload queue during a currently running upload
+                            var createdFoldersByUpload = _.property(['options', 'currentUploadInfo', 'createdFoldersByUpload'])(obj);
+                            return collector.concat(createdFoldersByUpload);
+                        }, []));
+                        folderCids = _(newfolderIds).map(function (folder_id) { return listView.createFolderCompositeKey(folder_id); });
+                        newItemsCid = fileCids.concat(folderCids);
+
+                        itemsToSelect = selection.getItems(function () {
                             // add already rendered items to selection array
-                            var position = files.indexOf($(this).attr('data-cid'));
+                            var position = newItemsCid.indexOf($(this).attr('data-cid'));
                             if (position >= 0) {
-                                delete files[position];
+                                delete newItemsCid[position];
                             }
                             return position >= 0;
                         });
 
                         // limit selectable items to PRIMARY_PAGE_SIZE
                         var lastPosition = api.collectionLoader.PRIMARY_PAGE_SIZE - selection.getItems().length;
-                        _.each(_.without(files, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
+                        _.each(_.without(newItemsCid, undefined).slice(0, lastPosition > 0 ? lastPosition : 0), function (cid) {
                             var file = api.pool.get('detail').get(cid);
                             // select only if the current folder is the upload folder
                             if (file && app.folder.get() === file.get('folder_id')) {
@@ -1103,19 +1228,18 @@ define('io.ox/files/main', [
                                         _.each(selection.getItems(), function (item) {
                                             if ($(item).attr('data-cid') === model.cid) {
                                                 // add items to selection array after rendering
-                                                items.push(item);
+                                                itemsToSelect.push(item);
                                             }
                                         });
                                         // select all items from selectiona array after rendering
-                                        selection.selectAll(items);
+                                        selection.selectAll(itemsToSelect);
                                     });
                                 }
                             }
                         });
-
                         // deselect all items
                         selection.selectNone();
-                        selection.selectAll(items);
+                        selection.selectAll(itemsToSelect);
                     });
                 });
             });
@@ -1598,7 +1722,6 @@ define('io.ox/files/main', [
         'account-error-handling': function (app) {
 
             app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
-                console.log(folderId, callbackEvent, data);
                 var node = app.treeView.getNodeView(folderId + '/'),
                     updateNode = function (node) {
                         node.showStatusIcon(gt('There is a problem with this account. Click for more information'), callbackEvent || 'checkAccountStatus', data || node.options.model_id, overwrite);

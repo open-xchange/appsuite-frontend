@@ -50,6 +50,8 @@ define('io.ox/core/settings/downloads/pane', [
                 langs = driveClientsSettings.get('l10nImages'),
                 imagePath = ox.abs + ox.root + '/apps/plugins/portal/oxdriveclients/img/';
 
+            // convenience: support string of comma separated values
+            langs = _.isString(langs) ? langs.split(',') : langs;
             platform = platform.toLowerCase();
 
             // fallback
@@ -61,7 +63,10 @@ define('io.ox/core/settings/downloads/pane', [
 
             return $('<a class="shoplink" target="_blank">').attr('href', url).append(
                 $img,
-                $('<span class="sr-only">').text(gt.format(gt('Download the %s client for %s'), productName, platform)));
+                //#. %1$s is the product name
+                //#. %2$s is the platform
+                //#, c-format
+                $('<span class="sr-only">').text(gt('Download the %1$s client for %2$s', productName, platform)));
         };
 
         ext.point('io.ox/core/settings/downloads/pane/detail').extend({
@@ -74,7 +79,7 @@ define('io.ox/core/settings/downloads/pane', [
                     hasWindowsClient = standaloneClient || products['com.openexchange.updater.drive'],
                     windowsClientUrl = ox.apiRoot + linkTo.Windows + '?session=' + ox.session,
                     //#. String will include the product name, i.e. "OX Drive for Windows"
-                    windowsClientLabel = gt.format(gt('%s client for Windows'), productName);
+                    windowsClientLabel = gt('%s client for Windows', productName);
 
                 this.append(
                     $('<section class="oxdrive">').append(
@@ -88,17 +93,17 @@ define('io.ox/core/settings/downloads/pane', [
                             ) : [],
                             $('<div class="shop-link-container">').append(
                                 //#. String will include the product name, "OX Drive for Mac OS"
-                                gt.format(gt('%s client for Mac OS'), productName),
+                                gt('%s client for Mac OS', productName),
                                 getShopLinkWithImage('mac_os', linkTo['Mac OS'])
                             ),
                             $('<div class="shop-link-container">').append(
                                 //#. String will include the product name, i.e. "OX Drive for iOS"
-                                gt.format(gt('%s client for iOS'), productName),
+                                gt('%s client for iOS', productName),
                                 getShopLinkWithImage('iOS', linkTo.iOS)
                             ),
                             $('<div class="shop-link-container">').append(
                                 //#. String will include the product name, i.e. "OX Drive for Android"
-                                gt.format(gt('%s client for Android'), productName),
+                                gt('%s client for Android', productName),
                                 getShopLinkWithImage('Android', linkTo.Android)
                             )
                         )

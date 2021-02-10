@@ -26,7 +26,7 @@ define('io.ox/backbone/mini-views/alarms', [
             DISPLAY: gt('Notification'),
             AUDIO: gt('Audio'),
             EMAIL: gt('Mail'),
-            'X-SMS': gt('SMS')
+            SMS: gt('SMS')
         },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -159,7 +159,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
             this.phoneNumber = options.phoneNumber;
-            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('X-SMS');
+            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('SMS');
             this.list = $('<div class="alarm-list">');
 
             if (this.model) {
@@ -296,7 +296,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     case 'DISPLAY':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
-                    case 'X-SMS':
+                    case 'SMS':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         if (!alarm.attendees && self.phoneNumber) alarm.attendees = [{ uri: 'tel:' + self.phoneNumber }];
                         break;
@@ -339,8 +339,8 @@ define('io.ox/backbone/mini-views/alarms', [
                     key = 'ABS';
                 }
                 options.push(alarm.action);
-                options.unshift(predefinedSentences[alarm.action + key] || predefinedSentences['GENERIC' + key]);
-                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(gt.format.apply(undefined, options))));
+                var pattern = predefinedSentences[alarm.action + key] || predefinedSentences['GENERIC' + key];
+                node.append($('<li>').append($('<button type="button" class="alarm-link btn btn-link">').text(_.noI18n.format(pattern, options))));
             });
             return node;
         },

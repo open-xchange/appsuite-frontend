@@ -337,7 +337,7 @@ define.async('io.ox/core/sub/subscriptions', [
                 service = model.toJSON();
             baton.popup.$body.empty().append(
                 $('<form class="form-horizontal">').append(
-                    $('<h4>').text(gt.format(gt('Configure %s'), model.get('displayName'))),
+                    $('<h4>').text(gt('Configure %s', model.get('displayName'))),
                     _(model.get('formDescription')).map(function (fd) {
                         var Input = fd.name === 'password' ? mini.PasswordView : mini.InputView;
                         return $('<div class="control-group">').append(

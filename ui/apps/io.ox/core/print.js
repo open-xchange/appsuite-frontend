@@ -177,7 +177,8 @@ define('io.ox/core/print', [
                 notifications.yell({
                     type: 'error',
                     headline: gt('Error'),
-                    message: gt.ngettext('Cannot print this item', 'Cannot print these items', options.selection.length)
+                    // do not use "gt.ngettext" for plural without count
+                    message: (options.selection.length === 1) ? gt('Cannot print this item') : gt('Cannot print these items')
                 });
             });
 

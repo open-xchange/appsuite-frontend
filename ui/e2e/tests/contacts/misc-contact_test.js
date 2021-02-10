@@ -13,15 +13,15 @@
 
 Feature('Contacts > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contacts) {
+Scenario('[C8817] - Send E-Mail to contact', function ({ I, users, search, contacts }) {
     const testrailID = 'C8817';
     const subject = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -48,7 +48,7 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contact
     I.see(testrailID);
 });
 
-Scenario('Subscribe and unsubscribe shared address book', async function (I, users) {
+Scenario('Subscribe and unsubscribe shared address book', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }
@@ -70,9 +70,9 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
 
     I.waitForText('New address book');
     I.rightClick({ css: '[aria-label^="New address book"]' });
-    I.waitForText('Permissions / Invite people');
+    I.waitForText('Share / Permissions');
     I.wait(0.2);
-    I.click('Permissions / Invite people');
+    I.click('Share / Permissions');
     I.waitForText('Permissions for folder "New address book"');
     I.waitForDetached(busystate);
     I.wait(0.5);
@@ -92,7 +92,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
     I.retry(5).doubleClick('~Shared address books');
     I.waitForText(sharedAddressBookName);
     I.click('Add new address book');
-    I.click('Subscribe shared address book');
+    I.click('Subscribe to shared address book');
     I.waitForText('Shared address books');
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
@@ -107,7 +107,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function (I, use
     I.waitForInvisible(locate('*').withText(sharedAddressBookName));
 
     I.click('Add new address book');
-    I.click('Subscribe shared address book');
+    I.click('Subscribe to shared address book');
     I.waitForText('Shared address books');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));

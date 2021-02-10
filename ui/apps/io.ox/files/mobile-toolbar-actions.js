@@ -13,53 +13,59 @@
 
 define('io.ox/files/mobile-toolbar-actions', [
     'io.ox/core/extensions',
-    'io.ox/backbone/views/actions/util',
     'io.ox/backbone/views/actions/mobile',
     'io.ox/backbone/views/toolbar',
     'io.ox/files/api',
     'gettext!io.ox/mail',
     'io.ox/files/actions'
-], function (ext, actionsUtil, mobile, ToolbarView, api, gt) {
+], function (ext, mobile, ToolbarView, api, gt) {
 
     'use strict';
 
     // define links for each page
 
-    var Action = actionsUtil.Action,
-        meta = {
-            'create': {
-                prio: 'hi',
-                mobile: 'hi',
-                icon: 'fa fa-plus',
-                dropdown: 'io.ox/files/toolbar/new',
-                drawDisabled: true,
-                caret: false
-            },
-            'view-icon': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show icons'),
-                icon: 'fa fa-th',
-                ref: 'io.ox/files/actions/layout-icon',
-                drawDisabled: true
-            },
-            'view-tile': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show tiles'),
-                icon: 'fa fa-th-large',
-                ref: 'io.ox/files/actions/layout-tile',
-                drawDisabled: true
-            },
-            'view-list': {
-                prio: 'hi',
-                mobile: 'hi',
-                label: gt('Show list'),
-                icon: 'fa fa-align-justify',
-                ref: 'io.ox/files/actions/layout-list',
-                drawDisabled: true
-            }
-        };
+    var meta = {
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-plus',
+            dropdown: 'io.ox/files/toolbar/new',
+            drawDisabled: true,
+            caret: false
+        },
+        'upload': {
+            prio: 'hi',
+            mobile: 'hi',
+            icon: 'fa fa-cloud-upload',
+            dropdown: 'io.ox/files/toolbar/upload',
+            drawDisabled: true,
+            caret: false
+        },
+        'view-icon': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Show icons'),
+            icon: 'fa fa-th',
+            ref: 'io.ox/files/actions/layout-icon',
+            drawDisabled: true
+        },
+        'view-tile': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Show tiles'),
+            icon: 'fa fa-th-large',
+            ref: 'io.ox/files/actions/layout-tile',
+            drawDisabled: true
+        },
+        'view-list': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Show list'),
+            icon: 'fa fa-align-justify',
+            ref: 'io.ox/files/actions/layout-list',
+            drawDisabled: true
+        }
+    };
 
     var points = {
         listView: 'io.ox/files/mobile/toolbar/main',
@@ -78,31 +84,11 @@ define('io.ox/files/mobile-toolbar-actions', [
         })
     );
 
-    mobile.addAction(points.listView, meta, ['create', 'view-list', 'view-icon', 'view-tile']);
+    mobile.addAction(points.listView, meta, ['create', 'upload', 'view-list', 'view-icon', 'view-tile']);
     mobile.createToolbarExtensions(points);
 
-    // actions
-    // TODO check action Jonas
-    new Action('io.ox/files/actions/layout-list', {
-        action: function (baton) {
-            baton.app.props.set('layout', 'list');
-        }
-    });
-    // TODO check action Jonas
-    new Action('io.ox/files/actions/layout-icon', {
-        action: function (baton) {
-            baton.app.props.set('layout', 'icon');
-        }
-    });
-    // TODO check action Jonas
-    new Action('io.ox/files/actions/layout-tile', {
-        action: function (baton) {
-            baton.app.props.set('layout', 'tile');
-        }
-    });
-
     var updateToolbar = _.debounce(function (list) {
-        if (!list) return;
+        if (!list || !list.length) return;
         var cids = list, models = api.resolve(cids, false);
         list = _(models).invoke('toJSON');
         // draw toolbar

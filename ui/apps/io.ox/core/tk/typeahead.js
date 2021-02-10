@@ -269,6 +269,7 @@ define('io.ox/core/tk/typeahead', [
             dropdown.$menu.off('mouseenter.tt mouseleave.tt')
                 .on('mouseenter.tt mousemove.tt', '.tt-suggestion', dropdown._onSuggestionMouseEnter.bind(dropdown))
                 .on('mouseleave.tt', '.tt-suggestion', dropdown._onSuggestionMouseLeave.bind(dropdown));
+
             return this;
         }
 

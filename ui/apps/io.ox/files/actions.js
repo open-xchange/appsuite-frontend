@@ -22,17 +22,20 @@ define('io.ox/files/actions', [
     'io.ox/backbone/views/actions/util',
     'io.ox/core/capabilities',
     'io.ox/files/actions/download',
+    'io.ox/files/permission-util',
     'settings!io.ox/files',
     'settings!io.ox/core',
     'gettext!io.ox/files',
     'io.ox/core/yell'
-], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, actionsUtil, capabilities, download, settings, coreSettings, gt, yell) {
+], function (folderAPI, api, userAPI, shareAPI, util, filestorageApi, ext, actionsUtil, capabilities, download, pUtil, settings, coreSettings, gt, yell) {
 
     'use strict';
 
     var supportsComments = settings.get('features/comments', true),
         // used by text editor
         allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
+
+    var moveConflictErrorCodes = [/* move to not shared folder */'FILE_STORAGE-0074', 'FILE_STORAGE-0077', 'FLD-1045', 'FLD-1048'/* , move to another shared folder 'FILE_STORAGE-0075', 'FLD-1046', 'FLD-1049'*/];
 
     if (capabilities.has('guard')) {
         allowedFileExtensions.push('pgp');
@@ -78,9 +81,46 @@ define('io.ox/files/actions', [
         return isFile(data);
     }
 
-    // check if this is a contact not a file, happens when contact is send as vcard
-    function isContact(baton) {
-        return _(baton.first()).has('internal_userid');
+    function createFilePickerAndUpload(baton, type) {
+        var input = $();
+
+        // notify when type is not provided
+        if (!type && ox.debug) { return console.error('No type for upload provided'); }
+        if (type === 'folder') { input = $('<input type="file" name="file" multiple directory webkitdirectory mozdirectory>'); }
+        if (type === 'file') { input = $('<input type="file" name="file" multiple>'); }
+
+        var elem = $(baton.e.target);
+
+        // remove old input-tags resulting from 'add local file' -> 'cancel'
+        elem.siblings('input').remove();
+
+        elem.after(
+            input
+            .css('display', 'none')
+            .on('change', function (e) {
+                var app = baton.app;
+                var fileList = baton.filter ? baton.filter(e.target.files) : e.target.files;
+                var extendedFileList =  _.map(fileList, function (file) {
+                    // normalize with drag&drop: for a file upload, the filepicker does not provide a path,
+                    // in contrast to the more modern drag & drop behavior were a path is always provided
+                    var normalizedPath = file.webkitRelativePath === '' ? String('/' + file.name) : file.webkitRelativePath;
+                    return {
+                        file: file,
+                        fullPath: normalizedPath,
+                        preventFileUpload: false
+                    };
+                });
+
+                require(['io.ox/files/upload/file-folder'], function (fileFolderUpload) {
+                    var targetFolder = baton.folder_id;
+                    var options = baton.file_options;
+                    fileFolderUpload.upload(extendedFileList, targetFolder, app, options);
+                });
+                input.remove();
+            })
+        );
+
+        input.trigger('click');
     }
 
     /**
@@ -109,7 +149,7 @@ define('io.ox/files/actions', [
     }
 
     var Action = actionsUtil.Action;
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/upload', {
         folder: 'create',
         matches: function (baton) {
@@ -119,37 +159,37 @@ define('io.ox/files/actions', [
             return true;
         },
         action: function (baton) {
-
-            var elem = $(baton.e.target),
-                input;
-
-            // remove old input-tags resulting from 'add local file' -> 'cancel'
-            elem.siblings('input').remove();
-
-            elem.after(
-                input = $('<input type="file" name="file" multiple>')
-                .css('display', 'none')
-                .on('change', function (e) {
-                    var app = baton.app;
-                    require(['io.ox/files/upload/main'], function (fileUpload) {
-                        e.preventDefault();
-
-                        var list = [];
-                        _(e.target.files).each(function (file) {
-                            list.push(_.extend(file, { group: 'file' }));
-                        });
-                        var options = _.extend({ folder: baton.folder_id }, baton.file_options);
-                        fileUpload.setWindowNode(app.getWindowNode());
-                        fileUpload.create.offer(list, options);
-                    });
-                    input.remove();
-                })
-            );
-
-            input.trigger('click');
+            createFilePickerAndUpload(baton, 'file');
         }
     });
-    // TODO check action Mario
+
+    new Action('io.ox/files/actions/uploadFolder', {
+        folder: 'create',
+        device: '!(ios || android)',
+        matches: function (baton) {
+            // hide for virtual folders (other files root, public files root)
+            if (_(['14', '15']).contains(baton.folder_id)) return false;
+            if (isTrash(baton)) return false;
+            return true;
+        },
+        action: function (baton) {
+            createFilePickerAndUpload(baton, 'folder');
+        }
+    });
+
+    new Action('io.ox/files/actions/edit-federated', {
+        collection: 'one && modify',
+        matches: function (baton) {
+            var model = baton.models[0];
+            return util.canEditDocFederated(model);
+        },
+        action: function (baton) {
+            var guestLink = shareAPI.getFederatedSharingRedirectUrl(baton.first());
+            /* global blankshield */
+            blankshield.open(guestLink, '_blank');
+        }
+    });
+
     new Action('io.ox/files/actions/editor', {
         toggle: !!window.Blob,
         collection: 'one && modify',
@@ -215,7 +255,7 @@ define('io.ox/files/actions', [
             launch();
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/editor-new', {
         toggle: !!window.Blob,
         folder: 'create',
@@ -233,14 +273,14 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/download', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
         collection: 'some',
         matches: function (baton) {
             if (baton.collection.has('multiple')) return baton.array().every(isDriveFile);
-            if (isContact(baton)) return false;
+            if (util.isContact(baton)) return false;
             return isDriveFile(baton.first());
         },
         action: function (baton) {
@@ -252,13 +292,18 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/download-folder', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
         // single folders only
         collection: 'one && folders',
         matches: function (baton) {
+            // enable for federated share that support it
+            if (filestorageApi.isFederatedAccount(baton.first().account_id)) {
+                var canDownloadFolder = _.contains(baton.first().supported_capabilities, 'zippable_folder');
+                return canDownloadFolder;
+            }
             // disable for external storages
             return !filestorageApi.isExternal(baton.first());
         },
@@ -268,7 +313,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/downloadversion', {
         // no download for older ios devices
         device: '!ios || ios >= 12',
@@ -286,29 +331,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
-    new Action('io.ox/files/actions/permissions', {
-        device: '!smartphone',
-        collection: 'one',
-        matches: function (baton) {
-            // get proper id
-            var data = baton.first(),
-                id = baton.collection.has('folders') ? data.id : data.folder_id;
-            return folderAPI.pool.getModel(id).isShareable();
-        },
-        action: function (baton) {
-            require(['io.ox/files/share/permissions'], function (controller) {
-                var model = baton.models[0], data = baton.first();
-                if (model.isFile()) {
-                    controller.showFilePermissions(data);
-                } else {
-                    controller.showFolderPermissions(data.id);
-                }
-            });
-        }
-    });
 
-    // TODO check action Kristof
     new Action('io.ox/files/actions/send', {
         collection: 'some && items',
         matches: function (baton) {
@@ -316,6 +339,7 @@ define('io.ox/files/actions', [
             if (isEmpty(baton)) return false;
             if (fromMailCompose(baton)) return false;
             if (isTrash(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return baton.array().reduce(function (memo, obj) {
                 return memo || obj.file_size > 0;
             }, false);
@@ -330,13 +354,14 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // // TODO check action Jonas
+
     new Action('io.ox/files/actions/delete', {
         collection: 'some && delete',
         matches: function (baton) {
             if (fromMailCompose(baton)) return false;
             if (baton.standalone) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -350,7 +375,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/viewer', {
         collection: 'some && items',
         matches: function (baton) {
@@ -377,14 +402,17 @@ define('io.ox/files/actions', [
     });
 
     // drive action for double-click or enter in files
-    // TODO check action Mario
     new Action('io.ox/files/actions/default', {
         action: function (baton) {
-            actionsUtil.invoke('io.ox/files/actions/viewer', baton);
+            var model = baton.models && baton.models[0];
+            if (util.canEditDocFederated(model)) {
+                actionsUtil.invoke('io.ox/files/actions/edit-federated', baton);
+            } else {
+                actionsUtil.invoke('io.ox/files/actions/viewer', baton);
+            }
         }
     });
 
-    // TODO check action Jonas
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         device: '!smartphone',
@@ -402,7 +430,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         device: '!smartphone',
@@ -429,14 +457,14 @@ define('io.ox/files/actions', [
         });
     }
 
-    // TODO check action Kristof
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         collection: 'one && items',
         matches: function (baton) {
             if (isEmpty(baton)) return false;
             if (isTrash(baton)) return false;
-            if (isContact(baton)) return false;
+            if (util.isContact(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             return true;
         },
         action: function (baton) {
@@ -446,34 +474,18 @@ define('io.ox/files/actions', [
         }
     });
 
-    function hasObjectWritePermissions(data) {
-        var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
-            myself = _(array).findWhere({ entity: ox.user_id });
-        // check if there is a permission for a group, the user is a member of
-        // use max permissions available
-        if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
-            return userAPI.get().then(
-                function (userData) {
-                    myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(userData.groups)[0] });
-                    return !!(myself && (myself.bits >= 2));
-                },
-                function () { return false; }
-            );
-        }
-        return $.when(!!(myself && (myself.bits >= 2)));
-    }
-    // TODO check action Jonas
     new Action('io.ox/files/actions/rename', {
         collection: 'one',
         matches: function (baton) {
             if (isTrash(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (fromMailCompose(baton)) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             // shortcuts
             if (baton.collection.has('folders')) return baton.collection.has('rename:folder');
             if (baton.collection.has('modify')) return true;
             // this is async
-            return hasObjectWritePermissions(baton.first());
+            return pUtil.hasObjectWritePermissions(baton.first());
         },
         action: function (baton) {
             var data = baton.first();
@@ -490,7 +502,7 @@ define('io.ox/files/actions', [
             }
         }
     });
-    // TODO check action Mario
+
     new Action('io.ox/files/actions/save-as-pdf', {
         // bug 54493: no "Save as PDF" for anonymous guests (same solution as in bug 42621)
         capabilities: 'document_preview && !guest && !anonymous',
@@ -510,7 +522,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     new Action('io.ox/files/actions/edit-description', {
         collection: 'one && items',
         matches: function (baton) {
@@ -518,8 +530,9 @@ define('io.ox/files/actions', [
             if (fromMailCompose(baton)) return false;
             if (hasStatus('lockedByOthers', baton)) return false;
             if (!folderAPI.pool.getModel(baton.first().folder_id).supports('extended_metadata')) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
             if (baton.collection.has('modify')) return true;
-            return hasObjectWritePermissions(baton.first());
+            return pUtil.hasObjectWritePermissions(baton.first());
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/edit-description']).done(function (action) {
@@ -531,8 +544,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
-    // TODO check action Mario
     new Action('io.ox/files/actions/upload-new-version', {
         toggle: supportsComments,
         collection: 'one && modify && items',
@@ -551,7 +562,6 @@ define('io.ox/files/actions', [
     });
 
     // Action to restore a list of files and folders
-    // TODO check action Kristof
     new Action('io.ox/files/actions/restore', {
         collection: 'some',
         matches: function (baton) {
@@ -584,7 +594,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Jonas
+
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             // anonymous guests just have one folder so no valid target folder (see bug 42621)
@@ -605,11 +615,14 @@ define('io.ox/files/actions', [
                         fullResponse: true,
                         label: label,
                         success: success,
+                        // TODO: please avoid multiple levels of if-else-nestings. Use "return early" or underscore's chaining to improve readability.
                         successCallback: function (response, apiInput) {
                             // see file/api.js transfer(): in case of an error the callback returns a string
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] },
-                                    itemsLeft = [];
+                                    itemsLeft = [],
+                                    isMoveAction = type === 'move',
+                                    moveConflictError = false;
 
                                 if (!_.isArray(response)) {
                                     response = [response];
@@ -627,36 +640,59 @@ define('io.ox/files/actions', [
 
                                         if (errorResponse.categories === 'CONFLICT' && (errorCausedByFile || errorCausedByFolder)) {
 
-                                            // -> populate error title for the dialog
-                                            if (!conflicts.title) {
-                                                conflicts.title = errorResponse.error;
-                                            }
+                                            if (isMoveAction) {
 
-                                            // -> populate 'itemsLeft' for folder that will be moved after pressed on ignore conflict
-                                            if (errorCausedByFolder && type === 'move' && !_(itemsLeft).findWhere({ id: errorResponse.error_params[1] })) {
-                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
-                                            }
+                                                // -> populate 'itemsLeft' for folder that will be moved after pressed on ignore conflict
+                                                if (errorCausedByFolder && !_(itemsLeft).findWhere({ id: errorResponse.error_params[1] })) {
+                                                    itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                }
 
-                                            // -> populate 'itemsLeft' list for files that will be moved after pressed on ignore conflict
-                                            // note: when a folder is moved and the conflict happens for files in this folder, don't move these files but only the folder
-                                            if (!errorCausedByFolder && type === 'move' && warningsInErrorResponse) {
-                                                _.each(warningsInErrorResponse, function (warning) {
-                                                    if (!_(itemsLeft).findWhere({ id: warning.error_params[3] })) {
-                                                        itemsLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
-                                                    }
-                                                });
-                                            }
+                                                // -> populate 'itemsLeft' list for files that will be moved after pressed on ignore conflict
+                                                // note: when a folder is moved and the conflict happens for files in this folder, don't move these files but only the folder
+                                                if (!errorCausedByFolder && warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        if (!_(itemsLeft).findWhere({ id: warning.error_params[3] })) {
+                                                            itemsLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
+                                                        }
+                                                    });
+                                                }
 
-                                            // -> populate shown warnings for the dialog
-                                            if (warningsInErrorResponse) {
-                                                _.each(warningsInErrorResponse, function (warning) {
-                                                    conflicts.warnings.push(warning.error);
-                                                });
-                                            }
+                                                // -> populate shown warnings for the dialog
+                                                if (warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        if (moveConflictErrorCodes.indexOf(warning.code) >= 0) {
 
-                                            // unfortunately move and copy responses do nt have the same structure
-                                            if (type === 'copy') {
-                                                itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                            if (!moveConflictError) {
+                                                                conflicts.title = gt('Change who has access?');
+                                                                conflicts.warnings.push(gt('You are moving one or more items that are shared with other people. These people will lose access.'));
+                                                                moveConflictError = true;
+                                                            }
+
+                                                        } else {
+                                                            if (!conflicts.title) {
+                                                                conflicts.title = errorResponse.error;
+                                                            }
+                                                            conflicts.warnings.push(warning.error);
+                                                        }
+                                                    });
+                                                }
+                                            } else {
+                                                // -> populate error title for the dialog
+                                                if (!conflicts.title) {
+                                                    conflicts.title = errorResponse.error;
+                                                }
+
+                                                // -> populate shown warnings for the dialog
+                                                if (warningsInErrorResponse) {
+                                                    _.each(warningsInErrorResponse, function (warning) {
+                                                        conflicts.warnings.push(warning.error);
+                                                    });
+                                                }
+
+                                                // unfortunately move and copy responses do nt have the same structure
+                                                if (type === 'copy') {
+                                                    itemsLeft.push(_(list).findWhere({ id: errorResponse.error_params[1] }));
+                                                }
                                             }
                                         }
                                     }
@@ -691,8 +727,11 @@ define('io.ox/files/actions', [
                                                 });
                                             },
                                             callbackCancel: function () {
-                                                // note: drag&drop and actions via menu use a different baton, see b53498
-                                                var folder_id = baton.first().folder_id;
+                                                // note: drag&drop and actions via folder tree menu use a different baton, see b53498
+                                                var model = new api.Model(baton.first());
+                                                // you can't use folder_id to get the parent for 'folder' fileModels
+                                                var folder_id = model.getParentFolder();
+
                                                 if (folder_id) {
                                                     folderAPI.reload(folder_id);
                                                     // bug 53498: refresh the list to display the not moved elements again after a failed move,
@@ -727,38 +766,7 @@ define('io.ox/files/actions', [
     moveAndCopy('move', gt('Move'), { single: gt('File has been moved'), multiple: gt('Files have been moved') });
     moveAndCopy('copy', gt('Copy'), { single: gt('File has been copied'), multiple: gt('Files have been copied') });
 
-    /**
-     * Checks if the collection inside an event is shareable
-     * @param {Event} e
-     *  Event to check the collection
-     * @param {String} type
-     *  Type of the sharing to check ("invite" or "link")
-     * @returns {boolean}
-     *  Whether the elements inside the collection are shareable
-     */
-    function isShareable(type, baton) {
-        var id;
-        // not possible for multi-selection
-        if (baton.collection.has('multiple')) return false;
-        if (isContact(baton)) return false;
-        // get folder id
-        if (baton.collection.has('one')) {
-            var data = baton.first();
-            id = baton.collection.has('folders') ? data.id : data.folder_id;
-        } else if (baton.app) {
-            // use current folder
-            id = baton.app.folder.get();
-        }
-        if (!id) return false;
-        // general capability and folder check
-        var model = folderAPI.pool.getModel(id);
-        if (!model.isShareable()) return false;
-        if (model.is('trash')) return false;
-        return type === 'invite' ? model.supportsInviteGuests() : true;
-    }
-
     // Action for the editShare Dialog. Detects if the link or invitiation dialog is opened.
-    // TODO check action Kristof
     new Action('io.ox/files/actions/editShare', {
         matches: function (baton) {
             if (!baton.app) return false;
@@ -769,17 +777,12 @@ define('io.ox/files/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
-                var models = _.isArray(baton.models) ? baton.models : [baton.models],
-                    shareType, elem;
+                var models = _.isArray(baton.models) ? baton.models : [baton.models], elem;
                 if (models && models.length) {
+                    var options = { hasLinkSupport: util.isShareable('link', baton) };
                     elem = baton.app.mysharesListView.$el.find('.list-item.selected');
                     if (elem.length) {
-                        shareType = elem.attr('data-share-type');
-                        if (shareType === 'invited-people') {
-                            action.invite(models);
-                        } else if (shareType === 'public-link') {
-                            action.link(models);
-                        }
+                        action.invite(models, options);
                     }
                 }
             });
@@ -787,52 +790,30 @@ define('io.ox/files/actions', [
     });
 
     // folder based actions
-    // TODO check action Kristof
     new Action('io.ox/files/actions/invite', {
-        capabilities: 'invite_guests',
+        capabilities: 'invite_guests || share_links',
         collection: '!multiple',
         matches: function (baton) {
-            return isShareable('invite', baton);
+            return util.isShareable('invite', baton) || util.isShareable('link', baton);
         },
         action: function (baton) {
             ox.load(['io.ox/files/actions/share']).done(function (action) {
+                var options = { hasLinkSupport: util.isShareable('link', baton) };
                 if (baton.models && baton.models.length) {
                     // share selected file
-                    action.invite(baton.models);
+                    action.invite(baton.models, options);
                 } else {
                     // share current folder
                     // convert folder model into file model
                     var id = baton.app.folder.get(),
                         model = new api.Model(folderAPI.pool.getModel(id).toJSON());
-                    action.invite([model]);
-                }
-            });
-        }
-    });
-    // TODO check action Kristof
-    new Action('io.ox/files/actions/getalink', {
-        capabilities: 'share_links',
-        collection: '!multiple',
-        matches: function (baton) {
-            return isShareable('link', baton);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/actions/share']).done(function (action) {
-                if (baton.models && baton.models.length) {
-                    action.link(baton.models);
-                } else {
-                    // share current folder
-                    // convert folder model into file model
-                    var id = baton.app.folder.get(),
-                        model = new api.Model(folderAPI.pool.getModel(id).toJSON());
-                    action.link([model]);
+                    action.invite([model], options);
                 }
             });
         }
     });
 
     // Action to revoke the sharing of the files.
-    // TODO check action Kristof
     new Action('io.ox/files/share/revoke', {
         matches: function (baton) {
             if (!baton.app) return false;
@@ -961,7 +942,6 @@ define('io.ox/files/actions', [
     });
 
     // version specific actions
-    // TODO check action Mario
     new Action('io.ox/files/versions/actions/makeCurrent', {
         collection: 'one && items && modify',
         matches: function (baton) {
@@ -990,7 +970,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // TODO check action Mario
     new Action('io.ox/files/versions/actions/delete', {
         collection: 'one && items && delete',
         matches: function (baton) {
@@ -1006,7 +985,6 @@ define('io.ox/files/actions', [
     });
 
     // Add new folder
-    // TODO check action Jonas
     new Action('io.ox/files/actions/add-folder', {
         matches: function (baton) {
             var model = folderAPI.pool.getModel(baton.app.folder.get());
@@ -1020,8 +998,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
-    // TODO check action Jonas
     new Action('io.ox/files/premium/actions/synchronize', {
         capabilities: 'boxcom || google || microsoftgraph',
         matches: function () {
@@ -1035,9 +1011,7 @@ define('io.ox/files/actions', [
         }
     });
 
-    // Tested: No
     // Action to switch to the folder of a file
-    // TODO check action Kristof
     new Action('io.ox/files/actions/show-in-folder', {
         device: '!smartphone',
         collection: 'one',
@@ -1095,13 +1069,13 @@ define('io.ox/files/actions', [
     });
 
     // Action to add files/folders to favorites
-    // TODO check action Kristof
     new Action('io.ox/files/actions/favorites/add', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
 
             if (isTrash(baton)) return false;
             if (baton.originFavorites) return false;
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
@@ -1141,10 +1115,10 @@ define('io.ox/files/actions', [
     }
 
     // Action to remove files/folders to favorites
-    // TODO check action Kristof
     new Action('io.ox/files/actions/favorites/remove', {
         capabilities: '!guest && !anonymous',
         matches: function (baton) {
+            if (baton.isViewer && !util.isCurrentVersion(baton)) return false;
 
             var favoritesFolder = coreSettings.get('favorites/infostore', []),
                 favoriteFiles = coreSettings.get('favoriteFiles/infostore', []),
@@ -1165,7 +1139,7 @@ define('io.ox/files/actions', [
             });
         }
     });
-    // TODO check action Kristof
+
     new Action('io.ox/files/favorite/back', {
         toggle: _.device('smartphone'),
         matches: function (baton) {
@@ -1176,31 +1150,102 @@ define('io.ox/files/actions', [
         }
     });
 
+    // view menu 'Layout' options' as actions
+    new Action('io.ox/files/actions/layout-list', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'list');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-icon', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'icon');
+        }
+    });
+
+    new Action('io.ox/files/actions/layout-tile', {
+        action: function (baton) {
+            baton.app.props.set('layout', 'tile');
+        }
+    });
+
+    // view menu  'Options' as actions
+    new Action('io.ox/files/actions/view-checkboxes', {
+        action: function (baton) {
+            var value = 'checkboxes';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
+    new Action('io.ox/files/actions/view-folderview', {
+        action: function (baton) {
+            var value = 'folderview';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
+    new Action('io.ox/files/actions/view-details', {
+        action: function (baton) {
+            var value = 'details';
+            var newValue = !baton.app.props.get(value);
+            baton.app.props.set(value, newValue);
+        }
+    });
+
     // 'new' dropdown
     ext.point('io.ox/files/toolbar/new').extend(
         {
             index: 100,
+            id: 'add-folder',
+            title: _.device('smartphone') ?
+                gt('Add new folder') :
+                //#. A folder in a computer system.
+                gt('Folder'),
+            ref: 'io.ox/files/actions/add-folder',
+            section: 'add'
+        },
+        {
+            index: 300,
+            id: 'note',
+            title:
+
+                _.device('smartphone') ?
+                    //#. Creating a new note item in context of "note taking". "Notiz" in German, for example.
+                    //#. More like "to notice" than "to notify".
+                    gt('New note') :
+                    //#. A note item in context of "note taking". "Notiz" in German, for example.
+                    //#. More like "to notice" than "to notify".
+                    gt('Note'),
+            ref: 'io.ox/files/actions/editor-new',
+            section: 'add'
+        }
+    );
+
+    // 'upload' dropdown
+    ext.point('io.ox/files/toolbar/upload').extend(
+        {
+            index: 100,
             id: 'upload',
-            title: gt('Upload files'),
+            title: _.device('smartphone') ?
+                //#. An action to upload a local file e.g. to Drive.
+                gt('Upload file') :
+                //#. A file in a computer system.
+                gt('File'),
             ref: 'io.ox/files/actions/upload',
             section: 'upload'
         },
         {
             index: 200,
-            id: 'note',
-            title:
-                //#. Please translate like "take a note", "Notiz" in German, for example.
-                //#. more like "to notice" than "to notify".
-                gt('Add note'),
-            ref: 'io.ox/files/actions/editor-new',
-            section: 'add'
-        },
-        {
-            index: 300,
-            id: 'add-folder',
-            title: gt('Add new folder'),
-            ref: 'io.ox/files/actions/add-folder',
-            section: 'add'
+            id: 'upload-folder',
+            title: _.device('smartphone') ?
+                //#. An action to upload a local folder to Drive.
+                gt('Upload folder') :
+                //#. A folder in a computer system.
+                gt('Folder'),
+            ref: 'io.ox/files/actions/uploadFolder',
+            section: 'upload-folder'
         }
     );
 
@@ -1209,20 +1254,10 @@ define('io.ox/files/actions', [
         {
             index: 100,
             id: 'invite',
-            title: gt('Invite people'),
+            title: gt('Share / Permissions'),
             //#. sharing: a guest user will be created for the owner of that email address
-            caption: gt('Every recipient gets an individual link. Guests can also create and change files.'),
             section: 'invite',
             ref: 'io.ox/files/actions/invite'
-        },
-        {
-            index: 200,
-            id: 'getalink',
-            title: gt('Create sharing link'),
-            //#. sharing: a link will be created
-            caption: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
-            section: 'link',
-            ref: 'io.ox/files/actions/getalink'
         }
     );
 
@@ -1301,16 +1336,8 @@ define('io.ox/files/actions', [
             id: 'invite',
             prio: 'lo',
             mobile: 'lo',
-            title: gt('Invite people'),
+            title: gt('Share / Permissions'),
             ref: 'io.ox/files/actions/invite',
-            section: 'share'
-        },
-        {
-            id: 'getalink',
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Create sharing link'),
-            ref: 'io.ox/files/actions/getalink',
             section: 'share'
         },
         {
@@ -1380,7 +1407,8 @@ define('io.ox/files/actions', [
 
     // version links
 
-    ext.point('io.ox/files/versions/links/inline').extend(
+    // current version
+    ext.point('io.ox/files/versions/links/inline/current').extend(
         {
             id: 'view',
             index: 100,
@@ -1399,6 +1427,47 @@ define('io.ox/files/actions', [
             title: gt('Edit'),
             ref: 'io.ox/files/actions/editor',
             section: 'edit'
+        },
+        {
+            id: 'download',
+            index: 200,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Download'),
+            ref: 'io.ox/files/actions/downloadversion',
+            section: 'edit'
+        },
+        {
+            id: 'delete',
+            index: 300,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Delete version'),
+            ref: 'io.ox/files/versions/actions/delete',
+            section: 'delete'
+        },
+        {
+            id: 'deletePreviousVersions',
+            index: 310,
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Delete all previous versions'),
+            ref: 'io.ox/files/versions/actions/deletePreviousVersions',
+            section: 'delete'
+        }
+    );
+
+    // older versions
+    ext.point('io.ox/files/versions/links/inline/older').extend(
+        {
+            id: 'view',
+            index: 100,
+            prio: 'lo',
+            mobile: 'lo',
+            //#. used as a verb here. label of a button to view files
+            title: gt('View'),
+            ref: 'io.ox/files/actions/viewer',
+            section: 'view'
         },
         {
             id: 'download',

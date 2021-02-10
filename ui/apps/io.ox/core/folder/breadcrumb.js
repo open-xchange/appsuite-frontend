@@ -157,6 +157,9 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
                 isDisabled = missingPrivileges || (this.disable && _(this.disable).indexOf(data.id) > -1),
                 node;
 
+            // special case DOCS-2252: public files has own_rights === 4, but the breadcrumb should be clickable anyhow
+            if (data && data.id === '15') { isDisabled = false; }
+
             if (index === 0 && this.defaultRootPath && this.defaultRootPath.id !== data.id) {
                 this.renderLink(this.defaultRootPath, 0, all);
             }

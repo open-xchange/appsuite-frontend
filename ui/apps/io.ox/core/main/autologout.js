@@ -78,11 +78,10 @@ define('io.ox/core/main/autologout', [
 
                         var countdown = timeLeft,
                             getString = function (sec) {
-                                return gt.format(
-                                    gt.ngettext(
-                                        'You will be automatically signed out in %1$d second',
-                                        'You will be automatically signed out in %1$d seconds', sec
-                                    ), sec
+                                return gt.ngettext(
+                                    'You will be automatically signed out in %1$d second',
+                                    'You will be automatically signed out in %1$d seconds',
+                                    sec, sec
                                 );
                             },
                             node = $('<span>').text(getString(countdown)),

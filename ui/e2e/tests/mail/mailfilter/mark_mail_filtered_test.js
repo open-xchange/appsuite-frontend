@@ -14,15 +14,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7808] -Mark Mail- filtered mail', async function (I, users, mail, mailfilter) {
+Scenario('[C7808] -Mark Mail- filtered mail', async function ({ I, users, mail, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

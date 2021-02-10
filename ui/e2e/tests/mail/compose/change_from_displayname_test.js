@@ -14,14 +14,14 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[OXUIB-142] personal field of primary account should be respected', async (I, users, mail) => {
+Scenario('[OXUIB-142] personal field of primary account should be respected', async ({ I, users, mail }) => {
     let [user] = users;
     const customDisplayNames = {};
     customDisplayNames[`${user.get('primaryEmail')}`] = {
@@ -50,7 +50,7 @@ Scenario('[OXUIB-142] personal field of primary account should be respected', as
     I.see('Entropy McDuck');
 });
 
-Scenario('update account with mail compose app open', async (I, users, mail) => {
+Scenario('update account with mail compose app open', async ({ I, users, mail }) => {
     let [user] = users;
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
 
@@ -69,6 +69,7 @@ Scenario('update account with mail compose app open', async (I, users, mail) => 
     I.click('Save');
 
     I.openApp('Mail');
+    mail.waitForApp();
     mail.newMail();
 
     // Verify the dislay name has changed

@@ -14,11 +14,11 @@
 
 Feature('Calendar > Import');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -60,7 +60,7 @@ examples.add(['[C104270] Import App Suite iCal', 'appsuite-783_recurring_appoint
     I.see('Sun, 11/27/2016', sidePopup);
     I.see('1:30', sidePopup);
     I.see('2:30 PM', sidePopup);
-    I.see('Every day. The series ends after 5 occurences.', sidePopup);
+    I.see('Every day. The series ends after 5 occurrences.', sidePopup);
 }]);
 
 examples.add(['[C104279] Import Outlook iCal', 'outlook_2013_en_simple', function (I) {
@@ -85,7 +85,7 @@ examples.add(['[C104279] Import Outlook iCal', 'outlook_2013_en_recurring', func
     I.see('Tue, 11/29/2016', sidePopup);
     I.see('10:00', sidePopup);
     I.see('10:30 AM', sidePopup);
-    I.see('Every day. The series ends after 5 occurences.', sidePopup);
+    I.see('Every day. The series ends after 5 occurrences.', sidePopup);
 }]);
 examples.add(['[C104279] Import Outlook iCal', 'outlook_2013_en_full', function (I) {
     I.waitForText('Busy', 5, appointment + ' .title');
@@ -116,7 +116,7 @@ examples.add(['[C104295] Import Apple Calendar iCal', 'macos_1011_recurring', fu
     I.see('Tue, 11/29/2016', sidePopup);
     I.see('11:45', sidePopup);
     I.see('12:45 PM', sidePopup);
-    I.see('Every day. The series ends after 5 occurences.', sidePopup);
+    I.see('Every day. The series ends after 5 occurrences.', sidePopup);
 }]);
 examples.add(['[C104295] Import Apple Calendar iCal', 'macos_1011_full', function (I) {
     I.waitForText('Recurring', 5, appointment + ' .title');
@@ -175,7 +175,7 @@ examples.add(['[C104299] Import Google iCal', 'google_2016_recurring', function 
     I.see('Tue, 11/29/2016', sidePopup);
     I.see('12:30', sidePopup);
     I.see('1:30 PM', sidePopup);
-    I.see('Every day. The series ends after 5 occurences.', sidePopup);
+    I.see('Every day. The series ends after 5 occurrences.', sidePopup);
 }]);
 examples.add(['[C104299] Import Google iCal', 'google_2016_full', function (I) {
     I.waitForText('Recurring', 5, appointment + ' .title');
@@ -256,7 +256,7 @@ examples.add(['[C104276] Import emClient iCal', 'yahoo_2016_full', function (I) 
     I.seeNumberOfElements(fulltime, 1);
 }]);
 
-Data(examples).Scenario('Import Calendar data', async (I, current, users, dialogs) => {
+Data(examples).Scenario('Import Calendar data', async ({ I, current, users, dialogs }) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     I.waitForText('My calendars');
     I.waitForText('Birthdays');

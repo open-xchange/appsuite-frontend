@@ -12,232 +12,694 @@
  */
 
 define('io.ox/chat/views/chat', [
+    'io.ox/core/extensions',
+    'io.ox/chat/api',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
     'io.ox/chat/views/chatMember',
+    'io.ox/chat/views/messages',
+    'io.ox/chat/views/content',
+    'io.ox/chat/views/typing',
     'io.ox/chat/events',
-    'io.ox/chat/data'
-], function (DisposableView, Avatar, ChatAvatar, ChatMember, events, data) {
+    'io.ox/chat/data',
+    'io.ox/chat/util',
+    'io.ox/chat/toolbar',
+    'io.ox/core/yell',
+    'io.ox/backbone/views/toolbar',
+    'gettext!io.ox/chat',
+    'io.ox/core/strings',
+    'io.ox/core/notifications',
+    'io.ox/chat/views/dropzone'
+], function (ext, api, DisposableView, Avatar, ChatAvatar, ChatMember, MessagesView, ContentView, typing, events, data, util, toolbar, yell, ToolbarView, gt, strings, notifications, dropzone) {
 
     'use strict';
 
-    var MESSAGE_LIMIT = 20;
-
     var ChatView = DisposableView.extend({
 
-        className: 'chat',
+        className: 'chat abs',
 
         events: {
             'keydown textarea': 'onEditorKeydown',
-            'input textarea': 'onEditorInput'
+            'input textarea': 'onEditorInput',
+            'click .send-btn': 'onSend',
+            'click .toggle-emoji': 'onToggleEmoji',
+            'click .file-upload-btn': 'onTriggerFileupload',
+            'click .jump-down': 'onJumpDown',
+            'change .file-upload-input': 'onFileupload',
+            'click .cancel-btn': 'onCancelSpecialMode'
         },
 
         initialize: function (options) {
 
-            this.room = options.room;
-            this.model = data.chats.get(this.room);
+            this.roomId = options.roomId;
+            this.messageId = options.messageId;
+            this.model = this.model || data.chats.get(this.roomId);
+
+            // we create the scrollpane early to pass it along the view chain
+            // this is just an optimization for better lazyload behavior (aka less flickering)
+            this.$scrollpane = $('<div class="scrollpane scrollable" tabindex="0">').lazyloadScrollpane();
+            this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages, scrollpane: this.$scrollpane });
 
             this.listenTo(this.model, {
-                'change:title': this.onChangeTitle
+                'change:title': this.onChangeTitle,
+                'change:favorite': this.updateDropdown,
+                'change:unreadCount': this.onChangeUnreadCount,
+                'change:roomId': this.onChangeRoomId,
+                'change:members': this.onChangeMembers
             });
+
+            // track whether current user is member
+            this.isMember = this.model.isMember();
 
             this.listenTo(this.model.messages, {
-                'add': this.onAdd,
-                'remove': this.onRemove,
-                'change:body': this.onChangeBody,
-                'change:time': this.onChangeTime,
-                'change:delivery': this.onChangeDelivery
+                'after:all': this.onUpdatePaginators.bind(this),
+                'paginate': this.toggleAutoScroll.bind(this, false)
             });
 
-            this.model.messages.fetch();
-
-            // tracking typing
-            this.typing = {
-                $el: $('<div class="typing">'),
-                timer: {},
-                show: function (userId) {
-                    var model = data.users.get(userId);
-                    if (!model || model.isMyself()) return;
-                    this.reset(userId);
-                    var $span = this.span(userId);
-                    if (!$span.length) this.add(userId, model.getName());
-                    this.timer[userId] = setTimeout(function () {
-                        if (this.disposed) return;
-                        this.hide(userId);
-                    }.bind(this), 5000);
-                },
-                span: function (userId) {
-                    return this.$el.find('[data-user-id="' + userId + '"]');
-                },
-                reset: function (userId) {
-                    if (!this.timer[userId]) return;
-                    window.clearTimeout(this.timer[userId]);
-                    delete this.timer[userId];
-                },
-                add: function (userId, name) {
-                    this.$el.append($('<div class="name">').attr('data-user-id', userId).text(name + ' is typing'));
-                },
-                hide: function (userId) {
-                    this.reset(userId);
-                    this.span(userId).remove();
-                },
-                toggle: function (userId, state) {
-                    if (state) this.show(userId); else this.hide(userId);
-                }
-            };
-
-            this.listenTo(events, 'typing:' + this.model.id, function (userId, state) {
-                this.typing.toggle(userId, state);
+            this.listenTo(events, {
+                'cmd:message:delete': this.onMessageDelete,
+                'cmd:message:edit': this.onMessageEdit,
+                'cmd:message:reply': this.onMessageReply
             });
 
-            this.$messages = $();
+            this.listenTo(this.messagesView, {
+                'before:add': this.onBeforeAdd,
+                'after:add': this.onAfterAdd
+            });
+
+            this.on('appended', function () {
+                // restore textarea height for draft content
+                this.$editor.focus().trigger('input');
+            });
+
+            this.on('dispose', this.onDispose);
+
+            this.messagesView.messageId = this.messageId;
+            // there are two cases when to reset the collection before usage
+            // 1) We have a messageId but the requested messageId is not in the collection
+            // 2) We don't have a messageId but the collection is not fully fetched
+            if ((this.messageId && !this.model.messages.get(this.messageId)) || (!this.messageId && !this.model.messages.nextComplete)) this.model.messages.reset();
+            _.delay(this.model.messages.fetch.bind(this.model.messages));
+
             this.$editor = $();
+            this.autoScroll = _.isUndefined(options.autoScroll) ? true : options.autoScroll;
+
+            this.onHide = this.onHide.bind(this);
+            this.onShow = this.onShow.bind(this);
+
+            $(window).on('blur', this.onHide);
+            $(window).on('focus', this.onShow);
+
+            // apply throttle within initialize other we have a shared throttled function across all instances
+            this.onScroll = _.throttle(this.onScroll, 300);
+
+            // DnD support
+            var zone = dropzone.add(this);
+            this.listenTo(zone, 'drop', function (files) {
+                files.forEach(function (file) {
+                    if (isUnderFileSizeLimit(file)) this.model.postMessage({ content: '' }, file);
+                }, this);
+            });
+        },
+
+        onShow: function () {
+            this.hidden = false;
+            this.markMessageAsRead();
+        },
+
+        onHide: function () {
+            this.hidden = true;
+        },
+
+        onDispose: function () {
+            $(window).off('blur', this.onHide);
+            $(window).off('focus', this.onShow);
         },
 
         render: function () {
+            this.toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
+            this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
+            this.chatMemberview = new ChatMember({ collection: this.model.members });
             this.$el.append(
-                $('<div class="header abs">').append(
+                $('<div class="header">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
-                    this.model.isPrivate() ?
+                    (this.model.isPrivate() ?
                         // private chat
-                        this.renderTitle().addClass('flex-grow') :
+                        this.renderTitle() :
                         // groups / channels
-                        $('<div class="flex-grow">').append(
+                        $('<div>').append(
                             this.renderTitle().addClass('small-line'),
-                            new ChatMember({ collection: this.model.members }).render().$el
-                        ),
+                            this.chatMemberview.render().$el
+                        )
+                    )
+                    .addClass('flex-grow flex-center-vertically'),
                     // burger menu (pull-right just to have the popup right aligned)
-                    $('<div class="dropdown pull-right">').append(
-                        $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
-                        .append('<i class="fa fa-bars" aria-hidden="true">'),
+                    this.$dropdown = $('<div class="dropdown">').append(
+                        $('<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').attr('title', gt('More actions'))
+                        .append(util.svg({ icon: 'fa-bars' }).attr('title', gt('More actions'))),
                         this.renderDropdown()
-                    )
+                    ).css('visibility', 'hidden')
                 ),
-                $('<div class="scrollpane abs">').append(
+                this.toolbar.$el,
+                this.$scrollpane.on('scroll', $.proxy(this.onScroll, this)).append(
+                    this.$paginatePrev = $('<div class="paginate prev">').hide(),
                     $('<div class="conversation">').append(
-                        this.$messages = $('<div class="messages">').append(
-                            this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
-                        ),
-                        this.typing.$el
-                    )
+                        this.messagesView.render().$el,
+                        new typing.View({ roomId: this.model.id }).render().$el
+                    ),
+                    this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
-                $('<div class="controls abs">').append(
-                    this.$editor = $('<textarea class="form-control" placeholder="Enter message here">')
+                $('<div class="controls">').append(
+                    this.renderJumpDown(),
+                    this.renderEditor()
                 )
             );
+            this.onUpdatePaginators();
+            this.markMessageAsRead();
+
+            if (this.$dropdown.find('.dropdown-menu').children().length > 0) this.$dropdown.css('visibility', 'visible');
 
             return this;
         },
 
+        renderJumpDown: function () {
+            var title = gt('Scroll to newest message');
+            this.$jumpDown = $('<button class="btn btn-default btn-circle jump-down">').attr('title', title).append(
+                util.svg({ icon: 'fa-chevron-down' }).attr('aria-label', title),
+                this.$unreadCounter = $('<span class="badge">').text(this.model.get('unreadCount') || '')
+            );
+            return this.$jumpDown.toggle(this.isJumpDownVisible());
+        },
+
+        renderEditor: function () {
+            if (this.isMember) {
+                var $container = $('<div class="editor-container">').append(
+                    $('<div class="reference-container">'),
+                    this.$editor = $('<textarea rows="1">').attr({
+                        'aria-label': gt('Message'),
+                        'placeholder': gt('Message'),
+                        'maxlength': data.serverConfig.maxMsgLength
+                    }).val(this.model.get('draft') || '')
+                );
+                var send = $('<button type="button" class="btn btn-link pull-right send-btn">').attr('aria-label', gt('Send'))
+                    .append(util.svg({ icon: 'fa-paper-plane' }).attr('title', gt('Send')));
+                var emoji = $('<button type="button" class="btn btn-link pull-right toggle-emoji">').attr('aria-label', gt('Add emoji'))
+                    .append(util.svg({ icon: 'fa-smile-o' }).attr('title', gt('Add emoji')));
+                var cancel = $('<button type="button" class="btn btn-link cancel-btn">').attr('aria-label', gt('Cancel'))
+                    .append(util.svg({ icon: 'fa-times' }).attr('title', gt('Cancel')));
+                var attachment = $('<button type="button" class="btn btn-link pull-right file-upload-btn">').attr('aria-label', gt('Upload file'))
+                    .append(util.svg({ icon: 'fa-paperclip' }).attr('title', gt('Upload file')));
+                var input = $('<input type="file" class="file-upload-input hidden" multiple>');
+
+                return [attachment, input, $container, cancel, emoji, send];
+            }
+
+            if (this.model.isChannel()) {
+                return $('<button type="button" class="btn btn-default btn-action join">')
+                .attr({ 'data-cmd': 'join-channel', 'data-id': this.model.get('roomId') })
+                .append(gt('Join'));
+            }
+        },
+
+        updateEditor: function () {
+            this.$('.controls').empty().append(this.renderEditor());
+        },
+
         renderDropdown: function () {
+            var $ul = $('<ul class="dropdown-menu dropdown-menu-right">'),
+                model = this.model,
+                id = model.id;
 
-            var $ul = $('<ul class="dropdown-menu">');
+            this.toolbar.$('.more-dropdown .dropdown-menu').children().toArray().forEach(function (child) {
+                var $child = $(child);
+                if ($child.hasClass('divider')) return addSeparator();
+                var a = $child.find('a');
+                if (!a.length) return;
+                addItem(a.text(), a.attr('data-cmd'));
+            });
 
-            function renderItem(text, data) {
-                return $('<li>').append(
-                    $('<a href="#" role="button">').attr(data).text(text)
+            function addItem(text, cmd) {
+                $ul.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" role="button">').attr({ 'data-cmd': cmd, 'data-id': id }).text(text)
+                    )
                 );
             }
 
-            // add member
-            if (this.model.isGroup()) {
-                $ul.append(renderItem('Add member', { 'data-cmd': 'add-member', 'data-id': this.model.id }));
+            function addSeparator() {
+                $ul.append('<li class="divider" role="separator">');
             }
 
-            // close
-            $ul.append(renderItem('Close chat', { 'data-cmd': 'close-chat', 'data-id': this.model.id }));
-
             return $ul;
+        },
+
+        updateDropdown: function () {
+            this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
+            this.$dropdown.find('.dropdown-menu').replaceWith(this.renderDropdown());
         },
 
         renderTitle: function () {
             return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
-        renderMessage: function (model) {
-            return $('<div class="message">')
-                // here we use cid instead of id, since the id might be unknown
-                .attr('data-cid', model.cid)
-                .addClass(model.isSystem() ? 'system' : model.get('type'))
-                .toggleClass('myself', model.isMyself())
-                .append(
-                    // sender avatar & name
-                    this.renderSender(model),
-                    // message boby
-                    $('<div class="body">').addClass().html(model.getBody()),
-                    // time
-                    $('<div class="time">').text(model.getTime()),
-                    // delivery state
-                    $('<div class="fa delivery">').addClass(model.get('delivery'))
-                );
+        isScrolledToBottom: function () {
+            var scrollpane = this.$scrollpane;
+            return scrollpane.scrollTop() + scrollpane.height() > scrollpane.prop('scrollHeight') - 30;
         },
 
-        renderSender: function (model) {
-            if (model.isSystem() || model.isMyself() || model.hasSameSender()) return $();
-            var user = data.users.get(model.get('senderId'));
-            return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
+        onBeforeAdd: function () {
+            var firstChild = this.messagesView.$el.children().first(),
+                prevTop = (firstChild.position() || {}).top || 0,
+                // check this before adding the new messages
+                isScrolledDown = this.isScrolledToBottom();
+            this.scrollInfo = { firstChild: firstChild, prevTop: prevTop, isScrolledDown: isScrolledDown };
+        },
+
+        onAfterAdd: function (added) {
+            // determine whether to scroll to new or selected message
+            var scrollpane = this.$scrollpane,
+                firstChild = this.scrollInfo.firstChild,
+                prevTop = this.scrollInfo.prevTop,
+                isScrolledDown = this.scrollInfo.isScrolledDown,
+                multipleMessages = added.length > 1,
+                isCurrentUser = api.isMyself(added[0].get('sender'));
+
+            if (multipleMessages || isCurrentUser || isScrolledDown) {
+                if (this.autoScroll) this.scrollToBottom();
+                else if (firstChild.position().top - prevTop) scrollpane.scrollTop(firstChild.position().top - prevTop);
+            }
+
+            this.toggleAutoScroll(true);
+            delete this.scrollInfo;
+
+            this.markMessageAsRead();
+        },
+
+        onMessageDelete: function (model) {
+            // success will trigger a message:changed event on the websocket. This takes care of view updates etc
+            api.deleteMessage(model).fail(function () {
+                yell('error', gt('The message could not be deleted.'));
+            });
+        },
+
+        onCancelSpecialMode: function () {
+            if (this.specialMode === 'edit') this.$editor.val('');
+            if (this.$messageReference) this.$messageReference.remove();
+            this.$('.controls').removeClass('edit-mode reply-mode system text preview emoji');
+            this.specialMode = false;
+            this.messageReference = null;
+            _.defer(function () { this.$editor.focus().trigger('input'); }.bind(this));
+        },
+
+        onMessageEdit: function (model) {
+            //clean up
+            this.onCancelSpecialMode();
+            var messageNode = this.getMessageNode(model);
+            // scroll to edited message
+            if (messageNode) {
+                this.$scrollpane.scrollTop(messageNode[0].offsetTop - this.$scrollpane.height() + messageNode.height() + 4);
+            }
+            this.specialMode = 'edit';
+            this.messageReference = model;
+            this.$('.controls').addClass('edit-mode');
+            this.$editor.val(model.get('content')).focus().trigger('input');
+        },
+
+        onMessageReply: function (model) {
+            // clean up
+            this.onCancelSpecialMode();
+
+            // scroll to quoted message
+            var $el = this.getMessageNode(model);
+            if ($el.length) $el[0].scrollIntoView(false);
+
+            var user = data.users.getByMail(model.get('sender'));
+
+            this.specialMode = 'reply';
+            this.messageReference = model;
+            this.$messageReference = $('<div class="message-quote">').append(
+                $('<div class="sender">').text(user.getName()),
+                new ContentView({ model: model, inEditor: true }).render().$el
+            );
+            this.$messageReference.find('button').remove();
+
+            this.$('.controls').addClass('reply-mode');
+            this.$('.reference-container').empty().append(this.$messageReference);
         },
 
         scrollToBottom: function () {
-            this.$('.scrollpane').scrollTop(0xFFFF);
-            this.model.set('unseen', 0);
+            var position = 0xFFFFFF,
+                scrollpane = this.$scrollpane;
+            if (this.messageId) {
+                var model = this.model.messages.get(this.messageId);
+                if (model) {
+                    var elem = this.messagesView.$('[data-cid="' + model.cid + '"]'),
+                        delta = elem.position().top - scrollpane.height() / 2;
+                    position = scrollpane.scrollTop() + delta;
+                    delete this.messageId;
+                }
+            }
+            // the first line is to set the scroll position immediately to avoid flicker
+            scrollpane.scrollTop(position);
+            // the second line sets the position again a few ticks later so that cached images are covered
+            setTimeout(function (pos) { scrollpane.scrollTop(pos); }, 10, position);
+        },
+
+        toggleAutoScroll: function (autoScroll) {
+            if (autoScroll === undefined) autoScroll = !this.autoScroll;
+            this.autoScroll = autoScroll;
         },
 
         onEditorKeydown: function (e) {
-            if (e.which !== 13) return;
-            e.preventDefault();
-            this.onPostMessage(this.$editor.val());
-            this.$editor.val('').focus();
+            // esc quits edit and reply
+            if (e.which === 27 && this.specialMode) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.onCancelSpecialMode();
+            }
+            // cursor up handling to edit last own message
+            // check if user has already typed something
+            if (e.which === 38 && !this.specialMode && !this.model.get('draft')) {
+                var last = this.model.getLastMessageForUser(api.userId);
+                if (last) this.onMessageEdit(last);
+            }
+            if (e.which === 13) {
+                // shift + enter appends newline
+                // other modifiers don't do anything to avoid unwanted messages
+                if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+                e.preventDefault();
+                this.onSend();
+                this.$editor.focus().trigger('input');
+            }
         },
 
         onEditorInput: function () {
-            var state = this.$editor.val() !== '';
-            data.socket.emit('typing', { roomId: this.model.id, state: state });
+            var textarea = this.$editor[0],
+                value = textarea.value;
+            this.model.set('draft', value, { silent: true });
+            // the following approach (instead of pixel height) also works with text-zoom
+            textarea.rows = 1;
+            var singleRowHeight = textarea.clientHeight;
+            var scrollHeight = textarea.scrollHeight;
+            // limit height to 10 rows
+            textarea.rows = Math.min(10, Math.round(scrollHeight / singleRowHeight));
+            if (value) typing.propagate(this.model.id);
         },
 
-        onPostMessage: function (body) {
-            this.model.postMessage({ body: body });
+        onTriggerFileupload: function () {
+            this.$('.file-upload-input').trigger('click');
+        },
+
+        onFileuploadNew: function () {
+            var $input = this.$('.file-upload-input');
+            var files = $input[0].files;
+            if (files.length <= 0) return;
+            for (var i = 0; i <= files.length - 1; i++) this.model.postMessage({ content: '' }, files.item(i));
+            $input.val('');
+        },
+
+        onFileupload: function () {
+            var $input = this.$('.file-upload-input');
+            var files = $input[0].files;
+            if (files.length > 0) {
+                for (var i = 0; i <= files.length - 1; i++) {
+                    var file = files.item(i);
+                    if (isUnderFileSizeLimit(file)) this.model.postMessage({ content: '' }, file);
+                }
+            }
+            $input.val('');
+        },
+
+        onJumpDown: function () {
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            } else {
+                this.scrollToBottom();
+            }
+        },
+
+        onSend: function () {
+            var text = this.$editor.val();
+            if (text.trim().length > 0) this.onPostMessage(text);
+            this.$editor.val('');
+            this.model.unset('draft', { silent: true });
+        },
+
+        onPostMessage: function (content) {
+            var maxMessageLength = data.serverConfig.maxMsgLength || -1;
+
+            if (maxMessageLength > 0 && (content.length > maxMessageLength)) {
+                notifications.yell('error', gt('The message cannot be sent because it exceeds the maximum message length of %1$s characters.', maxMessageLength));
+                return;
+            }
+
+            // reset and fetch messages when in search and collection is not complete
+            if (!this.model.messages.nextComplete) {
+                this.model.messages.reset();
+                this.model.messages.fetch();
+            }
+
+            api.typing(this.model.id, false);
+
+            if (this.specialMode === 'edit') {
+                api.editMessage(content, this.messageReference).fail(this.model.handleError);
+                this.onCancelSpecialMode();
+            } else if (this.specialMode === 'reply') {
+                var replyTo = this.messageReference.omit('edited', 'replyTo');
+                this.model.postMessage({ content: content, replyTo: replyTo });
+                this.onCancelSpecialMode();
+            } else {
+                this.model.postMessage({ content: content });
+            }
         },
 
         onChangeTitle: function (model) {
             this.$('.title').text(model.getTitle() || '\u00a0');
         },
 
-        onAdd: _.debounce(function (model, collection, options) {
-            if (this.disposed) return;
+        onChangeUnreadCount: function () {
+            this.$unreadCounter.text(this.model.get('unreadCount') || '');
+        },
 
-            // render
-            this.$messages.append(
-                options.changes.added.map(this.renderMessage.bind(this))
-            );
-            // too many messages?
-            var children = this.$messages.children();
-            if (children.length > MESSAGE_LIMIT) children.slice(0, children.length - MESSAGE_LIMIT).remove();
-            // proper scroll position
-            this.scrollToBottom();
-        }, 1),
+        onChangeMembers: function () {
+            var isMember = this.model.isMember();
+            var changed = this.isMember !== isMember;
+            this.isMember = isMember;
+            if (!changed) return;
+            this.updateEditor();
+            this.updateDropdown();
+        },
+
+        onScroll: function () {
+
+            if (this.disposed) return;
+            this.$jumpDown.toggle(this.isJumpDownVisible());
+
+            if (this.$('.messages').is(':empty')) return;
+            (function (view) {
+                if (!view.model.messages.prevComplete) {
+                    var $paginatePrev = view.$paginatePrev;
+                    if ($paginatePrev.hasClass('io-ox-busy')) return;
+                    if ($paginatePrev.position().top < -$paginatePrev.height() * 2) return;
+                    $paginatePrev.busy();
+                    view.model.messages.paginate('older').then(function () {
+                        $paginatePrev.idle();
+                    });
+                }
+            }(this));
+
+            (function (view) {
+                if (!view.model.messages.nextComplete) {
+                    var $paginateNext = view.$paginateNext;
+                    if ($paginateNext.hasClass('io-ox-busy')) return;
+                    if ($paginateNext.position().top - $paginateNext.height() > $paginateNext.parent().height()) return;
+                    $paginateNext.busy();
+                    view.model.messages.paginate('newer').then(function () {
+                        $paginateNext.idle();
+                    });
+                }
+            }(this));
+
+            this.markMessageAsRead();
+        },
+
+        onChangeRoomId: function () {
+            this.$('[data-cid=' + this.model.cid + ']').attr('data-cid', this.model.get('roomId'));
+        },
+
+        markMessageAsRead: function () {
+            if (this.hidden) return;
+            if (this.model.isChannel() && !this.model.isMember()) return;
+            var lastIndex = this.model.messages.findLastIndex(function (message) {
+                return !api.isMyself(message.get('sender'));
+            });
+            if (lastIndex < 0) return;
+            var message = this.model.messages.at(lastIndex);
+            if (message.get('deliveryState') === 'seen') return;
+            message.updateDelivery('seen');
+        },
+
+        isJumpDownVisible: function () {
+            return this.$scrollpane.scrollTop() + this.$scrollpane.height() < this.$scrollpane.prop('scrollHeight') - 50;
+        },
+
+        onUpdatePaginators: function () {
+            var wasScrolledToBottom = this.isScrolledToBottom();
+
+            this.$('.paginate.prev').idle().toggle(!this.model.messages.prevComplete && this.model.messages.length > 0);
+            this.$('.paginate.next').idle().toggle(!this.model.messages.nextComplete && this.model.messages.length > 0);
+
+            if (wasScrolledToBottom && !this.isScrolledToBottom()) this.scrollToBottom();
+        },
+
+        onComplete: function (direction) {
+            this.$('.paginate.' + direction).idle().hide();
+        },
 
         getMessageNode: function (model, selector) {
             return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
         },
 
-        onRemove: function (model) {
-            this.getMessageNode(model).remove();
+        onToggleEmoji: function () {
+            if (this.emojiView) return this.emojiView.toggle();
+            if (this.emojiView === false) return;
+            this.emojiView = false;
+            require(['io.ox/core/emoji/view'], function (EmojiView) {
+                this.emojiView = new EmojiView({ closeOnInsert: true, closeOnFocusLoss: true });
+                this.listenTo(this.emojiView, 'insert', this.insertEmoji);
+                this.$el.append(this.emojiView.$el);
+                this.emojiView.render();
+            }.bind(this));
         },
 
-        onChangeBody: function (model) {
-            this.getMessageNode(model, '.body').html(model.getBody());
-        },
-
-        onChangeTime: function (model) {
-            this.getMessageNode(model, '.time').text(model.getTime());
-        },
-
-        onChangeDelivery: function (model) {
-            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
+        insertEmoji: function (unicode) {
+            var editor = this.$editor[0];
+            var value = editor.value;
+            var pos = editor.selectionStart;
+            var activeElement = document.activeElement;
+            if (pos !== undefined) {
+                editor.value = value.substr(0, pos) + unicode + value.substr(pos);
+                editor.focus();
+                pos += unicode.length;
+                editor.setSelectionRange(pos, pos);
+                if (activeElement) activeElement.focus();
+            } else {
+                editor.value += unicode;
+            }
+            this.$editor.trigger('input');
         }
     });
+
+    ext.point('io.ox/chat/detail/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function (baton) {
+                baton.view.listenTo(baton.model, 'change:title', function () {
+                    this.text(baton.model.getTitle());
+                }.bind(this));
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(baton.model.getTitle());
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        },
+        {
+            id: 'toggle-favorite',
+            index: 400,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (!model.get('active')) return;
+                var title = model.isFavorite() ? gt('Remove from favorites') : gt('Add to favorites');
+                createMenuItem(this, 'toggle-favorite', model.id, title, 'general');
+            }
+        },
+        {
+            id: 'edit-group',
+            index: 500,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (!model.isMember() || model.isPrivate()) return;
+                createMenuItem(this, 'edit-group-chat', model.id, model.isChannel() ? gt('Edit channel') : gt('Edit chat'), 'general');
+            }
+        },
+        {
+            id: 'close-chat',
+            index: 600,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (!model.get('active')) return;
+                createMenuItem(this, 'unsubscribe-chat', model.id, model.isChannel() ? gt('Close channel') : gt('Close chat'), 'general');
+            }
+        },
+        {
+            id: 'leave-group',
+            index: 700,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (!model.isGroup() && !model.isChannel()) return;
+                if (!model.isMember()) return;
+                createMenuItem(this, model.isChannel() ? 'leave-channel' : 'leave-group', model.id, model.isChannel() ? gt('Leave channel') : gt('Leave chat'), 'actions');
+            }
+        },
+        {
+            id: 'join-channel',
+            index: 800,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (!model.isChannel()) return;
+                if (model.isMember()) return;
+                if (model.get('active')) return;
+                createMenuItem(this, 'join-channel', model.id, gt('Join channel'), 'join-leave', 'actions');
+            }
+        },
+        {
+            id: 'delete-room',
+            index: 800,
+            custom: true,
+            draw: function (baton) {
+                var model = baton.model;
+                if (model.isPrivate()) return;
+                if (!model.isMember()) return;
+                if (model.isGroup() && !model.isAdmin()) return;
+                if (model.isChannel() && !(model.isAdmin() || model.isCreator())) return;
+                createMenuItem(this, 'delete-chat', model.id, model.isChannel() ? gt('Delete channel') : gt('Delete chat'), 'join-leave', 'delete');
+            }
+        }
+    );
+
+    function createMenuItem(node, cmd, id, label, section) {
+        node.attr({ 'data-prio': 'lo', 'data-section': section }).append(
+            $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
+            .attr({ 'data-cmd': cmd, 'data-id': id })
+            .text(label)
+            .on('click', events.forward)
+        );
+    }
+
+    function isUnderFileSizeLimit(file) {
+        var sizeLimit = data.serverConfig.maxFileSize || -1;
+        if (file.size < sizeLimit) return true;
+        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', file.name, strings.fileSize(sizeLimit)));
+        return false;
+    }
 
     return ChatView;
 });

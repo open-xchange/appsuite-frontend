@@ -47,7 +47,13 @@ define('io.ox/core/tk/sounds-util', [
     // ensure we do not play a sound twice until the first sound has finished
     var playSound = _.throttle(function () {
         if (_.device('smartphone')) return;
-        if (sound) sound.play();
+        if (sound) {
+            try {
+                sound.play();
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }, 2000);
 
     settings.on('change:notificationSoundName', function () {
@@ -56,7 +62,11 @@ define('io.ox/core/tk/sounds-util', [
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
             if (s) {
-                s.play();
+                try {
+                    s.play();
+                } catch (e) {
+                    console.error('Error playing sound', e);
+                }
                 sound = s;
             }
         });

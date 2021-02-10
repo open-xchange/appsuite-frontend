@@ -14,16 +14,16 @@ const moment = require('moment');
 
 Feature('Calendar > Create');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Create recurring appointments with one participant', async function (I, users, calendar, dialogs) {
+Scenario('Create recurring appointments with one participant', async function ({ I, users, calendar, dialogs }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -57,8 +57,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForDetached('.modal-dialog');
 
     // add user 1
-    I.fillField('input.add-participant.tt-input', users[1].userdata.primaryEmail);
-    I.pressKey('Enter');
+    await calendar.addParticipant(users[1].userdata.primaryEmail, true);
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
 
@@ -80,8 +79,9 @@ Scenario('Create recurring appointments with one participant', async function (I
     // login new user1 for accept
     I.login('app=io.ox/calendar&perspective=list', { user: users[1] });
     calendar.waitForApp();
+    I.waitForNetworkTraffic();
 
-    I.waitForText('Load appointments until', 5, calendar.locators.listview);
+    I.waitForText('Load appointments until', 10, calendar.locators.listview);
     I.click('Load appointments until');
     I.waitForVisible(locate('.appointment').withText('test recurring').inside('.list-view').at(5).as('Appointment 5'));
     I.seeNumberOfElements('.list-view .appointment .title', 5);
@@ -126,7 +126,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     dialogs.clickButton('Cancel');
     I.waitForDetached('.modal-dialog');
 
-    // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurence"
+    // TODO: Needs a fix. "All future appointments" is wrong since apppointment has flag "first_occurrence"
     I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     dialogs.waitForVisible();
     dialogs.clickButton('Edit all future appointments');
@@ -161,7 +161,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForVisible(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
     I.seeNumberOfElements(locate('.title').withText('test recurring edit new').inside('.list-view-control'), 1);
 
-    I.click(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
+    I.retry(3).click(locate('.title').withText('test recurring edit new').inside('.list-view-control'));
     //edit exeption
     I.waitForVisible({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
     I.click({ css: '[data-action="io.ox/calendar/detail/actions/edit"]' });
@@ -187,7 +187,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForDetached('.modal-dialog');
 
     I.waitForVisible(locate('.title').withText('test recurring edit').inside('.list-view-control'));
-    I.seeNumberOfElements(locate('.title').withText('test recurring edit').inside('.list-view-control'), 3);
+    I.waitNumberOfVisibleElements(locate('.title').withText('test recurring edit').inside('.list-view-control'), 3);
 
 
     // check in Month view
@@ -211,7 +211,7 @@ Scenario('Create recurring appointments with one participant', async function (I
     I.waitForText('Load appointments until', 5, calendar.locators.listview);
     I.click('Load appointments until');
     I.waitForText('test recurring edit', 5, calendar.locators.listview);
-    I.seeNumberOfElements('.list-view .appointment .title', 4);
+    I.waitNumberOfVisibleElements('.list-view .appointment .title', 4);
 
     I.retry(5).click(locate('.list-item.appointment').withText('test recurring edit'));
 
@@ -239,15 +239,14 @@ Scenario('Create recurring appointments with one participant', async function (I
     dialogs.clickButton('Change appointment');
     I.waitForText('Change confirmation status', 5, dialogs.locators.header);
     dialogs.clickButton('Tentative');
-
     I.waitForDetached('.modal-dialog', 5);
     I.waitForVisible('.list-view .appointment');
-    I.seeNumberOfElements('.list-view .appointment .tentative', 1);
-    I.seeNumberOfElements('.list-view .appointment .declined', 2);
+    I.waitNumberOfVisibleElements('.list-view .appointment .tentative', 1);
+    I.waitNumberOfVisibleElements('.list-view .appointment .declined', 2);
 });
 
 
-Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function (I, calendar, dialogs) {
+Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never ends"', async function ({ I, calendar, dialogs }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
@@ -272,7 +271,7 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
         }
     });
 
-    // startDate of master is recurrenceId for the first occurence
+    // startDate of master is recurrenceId for the first occurrence
     var cid = appointment.folder + '.' + appointment.id + '.' + appointment.startDate.value;
 
     I.login('app=io.ox/calendar&perspective=list');
@@ -288,7 +287,7 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
 
     // change recurrence to never ending
-    I.click('Every day. The series ends after 3 occurences.');
+    I.click('Every day. The series ends after 3 occurrences.');
     dialogs.waitForVisible();
     I.selectOption('Ends', 'Never');
     dialogs.clickButton('Apply');
@@ -298,6 +297,38 @@ Scenario('[Bug 63392][OXUIB-212] Recurring appointment can\'t changed to "Never 
     // no backend error should happen here
     I.waitForDetached('.io-ox-tasks-edit-window');
     // must use xpath here since waitForText does not check if the elements text fully matches the string
-    // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurences.'
+    // we are looking for just 'Every day.' and not 'Every day. The series ends after 3 occurrences.'
     I.waitForElement({ xpath: '//div[contains(@class, "calendar-detail")]//div[@class="recurrence"][text()="Every day."]' });
 });
+
+Scenario('[Bug 62034] Appointment series ends one day to early', async function ({ I, calendar, dialogs }) {
+
+    await I.haveSetting({
+        'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+        'io.ox/calendar': { showCheckboxes: true }
+    });
+
+    // start tomorrow
+    var startDate = moment().startOf('day').add(1, 'day');
+
+    I.login('app=io.ox/calendar&perspective=list');
+    calendar.waitForApp();
+
+    calendar.newAppointment();
+    I.fillField('Subject', 'Until test');
+    calendar.setDate('startDate', startDate);
+    I.click('~Start time');
+    I.click('4:00 PM');
+    I.click('Repeat', '.io-ox-calendar-edit-window');
+    I.click({ css: '.recurrence-view .btn.btn-link.summary' });
+    dialogs.waitForVisible();
+    I.selectOption('.modal-dialog [name="recurrence_type"]', 'Daily');
+    I.selectOption('Ends', 'On specific date');
+    I.fillField('.recurrence-view-dialog .datepicker-day-field', startDate.add(3, 'days').format('l'));
+    dialogs.clickButton('Apply');
+    I.waitForInvisible('.modal-dialog');
+    I.click('Create');
+
+    I.waitNumberOfVisibleElements('.list-item.selectable.appointment', 4);
+});
+

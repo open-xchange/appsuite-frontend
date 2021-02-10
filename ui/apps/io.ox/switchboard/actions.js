@@ -31,7 +31,8 @@ define('io.ox/switchboard/actions', [
             return api.isGAB(baton);
         },
         action: function (baton) {
-            call.start(baton.type, getRecipients(baton));
+            var recipients = _(baton.array()).pluck('email1');
+            call.start(baton.type, recipients);
         }
     });
 
@@ -61,12 +62,6 @@ define('io.ox/switchboard/actions', [
 
     function justMyself(baton) {
         return baton.array().every(function (data) { return data.email1 === api.userId; });
-    }
-
-    function getRecipients(baton) {
-        return _(baton.array()).map(function (data) {
-            return String(data.email1).toLowerCase().trim();
-        });
     }
 
     // // add links to toolbar

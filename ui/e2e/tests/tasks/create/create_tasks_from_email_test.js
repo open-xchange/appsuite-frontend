@@ -14,15 +14,15 @@
 
 Feature('Tasks > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7737] Create Task from email', async (I, users, mail) => {
+Scenario('[C7737] Create Task from email', async ({ I, users, mail }) => {
 
     // Precondition: Have an email from an other user in the inbox.
 

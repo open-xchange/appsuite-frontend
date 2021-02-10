@@ -15,15 +15,15 @@
 /// <reference path="../../steps.d.ts" />
 Feature('General > User feedback');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C125002] Enable user feedback dialog', function (I, mail, dialogs) {
+Scenario('[C125002] Enable user feedback dialog', function ({ I, mail, dialogs }) {
     I.login();
     mail.waitForApp();
     I.waitForVisible('~Feedback');
@@ -32,7 +32,7 @@ Scenario('[C125002] Enable user feedback dialog', function (I, mail, dialogs) {
     I.see('Please rate the following application');
 });
 
-Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts, calendar, portal, tasks, dialogs) {
+Scenario('[C125004] App aware user feedback', function ({ I, mail, drive, contacts, calendar, portal, tasks, dialogs }) {
 
     // Check if 'appType' is the value selected by default
     function testFeedback(appType = 'general') {
@@ -71,7 +71,7 @@ Scenario('[C125004] App aware user feedback', function (I, mail, drive, contacts
 
 });
 
-Scenario('[C125005] Provide user feedback', function (I, mail, dialogs) {
+Scenario('[C125005] Provide user feedback', function ({ I, mail, dialogs }) {
 
     const appArr = ['Mail', 'General', 'Calendar', 'Address Book', 'Drive'];
     const giveFeedback = (app) => {
@@ -104,7 +104,7 @@ Scenario('[C125005] Provide user feedback', function (I, mail, dialogs) {
 
 });
 
-Scenario('[C125003] Disable user feedback dialog', async function (I) {
+Scenario('[C125003] Disable user feedback dialog', async function ({ I }) {
 
     // var userA = users[0], userB = users[1];
     // await I.haveCapability('feedback', userA);

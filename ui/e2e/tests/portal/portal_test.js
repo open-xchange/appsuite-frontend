@@ -15,16 +15,16 @@ let assert = require('assert');
 
 Feature('Portal');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7471] Open items via portal-tile', async function (I, users) {
+Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
     // TODO: Need to add Appointment, latest file(upload?)
     const moment = require('moment');
     let testrailID = 'C7471';
@@ -120,7 +120,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.click('.item', '.widget[aria-label="My latest files"]');
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
-    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name span');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 
@@ -134,7 +134,7 @@ Scenario('[C7471] Open items via portal-tile', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7472] Check if the portalpage is up to date', async function (I, users) {
+Scenario('[C7472] Check if the portalpage is up to date', async function ({ I, users }) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
     let testrailID = 'C7472';
@@ -153,7 +153,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     while (element === 0 && retries) {
         retries--;
         I.waitForElement('#io-ox-refresh-icon', 5, '.taskbar');
-        I.click('#io-ox-refresh-icon', '.taskbar');
+        I.click('.taskbar #io-ox-refresh-icon');
         I.waitForElement('.launcher .fa-spin-paused', 5);
         I.wait(0.5);
         element = await I.grabNumberOfVisibleElements({ css: '[aria-label="Inbox"] .item .person' });
@@ -171,7 +171,7 @@ Scenario('[C7472] Check if the portalpage is up to date', async function (I, use
     //TODO: Same for appointments, tasks birthdays and latest files.
 });
 
-Scenario('[C7482] Add a mail to portal', async function (I, users, mail) {
+Scenario('[C7482] Add a mail to portal', async function ({ I, users, mail }) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
     const testrailID = 'C7482',
@@ -203,7 +203,7 @@ Scenario('[C7482] Add a mail to portal', async function (I, users, mail) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7475] Add inbox widget', async function (I, portal, users, dialogs) {
+Scenario('[C7475] Add inbox widget', async function ({ I, portal, users, dialogs }) {
     // TODO: Need to add Appointment, latest file(upload?)
     //const moment = require('moment');
     const testrailID = 'C7475',
@@ -238,7 +238,7 @@ Scenario('[C7475] Add inbox widget', async function (I, portal, users, dialogs) 
     I.waitForDetached('.io-ox-sidepopup');
 });
 
-Scenario('[C7476] Add task widget', async function (I, users) {
+Scenario('[C7476] Add task widget', async function ({ I, users }) {
     const moment = require('moment');
     let testrailID = 'C7476';
     let testrailName = 'Add task widget';
@@ -274,7 +274,7 @@ Scenario('[C7476] Add task widget', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7477] Add appointment widget', async function (I, users) {
+Scenario('[C7477] Add appointment widget', async function ({ I, users }) {
     const moment = require('moment');
     let testrailID = 'C7477';
 
@@ -308,7 +308,7 @@ Scenario('[C7477] Add appointment widget', async function (I, users) {
     I.waitForDetached('.io-ox-sidepopup', 5);
 });
 
-Scenario('[C7478] Add user data widget', async function (I, users, portal) {
+Scenario('[C7478] Add user data widget', async function ({ I, users, portal }) {
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal');
     portal.waitForApp();
@@ -333,7 +333,7 @@ Scenario('[C7478] Add user data widget', async function (I, users, portal) {
     */
 });
 
-Scenario('[C7480] Add recently changed files widget', async function (I, users) {
+Scenario('[C7480] Add recently changed files widget', async function ({ I, users }) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
     I.haveSetting('io.ox/portal//widgets/user', '{}');
@@ -346,7 +346,7 @@ Scenario('[C7480] Add recently changed files widget', async function (I, users) 
     I.click('.item', '.widget[aria-label="My latest files"]');
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
-    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name a');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name span');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 });

@@ -20,7 +20,7 @@ define('io.ox/contacts/actions/send', [
 
     function resolve(list) {
 
-        if (list.length === 1 && (list[0].id === 0 || list[0].folder_id === 0)) {
+        if (list.length === 1 && (list[0].id === 0 || String(list[0].folder_id) === '0')) {
             // just one contact
             var adress = list[0].email1 || list[0].email2 || list[0].email3;
             return $.Deferred().resolve([[adress, adress]]);

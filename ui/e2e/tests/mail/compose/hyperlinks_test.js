@@ -18,15 +18,15 @@ Feature('Mail Compose');
 
 const { expect } = require('chai');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8821] Send mail with Hyperlink', async function (I, mail) {
+Scenario('[C8821] Send mail with Hyperlink', async function ({ I, mail }) {
 
     let hyperLink = 'https://foo.bar';
     let linkText = 'appsuite link';
@@ -65,7 +65,7 @@ Scenario('[C8821] Send mail with Hyperlink', async function (I, mail) {
     expect(i + 1, 'number of open tabs is 2 within 1s').to.be.below(10);
 });
 
-Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I, mail) {
+Scenario('[C8822] Send Mail with Hyperlink from existing text', function ({ I, mail }) {
     I.login('app=io.ox/mail');
     mail.newMail();
     I.fillField('To', 'foo@bar');
@@ -88,7 +88,7 @@ Scenario('[C8822] Send Mail with Hyperlink from existing text', function (I, mai
     I.waitForText('testlink', '.rightside.mail-detail-pane .body.user-select-text');
 });
 
-Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I, mail) {
+Scenario('[C8823] Send Mail with Hyperlink by typing the link', function ({ I, mail }) {
     // test String has to contain whitespace at the end for URL converting to work
     const testText = 'Some test text https://foo.bar  ';
     I.login('app=io.ox/mail');
@@ -111,7 +111,7 @@ Scenario('[C8823] Send Mail with Hyperlink by typing the link', function (I, mai
     });
 });
 
-Scenario('[C8824] Remove hyperlinks', async function (I, mail) {
+Scenario('[C8824] Remove hyperlinks', async function ({ I, mail }) {
     const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
     const defaultText = 'Dies ist ein testlink http://example.com.';
 

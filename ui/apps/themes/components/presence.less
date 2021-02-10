@@ -14,6 +14,7 @@
 
 .presence {
     display: inline-block;
+    line-height: 0;
     .icon {
         color: white;
         width: 16px;
@@ -25,49 +26,46 @@
         margin-right: 8px;
         // prevents some artefact pixels to show up under the border, especially visible in firefox in the gab
         background-clip: content-box;
-        i.fa {
-            font-size: 10px;
-            line-height: 14px;
-            margin: 0;
+        svg {
+            height: 12px;
+            text { display: none; }
         }
     }
     &.dot {
         .icon {
             width: 10px;
             height: 10px;
-            i.fa { display: none; }
+            svg { display: none; }
         }
     }
     &.offline {
         .icon { background-color: #aaa; }
-        /* hidden to get exact vertical position */
-        .fa { visibility: hidden; }
-        .fa:before { /* random */ content: "\f1db"; }
     }
     &.online {
         .icon { background-color: @presence-color-online; }
-        .fa:before { /* checkmark */ content: "\f00c"; }
+        svg .online { display: inline; }
     }
     &.busy {
         .icon { background-color: @presence-color-busy; }
-        .fa:before { /* minus */ content: "\f068"; }
+        svg .busy { display: inline; }
     }
     &.absent {
         .icon { background-color: @presence-color-absent; }
-        .fa:before { /* clock-o */ content: "\f017"; }
+        svg .absent { display: inline; }
     }
+
 }
 
-#io-ox-topbar-dropdown-icon > .dropdown-toggle > .presence {
+#io-ox-topbar-account-dropdown-icon > .dropdown-toggle > .presence {
     position: absolute;
-    top: 32px;
+    top: 36px;
     right: 0;
     .icon {
         border: 1px solid rgba(0, 0, 0, 0.6);
     }
 }
 
-#topbar-settings-dropdown .offline {
+#topbar-account-dropdown .offline {
      display: inline-block;
 }
 

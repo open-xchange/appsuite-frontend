@@ -442,6 +442,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             browser_spellcheck: true,
 
+            // touch devices: support is limited to 'lists', 'autolink', 'autosave'
             plugins: opt.plugins,
 
             // link plugin settings
@@ -564,6 +565,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             editor.css('min-height', availableHeight + 'px');
             iframe.css('min-height', availableHeight + 'px');
+            iframe.contents().find('#tinymce').css('min-height', availableHeight + 'px');
             if (opt.css) editor.css(opt.css);
         }
 
@@ -823,6 +825,8 @@ define('io.ox/core/tk/contenteditable-editor', [
         this.tinymce = function () { return editor.tinymce ? editor.tinymce() : {}; };
 
         this.show = function () {
+            // tinymce hides toolbar on non-desktop devices (own detection)
+            if (!window.tinyMCE.Env.desktop) this.trigger('device:non-desktop');
             $el.show();
             // set display to empty string because of overide 'display' property in css
             $(fixed_toolbar).css('display', '');

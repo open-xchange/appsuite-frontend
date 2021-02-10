@@ -15,8 +15,9 @@ define('io.ox/files/upload/dropzone', [
     'io.ox/core/extensions',
     'io.ox/core/dropzone',
     'io.ox/core/folder/api',
+    'io.ox/files/upload/file-folder',
     'gettext!io.ox/files'
-], function (ext, dropzone, api, gt) {
+], function (ext, dropzone, api, fileFolderUpload, gt) {
 
     'use strict';
 
@@ -26,7 +27,8 @@ define('io.ox/files/upload/dropzone', [
         getDropZones: function (baton) {
             var app = baton.app,
                 zone = new dropzone.Inplace({
-                    caption: gt('Drop files here to upload')
+                    folderSupport: true,
+                    caption: gt('Drop files or folders here to upload')
                 });
 
             zone.on({
@@ -36,11 +38,9 @@ define('io.ox/files/upload/dropzone', [
                 'hide': function () {
                     app.listView.$el.fadeIn('fast');
                 },
-                'drop': function (files) {
-                    require(['io.ox/files/upload/main'], function (fileUpload) {
-                        fileUpload.setWindowNode(app.getWindowNode());
-                        fileUpload.create.offer(files, { folder: app.folder.get() });
-                    });
+                'drop': function (fileObjArray) {
+                    var targetFolder = app.folder.get();
+                    fileFolderUpload.upload(fileObjArray, targetFolder, app);
                 }
             });
 
@@ -69,7 +69,15 @@ define('io.ox/files/upload/dropzone', [
                     if (!_.isFunction(zone.isEnabled)) {
                         zone.isEnabled = function () {
                             var id = app.folder.get();
-                            return api.pool.getModel(id).can('create');
+                            var model = api.pool.getModel(id);
+                            var isTrash = model ? api.is('trash', model.toJSON()) : false;
+
+                            if (isTrash) {
+                                return false;
+                            }
+
+                            return model.can('create');
+
                         };
                     }
 

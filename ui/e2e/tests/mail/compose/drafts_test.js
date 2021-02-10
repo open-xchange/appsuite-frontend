@@ -14,17 +14,17 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 
-Scenario('[C114967] Draft is created automatically on logout', async function (I, mail) {
+Scenario('[C114967] Draft is created automatically on logout', async ({ I, mail }) => {
 
     const mailSubject = 'C114967';
     const defaultText = 'Draft is created automatically on logout';
@@ -62,45 +62,52 @@ Scenario('[C114967] Draft is created automatically on logout', async function (I
     });
 });
 
-Scenario('Did you know dialog is correctly shown on save and close', async function (I, mail) {
+Scenario('Did you know dialog is correctly shown on save and close', async ({ I, mail, dialogs }) => {
 
     I.login('app=io.ox/mail');
 
     // save draft and close, click ok
     mail.newMail();
 
-    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
-    I.waitForText('Save draft and close', 5);
-    I.click('Save draft and close');
+    within('.io-ox-mail-compose-window', () => {
+        I.waitForEnabled('[data-extension-id="composetoolbar-menu"]');
+        I.click('[data-extension-id="composetoolbar-menu"]');
+    });
+    I.clickDropdown('Save draft and close');
 
+    dialogs.waitForVisible();
     I.waitForText('Did you know?', 5);
 
-    I.click('OK');
+    dialogs.clickButton('OK');
 
     I.waitForInvisible('.io-ox-mail-compose', 5);
-
 
     // save draft and close check checkbox
     mail.newMail();
 
-    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
-    I.waitForText('Save draft and close', 5);
-    I.click('Save draft and close');
+    within('.io-ox-mail-compose-window', () => {
+        I.waitForEnabled('[data-extension-id="composetoolbar-menu"]');
+        I.click('[data-extension-id="composetoolbar-menu"]');
+    });
+    I.clickDropdown('Save draft and close');
 
+    dialogs.waitForVisible();
     I.waitForText('Did you know?', 5);
 
     I.checkOption('Do not show again.');
 
-    I.click('OK');
+    dialogs.clickButton('OK');
 
     I.waitForInvisible('.io-ox-mail-compose', 5);
 
     // save draft, no "did you know" dialog should pop up
     mail.newMail();
 
-    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
-    I.waitForText('Save draft and close', 5);
-    I.click('Save draft and close');
+    within('.io-ox-mail-compose-window', () => {
+        I.waitForEnabled('[data-extension-id="composetoolbar-menu"]');
+        I.click('[data-extension-id="composetoolbar-menu"]');
+    });
+    I.clickDropdown('Save draft and close');
 
     I.waitForInvisible('.io-ox-mail-compose', 5);
 
@@ -113,14 +120,16 @@ Scenario('Did you know dialog is correctly shown on save and close', async funct
     I.login('app=io.ox/mail');
 
     mail.newMail();
+    within('.io-ox-mail-compose-window', () => {
+        I.waitForEnabled('[data-extension-id="composetoolbar-menu"]');
+        I.click('[data-extension-id="composetoolbar-menu"]');
+    });
+    I.clickDropdown('Save draft and close');
 
-    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
-    I.waitForText('Save draft and close', 5);
-    I.click('Save draft and close');
-
+    dialogs.waitForVisible();
     I.waitForText('Did you know?', 5);
 
-    I.click('OK');
+    dialogs.clickButton('OK');
 
     I.waitForInvisible('.io-ox-mail-compose', 5);
 
@@ -134,15 +143,17 @@ Scenario('Did you know dialog is correctly shown on save and close', async funct
 
     mail.newMail();
 
-    I.click({ css: '[data-extension-id="composetoolbar-menu"] a' });
-    I.waitForText('Save draft and close', 5);
-    I.click('Save draft and close');
+    within('.io-ox-mail-compose-window', () => {
+        I.waitForEnabled('[data-extension-id="composetoolbar-menu"]');
+        I.click('[data-extension-id="composetoolbar-menu"]');
+    });
+    I.clickDropdown('Save draft and close');
 
     I.waitForInvisible('.io-ox-mail-compose', 5);
 
 });
 
-Scenario('[C114959] Draft can be used as templates', async function (I, mail, dialogs) {
+Scenario('[C114959] Draft can be used as templates', async ({ I, mail, dialogs }) => {
 
     I.login('app=io.ox/mail');
 
@@ -173,10 +184,10 @@ Scenario('[C114959] Draft can be used as templates', async function (I, mail, di
     //I.seeInField('Subject','[Copy]');
     I.click(mail.locators.compose.close);
 
-    //waiting for Modal dialog "Discard message" and click on "Save as draft"
-    I.waitForText('Discard message', 5, dialogs.locators.header);
-    I.click('Save as draft');
-    I.waitForInvisible('Discard message', 5, dialogs.locators.header);
+    //waiting for Modal dialog "Save draft" and click on "Save draft"
+    I.waitForText('Save draft', 5, dialogs.locators.header);
+    I.click('Save draft');
+    I.waitForInvisible('Save message', 5, dialogs.locators.header);
     I.waitForInvisible('.window-container.io-ox-mail-compose-window');
 
     //Check new draft in list view

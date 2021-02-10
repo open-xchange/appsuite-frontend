@@ -81,7 +81,7 @@ define('io.ox/tasks/settings/pane', [
                         subscribe.open({
                             module: 'tasks',
                             help: 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
-                            title: gt('Subscribe shared task folders'),
+                            title: gt('Subscribe to shared task folders'),
                             point: 'io.ox/core/folder/subscribe-shared-tasks-folders',
                             sections: {
                                 public: gt('Public tasks folders'),
@@ -96,7 +96,7 @@ define('io.ox/tasks/settings/pane', [
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="subscribe-shared-tasks-folders">')
                     .append(
-                        $.txt(gt('Subscribe shared tasks folders'))
+                        $.txt(gt('Subscribe to shared tasks folders'))
                     )
                     .on('click', openDialog)
                 );

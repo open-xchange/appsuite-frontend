@@ -186,7 +186,7 @@ define('io.ox/contacts/actions', [
         collection: 'one',
         matches: function (baton) {
             var data = baton.first();
-            if (data.folder_id === mailSettings.get('contactCollectFolder')) return true;
+            if (data.folder_id === String(mailSettings.get('contactCollectFolder'))) return true;
             return !data.folder_id && !data.id;
         },
         action: function (baton) {

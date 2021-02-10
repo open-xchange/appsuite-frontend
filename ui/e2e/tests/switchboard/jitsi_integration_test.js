@@ -18,7 +18,7 @@ const jitsiHost = 'https://meet.k3s.os.oxui.de';
 
 Feature('Switchboard > Jitsi');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -32,17 +32,17 @@ Before(async (users) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 const waitAndSwitchTab = () => {
     const { I } = inject();
-    I.wait(0.2);
+    I.wait(0.3);
     I.switchToNextTab();
 };
 
-Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dialogs) => {
+Scenario('[OXUIB-442] Calling contact via jitsi', async ({ I, users, contacts, dialogs }) => {
     const [user1, user2] = users;
     let meetingURL;
 
@@ -56,8 +56,8 @@ Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dia
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-        I.waitForText('Call', 5, '.switchboard-actions');
-        I.waitForEnabled(locate('.switchboard-actions .btn').withText('Call'));
+        I.waitForText('Call', 5, '.action-button-rounded');
+        I.waitForEnabled(locate('.action-button-rounded .btn').withText('Call'));
         I.click('Call');
         I.waitForText('Call via Jitsi', 5, '.dropdown.open');
         I.waitForEnabled('.dropdown.open .dropdown-menu a');
@@ -81,7 +81,7 @@ Scenario('[OXUIB-442] Calling contact via jitsi', async (I, users, contacts, dia
     });
 });
 //needs MR-542
-Scenario.skip('Create call and check call history for jitsi', async (I, users, contacts, dialogs) => {
+Scenario.skip('Create call and check call history for jitsi', async ({ I, users, contacts, dialogs }) => {
     const [user1, user2] = users;
 
     session('userB', () => {
@@ -94,8 +94,8 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-        I.waitForText('Call', 5, '.switchboard-actions');
-        I.waitForEnabled(locate('.switchboard-actions .btn').withText('Call'));
+        I.waitForText('Call', 5, '.action-button-rounded');
+        I.waitForEnabled(locate('.action-button-rounded .btn').withText('Call'));
         I.click('Call');
         I.waitForText('Call via Jitsi', 5, '.dropdown.open');
         I.waitForEnabled('.dropdown.open .dropdown-menu a');
@@ -109,7 +109,6 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     await session('userB', async () => {
         dialogs.waitForVisible();
         I.waitForText('Incoming call');
-        pause();
         dialogs.clickButton('Answer');
         I.waitForDetached('.modal-dialog');
         waitAndSwitchTab();
@@ -161,16 +160,16 @@ Scenario.skip('Create call and check call history for jitsi', async (I, users, c
     });
 });
 
-Scenario('Create call from call history and check call history after hang up for jitsi', (I, users, dialogs) => {
+Scenario('[J2] Create call from call history and check call history after hang up for jitsi', async ({ I, users, dialogs }) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
 
 
-    session('userB', () => {
+    await session('userB', () => {
         I.login({ user: user2 });
     });
 
-    session('userA', () => {
+    await session('userA', () => {
         I.login({ user: user1 });
         I.executeScript((mail, name) => {
             require(['io.ox/switchboard/views/call-history']).then(function (ch) {
@@ -187,13 +186,21 @@ Scenario('Create call from call history and check call history after hang up for
         I.waitForText('Hang up', 5, dialogs.locators.footer);
     });
 
-    session('userB', () => {
+    await session('userB', () => {
         dialogs.waitForVisible();
+        I.waitForText('Incoming call');
+        I.waitForText('Answer');
     });
 
-    session('userA', () => {
+    await session('userA', () => {
+        waitAndSwitchTab();
+        I.closeCurrentTab();
+        I.wait(0.2);
+        I.waitForText('Hang up');
         dialogs.clickButton('Hang up');
         I.waitForDetached('.modal');
+        I.waitForVisible('~Call history');
+        I.waitForEnabled('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
@@ -202,7 +209,9 @@ Scenario('Create call from call history and check call history after hang up for
         );
     });
 
-    session('userB', () => {
+    await session('userB', () => {
+        I.waitForVisible('~Call history');
+        I.waitForEnabled('~Call history');
         I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
@@ -212,7 +221,7 @@ Scenario('Create call from call history and check call history after hang up for
     });
 });
 
-Scenario('Create appointment with jitsi conference', async (I, users, calendar) => {
+Scenario('Create appointment with jitsi conference', async ({ I, users, calendar }) => {
 
     const [user1, user2] = users;
     let meetingURL;
@@ -234,8 +243,9 @@ Scenario('Create appointment with jitsi conference', async (I, users, calendar) 
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         meetingURL = await I.grabCurrentUrl();
     });
@@ -244,15 +254,16 @@ Scenario('Create appointment with jitsi conference', async (I, users, calendar) 
         I.waitForVisible('.appointment');
         I.click('.appointment');
         I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
-        I.click('.io-ox-sidepopup .switchboard-actions .btn[data-action="join"]');
+        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
+        I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
         waitAndSwitchTab();
         let url = await I.grabCurrentUrl();
         expect(meetingURL).to.be.equal(url);
     });
 });
 
-Scenario('[OXUIB-443] Zoom settings are not shown when only jitsi is enabled', (I, settings) => {
+Scenario('[OXUIB-443] Zoom settings are not shown when only jitsi is enabled', ({ I, settings }) => {
 
     I.login('app=io.ox/settings');
     settings.waitForApp();

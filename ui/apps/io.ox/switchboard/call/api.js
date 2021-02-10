@@ -108,11 +108,15 @@ define('io.ox/switchboard/call/api', [
     // start a call with participants
     function start(type, callees) {
         // should not happen UI-wise, but to be sure
-        if (isCallActive()) return;
-        call = new Call({ caller: api.userId, callees: [].concat(callees), type: type, incoming: false });
+        if (isCallActive()) return $.when();
+        // clean up callees
+        callees = [].concat(callees).map(function (address) {
+            return String(address).trim().toLowerCase();
+        });
+        call = new Call({ caller: api.userId, callees: callees, type: type, incoming: false });
         // load on demand / otherwise circular deps
-        require(['io.ox/switchboard/call/outgoing'], function (outgoing) {
-            outgoing.openDialog(call);
+        return require(['io.ox/switchboard/call/outgoing']).then(function (outgoing) {
+            return outgoing.openDialog(call);
         });
     }
 

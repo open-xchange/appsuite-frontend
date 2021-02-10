@@ -222,7 +222,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ id: guid, name: 'summary', model: self.model, mandatory: true }).render().$el,
+                    input = new mini.InputView({ id: guid, name: 'summary', model: self.model, autocomplete: false, mandatory: true }).render().$el,
                     new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
@@ -878,12 +878,6 @@ define('io.ox/calendar/edit/extensions', [
         id: 'allowAttendeeChanges',
         index: 200,
         render: function () {
-            // only the organizer is allowed to change this attribute
-            // also not allowed for exceptions or in public folders
-            var disabled = folderAPI.pool.getModel(this.model.get('folder')).is('public') ||
-                           (this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf'))) ||
-                           (this.model.get('recurrenceId') && this.model.mode === 'appointment');
-
             var checkboxView  = new mini.CustomCheckboxView({
                 label: gt('Participants can make changes'),
                 name: 'attendeePrivileges',
@@ -895,9 +889,25 @@ define('io.ox/calendar/edit/extensions', [
                 checkboxView.render().$el.addClass('attendee-change-checkbox')
             );
 
-            if (disabled) {
-                checkboxView.$el.addClass('disabled').find('input').attr('aria-disabled', true).prop('disabled', 'disabled');
-            }
+            // only the organizer is allowed to change this attribute
+            // also not allowed for exceptions or in public folders
+            var isNotOrganizer = this.baton.mode === 'edit' && !(calendarUtil.hasFlag(this.model, 'organizer') || calendarUtil.hasFlag(this.model, 'organizer_on_behalf')),
+                isException = this.model.get('recurrenceId') && this.model.mode === 'appointment',
+                onChangeFolder = function () {
+                    // force true boolean
+                    var disabled = !!(folderAPI.pool.getModel(this.model.get('folder')).is('public') || isNotOrganizer || isException);
+                    checkboxView.$el.toggleClass('disabled', disabled).find('input').attr('aria-disabled', disabled).prop('disabled', disabled ? 'disabled' : null);
+                    // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwisexd
+                    // no changes if you are not the organizer or if this is an exception. We need to leave the value as is
+                    if (disabled && !(isNotOrganizer || isException)) this.model.set('attendeePrivileges', 'DEFAULT');
+                }.bind(this);
+
+            onChangeFolder();
+
+            // no need for onChangeFolder listener when not organizer or if the appointment is an exception. Checkbox will stay disabled all the time;
+            if (isNotOrganizer || isException) return;
+
+            this.model.on('change:folder', onChangeFolder);
         }
     });
 

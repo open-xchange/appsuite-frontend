@@ -57,11 +57,13 @@ define.async('io.ox/mail/accounts/keychain', [
             return accounts;
         }, function () {
             return {};
-        }), filestorageAPI.getAllAccounts(false, true).then(function (allFileAccounts) {
+        }), filestorageAPI.getAllAccounts().then(function (allFileAccounts) {
             var accounts = {};
             allFileAccounts = allFileAccounts.models;
             _(allFileAccounts).each(function (account) {
-                if (/owncloud|nextcloud|webdav/.test(account.get('filestorageService'))) {
+                // show federated sharing accounts when debugging mode is true, helps developing and is also a convenient way to remove broken accounts (offers delete action)
+                var filterRegex = (ox.debug ? /owncloud|nextcloud|webdav|xox\d+|xctx\d+/ : /owncloud|nextcloud|webdav/);
+                if (filterRegex.test(account.get('filestorageService'))) {
                     account = account.attributes;
 
                     var error = account.hasError ? { message: account.error } : account.status = 'ok';

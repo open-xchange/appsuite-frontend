@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 
     var process_options = {
         version: version,
-        revision: String(pkgVersion.split('-')[1]),
+        revision: String(pkgVersion.split('-')[1] || process.env.CI_COMMIT_SHORT_SHA || ''),
         enable_debug: String(grunt.config('local.debug')),
         base: 'v=' + version,
         cap: String(grunt.config('local.cap') || ''),

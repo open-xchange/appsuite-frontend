@@ -82,28 +82,27 @@ define('io.ox/mail/compose/actions/extensions', [
             stopPropagation: false,
             removeQueue: false
         }, opt);
+
         return function (baton) {
-            if (settings.get('compose/shareAttachments/threshold', 0) > 0) {
-                var model = baton.model,
-                    sharedAttachments = model.get('sharedAttachments') || {},
-                    actualAttachmentSize = model.get('attachments').getSize();
-                if (actualAttachmentSize > settings.get('compose/shareAttachments/threshold', 0) && sharedAttachments.enabled === false) {
-                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    if (opt.yell) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
-                    model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
+            var model = baton.model;
 
-                    if (opt.stopPropagation) baton.stopPropagation();
+            if (!model.exceedsThreshold()) return;
 
-                    if (opt.restoreWindow) {
-                        var win = baton.app.getWindow();
-                        win.idle().show();
-                    }
+            //#. %1$s is usually "Drive Mail" (product name; might be customized)
+            if (opt.yell) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+            var sharedAttachments = model.get('sharedAttachments') || {};
+            model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
 
-                    if (opt.removeQueue) composeAPI.queue.remove(baton.model.get('id'));
+            if (opt.stopPropagation) baton.stopPropagation();
 
-                    throw arguments;
-                }
+            if (opt.restoreWindow) {
+                var win = baton.app.getWindow();
+                win.idle().show();
             }
+
+            if (opt.removeQueue) composeAPI.queue.remove(baton.model.get('id'));
+
+            throw arguments;
         };
     };
 
@@ -147,7 +146,7 @@ define('io.ox/mail/compose/actions/extensions', [
                 this.$body.append(
                     $('<div>').append(
                         $('<p>').text(gt('It appears as if you forgot to attach a file.')),
-                        $('<p>').text(gt.format(gt('You mentioned "%s" in your email, but there are no files attached.'), detectedString[1]))
+                        $('<p>').text(gt('You mentioned "%s" in your email, but there are no files attached.', detectedString[1]))
                     )
                 );
             })

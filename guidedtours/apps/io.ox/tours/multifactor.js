@@ -161,11 +161,12 @@ define('io.ox/tours/multifactor', [
     return {
         run: function () {
             // Verify multifactor service running before starting tour
-            if (!capabilities.has('multifactor') || !capabilities.has('multifactor_service')) return;
+            if (!capabilities.has('multifactor') || !capabilities.has('multifactor_service')) return false;
             // We are always on going to autoshow this tour only once
             settings.set('multifactor/shownTour', true).save();
             // Start tour
             Tour.registry.run('default/io.ox/multifactor');
+            return true;
         }
     };
 });

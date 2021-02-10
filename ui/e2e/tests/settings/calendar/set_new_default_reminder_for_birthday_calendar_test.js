@@ -14,16 +14,16 @@
 /// <reference path="../../../steps.d.ts" />
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 
-Scenario('[C244800] Set new default reminder for appointments in birthday calendar', async function (I, calendar, dialogs) {
+Scenario('[C244800] Set new default reminder for appointments in birthday calendar', async function ({ I, calendar, dialogs }) {
     const alaramNotification = 'Notification';
     const alaramTime = '45 minutes';
     const alaramRelated = 'before start';

@@ -14,18 +14,18 @@
 
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7870] Configure notifications for new/modified/deleted', (I, users, calendar, mail) => {
+Scenario('[C7870] Configure notifications for new/modified/deleted', async ({ I, users, calendar, mail }) => {
     const [userA, userB] = users;
 
     async function createModifyDeleteAppointment() {
@@ -53,7 +53,7 @@ Scenario('[C7870] Configure notifications for new/modified/deleted', (I, users, 
     }
 
     I.say('Login userA and verify notifyNewModifiedDeleted is set');
-    session('userA', () => {
+    await session('userA', () => {
         I.login('app=io.ox/settings&folder=virtual/settings/io.ox/calendar', { user: userA });
         I.waitForVisible('.io-ox-calendar-settings');
         I.waitForText('Receive notifications when an appointment');
@@ -62,13 +62,13 @@ Scenario('[C7870] Configure notifications for new/modified/deleted', (I, users, 
     });
 
     I.say('Login userB, create appointment and invite userA');
-    session('userB', async () => {
+    await session('userB', async () => {
         I.login('app=io.ox/calendar&perspective=week:week', { user: userB });
         await createModifyDeleteAppointment();
     });
 
     I.say('Verify notifications emails with userA with notifyNewModifiedDeleted set ');
-    session('userA', () => {
+    await session('userA', () => {
         I.openApp('Mail');
         I.refreshPage();
         mail.waitForApp();
@@ -89,12 +89,12 @@ Scenario('[C7870] Configure notifications for new/modified/deleted', (I, users, 
     });
 
     I.say('UserB creates appointment again');
-    session('userB', async () => {
+    await session('userB', async () => {
         await createModifyDeleteAppointment();
     });
 
     I.say('Verify that only the deleted notification email was send to userA');
-    session('userA', () => {
+    await session('userA', () => {
         I.openApp('Mail');
         mail.waitForApp();
         I.dontSeeElement('.list-view-control .seen-unseen-indicator');

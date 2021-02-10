@@ -16,8 +16,9 @@ define('io.ox/find/main', [
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (PlaceholderView, folderAPI, ext, settings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/api/jobs'
+], function (PlaceholderView, folderAPI, ext, settings, gt, jobsAPI) {
 
     'use strict';
 
@@ -31,6 +32,13 @@ define('io.ox/find/main', [
             //toString
             return _.compact(parts).join(':');
         };
+
+    // add generic listener for long running search querries
+    jobsAPI.on('added:find', function () {
+        require(['io.ox/core/yell'], function (yell) {
+            yell('info', gt('Please wait, your search may take a while'));
+        });
+    });
 
     // multi instance pattern
     var createInstance = function (opt) {
@@ -471,7 +479,7 @@ define('io.ox/find/main', [
             //         empty = gt('No items were found. Please adjust currently used facets.'),
             //         //#. result count for screenreaders
             //         //#. %1$s number of items found by search feature
-            //         some = gt.format(gt.ngettext('One item was found.', '%1$s items were found.', n), n);
+            //         some = gt.ngettext('%1$d item was found.', '%1$s items were found.', n, n);
             //     notifications.yell('screenreader', n ? some : empty);
             // });
         }

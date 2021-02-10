@@ -22,6 +22,10 @@ stages:
   - report
   - cleanup
 
+variables:
+    # only fetch last 10 commits, much faster clones
+  GIT_DEPTH: "10"
+
 .default_cache:
   cache:
     # use one cache
@@ -46,6 +50,8 @@ stages:
     - npx grunt install:dist --prefix=../${PACKAGE_NAME}/build/pkg --htdoc=../${HTDOCS_PACKAGE_NAME}/build/pkg
     - npx grunt install:languages --prefix=../${L10N_PACKAGE_NAME}/build/pkg
   stage: build
+  tags:
+    - kubernetes
   artifacts:
     expire_in: 2hours
     paths:
@@ -69,8 +75,6 @@ build ui:
   before_script:
     - "[ -z \"$VERSION\" ] && export VERSION=$(git describe --match '[0-9]*.[0-9]*.[0-9]*')"
     - echo "Building version $VERSION"
-  tags:
-    - openstack
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_REF_NAME =~ /^master/'
@@ -122,6 +126,8 @@ test ui:
     - build ui
   needs:
     - build ui
+  tags:
+    - kubernetes
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml

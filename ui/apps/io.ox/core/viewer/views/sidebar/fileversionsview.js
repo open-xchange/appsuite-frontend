@@ -46,6 +46,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         id: 'versions-list',
         draw: function (baton) {
             var model = baton && baton.model,
+                standalone = Boolean(baton && baton.standalone),
                 isViewer = Boolean(baton && baton.isViewer),
                 viewerEvents = baton && baton.viewerEvents,
                 versions = model && model.get('versions'),
@@ -69,7 +70,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
                 _(getSortedVersions(versions)).each(function (version, id, versions) {
                     var entryRow = $('<tr class="version">').attr('data-version-number', version.version);
-                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, latestVersion: versionCounter === versions.length, last_modified: id === 0 }));
+                    Ext.point(POINT + '/version').invoke('draw', entryRow, Ext.Baton({ data: version, viewerEvents: viewerEvents, isViewer: isViewer, standalone: standalone, latestVersion: versionCounter === versions.length, last_modified: id === 0 }));
                     table.append(entryRow);
                     versionCounter++;
                 });
@@ -96,7 +97,17 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
     });
 
     // View a specific version
-    Ext.point('io.ox/files/versions/links/inline').extend({
+    Ext.point('io.ox/files/versions/links/inline/current').extend({
+        id: 'display-version',
+        index: 100,
+        prio: 'lo',
+        mobile: 'lo',
+        title: gt('View this version'),
+        section: 'view',
+        ref: 'io.ox/files/actions/viewer/display-version'
+    });
+
+    Ext.point('io.ox/files/versions/links/inline/older').extend({
         id: 'display-version',
         index: 100,
         prio: 'lo',
@@ -112,7 +123,8 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             var versionSpec = baton.first();
             if (!baton.isViewer) { return false; }
             // Spreadsheet supports display of current version only
-            if (!versionSpec.current_version && FilesAPI.isSpreadsheet(versionSpec)) { return false; }
+            // for external storages: current_version = true, attribute not present -> current version
+            if ((versionSpec.current_version === false) && FilesAPI.isSpreadsheet(versionSpec)) { return false; }
             return true;
         },
         action: function (baton) {
@@ -121,23 +133,75 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
         }
     });
 
+    // Open a specific version in Popout Viewer
+    Ext.point('io.ox/files/versions/links/inline/current').extend({
+        id: 'open-version-in-popout-viewer',
+        index: 120,
+        prio: 'lo',
+        mobile: 'lo',
+        title: gt('Open in pop out viewer'),
+        section: 'view',
+        ref: 'io.ox/files/actions/viewer/popout-version'
+    });
+
+    Ext.point('io.ox/files/versions/links/inline/older').extend({
+        id: 'open-version-in-popout-viewer',
+        index: 120,
+        prio: 'lo',
+        mobile: 'lo',
+        title: gt('Open in pop out viewer'),
+        section: 'view',
+        ref: 'io.ox/files/actions/viewer/popout-version'
+    });
+
+    new Action('io.ox/files/actions/viewer/popout-version', {
+        capabilities: 'infostore',
+        device: '!smartphone',
+        matches: function (baton) {
+            var versionSpec = baton.first();
+            if (!baton.isViewer) { return false; }
+            if (baton.standalone) { return false; }
+            // Spreadsheet supports display of current version only
+            // for external storages: current_version = true, attribute not present -> current version
+            if ((versionSpec.current_version === false) && FilesAPI.isSpreadsheet(versionSpec)) { return false; }
+            return true;
+        },
+        action: function (baton) {
+            actionsUtil.invoke('io.ox/core/viewer/actions/toolbar/popoutstandalone', Ext.Baton({
+                data: baton.data,
+                model: new FilesAPI.Model(baton.data),
+                isViewer: baton.isViewer,
+                openedBy: baton.openedBy,
+                standalone: baton.standalone
+            }));
+        }
+    });
+
     // Extensions for the version detail table
     Ext.point(POINT + '/version').extend({
         index: 10,
         id: 'filename',
         draw: function (baton) {
+            // for external storages: current_version = true, attribute not present -> current version
+            var isCurrentVersion = baton.data.current_version !== false;
+            var versionPoint = isCurrentVersion ? 'io.ox/files/versions/links/inline/current' : 'io.ox/files/versions/links/inline/older';
 
-            var dropdown = new ActionDropdownView({ point: 'io.ox/files/versions/links/inline' });
+            if (isCurrentVersion) {
+                // fix for the files action edit it needs the model
+                baton.models = [FilesAPI.pool.get('detail').get(_.cid(baton.data))];
+            }
+
+            var dropdown = new ActionDropdownView({ point: versionPoint });
 
             dropdown.once('rendered', function () {
-                var $toggle = this.$('> .dropdown-toggle'),
-                    versionCounterSupport = !(/^(owncloud|webdav|nextcloud)$/.test(baton.data.folder_id.split(':')[0]));
-                if (baton.data.current_version || (baton.last_modified && !versionCounterSupport)) $toggle.addClass('current');
+                var $toggle = this.$('> .dropdown-toggle');
+
+                if (isCurrentVersion) { $toggle.addClass('current'); }
 
                 Util.setClippedLabel($toggle, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
             });
 
-            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion'));
+            dropdown.setSelection([baton.data], _(baton).pick('data', 'isViewer', 'viewerEvents', 'latestVersion', 'standalone', 'models'));
 
             this.append(
                 $('<td class="version-content">').append(dropdown.$el)
@@ -222,11 +286,17 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
 
             _.extend(this, {
                 isViewer: Boolean(options && options.isViewer),
-                viewerEvents: options && options.viewerEvents || _.extend({}, Backbone.Events)
+                viewerEvents: options && options.viewerEvents || _.extend({}, Backbone.Events),
+                standalone: Boolean(options && options.standalone)
             });
 
             // initially hide the panel
             this.$el.hide();
+
+            // use current version, if possible
+            var currentVersion = FilesAPI.pool.get('detail').get(_.cid(this.model.toJSON()));
+            this.model = currentVersion || this.model;
+
             // attach event handlers
             this.$el.on({
                 open: this.onOpen.bind(this),
@@ -267,13 +337,13 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
          * Render the version list
          */
         renderVersions: function () {
-            if (!this.model) return this;
+            if (!this.model || !open[this.model.cid]) return this;
             var expectedVersionOrder = _(getSortedVersions(this.model.get('versions') || [])).pluck('version'),
                 actualVersionOrder = this.$el.find('.version').map(function (index, node) { return node.getAttribute('data-version-number'); }).get();
 
             // if we already show the versionlist in exactly that order and length, we have nothing to do => avoid flickering because of needless redraw
             if (JSON.stringify(expectedVersionOrder) === JSON.stringify(actualVersionOrder)) return;
-            Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON(), viewerEvents: this.viewerEvents, isViewer: this.isViewer }));
+            Ext.point(POINT + '/list').invoke('draw', this.$el, Ext.Baton({ model: this.model, data: this.model.toJSON(), viewerEvents: this.viewerEvents, isViewer: this.isViewer, standalone: this.standalone }));
         },
 
         renderVersionsAsNeeded: function () {

@@ -296,9 +296,15 @@ define('io.ox/dev/wizard/welcomeWizard', ['io.ox/core/extensions', 'io.ox/core/w
             id: 'welcome-wizard',
             after: 'curtain',
             run: function (baton) {
+                // Check for previously blocking popups that interrupted the startup process
+                // this is probably not wanted for a "welcome wizard", but helps get the idea about
+                // the possibilities of this well-known data attribute
+                if (baton.data.popups.length > 0) return;
+
+                // notify upcoming stages that we interrupted startup to get attention of the user
+                baton.data.popups.push({ name: 'welcome-wizard' });
+
                 var def = $.Deferred();
-                //TODO: Check a JSLob if the wizard needs to be run, or has been cleared successfully
-                // If it has to be run, require the wizards source file and trigger the wizard
                 require(["io.ox/dev/wizard/welcomeWizard"], function (w) {
                     w.getInstance().start().done(function () {
                         //TODO: Mark this wizard as passed, so as not to start it again

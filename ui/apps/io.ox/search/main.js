@@ -26,6 +26,15 @@ define('io.ox/search/main', [
     ext.point('io.ox/search/main').extend({
         index: 100,
         id: 'default',
+        launch: function () {
+            // pre launch to identify recent app
+            this.recent = ox.ui.App.getCurrentApp();
+        }
+    });
+
+    ext.point('io.ox/search/main').extend({
+        index: 100,
+        id: 'default',
         config: function (data) {
             // used only for search app
             data.defaultApp = settings.get('search/default', 'io.ox/mail');
@@ -126,11 +135,10 @@ define('io.ox/search/main', [
         }),
         app = ox.ui.createApp({
             name: 'io.ox/search',
-            title: 'Search',
-            closable: true,
+            id: 'io.ox/search',
             window: win
         }),
-        model, run;
+        model;
 
     // hide/show topbar search field
     win.on('show', function () {
@@ -191,7 +199,7 @@ define('io.ox/search/main', [
     // define launcher callback
     app.setLauncher(function (options) {
         var opt = $.extend({}, options || {}),
-            current = ox.ui.App.getCurrentApp();
+            current = this.recent || ox.ui.App.getCurrentApp();
 
         win.nodes.main.addClass('container io-ox-search f6-target empty').attr({
             'tabindex': '0',
@@ -269,6 +277,7 @@ define('io.ox/search/main', [
 
         //draw
         app.view.redraw().focus();
+        app.idle();
     });
 
     // init model and listeners
@@ -280,35 +289,35 @@ define('io.ox/search/main', [
     ext.point('io.ox/search').invoke('config', model, app);
 
     // run app
-    run = function () {
-        var current;
+    // run = function () {
+    //     var current;
 
-        if (app.is('ready')) {
-            // not started yet use app callback for inital stuff
-            app.launch();
-        } else {
-            // reset model and update current app
-            model.reset({ silent: true });
-            current = ox.ui.App.getCurrentApp().get('name');
-            if (current !== 'io.ox/search') {
-                model.set('app', current, { silent: true });
-            }
-            // update state
-            app.set('state', 'running');
-            // reset view
-            app.launch();
-            app.view.redraw({ closeSidepanel: true });
-        }
-        app.view.focus();
-        app.idle();
-        return app;
-    };
+    //     if (app.is('ready')) {
+    //         // not started yet use app callback for inital stuff
+    //         app.launch();
+    //     } else {
+    //         // reset model and update current app
+    //         model.reset({ silent: true });
+    //         current = ox.ui.App.getCurrentApp().get('name');
+    //         if (current !== 'io.ox/search') {
+    //             model.set('app', current, { silent: true });
+    //         }
+    //         // update state
+    //         app.set('state', 'running');
+    //         // reset view
+    //         app.launch();
+    //         app.view.redraw({ closeSidepanel: true });
+    //     }
+    //     app.view.focus();
+    //     app.idle();
+    //     return app;
+    // };
 
     return {
 
         getApp: app.getInstance,
 
-        run: run,
+        //run: run,
 
         getView: function () {
             return (app.view = SearchView.factory.create(app, model));

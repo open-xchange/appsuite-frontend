@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>User Guide</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
@@ -56,6 +56,7 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.firststeps.keyboard.elements.html">2.5.2 Interacting with the user interface via keyboard</a></span></dt>
 <dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.firststeps.keyboard.examples.html">2.5.3 Use cases</a></span></dt>
 </dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.firststeps.mobile.html">2.6 Usage on Mobile Devices</a></span></dt>
 </dl></dd>
 <dt><span class="chapter"><a href="ox.appsuite.user.chap.settings.html">3 Basic Settings</a></span></dt>
 <dd><dl>
@@ -65,6 +66,8 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.settings.getnotifications.html">3.4 Receiving Notifications</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.settings.clients.html">3.5 Manually Installing Local Apps</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.settings.wizard.html">3.6 Using a Wizard to Set Up Local Apps</a></span></dt>
+<dt><span class="sect1 cap-call"><a href="ox.appsuite.user.sect.settings.zoom.html">3.7 Setting up and Configuring the Zoom Integration</a></span></dt>
+<dt><span class="sect1 cap-call"><a href="ox.appsuite.user.sect.settings.presencestatus.html">3.8 Setting the presence status</a></span></dt>
 </dl></dd>
 <dt><span class="chapter cap-portal"><a href="ox.appsuite.user.chap.portal.html">4 <span class="phrase">Portal</span></a></span></dt>
 <dd><dl>
@@ -97,15 +100,14 @@
 <dd><dl>
 <dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.html">5.1 The <span class="phrase">E-Mail</span> Components</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.search.html">5.1.1 The <span class="phrase">E-Mail</span> search bar</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.toolbar.html">5.1.2 The <span class="phrase">E-Mail</span> toolbar</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.foldertree.html">5.1.3 The <span class="phrase">E-Mail</span> folder view</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.tabs.html">5.1.4 The <span class="phrase">E-Mail</span> categories bar</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.content.html">5.1.5 The <span class="phrase">E-Mail</span> display area</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.list.html">5.1.6 The <span class="phrase">E-Mail</span> list</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.detailview.html">5.1.7 The <span class="phrase">E-Mail</span> detail view</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.popup.html">5.1.8 The <span class="phrase">E-Mail</span> pop-up</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.create.html">5.1.9 The E-Mail editing window</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.toolbar.html">5.1.1 The <span class="phrase">E-Mail</span> toolbar</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.foldertree.html">5.1.2 The <span class="phrase">E-Mail</span> folder view</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.tabs.html">5.1.3 The <span class="phrase">E-Mail</span> categories bar</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.content.html">5.1.4 The <span class="phrase">E-Mail</span> display area</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.list.html">5.1.5 The <span class="phrase">E-Mail</span> list</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.detailview.html">5.1.6 The <span class="phrase">E-Mail</span> detail view</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.popup.html">5.1.7 The <span class="phrase">E-Mail</span> pop-up</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.gui.create.html">5.1.8 The E-Mail editing window</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.view.html">5.2 Displaying E-Mails</a></span></dt>
 <dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.attachments.html">5.3 Viewing or Saving E-Mail Attachments</a></span></dt>
@@ -123,56 +125,57 @@
 <dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.email.send.attendees.html">5.4.10 Sending an E-Mail to appointment participants</a></span></dt>
 <dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.send.vacationnotice.html">5.4.11 Sending a vacation notice automatically</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.folder.html">5.5 Adding E-Mail Folders</a></span></dt>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.html">5.6 Managing E-Mails</a></span></dt>
+<dt><span class="sect1 cap-webmail cap-call"><a href="ox.appsuite.user.sect.email.call.html">5.5 Calling the Sender or Another Recipient</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.folder.html">5.6 Adding E-Mail Folders</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.html">5.7 Managing E-Mails</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.categories.html">5.6.1 Working with tabs</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.movecopy.html">5.6.2 Moving or copying E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.mark.html">5.6.3 Marking E-Mails as read or unread</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.collectaddress.html">5.6.4 Collecting addresses</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.label.html">5.6.5 Categorizing E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.source.html">5.6.6 Showing the E-Mail source</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.draft.html">5.6.7 Using E-Mail drafts</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.6.8 Creating E-Mail reminders</a></span></dt>
-<dt><span class="sect2 cap-portal"><a href="ox.appsuite.user.sect.email.manage.addportal.html">5.6.9 Adding an E-Mail to the Portal</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.save.html">5.6.10 Saving E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.import.html">5.6.11 Importing E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.print.html">5.6.12 Printing E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.6.13 Archiving E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.6.14 Deleting E-Mails</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.6.15 Cleaning up E-Mail folders</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.6.16 Using Unified Mail</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.categories.html">5.7.1 Working with tabs</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.movecopy.html">5.7.2 Moving or copying E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.mark.html">5.7.3 Marking E-Mails as read or unread</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.collectaddress.html">5.7.4 Collecting addresses</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.label.html">5.7.5 Categorizing E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.source.html">5.7.6 Showing the E-Mail source</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.draft.html">5.7.7 Using E-Mail drafts</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.email.manage.reminder.html">5.7.8 Creating E-Mail reminders</a></span></dt>
+<dt><span class="sect2 cap-portal"><a href="ox.appsuite.user.sect.email.manage.addportal.html">5.7.9 Adding an E-Mail to the Portal</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.save.html">5.7.10 Saving E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.import.html">5.7.11 Importing E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.print.html">5.7.12 Printing E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.archive.html">5.7.13 Archiving E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.delete.html">5.7.14 Deleting E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.expungefolder.html">5.7.15 Cleaning up E-Mail folders</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.manage.unifiedmail.html">5.7.16 Using Unified Mail</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.html">5.7 Using E-Mail Filters</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.html">5.8 Using E-Mail Filters</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.create.html">5.7.1 Creating new rules</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.condition.html">5.7.2 Adding a condition</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.action.html">5.7.3 Adding an action</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.createmove.html">5.7.4 Creating a new rule when moving</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.change.html">5.7.5 Changing a rule</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.apply.html">5.7.6 Applying a rule to existing E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.create.html">5.8.1 Creating new rules</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.condition.html">5.8.2 Adding a condition</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.action.html">5.8.3 Adding an action</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.createmove.html">5.8.4 Creating a new rule when moving</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.createsubjectfrom.html">5.8.5 Creating new rules for the subject and the sender</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.change.html">5.8.6 Changing a rule</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.mailfilter.apply.html">5.8.7 Applying a rule to existing E-Mails</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.search.html">5.8 Searching for E-Mails</a></span></dt>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.accounts.html">5.9 Adding E-Mail Accounts</a></span></dt>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.html">5.10 E-Mail Settings</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.search.html">5.9 Searching for E-Mails</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.accounts.html">5.10 Adding E-Mail Accounts</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.html">5.11 E-Mail Settings</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.receive.html">5.10.1 Settings for receiving E-Mails.</a></span></dt>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.compose.html">5.10.2 Settings for composing E-Mails</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.receive.html">5.11.1 Settings for receiving E-Mails.</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.email.settings.compose.html">5.11.2 Settings for composing E-Mails</a></span></dt>
 </dl></dd>
 </dl></dd>
 <dt><span class="chapter cap-contacts"><a href="ox.appsuite.user.chap.contacts.html">6 <span class="phrase">Address Book</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.html">6.1 The <span class="phrase">Address Book</span> Components</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.search.html">6.1.1 The <span class="phrase">Address Book</span> search bar</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.toolbar.html">6.1.2 The <span class="phrase">Address Book</span> toolbar</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.foldertree.html">6.1.3 The <span class="phrase">Address Book</span> folder view</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.navbar.html">6.1.4 The <span class="phrase">Address Book</span> navigation bar</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.content.html">6.1.5 The <span class="phrase">Address Book</span> display area</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.list.html">6.1.6 The <span class="phrase">Address Book</span> list</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.detailview.html">6.1.7 The <span class="phrase">Address Book</span> detail view</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.create.html">6.1.8 The contact editing window</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.createlist.html">6.1.9 The distribution list editing window</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.toolbar.html">6.1.1 The <span class="phrase">Address Book</span> toolbar</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.foldertree.html">6.1.2 The <span class="phrase">Address Book</span> folder view</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.navbar.html">6.1.3 The <span class="phrase">Address Book</span> navigation bar</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.content.html">6.1.4 The <span class="phrase">Address Book</span> display area</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.list.html">6.1.5 The <span class="phrase">Address Book</span> list</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.detailview.html">6.1.6 The <span class="phrase">Address Book</span> detail view</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.create.html">6.1.7 The contact editing window</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.gui.createlist.html">6.1.8 The distribution list editing window</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.view.html">6.2 Displaying contacts</a></span></dt>
 <dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.attachments.html">6.3 Viewing or Saving Contact Attachments</a></span></dt>
@@ -190,45 +193,45 @@
 <dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.contacts.distributionlist.attendees.html">6.6.3 Creating a distribution list from the list of participants</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.edit.html">6.7 Editing Contacts or Distribution Lists</a></span></dt>
-<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.html">6.8 Adding Address Books</a></span></dt>
+<dt><span class="sect1 cap-contacts cap-call"><a href="ox.appsuite.user.sect.contacts.call.html">6.8 Calling Contacts</a></span></dt>
+<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.html">6.9 Adding Address Books</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.personal.html">6.8.1 Adding address books</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.subscribe.html">6.8.2 Subscribing to external address books</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.managesubscribed.html">6.8.3 Refreshing and managing subscribed address books</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.displayshared.html">6.8.4 Subscribing to public and shared address books</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.personal.html">6.9.1 Adding address books</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.subscribe.html">6.9.2 Subscribing to external address books</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.managesubscribed.html">6.9.3 Refreshing and managing subscribed address books</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.folder.subscribeshared.html">6.9.4 Subscribing to public and shared address books</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.html">6.9 Managing Contacts</a></span></dt>
+<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.html">6.10 Managing Contacts</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.9.1 Sending E-Mails from within an address book</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.9.2 Inviting contacts to an appointment</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.movecopy.html">6.9.3 Moving or copying contacts</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.9.4 Sending contacts as vCard</a></span></dt>
-<dt><span class="sect2 cap-xing"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.9.5 Adding contacts as Xing contacts</a></span></dt>
-<dt><span class="sect2 cap-xing"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.9.6 Inviting contacts to Xing</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.import.html">6.9.7 Importing contacts</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.export.html">6.9.8 Exporting contacts</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.9.9 Printing contacts</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.9.10 Deleting contacts</a></span></dt>
+<dt><span class="sect2 cap-webmail"><a href="ox.appsuite.user.sect.contacts.manage.sendmail.html">6.10.1 Sending E-Mails from within an address book</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">6.10.2 Inviting contacts to an appointment</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.movecopy.html">6.10.3 Moving or copying contacts</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">6.10.4 Sending contacts as vCard</a></span></dt>
+<dt><span class="sect2 cap-xing"><a href="ox.appsuite.user.sect.contacts.manage.addxing.html">6.10.5 Adding contacts as Xing contacts</a></span></dt>
+<dt><span class="sect2 cap-xing"><a href="ox.appsuite.user.sect.contacts.manage.invitexing.html">6.10.6 Inviting contacts to Xing</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.import.html">6.10.7 Importing contacts</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.export.html">6.10.8 Exporting contacts</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.print.html">6.10.9 Printing contacts</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.contacts.manage.delete.html">6.10.10 Deleting contacts</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.search.html">6.10 Searching for Contacts</a></span></dt>
-<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.settings.html">6.11 Address Book Settings</a></span></dt>
+<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.search.html">6.11 Searching for Contacts</a></span></dt>
+<dt><span class="sect1 cap-contacts"><a href="ox.appsuite.user.sect.contacts.settings.html">6.12 Address Book Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter cap-calendar"><a href="ox.appsuite.user.chap.calendar.html">7 <span class="phrase">Calendar</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 The <span class="phrase">Calendar</span> Components</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.search.html">7.1.1 The <span class="phrase">Calendar</span> search bar</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.toolbar.html">7.1.2 The <span class="phrase">Calendar</span> toolbar</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">7.1.3 The mini calendar</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.foldertree.html">7.1.4 The <span class="phrase">Calendar</span> folder view</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.content.html">7.1.5 The <span class="phrase">Calendar</span> display area</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.calendarview.html">7.1.6 Day, Work week, Week, Month or Year calendar view.</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.datepicker.html">7.1.7 The date picker</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.popup.html">7.1.8 The <span class="phrase">Calendar</span> pop-up</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.list.html">7.1.9 The <span class="phrase">Calendar</span> list</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.detailview.html">7.1.10 The <span class="phrase">Calendar</span> detail view</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.scheduling.html">7.1.11 The scheduling view</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.create.html">7.1.12 The appointment editing window</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.toolbar.html">7.1.1 The <span class="phrase">Calendar</span> toolbar</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">7.1.2 The mini calendar</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.foldertree.html">7.1.3 The <span class="phrase">Calendar</span> folder view</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.content.html">7.1.4 The <span class="phrase">Calendar</span> display area</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.calendarview.html">7.1.5 Day, Work week, Week, Month or Year calendar view.</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.datepicker.html">7.1.6 The date picker</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.popup.html">7.1.7 The <span class="phrase">Calendar</span> pop-up</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.list.html">7.1.8 The <span class="phrase">Calendar</span> list</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.detailview.html">7.1.9 The <span class="phrase">Calendar</span> detail view</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.scheduling.html">7.1.10 The scheduling view</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.gui.create.html">7.1.11 The appointment editing window</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Viewing Appointments</a></span></dt>
 <dd><dl>
@@ -242,56 +245,57 @@
 <dd><dl>
 <dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.create.html">7.4.1 Creating new appointments</a></span></dt>
 <dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.datepicker.html">7.4.2 Using the date picker</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.serial.html">7.4.3 Setting recurring appointments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.display.html">7.4.4 Setting an appointment's display</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.alarms.html">7.4.5 Using appointment reminders</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.participants.html">7.4.6 Adding participants or resources</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.attachments.html">7.4.7 Adding attachments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.scheduling.html">7.4.8 Using the scheduling view</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.followup.html">7.4.9 Creating a follow-up appointment</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.attendees.html">7.4.10 Inviting participants to a new appointment</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.recipients.html">7.4.11 Inviting E-Mail recipients to new appointments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.12 Creating appointments from iCal attachments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.13 Resolving appointment conflicts</a></span></dt>
+<dt><span class="sect2 cap-calendar cap-call"><a href="ox.appsuite.user.sect.calendar.add.call.html">7.4.3 Scheduling audio/video conferences</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.serial.html">7.4.4 Setting recurring appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.display.html">7.4.5 Setting an appointment's display</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.alarms.html">7.4.6 Using appointment reminders</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.participants.html">7.4.7 Adding participants or resources</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.attachments.html">7.4.8 Adding attachments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.scheduling.html">7.4.9 Using the scheduling view</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.followup.html">7.4.10 Creating a follow-up appointment</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.attendees.html">7.4.11 Inviting participants to a new appointment</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.recipients.html">7.4.12 Inviting E-Mail recipients to new appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.icalattachment.html">7.4.13 Creating appointments from iCal attachments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.4.14 Resolving appointment conflicts</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.5 Answering Appointment Invitations</a></span></dt>
 <dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.edit.html">7.6 Editing appointments</a></span></dt>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.html">7.7 Adding Calendars</a></span></dt>
+<dt><span class="sect1 cap-calendar cap-call"><a href="ox.appsuite.user.sect.calendar.call.html">7.7 Calling Appointment Participants</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.html">7.8 Adding Calendars</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.personal.html">7.7.1 Adding personal calendars</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.subscribe.html">7.7.2 Subscribing to external calendars</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.import.html">7.7.3 Importing calendars from files</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.displayshared.html">7.7.4 Subscribing to public and shared calendars</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.personal.html">7.8.1 Adding personal calendars</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.subscribe.html">7.8.2 Subscribing to external calendars</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.import.html">7.8.3 Importing calendars from files</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.folder.subscribeshared.html">7.8.4 Subscribing to public and shared calendars</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.html">7.8 Managing Appointments</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.html">7.9 Managing Appointments</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.8.1 Changing the appointment confirmation or status</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changereminder.html">7.8.2 Changing appointment reminders</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changeorganizer.html">7.8.3 Changing the organizer</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.timezones.html">7.8.4 Managing favorite timezones</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.colors.html">7.8.5 Using calendar colors</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.8.6 Moving appointments to another calendar</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.import.html">7.8.7 Importing appointments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.export.html">7.8.8 Exporting appointments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.8.9 Printing appointments</a></span></dt>
-<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.8.10 Deleting appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.9.1 Changing the appointment confirmation or status</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changereminder.html">7.9.2 Changing appointment reminders</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.changeorganizer.html">7.9.3 Changing the organizer</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.timezones.html">7.9.4 Managing favorite timezones</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.colors.html">7.9.5 Using calendar colors</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.9.6 Moving appointments to another calendar</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.import.html">7.9.7 Importing appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.export.html">7.9.8 Exporting appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.9.9 Printing appointments</a></span></dt>
+<dt><span class="sect2 cap-calendar"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.9.10 Deleting appointments</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.search.html">7.9 Searching for Appointments</a></span></dt>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.groups.html">7.10 Managing Groups</a></span></dt>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.resources.html">7.11 Managing Resources</a></span></dt>
-<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.settings.html">7.12 Calendar Settings</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.search.html">7.10 Searching for Appointments</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.groups.html">7.11 Managing Groups</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.resources.html">7.12 Managing Resources</a></span></dt>
+<dt><span class="sect1 cap-calendar"><a href="ox.appsuite.user.sect.calendar.settings.html">7.13 Calendar Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter cap-tasks"><a href="ox.appsuite.user.chap.tasks.html">8 <span class="phrase">Tasks</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.html">8.1 The <span class="phrase">Tasks</span> Components</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.search.html">8.1.1 The <span class="phrase">Tasks</span> search bar</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.toolbar.html">8.1.2 The <span class="phrase">Tasks</span> toolbar</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.foldertree.html">8.1.3 The <span class="phrase">Tasks</span> folder view</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.content.html">8.1.4 The <span class="phrase">Tasks</span> display area</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.list.html">8.1.5 The <span class="phrase">Tasks</span> list</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.detailview.html">8.1.6 The <span class="phrase">Tasks</span> detail view</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.create.html">8.1.7 The editing window</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.toolbar.html">8.1.1 The <span class="phrase">Tasks</span> toolbar</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.foldertree.html">8.1.2 The <span class="phrase">Tasks</span> folder view</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.content.html">8.1.3 The <span class="phrase">Tasks</span> display area</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.list.html">8.1.4 The <span class="phrase">Tasks</span> list</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.detailview.html">8.1.5 The <span class="phrase">Tasks</span> detail view</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.gui.create.html">8.1.6 The editing window</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.view.html">8.2 Viewing Tasks</a></span></dt>
 <dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.attachments.html">8.3 Viewing or Saving Task Attachments</a></span></dt>
@@ -304,36 +308,36 @@
 </dl></dd>
 <dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.invitation.html">8.5 Answering Task Invitations</a></span></dt>
 <dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.edit.html">8.6 Editing tasks</a></span></dt>
-<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.folder.html">8.7 Adding Task Folders</a></span></dt>
+<dt><span class="sect1 cap-tasks cap-call"><a href="ox.appsuite.user.sect.tasks.call.html">8.7 Calling Task Participants</a></span></dt>
+<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.folder.html">8.8 Adding Task Folders</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.folder.personal.html">8.7.1 Adding personal task folders</a></span></dt>
-<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.tasks.folder.displayshared.html">8.7.2 Subscribing to public and shared task folders</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.folder.personal.html">8.8.1 Adding personal task folders</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.tasks.folder.subscribeshared.html">8.8.2 Subscribing to public and shared task folders</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.html">8.8 Managing tasks</a></span></dt>
+<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.html">8.9 Managing tasks</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.8.1 Marking tasks as done</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.8.2 Changing a task's due date</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.8.3 Moving tasks to another folder</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.8.4 Changing tasks confirmations</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.import.html">8.8.5 Importing tasks</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.export.html">8.8.6 Exporting tasks</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.8.7 Printing tasks</a></span></dt>
-<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.8.8 Deleting tasks</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.markasdone.html">8.9.1 Marking tasks as done</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">8.9.2 Changing a task's due date</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.move.html">8.9.3 Moving tasks to another folder</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.changestatus.html">8.9.4 Changing tasks confirmations</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.import.html">8.9.5 Importing tasks</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.export.html">8.9.6 Exporting tasks</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.print.html">8.9.7 Printing tasks</a></span></dt>
+<dt><span class="sect2 cap-tasks"><a href="ox.appsuite.user.sect.tasks.manage.delete.html">8.9.8 Deleting tasks</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.search.html">8.9 Searching for Tasks</a></span></dt>
-<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.settings.html">8.10 Tasks Settings</a></span></dt>
+<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.search.html">8.10 Searching for Tasks</a></span></dt>
+<dt><span class="sect1 cap-tasks"><a href="ox.appsuite.user.sect.tasks.settings.html">8.11 Tasks Settings</a></span></dt>
 </dl></dd>
 <dt><span class="chapter cap-infostore"><a href="ox.appsuite.user.chap.drive.html">9 <span class="phrase">Drive</span></a></span></dt>
 <dd><dl>
 <dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.html">9.1 The <span class="phrase">Drive</span> Components</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.search.html">9.1.1 The <span class="phrase">Drive</span> search bar</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.toolbar.html">9.1.2 The <span class="phrase">Drive</span> toolbar</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.foldertree.html">9.1.3 The <span class="phrase">Drive</span> folder view</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.navbar.html">9.1.4 The <span class="phrase">Drive</span> navigation bar</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.content.html">9.1.5 The <span class="phrase">Drive</span> display area</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.details.html">9.1.6 The file details</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.viewer.html">9.1.7 The viewer</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.toolbar.html">9.1.1 The <span class="phrase">Drive</span> toolbar</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.foldertree.html">9.1.2 The <span class="phrase">Drive</span> folder view</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.navbar.html">9.1.3 The <span class="phrase">Drive</span> navigation bar</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.content.html">9.1.4 The <span class="phrase">Drive</span> display area</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.details.html">9.1.5 The file details</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.gui.viewer.html">9.1.6 The viewer</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.view.html">9.2 Viewing files</a></span></dt>
 <dd><dl>
@@ -342,116 +346,147 @@
 <dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.view.presentation.html">9.2.3 Holding a presentation</a></span></dt>
 </dl></dd>
 <dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.download.html">9.3 Downloading Files or Folder Contents</a></span></dt>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.add.html">9.4 Creating Files or <span class="phrase">Drive</span> Folders</a></span></dt>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.text.html">9.5 Creating or Editing Text Files</a></span></dt>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.html">9.6 Organizing Files and <span class="phrase">Drive</span> Folders</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.folder.html">9.4 <span class="phrase">Drive</span>add folder</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.send.html">9.6.1 Sending files as E-Mail attachments</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.rename.html">9.6.2 Editing file names</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.editdescription.html">9.6.3 Creating or editing descriptions</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.move.html">9.6.4 Moving files or <span class="phrase">Drive</span> folders</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.copy.html">9.6.5 Copying files</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">9.6.6 Saving files as PDF</a></span></dt>
-<dt><span class="sect2 cap-portal"><a href="ox.appsuite.user.sect.drive.manage.addportal.html">9.6.7 Adding files to the Portal</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.favorite.html">9.6.8 Adding files or <span class="phrase">Drive</span> folders to Favorites</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.delete.html">9.6.9 Deleting files or <span class="phrase">Drive</span> folders</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.lock.html">9.6.10 Locking or unlocking files</a></span></dt>
-<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.versions.html">9.6.11 Working with versions</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.folder.personal.html">9.4.1 <span class="phrase">Drive</span>: Creating Folders</a></span></dt>
+<dt><span class="sect2 cap-contacts"><a href="ox.appsuite.user.sect.drive.folder.subscribeshared.html">9.4.2 Subscribing to public and shared <span class="phrase">Drive</span> folders</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.search.html">9.7 Searching for Files</a></span></dt>
-<dt><span class="sect1 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.html">9.8 Accessing Files with WebDAV</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.upload.html">9.5 Uploading Files or Folders</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.text.html">9.6 Creating or Editing Text Files</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.html">9.7 Organizing Files and <span class="phrase">Drive</span> Folders</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.linux.html">9.8.1 Setting up WebDAV under Linux</a></span></dt>
-<dt><span class="sect2 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.win.html">9.8.2 Setting up WebDAV under Windows</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.send.html">9.7.1 Sending files as E-Mail attachments</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.rename.html">9.7.2 Editing file names</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.editdescription.html">9.7.3 Creating or editing descriptions</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.move.html">9.7.4 Moving files or <span class="phrase">Drive</span> folders</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.copy.html">9.7.5 Copying files</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">9.7.6 Saving files as PDF</a></span></dt>
+<dt><span class="sect2 cap-portal"><a href="ox.appsuite.user.sect.drive.manage.addportal.html">9.7.7 Adding files to the Portal</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.favorite.html">9.7.8 Adding files or <span class="phrase">Drive</span> folders to Favorites</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.delete.html">9.7.9 Deleting files or <span class="phrase">Drive</span> folders</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.lock.html">9.7.10 Locking or unlocking files</a></span></dt>
+<dt><span class="sect2 cap-infostore"><a href="ox.appsuite.user.sect.drive.manage.versions.html">9.7.11 Working with versions</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.accounts.html">9.9 Adding storage accounts</a></span></dt>
-<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.settings.html">9.10 <span class="phrase">Drive</span>Settings</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.search.html">9.8 Searching for Files</a></span></dt>
+<dt><span class="sect1 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.html">9.9 Accessing Files with WebDAV</a></span></dt>
+<dd><dl>
+<dt><span class="sect2 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.linux.html">9.9.1 Setting up WebDAV under Linux</a></span></dt>
+<dt><span class="sect2 cap-webdav"><a href="ox.appsuite.user.sect.drive.webdav.win.html">9.9.2 Setting up WebDAV under Windows</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">10 Data Organization and Shares</a></span></dt>
-<dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">10.1 Managing Data with Folders</a></span></dt>
-<dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">10.1.1 What are folder types?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">10.1.2 What is the purpose of permissions?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">10.1.3 Navigating within the folder structure</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">10.1.4 Hiding folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">10.1.5 Adding folders to favorites</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">10.1.6 Renaming folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">10.1.7 Moving folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">10.1.8 Deleting folders</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.accounts.html">9.10 Adding storage accounts</a></span></dt>
+<dt><span class="sect1 cap-infostore"><a href="ox.appsuite.user.sect.drive.settings.html">9.11 <span class="phrase">Drive</span>Settings</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.html">10.2 Sharing Data</a></span></dt>
+<dt><span class="chapter cap-chat cap-call"><a href="ox.appsuite.user.chap.chat.html">10 <span class="phrase">Chat</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-share_links"><a href="ox.appsuite.user.sect.dataorganisation.sharing.link.html">10.2.1 Sharing with public links</a></span></dt>
-<dt><span class="sect2 cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.invitation.html">10.2.2 Inviting to a shared item</a></span></dt>
-<dt><span class="sect2 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.edit.html">10.2.3 Editing shares</a></span></dt>
-<dt><span class="sect2 cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.resend.html">10.2.4 Resending an invitation</a></span></dt>
-<dt><span class="sect2 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.remove.html">10.2.5 Removing shares</a></span></dt>
-<dt><span class="sect2 cap-infostore cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">10.2.6 Viewing or editing shares in the <span class="phrase">Drive</span> app</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.subscribe.html">10.2.7 Subscribing to E-Mail folders</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">10.2.8 Accessing other users' shares</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">10.2.9 Which permissions can be used?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">10.2.10 Use cases for permissions</a></span></dt>
+<dt><span class="sect1 cap-chat"><a href="ox.appsuite.user.sect.chat.gui.html">10.1 The <span class="phrase">Chat</span> window</a></span></dt>
+<dt><span class="sect1 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.html">10.2 Working with Chats</a></span></dt>
+<dd><dl>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.create.html">10.2.1 Creating chats</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.edit.html">10.2.2 Editing chats</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.join.html">10.2.3 Joining a chat</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.favorite.html">10.2.4 Adding chats to favorites</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.hide.html">10.2.5 Closing a chat</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.conversation.leave.html">10.2.6 Leaving a chat</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.accounts.html">10.3 Managing Accounts</a></span></dt>
+<dt><span class="sect1 cap-chat"><a href="ox.appsuite.user.sect.chat.message.html">10.3 Working with Messages</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">10.3.1 Editing the primary E-Mail account</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">10.3.2 Viewing, editing, deleting accounts</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.message.create.html">10.3.1 Reading, sending, replying to messages</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.message.manage.html">10.3.2 Managing Messages</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">10.4 Downloading Personal Data</a></span></dt>
+<dt><span class="sect1 cap-chat"><a href="ox.appsuite.user.sect.chat.objects.html">10.4 Creating Chats in Other Apps</a></span></dt>
+<dd><dl>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.objects.email.html">10.4.1 Replying to an E-Mail with a chat message</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.objects.contact.html">10.4.2 Starting a chat with contacts</a></span></dt>
+<dt><span class="sect2 cap-chat"><a href="ox.appsuite.user.sect.chat.objects.appointment.html">10.4.3 Starting a chat with appointment participants</a></span></dt>
 </dl></dd>
-<dt><span class="chapter"><a href="ox.appsuite.user.chap.security.html">11 Data Security</a></span></dt>
+<dt><span class="sect1 cap-coi"><a href="ox.appsuite.user.sect.chat.settings.html">10.5 Chat settings</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.dataorganisation.html">11 Data Organization and Shares</a></span></dt>
 <dd><dl>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.autologout.html">11.1 Signing out Automatically</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.emaillinkedimages.html">11.2 Externally Linked Images in E-Mails</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.emailauthentication.html">11.3 Showing the E-Mail Authenticity</a></span></dt>
-<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.security.whitelist.html">11.4 Using a Whitelist</a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.sessions.html">11.5 Displaying or Terminating Sessions</a></span></dt>
-<dt><span class="sect1 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.html">11.6 Multi-Factor Authentication</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.folder.html">11.1 Managing Data with Folders</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.settings.html">11.6.1 Setting up verification methods</a></span></dt>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.authenticator.html">11.6.2 Verifying a login by using an authenticator app</a></span></dt>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.securitykey.html">11.6.3 Verifying the login with a security key</a></span></dt>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.sms.html">11.6.4 Verifying the login with an SMS code</a></span></dt>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.recovery.html">11.6.5 Recovering the verification</a></span></dt>
-<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.manage.html">11.6.6 Managing verification methods</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">11.1.1 What are folder types?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">11.1.2 What is the purpose of permissions?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">11.1.3 Navigating within the folder structure</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">11.1.4 Hiding folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">11.1.5 Adding folders to favorites</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">11.1.6 Renaming folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">11.1.7 Moving folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">11.1.8 Deleting folders</a></span></dt>
+</dl></dd>
+<dt><span class="sect1 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.html">11.2 Sharing Data</a></span></dt>
+<dd><dl>
+<dt><span class="sect2 cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.share.html">11.2.1 Sharing data</a></span></dt>
+<dt><span class="sect2 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.edit.html">11.2.2 Editing shares</a></span></dt>
+<dt><span class="sect2 cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.resend.html">11.2.3 Resending an invitation</a></span></dt>
+<dt><span class="sect2 cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.remove.html">11.2.4 Removing shares</a></span></dt>
+<dt><span class="sect2 cap-infostore cap-share_links cap-share_mail_attachments"><a href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">11.2.5 Viewing or editing shares in the <span class="phrase">Drive</span> app</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">11.2.6 Subscribing to shared or personal E-Mail folders</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">11.2.7 Accessing other users' shares</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">11.2.8 Which permissions can be used?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">11.2.9 Use cases for permissions</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.accounts.html">11.3 Managing Accounts</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">11.3.1 Editing the primary E-Mail account</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">11.3.2 Viewing, editing, deleting accounts</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">11.4 Downloading Personal Data</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="ox.appsuite.user.chap.security.html">12 Data Security</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.autologout.html">12.1 Signing out Automatically</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.emaillinkedimages.html">12.2 Externally Linked Images in E-Mails</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.emailauthentication.html">12.3 Showing the E-Mail Authenticity</a></span></dt>
+<dt><span class="sect1 cap-webmail"><a href="ox.appsuite.user.sect.security.whitelist.html">12.4 Using a Whitelist</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.sessions.html">12.5 Display or sign out from active clients</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.security.apppasswords.html">12.6 Using Additional Passwords for Applications</a></span></dt>
+<dt><span class="sect1 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.html">12.7 Multi-Factor Authentication</a></span></dt>
+<dd><dl>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.settings.html">12.7.1 Setting up verification methods</a></span></dt>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.authenticator.html">12.7.2 Verifying a login by using an authenticator app</a></span></dt>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.securitykey.html">12.7.3 Verifying the login with a security key</a></span></dt>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.sms.html">12.7.4 Verifying the login with an SMS code</a></span></dt>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.recovery.html">12.7.5 Recovering the verification</a></span></dt>
+<dt><span class="sect2 cap-multifactor"><a href="ox.appsuite.user.sect.security.multifactor.manage.html">12.7.6 Managing verification methods</a></span></dt>
 </dl></dd>
 </dl></dd>
-<dt><span class="chapter cap-guard"><a href="ox.appsuite.user.chap.guard.html">12 Encrypting Data with <span class="phrase">Guard</span></a></span></dt>
+<dt><span class="chapter cap-guard"><a href="ox.appsuite.user.chap.guard.html">13 Encrypting Data with <span class="phrase">Guard</span></a></span></dt>
 <dd><dl>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.setup.html">12.1 Setting up <span class="phrase">Guard</span></a></span></dt>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.email.html">12.2 Encrypting E-Mail Conversations</a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.setup.html">13.1 Setting up <span class="phrase">Guard</span></a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.email.html">13.2 Encrypting E-Mail Conversations</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.read.html">12.2.1 Reading encrypted E-Mails</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.send.html">12.2.2 Sending encrypted E-Mails</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.external.html">12.2.3 How can external recipients read an encrypted E-Mail?</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.read.html">13.2.1 Reading encrypted E-Mails</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.send.html">13.2.2 Sending encrypted E-Mails</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.external.html">13.2.3 How can external recipients read an encrypted E-Mail?</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.email.incoming.html">13.2.4 Encrypting incoming E-Mails by using a filter rule</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.html">12.3 Encrypting E-Mail Conversations with Autocrypt</a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.html">13.3 Encrypting E-Mail Conversations with Autocrypt</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">12.3.1 Importing Autocrypt keys</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.manage.html">12.3.2 Managing Autocrypt keys</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.clients.html">12.3.3 Transferring Autocrypt keys to other clients</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">13.3.1 Importing Autocrypt keys</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.manage.html">13.3.2 Managing Autocrypt keys</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.autocrypt.clients.html">13.3.3 Transferring Autocrypt keys to other clients</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.html">12.4 Encrypting or Decrypting Files</a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.html">13.4 Encrypting or Decrypting Files</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.encrypt.html">12.4.1 Encrypting files</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.upload.html">12.4.2 Creating new encrypted files</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.open.html">12.4.3 Opening encrypted files</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.download.html">12.4.4 Downloading encrypted files</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.decrypt.html">12.4.5 Decrypting files</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.encrypt.html">13.4.1 Encrypting files</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.upload.html">13.4.2 Uploading files securely by using encryption</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.open.html">13.4.3 Opening encrypted files</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.download.html">13.4.4 Downloading encrypted files</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.drive.decrypt.html">13.4.5 Decrypting files</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.html">12.5 Encrypting Office Documents</a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.html">13.5 Encrypting Office Documents</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.createencrypted.html">12.5.1 Creating new encrypted documents</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.saveencrypted.html">12.5.2 Saving selected documents in an encrypted format</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.open.html">12.5.3 Opening an encrypted document</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.createencrypted.html">13.5.1 Creating new encrypted documents</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.saveencrypted.html">13.5.2 Saving selected documents in an encrypted format</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.documents.open.html">13.5.3 Opening an encrypted document</a></span></dt>
 </dl></dd>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.logout.html">12.6 Signing Out from <span class="phrase">Guard</span></a></span></dt>
-<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.html">12.7 <span class="phrase">Guard</span>Settings</a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.logout.html">13.6 Signing Out from <span class="phrase">Guard</span></a></span></dt>
+<dt><span class="sect1 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.html">13.7 <span class="phrase">Guard</span>Settings</a></span></dt>
 <dd><dl>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.password.html">12.7.1 Password management</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.yourkeys.html">12.7.2 Managing own keys</a></span></dt>
-<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.publickeys.html">12.7.3 Managing public keys</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.password.html">13.7.1 Password management</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.yourkeys.html">13.7.2 Managing own keys</a></span></dt>
+<dt><span class="sect2 cap-guard"><a href="ox.appsuite.user.sect.guard.settings.publickeys.html">13.7.3 Managing public keys</a></span></dt>
 </dl></dd>
 </dl></dd>
 <dt><span class="index"><a href="ox.appsuite.user.index.html">Index</a></span></dt>

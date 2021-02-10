@@ -61,7 +61,7 @@ define('io.ox/contacts/view-detail', [
     //         //#. %1$d is a number of members in distribution list
     //         desc = count === 0 ?
     //             gt('Distribution list') :
-    //             gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+    //             gt.ngettext('Distribution list with %1$d entry', 'Distribution list with %1$d entries', count, count);
     //         return single(7, desc, true);
     //     }
 
@@ -148,10 +148,10 @@ define('io.ox/contacts/view-detail', [
             if (!baton.data.mark_as_distributionlist) return;
 
             var count = baton.data.number_of_distribution_list,
-                //#. %1$d is a number of members in distribution list
                 desc = count === 0 ?
                     gt('Distribution list') :
-                    gt.format(gt.ngettext('Distribution list with 1 entry', 'Distribution list with %1$d entries', count), count);
+                    //#. %1$d is a number of members in distribution list
+                    gt.ngettext('Distribution list with %1$d entry', 'Distribution list with %1$d entries', count, count);
 
             this.addClass('distribution-list').append(
                 $('<div class="contact-header">').append(

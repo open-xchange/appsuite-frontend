@@ -14,7 +14,7 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create(); // Sender
     await users.create(); // Recipient1
     await users.create(); // Recipient2
@@ -22,11 +22,11 @@ Before(async (users) => {
     await users.create(); // Recipient4
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
+Scenario('[C8832] Re-order recipients', async function ({ I, users, mail }) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
 
@@ -134,7 +134,7 @@ Scenario('[C8832] Re-order recipients', async function (I, users, mail) {
 
 // also see [OXUIB-226]
 // TODO: re-enable after multi d&d on tokenfields works properly
-Scenario.skip('Re-order multiple recipients', async function (I, users, mail) {
+Scenario.skip('Re-order multiple recipients', async function ({ I, users, mail }) {
 
     let [sender, recipient1, recipient2, recipient3, recipient4] = users;
 

@@ -67,7 +67,8 @@ This sections describes how the different attributes are configured. All values 
 The attribute 'loginPage' is the root container that contains the whole configuration of the login page.
 
 <config>backgroundImage</config>
-The attribute 'backgroundImage' sets the background. It can be used with any valid values within css 'background', like a color, gradient or image url.
+The attribute 'backgroundImage' sets the background. It can be used with any valid values within css 'background', like a color, gradient or image url.<br>
+**Important:** For mobile devices the background image won't be set. The attribute 'backgroundColor' will be used instead.
 
 examples
 

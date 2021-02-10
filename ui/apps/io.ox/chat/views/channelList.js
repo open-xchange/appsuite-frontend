@@ -12,10 +12,15 @@
  */
 
 define('io.ox/chat/views/channelList', [
+    'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/chatAvatar',
-    'io.ox/chat/data'
-], function (DisposableView, ChatAvatar, data) {
+    'io.ox/chat/api',
+    'io.ox/chat/data',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/chat/toolbar',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, ChatAvatar, api, data, ToolbarView, toolbar, gt) {
 
     'use strict';
 
@@ -25,60 +30,76 @@ define('io.ox/chat/views/channelList', [
 
         initialize: function () {
 
-            this.collection = data.chats;
+            this.collection = data.channels;
 
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:joined': this.onChangeJoined,
                 'change:title': this.onChangeTitle
             });
 
+            // add all channels from chat collection first, so we don't have 2 different models for the same channel
+            // only needed once
+            if (!this.collection.synced) {
+                this.collection.add(data.chats.filter({ type: 'channel' }));
+                this.collection.synced = true;
+            }
+
             // get fresh data
-            this.collection.fetch({ remove: false, data: { type: 'channel' } });
+            this.collection.fetch();
         },
 
         render: function () {
+            var channels = this.collection;
             this.$el.append(
-                $('<div class="header abs">').append(
-                    $('<h2>').append('All channels')
+                $('<div class="header">').append(
+                    $('<h2>').text(gt('All channels'))
                 ),
-                $('<div class="scrollpane abs">').append(
+                new ToolbarView({ point: 'io.ox/chat/channel-list/toolbar', title: gt('All channels') }).render(new ext.Baton()).$el,
+                $('<div class="scrollpane scrollable" tabindex="0">').append(
                     $('<ul>').append(
-                        this.getItems().map(this.renderItem, this)
+                        channels.length > 0 ? channels.map(this.renderItem, this) : this.renderEmpty().delay(500).fadeIn(100)
                     )
                 )
             );
             return this;
         },
-
-        renderItem: function (model) {
-            return $('<li class="channel">').append(
-                $('<div>').append(
-                    new ChatAvatar({ model: model }).render().$el,
-                    $('<span class="title">').text(model.getTitle()),
-                    $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
-                ),
-                $('<div class="description">').text(model.get('description')),
-                $('<button type="button" class="btn btn-default btn-action join" >')
-                    .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
-                    .text('Join')
-            );
+        renderEmpty: function () {
+            return $('<li class="channel">').hide()
+                .append($('<div class="info">').text(gt('There are no channels yet')));
         },
+        renderItem: function (model) {
+            var isMember = model.isMember(),
+                numberOfMembers =  (model.get('members') && Object.keys(model.get('members')) || []).length;
 
-        getItems: function () {
-            return this.collection.getChannelsUnjoined();
+            return $('<li class="channel">')
+                .attr({ 'data-cmd': 'view-channel', 'data-id': model.get('roomId') })
+                .append(
+                    new ChatAvatar({ model: model }).render().$el,
+                    $('<div class="details">').append(
+                        $('<div class="title">').text(model.getTitle()),
+                        //#. %1$d: is the number of members
+                        $('<div class="members">').text(gt.ngettext('%1$d member', '%1$d members', numberOfMembers, numberOfMembers)),
+                        $('<div class="description">').text(model.get('description'))
+                    ),
+                    $('<button type="button" class="btn btn-default btn-action" >')
+                        .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('roomId') })
+                        .prop('disabled', isMember)
+                        .toggleClass('join', !isMember)
+                        .toggleClass('hidden', isMember)
+                        .text(gt('Join'))
+                );
         },
 
         getNode: function (model) {
-            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
+            return this.$('[data-id="' + $.escape(model.get('roomId')) + '"]');
         },
 
         onAdd: _.debounce(function () {
             if (this.disposed) return;
-
-            this.$('ul').empty().append(
-                this.getItems().map(this.renderItem.bind(this))
+            this.$('.scrollpane ul').empty().append(
+                this.collection.map(this.renderItem.bind(this))
             );
         }, 1),
 
@@ -86,14 +107,37 @@ define('io.ox/chat/views/channelList', [
             this.getNode(model).remove();
         },
 
-        onChangeJoined: function (model) {
-            this.onRemove(model);
-        },
-
         onChangeTitle: function (model) {
             this.getNode(model).find('.title').text(model.getTitle());
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
+
+    ext.point('io.ox/chat/channel-list/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function () {
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('All channels'));
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        }
+    );
 
     return ChannelList;
 });

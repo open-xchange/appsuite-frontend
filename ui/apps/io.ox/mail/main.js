@@ -267,7 +267,6 @@ define('io.ox/mail/main', [
         'account-error-handling': function (app) {
 
             app.addAccountErrorHandler = function (folderId, callbackEvent, data, overwrite) {
-                console.log(folderId, callbackEvent, data);
                 var node = app.treeView.getNodeView(folderId),
                     updateNode = function (node) {
                         //#. Shown as a tooltip when a mail account doesn't work correctly. Click brings user to the settings page
@@ -1083,12 +1082,17 @@ define('io.ox/mail/main', [
                             $('<div>').append(
                                 // although we are in showMultiple, we could just have one message if selection mode is alternative
                                 //#. %1$d is the number of selected messages
-                                gt.format(gt.ngettext('%1$d message selected', '%1$d messages selected', count, count))
+                                gt.ngettext('%1$d message selected', '%1$d messages selected', count, count)
                             ),
                             // inline actions
                             id && total > list.length && !search ?
                                 $('<div class="inline-actions selection-message">').append(
-                                    gt('There are %1$d messages in this folder; not all messages are displayed in the list currently.', total)
+                                    // although "total" is always greater than 1, "gt.ngettext" must be used to produce correct plural forms for some languages!
+                                    gt.ngettext(
+                                        'There is %1$d message in this folder; not all messages are displayed in the list currently.',
+                                        'There are %1$d messages in this folder; not all messages are displayed in the list currently.',
+                                        total, total
+                                    )
                                 ).hide()
                                 : $()
                         );
@@ -1826,10 +1830,70 @@ define('io.ox/mail/main', [
             app.folder.handleErrors();
         },
 
-        'save-draft': function (app) {
+        // drafts deleted outside of this client
+        'composition-spaces': function () {
+
+            api.on('deleted-mails', function (e, ids) {
+                if (_.some(ids, function (mail) { return ox.ui.spaces[mail.cid]; })) _.delay(refresh, 1000);
+            });
+
+            ox.on('refresh^', refresh);
+            composeAPI.on('refresh', refresh);
+            function refresh() {
+                var activespaces = {};
+                composeAPI.space.all().then(function transform(list) {
+                    return _.chain(list).map(function (space) {
+                        activespaces[space.cid] = {
+                            //#. $1$s is the subject of an email
+                            description: gt('Mail: %1$s', space.subject || gt('No subject')),
+                            floating: true,
+                            id: space.id + Math.random().toString(16),
+                            cid: space.cid,
+                            keepOnRestore: false,
+                            module: 'io.ox/mail/compose',
+                            point: space,
+                            timestamp: new Date().valueOf(),
+                            ua: navigator.userAgent
+                        };
+                        return activespaces[space.cid];
+                    }).filter(function (space) {
+                        // filter out already loaded ones
+                        return !ox.ui.apps.getByCID(space.cid);
+                    }).value();
+                }).then(function (list) {
+                    // add new ones
+                    return ox.ui.App.restoreLoad({ spaces: list });
+                }).then(function () {
+                    // look for removed spaces
+                    _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
+                        var space = activespaces[app.cid];
+                        // update taskbar items title (changed outside client)
+                        if (space && space.point) {
+                            var model = getTaskBarModel(space.point.cid);
+                            if (model) model.set('title', space.description);
+                        }
+                        // update state
+                        return space ?
+                            app.resume(space) :
+                            app.onError({ code: 'UI-SPACEMISSING' });
+                    });
+                }).catch(function (e) {
+                    if (ox.debug) console.error(e);
+                });
+            }
+
+            function getTaskBarModel(cid) {
+                return _.find(ox.ui.floatingWindows.models, function (model) {
+                    return model.get('cid') === cid;
+                });
+            }
+        },
+
+        'database-drafts': function () {
+            // edit of existing draft
             composeAPI.on('before:send before:save', function (id, data) {
                 var editFor = data.meta.editFor;
-                if (!editFor) return;
+                if (!editFor || data.mailPath) return;
 
                 var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
                     draftsId = account.getFoldersByType('drafts');
@@ -1839,12 +1903,46 @@ define('io.ox/mail/main', [
                     });
                 });
             });
-            composeAPI.on('after:send after:save', function () {
+            // new draft created
+            composeAPI.on('after:save', function (data) {
+                if (data.mailPath) return;
+                var folder = app.folder.get();
+                if (account.is('drafts', folder)) app.listView.reload();
+            });
+            // existing draft removed
+            composeAPI.on('after:send', function (data) {
+                var editFor = data.meta.editFor;
+                if (!editFor || data.mailPath) return;
                 var folder = app.folder.get();
                 if (account.is('drafts', folder)) app.listView.reload();
             });
         },
 
+        'real-drafts': function () {
+            // edit of existing draft
+            composeAPI.on('before:send', function removeFromPool(space, data) {
+                if (!data.mailPath) return;
+                var id = (data.mailPath || {}).id,
+                    folder = (data.mailPath || {}).folderId;
+                _(api.pool.getByFolder(folder)).each(function (collection) {
+                    collection.remove(_.cid({ id: id, folder_id: folder }));
+                });
+            });
+
+            // update
+            composeAPI.on('after:send after:update after:remove after:save add mailref:changed', function refreshFolder(data, result) {
+                var mailPath = data.mailPath || result.mailPath;
+                if (!mailPath) return;
+                // immediate reload when currently selected
+                var folder = app.folder.get();
+                if (account.is('drafts', folder)) return app.listView.reload();
+                // delayed reload on next select
+
+                _(api.pool.getByFolder(mailPath.folderId)).each(function (collection) {
+                    collection.expire();
+                });
+            });
+        },
 
         'mail-progress': function () {
             if (_.device('smartphone')) return;
@@ -1875,7 +1973,7 @@ define('io.ox/mail/main', [
                         var n = data.count,
                             pct = Math.round(data.pct * 100),
                             //#. %1$d is number of messages; %2$d is progress in percent
-                            caption = gt.ngettext('Sending 1 message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
+                            caption = gt.ngettext('Sending %1$d message ... %2$d%', 'Sending %1$d messages ... %2$d%', n, n, pct);
                         $el.find('.progress-bar').css('width', pct + '%');
                         $el.find('.caption span').text(caption);
                         $el.find('[data-action="close"]').off().on('click', function (e) {
@@ -1910,9 +2008,7 @@ define('io.ox/mail/main', [
                 if (result.error) {
                     return $.Deferred().reject(result).promise();
                 } else if (result.data) {
-                    var base = _(result.data.toString().split(api.separator)),
-                        id = base.last(),
-                        folder = base.without(id).join(api.separator);
+                    var folder = result.data.folderId;
                     $.when(accountAPI.getUnifiedMailboxName(), accountAPI.getPrimaryAddress())
                     .done(function (isUnified, senderAddress) {
                         // check if mail was sent to self to update inbox counters correctly
@@ -1937,7 +2033,14 @@ define('io.ox/mail/main', [
                 }
             }
 
-            composeAPI.on('after:save after:send', function (data, result) {
+            // only needed for db-based drafts
+            composeAPI.on('after:save', function (data, result) {
+                if (data.mailPath) return;
+                resetMailFolders();
+                refreshFolders(data, result);
+            });
+
+            composeAPI.on('after:send', function (data, result) {
                 resetMailFolders();
                 refreshFolders(data, result);
             });

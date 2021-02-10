@@ -707,6 +707,9 @@ define('io.ox/tasks/edit/view-template', [
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 currencies = settings.get('currencies', ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']);
+
+            // convenience: support string of comma separated values
+            currencies = _.isString(currencies) ? currencies.split(',') : currencies;
             currencies.unshift('');
             this.$el.append(
                 $('<label>').attr({

@@ -15,15 +15,15 @@
 
 Feature('Mail > Detail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C101624] Parsing CSS in HTML mails', async function (I) {
+Scenario('[C101624] Parsing CSS in HTML mails', async function ({ I }) {
 
     await I.haveMail({ folder: 'default0/INBOX', path:   'e2e/media/mails/c101624_1.eml' });
     await I.haveMail({ folder: 'default0/INBOX', path:   'e2e/media/mails/c101624_2.eml' });

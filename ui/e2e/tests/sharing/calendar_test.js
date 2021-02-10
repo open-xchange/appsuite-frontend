@@ -17,20 +17,23 @@ const moment = require('moment');
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async (I, users, calendar, dialogs) => {
+Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sharing link', async ({ I, users, calendar, dialogs }) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
-    session('Alice', async () => {
-        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] });
+    await Promise.all([
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[0] }),
+        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] })
+    ]);
+    await session('Alice', async () => {
         I.login('app=io.ox/calendar');
         calendar.newAppointment();
         I.fillField('Subject', 'simple appointment 1');
@@ -45,9 +48,11 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitToHide('.io-ox-calendar-edit');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Permissions / Invite people');
-
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
+        I.waitForText('Author', 5, '.permission-pre-selection');
+        I.click('.permission-pre-selection .btn');
+        I.clickDropdown('Viewer');
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));
@@ -57,20 +62,17 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.waitForText('Author', 10, '.permissions-view');
-        I.click('Author');
-        I.clickDropdown('Viewer');
-
+        I.waitForText('Viewer', 10, '.permissions-view');
+        I.waitForText('Invited people only');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+        url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
+        url = Array.isArray(url) ? url[0] : url;
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
-        I.click({ css: `.folder-tree [title="Actions for ${users[0].get('sur_name')}, ${users[0].get('given_name')}"]` });
-        I.click(locate('a').withText('Create sharing link').inside('.dropdown'));
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
-        url = Array.isArray(url) ? url[0] : url;
         I.say(url);
-        I.click('Close');
     });
 
     const checkSharedCalendarFolder = () => {
@@ -88,8 +90,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
     };
 
     I.say('Bob receives the share');
-    session('Bob', () => {
-        I.haveSetting('io.ox/calendar//viewView', 'week:week', { user: users[1] });
+    await session('Bob', async () => {
         I.login('app=io.ox/mail', { user: users[1] });
         I.waitForText('has shared the calendar', undefined, '.list-view');
         I.click(locate('li.list-item'));
@@ -99,23 +100,26 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
             I.click('View calendar');
         });
         I.waitForElement('.io-ox-calendar-main');
+        calendar.waitForApp();
         checkSharedCalendarFolder();
     });
 
     I.say('Eve uses external link to shared folder');
-    session('Eve', () => {
+    await session('Eve', () => {
         I.haveSetting('io.ox/calendar//viewView', 'week:week');
         I.amOnPage(url);
         I.waitForElement('.io-ox-calendar-main', 30);
         calendar.switchView('Week');
         I.waitForVisible({ css: '[data-page-id="io.ox/calendar/week:week"]' });
+        calendar.waitForApp();
         checkSharedCalendarFolder();
+        I.logout();
     });
 
     I.say('Alice revoces access');
-    session('Alice', () => {
+    await session('Alice', () => {
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForVisible({ css: `[aria-label="${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user."]` });
         I.click(locate({ css: 'button[title="Actions"]' }).inside('.modal'));
@@ -126,13 +130,15 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitForDetached('.modal-dialog');
 
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
-        I.clickDropdown('Create sharing link');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        I.click('Remove link');
+        I.clickDropdown('Share / Permissions');
+        dialogs.waitForVisible();
+        dialogs.clickButton('Unshare');
+        dialogs.waitForVisible();
+        dialogs.clickButton('OK');
     });
 
     I.say('Bob has no access');
-    session('Bob', () => {
+    await session('Bob', () => {
         I.refreshPage();
         calendar.waitForApp();
         I.retry(5).seeNumberOfElements(locate('.appointment').inside('.io-ox-calendar-main'), 0);
@@ -140,7 +146,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.dontSee('simple appointment 2', '.io-ox-calendar-main');
     });
     I.say('Eve has no access');
-    session('Eve', () => {
+    await session('Eve', () => {
         I.amOnPage(url);
         I.waitForText('The share you are looking for does not exist.');
     });

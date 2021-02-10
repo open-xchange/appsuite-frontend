@@ -149,7 +149,15 @@ define('io.ox/calendar/actions', [
     });
 
     new Action('io.ox/calendar/detail/actions/create', {
-        capabilities: '!guest',
+        matches: function (data) {
+            // if you are not a guest you always have your default folder to create appointments
+            if (capabilities.has('!guest')) return true;
+            // don't use collection.has(create) here, doesn't work when there is no appointment selected
+            var folder = folderAPI.pool.getModel(data.folder_id);
+            if (!folder) return false;
+            // guests need create permissions in the current folder
+            return folder.can('create');
+        },
         action: _.debounce(function (baton, obj) {
             ox.load(['io.ox/calendar/actions/create']).done(function (action) {
                 action(baton, obj);
@@ -169,6 +177,8 @@ define('io.ox/calendar/actions', [
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
             // In public folders we must be organizer or attendee, not on behalf
             if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
+            // do not show change reminder as this duplicates "edit"
+            if (util.allowedToEdit(data, folder)) return false;
             return true;
         },
         action: function (baton) {
@@ -431,6 +441,17 @@ define('io.ox/calendar/actions', [
                 entity: !folder.error && !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
                 partStat: accept ? 'ACCEPTED' : 'DECLINED'
             };
+
+            if (!appointment.attendee.entity && folder.created_from) {
+                var prev = _(data.attendees).find(function (attendee) {
+                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === folder.created_from.identifier;
+                });
+                if (prev) {
+                    delete appointment.attendee.entity;
+                    appointment.attendee.email = prev.email;
+                    appointment.attendee.uri = prev.uri;
+                }
+            }
 
             if (accept) {
                 // default reminder

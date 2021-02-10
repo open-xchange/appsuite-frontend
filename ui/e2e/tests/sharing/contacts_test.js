@@ -15,19 +15,19 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async (I, users, contacts, mail, dialogs) => {
+Scenario.skip('[C104306] contact folders using “Permisions” dialog and sharing link', async ({ I, users, contacts, mail, dialogs }) => {
     let url;
     // Alice shares a folder with 2 contacts
-    session('Alice', async () => {
+    await session('Alice', async () => {
         const defaultFolder = await I.grabDefaultFolder('contacts');
         await Promise.all([
             I.haveContact({ display_name: 'Wonderland, Alice', folder_id: defaultFolder, first_name: 'Alice', last_name: 'Wonderland' }),
@@ -40,7 +40,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click('.folder-arrow', '~My address books');
 
         I.openFolderMenu('Contacts');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
 
         I.waitForText('Permissions for folder', 5, dialogs.locators.header);
@@ -51,21 +51,20 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.waitForText(users[1].get('primaryEmail'));
         I.click(users[1].get('primaryEmail'), '.address-picker .list-item');
         I.click({ css: 'button[data-action="select"]' });
-        I.waitForDetached('.address-picer');
+        I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.click('Author');
+        I.click('Author', '.permissions-view');
         I.clickDropdown('Viewer');
-
+        I.waitForText('Invited people only');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.waitForText('Copy link', 5);
+        I.click('Copy link');
+        I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+        url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
+        url = Array.isArray(url) ? url[0] : url;
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
-        I.openFolderMenu('Contacts');
-        I.clickDropdown('Create sharing link');
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        url = await I.grabValueFrom('.share-wizard input[type="text"]');
-        url = Array.isArray(url) ? url[0] : url;
-        I.click('Close');
+        //I.click('Close');
     });
 
     // Bob receives the share
@@ -100,27 +99,26 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.see('Wonderland', '.vgrid');
 
         // check for missing edit rights
-        I.seeElement(locate('.io-ox-contacts-window .classic-toolbar a.disabled').withText('Edit'));
+        I.retry(5).seeElement(locate('.io-ox-contacts-window .classic-toolbar a.disabled').withText('Edit'));
     });
 
     session('Alice', () => {
         I.openFolderMenu('Contacts');
-        I.clickDropdown('Permissions / Invite people');
+        I.clickDropdown('Share / Permissions');
         I.waitForElement('.btn[title="Actions"]');
         I.click('.btn[title="Actions"]');
         I.clickDropdown('Revoke access');
         dialogs.waitForVisible();
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-
         I.click({ css: '.folder-tree [title="Actions for Contacts"]' });
-        I.clickDropdown('Create sharing link');
+        I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
-        I.waitForText('Sharing link created for folder');
-        I.waitForFocus('.share-wizard input[type="text"]');
-        dialogs.clickButton('Remove link');
+        I.waitForText('Anyone with the link and invited people', 5);
+        I.selectOption('Who can access this folder?', 'Invited people only');
+        I.dontSee('Copy link');
+        dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-        I.waitForText('The link has been removed');
     });
 
     session('Bob', () => {
@@ -132,6 +130,6 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
 
     session('Eve', () => {
         I.amOnPage(url);
-        I.waitForText('The share you are looking for does not exist.');
+        I.waitForText('The share you are looking for does not exist.', 5);
     });
 });

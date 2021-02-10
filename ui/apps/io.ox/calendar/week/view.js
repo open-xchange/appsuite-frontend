@@ -362,6 +362,11 @@ define('io.ox/calendar/week/view', [
 
         onAddAppointment: function (model) {
             if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
+            var startOfWeek = moment(this.model.get('startDate')).format('YYYYMMDD'),
+                endOfWeek = moment(this.model.get('startDate')).add(Math.max(0, this.model.get('numColumns') - 1), 'days').format('YYYYMMDD');
+            // check if appointment is out of displayed time, may happen with some strange recurrece rules
+            // endDate is exclusive so if the end date matches the start of the week we will not show the event
+            if (model.get('endDate').value <= startOfWeek || model.get('startDate').value > endOfWeek) return;
             var node = this.renderAppointment(model);
             this.$appointmentContainer.append(node.hide());
             if (!this.onReset) this.adjustPlacement();
@@ -1033,18 +1038,26 @@ define('io.ox/calendar/week/view', [
             var target = $(e.currentTarget),
                 index = this.$('.day').index(target.parent()),
                 startDate = this.model.get('startDate').clone(),
-                folder = this.opt.app.folder.get();
+                folder = this.opt.app.folder.get(),
+                offset = 60 / this.model.get('gridSize') * target.index(),
+                endDate;
 
             if (this.model.get('mergeView')) folder = this.opt.app.folders.list()[index];
             else startDate.add(index, 'days');
-
-            startDate.add(60 / this.model.get('gridSize') * target.index(), 'minutes');
+            var startOfDay = startDate.clone();
+            startDate.add(offset + this.getDSTOffset(startOfDay, offset), 'minutes');
+            endDate = startDate.clone().add(60, 'minutes');
 
             this.opt.view.createAppointment({
-                startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid:  startDate.tz() },
-                endDate: { value: startDate.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  startDate.tz() },
+                startDate: { value: startDate.format('YYYYMMDD[T]HHmmss'), tzid: startDate.tz() },
+                endDate: { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() },
                 folder: folder
             });
+        },
+
+        getDSTOffset: function (startDate, offset) {
+            var endDate = startDate.clone().add(offset, 'minutes');
+            return startDate._offset - endDate._offset;
         },
 
         onAddAppointment: function (model) {
@@ -1056,7 +1069,8 @@ define('io.ox/calendar/week/view', [
                 start = moment(startLocal).startOf('day'),
                 end = moment(endLocal).startOf('day'),
                 startOfNextWeek = moment(this.model.get('startDate')).startOf('day').add(this.model.get('numColumns'), 'days'),
-                maxCount = 0;
+                maxCount = 0,
+                dayNodes = this.$('.day');
 
             // draw across multiple days
             while (maxCount <= this.model.get('numColumns')) {
@@ -1082,22 +1096,26 @@ define('io.ox/calendar/week/view', [
                 node = node.get(maxCount) ? $(node.get(maxCount)) : $(node).first().clone();
 
                 // daylight saving time change?
-                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset;
+                var offset = start._offset - model.getMoment('startDate').tz(start.tz())._offset,
+                    height = endLocal.diff(startLocal, 'minutes') / 24 / 60,
+                    index = startLocal.day() - this.model.get('startDate').day();
+                if (index < 0) index += 7;
 
                 node
                     .addClass(endLocal.diff(startLocal, 'minutes') < 120 / this.model.get('gridSize') ? 'no-wrap' : '')
                     .css({
                         top: (Math.max(0, startLocal.diff(moment(start), 'minutes') - offset)) / 24 / 60 * 100 + '%',
-                        height: 'calc( ' + endLocal.diff(startLocal, 'minutes') / 24 / 60 * 100 + '% - 2px)',
+                        height: 'calc( ' + height * 100 + '% - 2px)',
                         lineHeight: this.opt.minCellHeight + 'px'
                     });
-
-                var index = startLocal.day() - this.model.get('startDate').day();
-                if (index < 0) index += 7;
+                // needed for flags to draw correctly
+                node.attr('contentHeight', height * dayNodes.eq(index).height() - 2);
                 if (this.model.get('mergeView')) index = this.opt.app.folders.list().indexOf(model.get('folder'));
-                // append at the right place
-                this.$('.day').eq(index).append(node);
+
                 ext.point('io.ox/calendar/week/view/appointment').invoke('draw', node, ext.Baton({ model: model, date: start, view: this }));
+
+                // append at the right place
+                dayNodes.eq(index).append(node);
 
                 // do incrementation
                 if (!start.isSame(end, 'day')) {
@@ -1233,6 +1251,8 @@ define('io.ox/calendar/week/view', [
                     },
                     update: function (e) {
                         var start = pivot, end = $(e.target), day, days = this.$('.day');
+                        function minutesToAdd(position, timeSlots) { return position / timeSlots * 24 * 60; }
+
                         if (this.model.get('mode') === 'day') {
                             days = pivot.parent();
                             start = days.children().eq(start.index());
@@ -1254,8 +1274,16 @@ define('io.ox/calendar/week/view', [
                                 top: (top / numTimeslots * 100) + '%',
                                 height: ((bottom - top) / numTimeslots * 100) + '%'
                             });
-                            if (start.parent().is(day)) startDate = this.model.get('startDate').clone().add(days.index(day), 'days').add(top / numTimeslots * 24 * 60, 'minutes');
-                            if (end.parent().is(day)) endDate = this.model.get('startDate').clone().add(days.index(day), 'days').add(bottom / numTimeslots * 24 * 60, 'minutes');
+                            if (start.parent().is(day)) {
+                                var startDay = this.model.get('startDate').clone().add(days.index(day), 'days'),
+                                    minutesToStart = minutesToAdd(top, numTimeslots);
+                                startDate = startDay.clone().add(minutesToStart + this.getDSTOffset(startDay, minutesToStart), 'minutes');
+                            }
+                            if (end.parent().is(day)) {
+                                var endDay = this.model.get('startDate').clone().add(days.index(day), 'days'),
+                                    minutesToEnd = minutesToAdd(bottom, numTimeslots);
+                                endDate = endDay.clone().add(minutesToEnd + this.getDSTOffset(endDay, minutesToEnd), 'minutes');
+                            }
                         }
                         start.parent().prevAll().find('.lasso').remove();
                         day.nextAll().addBack().find('.lasso').remove();
@@ -1276,8 +1304,6 @@ define('io.ox/calendar/week/view', [
             }
 
             return function (e) {
-                // needless for guests
-                if (capabilities.has('guest')) return;
 
                 if (e.type === 'mousedown') {
                     var app = this.opt.app;
@@ -1737,10 +1763,12 @@ define('io.ox/calendar/week/view', [
         onResetAppointments: function () {
             this.fulltimeView.trigger('collection:before:reset');
             this.appointmentView.trigger('collection:before:reset');
+
             this.collection.forEach(function (model) {
                 if (util.isAllday(model) && this.options.showFulltime) this.fulltimeView.trigger('collection:add', model);
                 else this.appointmentView.trigger('collection:add', model);
             }.bind(this));
+
             this.fulltimeView.trigger('collection:after:reset');
             this.appointmentView.trigger('collection:after:reset');
         },

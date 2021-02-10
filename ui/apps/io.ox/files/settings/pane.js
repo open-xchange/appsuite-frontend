@@ -64,8 +64,10 @@ define('io.ox/files/settings/pane', [
                     },
                     getAutoPlayPauseOptions: function () {
                         return _.map([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 50, 60], function (i) {
-                            i = String(i);
-                            return { value: i, label: gt('%1$d seconds', i) };
+                            return {
+                                value: String(i),
+                                label: gt.ngettext('%1$d second', '%1$d seconds', i, i)
+                            };
                         });
                     },
                     getRetentionDaysOptions: function (retentionDays) {
@@ -81,7 +83,8 @@ define('io.ox/files/settings/pane', [
                         var entry = _.findWhere(entries, { value: retentionDays });
                         if (!entry) {
                             entries.unshift({
-                                label: gt.format(gt.ngettext('%1$d day', '%1$d days', retentionDays), retentionDays), value: retentionDays
+                                label: gt.ngettext('%1$d day', '%1$d days', retentionDays, retentionDays),
+                                value: retentionDays
                             });
                         }
                         return entries;
@@ -105,7 +108,8 @@ define('io.ox/files/settings/pane', [
                         var entry = _.findWhere(entries, { value: maxVersions });
                         if (!entry) {
                             entries.unshift({
-                                label: gt.format(gt.ngettext('%1$d version', '%1$d versions', maxVersions - 1), maxVersions - 1), value: maxVersions
+                                label: gt.ngettext('%1$d version', '%1$d versions', maxVersions - 1, maxVersions - 1),
+                                value: maxVersions
                             });
                         }
                         return entries;
@@ -206,9 +210,19 @@ define('io.ox/files/settings/pane', [
                         util.fieldset(
                             gt('File version history'),
                             $('<span>').append(gt('Timeframe')),
-                            $('<ul>').append($('<li>').append((retentionDays <= 0) ? gt('The timeframe is not limited') : gt.format(gt.ngettext('The timeframe is limited to 1 day.', 'The timeframe is limited to %1$d days.', retentionDays), retentionDays))),
+                            $('<ul>').append($('<li>').append((retentionDays <= 0) ?
+                                gt('The timeframe is not limited.') :
+                                //#. %1$d is the number of days
+                                //#, c-format
+                                gt.ngettext('The timeframe is limited to %1$d day.', 'The timeframe is limited to %1$d days.', retentionDays, retentionDays)
+                            )),
                             $('<span>').append(gt('File version limit')),
-                            $('<ul>').append($('<li>').append((maxVersions <= 0) ? gt('The number of versions is not limited') : gt.format(gt.ngettext('The number of versions is limited to 1 version.', 'The number of versions is limited to %1$d versions.', maxVersions - 1), maxVersions - 1)))
+                            $('<ul>').append($('<li>').append((maxVersions <= 0) ?
+                                gt('The number of versions is not limited.') :
+                                //#. %1$d is the number of versions
+                                //#, c-format
+                                gt.ngettext('The number of versions is limited to %1$d version.', 'The number of versions is limited to %1$d versions.', maxVersions - 1, maxVersions - 1)
+                            ))
                         )
                     );
 
@@ -223,12 +237,33 @@ define('io.ox/files/settings/pane', [
                         summary = $('<span>').text(gt('Summary')).append(summaryList);
 
                     if (maxVersions <= 0 && retentionDays <= 0) {
-                        summaryList.append($('<li>').text(gt('All file versions are retained')));
+                        summaryList.append($('<li>').text(gt('All file versions are retained.')));
                         return summary;
                     }
 
-                    if (retentionDays > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('All file versions older than 1 day will be deleted after next login', 'All file versions older than %1$d days will be deleted after next login', retentionDays), retentionDays)));
-                    if (maxVersions > 0) summaryList.append($('<li>').append(gt.format(gt.ngettext('When a file has more than 1 additional version, older versions will be deleted when a new version is created', 'When a file has more than %1$d additional versions, older versions will be deleted when a new version is created', maxVersions - 1), maxVersions - 1)));
+                    if (retentionDays > 0) {
+                        summaryList.append($('<li>').append(
+                            //#. %1$d is the number of days
+                            //#, c-format
+                            gt.ngettext(
+                                'All file versions older than %1$d day will be deleted after next login.',
+                                'All file versions older than %1$d days will be deleted after next login.',
+                                retentionDays, retentionDays
+                            )
+                        ));
+                    }
+
+                    if (maxVersions > 0) {
+                        summaryList.append($('<li>').append(
+                            //#. %1$d is the number of versions
+                            //#, c-format
+                            gt.ngettext(
+                                'When a file has more than 1 additional version, older versions will be deleted when a new version is created.',
+                                'When a file has more than %1$d additional versions, older versions will be deleted when a new version is created.',
+                                maxVersions - 1, maxVersions - 1
+                            )
+                        ));
+                    }
 
                     return summary;
                 };

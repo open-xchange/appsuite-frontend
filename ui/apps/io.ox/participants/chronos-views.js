@@ -135,7 +135,9 @@ define('io.ox/participants/chronos-views', [
         isOrganizer: function () {
             if (!this.options.baton) return false;
             var appointment = this.options.baton.model.toJSON();
-            if (!appointment.organizer || !appointment.organizer.entity) return false;
+            if (!appointment.organizer || !(appointment.organizer.entity || appointment.organizer.email)) return false;
+            // we may have external organizers, those don't have entity numbers, see federated sharing
+            if (!appointment.organizer.entity && appointment.organizer.email) return this.model.get('email') === appointment.organizer.email;
             return this.model.get('entity') === appointment.organizer.entity;
         },
 

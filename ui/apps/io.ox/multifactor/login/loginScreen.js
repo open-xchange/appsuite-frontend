@@ -33,7 +33,7 @@ define('io.ox/multifactor/login/loginScreen', ['io.ox/core/extensions', 'io.ox/c
         var a = $('<a href="#" class="dropdown-toggle f6-target" data-toggle="dropdown" tabindex="-1">').attr('title', gt('Settings')),
             dropdown = new Dropdown({
                 tagName: 'li',
-                id: 'io-ox-topbar-dropdown-icon',
+                id: 'io-ox-topbar-settings-dropdown-icon',
                 className: 'launcher dropdown',
                 $toggle: a
             });

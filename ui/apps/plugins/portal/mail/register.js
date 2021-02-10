@@ -232,12 +232,11 @@ define('plugins/portal/mail/register', [
             function setSummary(model) {
                 var unread = model.get('unread');
                 if (!unread) return node.text(gt('You have no unread messages'));
-                node.text(gt.format(
+                node.text(
                     //#. %1$d is the number of mails
                     //#, c-format
-                    gt.ngettext('You have %1$d unread message', 'You have %1$d unread messages', unread),
-                    unread
-                ));
+                    gt.ngettext('You have %1$d unread message', 'You have %1$d unread messages', unread, unread)
+                );
             }
         },
 

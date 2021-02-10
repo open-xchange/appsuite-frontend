@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Zoom');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -24,11 +24,11 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('User can connect zoom account through settings', (I, settings) => {
+Scenario('User can connect zoom account through settings', ({ I, settings }) => {
 
     I.login('app=io.ox/settings');
     settings.waitForApp();
@@ -39,7 +39,7 @@ Scenario('User can connect zoom account through settings', (I, settings) => {
     I.waitForText('You have linked the following Zoom account', 10, settings.locators.main);
 });
 
-Scenario('User can connect zoom account through appointments', (I, calendar) => {
+Scenario('User can connect zoom account through appointments', ({ I, calendar }) => {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -53,7 +53,7 @@ Scenario('User can connect zoom account through appointments', (I, calendar) => 
     I.dontSee('Connect with Zoom');
 });
 
-Scenario('User can connect zoom account through address book', (I, users, contacts, dialogs) => {
+Scenario('User can connect zoom account through address book', ({ I, users, contacts, dialogs }) => {
 
     const [user1, user2] = users;
 
@@ -62,7 +62,7 @@ Scenario('User can connect zoom account through address book', (I, users, contac
     I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     I.waitForVisible('.io-ox-contacts-window .tree-container');
     contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
     I.click('Call');
     I.waitForText('Call via Zoom', 5, '.dropdown.open');
     I.click('Call via Zoom');
@@ -74,23 +74,23 @@ Scenario('User can connect zoom account through address book', (I, users, contac
     I.dontSee('Connect with Zoom');
 });
 
-Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', (I, dialogs) => {
+Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', ({ I, dialogs }) => {
 
     I.login('app=io.ox/contacts&folder=6');
     I.waitForElement('.io-ox-contacts-window');
     I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     I.waitForVisible('.io-ox-contacts-window .tree-container');
-    I.waitForText('Call', 5, '.switchboard-actions');
+    I.waitForText('Call', 5, '.action-button-rounded');
 
-    I.click('Email', '.switchboard-actions');
+    I.click('Email', '.action-button-rounded');
     I.waitForVisible('.io-ox-mail-compose [placeholder="To"]', 30);
     I.waitForFocus('.io-ox-mail-compose [placeholder="To"]');
     I.click('~Save', '.io-ox-mail-compose-window');
     dialogs.waitForVisible();
-    dialogs.clickButton('Discard message');
+    dialogs.clickButton('Delete draft');
     I.waitForDetached('.io-ox-mail-compose-window');
 
-    I.click('Invite', '.switchboard-actions');
+    I.click('Invite', '.action-button-rounded');
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.click('~Close', '.io-ox-calendar-edit-window');

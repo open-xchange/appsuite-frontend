@@ -29,8 +29,7 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
             ['download', '30', gt('Download')],
             ['download-folder', '30', gt('Download entire folder')],
             // #4
-            ['invite', '40', gt('Permissions / Invite people')],
-            ['getalink', '40', gt('Create sharing link')],
+            ['invite', '40', gt('Share / Permissions')],
             // #5
             ['rename', '50', gt('Rename')],
             ['move', '50', gt('Move')],
@@ -43,11 +42,109 @@ define('io.ox/files/contextmenu', ['io.ox/core/extensions', 'gettext!io.ox/core'
             ['restore', '70', gt('Restore')]
         ],
         'io.ox/files/share/myshares/listview/contextmenu': [
-            ['editShare', '10', gt('Edit Share')],
+            ['editShare', '10', gt('Edit share')],
             ['show-in-folder', '10', gt('Show in Drive')],
             ['revoke', '20', gt('Revoke access')]
         ]
     };
+
+    function layoutEnabled(baton) {
+        var layoutType = this;
+        return layoutType === baton.app.props.get('layout');
+    }
+
+    function viewOptionEnabled(baton) {
+        var optionName = this;
+        return baton.app.props.get(optionName);
+    }
+
+    // Drive context menu when clicked in free space
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'add-folder',
+        index: 10,
+        section: 10,
+        title: gt('Add new folder'),
+        ref: 'io.ox/files/actions/add-folder'
+    });
+
+    // sharing
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'invite',
+        index: 20,
+        section: 20,
+        title: gt('Share / Permissions'),
+        ref: 'io.ox/files/actions/invite'
+    });
+
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'getalink',
+        index: 30,
+        section: 20,
+        title: gt('Create sharing link'),
+        ref: 'io.ox/files/actions/getalink'
+    });
+
+    // layout options
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'list',
+        index: 40,
+        section: 30,
+        sectionTitle: gt('Layout'),
+        title: gt('List'),
+        checkmarkFn: layoutEnabled.bind('list'),
+        ref: 'io.ox/files/actions/layout-list'
+    });
+
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'icon',
+        index: 50,
+        section: 30,
+        sectionTitle: gt('Layout'),
+        title: gt('Icons'),
+        checkmarkFn: layoutEnabled.bind('icon'),
+        ref: 'io.ox/files/actions/layout-icon'
+    });
+
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'title',
+        index: 60,
+        section: 30,
+        sectionTitle: gt('Layout'),
+        title: gt('Tiles'),
+        checkmarkFn: layoutEnabled.bind('tile'),
+        ref: 'io.ox/files/actions/layout-tile'
+    });
+
+    // View options
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'checkbox',
+        index: 70,
+        section: 40,
+        sectionTitle: gt('Options'),
+        title: gt('Checkboxes'),
+        checkmarkFn: viewOptionEnabled.bind('checkboxes'),
+        ref: 'io.ox/files/actions/view-checkboxes'
+    });
+
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'folderview',
+        index: 80,
+        section: 40,
+        sectionTitle: gt('Options'),
+        title: gt('Folder view'),
+        checkmarkFn: viewOptionEnabled.bind('folderview'),
+        ref: 'io.ox/files/actions/view-folderview'
+    });
+
+    ext.point('io.ox/files/listview/contextmenu/freespace').extend({
+        id: 'file-detail',
+        index: 90,
+        section: 40,
+        sectionTitle: gt('Options'),
+        title: gt('File details'),
+        checkmarkFn: viewOptionEnabled.bind('details'),
+        ref: 'io.ox/files/actions/view-details'
+    });
 
     _(points).each(function (items, point) {
         ext.point(point).extend(

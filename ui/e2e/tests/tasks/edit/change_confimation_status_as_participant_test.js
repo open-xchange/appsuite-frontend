@@ -15,18 +15,18 @@
 
 Feature('Tasks > Edit');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C125311] Change confimation status as participant', async function (I, users, tasks, mail) {
+Scenario('[C125311] Change confimation status as participant', async function ({ I, users, tasks, mail }) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', false, { user: users[1] });
     I.haveSetting('io.ox/calendar//deleteInvitationMailAfterAction', false, { user: users[1] });

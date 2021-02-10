@@ -15,20 +15,25 @@
 
 Feature('Portal');
 
-Before(async (users) => {
-    await users.create();
+Before(async ({ users, contexts }) => {
+    const ctx = await contexts.create();
+
+    await Promise.all([
+        ctx.hasQuota(1000),
+        users.create(users.getRandom(), ctx)
+    ]);
 });
-After(async (users) => {
+After(async ({ users, contexts }) => {
     await users.removeAll();
+    await contexts[1].remove();
 });
 
-Scenario('[C7495] Quota update', async (I, users, contexts) => {
+Scenario('[C7495] Quota update', async ({ I, users }) => {
 
     const assert = require('chai').assert;
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
-    await contexts[0].hasQuota(1000);
 
     //Add Recently changed files widget to Portal
     I.login('app=io.ox/portal');

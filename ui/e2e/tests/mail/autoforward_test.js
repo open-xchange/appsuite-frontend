@@ -12,15 +12,15 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('adds and removes a autoforward rule', function (I, mail, dialogs) {
+Scenario('adds and removes a autoforward rule', function ({ I, mail, dialogs }) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main .rightside h1');
     I.see('Basic settings', '.rightside h1');

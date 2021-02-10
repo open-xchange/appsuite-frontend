@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-10 13:57+0800\n"
+"PO-Revision-Date: 2020-12-11 22:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -254,39 +254,37 @@ msgstr "分享檔案"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
+"also collaborate on a document and set different rights."
 msgstr ""
-"您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
+"您可在此與同事及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
 "限。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "分享選項"
+msgid "Sharing option - Invite people"
+msgstr "分享選項 - 邀請人員"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
+"Choose from two alternatives to share your files and folder. Use \"Invited "
+"people only\" if you want ot manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
 msgstr ""
-"在兩個選項間選擇以分享您的檔案與資料夾。若您想要管理權限並允許受邀者建立與編"
-"輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的檔"
-"案。若您希望的話，也可指定到期日，並加上密碼保護。"
+"從兩種方式中選擇一種來分享檔案與資料夾。若您想要管理存取權，並允許收件者建立"
+"或編輯檔案，使用「僅受邀人員」。內部與外部參與者也可以同事與您一起編輯文件。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "協作"
+msgid "Sharing option - Everyone who has the link"
+msgstr "分享選項 - 每個收到連結的人"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
 msgstr ""
-"透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能夠"
-"與您同時編輯文件與試算表。"
+"也可以提供一組分享連結，讓其他人檢視或下載檔案。想要的話也可以設定到期日與密"
+"碼來保護連結。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -346,8 +344,8 @@ msgid "Navigation"
 msgstr "導覽"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
-msgstr "可在右上角的選單找到所有應用程式。"
+msgid "All apps can be found in the app menu on the top left."
+msgstr "可以在左上角的應用程式選單找到所有應用程式。"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -380,7 +378,7 @@ msgstr "若您需要協助，或有其他問題，可以使用「說明」應用
 msgid "Cancel tour"
 msgstr "取消導覽"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
@@ -514,11 +512,11 @@ msgstr "開啟郵件選項"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
-"件。"
+"要開啟電子郵件設定，點擊右上角選單列的「設定」選單圖示，然後選擇「設定」。接"
+"下來點擊左邊的「郵件」。"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -668,13 +666,14 @@ msgstr "開啟說明"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的應"
-"用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
+"要開啟說明，點擊右上角選單列的說明圖示，然後選擇「說明」。將顯示目前所選的應"
+"用程式的相關說明；若要瀏覽完整的說明內容，請點擊視窗上方的「開始頁面」或「目"
+"錄」。"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -781,6 +780,57 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "您可在此與朋友及外部聯絡人分享檔案。您也可以一起編輯文件，並設定不同存取權"
+#~ "限。"
+
+#~ msgid "Sharing options"
+#~ msgstr "分享選項"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "在兩個選項間選擇以分享您的檔案與資料夾。若您想要管理權限並允許受邀者建立與"
+#~ "編輯檔案，請使用邀請成員功能；若只要將鏈結提供給其他人，即可檢視、下載您的"
+#~ "檔案。若您希望的話，也可指定到期日，並加上密碼保護。"
+
+#~ msgid "Collaborating"
+#~ msgstr "協作"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "透過邀請成員來分享檔案不僅能讓受邀者建立、編輯檔案，內外部的其他參與者也能"
+#~ "夠與您同時編輯文件與試算表。"
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr "可在右上角的選單找到所有應用程式。"
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "要開啟郵件設定，點擊選單列右上角的系統選單圖示。選擇設定，點擊左邊的電子郵"
+#~ "件。"
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "若要開啟說明，點擊選單列右上角的使用者圖片，然後選擇說明。將顯示目前選擇的"
+#~ "應用程式的使用說明。若要瀏覽完整說明，請點擊開始頁面，或視窗上方的目錄。"
 
 #~ msgid "Creating new items"
 #~ msgstr "建立新項目"

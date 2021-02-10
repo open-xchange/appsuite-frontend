@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Presence');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -24,50 +24,50 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 
 const presenceStates = [
-    { status: 'Absent', class: 'absent' },
-    { status: 'Busy', class: 'busy' },
-    { status: 'Offline', class: 'offline' }
+    { status: 'Absent', value: 'absent', class: 'absent' },
+    { status: 'Busy', value: 'busy', class: 'busy' },
+    { status: 'Invisible', value: 'invisible', class: 'offline' }
 ];
 
-Scenario('Presence state is shown and can be changed', async function (I) {
-    const checkStatus = (statusToClick, classToCheck) => {
+Scenario('Presence state is shown and can be changed', async function ({ I }) {
+    const checkStatus = (statusToClick, valueToCheck, classToCheck) => {
         I.say(`Check: ${statusToClick}`);
         I.clickDropdown(statusToClick);
         I.waitForDetached('.dropdown.open');
         // Check if state is updated in the topbar
         I.waitForVisible(`.taskbar .presence.${classToCheck}`);
-        I.click('~Support');
+        I.click('~My account');
         // Verify that the right status is marked as checked
-        I.waitForVisible(`.dropdown.open a[data-value="${classToCheck}"] .fa-check`);
+        I.waitForVisible(`.dropdown.open a[data-value="${valueToCheck}"] .fa-check`);
     };
 
     I.login();
 
     // Check default online state
     I.waitForVisible('.presence.online', 20);
-    I.click('~Support');
+    I.click('~My account');
     I.waitForVisible('.dropdown.open a[data-value="online"] .fa-check');
 
     presenceStates.forEach((state) => {
-        checkStatus(state.status, state.class);
+        checkStatus(state.status, state.value, state.class);
     });
 });
 
-Scenario('Presence state is shown in mails', async function (I, users, mail) {
+Scenario('Presence state is shown in mails', async function ({ I, users, mail }) {
     const [user1] = users,
         checkStatus = (statusToClick, classToCheck) => {
             I.say(`Check: ${statusToClick}`);
-            I.click('~Support');
+            I.click('~My account');
             I.clickDropdown(statusToClick);
             I.waitForDetached('.dropdown.open');
             I.waitForVisible(`.mail-detail .presence.${classToCheck}`);
-            if (statusToClick === 'Offline') {
+            if (statusToClick === 'Invisible') {
                 I.waitForElement(`.list-view-control .presence.${classToCheck}`);
                 I.dontSeeElement(`.list-view-control .presence.${classToCheck}`);
             } else I.waitForVisible(`.list-view-control .presence.${classToCheck}`);
@@ -90,12 +90,12 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     // Check presence in mail detail
     I.waitForVisible('.mail-detail .presence.online');
 
-    presenceStates.forEach((state) => {
+    presenceStates.forEach(state => {
         checkStatus(state.status, state.class);
     });
 });
 
-Scenario('Presence state is shwon in call history', async function (I, users) {
+Scenario('Presence state is shwon in call history', async function ({ I, users }) {
     const [user1] = users;
     const { primaryEmail, display_name } = user1.userdata;
 
@@ -112,12 +112,11 @@ Scenario('Presence state is shwon in call history', async function (I, users) {
     I.waitForVisible('.call-history .dropdown-menu .presence.online');
 });
 
-Scenario('Check presence state of new user', (I, users) => {
+Scenario('Check presence state of new user', ({ I, users }) => {
     const [user1, user2] = users;
 
     session('userA', () => {
         I.login('app=io.ox/contacts', { user: user1 });
-
         I.waitForElement('.io-ox-contacts-window');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
@@ -130,7 +129,7 @@ Scenario('Check presence state of new user', (I, users) => {
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.online`);
-        I.click('~Support');
+        I.click('~My account');
         I.clickDropdown('Busy');
         I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
     });
@@ -138,7 +137,7 @@ Scenario('Check presence state of new user', (I, users) => {
     session('userA', () => {
         //this step fails, since userB presence is not updated currently
         I.waitForVisible(`.vgrid [aria-label="${user2.get('sur_name')}, ${user2.get('given_name')}"] .presence.busy`);
-        I.click('~Support');
+        I.click('~My account');
         I.clickDropdown('Absent');
         I.waitForVisible(`.vgrid [aria-label="${user1.get('sur_name')}, ${user1.get('given_name')}"] .presence.absent`);
     });
@@ -148,7 +147,7 @@ Scenario('Check presence state of new user', (I, users) => {
     });
 });
 
-Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', (I, dialogs) => {
+Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', ({ I, dialogs }) => {
     I.login();
 
     // verify presence icon is there

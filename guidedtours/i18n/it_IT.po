@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-04-10 20:22+0200\n"
+"PO-Revision-Date: 2020-12-11 14:18+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.com>\n"
 "Language-Team: Italian <it@workshop-chapina.it>\n"
 "Language: it_IT\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
@@ -193,7 +193,7 @@ msgstr ""
 "visita guidata vi introdurrà alla vostra nuova soluzione di archiviazione in "
 "linea - il punto di accesso ai file archiviati in linea da tutti i vostri "
 "account. Qui potrete caricare e salvare i vostri file, condividerli e "
-"sincronizzarli con altri dispositivi."
+"sincronizzarli con altri dispositivi. "
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
@@ -289,45 +289,43 @@ msgstr "Condividere file"
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
-"also collaborate on a document and set different access rights."
+"also collaborate on a document and set different rights."
 msgstr ""
 "Qui è possibile condividere file con i propri colleghi e contatti esterni. È "
-"inoltre possibile collaborare su un documento e impostare diversi permessi "
-"di accesso."
+"inoltre possibile collaborare su un documento e impostare diversi permessi."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Sharing options"
-msgstr "Opzioni di condivisione"
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid ""
-"Choose from two alternatives to share your files and folders. Use Invite "
-"people if you want to manage access rights and allow recipients to create "
-"and edit files. Or just get a link to let others view and download your "
-"files. You can use an expiration date and password protection if you like."
-msgstr ""
-"Scegliere tra due alternative per condividere i propri file e cartelle. "
-"Utilizzare Invita persone se si desidera gestire i permessi di accesso e "
-"consentire ai destinatari di creare e modificare i file. Oppure ottenere "
-"solo un collegamento per consentire agli altri di visualizzare e scaricare i "
-"propri file. È inoltre possibile utilizzare una data di scadenza e una "
-"password di protezione, se lo si desidera."
-
-#: apps/io.ox/tours/files.js module:io.ox/tours
-msgid "Collaborating"
-msgstr "Collaborare"
+msgid "Sharing option - Invite people"
+msgstr "Opzione di condivisione - Invita persone"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Sharing files by inviting people does not only offer your recipients the "
-"option to create and edit files. Internal and external participants are also "
-"able to collaborate with you on text documents and spreadsheets at the same "
-"time."
+"Choose from two alternatives to share your files and folder. Use \"Invited "
+"people only\" if you want ot manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
 msgstr ""
-"Condividere i file invitando persone non offre solo ai propri destinatari la "
-"facoltà di creare e modificare i file. I partecipanti interni ed esterni "
-"possono collaborare con voi su documenti di testo e fogli elettronici in "
-"contemporanea."
+"Scegliere tra due alternative per condividere file e cartelle. Utilizzare"
+" \"Solo le persone invitate\" se si "
+"desidera gestire i diritti di accesso e consentire ai destinatari di creare e"
+" modificare file. "
+"I partecipanti interni ed esterni possono anche collaborare sui documenti con"
+" voi contemporaneamente."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing option - Everyone who has the link"
+msgstr "Opzione di condivisione - Chiunque abbia il collegamento"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
+msgstr ""
+"È inoltre possibile ottenere un collegamento di condivisione per consentire "
+"ad altri di visualizzare o scaricare i propri file. Se desiderato, è"
+" possibile "
+"utilizzare una data di scadenza e una password di protezione."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -385,18 +383,18 @@ msgstr "Benvenuti in %s"
 msgid ""
 "This tour will give you a quick introduction to the product in five steps."
 msgstr ""
-"Questa panoramica ti fornirà una rapida introduzione al prodotto in cinque"
-" passi."
+"Questa panoramica ti fornirà una rapida introduzione al prodotto in cinque "
+"passi."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Navigation"
 msgstr "Navigazione"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
-msgid "All apps can be found in the app menu on the top right."
+msgid "All apps can be found in the app menu on the top left."
 msgstr ""
-"Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto a"
-" destra."
+"Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto a "
+"sinistra."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Personal settings"
@@ -407,8 +405,8 @@ msgid ""
 "Your personal data can be changed in the account dropdown. You can also sign "
 "out from there."
 msgstr ""
-"I tuoi dati personali possono essere modificati nel menu a tendina"
-" dell'account. Puoi anche uscire da lì."
+"I tuoi dati personali possono essere modificati nel menu a tendina "
+"dell'account. Puoi anche uscire da lì."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Settings"
@@ -417,8 +415,8 @@ msgstr "Impostazioni"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Customize the product to your needs in the settings area."
 msgstr ""
-"Personalizza il prodotto in base alle tue esigenze nell'area delle"
-" impostazioni."
+"Personalizza il prodotto in base alle tue esigenze nell'area delle "
+"impostazioni."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Help"
@@ -428,21 +426,21 @@ msgstr "Aiuto"
 msgid ""
 "If you need assistance or have further questions, you can use the help app."
 msgstr ""
-"Se hai bisogno di assistenza o hai ulteriori domande, puoi utilizzare"
-" l'applicazione di aiuto."
+"Se hai bisogno di assistenza o hai ulteriori domande, puoi utilizzare "
+"l'applicazione di aiuto."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Cancel tour"
 msgstr "Annulla la panoramica"
 
-#. %s is the getting started tour button label
+#. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the account icon and "
 "choose \"%s\""
 msgstr ""
-"Puoi riavviare questa panoramica in qualsiasi momento facendo clic sull'icona"
-" dell'account e scegliere \"%s\""
+"Puoi riavviare questa panoramica in qualsiasi momento facendo clic "
+"sull'icona dell'account e scegliere \"%s\""
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -589,12 +587,12 @@ msgstr "Aprire le impostazioni di posta elettronica"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open the email settings, click the System menu icon on the upper right "
+"To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr ""
-"Per aprire le impostazioni di posta elettronica, fare clic sull'icona Menu "
-"di sistema a destra della barra dei menu. Selezionare Impostazioni. Fare "
-"clic sul messaggio a sinistra."
+"Per aprire le impostazioni di posta elettronica, fare clic sull'icona "
+"Impostazioni del menu in alto a destra della barra dei menu. Selezionare "
+"Impostazioni. Fare clic su Posta a sinistra."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -736,8 +734,8 @@ msgid ""
 "To open the settings, click on the settings icon on the upper right side of "
 "the menu bar."
 msgstr ""
-"Per aprire le impostazioni, fai clic sull'icona delle impostazioni in alto a"
-" destra della barra dei menu."
+"Per aprire le impostazioni, fai clic sull'icona delle impostazioni in alto a "
+"destra della barra dei menu."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
@@ -769,15 +767,15 @@ msgstr "Aprire la guida"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
-"To open the help, click the user image on the upper right side of the menu "
+"To open the help, click the help icon on the upper right side of the menu "
 "bar. Select Help. The help for the currently selected app is displayed. To "
 "browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
-"Per aprire la guida, fare clic sull'immagine dell'utente in alto a destra "
-"della barra dei menu. Seleziona Aiuto. La guida per l'applicazione "
-"selezionata viene visualizzata. Per sfogliare la guida completa, fare clic "
-"su Pagina iniziale o Indice nella parte superiore della finestra."
+"Per aprire la guida, fare clic sull'icona della guida in alto a destra della "
+"barra dei menu. Selezionare Aiuto. La guida per l'applicazione selezionata "
+"viene visualizzata.Per sfogliare la guida completa, fare clic su Pagina "
+"iniziale o Indice nella parte superiore della finestra."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
@@ -897,6 +895,68 @@ msgstr ""
 "selezione a sinistra delle attività. Se le caselle non sono visualizzate, "
 "fare clic su Vista > Caselle di selezione a destra della barra degli "
 "strumenti."
+
+#~ msgid ""
+#~ "Here you can share files with your colleagues and external contacts. You "
+#~ "can also collaborate on a document and set different access rights."
+#~ msgstr ""
+#~ "Qui è possibile condividere file con i propri colleghi e contatti "
+#~ "esterni. È inoltre possibile collaborare su un documento e impostare "
+#~ "diversi permessi di accesso."
+
+#~ msgid "Sharing options"
+#~ msgstr "Opzioni di condivisione"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folders. Use Invite "
+#~ "people if you want to manage access rights and allow recipients to create "
+#~ "and edit files. Or just get a link to let others view and download your "
+#~ "files. You can use an expiration date and password protection if you like."
+#~ msgstr ""
+#~ "Scegliere tra due alternative per condividere i propri file e cartelle. "
+#~ "Utilizzare Invita persone se si desidera gestire i permessi di accesso e "
+#~ "consentire ai destinatari di creare e modificare i file. Oppure ottenere "
+#~ "solo un collegamento per consentire agli altri di visualizzare e "
+#~ "scaricare i propri file. È inoltre possibile utilizzare una data di "
+#~ "scadenza e una password di protezione, se lo si desidera."
+
+#~ msgid "Collaborating"
+#~ msgstr "Collaborare"
+
+#~ msgid ""
+#~ "Sharing files by inviting people does not only offer your recipients the "
+#~ "option to create and edit files. Internal and external participants are "
+#~ "also able to collaborate with you on text documents and spreadsheets at "
+#~ "the same time."
+#~ msgstr ""
+#~ "Condividere i file invitando persone non offre solo ai propri destinatari "
+#~ "la facoltà di creare e modificare i file. I partecipanti interni ed "
+#~ "esterni possono collaborare con voi su documenti di testo e fogli "
+#~ "elettronici in contemporanea."
+
+#~ msgid "All apps can be found in the app menu on the top right."
+#~ msgstr ""
+#~ "Tutte le applicazioni sono disponibili nel menu dell'applicazione in alto "
+#~ "a destra."
+
+#~ msgid ""
+#~ "To open the email settings, click the System menu icon on the upper right "
+#~ "side of the menu bar. Select Settings. Click on Mail on the left side."
+#~ msgstr ""
+#~ "Per aprire le impostazioni di posta elettronica, fare clic sull'icona "
+#~ "Menu di sistema a destra della barra dei menu. Selezionare Impostazioni. "
+#~ "Fare clic sul messaggio a sinistra."
+
+#~ msgid ""
+#~ "To open the help, click the user image on the upper right side of the "
+#~ "menu bar. Select Help. The help for the currently selected app is "
+#~ "displayed. To browse the complete help, click on Start Page or Table Of "
+#~ "Contents at the upper part of the window."
+#~ msgstr ""
+#~ "Per aprire la guida, fare clic sull'immagine dell'utente in alto a destra "
+#~ "della barra dei menu. Seleziona Aiuto. La guida per l'applicazione "
+#~ "selezionata viene visualizzata. Per sfogliare la guida completa, fare "
+#~ "clic su Pagina iniziale o Indice nella parte superiore della finestra."
 
 #~ msgid "Creating new items"
 #~ msgstr "Creare nuovi elementi"

@@ -12,82 +12,145 @@
  */
 
 define('io.ox/chat/views/history', [
+    'io.ox/core/extensions',
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/chatAvatar',
-    'io.ox/chat/data'
-], function (DisposableView, ChatAvatar, data) {
+    'io.ox/chat/data',
+    'io.ox/backbone/views/toolbar',
+    'io.ox/core/strings',
+    'io.ox/chat/util',
+    'io.ox/chat/toolbar',
+    'gettext!io.ox/chat'
+], function (ext, DisposableView, ChatAvatar, data, ToolbarView, strings, util, toolbar, gt) {
 
     'use strict';
 
     var History = DisposableView.extend({
 
-        className: 'history abs',
+        className: 'history-list abs',
 
         initialize: function () {
 
             this.collection = data.chats;
 
             this.listenTo(this.collection, {
+                'expire': this.onExpire,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:open': this.onChangeOpen,
+                'change:active': this.onChangeActive,
                 'change': this.onChange
+            });
+
+            // get fresh data
+            this.collection.fetch().fail(function () {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell('error', gt('Recent chats could not be loaded.'));
+                });
             });
         },
 
         render: function () {
             this.$el.append(
-                $('<div class="header abs">').append(
-                    $('<h2>').append('Recent conversations')
+                $('<div class="header">').append(
+                    //#. Used for a list of olders/recent chats
+                    $('<h2>').append(gt('History'))
                 ),
-                $('<div class="scrollpane abs">').append(
-                    $('<ul>').append(
-                        this.getItems().map(this.renderItem, this)
-                    )
+                new ToolbarView({ point: 'io.ox/chat/history/toolbar', title: gt('History actions') }).render(new ext.Baton()).$el,
+                $('<div class="scrollpane scrollable" tabindex="0">').append(
+                    $('<ul>').append(this.renderItems())
                 )
             );
             return this;
         },
 
-        getItems: function () {
-            return this.collection.getHistory();
+        renderItems: function () {
+            return this.collection.length > 0 ?
+                this.collection.map(this.renderItem, this) :
+                this.renderEmpty().delay(1500).fadeIn(200);
+        },
+
+        renderEmpty: function () {
+            return $('<li class="history-item">').hide()
+                .append($('<div class="info">').text(gt('There are no archived chats yet')));
         },
 
         renderItem: function (model) {
-            return $('<li>')
+            return $('<li class="history-item">')
                 .attr('data-cid', model.cid)
                 .append(
                     new ChatAvatar({ model: model }).render().$el,
-                    $('<div class="title">').text(model.getTitle()),
-                    $('<div class="date">').text(model.getLastMessageDate()),
-                    $('<div class="body">').text(model.getLastMessage()),
+                    $('<div class="details">').append(
+                        $('<div class="ellipsis">').append(
+                            $('<span class="title">').text(model.getTitle()),
+                            $('<span class="type">').text('(' + this.getType(model) + ')')
+                        ),
+                        $('<div class="body">').text(model.getLastMessageText())
+                    ),
                     $('<button type="button" class="btn btn-default btn-action" >')
                         .attr({ 'data-cmd': 'open-chat', 'data-id': model.id })
-                        .text('Open')
+                        //#. Used as a verb
+                        .text(gt('Open'))
                 );
+        },
+
+        getType: function (model) {
+            var type = model.get('type');
+            if (type === 'channel') return gt('Channel');
+            if (type === 'group') return gt('Group chat');
+            return gt('Private chat');
         },
 
         getNode: function (model) {
             return this.$('[data-cid="' + model.cid + '"]');
         },
 
-        onAdd: function () {
-
-        },
+        onAdd: _.debounce(function () {
+            if (this.disposed) return;
+            this.$('.scrollpane ul').empty().append(
+                this.collection.map(this.renderItem.bind(this))
+            );
+        }, 1),
 
         onRemove: function (model) {
             this.getNode(model).remove();
         },
 
-        onChangeOpen: function (model, value) {
-            console.log('onChangeOpen', model, value);
+        onChangeActive: function (model, value) {
             if (value) this.onRemove(model);
         },
 
         onChange: function () {
 
+        },
+
+        onExpire: function () {
+            this.collection.expired = false;
         }
     });
+
+    ext.point('io.ox/chat/history/toolbar').extend(
+        {
+            id: 'back',
+            index: 100,
+            custom: true,
+            draw: toolbar.back
+        },
+        {
+            id: 'title',
+            index: 200,
+            custom: true,
+            draw: function () {
+                //#. Used for chats this time, not for mail threads
+                this.addClass('toolbar-title').attr('data-prio', 'hi').text(gt('History'));
+            }
+        },
+        {
+            id: 'switch-to-floating',
+            index: 300,
+            custom: true,
+            draw: toolbar.detach
+        }
+    );
 
     return History;
 });

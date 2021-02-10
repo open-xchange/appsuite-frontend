@@ -40,7 +40,7 @@ define('io.ox/help/main', [
                 href: 'index.html',
                 modal: false
             }, options),
-            // .# This is a concatenated string to build a window title like "OX Appsuite help"
+            //#. This is a concatenated string to build a window title like "OX Appsuite help"
             windowTitle = gt('%1$s Help', ox.serverConfig.productName || 'OX App Suite');
 
         var app = ox.ui.createApp({
@@ -115,7 +115,7 @@ define('io.ox/help/main', [
             iframe.on('load', function () {
                 // mark the iframes html as embedded class and modal to override the styles in the help less files
                 var classesToAdd = opt.modal ? 'embedded in-modal' : 'embedded',
-                    contents = $('.inline-help-iframe').contents(),
+                    contents = $(this).contents(),
                     firstTabbable = contents.find('.oxhelp-content a:first'),
                     lastTabbable = contents.find('.navbar-nav a:eq(2)'),
                     caps = capabilities.getFlat(),

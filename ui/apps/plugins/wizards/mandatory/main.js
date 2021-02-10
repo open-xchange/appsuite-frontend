@@ -47,6 +47,8 @@ define.async('plugins/wizards/mandatory/main', [
                         } else {
                             user.save();
                             settings.save();
+                            // normally this could cause problems but at this early stage no app is loaded, so it should work
+                            moment.tz.setDefault(settings.get('timezone'));
                             def.resolve();
                         }
                     });
@@ -62,7 +64,7 @@ define.async('plugins/wizards/mandatory/main', [
                 var tour = this;
                 this.step()
                     .mandatory()
-                    .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
+                    .title(gt('Welcome to %s', ox.serverConfig.productName))
                     .content(gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'))
                     .beforeShow(function () {
                         var step = this;

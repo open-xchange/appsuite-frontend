@@ -13,19 +13,19 @@ const { expect } = require('chai');
 
 Feature('General > Help');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function (I, users, contacts) {
+Scenario('Hide and show Help topics based on user capabilities', async function ({ I, users, contacts, topbar }) {
 
     const checkIfDisplayNone = async (capability) => {
         I.waitForElement(`.listitem.cap-${capability}`);
-        const displayProperties = await I.grabCssPropertyFrom(locate(`.listitem.cap-${capability}`), 'display');
+        const displayProperties = await I.grabCssPropertyFromAll(locate(`.listitem.cap-${capability}`), 'display');
         const result = displayProperties.every(displayProperty => displayProperty === 'none');
         expect(result, `expected ${capability} section to be hidden`).to.be.true;
     };
@@ -38,10 +38,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     //open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {
@@ -60,10 +57,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     // open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {
@@ -86,10 +80,7 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     contacts.waitForApp();
 
     //open help window
-    I.waitForElement('.io-ox-context-help');
-    I.click('.io-ox-context-help');
-    I.waitForElement('.io-ox-help-window');
-    I.waitForVisible('.inline-help-iframe');
+    topbar.help();
 
     // Check if help shows info about disabled capability
     await within({ frame: '.inline-help-iframe' }, async () => {

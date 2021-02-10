@@ -15,11 +15,11 @@ const expect = require('chai').expect;
 
 Feature('Mail > Detail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -37,7 +37,7 @@ function getTestMail(user, content) {
     };
 }
 
-Scenario('double quoted urls are escaped properly', async function (I, users, mail) {
+Scenario('double quoted urls are escaped properly', async function ({ I, users, mail }) {
     // See Bug 57692
     let [user] = users;
     await I.haveMail(getTestMail(user, '<p><a href="http://qwe&quot;-alert(document.domain)-&quot;">XSSME</a></p>'));
@@ -55,7 +55,7 @@ Scenario('double quoted urls are escaped properly', async function (I, users, ma
     expect(href).to.equal('http://qwe%22-alert%28document.domain%29-%22/');
 });
 
-Scenario('urls should not be double encoded', async function (I, users, mail) {
+Scenario('urls should not be double encoded', async function ({ I, users, mail }) {
     // See Bug 58333
     let [user] = users;
     await I.haveMail(getTestMail(user, '<p><a href="http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test">XSSME</a></p>'));

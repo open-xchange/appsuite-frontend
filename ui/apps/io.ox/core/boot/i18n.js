@@ -34,14 +34,14 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
            'and retry.');
         gt('Please enter your credentials.');
         gt('Please enter your password.');
-        gt('Your browser version is not supported!');
-        gt('Your browser is not supported!');
+        gt('Your browser version is not supported');
+        gt('Your browser is not supported');
         gt('This browser is not supported on your current platform.');
         //#. %n in the lowest version of Android
         gt('You need to use Android %n or higher.');
         //#. %n is the lowest version of iOS
         gt('You need to use iOS %n or higher.');
-        gt('Your platform is not supported!');
+        gt('Your platform is not supported');
         gt('This platform is currently not supported.');
         //#. all variables are version strings of the browsers, like 52 in Chrome 52
         gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.');

@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Calls');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -23,7 +23,7 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -36,7 +36,7 @@ const switchAndCloseTab = () => {
 };
 
 // TODO: fix in code
-Scenario.skip('Create call and check call history from addressbook', async (I, users, contacts, dialogs) => {
+Scenario.skip('Create call and check call history from addressbook', async ({ I, users, contacts, dialogs }) => {
 
     const [user1, user2] = users;
 
@@ -51,8 +51,8 @@ Scenario.skip('Create call and check call history from addressbook', async (I, u
         I.waitForVisible('.io-ox-contacts-window .tree-container');
         contacts.selectContact(`${user2.get('sur_name')}, ${user2.get('given_name')}`);
 
-        I.waitForText('Call', 5, '.switchboard-actions');
-        I.waitForEnabled(locate('.switchboard-actions .btn').withText('Call'));
+        I.waitForText('Call', 5, '.action-button-rounded');
+        I.waitForEnabled(locate('.action-button-rounded .btn').withText('Call'));
         I.click('Call');
         I.waitForText('Call via Zoom', 5, '.dropdown.open');
         I.waitForEnabled('.dropdown.open .dropdown-menu a');
@@ -117,7 +117,7 @@ Scenario.skip('Create call and check call history from addressbook', async (I, u
     });
 });
 
-Scenario('Create call from call history and check call history after hang up', (I, users, dialogs) => {
+Scenario('Create call from call history and check call history after hang up', ({ I, users, dialogs }) => {
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
 
@@ -170,7 +170,7 @@ Scenario('Create call from call history and check call history after hang up', (
     });
 });
 
-Scenario('Check call history filtering', (I, users) => {
+Scenario('Check call history filtering', ({ I, users }) => {
 
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
@@ -199,7 +199,7 @@ Scenario('Check call history filtering', (I, users) => {
 
 });
 
-Scenario('Call history is not visible when empty', (I, users) => {
+Scenario('Call history is not visible when empty', ({ I, users }) => {
 
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;
@@ -220,7 +220,7 @@ Scenario('Call history is not visible when empty', (I, users) => {
 });
 
 // TODO: fix behaviour in code
-Scenario.skip('Call history closes on second click', (I, users) => {
+Scenario.skip('Call history closes on second click', ({ I, users }) => {
 
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;

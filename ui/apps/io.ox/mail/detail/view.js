@@ -392,7 +392,7 @@ define('io.ox/mail/detail/view', [
                     if (_.device('noopener')) return;
                     // see bug 67365
                     var isDeepLink = ($(this).attr('class') || '').indexOf('deep-link') > -1;
-                    if (isDeepLink) return e.preventDefault();
+                    if (isDeepLink) return;
                     e.preventDefault();
                     blankshield.open($(this).attr('href'));
                 });
@@ -443,7 +443,8 @@ define('io.ox/mail/detail/view', [
                     var html = $(this.contentDocument).find('html');
                     if (!html.attr('lang')) html.attr('lang', $('html').attr('lang'));
                     // trigger click or keydown on iframe node to forward events properly -> to close none smart dropdowns correctly or jump to the listview on esc
-                    html.on('keydown click', forwardEvent);
+                    // forward mousemove so resizehandler of listview works
+                    html.on('keydown mousemove click', forwardEvent);
 
                     if (_.device('ios && smartphone')) html.addClass('ios smartphone');
 

@@ -29,7 +29,7 @@ define('io.ox/core/tk/list-dnd', [
 
     function defaultMessage(items) {
         var title = joinTextNodes(this.find('.selected .drag-title'), ', ');
-        return title || gt.format(gt.ngettext('1 item', '%1$d items', items.length), items.length);
+        return title || gt.ngettext('%1$d item', '%1$d items', items.length, items.length);
     }
 
     //toggleTime must be defined here to give over and drop event handlers the same scope, see Bug 37605

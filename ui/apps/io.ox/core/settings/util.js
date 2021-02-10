@@ -23,7 +23,12 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
 
         checkbox: function (id, label, model) {
             if (model.isConfigurable && !model.isConfigurable(id)) return $();
-            return new miniViews.CustomCheckboxView(_.extend({ name: id, model: model, label: label })).render().$el;
+            return new miniViews.CustomCheckboxView({ name: id, model: model, label: label }).render().$el;
+        },
+
+        radio: function (id, label, model, options) {
+            if (model.isConfigurable && !model.isConfigurable(id)) return $();
+            return this.fieldset(label, new miniViews.CustomRadioView({ name: id, model: model, list: options }).render().$el).addClass('compact');
         },
 
         switchView: function (id, label, model) {

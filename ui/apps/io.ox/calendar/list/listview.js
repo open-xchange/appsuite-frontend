@@ -119,7 +119,7 @@ define('io.ox/calendar/list/listview', [
             if (util.isPrivate(model) && !!model.get('summary')) a11yLabel.push(gt('Private'));
             //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
             //#. This fragment appears within a long string for screen readers
-            if (model.get('location')) a11yLabel.push(gt.format(gt.pgettext('a11y', 'location %1$s'), model.get('location')));
+            if (model.get('location')) a11yLabel.push(gt.pgettext('a11y', 'location %1$s', model.get('location')));
             a11yLabel.push(util.getShownAs(model));
             a11yLabel.push(startDate.isSame(endDate, 'day') ? util.getEvenSmarterDate(model) : util.getDateIntervalA11y(model.attributes));
             a11yLabel.push(util.getTimeIntervalA11y(model.attributes));
@@ -159,7 +159,7 @@ define('io.ox/calendar/list/listview', [
             var collection = baton.listView.collection,
                 m = moment(collection.originalStart).add(collection.range || 0, 'month').startOf('day');
             if (collection.cid.indexOf('folders') < 0) return;
-            this.addClass('empty').text(gt.format(gt('No appointments found until %s'), m.format('LLL')));
+            this.addClass('empty').text(gt('No appointments found until %s', m.format('LLL')));
             baton.listView.drawTail();
         }
     });
@@ -352,7 +352,9 @@ define('io.ox/calendar/list/listview', [
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
-            var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range, 'month');
+            // increase by one month. Keep this in sync with the paginate function in the api (in case we increase the step to 2 months etc)
+            var m = moment(this.originalCollection.originalStart).add(this.originalCollection.range + 1, 'month');
+
             this.$el.append(
                 this.tail = $('<li class="tail" role="presentation">').append(
                     $('<a href="#">')

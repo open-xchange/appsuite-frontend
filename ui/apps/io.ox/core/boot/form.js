@@ -177,9 +177,9 @@ define('io.ox/core/boot/form', [
                 $language: $('<span id="io-ox-languages">'),
                 $spacer: $('<div class="composition-element login-spacer">'),
                 $privacy: $('<span>').append(
-                    $('<a>').attr({ 'href': lc.footer.privacy, 'data-i18n': 'Privacy Policy' }).data('href-translations', getTranslations(lc.footer.$privacy)).text(gt('Privacy Policy'))),
+                    $('<a>').attr({ 'target': '_blank', 'href': lc.footer.privacy, 'data-i18n': 'Privacy Policy' }).data('href-translations', getTranslations(lc.footer.$privacy)).text(gt('Privacy Policy'))),
                 $imprint: $('<span>').append(
-                    $('<a>').attr({ 'href': lc.footer.imprint, 'data-i18n': 'Imprint' }).data('href-translations', getTranslations(lc.footer.$imprint)).text(gt('Imprint'))),
+                    $('<a>').attr({ 'target': '_blank', 'href': lc.footer.imprint, 'data-i18n': 'Imprint' }).data('href-translations', getTranslations(lc.footer.$imprint)).text(gt('Imprint'))),
                 $copyright: $('<span>').text((lc.footer.copyright || sc.copyright).replace(/\(c\)/g, '\u00A9').replace(/\$year/g, moment().year())),
                 $version: $('<span>').text(sc.version)
             };

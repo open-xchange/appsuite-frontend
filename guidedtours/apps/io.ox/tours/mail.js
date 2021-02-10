@@ -139,9 +139,12 @@ define('io.ox/tours/mail', [
         }
         emailTour.step()
             .title(gt('Opening the email settings'))
-            .content(gt('To open the email settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
-            .referTo('#io-ox-topbar-dropdown-icon')
-            .hotspot('#io-ox-topbar-dropdown-icon')
+            .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
+            .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
+            .spotlight('#topbar-settings-dropdown')
+            .waitFor('#topbar-settings-dropdown')
+            .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
+            .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
             .end()
         .on('stop', function () {
             if (composeApp) {

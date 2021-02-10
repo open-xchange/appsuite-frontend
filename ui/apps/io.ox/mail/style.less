@@ -1005,6 +1005,9 @@ html.macos .preview-right, html.ios {
     padding: 8px;
 }
 
+// ios specific Setting this to overflow: blocks scrolling with pointer devices
+.ios .thread-view-list.scrollable { overflow: visible; }
+
 .thread-view-list {
 
     padding: @default-padding;

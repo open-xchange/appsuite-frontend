@@ -16,6 +16,8 @@ delete project on obs:
   script:
     - echo ${CI_COMMIT_REF_SLUG} | grep -e "^master" -e "^release" && export OBS_PROJECT=frontend-${CI_COMMIT_REF_NAME} || export OBS_PROJECT=frontend-${CI_COMMIT_REF_SLUG}
     - osc rdelete -r ${OBS_PROJECT} -m "GitLab CI environment stopped"
+  tags:
+    - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME
     action: stop
@@ -31,12 +33,15 @@ upload:
   stage: deploy
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
+    GIT_DEPTH: 3000
   timeout: 20m
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
     - export TASKS=$(ls */build/pkg -d | sed -E "s,([^\/ ]+)\/[^ ]+,:\1:upload,g")
     - test -n "$TASKS" && export TASKS="$TASKS wait4Project"
     - gradle --no-daemon $TASKS
+  tags:
+    - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME
     on_stop: "delete project on obs"
@@ -49,7 +54,7 @@ upload:
     - build spamexperts
     - build dynamic-theme
   rules:
-    - if: '$FORCE_PACKAGE_UPLOAD == "true"'
+    - if: '$FORCE_PACKAGE_UPLOAD == "true" || $CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/'
       when: always
       allow_failure: true
     - if: '$CI_COMMIT_TAG || $CI_PIPELINE_SOURCE == "schedule"'
@@ -68,5 +73,21 @@ upload stable:
     url: https://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_NAME/
   rules:
     - if: '$CI_COMMIT_TAG || $CI_COMMIT_REF_NAME =~ /^(master-?.*|develop|release-.*)$/'
+      when: on_success
+      allow_failure: true
+
+trigger documents pipeline:
+  stage: .post
+  trigger:
+    project: documents/appsuite
+    branch: develop
+  variables:
+    CWS: ${CI_COMMIT_REF_NAME}
+    GIT_REPO: ${CI_PROJECT_URL}
+    GITLAB_ID: ${CI_PROJECT_ID}
+  needs:
+    - upload
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/'
       when: on_success
       allow_failure: true

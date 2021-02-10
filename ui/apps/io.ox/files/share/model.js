@@ -14,9 +14,8 @@
 define('io.ox/files/share/model', [
     'io.ox/files/share/api',
     'io.ox/core/api/group',
-    'io.ox/core/yell',
-    'gettext!io.ox/core'
-], function (api, groupApi, yell, gt) {
+    'io.ox/core/yell'
+], function (api, groupApi, yell) {
 
     'use strict';
 
@@ -28,10 +27,9 @@ define('io.ox/files/share/model', [
                 recipients: [],
                 message: '',
                 edit: false,
-                secured: false,
                 password: '',
                 temporary: false,
-                expires: 2,
+                expires: 6,
                 url: '',
                 is_new: false,
                 includeSubfolders: true // see SoftwareChange Request SCR-97: [https://jira.open-xchange.com/browse/SCR-97]
@@ -41,7 +39,44 @@ define('io.ox/files/share/model', [
         idAttribute: 'entity',
 
         initialize: function () {
+            // Set url if already shared
+            this._setUrlAndSettings();
             this.setOriginal();
+        },
+
+        _setUrlAndSettings: function () {
+            var extendedObjPermissions = 'com.openexchange.share.extendedObjectPermissions';
+            var extendedPermissions = 'com.openexchange.share.extendedPermissions';
+            if (this.attributes.files) {
+                _.each(this.attributes.files, function (file) {
+                    var matchedPermission = null;
+                    if (file.has(extendedPermissions)) {
+                        matchedPermission = extendedPermissions;
+                    } else if (file.has(extendedObjPermissions)) {
+                        matchedPermission = extendedObjPermissions;
+                    }
+                    if (matchedPermission) {
+                        _.each(file.get(matchedPermission), function (permission) {
+                            if (permission.type === 'anonymous' && permission.share_url) {
+                                this.attributes.url = permission.share_url;
+                                if (permission.password) {
+                                    this.attributes.password = permission.password;
+                                }
+                                if (permission.expiry_date) {
+                                    this.attributes.expires = permission.expires;
+                                    this.attributes.expiry_date = permission.expiry_date;
+                                    this.attributes.temporary = true;
+                                }
+                                this.attributes.includeSubfolders = permission.includeSubfolders;
+                            }
+                        }, this);
+                    }
+                }, this);
+            }
+        },
+
+        hasUrl: function () {
+            return !!this.get('url');
         },
 
         setOriginal: function (data) {
@@ -56,7 +91,7 @@ define('io.ox/files/share/model', [
                 }
             });
             // limit to relevant attributes
-            return _(changes).pick('expiry_date', 'includeSubfolders', 'password', 'temporary', 'secured');
+            return _(changes).pick('expiry_date', 'includeSubfolders', 'password', 'temporary');
         },
 
         hasChanges: function () {
@@ -65,7 +100,7 @@ define('io.ox/files/share/model', [
 
         getExpiryDate: function () {
             var now = moment();
-            switch (this.get('expires')) {
+            switch (parseInt(this.get('expires'), 10)) {
                 case 0:
                     return now.add(1, 'day').valueOf();
                 case 1:
@@ -110,10 +145,10 @@ define('io.ox/files/share/model', [
 
             data.includeSubfolders = this.get('includeSubfolders');
 
-            if (this.get('secured') && this.get('password') !== '') {
-                data.password = this.get('password');
-            } else {
+            if (_.isEmpty(this.get('password'))) {
                 data.password = null;
+            } else {
+                data.password = this.get('password');
             }
 
             // collect recipients data
@@ -134,7 +169,9 @@ define('io.ox/files/share/model', [
             }
 
             // create or update ?
-            if (!this.has('url')) return data;
+            if (!this.has('url')) {
+                return data;
+            }
 
             if (this.get('temporary')) {
                 data.expiry_date = this.getExpiryDate();
@@ -194,9 +231,7 @@ define('io.ox/files/share/model', [
                     var changes = self.getChanges(),
                         data = model.toJSON();
                     // set password to null if password protection was revoked
-                    if (changes.secured === false) {
-                        data.password = null;
-                    } else if (!('password' in changes)) {
+                    if (!('password' in changes)) {
                         // remove password from data unless it has changed
                         delete data.password;
                     }
@@ -221,14 +256,6 @@ define('io.ox/files/share/model', [
         send: function () {
             if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
-        },
-
-        validate: function (attr, options) {
-            // special case: bug 53466
-            if (options._event === 'change') return;
-            if (attr.secured === true && _.isEmpty(attr.password)) {
-                return gt('Please set password');
-            }
         }
     });
 

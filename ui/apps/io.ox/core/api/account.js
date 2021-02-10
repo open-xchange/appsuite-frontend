@@ -283,7 +283,7 @@ define('io.ox/core/api/account', [
     /**
      * get the primary address for a given account
      * @param  {string} account_id [optional: default account will be used instead]
-     * @return { deferred} returns array (name, primary adress)
+     * @return { deferred} returns array (name, primary address)
      */
     api.getPrimaryAddress = function (account_id) {
 
@@ -401,7 +401,7 @@ define('io.ox/core/api/account', [
     }
 
     /**
-     * get sender adress
+     * get sender address
      * @param  {object} account
      * @return { deferred} returns array the personal name and a list of (alias) addresses
      */
@@ -684,7 +684,7 @@ define('io.ox/core/api/account', [
     };
 
     /**
-     * get autoconfig for given emailadress
+     * get autoconfig for given emailaddress
      * @param  {object} data (email, password)
      * @return { deferred} returns best available mail server settings (may be incomplete or empty)
      */

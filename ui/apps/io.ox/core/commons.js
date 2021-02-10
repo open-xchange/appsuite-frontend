@@ -43,15 +43,16 @@ define('io.ox/core/commons', [
 
             if (length <= 1) return;
 
+            //#. %1$s is the number of selected items
+            //#, c-format
+            var pattern = gt.ngettext('%1$s item selected', '%1$s items selected', length);
+
+            // create a <span> element with the number of items for the placeholder
+            var nodes = _.noI18n.assemble(pattern, function () { return $('<span class="number">').text(_.noI18n(length)); }, $.txt);
+
             node.idle().empty().append(
                 $('<div class="io-ox-center multi-selection-message">').append(
-                    $('<div class="message" id="' + grid.multiselectId + '">').append(
-                        gt.format(
-                            //#. number of selected item
-                            //#. %1$s is the number surrounded by a tag
-                            gt.ngettext('%1$s item selected', '%1$s items selected', length), $('<span class="number">').text(length).prop('outerHTML')
-                        )
-                    )
+                    $('<div class="message" id="' + grid.multiselectId + '">').append(nodes)
                 )
             );
         },

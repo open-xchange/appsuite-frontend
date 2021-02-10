@@ -9,9 +9,9 @@
  *
  * @author Philipp Schumacher <philipp.schumacher@open-xchange.com>
  */
-///  <reference path="../../steps.d.ts" />
+///  <reference path="../../../steps.d.ts" />
 
-Scenario('[C101621] Kanji', async function (I, users, mail) {
+Scenario('[C101621] Kanji', async function ({ I, users, mail }) {
     const [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101621.eml' }, { user });
     I.login('app=io.ox/mail');

@@ -35,6 +35,7 @@ module.exports = function (grunt) {
                             // load moment before require, because of anonymous define
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
+                            'build/static/3rd.party/jwt-decode.js',
                             'node_modules/velocity-animate/velocity.min.js',
                             'src/util.js',
                             'node_modules/requirejs/require.js',
@@ -288,9 +289,9 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/main/warning.js',
                             'apps/io.ox/core/main.js',
                             'apps/io.ox/core/links.js',
+                            'apps/io.ox/core/active.js',
                             // tracker
                             'apps/io.ox/core/count/api.js',
-                            'apps/io.ox/core/count/active.js',
                             'apps/io.ox/core/count/timing.js',
                             'apps/io.ox/core/count/errors.js',
                             'apps/io.ox/core/count/eyeballtime.js',

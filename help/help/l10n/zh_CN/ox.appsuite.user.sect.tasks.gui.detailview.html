@@ -1,13 +1,13 @@
 <html lang="zh_cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>8.1.6. 任务详细视图</title>
-<link rel="stylesheet" type="text/css" href="../../help.css">
+<title>8.1.5. 任务详细视图</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="用户向导&gt;">
 <link rel="up" href="ox.appsuite.user.sect.tasks.gui.html" title="8.1. 任务部件">
-<link rel="prev" href="ox.appsuite.user.sect.tasks.gui.list.html" title="8.1.5. 任务列表">
-<link rel="next" href="ox.appsuite.user.sect.tasks.gui.create.html" title="8.1.7. 编辑窗口">
+<link rel="prev" href="ox.appsuite.user.sect.tasks.gui.list.html" title="8.1.4. 任务列表">
+<link rel="next" href="ox.appsuite.user.sect.tasks.gui.create.html" title="8.1.6. 编辑窗口">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -33,8 +33,8 @@
 <h2 class="sr-only">
 <span class="phrase">任务</span>部件</h2>
 <div class="sect2" id="ox.appsuite.user.sect.tasks.gui.detailview">
-<div class="titlepage"><div><div><h3 class="title">8.1.6. <span class="phrase">任务</span>详细视图</h3></div></div></div>
-<a class="indexterm" name="id-1.9.6.10.2"></a><p id="ox.appsuite.user.concept.tasks.gui.detailview">显示您从列表选择任务的数据。如果双击列表中一个任务，会在一个窗口里显示数据。</p>
+<div class="titlepage"><div><div><h3 class="title">8.1.5. <span class="phrase">任务</span>详细视图</h3></div></div></div>
+<a class="indexterm" name="id-1.9.6.9.2"></a><p id="ox.appsuite.user.concept.tasks.gui.detailview">显示您从列表里选择的任务数据。如果双击列表中一个任务，会在一个窗口里显示数据。</p>
 <p id="ox.appsuite.user.reference.tasks.gui.detailview">
         </p>
 <p class="title">内容</p>
@@ -48,23 +48,15 @@
 <li class="listitem"><p role="presentation">状态和进度</p></li>
 <li class="listitem"><p role="presentation">如果任务包含附件，将会显示附件名称。</p></li>
 <li class="listitem"><p role="presentation">任务描述（如有输入）</p></li>
-<li class="listitem"><p role="presentation">如果任务包含重复任务，将会显示重复参数。</p></li>
+<li class="listitem"><p role="presentation">如果任务是一个循环任务，将会显示循环参数。</p></li>
 <li class="listitem"><p role="presentation">任务开始日期（如有提供）</p></li>
 <li class="listitem"><p role="presentation">如果可用，像开票信息的任务详情</p></li>
 <li class="listitem"><p role="presentation">如果任务有多个参与者，未确定、已接受、已拒绝或还没回复的参与者数目，会在参与者列表上面的右上方显示。为了过滤参与者列表，单击图标。</p></li>
 <li class="listitem">
-<p role="presentation">参与者名称（如果存在）。如果单击一个名称，会打开一个弹出窗口。显示有关联系人的信息。</p>
-<ul class="itemizedlist" id="ox.appsuite.user.reference.tasks.gui.detailview.popup" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">此人的联系人数据。</p></li>
-<li class="listitem"><p role="presentation">如果您和此人交换电子邮件，邮件会在<span class="guilabel"><strong>最近交谈</strong></span>下面显示。</p></li>
-<li class="listitem"><p role="presentation">如果您和此人预约约会，约会会在<span class="guilabel"><strong>分享约会</strong></span>下面显示。</p></li>
-<li class="listitem"><p role="presentation">从社交网路有关此人的信息。您可以使用可用的按键以打开此人文件。</p></li>
-</ul>
-<p role="presentation">
-            </p>
-<p role="presentation">如果单击一个约会或电子邮件，会打开更多弹出窗口。</p>
+<p role="presentation">参与者名称（如果存在）。</p>
+<p role="presentation">如果单击一个名称，会打开一个弹出窗口。显示参与者的<span class="guibutton"><strong>光环视图</strong></span>。</p>
 </li>
-<li class="listitem"><p role="presentation">如果约会包含外部参与者，他们的名字会在<span class="guilabel"><strong>外部联系人</strong></span>下面显示。</p></li>
+<li class="listitem"><p role="presentation">如果约会包含外部参与者，他们的名字会在<span class="guibutton"><strong>外部联系人</strong></span>下面显示。</p></li>
 </ul>
 <p>
       </p>
@@ -79,7 +71,9 @@
 <li class="listitem" style="list-style-type: none">
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.tasks.view.html">检视任务</a></p>
 <p role="presentation"><a class="xref" href="ox.appsuite.user.sect.tasks.attachments.html">检视或保存任务附件</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.tasks.call.html">拨接任务参与者</a></p>
 </li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.contacts.haloview.html">在光环视图里显示联系人</a></p></li>
 </ul>
 <p>
       </p>

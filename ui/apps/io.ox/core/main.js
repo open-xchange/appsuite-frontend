@@ -35,6 +35,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/views/disposable',
     'io.ox/tours/get-started',
+    'io.ox/core/whatsnew/main',
     'io.ox/core/main/icons',
     'io.ox/core/main/appcontrol',
     'io.ox/core/main/stages',
@@ -91,7 +92,9 @@ define('io.ox/core/main', [
         // b) to recognize deep links
         if (location.hash === '') location.hash = '#!!';
 
-        var baton = ext.Baton();
+        var baton = ext.Baton.ensure({
+            popups: []
+        });
 
         debug('core: launch > run stages');
         Stage.run('io.ox/core/stages', baton);

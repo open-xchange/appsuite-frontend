@@ -372,17 +372,9 @@ define('io.ox/calendar/model', [
             if (!options.create) return $.when();
             var self = this;
             return folderAPI.get(this.get('folder')).then(function (folder) {
-                var isShared = folderAPI.is('shared', folder);
-                return require(['io.ox/core/api/user']).then(function (userAPI) {
-                    return userAPI.get({ id: isShared ? folder.created_by : undefined });
-                }).then(function (user) {
-                    self.set('organizer', {
-                        cn: user.display_name,
-                        email: user.email1,
-                        uri: 'mailto:' + user.email1,
-                        entity: user.id
-                    });
-                    var newAttendee = util.createAttendee(user, { partStat: 'ACCEPTED' }),
+                return getOwnerData(folder).then(function (organizer) {
+                    self.set('organizer', organizer);
+                    var newAttendee = util.createAttendee(organizer, { partStat: 'ACCEPTED' }),
                         id = newAttendee.email ? { email:  newAttendee.email } : { entity: newAttendee.entity };
 
                     if (options.resetStates) {
@@ -547,6 +539,34 @@ define('io.ox/calendar/model', [
         }
 
     });
+
+    // helper to get userData about a folder owner, uses created_from if available with created_by as fallback
+    function getOwnerData(folderData) {
+        var isPublic = folderAPI.is('public', folderData);
+
+        // shared and private folder use the folder creator as organizer, public uses the current user
+        if (folderData.created_from && !isPublic && folderData.created_from.display_name && folderData.created_from.contact && folderData.created_from.contact.email1) {
+            return $.when({
+                cn: folderData.created_from.display_name,
+                email: folderData.created_from.contact.email1,
+                uri: 'mailto:' + folderData.created_from.contact.email1,
+                entity: folderData.created_from.entity,
+                contact: folderData.created_from.contact
+            });
+        }
+        return require(['io.ox/core/api/user']).then(function (userAPI) {
+            return userAPI.get({ id: !isPublic ? folderData.created_by : undefined }).then(function (user) {
+                return {
+                    cn: user.display_name,
+                    email: user.email1,
+                    uri: 'mailto:' + user.email1,
+                    entity: user.id,
+                    contact: user
+                };
+
+            });
+        });
+    }
 
     return {
         Model: Model,

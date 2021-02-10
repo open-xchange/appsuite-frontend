@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[7774] Fixed-font for plain-text mails', async (I, users) => {
+Scenario('[C7774] Fixed-font for plain-text mails', async ({ I, users }) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
@@ -36,9 +36,10 @@ Scenario('[7774] Fixed-font for plain-text mails', async (I, users) => {
     I.login('app=io.ox/mail', { user });
     I.waitForText('plain text');
     I.click('.list-item.selectable');
-    I.waitForVisible('h1.subject');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, async () => {
-        I.seeCssPropertiesOnElements('.mail-detail-content', { 'font-family': '-apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif' });
+        I.seeElement('.mail-detail-content.plain-text');
+        I.dontSeeElement('.mail-detail-content.fixed-width-font');
     });
     I.logout();
 
@@ -46,11 +47,12 @@ Scenario('[7774] Fixed-font for plain-text mails', async (I, users) => {
     I.waitForVisible('.io-ox-mail-settings');
     I.click('Use fixed-width font for text mails');
 
-    I.click('Mail');
+    I.openApp('Mail');
     I.waitForText('plain text');
     I.click('.list-item.selectable');
-    I.waitForVisible('h1.subject');
+    I.waitForVisible('.mail-detail-frame');
     within({ frame: '.mail-detail-frame' }, async () => {
+        I.seeElement('.mail-detail-content.plain-text.fixed-width-font');
         I.seeCssPropertiesOnElements('.mail-detail-content', { 'font-family': 'monospace' });
     });
 });

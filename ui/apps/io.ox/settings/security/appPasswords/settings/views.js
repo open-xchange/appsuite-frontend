@@ -84,7 +84,8 @@ define('io.ox/settings/security/appPasswords/settings/views', [
                     gt('IP: %s', this.model.get('IP'))) : '')
                 .append(this.model.get('GeoData') ? $('<span class="appLoginData">').append($('<br>'),
                     gt('Location: %s', this.model.get('GeoData'))) : '')
-                .attr('title', gt('Device %s logged in %s', lastDevice, date));
+                //#. 1st %s = name of last device that was used to log in (e.g. 'Drive Client') | 2nd %s = date of the login
+                .attr('title', gt('%s logged in on %s', lastDevice, date));
             return div;
         },
         render: function () {

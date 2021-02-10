@@ -27,7 +27,8 @@ define('io.ox/mail/actions/attachmentSave', [
     function commit(list, target) {
 
         notifications.yell('busy',
-            gt.ngettext('Saving attachment ...', 'Saving attachments ...', list.length)
+            // do not use "gt.ngettext" for plural without count
+            (list.length === 1) ? gt('Saving attachment ...') : gt('Saving attachments ...')
         );
 
         api.saveAttachments(list, target).then(
@@ -39,7 +40,8 @@ define('io.ox/mail/actions/attachmentSave', [
                         notifications.yell(res.error);
                     } else {
                         notifications.yell('success',
-                            gt.ngettext('Attachment has been saved', 'Attachments have been saved', list.length)
+                            // do not use "gt.ngettext" for plural without count
+                            (list.length === 1) ? gt('Attachment has been saved') : gt('Attachments have been saved')
                         );
                     }
                 }

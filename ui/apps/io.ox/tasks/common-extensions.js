@@ -14,45 +14,13 @@
 define('io.ox/tasks/common-extensions', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/tasks/util',
-    'io.ox/mail/util',
     'io.ox/tasks/api',
-    'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (Dropdown, util, mailUtil, api, strings, gt) {
+], function (Dropdown, util, api, gt) {
 
     'use strict';
 
     var extensions = {
-
-        date: function (baton, options) {
-            var data = baton.data, t = data.end_time || data.start_time || data.last_modified;
-            if (!_.isNumber(t)) return;
-            this.append(
-                $('<time class="date">')
-                .attr('datetime', moment(t).toISOString())
-                .text(mailUtil.getDateTime(t, options))
-            );
-        },
-
-        compactdate: function (baton) {
-            extensions.date.call(this, baton, { fulldate: false, smart: false });
-        },
-
-        title: function (baton) {
-            this.append(
-                $('<div class="title">').text(
-                    baton.data.title
-                )
-            );
-        },
-
-        progress: function (baton) {
-            this.append(
-                $('<div class="prog">').append(
-                    gt('Progress') + ': ' + (baton.data.percent_completed || 0) + '%'
-                )
-            );
-        },
 
         dueDate: (function () {
 

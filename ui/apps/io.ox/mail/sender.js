@@ -66,7 +66,7 @@ define('io.ox/mail/sender', [
         },
 
         /**
-         * default send adresse from settings
+         * default send address from settings
          * @return {string}
          */
         getDefaultSendAddress: function () {

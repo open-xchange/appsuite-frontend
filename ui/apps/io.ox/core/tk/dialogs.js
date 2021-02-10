@@ -875,13 +875,15 @@ define('io.ox/core/tk/dialogs', [
                 arrow.css('zIndex', zIndex + 1);
 
                 if (options.closely && _.device('!smartphone')) {
+                    // for click events inside iframes we need to add the iframe's offset too
+                    var offset = e.target && $(e.target).is('iframe') ? e.target.getBoundingClientRect().left : 0;
                     if (mode === 'left') {
                         // sidepopup's max-width is 45%, so we limit to 54%
-                        pct = Math.min(54, 100 - getPct(e.pageX - 100));
+                        pct = Math.min(54, 100 - getPct(e.pageX + offset - 100));
                         left = '';
                         right = pct + '%';
                     } else {
-                        pct = Math.min(54, getPct(e.pageX + 100));
+                        pct = Math.min(54, getPct(e.pageX + offset + 100));
                         left = pct + '%';
                         right = '';
                     }
