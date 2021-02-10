@@ -19,8 +19,7 @@
  * Any use of the work other than as authorized under this license or copyright law is prohibited.
  *
  */
-
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 const { expect } = require('chai');
 
