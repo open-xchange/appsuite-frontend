@@ -107,12 +107,14 @@ Scenario('[C83387] Create mail filter based on moving mail', async ({ I, users, 
         to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
     }, { user: users[1] });
 
-    I.selectFolder('Trash');
+    I.triggerRefresh();
+    I.waitForElement('~Trash, 1 unread, 2 total.', 10);
 
-    I.waitForText('Subject#1', 5, '.list-view');
-    I.waitForText('Content#1', 5, '.list-view');
+    I.click('~Trash, 1 unread, 2 total.');
+
+    I.waitForText('Subject#1', 10, '.list-view');
+    I.waitForText('Content#1', 10, '.list-view');
 
     I.waitForText('Subject#2', 5, '.list-view');
     I.waitForText('Content#2', 5, '.list-view');
-
 });
