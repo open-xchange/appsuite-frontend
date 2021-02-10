@@ -167,6 +167,7 @@ define('io.ox/mail/compose/api', [
         process: process,
 
         all: function () {
+            // requestable columns limited to: meta, subject & security
             return http.GET({ url: 'api/mail/compose', params: { action: 'all', columns: 'subject,meta,security' } }).then(process);
         },
 
