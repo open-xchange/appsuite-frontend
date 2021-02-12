@@ -223,7 +223,7 @@ define('io.ox/participants/model', [
                     if (model.get('display_name')) {
                         // if we have a display name we drop other names to keep it
                         // since this update is done on search results
-                        data = _(data).omit('first_name', 'last_name', 'display_name');
+                        data = _(data).omit('first_name', 'last_name', 'display_name', 'company');
                     }
                     // fix wrong mail field (see bug 47874)
                     if (model.has('mail') && model.get('mail') !== data[model.get('field')]) {
