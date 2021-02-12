@@ -129,7 +129,8 @@ Scenario('Can change my presence state which will be updated', async ({ I, users
     });
 
     await session('Bob', async () => {
-        I.waitForDetached('.modal-dialog .presence.online');
-        I.waitForElement('.modal-dialog .presence.busy');
+        const memberLocator = locate('.members li').withAttr({ 'data-id': users[0].userdata.email1 });
+        I.waitForDetached(locate('.presence-online').inside(memberLocator));
+        I.waitForElement(locate('.presence.busy').inside(memberLocator));
     });
 });
