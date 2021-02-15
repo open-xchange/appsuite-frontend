@@ -1772,7 +1772,7 @@ define('io.ox/mail/api', [
             // apply static limit for all-unseen
             var isAllFolder = api.allMessagesFolder && params.folder === api.allMessagesFolder,
                 isUnseenfolder = api.allUnseenMessagesFolder && params.folder === api.allUnseenMessagesFolder,
-                isAllUnseen = (isUnseenfolder || isAllFolder) && params.unseen === true;
+                isAllUnseen = (isAllFolder && params.unseen === true) || isUnseenfolder;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
                 // drop all seen messages for all-unseen
