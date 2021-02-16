@@ -30,7 +30,7 @@ define('io.ox/tours/intro', [
         //Tour needs webmail and should be disabled for guests (See Bug 40545)
         if (!capabilities.has('webmail && !guest')) return;
         var showAbortDialog = true;
-        new Tour({
+        var tour = new Tour({
             showStepNumbers: true
         })
             .step({ noAutoAlign: true })
@@ -55,8 +55,10 @@ define('io.ox/tours/intro', [
                 .waitFor('#topbar-account-dropdown')
                 .on('wait', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', true); })
                 .on('hide', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', false); })
-                .end()
-            .step({ back: false, noAutoAlign: true })
+                .end();
+
+        if (capabilities.has('client-onboarding')) {
+            tour.step({ back: false, noAutoAlign: true })
                 .title(gt('Settings'))
                 .content(gt('Customize the product to your needs in the settings area.'))
                 .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
@@ -64,8 +66,18 @@ define('io.ox/tours/intro', [
                 .waitFor('#topbar-settings-dropdown')
                 .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
                 .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
-                .end()
-            .step({ back: false, noAutoAlign: true })
+                .end();
+        } else {
+            tour.step({ back: false, noAutoAlign: true })
+                .title(gt('Settings'))
+                .content(gt('Customize the product to your needs in the settings area.'))
+                .hotspot('#io-ox-settings-topbar-icon i', { top: 12, left: 6 })
+                .spotlight('#io-ox-settings-topbar-icon')
+                .waitFor('#io-ox-settings-topbar-icon')
+                .end();
+        }
+
+        tour.step({ back: false, noAutoAlign: true })
                 .title(gt('Help'))
                 .content(gt('If you need assistance or have further questions, you can use the help app.'))
                 .hotspot('#io-ox-topbar-help-dropdown-icon i', { top: 12, left: 6 })
