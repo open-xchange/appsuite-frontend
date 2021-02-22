@@ -255,7 +255,7 @@ define('io.ox/core/api/user', [
      * @return { object} text node
      */
     api.getTextNode = function (id, options) {
-        var opt = _.extend({ type: 'name' }, options),
+        var opt = _.extend({ type: 'name', textZoom: true }, options),
             node = opt.node || document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
@@ -264,7 +264,11 @@ define('io.ox/core/api/user', [
                 else if (opt.type === 'email') name = data.email1 || data.display_name;
                 else if (opt.type === 'email-localpart') name = (data.email1 || data.display_name || '').replace(/@.*$/, '');
                 else if (opt.type === 'initials') name = util.getInitials(data);
-                node.nodeValue = name;
+                if (opt.textZoom) {
+                    node.nodeValue = name;
+                    return;
+                }
+                $(node).replaceWith('<svg viewbox="0 0 48 48"><text x="24" y="30" text-anchor="middle">' + _.escape(name) + '</text></svg>');
             });
         return node;
     };

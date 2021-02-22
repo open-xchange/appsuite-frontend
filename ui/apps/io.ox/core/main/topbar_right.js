@@ -553,7 +553,7 @@ define('io.ox/core/main/topbar_right', [
                 a.empty().append(
                     contactAPI.pictureHalo(
                         $('<div class="contact-picture" aria-hidden="true">').attr('title', title)
-                        .append(userAPI.getTextNode(ox.user_id, { type: 'initials' })),
+                        .append(userAPI.getTextNode(ox.user_id, { type: 'initials', textZoom: false })),
                         { internal_userid: ox.user_id },
                         { width: 40, height: 40, fallback: false }
                     )
