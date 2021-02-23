@@ -86,6 +86,13 @@ define('io.ox/chat/api', [
         });
     }
 
+    api.roomToEndpointMapping = {
+        private: '/rooms/private',
+        group: '/rooms/groups',
+        channel: '/rooms/channels',
+        all: '/rooms/all'
+    };
+
     api.request = request;
     api.getJwtFromSwitchboard = getJwtFromSwitchboard;
 
@@ -95,15 +102,17 @@ define('io.ox/chat/api', [
     };
 
     api.joinChannel = function (roomId) {
-        return request({ method: 'POST', url: api.url + '/rooms/' + roomId + '/members' });
+        return request({ method: 'POST', url: api.url + '/rooms/channels/' + roomId + '/members' });
     };
 
     api.getChannelByType = function (type, roomId) {
-        return request({ url: api.url + '/' + type + '/' + roomId });
+        var endpoint = api.roomToEndpointMapping[type];
+        return request({ url: api.url + endpoint + '/' + roomId });
     };
 
-    api.leaveRoom = function (roomId) {
-        var url = api.url + '/rooms/' + roomId + '/members';
+    api.leaveRoom = function (room) {
+        var endpoint = api.roomToEndpointMapping[room.get('type')],
+            url = api.url + endpoint + '/' + room.get('roomId') + '/members';
         return request({ method: 'DELETE', url: url, processData: false, contentType: false });
     };
 
@@ -117,8 +126,18 @@ define('io.ox/chat/api', [
         return request({ method: 'PUT', url: url, processData: false, contentType: false });
     };
 
+    api.uploadIcon = function (room, icon) {
+        var formData = new FormData(),
+            endpoint = api.roomToEndpointMapping[room.get('type')];
+
+        formData.append('icon', icon);
+
+        var url = api.url + endpoint + '/' + room.get('roomId') + '/icon/';
+        return api.request({ contentType: false, processData: false, method: 'POST', url: url, data: formData });
+    };
+
     api.deleteGroup = function (roomId) {
-        var url = api.url + '/rooms/' + roomId;
+        var url = api.url + '/rooms/groups/' + roomId;
         return request({ method: 'DELETE', url: url });
     };
 

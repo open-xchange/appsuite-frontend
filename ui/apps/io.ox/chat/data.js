@@ -290,7 +290,7 @@ define('io.ox/chat/data', [
 
         getFileUrl: function (file) {
             var room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
-            if (room && room.isChannel()) return api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+            if (room && room.isChannel()) return api.url + '/rooms/channels/' + this.get('roomId') + '/files/' + file.fileId;
             return api.url + '/files/' + file.fileId;
         },
 
@@ -320,7 +320,7 @@ define('io.ox/chat/data', [
             if (this.get('file') && (file = this.get('file'))) {
                 var room = data.chats.get(this.get('roomId')) || data.channels.get(this.get('roomId'));
                 if (room && room.isChannel()) {
-                    url = api.url + '/channels/' + this.get('roomId') + '/files/' + file.fileId;
+                    url = api.url + '/rooms/channels/' + this.get('roomId') + '/files/' + file.fileId;
                 } else {
                     url = api.url + '/files/' + file.fileId;
                 }
@@ -448,7 +448,7 @@ define('io.ox/chat/data', [
             }
 
             // unjoined channels are not yet in the chats collection but we still allow previews, so check the channels collection too
-            var endpoint = (data.chats.get(this.roomId) || data.channels.get(this.roomId)).isChannel() ? '/channels/' : '/rooms/';
+            var endpoint = (data.chats.get(this.roomId) || data.channels.get(this.roomId)).isChannel() ? '/rooms/channels/' : '/rooms/';
             return api.request({
                 url: api.url + endpoint + this.roomId + '/messages?' + $.param(params)
             })
@@ -542,8 +542,7 @@ define('io.ox/chat/data', [
         idAttribute: 'roomId',
 
         urlRoot: function () {
-            var endpoint = this.isChannel() && !this.isNew() ? 'channels' : 'rooms';
-            return api.url + '/' + endpoint;
+            return api.url + '/' + api.roomToEndpointMapping[this.get('type')];
         },
 
         initialize: function (attr) {
@@ -725,7 +724,7 @@ define('io.ox/chat/data', [
 
         getIconUrl: function () {
             if (!this.get('iconId')) return;
-            var endpoint = this.get('type') !== 'channel' ? '/rooms/' : '/channels/';
+            var endpoint = this.get('type') !== 'channel' ? '/rooms/groups/' : '/rooms/channels/';
             return api.url + endpoint + this.get('roomId') + '/icon/' + this.get('iconId');
         },
 
@@ -859,17 +858,12 @@ define('io.ox/chat/data', [
 
         sync: function (method, model, options) {
             if (method === 'create' || method === 'update') {
-                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference'),
-                    hiddenAttr = options.hiddenAttr,
-                    icon = options.icon,
-                    formData = new FormData();
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference', 'icon'),
+                    hiddenAttr = options.hiddenAttr;
 
-                formData.append('json', JSON.stringify(_.extend(data, hiddenAttr)));
-                if (icon !== undefined) formData.append('icon', icon);
-
-                options.data = formData;
+                options.data = JSON.stringify(_.extend(data, hiddenAttr));
                 options.processData = false;
-                options.contentType = false;
+                options.contentType = 'application/json';
                 options.method = method === 'create' ? 'POST' : 'PATCH';
             }
 
@@ -936,7 +930,7 @@ define('io.ox/chat/data', [
         fetchUnlessExists: function (roomId) {
             var model = this.get(roomId);
             if (model) return $.when(model);
-            return api.getChannelByType('rooms', roomId)
+            return api.getChannelByType('all', roomId)
                 .then(function (data) { return this.add(data); }.bind(this))
                 .fail(function () {
                     require(['io.ox/core/yell'], function (yell) {
@@ -959,7 +953,7 @@ define('io.ox/chat/data', [
 
         leaveChannel: function (roomId) {
             var room = this.get(roomId);
-            return api.leaveRoom(roomId)
+            return api.leaveRoom(room)
                 .then(function () { room.set('active', false); })
                 .fail(function () {
                     require(['io.ox/core/yell'], function (yell) {
@@ -969,7 +963,8 @@ define('io.ox/chat/data', [
         },
 
         leaveGroup: function (roomId) {
-            return api.leaveRoom(roomId)
+            var room = this.get(roomId);
+            return api.leaveRoom(room)
                 .fail(function () {
                     require(['io.ox/core/yell'], function (yell) {
                         yell('error', gt('The group could not be left.'));
@@ -998,7 +993,7 @@ define('io.ox/chat/data', [
 
     var ChannelCollection = ChatCollection.extend({
         url: function () {
-            return api.url + '/channels';
+            return api.url + '/rooms/channels';
         },
         setComparator: function () {
             this.comparator = this.sortByTitle;
@@ -1043,7 +1038,7 @@ define('io.ox/chat/data', [
             var roomId = this.collection.roomId,
                 room = data.chats.get(roomId) || data.channels.get(roomId),
                 isChannel = room && room.isChannel();
-            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
+            if (isChannel) return api.url + '/rooms/channels/' + roomId + '/files/' + this.get('fileId') + 'thumbnail';
             return api.url + '/files/' + this.get('fileId') + '/thumbnail';
         },
 
@@ -1051,7 +1046,7 @@ define('io.ox/chat/data', [
             var roomId = this.collection.roomId,
                 room = data.chats.get(roomId) || data.channels.get(roomId),
                 isChannel = room && room.isChannel();
-            if (isChannel) return api.url + '/channels/' + roomId + '/files/' + this.get('fileId');
+            if (isChannel) return api.url + '/rooms/channels/' + roomId + '/files/' + this.get('fileId');
             return api.url + '/files/' + this.get('fileId');
         }
     });
@@ -1069,7 +1064,7 @@ define('io.ox/chat/data', [
         url: function () {
             var room = data.chats.get(this.roomId) || data.channels.get(this.roomId),
                 isChannel = room && room.isChannel();
-            if (isChannel) return api.url + '/channels/' + this.roomId + '/files';
+            if (isChannel) return api.url + '/rooms/channels/' + this.roomId + '/files';
             return api.url + '/rooms/' + this.roomId + '/files';
         }
 
@@ -1196,8 +1191,10 @@ define('io.ox/chat/data', [
                 events.trigger('typing:' + event.roomId, event.email, event.state);
             });
 
-            socket.on('chat:message:changed', function (message) {
-                data.chats.fetchUnlessExists(message.roomId).done(function (room) {
+            socket.on('chat:message:changed', function (obj) {
+                var message = obj.message,
+                    roomId = obj.roomId;
+                data.chats.fetchUnlessExists(roomId).done(function (room) {
                     var messageModel = room.messages.get(message.messageId);
                     if (messageModel) {
                         messageModel.set(message);

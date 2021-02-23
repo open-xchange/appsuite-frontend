@@ -202,28 +202,40 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             if (this.pictureModel.get('pictureFileEdited') === '') {
-                icon = null;
+                updates.icon = null;
             } else if (this.pictureModel.get('pictureFileEdited')) {
                 icon = this.pictureModel.get('pictureFileEdited');
             }
 
-            if (Object.keys(updates).length <= 1 && Object.keys(hiddenAttr).length <= 0 && icon === undefined) {
+            var hasModelChanges = Object.keys(updates).length > 1 || Object.keys(hiddenAttr).length > 0;
+
+            if (!hasModelChanges && icon === undefined) {
                 def.resolve(this.model.get('roomId'));
                 this.close();
                 return;
             }
 
-            originalModel.save(updates, { hiddenAttr: hiddenAttr, icon: icon }).then(function () {
-                this.close();
-                data.chats.add(originalModel);
-                def.resolve(originalModel.get('roomId'));
-            }.bind(this), function (e) {
+
+            // update model if necessary
+            var updateModelDef = hasModelChanges ? originalModel.save(updates, { hiddenAttr: hiddenAttr }) : $.when();
+            updateModelDef.then(function () {
+                if (icon) return api.uploadIcon(originalModel, icon);
+            }, function (e) {
                 originalModel.set(originalModel.previousAttributes());
                 dialog.idle();
                 if (e.responseJSON) return this.model.handleError(e);
                 if (originalModel.get('roomId')) return notifications.yell('error', gt('Changes to this chat could not be saved.'));
                 notifications.yell('error', gt('Chat could not be saved.'));
-            }.bind(this));
+            }.bind(this)).then(function (response) {
+                originalModel.set(response);
+
+                this.close();
+                data.chats.add(originalModel);
+                def.resolve(originalModel.get('roomId'));
+            }.bind(this), function () {
+                notifications.yell('error', gt('The icon could not be saved.'));
+                dialog.idle();
+            });
         })
         .on('discard', def.reject)
         .open();
