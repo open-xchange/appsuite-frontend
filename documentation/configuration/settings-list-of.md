@@ -760,3 +760,30 @@ Link to Appstore or download location
 <config>plugins/portal//oxdriveclients/productName=`<string>`</config>
 Customized product name for OX Drive. Default `OX Drive`
 
+# Misc
+## What's New dialog
+
+Do not confuse this with the What's New TOUR.
+The dialog uses core namespace because it is part of the core package.
+
+<config>io.ox/core//whatsNew/menuEntry`<boolean>`</config>
+Wether or not the dropdown button is shown. Default is true
+
+<config>io.ox/core//whatsNew/helpLinks`<json>`</config>
+Can be used to set language specific help links. Example:
+```javascript
+{
+        fallback: 'https://www.open-xchange.com',
+        ca_ES: 'https://www.open-xchange.com',
+        cs_CZ: 'https://www.open-xchange.com',
+        da_DK: 'https://www.open-xchange.com',
+        de_DE: 'https://www.open-xchange.com',
+        en_GB: 'https://www.open-xchange.com',
+        en_US: 'https://www.open-xchange.com'
+}
+```
+There is no default.
+
+<config>io.ox/core//whatsNew/autoStart`<boolean>`</config>
+set if the whats new dialog is shown automatically when a user logs in with a new version. Default is true
+
