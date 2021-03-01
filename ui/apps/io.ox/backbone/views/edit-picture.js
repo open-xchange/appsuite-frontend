@@ -202,7 +202,7 @@ define('io.ox/backbone/views/edit-picture', [
             .addButton({ label: gt('Apply'), action: 'apply' })
             .on('open', function () {
                 this.busy();
-                this.load().done(this.idle);
+                this.load().always(this.idle);
             })
             .on('action', function (action) {
                 switch (action) {
