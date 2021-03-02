@@ -21,7 +21,7 @@ const expect = require('chai').expect;
 
 Feature('Calendar > Create');
 
-Before(async (I, users) => {
+Before(async ({ I, users }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -31,11 +31,11 @@ Before(async (I, users) => {
         'io.ox/calendar': { showCheckboxes: true }
     });
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('Create appointment with all fields', async (I, calendar, dialogs) => {
+Scenario('Create appointment with all fields', async ({ I, calendar, dialogs }) => {
     const data = { subject: 'test title', location: 'test location' };
 
     I.login('app=io.ox/calendar');
@@ -74,7 +74,7 @@ Scenario('Create appointment with all fields', async (I, calendar, dialogs) => {
     I.waitForDetached(appointment);
 });
 
-Scenario('Fullday appointments', async (I, calendar) => {
+Scenario('Fullday appointments', async ({ I, calendar }) => {
     const data = { subject: 'Fullday' };
 
     I.login('app=io.ox/calendar&perspective="week:week"');
@@ -95,7 +95,7 @@ Scenario('Fullday appointments', async (I, calendar) => {
 
 //See Bug 64409
 // TODO: shaky (element (~Start time) is not in DOM or there is no element(~Start time) with value "9:52 AM" after 30 sec)
-Scenario('Enter start time and press enter key', (I, calendar) => {
+Scenario('Enter start time and press enter key', ({ I, calendar }) => {
     I.login('app=io.ox/calendar');
 
     calendar.waitForApp();
@@ -109,7 +109,7 @@ Scenario('Enter start time and press enter key', (I, calendar) => {
     I.waitForValue('~Start time', '9:52 AM');
 });
 
-Scenario('[C7411] Discard appointment during the creation', (I, calendar) => {
+Scenario('[C7411] Discard appointment during the creation', ({ I, calendar }) => {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -124,7 +124,7 @@ Scenario('[C7411] Discard appointment during the creation', (I, calendar) => {
 });
 
 // TODO: creation of shared appointment happened via api call?!
-Scenario('[C7412] Create private appointment @contentReview @bug', async (I, users, calendar) => {
+Scenario('[C7412] Create private appointment @contentReview @bug', async ({ I, users, calendar }) => {
     const title = 'C7412';
     const somedetail = Math.round(+new Date() / 1000);
     const today = moment('12:00:00', 'HH:mm:ss');
@@ -168,7 +168,7 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async (I, use
     }));
 });
 
-Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async (I, calendar, dialogs) => {
+Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async ({ I, calendar, dialogs }) => {
     const date = moment('1216', 'MMDD');
 
     I.login('app=io.ox/calendar');
@@ -210,7 +210,7 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     }));
 });
 
-Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async (I, calendar, dialogs) => {
+Scenario('[C7418] Create a Yearly recurring appointment last day of week in december, ends after 5', async ({ I, calendar, dialogs }) => {
     const date = moment('12', 'MM').weekday(0);
     if (date.month() === 10) date.add(1, 'week'); // special cases
 
@@ -262,7 +262,7 @@ Scenario('[C7418] Create a Yearly recurring appointment last day of week in dece
     }));
 });
 
-Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async (I, calendar, dialogs) => {
+Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/2020', async ({ I, calendar, dialogs }) => {
     const date = moment('10', 'DD');
 
     I.login('app=io.ox/calendar');
@@ -312,7 +312,7 @@ Scenario('[C7419] Create a monthly recurring appointment on day 10 ends 31/12/20
 
 });
 
-Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async (I, calendar, dialogs) => {
+Scenario('[C7420] Create a monthly recurring appointment every second Monday every month never ends', async ({ I, calendar, dialogs }) => {
     const date = moment().startOf('month').weekday(1);
     if (date.month() === moment().subtract(1, 'month').month()) date.add(1, 'week'); // special cases
     date.add(1, 'week');
@@ -364,7 +364,7 @@ Scenario('[C7420] Create a monthly recurring appointment every second Monday eve
 
 });
 
-Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async (I, calendar, dialogs) => {
+Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday ends after 3', async ({ I, calendar, dialogs }) => {
     const date = moment().startOf('week');
     I.say(date);
 
@@ -424,7 +424,7 @@ Scenario('[C7421] Create a weekly recurring appointment every 2 weeks Sunday end
 
 });
 
-Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async (I, calendar) => {
+Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thursday never ends', async ({ I, calendar }) => {
     const date = moment().startOf('day').weekday(2);
 
     I.login('app=io.ox/calendar');
@@ -459,7 +459,7 @@ Scenario('[C7422] Create a allday weekly recurring appointment every Tuesday Thu
     }));
 });
 
-Scenario('[C7423] Create daily recurring appointment every day ends after 5', async (I, calendar, dialogs) => {
+Scenario('[C7423] Create daily recurring appointment every day ends after 5', async ({ I, calendar, dialogs }) => {
     // pick the second monday in the following month
     const date = moment().add(1, 'month').startOf('month').weekday(1);
     if (date.isSame(moment(), 'month')) date.add(1, 'week');
@@ -507,7 +507,7 @@ Scenario('[C7423] Create daily recurring appointment every day ends after 5', as
     }));
 });
 
-Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async (I, calendar, dialogs) => {
+Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12', async ({ I, calendar, dialogs }) => {
     // pick the second monday in the following month
     const date = moment().add(1, 'month').startOf('month').weekday(1);
     if (date.isSame(moment(), 'month')) date.add(1, 'week');
@@ -562,7 +562,7 @@ Scenario('[C7424] Create daily recurring appointment every 2 days ends in x+12',
     I.seeNumberOfVisibleElements('.page.current .appointment', 1);
 });
 
-Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async (I, users, calendar) => {
+Scenario('[C274537] Support use-count calculation on Appointment create with Groups', async ({ I, users, calendar }) => {
     const testrailID = 'C274537';
     const timestamp = Math.round(+new Date() / 1000);
     const result1 = [], result2 = [];
@@ -618,7 +618,7 @@ Scenario('[C274537] Support use-count calculation on Appointment create with Gro
     await I.dontHaveGroup(/\d+-\d{3}/);
 });
 
-Scenario('[C274516] Follow up should also propose a future date for appointments in the future', async (I, calendar) => {
+Scenario('[C274516] Follow up should also propose a future date for appointments in the future', async ({ I, calendar }) => {
     const testrailID = 'C274516';
     const appointmentSelector = `.appointment-content[title="${testrailID}"]`;
     const date = moment().add(2, 'week');
@@ -665,7 +665,7 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     I.see('Whole day', '.io-ox-sidepopup');
 });
 
-Scenario('[C274515] Attendees are not allowed to change their own permission status', async (I, users, calendar) => {
+Scenario('[C274515] Attendees are not allowed to change their own permission status', async ({ I, users, calendar }) => {
     const SIDEPOPUP = locate({ css: '.io-ox-calendar-main .io-ox-sidepopup' }).as('Sidepopup');
     const testrailID = 'C274515';
     await I.haveSetting('io.ox/calendar//chronos/allowAttendeeEditsByDefault', true);
@@ -699,7 +699,7 @@ Scenario('[C274515] Attendees are not allowed to change their own permission sta
     I.waitForElement('.disabled.attendee-change-checkbox', 5);
 });
 
-Scenario('[C274484] Attendees can change the appointment', async (I, users, calendar) => {
+Scenario('[C274484] Attendees can change the appointment', async ({ I, users, calendar }) => {
     const SIDEPOPUP = locate({ css: '.io-ox-calendar-main .io-ox-sidepopup' }).as('Sidepopup');
     const testrailID = 'C274484';
     const timestamp = Math.round(+new Date() / 1000);
@@ -739,7 +739,7 @@ Scenario('[C274484] Attendees can change the appointment', async (I, users, cale
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C7428] Create appointment with internal participants', async (I, users, calendar) => {
+Scenario('[C7428] Create appointment with internal participants', async ({ I, users, calendar }) => {
     const subject = 'Einkaufen';
     const location = 'Wursttheke';
 
@@ -775,7 +775,7 @@ Scenario('[C7428] Create appointment with internal participants', async (I, user
     I.waitForText(`New appointment: ${subject}`);
 });
 
-Scenario('[C7425] Create appointment with a group', async (I, users, calendar, mail) => {
+Scenario('[C7425] Create appointment with a group', async ({ I, users, calendar, mail }) => {
     const subject = 'C7425';
     const location = 'Group Therapy';
     const groupName = 'Awesome guys';
@@ -827,7 +827,7 @@ Scenario('[C7425] Create appointment with a group', async (I, users, calendar, m
     await I.dontHaveGroup(groupName);
 });
 
-Scenario('[C7429] Create appointment via Contact', async (I, users, contacts, calendar) => {
+Scenario('[C7429] Create appointment via Contact', async ({ I, users, contacts, calendar }) => {
     const data = { subject: 'Wichtige Dinge', location: 'Kneipe' };
 
     I.login('app=io.ox/contacts');
@@ -869,7 +869,7 @@ Scenario('[C7429] Create appointment via Contact', async (I, users, contacts, ca
     }));
 });
 
-Scenario('[C7430] Create appointment via Icon', async (I, calendar) => {
+Scenario('[C7430] Create appointment via Icon', async ({ I, calendar }) => {
     const subject = 'Einkaufen';
     const location = 'Wursttheke';
 
@@ -890,7 +890,7 @@ Scenario('[C7430] Create appointment via Icon', async (I, calendar) => {
     }));
 });
 
-Scenario('[C7431] Create appointment via doubleclick', async (I, calendar) => {
+Scenario('[C7431] Create appointment via doubleclick', async ({ I, calendar }) => {
     const subject = 'Todesstern testen';
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -921,7 +921,7 @@ Scenario('[C7431] Create appointment via doubleclick', async (I, calendar) => {
     I.waitForVisible('.appointment', 5);
 });
 
-Scenario('[C256455] Create all-day appointment via date label', async (I, calendar) => {
+Scenario('[C256455] Create all-day appointment via date label', async ({ I, calendar }) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
 
@@ -952,7 +952,7 @@ Scenario('[C256455] Create all-day appointment via date label', async (I, calend
     await createOnfirstDay();
 });
 
-Scenario('[C7436] Create appointment without any infos', async function (I, calendar) {
+Scenario('[C7436] Create appointment without any infos', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -960,7 +960,7 @@ Scenario('[C7436] Create appointment without any infos', async function (I, cale
     I.see('Please enter a value');
 });
 
-Scenario('[C271749] Show prompt on event creation in public calendar', async function (I, calendar, dialogs) {
+Scenario('[C271749] Show prompt on event creation in public calendar', async function ({ I, calendar, dialogs }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
@@ -983,7 +983,7 @@ Scenario('[C271749] Show prompt on event creation in public calendar', async fun
 });
 
 // "datepicker open" doesn't work reliable when running puppeteer headerless
-Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
+Scenario('[C7440] Start/End date autoadjustment', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -1034,7 +1034,7 @@ Scenario('[C7440] Start/End date autoadjustment', async function (I, calendar) {
     expect(newEndString).to.not.equal(endString);
 });
 
-Scenario('[C7441] Start/End time autocompletion', async function (I, calendar) {
+Scenario('[C7441] Start/End time autocompletion', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -1058,7 +1058,7 @@ Scenario('[C7441] Start/End time autocompletion', async function (I, calendar) {
     check('1:00 PM', 'endDate', '10:00 AM', '1:00 PM');
 });
 
-Scenario('[C7442] Set date from date-picker', async function (I, calendar) {
+Scenario('[C7442] Set date from date-picker', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar&perspective=week:day');
     calendar.waitForApp();
     calendar.newAppointment();
@@ -1142,7 +1142,7 @@ Scenario('[C7442] Set date from date-picker', async function (I, calendar) {
 
 });
 
-Scenario('[C7413] Create appointment with an attachment', async (I, calendar) => {
+Scenario('[C7413] Create appointment with an attachment', async ({ I, calendar }) => {
     // Preconditions: You are at the Calendar-tab
     I.login(['app=io.ox/calendar&perspective=week:week']);
     calendar.waitForApp();
@@ -1178,7 +1178,7 @@ Scenario('[C7413] Create appointment with an attachment', async (I, calendar) =>
     }));
 });
 
-Scenario('[C274406] Change organizer of appointment with external attendees', async (I, users, calendar) => {
+Scenario('[C274406] Change organizer of appointment with external attendees', async ({ I, users, calendar }) => {
     const subject = 'To be or not to be Organizor';
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -1221,7 +1221,7 @@ Scenario('[C274406] Change organizer of appointment with external attendees', as
     I.dontSee('Change organizer');
 });
 
-Scenario('[C274651] Create secret appointment', async function (I, users, calendar) {
+Scenario('[C274651] Create secret appointment', async function ({ I, users, calendar }) {
     const testrailID = 'C274651';
     const startDate = moment().startOf('week').add('1', 'day');
     const sharedFolderID = await I.haveFolder({
@@ -1261,7 +1261,7 @@ Scenario('[C274651] Create secret appointment', async function (I, users, calend
 
 });
 
-Scenario('[C7414] Create two appointments at the same time (one is shown as free)', async function (I, users, calendar) {
+Scenario('[C7414] Create two appointments at the same time (one is shown as free)', async function ({ I, users, calendar }) {
     const testrailID = 'C7414';
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
@@ -1285,7 +1285,7 @@ Scenario('[C7414] Create two appointments at the same time (one is shown as free
     I.waitForDetached(locate('.modal-open .modal-title').withText('Conflicts detected'));
 });
 
-Scenario('[C7415] Create two reserved appointments at the same time', async function (I, users, calendar, dialogs) {
+Scenario('[C7415] Create two reserved appointments at the same time', async function ({ I, users, calendar, dialogs }) {
     const testrailID = 'C7415';
     //Create Appointment
     await I.haveAppointment({
@@ -1324,7 +1324,7 @@ Scenario('[C7415] Create two reserved appointments at the same time', async func
     I.seeNumberOfVisibleElements(`.appointment-container [title="${testrailID}, ${testrailID}"]`, 2);
 });
 
-Scenario('[C7446] Create recurring whole-day appointment', async function (I, calendar) {
+Scenario('[C7446] Create recurring whole-day appointment', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
     I.clickToolbar('Today');
@@ -1356,7 +1356,7 @@ Scenario('[C7446] Create recurring whole-day appointment', async function (I, ca
 });
 
 
-Scenario('[C7447] Private appointment with participants', async (I, users, calendar) => {
+Scenario('[C7447] Private appointment with participants', async ({ I, users, calendar }) => {
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
     I.clickToolbar('Today');
@@ -1384,7 +1384,7 @@ Scenario('[C7447] Private appointment with participants', async (I, users, calen
     }));
 });
 
-Scenario('[C7448] Cannot create private appointment', async function (I, users, calendar) {
+Scenario('[C7448] Cannot create private appointment', async function ({ I, users, calendar }) {
     const title = 'C7448';
     await I.haveFolder({
         title,
@@ -1418,7 +1418,7 @@ Scenario('[C7448] Cannot create private appointment', async function (I, users, 
     expect(await I.grabNumberOfVisibleElements('option[value="CONFIDENTIAL"]')).to.equal(0);
 });
 
-Scenario('[C234658] Create appointments and show this in cumulatively view', async (I, calendar) => {
+Scenario('[C234658] Create appointments and show this in cumulatively view', async ({ I, calendar }) => {
     await I.haveSetting('io.ox/calendar//selectedFolders', {});
     const testrailID = 'C234658';
     const selector = '.appointment-container [title="C234658, C234658"]';
@@ -1442,7 +1442,7 @@ Scenario('[C234658] Create appointments and show this in cumulatively view', asy
     I.waitNumberOfVisibleElements('.appointment-container [title="C234658, C234658"]', 2);
 });
 
-Scenario('[C265153] Create appointment with a link in the description', async (I, calendar) => {
+Scenario('[C265153] Create appointment with a link in the description', async ({ I, calendar }) => {
     const testrailID = 'C265153';
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
@@ -1465,7 +1465,7 @@ Scenario('[C265153] Create appointment with a link in the description', async (I
     I.waitInUrl('https://www.google.de/', 5);
 });
 
-Scenario('Prevent XSS in folder dropdown', async (I, calendar, contacts) => {
+Scenario('Prevent XSS in folder dropdown', async ({ I, calendar, contacts }) => {
     I.login('app=io.ox/mail');
 
     contacts.editMyContact();
@@ -1477,7 +1477,7 @@ Scenario('Prevent XSS in folder dropdown', async (I, calendar, contacts) => {
     calendar.newAppointment();
 });
 
-Scenario('[C7432] Create all-day appointment via doubleclick', async (I, calendar, dialogs) => {
+Scenario('[C7432] Create all-day appointment via doubleclick', async ({ I, calendar, dialogs }) => {
     const appointmentPanel = '.io-ox-pagecontroller.current .appointment-panel';
     const subject = 'Meetup ';
     const location = 'Conference Room ';
@@ -1514,7 +1514,7 @@ Scenario('[C7432] Create all-day appointment via doubleclick', async (I, calenda
 // do not Show as free when editing
 // do not Show as free when a user manually changed the checkbox (the user wants it set to that value obviously)
 // do not Show as free when the setting is not set
-Scenario('[OXUIB-244] Mark all day appointments as free not respected for new appointments', async (I, calendar) => {
+Scenario('[OXUIB-244] Mark all day appointments as free not respected for new appointments', async ({ I, calendar }) => {
 
     await I.haveSetting('io.ox/calendar//markFulltimeAppointmentsAsFree', true);
 

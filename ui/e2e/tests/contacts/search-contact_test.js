@@ -13,16 +13,16 @@
 
 Feature('Contacts > Search');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
-Scenario('[C7369] by Name', async function (I, search, contacts) {
+Scenario('[C7369] by Name', async function ({ I, search, contacts }) {
     const testrailID = 'C7369';
     const contact = {
         display_name: testrailID + ', ' + testrailID,
@@ -39,7 +39,7 @@ Scenario('[C7369] by Name', async function (I, search, contacts) {
     I.waitForText(testrailID, 5, '.vgrid-cell');
 });
 
-Scenario('[C7370] by Phone numbers', async function (I, search, contacts) {
+Scenario('[C7370] by Phone numbers', async function ({ I, search, contacts }) {
     const phone = '+4917113371337';
     const testrailID = 'C7370';
     //Create Contact
@@ -60,7 +60,7 @@ Scenario('[C7370] by Phone numbers', async function (I, search, contacts) {
     I.waitForText(testrailID, 5, '.vgrid-cell');
 });
 
-Scenario('[C7371] by Addresses', async function (I, search, contacts) {
+Scenario('[C7371] by Addresses', async function ({ I, search, contacts }) {
     const testrailID = 'C7371';
     const firstname = testrailID;
     const lastname = testrailID;

@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Zoom');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -24,11 +24,11 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('User can connect zoom account through settings', (I, settings) => {
+Scenario('User can connect zoom account through settings', ({ I, settings }) => {
 
     I.login('app=io.ox/settings');
     settings.waitForApp();
@@ -39,7 +39,7 @@ Scenario('User can connect zoom account through settings', (I, settings) => {
     I.waitForText('You have linked the following Zoom account', 10, settings.locators.main);
 });
 
-Scenario('User can connect zoom account through appointments', (I, calendar) => {
+Scenario('User can connect zoom account through appointments', ({ I, calendar }) => {
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -53,7 +53,7 @@ Scenario('User can connect zoom account through appointments', (I, calendar) => 
     I.dontSee('Connect with Zoom');
 });
 
-Scenario('User can connect zoom account through address book', (I, users, contacts, dialogs) => {
+Scenario('User can connect zoom account through address book', ({ I, users, contacts, dialogs }) => {
 
     const [user1, user2] = users;
 
@@ -74,7 +74,7 @@ Scenario('User can connect zoom account through address book', (I, users, contac
     I.dontSee('Connect with Zoom');
 });
 
-Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', (I, dialogs) => {
+Scenario('[OXUIB-420] Compose mail and invite to appointment from addressbook', ({ I, dialogs }) => {
 
     I.login('app=io.ox/contacts&folder=6');
     I.waitForElement('.io-ox-contacts-window');

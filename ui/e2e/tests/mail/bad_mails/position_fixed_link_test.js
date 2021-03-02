@@ -14,15 +14,15 @@
 
 Feature('Mail > Detail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C101618] Link with position: fixed; should not cover the whole UI', async (I, mail) => {
+Scenario('[C101618] Link with position: fixed; should not cover the whole UI', async ({ I, mail }) => {
 
     const DESCRIPTION = 'Link with position: fixed; should not cover the whole UI';
 

@@ -14,15 +14,15 @@
 
 Feature('General > Floating windows');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C237267] Check if specific apps open as floating windows @contentReview', function (I) {
+Scenario('[C237267] Check if specific apps open as floating windows @contentReview', function ({ I }) {
     I.login(['app=io.ox/tasks']);
     I.waitForVisible('.io-ox-tasks-window');
 
@@ -34,7 +34,7 @@ Scenario('[C237267] Check if specific apps open as floating windows @contentRevi
     });
 });
 
-Scenario('[C237268] Open floating apps and verify the taskbar', function (I, mail, contacts, tasks) {
+Scenario('[C237268] Open floating apps and verify the taskbar', function ({ I, mail, tasks }) {
     I.login(['app=io.ox/mail']);
     mail.waitForApp();
 
@@ -53,7 +53,7 @@ Scenario('[C237268] Open floating apps and verify the taskbar', function (I, mai
     I.waitForVisible('#io-ox-taskbar-container button[aria-label="Compose"]');
 });
 
-Scenario('[C237269] Toggle display styles of floating windows @contentReview', function (I) {
+Scenario('[C237269] Toggle display styles of floating windows @contentReview', function ({ I }) {
     I.login(['app=io.ox/tasks']);
     I.waitForVisible('.io-ox-tasks-window');
 

@@ -13,15 +13,15 @@
 
 Feature('Contacts > Detail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Displays only fields with content', async function (I, contacts) {
+Scenario('Displays only fields with content', async function ({ I, contacts }) {
     // alwaysVisible and optional fields
     const first = 'Phil',
         last = 'Dunphy',
@@ -63,7 +63,7 @@ Scenario('Displays only fields with content', async function (I, contacts) {
     I.dontSee('street_home', '.contact-detail');
 });
 
-Scenario.skip('[C273805] - Download infected file', async function (I) {
+Scenario.skip('[C273805] - Download infected file', async function ({ I }) {
     const testrailID = 'C273805';
     const contact = {
         display_name: '' + testrailID + ', ' + testrailID + '',

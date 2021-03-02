@@ -15,15 +15,15 @@
 
 Feature('Tasks > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7735] Discard Task without entered information', async (I, tasks) => {
+Scenario('[C7735] Discard Task without entered information', async ({ I, tasks }) => {
 
     // 1. Create a new task an click Discard
 

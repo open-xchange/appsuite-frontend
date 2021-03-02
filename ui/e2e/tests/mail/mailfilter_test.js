@@ -14,16 +14,16 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
-Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
+Scenario('add and removes Mail Filter Rules', async function ({ I, dialogs }) {
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');
     I.waitForVisible('.io-ox-settings-main');
 
@@ -280,7 +280,7 @@ Scenario('add and removes Mail Filter Rules', async function (I, dialogs) {
     I.waitForVisible('.settings-detail-pane .hint');
 });
 
-Scenario('adds and removes Mail Filter Rules with modified config', function (I, users) {
+Scenario('adds and removes Mail Filter Rules with modified config', function ({ I, users }) {
     let [user] = users;
     user.hasConfig('com.openexchange.mail.filter.blacklist.actions', 'keep');
     user.hasConfig('com.openexchange.mail.filter.blacklist.tests.from.comparisons', 'contains');
@@ -406,7 +406,7 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I,
     I.click('Cancel');
 });
 
-Scenario('checks if the size test is correctly displayed', function (I) {
+Scenario('checks if the size test is correctly displayed', function ({ I }) {
 
     I.haveMailFilterRule({ rulename: 'rule with size b', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '20' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });
     I.haveMailFilterRule({ rulename: 'rule with size kb', active: true, flags: [], test: { id: 'size', comparison: 'over', size: '20K' }, actioncmds: [{ id: 'keep' }, { id: 'stop' }] });

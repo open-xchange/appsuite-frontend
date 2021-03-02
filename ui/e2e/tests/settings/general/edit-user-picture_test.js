@@ -14,15 +14,15 @@ const expect = require('chai').expect;
 
 Feature('Settings > Basic > User picture');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('User start with no picture', async function (I, contacts, mail) {
+Scenario('User start with no picture', async function ({ I, contacts, mail }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -44,7 +44,7 @@ Scenario('User start with no picture', async function (I, contacts, mail) {
     I.click('Discard');
 });
 
-Scenario('User can upload and remove a picture', async function (I, contacts, mail, dialogs) {
+Scenario('User can upload and remove a picture', async function ({ I, contacts, mail, dialogs }) {
     I.login('app=io.ox/mail');
     mail.waitForApp();
 
@@ -99,7 +99,7 @@ Scenario('User can upload and remove a picture', async function (I, contacts, ma
     I.waitForVisible('.edit-picture.in.empty');
 });
 
-Scenario('User can rotate her/his picture', async function (I, contacts, mail, dialogs) {
+Scenario('User can rotate her/his picture', async function ({ I, contacts, mail, dialogs }) {
     let image;
 
     I.login('app=io.ox/mail');

@@ -13,7 +13,17 @@
 
 const { expect } = require('chai');
 
-Scenario('Contacts - List view w/o contact', async (I, contacts) => {
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
+Scenario('Contacts - List view w/o contact', async ({ I, contacts }) => {
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
     I.waitForElement('.summary.empty');
@@ -22,14 +32,14 @@ Scenario('Contacts - List view w/o contact', async (I, contacts) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - List view with contact detail view', async (I) => {
+Scenario('Contacts - List view with contact detail view', async ({ I }) => {
     I.login('app=io.ox/contacts');
     I.waitForElement('.contact-detail');
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async ({ I, contacts }) => {
     // Exceptions:
     // Input field has a missing label (critical)
     const excludes = { exclude: [['input[name="name"]']] };
@@ -43,7 +53,7 @@ Scenario('Contacts - Modal Dialog - New address book (with exceptions)', async (
     expect(await I.grabAxeReport(excludes)).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Import', async (I, contacts, dialogs) => {
+Scenario('Contacts - Modal Dialog - Import', async ({ I, contacts, dialogs }) => {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
@@ -56,7 +66,7 @@ Scenario('Contacts - Modal Dialog - Import', async (I, contacts, dialogs) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async (I, contacts) => {
+Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', async ({ I, contacts }) => {
     // Exceptions:
     // Typeahead missing label (critical)
     // Textinput, password and textarea have missing visual labels (critical)
@@ -66,6 +76,7 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
         ['[placeholder="Message (optional)"]'],
         ['input[type="text"].form-control']
     ] };
+
     const defaultFolder = await I.grabDefaultFolder('contacts');
 
     await I.haveFolder({
@@ -91,9 +102,10 @@ Scenario('Contacts - Modal Dialog - Create sharing link (with exceptions)', asyn
     I.say('Cleanup');
     I.click('Remove link');
     I.waitForText('The link has been removed');
+
 });
 
-Scenario('Contacts - New contact window', async (I, contacts) => {
+Scenario('Contacts - New contact window', async ({ I, contacts }) => {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
@@ -102,7 +114,7 @@ Scenario('Contacts - New contact window', async (I, contacts) => {
     expect(await I.grabAxeReport()).to.be.accessible;
 });
 
-Scenario('Contacts - New distribution list window (with exceptions)', async (I, contacts) => {
+Scenario('Contacts - New distribution list window (with exceptions)', async ({ I, contacts }) => {
     // Exceptions:
     // Typeahead missing label (critical)
     const excludes = { exclude: [['.tt-hint'], ['.tt-input']] };

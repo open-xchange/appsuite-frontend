@@ -13,16 +13,26 @@
 
 const { expect } = require('chai');
 
-Scenario('Portal - View with empty standard tiles', async (I) => {
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
+Scenario('Portal - View with empty standard tiles', async ({ I, portal }) => {
     await I.haveSetting({ 'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false } });
     I.login('app=io.ox/portal');
+    portal.waitForApp();
     I.waitForText('Inbox');
     I.waitForText('Appointments');
     I.waitForText('My tasks');
     I.waitForText('Birthdays');
     I.waitForText('My latest files');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForDetached('.fa-spin.fa-refresh');
+    I.waitForNetworkTraffic();
 
     expect(await I.grabAxeReport()).to.be.accessible;
 });

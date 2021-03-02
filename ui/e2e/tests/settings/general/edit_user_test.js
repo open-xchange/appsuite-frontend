@@ -16,16 +16,16 @@ const expect = require('chai').expect;
 
 Feature('Settings > Basic > User');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario('[C208269] Edit users contact information', async (I, dialogs) => {
+Scenario('[C208269] Edit users contact information', async ({ I, dialogs }) => {
 
     function addContactsField(fieldType, field, input) {
         I.click({ css: `.dropdown[data-add="${fieldType}"] button` }, '.contact-edit');

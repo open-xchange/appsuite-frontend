@@ -15,16 +15,16 @@
 
 Feature('Mail > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C83387] Create mail filter based on moving mail', async (I, users, mail, dialogs) => {
+Scenario('[C83387] Create mail filter based on moving mail', async ({ I, users, mail, dialogs }) => {
 
     // 1. Login User#A
     // 2. Go to Mail and send a mail to User#B
@@ -107,12 +107,14 @@ Scenario('[C83387] Create mail filter based on moving mail', async (I, users, ma
         to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
     }, { user: users[1] });
 
-    I.selectFolder('Trash');
+    I.triggerRefresh();
+    I.waitForElement('~Trash, 1 unread, 2 total.', 10);
 
-    I.waitForText('Subject#1', 5, '.list-view');
-    I.waitForText('Content#1', 5, '.list-view');
+    I.click('~Trash, 1 unread, 2 total.');
+
+    I.waitForText('Subject#1', 10, '.list-view');
+    I.waitForText('Content#1', 10, '.list-view');
 
     I.waitForText('Subject#2', 5, '.list-view');
     I.waitForText('Content#2', 5, '.list-view');
-
 });

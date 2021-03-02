@@ -15,17 +15,17 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     var user = users.getRandom();
     user.aliases = [`${user.name}@${user.domain}`, 'foo@ox.io'];
     await users.create(user);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7781] Default sender address', async (I, users, mail) => {
+Scenario('[C7781] Default sender address', async ({ I, users, mail }) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

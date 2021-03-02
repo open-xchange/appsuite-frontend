@@ -15,15 +15,15 @@
 
 Feature('Mail > Search');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8404] Find mails based on from/to', async (I, users) => {
+Scenario('[C8404] Find mails based on from/to', async ({ I, users }) => {
 
     const USER = users[0];
     const INBOX = 'default0/INBOX';

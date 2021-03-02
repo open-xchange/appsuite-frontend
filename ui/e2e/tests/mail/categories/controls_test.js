@@ -15,11 +15,11 @@ const expect = require('chai').expect;
 
 Feature('Mail > Categories');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -48,7 +48,7 @@ const A = {
 };
 
 // PARTIAL: missing drag and drop steps
-Scenario.skip('[C85634] Enable/disable tabbed inbox', function (I) {
+Scenario.skip('[C85634] Enable/disable tabbed inbox', function ({ I }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -64,7 +64,7 @@ Scenario.skip('[C85634] Enable/disable tabbed inbox', function (I) {
     I.seeElement('.classic-toolbar.categories');
 });
 
-Scenario('[C85626] Mail categories can be renamed', function (I) {
+Scenario('[C85626] Mail categories can be renamed', function ({ I }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -86,7 +86,7 @@ Scenario('[C85626] Mail categories can be renamed', function (I) {
     I.seeTextEquals('C85626-02', SELECTORS.toolbar + ' [data-id="uc2"] .category-name');
 });
 
-Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
+Scenario('[C85626] Categories can be enabled or disabled', function ({ I, mail }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -143,7 +143,7 @@ Scenario('[C85626] Categories can be enabled or disabled', function (I, mail) {
     I.waitForVisible({ css: '[data-id="uc2"]' }, 5, SELECTORS.toolbar);
 });
 
-Scenario('[C85626] Support different aspects of categories', function (I) {
+Scenario('[C85626] Support different aspects of categories', function ({ I }) {
     I.haveSetting('io.ox/mail//categories/enabled', true);
 
     I.login('app=io.ox/mail');
@@ -186,7 +186,7 @@ function getTestMail(from, to, opt) {
 }
 
 // PARTIAL: missing drag and drop steps
-Scenario.skip('[C85632] Move mails to another category', async function (I, users) {
+Scenario.skip('[C85632] Move mails to another category', async function ({ I, users }) {
     await users.create();
     await users.create();
     await users.create();
@@ -247,7 +247,7 @@ function reply(I, user) {
 }
 
 // PARTIAL: missing drag and drop steps
-Scenario.skip('[C96951] Conversations', async function (I, users) {
+Scenario.skip('[C96951] Conversations', async function ({ I, users }) {
     await users.create();
     await users.create();
 

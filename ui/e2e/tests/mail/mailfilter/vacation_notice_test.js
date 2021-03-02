@@ -14,16 +14,16 @@
 
 Feature('Mailfilter > Vacation notice');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7785] Set vacation notice', async function (I, users, mail, dialogs) {
+Scenario('[C7785] Set vacation notice', async function ({ I, users, mail, dialogs }) {
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
     }, { user: users[1] });
@@ -108,7 +108,7 @@ Scenario('[C7785] Set vacation notice', async function (I, users, mail, dialogs)
 
 });
 
-Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in inbox)', async function (I, users) {
+Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in inbox)', async function ({ I, users }) {
     let [user] = users;
 
     I.haveMailFilterRule({
@@ -126,7 +126,7 @@ Scenario('[C163027] User gets notified if a vacation notice is avtive (banner in
     I.see('Your vacation notice is active', '.window-body .leftside .alert');
 });
 
-Scenario('[C110281] Vacation notice is time zone capable', async function (I, users, mail, dialogs) {
+Scenario('[C110281] Vacation notice is time zone capable', async function ({ I, users, mail, dialogs }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' },

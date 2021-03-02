@@ -14,6 +14,16 @@
 const { expect } = require('chai');
 const moment = require('moment');
 
+Feature('Accessibility');
+
+BeforeSuite(async function ({ users }) {
+    await users.create();
+});
+
+AfterSuite(async function ({ users }) {
+    await users.removeAll();
+});
+
 const options = {
     rules: {
         'scrollable-region-focusable': { enabled: false }, // [MODERATE] Ensure that scrollable region has keyboard access
@@ -28,38 +38,38 @@ async function openPerspective(I, perspective) {
     });
 
     I.login(['app=io.ox/calendar', 'perspective=' + perspective]);
-    I.waitForVisible({ css: '[data-app-name="io.ox/calendar"]' }, 5);
+    I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 }
 
-Scenario('Calendar - Day view w/o appointments', async (I) => {
+Scenario('Calendar - Day view w/o appointments', async ({ I }) => {
     await openPerspective(I, 'week:day');
     I.waitForVisible('.current-time-indicator');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
 });
 
-Scenario('Calendar - Workweek view w/o appointments', async (I) => {
+Scenario('Calendar - Workweek view w/o appointments', async ({ I }) => {
     await openPerspective(I, 'week:workweek');
     I.waitForVisible('.week-container-label');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
 });
 
-Scenario('Calendar - Week view w/o appointments', async (I) => {
+Scenario('Calendar - Week view w/o appointments', async ({ I }) => {
     await openPerspective(I, 'week:week');
     I.waitForVisible('.week-container-label');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
 });
 
-Scenario('Calendar - Month view w/o appointments', async function (I) {
+Scenario('Calendar - Month view w/o appointments', async function ({ I }) {
     await openPerspective(I, 'month');
     I.waitForVisible('.month-container');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
 });
 
-Scenario('Calendar - Year', async (I) => {
+Scenario('Calendar - Year', async ({ I }) => {
     await openPerspective(I, 'year');
     I.waitForVisible('.year-view-container');
 
@@ -69,14 +79,14 @@ Scenario('Calendar - Year', async (I) => {
     expect(await I.grabAxeReport({ exclude: [['td.out']] }, options)).to.be.accessible;
 });
 
-Scenario('Calendar - List view w/o appointments', async (I) => {
+Scenario('Calendar - List view w/o appointments', async ({ I }) => {
     await openPerspective(I, 'list');
     I.waitForVisible('.io-ox-center.multi-selection-message');
 
     expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
 });
 
-Scenario('Calendar - Month view with appointment clicked', async (I, calendar) => {
+Scenario('Calendar - Month view with appointment clicked', async ({ I, calendar }) => {
     const time = moment().startOf('day').add(10, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
 

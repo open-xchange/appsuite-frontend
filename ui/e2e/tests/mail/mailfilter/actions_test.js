@@ -14,18 +14,18 @@
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7801] Keep filtered mail', async function (I, users, mail, mailfilter) {
+Scenario('[C7801] Keep filtered mail', async function ({ I, users, mail, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -54,7 +54,7 @@ Scenario('[C7801] Keep filtered mail', async function (I, users, mail, mailfilte
     I.waitForText('C7801', 5, '.subject');
 });
 
-Scenario('[C7802] Discard filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7802] Discard filtered mail', async function ({ I, users, mailfilter }) {
     const [user] = users;
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -86,7 +86,7 @@ Scenario('[C7802] Discard filtered mail', async function (I, users, mailfilter) 
 
 });
 
-Scenario('[C7803] Redirect filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7803] Redirect filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -124,7 +124,7 @@ Scenario('[C7803] Redirect filtered mail', async function (I, users, mailfilter)
 
 });
 
-Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7804] Move to Folder filtered mail', async function ({ I, users, mailfilter }) {
 
     const folder = 'TestCase0389';
 
@@ -178,7 +178,7 @@ Scenario('[C7804] Move to Folder filtered mail', async function (I, users, mailf
 
 });
 
-Scenario('[C7805] Reject with reason filtered mail', async function (I, users, mail, mailfilter) {
+Scenario('[C7805] Reject with reason filtered mail', async function ({ I, users, mail, mailfilter }) {
     const [user1, user2] = users;
 
     await I.haveSetting({
@@ -215,7 +215,7 @@ Scenario('[C7805] Reject with reason filtered mail', async function (I, users, m
 
 });
 
-Scenario('[C7806] Mark mail as filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7806] Mark mail as filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -247,7 +247,7 @@ Scenario('[C7806] Mark mail as filtered mail', async function (I, users, mailfil
 
 });
 
-Scenario('[C7807] Tag mail with filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7807] Tag mail with filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -282,7 +282,7 @@ Scenario('[C7807] Tag mail with filtered mail', async function (I, users, mailfi
 
 });
 
-Scenario('[C7809] Mark mail as deleted filtered mail', async function (I, users, mailfilter) {
+Scenario('[C7809] Mark mail as deleted filtered mail', async function ({ I, users, mailfilter }) {
 
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

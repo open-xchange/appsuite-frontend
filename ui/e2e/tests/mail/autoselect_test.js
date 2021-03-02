@@ -12,15 +12,15 @@
 
 Feature('Mail > Listview');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('check auto select behavior in list view', async (I, users) => {
+Scenario('check auto select behavior in list view', async ({ I, users }) => {
 
     const user = users[0];
 

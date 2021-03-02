@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[7774] Fixed-font for plain-text mails', async (I, users) => {
+Scenario('[7774] Fixed-font for plain-text mails', async ({ I, users }) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

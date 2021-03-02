@@ -13,17 +13,17 @@
 
 Feature('Mail Compose');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
     await users.create();
     await users.create();
 });
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7380] Send saved draft mail', async function (I, users, mail) {
+Scenario('[C7380] Send saved draft mail', async function ({ I, users, mail }) {
     const [user] = users;
     var testrailId = 'C7380';
     var text = Math.round(+new Date() / 1000);
@@ -57,7 +57,7 @@ Scenario('[C7380] Send saved draft mail', async function (I, users, mail) {
     I.waitForText(testrailId + ' - ' + timestamp, 5, '.io-ox-mail-detail-window');
 });
 
-Scenario('[C7381] Send email to multiple recipients', async function (I, users, mail) {
+Scenario('[C7381] Send email to multiple recipients', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7381';
     var timestamp = Math.round(+new Date() / 1000);
@@ -95,7 +95,7 @@ Scenario('[C7381] Send email to multiple recipients', async function (I, users, 
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.io-ox-mail-detail-window');
 });
 
-Scenario('[C7382] Compose plain text mail', async function (I, users, mail) {
+Scenario('[C7382] Compose plain text mail', async function ({ I, users, mail }) {
     let [user] = users;
     var subject = `C7382 - ${Math.round(+new Date() / 1000)}`;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -113,7 +113,7 @@ Scenario('[C7382] Compose plain text mail', async function (I, users, mail) {
     I.waitForText(subject, 5, '.io-ox-mail-detail-window');
 });
 
-Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
+Scenario('[C7384] Save draft', async function ({ I, users, mail, dialogs }) {
     const [user] = users;
     var testrailid = 'C7384';
     var text = Math.round(+new Date() / 1000);
@@ -137,7 +137,7 @@ Scenario('[C7384] Save draft', async function (I, users, mail, dialogs) {
     I.seeInField({ css: 'textarea.plain-text' }, text);
 });
 
-Scenario('[C7385] Write mail to BCC recipients', async function (I, users, mail) {
+Scenario('[C7385] Write mail to BCC recipients', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7385';
     var timestamp = Math.round(+new Date() / 1000);
@@ -166,7 +166,7 @@ Scenario('[C7385] Write mail to BCC recipients', async function (I, users, mail)
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
 });
 
-Scenario('[C7386] Write mail to CC recipients', async function (I, users, mail) {
+Scenario('[C7386] Write mail to CC recipients', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7386';
     var timestamp = Math.round(+new Date() / 1000);
@@ -225,7 +225,7 @@ function addFile(I, path) {
     //I.wait(1);
 }
 
-Scenario('[C7387] Send mail with attachment from upload', async function (I, users, mail) {
+Scenario('[C7387] Send mail with attachment from upload', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7387';
     var timestamp = Math.round(+new Date() / 1000);
@@ -264,7 +264,7 @@ Scenario('[C7387] Send mail with attachment from upload', async function (I, use
     I.waitForText('testspreadsheed.xlsm');
 });
 
-Scenario('[C7388] Send mail with different priorities', async function (I, users, mail) {
+Scenario('[C7388] Send mail with different priorities', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7388';
     var timestamp = Math.round(+new Date() / 1000);
@@ -297,7 +297,7 @@ Scenario('[C7388] Send mail with different priorities', async function (I, users
     });
 });
 
-Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail, dialogs) {
+Scenario('[C7389] Send mail with attached vCard', async function ({ I, users, mail, dialogs }) {
     let [user] = users;
     var subject = `C7389 - ${Math.round(+new Date() / 1000)}`;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -338,7 +338,7 @@ Scenario('[C7389] Send mail with attached vCard', async function (I, users, mail
     I.waitForText(users[0].userdata.sur_name + ', ' + users[0].userdata.given_name, 5, '.contact-detail.view .contact-header .fullname');
 });
 
-Scenario('[C7403] Forward a single mail', async function (I, users, mail) {
+Scenario('[C7403] Forward a single mail', async function ({ I, users, mail }) {
     let [userA, userB, userC] = users,
         testrailID = 'C7403',
         timestamp = Math.round(+new Date() / 1000);
@@ -370,7 +370,7 @@ Scenario('[C7403] Forward a single mail', async function (I, users, mail) {
     I.see('Fwd: ' + testrailID + ' - ' + timestamp, '.thread-view-header .subject');
 });
 
-Scenario('[C7404] Reply to single mail', async function (I, users, mail) {
+Scenario('[C7404] Reply to single mail', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7404';
     var timestamp = Math.round(+new Date() / 1000);
@@ -395,7 +395,7 @@ Scenario('[C7404] Reply to single mail', async function (I, users, mail) {
     I.see('Re: ' + testrailID + ' - ' + timestamp, '.mail-detail-pane .subject');
 });
 
-Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
+Scenario('[C8816] Cancel mail compose', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C8816';
     var timestamp = Math.round(+new Date() / 1000);
@@ -411,7 +411,7 @@ Scenario('[C8816] Cancel mail compose', async function (I, users, mail) {
     I.click('Discard message');
 });
 
-Scenario('[C8820] Forward attachments', async function (I, users, mail) {
+Scenario('[C8820] Forward attachments', async function ({ I, users, mail }) {
     let [user, user2, user3] = users;
     var subject = `C8820 - ${Math.round(+new Date() / 1000)}`;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -465,7 +465,7 @@ Scenario('[C8820] Forward attachments', async function (I, users, mail) {
     I.see('Fwd: ' + subject, '.mail-detail-pane .subject');
 });
 
-Scenario('[C8829] Recipients autocomplete', async function (I, users, mail) {
+Scenario('[C8829] Recipients autocomplete', async function ({ I, users, mail }) {
     let [user] = users;
     var testrailID = 'C7382';
     var timestamp = Math.round(+new Date() / 1000);
@@ -503,7 +503,7 @@ Scenario('[C8829] Recipients autocomplete', async function (I, users, mail) {
     });
 });
 
-Scenario('[C8830] Manually add multiple recipients via comma', async function (I, users, mail) {
+Scenario('[C8830] Manually add multiple recipients via comma', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -513,7 +513,7 @@ Scenario('[C8830] Manually add multiple recipients via comma', async function (I
     I.seeNumberOfElements('.io-ox-mail-compose div.token', 3);
 });
 
-Scenario('[C8831] Add recipient manually', async function (I, users, mail) {
+Scenario('[C8831] Add recipient manually', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -528,7 +528,7 @@ Scenario('[C8831] Add recipient manually', async function (I, users, mail) {
     I.waitForText('super02@ox.com', 5, '.io-ox-mail-compose div[data-extension-id="to"]');
 });
 
-Scenario('[C12118] Remove recipients', async function (I, users, mail) {
+Scenario('[C12118] Remove recipients', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -558,7 +558,7 @@ Scenario('[C12118] Remove recipients', async function (I, users, mail) {
     });
 });
 
-Scenario('[C12119] Edit recipients', async function (I, users, mail) {
+Scenario('[C12119] Edit recipients', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -593,7 +593,7 @@ Scenario('[C12119] Edit recipients', async function (I, users, mail) {
     });
 });
 
-Scenario('[C12120] Recipient cartridge', async function (I, users, mail) {
+Scenario('[C12120] Recipient cartridge', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail', { user });
@@ -625,7 +625,7 @@ Scenario('[C12120] Recipient cartridge', async function (I, users, mail) {
     });
 });
 
-Scenario('[C12121] Display and hide recipient fields', async function (I, mail) {
+Scenario('[C12121] Display and hide recipient fields', async function ({ I, mail }) {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     I.login('app=io.ox/mail');
     mail.newMail();
@@ -639,7 +639,7 @@ Scenario('[C12121] Display and hide recipient fields', async function (I, mail) 
     I.waitForInvisible({ css: '.io-ox-mail-compose .bcc .tt-input' }, 5);
 });
 
-Scenario('[C83384] Automatically bcc all messages', async function (I, mail, users) {
+Scenario('[C83384] Automatically bcc all messages', async function ({ I, mail, users }) {
     await Promise.all([
         I.haveSetting('io.ox/mail//messageFormat', 'text'),
         users.create()
@@ -669,7 +669,7 @@ Scenario('[C83384] Automatically bcc all messages', async function (I, mail, use
     });
 });
 
-Scenario('[C101615] Emojis', async function (I, users, mail) {
+Scenario('[C101615] Emojis', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101615.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
@@ -681,7 +681,7 @@ Scenario('[C101615] Emojis', async function (I, users, mail) {
     });
 });
 
-Scenario('[C101620] Very long TO field', async function (I, users, mail) {
+Scenario('[C101620] Very long TO field', async function ({ I, users, mail }) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101620.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
@@ -698,7 +698,7 @@ Scenario('[C101620] Very long TO field', async function (I, users, mail) {
     });
 });
 
-Scenario('[C163026] Change from display name when sending a mail', async function (I, users, mail, dialogs) {
+Scenario('[C163026] Change from display name when sending a mail', async function ({ I, users, mail, dialogs }) {
     let [user] = users;
     var timestamp = Math.round(+new Date() / 1000);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -734,7 +734,7 @@ Scenario('[C163026] Change from display name when sending a mail', async functio
     I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
 });
 
-Scenario('[C207507] Forgot mail attachment hint', async function (I, users, mail, dialogs) {
+Scenario('[C207507] Forgot mail attachment hint', async function ({ I, users, mail, dialogs }) {
     let [user] = users;
     var testrailID = 'C207507';
     I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -765,7 +765,7 @@ Scenario('[C207507] Forgot mail attachment hint', async function (I, users, mail
 });
 
 // TODO: skipped until backend server with feautre support is available
-Scenario.skip('[C273801] Download infected file', async function (I, users, dialogs) {
+Scenario.skip('[C273801] Download infected file', async function ({ I, users, dialogs }) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/Virus_attached!.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
@@ -787,7 +787,7 @@ Scenario.skip('[C273801] Download infected file', async function (I, users, dial
 });
 
 // TODO: skipped until backend server with feautre support is available
-Scenario.skip('[C273802] Download multiple files (one infected)', async function (I, users, dialogs) {
+Scenario.skip('[C273802] Download multiple files (one infected)', async function ({ I, users, dialogs }) {
     let [user] = users;
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C273802.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
@@ -809,7 +809,7 @@ Scenario.skip('[C273802] Download multiple files (one infected)', async function
     // I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
 
-Scenario('[C274142]- Disable autoselect in mail list layout', async function (I, users) {
+Scenario('[C274142]- Disable autoselect in mail list layout', async function ({ I, users }) {
     let [user] = users;
     let mailcount = 10;
     const promises = [I.haveSetting('io.ox/mail//layout', 'list')];

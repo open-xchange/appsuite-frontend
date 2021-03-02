@@ -15,17 +15,17 @@ const moment = require('moment');
 Feature('Calendar > reminder');
 
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 
 // skip for now, too shaky when server is slow (we actually wait here for the reminder time since backend doesn't let us create reminders in the past)
-Scenario.skip('duplicate reminder test', async function (I) {
+Scenario.skip('duplicate reminder test', async function ({ I }) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', true);
 
@@ -151,7 +151,7 @@ Scenario.skip('duplicate reminder test', async function (I) {
 });
 
 // skip for now, too shaky when server is slow (we actually wait here for the reminder time since backend doesn't let us create reminders in the past)
-Scenario.skip('reminders for past appointments', async function (I) {
+Scenario.skip('reminders for past appointments', async function ({ I }) {
 
     I.haveSetting('io.ox/core//autoOpenNotification', true);
     I.haveSetting('io.ox/calendar//showPastReminders', false);

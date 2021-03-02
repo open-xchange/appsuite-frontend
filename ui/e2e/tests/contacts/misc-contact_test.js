@@ -13,15 +13,15 @@
 
 Feature('Contacts > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contacts) {
+Scenario('[C8817] - Send E-Mail to contact', function ({ I, users, search, contacts }) {
     const testrailID = 'C8817';
     const subject = Math.round(+new Date() / 1000);
     I.haveSetting('io.ox/mail//messageFormat', 'text');
@@ -48,7 +48,7 @@ Scenario('[C8817] - Send E-Mail to contact', function (I, users, search, contact
     I.see(testrailID);
 });
 
-Scenario('Subscribe and unsubscribe shared address book', async function (I, users) {
+Scenario('Subscribe and unsubscribe shared address book', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }

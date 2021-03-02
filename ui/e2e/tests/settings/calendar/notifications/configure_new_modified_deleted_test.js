@@ -14,18 +14,18 @@
 
 Feature('Settings > Calendar');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create()
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7870] Configure notifications for new/modified/deleted', (I, users, calendar, mail) => {
+Scenario('[C7870] Configure notifications for new/modified/deleted', ({ I, users, calendar, mail }) => {
     const [userA, userB] = users;
 
     async function createModifyDeleteAppointment() {

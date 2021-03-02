@@ -11,23 +11,25 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+const { expect } = require('chai');
+
 Feature('Accessibility');
 
-BeforeSuite(async function (users) {
+BeforeSuite(async function ({ users }) {
     await users.create();
 });
 
-AfterSuite(async function (users) {
+AfterSuite(async function ({ users }) {
     await users.removeAll();
 });
 
-require('./login');
-require('./mail');
-require('./contacts');
-require('./calendar');
-require('./drive');
-require('./portal');
-require('./tasks');
-require('./settings');
-require('./general');
-require('./toolbar');
+// Exceptions:
+// Login form does not have a visible label
+const excludes = { exclude: [['#io-ox-login-username'], ['#io-ox-login-password']] };
+
+Scenario('Login page (with exceptions)', async ({ I }) => {
+    I.amOnPage('ui');
+    I.waitForInvisible('#background-loader');
+
+    expect(await I.grabAxeReport(excludes)).to.be.accessible;
+});

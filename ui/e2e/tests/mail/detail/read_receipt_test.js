@@ -13,16 +13,16 @@
 
 Feature('Mail > Detail');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Read receipt block is displayed for read/unread mails (OXUIB-319)', async function (I, users, mail) {
+Scenario('Read receipt block is displayed for read/unread mails (OXUIB-319)', async function ({ I, users, mail }) {
     const subject = 'read receipt';
     await I.haveSetting({ 'io.ox/mail': { sendDispositionNotification: true } });
 

@@ -15,15 +15,15 @@
 
 Feature('Drive > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive, dialogs) => {
+Scenario('[C114352] Create folder in copy/move dialog', async ({ I, drive, dialogs }) => {
     await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
 
     // 1. Go to Drive
@@ -61,7 +61,7 @@ Scenario('[C114352] Create folder in copy/move dialog', async (I, users, drive, 
     I.waitForText('testdocument.odt', 5, '.list-view');
 });
 
-Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async (I, users, drive, dialogs) => {
+Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', async ({ I, drive, dialogs }) => {
 
     /*
      * Preconditions:
@@ -112,7 +112,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
 });
 
 // TODO: @bug 68484 - unskip when fixed from backend
-Scenario.skip('[C257247] Restore deleted items', async (I, drive, dialogs) => {
+Scenario.skip('[C257247] Restore deleted items', async ({ I, drive, dialogs }) => {
 
     // Preconditions: At least one file and one folder in Drive
 
@@ -181,7 +181,7 @@ Scenario.skip('[C257247] Restore deleted items', async (I, drive, dialogs) => {
 
 });
 
-Scenario('Logout right before running into error storing data in JSLob', async (I) => {
+Scenario('Logout right before running into error storing data in JSLob', async ({ I }) => {
     await I.haveSetting('io.ox/files//viewOptions',
         [...Array(2500)]
         .map(() => ({ sort: 702, order: 'ASC', layout: 'list' }))
@@ -196,7 +196,7 @@ Scenario('Logout right before running into error storing data in JSLob', async (
     I.logout();
 });
 
-Scenario('[Bug 61823] Drive shows main folder content instead of content from selected folder', async (I, drive, dialogs) => {
+Scenario('[Bug 61823] Drive shows main folder content instead of content from selected folder', async ({ I, drive, dialogs }) => {
     const defaultFolder = await I.grabDefaultFolder('infostore');
     const testFolder1 = await I.haveFolder({ title: 'testFolder1', module: 'infostore', parent: defaultFolder });
     const testFolder2 = await I.haveFolder({ title: 'testFolder2', module: 'infostore', parent: defaultFolder });

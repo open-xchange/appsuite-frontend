@@ -15,17 +15,17 @@
 
 Feature('Sharing');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
 // TODO: shaky (element (body) is not in DOM or there is no element(body) with text "The share you are looking for does not exist." after 30 sec)
-Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async (I, users, tasks, mail, dialogs) => {
+Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', async ({ I, users, tasks, mail, dialogs }) => {
     let url;
     // Alice shares a folder with 2 tasks
     session('Alice', async () => {

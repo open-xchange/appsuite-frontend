@@ -9,19 +9,19 @@
  *
  * @author Christohp Kopp < christohp.kopp@open-xchange.com >
  */
-/// <reference path="../../steps.d.ts" />
+/// <reference path="../../../steps.d.ts" />
 
 Feature('Tasks > Misc');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('Subscribe shared folder and Unsubscribe shared folder', async function (I, users) {
+Scenario('Subscribe shared folder and Unsubscribe shared folder', async function ({ I, users }) {
 
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }

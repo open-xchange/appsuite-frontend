@@ -14,14 +14,14 @@
 
 Feature('Mail Compose');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C8819] Default mail priority', async (I, mail) => {
+Scenario('[C8819] Default mail priority', async ({ I, mail }) => {
     // Preparation
     // Suppress mailto: popup
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);

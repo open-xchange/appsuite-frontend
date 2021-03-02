@@ -23,11 +23,11 @@ const fs = require('fs'),
     helperUtil = require('@open-xchange/codecept-helper').util,
     path = require('path');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -74,21 +74,21 @@ async function run(I, start, end) {
     I.logout();
 }
 
-Scenario('[C204747] Listing mailbox content (chunk #1)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #1)', async function ({ I }) {
     await run(I, 0, 20, 'e2e/media/mails/badmails-xss.json');
 });
-Scenario('[C204747] Listing mailbox content (chunk #2)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #2)', async function ({ I }) {
     await run(I, 20, 40, 'e2e/media/mails/badmails-xss.json');
 });
-Scenario('[C204747] Listing mailbox content (chunk #3)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #3)', async function ({ I }) {
     await run(I, 40, 60, 'e2e/media/mails/badmails-xss.json');
 });
-Scenario('[C204747] Listing mailbox content (chunk #4)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #4)', async function ({ I }) {
     await run(I, 60, 80, 'e2e/media/mails/badmails-xss.json');
 });
-Scenario('[C204747] Listing mailbox content (chunk #5)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #5)', async function ({ I }) {
     await run(I, 80, 100, 'e2e/media/mails/badmails-xss.json');
 });
-Scenario('[C204747] Listing mailbox content (chunk #6)', async function (I) {
+Scenario('[C204747] Listing mailbox content (chunk #6)', async function ({ I }) {
     await run(I, 100, 120, 'e2e/media/mails/badmails-xss.json');
 });

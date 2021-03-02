@@ -15,15 +15,15 @@
 
 Feature('Settings > Mail');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7776] Insert the original email text to a reply', async (I, users, mail) => {
+Scenario('[C7776] Insert the original email text to a reply', async ({ I, users, mail }) => {
     const user = users[0];
     const listview = locate('.list-view-control').as('List View');
 

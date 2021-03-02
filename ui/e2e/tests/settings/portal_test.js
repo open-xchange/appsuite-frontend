@@ -15,15 +15,15 @@
 
 Feature('Settings > Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7821] Add inbox widget', async function (I, users) {
+Scenario('[C7821] Add inbox widget', async function ({ I, users }) {
 
     const mailSubject = 'Mail7821';
     const widgetName = 'Inbox Widget 7821';
@@ -58,7 +58,7 @@ Scenario('[C7821] Add inbox widget', async function (I, users) {
     I.waitForText(mailSubject);
 });
 
-Scenario('[C7822] Add Birthday widget', async function (I) {
+Scenario('[C7822] Add Birthday widget', async function ({ I }) {
 
     const moment = require('moment');
 
@@ -100,7 +100,7 @@ Scenario('[C7822] Add Birthday widget', async function (I) {
     I.waitForText('Buy a gift', 10, '.io-ox-sidepopup');
 });
 
-Scenario('[C7823] Add calendar widget', async function (I) {
+Scenario('[C7823] Add calendar widget', async function ({ I }) {
 
     const moment = require('moment');
 
@@ -148,7 +148,7 @@ Scenario('[C7823] Add calendar widget', async function (I) {
 
 });
 
-Scenario('[C7825] Add quota widget', async function (I) {
+Scenario('[C7825] Add quota widget', async function ({ I }) {
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
@@ -169,7 +169,7 @@ Scenario('[C7825] Add quota widget', async function (I) {
     I.waitForText('Mail quota');
 });
 
-Scenario('[C7826] Add RSS Feed widget', async function (I) {
+Scenario('[C7826] Add RSS Feed widget', async function ({ I }) {
 
     let rssFeedURL = 'http://rss.kicker.de/team/borussiadortmund';
     let rssFeedDescription = 'Kicker RSS Feed';
@@ -197,7 +197,7 @@ Scenario('[C7826] Add RSS Feed widget', async function (I) {
     I.waitForText(rssFeedDescription);
 });
 
-Scenario('[C7827] Add task widget', async function (I) {
+Scenario('[C7827] Add task widget', async function ({ I }) {
 
     const moment = require('moment');
 
@@ -237,7 +237,7 @@ Scenario('[C7827] Add task widget', async function (I) {
     I.waitForText(taskDescription, 10, '.io-ox-sidepopup');
 });
 
-Scenario('[C7830] Add User data widget', async function (I, users) {
+Scenario('[C7830] Add User data widget', async function ({ I, users }) {
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');
@@ -265,7 +265,7 @@ Scenario('[C7830] Add User data widget', async function (I, users) {
 
 });
 
-Scenario('[C7833] Disable widgets', async function (I) {
+Scenario('[C7833] Disable widgets', async function ({ I }) {
 
     I.login(['app=io.ox/portal']);
 
@@ -299,7 +299,7 @@ Scenario('[C7833] Disable widgets', async function (I) {
     I.dontSee(widget3, '.widgets');
 });
 
-Scenario('[C7834] Modify widget color', async function (I) {
+Scenario('[C7834] Modify widget color', async function ({ I }) {
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/portal']);
     I.waitForText('Portal settings');
@@ -326,7 +326,7 @@ Scenario('[C7834] Modify widget color', async function (I) {
     I.waitForElement((locate('span').withText('My latest files')).inside('li.widget-color-blue'));
 });
 
-Scenario('[C7832] Remove widgets', async function (I, dialogs) {
+Scenario('[C7832] Remove widgets', async function ({ I, dialogs }) {
 
     I.login(['app=io.ox/portal']);
 
@@ -363,7 +363,7 @@ Scenario('[C7832] Remove widgets', async function (I, dialogs) {
     I.dontSee(widget3, '.widgets');
 });
 
-Scenario.skip('[C7835] Re-order widgets', async function (I) {
+Scenario.skip('[C7835] Re-order widgets', async function ({ I }) {
 
     I.login(['app=io.ox/portal']);
 

@@ -16,15 +16,15 @@ const crypto = require('crypto');
 
 Feature('Settings > Calendar');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('[C7873] Configure incoming invitation mails to be deleted after accepting or declining', async function (I, users) {
+Scenario('[C7873] Configure incoming invitation mails to be deleted after accepting or declining', async function ({ I, users }) {
 
     // Creates the .eml source for an invitation mail
     // Options are:

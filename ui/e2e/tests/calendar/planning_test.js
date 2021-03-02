@@ -19,17 +19,17 @@ const { expect } = require('chai');
 
 Feature('Calendar > Planning View');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
     await users.create();
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('use planning view opened from edit view', async function (I, calendar, dialogs) {
+Scenario('use planning view opened from edit view', async function ({ I, calendar, dialogs }) {
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
 
@@ -60,7 +60,7 @@ Scenario('use planning view opened from edit view', async function (I, calendar,
     I.click('Create');
 });
 
-Scenario('use planning view as Standalone app', async function (I) {
+Scenario('use planning view as Standalone app', async function ({ I }) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -100,7 +100,7 @@ Scenario('use planning view as Standalone app', async function (I) {
 });
 
 // TODO: shaky, msg: 'Cannot read property 'x' of null'
-Scenario('test planning view lasso', async function (I) {
+Scenario('test planning view lasso', async function ({ I }) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -132,7 +132,7 @@ Scenario('test planning view lasso', async function (I) {
     I.click('Create');
 });
 
-Scenario('create distributionlist from planning view', async function (I) {
+Scenario('create distributionlist from planning view', async function ({ I }) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -157,7 +157,7 @@ Scenario('create distributionlist from planning view', async function (I) {
     I.click('.scheduling-app-close');
 });
 
-Scenario('check planning view options and minimizing behavior', async function (I) {
+Scenario('check planning view options and minimizing behavior', async function ({ I }) {
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
 
@@ -204,7 +204,7 @@ var addAttendee = function (I, name, context) {
     I.pressKey('Enter');
 };
 
-Scenario('[C7443] Check availability of participants', async function (I, users, calendar) {
+Scenario('[C7443] Check availability of participants', async function ({ I, users, calendar }) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -236,7 +236,7 @@ Scenario('[C7443] Check availability of participants', async function (I, users,
     I.waitForElement({ xpath: '//div[@class="appointments"]/*[3]' });
 });
 
-Scenario('[C7444] Check availability of resources', async function (I, calendar) {
+Scenario('[C7444] Check availability of resources', async function ({ I, calendar }) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -278,7 +278,7 @@ Scenario('[C7444] Check availability of resources', async function (I, calendar)
     await I.dontHaveResource('LaserSharks');
 });
 
-Scenario('[C7445] Check availability of resources and participants', async function (I, users, calendar) {
+Scenario('[C7445] Check availability of resources and participants', async function ({ I, users, calendar }) {
 
     await I.haveSetting('io.ox/calendar//scheduling/onlyWorkingHours', false);
 
@@ -329,7 +329,7 @@ Scenario('[C7445] Check availability of resources and participants', async funct
     await I.dontHaveResource('Colors');
 });
 
-Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) {
+Scenario('[C252157] Fine grid for high zoom levels ', async function ({ I, users }) {
 
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '*[data-app-name="io.ox/calendar"]' });
@@ -356,25 +356,25 @@ Scenario('[C252157] Fine grid for high zoom levels ', async function (I, users) 
     I.pressKey('Escape');
 
     // 100%
-    var [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    var backgroudImage = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
     expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 200%
     I.click('.fa-plus');
 
-    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    backgroudImage = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
     expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 400%
     I.click('.fa-plus');
 
-    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    backgroudImage = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
     expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(170, 170, 170) 0px, rgba(0, 0, 0, 0) 1px)');
 
     // 1000%
     I.click('.fa-plus');
 
-    [backgroudImage] = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
+    backgroudImage = await I.grabCssPropertyFrom('.freetime-table-cell', 'background-image');
     expect(backgroudImage).to.equal('linear-gradient(90deg, rgb(51, 51, 51) 0px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 50px, rgb(136, 136, 136) 51px, rgba(0, 0, 0, 0) 51px, rgba(0, 0, 0, 0) 99px, rgb(136, 136, 136) 100px, rgba(0, 0, 0, 0) 100px, rgba(0, 0, 0, 0) 149px)');
 
     await I.dontHaveResource('Zebra');

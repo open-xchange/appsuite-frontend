@@ -13,16 +13,16 @@
 
 const moment = require('moment');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 // TODO: very shaky
-Scenario.skip('Mail - Toolbar Navigation', async function (I, users, mail, toolbar) {
+Scenario.skip('Mail - Toolbar Navigation', async function ({ I, users, mail, toolbar }) {
     const [user] = users;
     let selector = '.classic-toolbar-container > ul[role="toolbar"]';
     await I.haveMail({
@@ -111,7 +111,7 @@ Scenario.skip('Mail - Toolbar Navigation', async function (I, users, mail, toolb
     await toolbar.testTabindex(selector);
 });
 
-Scenario('Calendar - Toolbar Navigation', async function (I, calendar, toolbar) {
+Scenario('Calendar - Toolbar Navigation', async function ({ I, calendar, toolbar }) {
 
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
     const time = moment().add(1, 'hours');
@@ -186,7 +186,7 @@ Scenario('Calendar - Toolbar Navigation', async function (I, calendar, toolbar) 
     await toolbar.testTabindex(selector);
 });
 
-Scenario('Drive - Toolbar Navigation', async function (I, drive, toolbar) {
+Scenario('Drive - Toolbar Navigation', async function ({ I, drive, toolbar }) {
 
     let selector = '.classic-toolbar-container > ul[role="toolbar"]';
 
@@ -243,7 +243,7 @@ Scenario('Drive - Toolbar Navigation', async function (I, drive, toolbar) {
     await toolbar.testTabindex(selector);
 });
 
-Scenario('Contacts - Toolbar Navigation', async function (I, contacts, toolbar) {
+Scenario('Contacts - Toolbar Navigation', async function ({ I, contacts, toolbar }) {
 
     let selector = '.classic-toolbar-container > ul[role="toolbar"]';
     const contact = {
@@ -296,7 +296,7 @@ Scenario('Contacts - Toolbar Navigation', async function (I, contacts, toolbar) 
     await toolbar.testTabindex(selector);
 });
 
-Scenario('Tasks - Toolbar Navigation', async function (I, tasks, toolbar) {
+Scenario('Tasks - Toolbar Navigation', async function ({ I, tasks, toolbar }) {
 
     let selector = '.classic-toolbar-container > ul[role="toolbar"]';
     const taskDefaultFolder = await I.grabDefaultFolder('tasks');
@@ -348,7 +348,7 @@ Scenario('Tasks - Toolbar Navigation', async function (I, tasks, toolbar) {
 });
 
 // TODO: fix core bug: all taskbar-buttons are reachable via tab until you press left or right once
-Scenario.skip('Taskbar - Toolbar Navigation', async function (I, tasks, toolbar) {
+Scenario.skip('Taskbar - Toolbar Navigation', async function ({ I, tasks, toolbar }) {
 
     let selector = '#io-ox-taskbar-container > ul[role="toolbar"]';
 

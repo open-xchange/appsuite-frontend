@@ -1601,6 +1601,7 @@ define('io.ox/mail/main', [
             // they already see emails in full screen
             if (_.device('smartphone')) return;
             app.listView.on('selection:doubleclick', function (list) {
+                if (app.props && app.props.get('layout') === 'list') return;
                 if (app.isThreaded()) list = _(api.threads.get(list[0])).pluck('cid');
                 var cid = list[0],
                     obj = _.cid(cid),

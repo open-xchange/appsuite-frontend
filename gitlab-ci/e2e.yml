@@ -23,6 +23,8 @@ run e2e tests:
     CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
     FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
+    MIN_SUCCESS: 1
+    MAX_RERUNS: 5
     # services configuration
     SERVER: https://as-7104.k3s.os.oxui.de/appsuite/
     # gitlab config
@@ -34,7 +36,7 @@ run e2e tests:
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
     - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
-    - yarn e2e
+    - npx ./e2e/customRerun.js
   parallel: 20
   # reasonable timeout, enforce better partitioning
   timeout: 30 minutes
@@ -49,26 +51,21 @@ run e2e tests:
     - changes:
         - ui/**/*
       when: on_success
-      allow_failure: true
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
-deploy e2e dev server:
+trigger appsuite-stack deployment pipeline:
   stage: deploy
-  dependencies: []
   variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e-develop
-    SERVER: http://10.20.28.164/appsuite/
-  script:
-    - docker stop $CONTAINER_NAME || true
-    - docker wait $CONTAINER_NAME || true
-    - docker rm $CONTAINER_NAME || true
-    - docker pull $DOCKER_IMAGE
-    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
-    - docker container start $CONTAINER_NAME
+    ENVIRONMENT: $CI_COMMIT_REF_SLUG
+  trigger:
+    project: frontend/infrastructure/appsuite-stack
+    strategy: depend
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "develop"'
+    - if: '$CI_COMMIT_REF_SLUG == "develop"'
       when: always
 
 merge filter report and rerun:
@@ -90,11 +87,9 @@ merge filter report and rerun:
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
     PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
     CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
+    CHROME_ARGS: '--no-sandbox --disable-gpu'
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
-    MIN_SUCCESS: 1
-    MAX_RERUNS: 10
     # services configuration
     SERVER: https://as-7104.k3s.os.oxui.de/appsuite/
     # gitlab config
@@ -102,13 +97,13 @@ merge filter report and rerun:
   script:
     - cd ui
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - ls build/e2e/filter_report_*.json
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/filter_report_*.json > $FILTER_SUITE
+    # check if the filter suite file exists, otherwise something went wrong in the run e2e tests jobs
+    - "[ -f $FILTER_SUITE ] && fgrep 'title' $FILTER_SUITE > /dev/null"
     # ignore any failing tests
     - yarn e2e -i || true
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/filterFailed')" ./build/e2e/filter_report.json > ./build/e2e/filter_failed_tests.txt
-    - while read line; do echo $line && npx codeceptjs run-rerun --fgrep "$line" || echo "$line" >> ./build/e2e/still_failing_tests.txt; done < ./build/e2e/filter_failed_tests.txt
-    - if [ -f ./build/e2e/still_failing_tests.txt ];then while read line; do echo "$line"; done < ./build/e2e/still_failing_tests.txt && echo "There are still failing tests. Report published to http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/" && false;fi
   tags:
     - e2e
   artifacts:
@@ -123,6 +118,10 @@ merge filter report and rerun:
     - changes:
         - ui/**/*
       when: always
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
 
 generate e2e report:
   stage: report
@@ -135,7 +134,7 @@ generate e2e report:
     - run single test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
-    - find ui/build/e2e/ -name *.xml > /dev/null
+    - ls ui/build/e2e/*.xml > /dev/null
     # fetch current version of history
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
     - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
@@ -149,7 +148,7 @@ generate e2e report:
       - ui/build/allure-report
     expire_in: 1 day
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e.*)$/'
       changes:
         - ui/**/*
       when: always
@@ -164,7 +163,7 @@ publish e2e report:
     - merge filter report and rerun
   script:
     # fail if there is no history being generated. Prevents empty reports from being "published".
-    - find ui/build/allure-report/ -name history.json > /dev/null
+    - ls ui/build/allure-report/history.tar > /dev/null
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
@@ -174,7 +173,7 @@ publish e2e report:
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e.*)$/'
       changes:
         - ui/**/*
       when: always
@@ -205,11 +204,14 @@ run single test:
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e-test.os.oxui.de
+  variables:
+    MIN_SUCCESS: 10
+    MAX_RERUNS: 10
   script:
   - cd ui
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
   - echo ${CI_COMMIT_REF_NAME//e2e\//}
-  - npx codeceptjs run-rerun --grep "${CI_COMMIT_REF_NAME//e2e\//}"
+  - npx ./e2e/customRerun.js "${CI_COMMIT_REF_NAME//e2e\//}"
   parallel: 5
   timeout: 60 minutes
   rules:

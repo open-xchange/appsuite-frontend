@@ -16,16 +16,16 @@ const expect = require('chai').expect;
 
 Feature('Mailfilter');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     const user = await users.create();
     await user.hasConfig('com.openexchange.imap.attachmentMarker.enabled', true);
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Set IMAP tags rule: no tags', async function (I, users, settings, mailfilter, mail) {
+Scenario('Set IMAP tags rule: no tags', async function ({ I, users, settings, mailfilter, mail }) {
     const subject = 'TestCase0393';
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }
@@ -68,7 +68,7 @@ Scenario('Set IMAP tags rule: no tags', async function (I, users, settings, mail
     expect(value).to.eql([]);
 });
 
-Scenario('Set IMAP tags: two tags', async function (I, users, settings, mailfilter, mail) {
+Scenario('Set IMAP tags: two tags', async function ({ I, users, settings, mailfilter, mail }) {
     const subject = 'TestCase0399';
     await I.haveSetting({
         'io.ox/mail': { messageFormat: 'text' }

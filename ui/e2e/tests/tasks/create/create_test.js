@@ -13,18 +13,18 @@
 
 Feature('Tasks > Create');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await Promise.all([
         users.create(),
         users.create(),
         users.create()
     ]);
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7730] Create a private Task with participant', async function (I, users, tasks) {
+Scenario('[C7730] Create a private Task with participant', async function ({ I, users, tasks }) {
     const testrailID = 'C7730',
         testrailName = 'Create a private Task with participant';
 
@@ -44,7 +44,7 @@ Scenario('[C7730] Create a private Task with participant', async function (I, us
     I.see('Tasks with private flag cannot be delegated.');
 });
 
-Scenario('[C7728] Create simple Task', async function (I, tasks) {
+Scenario('[C7728] Create simple Task', async function ({ I, tasks }) {
     const testrailID = 'C7728',
         testrailName = 'Create simple Task';
 
@@ -64,7 +64,7 @@ Scenario('[C7728] Create simple Task', async function (I, tasks) {
     I.see('Not started');
 });
 
-Scenario('[C7732] Create a Task in a shared folder without rights', async function (I, users, tasks) {
+Scenario('[C7732] Create a Task in a shared folder without rights', async function ({ I, users, tasks }) {
     const testrailID = 'C7732';
     const folder = {
         module: 'tasks',
@@ -94,7 +94,7 @@ Scenario('[C7732] Create a Task in a shared folder without rights', async functi
 });
 
 // TODO: edit view and detail view timestamps differ about an hour, see Bug 68542
-Scenario.skip('[C7727] Create task with all fields', async function (I, tasks) {
+Scenario.skip('[C7727] Create task with all fields', async function ({ I, tasks }) {
     const testrailID = 'C7727';
     const testrailName = 'Create task with all fields';
     I.login('app=io.ox/tasks');
@@ -166,7 +166,7 @@ Scenario.skip('[C7727] Create task with all fields', async function (I, tasks) {
     I.see('testdude1 <testdude1@test.test>');
 });
 
-Scenario('[C7729] Create Task with participants', async function (I, users, tasks) {
+Scenario('[C7729] Create Task with participants', async function ({ I, users, tasks }) {
     const testrailID = 'C7729';
     const testrailName = 'Create Task with participants';
 
@@ -214,14 +214,14 @@ Scenario('[C7729] Create Task with participants', async function (I, users, task
     I.waitForElement('.participant-list .participant [title="' + users[1].userdata.primaryEmail + '"]');
     I.waitForElement('.participant-list .participant [title="' + users[2].userdata.primaryEmail + '"]');
 });
-Scenario('[C7734] Create Task without any information', function (I, tasks) {
+Scenario('[C7734] Create Task without any information', function ({ I, tasks }) {
     I.login('app=io.ox/tasks');
     tasks.waitForApp();
     tasks.newTask();
     I.seeElement('.floating-window-content .btn-primary[disabled=""][data-action="save"]');
 });
 
-Scenario('[C7733] Set Task startdate behind due date', async function (I, tasks) {
+Scenario('[C7733] Set Task startdate behind due date', async function ({ I, tasks }) {
     const testrailID = 'C7733';
     const testrailName = 'Set Task startdate behind due date';
 
@@ -244,7 +244,7 @@ Scenario('[C7733] Set Task startdate behind due date', async function (I, tasks)
 });
 
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
-Scenario.skip('[C7731] Create a Task in a shared folder', async function (I, users, tasks) {
+Scenario.skip('[C7731] Create a Task in a shared folder', async function ({ I, users, tasks }) {
     const id = 'C7731',
         desc = 'Create a Task in a shared folder',
         sharedFolder = await I.haveFolder({
@@ -293,7 +293,7 @@ Scenario.skip('[C7731] Create a Task in a shared folder', async function (I, use
     checkTask();
 });
 
-Scenario('[Bug 62240] Creating tasks while on a different time zone with a yearly or montly repeat leads to wrong dates', async function (I, tasks, dialogs) {
+Scenario('[Bug 62240] Creating tasks while on a different time zone with a yearly or montly repeat leads to wrong dates', async function ({ I, tasks, dialogs }) {
     await I.haveSetting({
         'io.ox/core': { timezone: 'America/New_York' }
     });

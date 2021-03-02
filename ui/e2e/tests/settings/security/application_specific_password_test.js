@@ -20,11 +20,11 @@ const moment = require('moment');
 const DRIVE = 'drive', MAIL = 'mail', EAS = 'eas', CALDAV = 'caldav';
 const SUBJECT = 'test mail subject';
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -35,7 +35,7 @@ async function addUser(I, users, name, type) {
 
     I.see('Password name');
     I.fillField('.col-md-6 [name="name"]', name);
-    
+
     I.click('Add new password');
 
     // Get the new login information
@@ -62,12 +62,12 @@ async function addUser(I, users, name, type) {
     return newuser;
 }
 
-Scenario.skip('Add and remove application password', async (I, users) => {
+Scenario.skip('Add and remove application password', async ({ I, users }) => {
 
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/appPasswords']);
     I.waitForElement('[data-point="io.ox/settings/security/appPasswords/settings/detail/view"] .btn');
-    
+
 
     // Select calendar type password
 
@@ -91,7 +91,7 @@ Scenario.skip('Add and remove application password', async (I, users) => {
 
 // Functions required for use tests
 
-async function testMail (I, pass) {
+async function testMail(I, pass) {
     if (pass) {
         I.waitForVisible('.mail-item .list-item.selectable');
         I.click('.list-item.selectable');
@@ -104,7 +104,7 @@ async function testMail (I, pass) {
     return;
 }
 
-async function testDrive (I, pass) {
+async function testDrive(I, pass) {
     await I.openApp('Drive');
     I.waitForElement('.file-list-view.complete');
     if (pass) {
@@ -113,10 +113,10 @@ async function testDrive (I, pass) {
         return;
     }
     I.dontSee('document.txt');
-    
+
 }
 
-async function testCalendar (I, pass, calendar) {
+async function testCalendar(I, pass, calendar) {
     await I.openApp('Calendar');
     await calendar.waitForApp();
     if (pass) {
@@ -127,7 +127,7 @@ async function testCalendar (I, pass, calendar) {
     I.dontSee('.appointment-content');
 }
 
-async function testContacts (I, pass, calendar, contacts) {
+async function testContacts(I, pass, calendar, contacts) {
     await I.openApp('io.ox/contacts');
     await contacts.waitForApp(true);
     if (pass) {
@@ -138,7 +138,7 @@ async function testContacts (I, pass, calendar, contacts) {
     I.see('This account isn\'t authorized to perform this action.', '.io-ox-fail');
 }
 
-async function testUser (I, user, type, calendar, contacts) {
+async function testUser(I, user, type, calendar, contacts) {
     await I.login('app=io.ox/mail', user);
     switch (type) {
         case MAIL:  // yes to mail, contacts, but not cal or drive
@@ -159,11 +159,12 @@ async function testUser (I, user, type, calendar, contacts) {
             await testCalendar(I, false, calendar);
             await testContacts(I, false, calendar, contacts);
             break;
+        default:
     }
     I.logout();
 }
 
-Scenario.skip('Add and use application password', async (I, users, calendar, contacts) => {
+Scenario.skip('Add and use application password', async ({ I, users, calendar, contacts }) => {
 
     const user = users[0];
 
@@ -202,7 +203,7 @@ Scenario.skip('Add and use application password', async (I, users, calendar, con
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/appPasswords']);
     I.waitForElement('[data-point="io.ox/settings/security/appPasswords/settings/detail/view"] .btn');
-    
+
 
     // Create user passwords
 

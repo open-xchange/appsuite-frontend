@@ -2,7 +2,7 @@
 
 Feature('Mail > Virtual Attachments');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     const user = await users.create();
     await Promise.all([
         user.hasConfig('com.openexchange.file.storage.mail.enabled', true),
@@ -12,7 +12,7 @@ Before(async (users) => {
     ]);
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -37,7 +37,7 @@ async function prepare() {
     mail.send();
 }
 
-Scenario('[C83396] View all attachments (from Mail)', async (I, drive) => {
+Scenario('[C83396] View all attachments (from Mail)', async ({ I, drive }) => {
     await prepare();
     I.click('View all attachments', '.folder-tree');
     drive.waitForApp();
@@ -48,7 +48,7 @@ Scenario('[C83396] View all attachments (from Mail)', async (I, drive) => {
     });
 });
 
-Scenario('[C83405] View all attachments (from Mail-View)', async (I, drive) => {
+Scenario('[C83405] View all attachments (from Mail-View)', async ({ I, drive }) => {
     await prepare();
     I.clickToolbar('View');
     I.click('All attachments', '.dropdown.open .dropdown-menu');
@@ -60,7 +60,7 @@ Scenario('[C83405] View all attachments (from Mail-View)', async (I, drive) => {
     });
 });
 
-Scenario('[C83397] View all attachments (from Drive)', async (I, drive) => {
+Scenario('[C83397] View all attachments (from Drive)', async ({ I, drive }) => {
     await prepare();
     I.logout();
     I.login('app=io.ox/files');
@@ -73,7 +73,7 @@ Scenario('[C83397] View all attachments (from Drive)', async (I, drive) => {
     });
 });
 
-Scenario('[C83398] View all INBOX attachments', async (I, drive) => {
+Scenario('[C83398] View all INBOX attachments', async ({ I, drive }) => {
     await prepare();
     I.logout();
     I.login('app=io.ox/files');
@@ -90,7 +90,7 @@ Scenario('[C83398] View all INBOX attachments', async (I, drive) => {
     });
 });
 
-Scenario('[C83399] View all SENT attachments', async (I, drive) => {
+Scenario('[C83399] View all SENT attachments', async ({ I, drive }) => {
     await prepare();
     I.logout();
     I.login('app=io.ox/files');
@@ -107,7 +107,7 @@ Scenario('[C83399] View all SENT attachments', async (I, drive) => {
     });
 });
 
-Scenario('[C83404] Attachments can be copied', async (I, drive) => {
+Scenario('[C83404] Attachments can be copied', async ({ I, drive }) => {
     await prepare();
     I.logout();
 
@@ -142,7 +142,7 @@ Scenario('[C83404] Attachments can be copied', async (I, drive) => {
     });
 });
 
-Scenario('[C125297] Attachments are linked to mails', async (I, drive) => {
+Scenario('[C125297] Attachments are linked to mails', async ({ I, drive }) => {
     await prepare();
     I.logout();
 

@@ -15,11 +15,11 @@
 
 Feature('Settings');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
@@ -57,7 +57,7 @@ const data = [{
 }));
 
 // TODO can be unskipeed as soon as the problems with JellyJS mock server are fixed (see https://github.com/Netflix/pollyjs/issues/248)
-Scenario.skip('lists all sessions', function (I) {
+Scenario.skip('lists all sessions', function ({ I }) {
 
     I.mockRequest('GET', '/appsuite/api/sessionmanagement', data);
 

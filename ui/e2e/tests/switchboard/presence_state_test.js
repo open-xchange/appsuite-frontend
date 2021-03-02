@@ -15,7 +15,7 @@
 
 Feature('Switchboard > Presence');
 
-Before(async (users) => {
+Before(async ({ users }) => {
 
     await Promise.all([
         users.create(),
@@ -24,7 +24,7 @@ Before(async (users) => {
     await users[0].context.hasCapability('switchboard');
 });
 
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
@@ -35,7 +35,7 @@ const presenceStates = [
     { status: 'Offline', class: 'offline' }
 ];
 
-Scenario('Presence state is shown and can be changed', async function (I) {
+Scenario('Presence state is shown and can be changed', async function ({ I }) {
     const checkStatus = (statusToClick, classToCheck) => {
         I.say(`Check: ${statusToClick}`);
         I.clickDropdown(statusToClick);
@@ -59,7 +59,7 @@ Scenario('Presence state is shown and can be changed', async function (I) {
     });
 });
 
-Scenario('Presence state is shown in mails', async function (I, users, mail) {
+Scenario('Presence state is shown in mails', async function ({ I, users, mail }) {
     const [user1] = users,
         checkStatus = (statusToClick, classToCheck) => {
             I.say(`Check: ${statusToClick}`);
@@ -95,7 +95,7 @@ Scenario('Presence state is shown in mails', async function (I, users, mail) {
     });
 });
 
-Scenario('Presence state is shwon in call history', async function (I, users) {
+Scenario('Presence state is shwon in call history', async function ({ I, users }) {
     const [user1] = users;
     const { primaryEmail, display_name } = user1.userdata;
 
@@ -112,7 +112,7 @@ Scenario('Presence state is shwon in call history', async function (I, users) {
     I.waitForVisible('.call-history .dropdown-menu .presence.online');
 });
 
-Scenario('Check presence state of new user', (I, users) => {
+Scenario('Check presence state of new user', ({ I, users }) => {
     const [user1, user2] = users;
 
     session('userA', () => {
@@ -148,26 +148,22 @@ Scenario('Check presence state of new user', (I, users) => {
     });
 });
 
-Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', (I, dialogs) => {
+Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', ({ I, dialogs }) => {
     I.login();
-
     // verify presence icon is there
-    I.waitForVisible('.dropdown-toggle[aria-label="My account"] .presence .icon');
+    I.waitForVisible('.dropdown-toggle[aria-label="Support"] .presence .icon');
     I.waitForVisible('.contact-picture');
     I.click('.contact-picture');
-
-    //I.waitForVisible('.dropdown.open');
-    I.waitForVisible('.dropdown.open .action[data-name="user-picture"]');
-    I.click('.action[data-name="user-picture"]');
+    I.clickDropdown('My contact data');
 
     // Change user photo
+    I.waitForVisible('.io-ox-contacts-edit-window');
+    I.attachFile('.contact-photo-upload input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
     dialogs.waitForVisible();
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
-    I.waitForInvisible('.edit-picture.empty');
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
 
     // verify presence icon is still there
-    I.waitForVisible('.dropdown-toggle[aria-label="My account"] .presence .icon');
+    I.waitForVisible('.dropdown-toggle[aria-label="Support"] .presence .icon');
 
 });

@@ -14,14 +14,14 @@
 
 Feature('Portal');
 
-Before(async (users) => {
+Before(async ({ users }) => {
     await users.create();
 });
-After(async (users) => {
+After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7481] Add a file', async (I, users, portal) => {
+Scenario('[C7481] Add a file', async ({ I, users, portal }) => {
     // Add a file to portal
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
     await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');

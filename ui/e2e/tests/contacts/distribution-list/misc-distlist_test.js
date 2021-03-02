@@ -13,17 +13,17 @@
 
 Feature('Contacts > Distribution List > Misc');
 
-Before(async function (users) {
+Before(async function ({ users }) {
     await users.create();
 });
 
-After(async function (users) {
+After(async function ({ users }) {
     await users.removeAll();
 });
 
 const util = require('./util');
 
-Scenario('Add external participant as contact', async function (I, contacts, dialogs) {
+Scenario('Add external participant as contact', async function ({ I, contacts, dialogs }) {
     const haloview = locate({ css: '.io-ox-sidepopup .io-ox-halo' }).as('Halo View');
 
     I.login('app=io.ox/contacts');
@@ -72,7 +72,7 @@ Scenario('Add external participant as contact', async function (I, contacts, dia
     I.waitForDetached('.io-ox-contacts-distrib-window');
 });
 
-Scenario('[C7376] Send a mail to list', async function (I, users, contacts, mail) {
+Scenario('[C7376] Send a mail to list', async function ({ I, users, contacts, mail }) {
     await users.create();
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     const testrailID = 'C7376',
