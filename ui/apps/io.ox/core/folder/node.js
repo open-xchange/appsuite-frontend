@@ -139,7 +139,26 @@ define('io.ox/core/folder/node', [
             this.options.open = false;
             // update collection
             if (this.collection) {
+                // remove old listeners
+                this.stopListening(this.collection);
+                this.stopListening(api, 'create:' + String(previous).replace(/\s/g, '_'));
+
+                // change collection
                 this.collection = api.pool.getCollection(id);
+
+                // add new listeners
+                this.listenTo(this.collection, {
+                    'add':     this.onAdd,
+                    'remove':  this.onRemove,
+                    'change:subscribed': this.onReset,
+                    'reset':   this.onReset,
+                    'sort':    this.onSort
+                });
+                this.listenTo(api, 'create:' + String(id).replace(/\s/g, '_'), function () {
+                    this.open = true;
+                    this.onChangeSubFolders();
+                });
+
                 this.isReset = false;
                 this.reset();
             }
@@ -453,6 +472,8 @@ define('io.ox/core/folder/node', [
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));
+            // needed to avoid zombie listeners
+            o.tree.once('dispose', this.remove.bind(this));
         },
 
         getCounter: function () {

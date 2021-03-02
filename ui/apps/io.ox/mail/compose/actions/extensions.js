@@ -56,6 +56,10 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
+    api.waitForPendingDeleteRequests = function (baton) {
+        return baton.model.pendingDeletedAttachments;
+    };
+
     api.removeUnusedInlineImages = function (baton) {
         var inlineAttachments = baton.model.get('attachments').where({ contentDisposition: 'INLINE' }),
             deferreds = _(inlineAttachments)

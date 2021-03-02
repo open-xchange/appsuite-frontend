@@ -107,6 +107,7 @@ define('io.ox/mail/compose/model', [
                 this.listenTo(composeAPI, 'mailref:' + data.id, this.onChangeMailPath);
                 this.listenTo(composeAPI, 'mail-compose-claim:' + data.id, this.onExternalClaim);
             }.bind(this));
+            this.pendingDeletedAttachments = $.when();
         },
 
         initialPatch: function () {
@@ -189,7 +190,15 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed || this.paused) return;
 
             model.trigger('destroy');
-            if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
+
+            if (model.get('id')) {
+                var def = attachmentsAPI.remove(this.get('id'), model.get('id'));
+                console.log('on remove attachment before');
+                this.pendingDeletedAttachments = this.pendingDeletedAttachments
+                .catch(_.constant()).then(function () {
+                    return def;
+                });
+            }
         },
 
         exceedsThreshold: function () {
@@ -425,6 +434,9 @@ define('io.ox/mail/compose/model', [
             return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
                 return $.when(def).catch();
             }))
+            .then(function () {
+                return this.pendingDeletedAttachments;
+            }.bind(this))
             // update space one final time so the draft that is moved to the trash has the current data
             .then(function () {
                 return this.save(true, true);
