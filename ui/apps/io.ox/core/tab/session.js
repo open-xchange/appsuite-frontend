@@ -44,14 +44,6 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
      * Initialize listener for storage events and listener for propagation
      */
     function initListener() {
-        TabSession.events.listenTo(TabSession.events, 'getSession', function (parameters) {
-            var tabAPI = require('io.ox/core/api/tab');
-            tabAPI.propagate('propagateLogin', _.extend(parameters, {
-                exceptWindow: tabAPI.getWindowName(),
-                storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
-            }));
-        });
-
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
             if (!(ox.signin || reloginBySameUser(parameters))) return;
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
@@ -151,7 +143,6 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
 
             // the login process is finished when session, user and user_id are set in the ox object
             if (!ox.session || !ox.user || !ox.user_id) {
-                tabAPI.propagate('propagateNoSession', { exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 return;
             }
             // the requested session is differently to ox.session. e.g. guest user vs normal login
@@ -186,9 +177,6 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                     break;
                 case 'propagateSession':
                     this.events.trigger(data.propagate, data.parameters);
-                    break;
-                case 'propagateNoSession':
-                    this.events.trigger(data.propagate);
                     break;
                 case 'propagateLogout':
                     if (ox.signin) return;
