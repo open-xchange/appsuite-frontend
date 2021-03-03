@@ -650,7 +650,7 @@ define('io.ox/chat/data', [
         isMember: function (email) {
             email = email || api.userId;
             var members = this.get('members');
-            return members && !!members[email];
+            return !!members && !!members[email];
         },
 
         isAdmin: function (email) {
@@ -858,7 +858,7 @@ define('io.ox/chat/data', [
 
         sync: function (method, model, options) {
             if (method === 'create' || method === 'update') {
-                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference', 'icon'),
+                var data = _(method === 'create' ? model.attributes : model.changed).pick('title', 'type', 'members', 'description', 'pimReference'),
                     hiddenAttr = options.hiddenAttr;
 
                 options.data = JSON.stringify(_.extend(data, hiddenAttr));
@@ -870,13 +870,7 @@ define('io.ox/chat/data', [
             return BaseModel.prototype.sync.call(this, method, model, options).then(function (data) {
                 if (method === 'create') this.messages.roomId = this.get('roomId');
                 return data;
-            }.bind(this))
-            .fail(function () {
-                require(['io.ox/core/yell'], function (yell) {
-                    if (method === 'create') yell('error', gt('The chat could not be started.'));
-                    else if (method === 'update') yell('error', gt('The chat could not be updated.'));
-                });
-            });
+            }.bind(this));
         }
     });
 
@@ -954,7 +948,11 @@ define('io.ox/chat/data', [
         leaveChannel: function (roomId) {
             var room = this.get(roomId);
             return api.leaveRoom(room)
-                .then(function () { room.set('active', false); })
+                .then(function () {
+                    room.set('active', false);
+                    room.removeMembers(api.userId);
+                    room.messages.reset();
+                })
                 .fail(function () {
                     require(['io.ox/core/yell'], function (yell) {
                         yell('error', gt('The channel could not be left.'));

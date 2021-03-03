@@ -202,7 +202,7 @@ define('io.ox/chat/actions/openGroupDialog', [
             }
 
             if (this.pictureModel.get('pictureFileEdited') === '') {
-                updates.icon = null;
+                icon = null;
             } else if (this.pictureModel.get('pictureFileEdited')) {
                 icon = this.pictureModel.get('pictureFileEdited');
             }
@@ -215,25 +215,35 @@ define('io.ox/chat/actions/openGroupDialog', [
                 return;
             }
 
+            function saveModel() {
+                if (!hasModelChanges) return $.when();
+                return originalModel.save(updates, { hiddenAttr: hiddenAttr }).then(function () {
+                    data.chats.add(originalModel);
+                }).fail(function (e) {
+                    originalModel.set(originalModel.previousAttributes());
+                    dialog.idle();
+                    if (e.responseJSON) originalModel.handleError(e);
+                    else if (originalModel.get('roomId')) notifications.yell('error', gt('Changes to this chat could not be saved.'));
+                    else notifications.yell('error', gt('Chat could not be saved.'));
+                });
+            }
 
-            // update model if necessary
-            var updateModelDef = hasModelChanges ? originalModel.save(updates, { hiddenAttr: hiddenAttr }) : $.when();
-            updateModelDef.then(function () {
-                if (icon) return api.uploadIcon(originalModel, icon);
-            }, function (e) {
-                originalModel.set(originalModel.previousAttributes());
-                dialog.idle();
-                if (e.responseJSON) return this.model.handleError(e);
-                if (originalModel.get('roomId')) return notifications.yell('error', gt('Changes to this chat could not be saved.'));
-                notifications.yell('error', gt('Chat could not be saved.'));
-            }.bind(this)).then(function (response) {
-                originalModel.set(response);
+            function saveIcon() {
+                if (icon === undefined) return $.when();
 
-                this.close();
-                data.chats.add(originalModel);
+                var def = icon ? api.uploadIcon(originalModel, icon) : api.deleteIcon(originalModel);
+
+                return def.fail(function () {
+                    notifications.yell('error', gt('The icon could not be saved.'));
+                });
+            }
+
+            saveModel().then(function () {
+                return saveIcon();
+            }).then(function success() {
+                dialog.close();
                 def.resolve(originalModel.get('roomId'));
-            }.bind(this), function () {
-                notifications.yell('error', gt('The icon could not be saved.'));
+            }, function fail() {
                 dialog.idle();
             });
         })

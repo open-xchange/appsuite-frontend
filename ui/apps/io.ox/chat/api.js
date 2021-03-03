@@ -136,6 +136,12 @@ define('io.ox/chat/api', [
         return api.request({ contentType: false, processData: false, method: 'POST', url: url, data: formData });
     };
 
+    api.deleteIcon = function (room) {
+        var endpoint = api.roomToEndpointMapping[room.get('type')],
+            url = api.url + endpoint + '/' + room.get('roomId') + '/icon/';
+        return request({ method: 'DELETE', url: url });
+    };
+
     api.deleteGroup = function (roomId) {
         var url = api.url + '/rooms/groups/' + roomId;
         return request({ method: 'DELETE', url: url });
