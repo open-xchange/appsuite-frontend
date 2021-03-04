@@ -193,7 +193,6 @@ define('io.ox/mail/compose/model', [
 
             if (model.get('id')) {
                 var def = attachmentsAPI.remove(this.get('id'), model.get('id'));
-                console.log('on remove attachment before');
                 this.pendingDeletedAttachments = this.pendingDeletedAttachments
                 .catch(_.constant()).then(function () {
                     return def;
