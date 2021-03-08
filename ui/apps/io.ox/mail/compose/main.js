@@ -16,11 +16,12 @@ define('io.ox/mail/compose/main', [
     'io.ox/mail/api',
     'io.ox/core/api/account',
     'io.ox/mail/util',
+    'io.ox/mail/sender',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, settings, gt) {
 
     'use strict';
 
@@ -71,12 +72,13 @@ define('io.ox/mail/compose/main', [
         id: 'fix-custom-displayname',
         index: INDEX += 100,
         perform: function () {
-            if (settings.get('customDisplayNames')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
-                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
-            }).then(function (address) {
-                // ensure defaultName is set (bug 56342 and 63891)
-                settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+            // make sure these settings are correct, defaultNames can change when someone edits the account data
+            return senderUtil.getAccounts().done(function (addresses) {
+                _(addresses).each(function (address) {
+                    // ensure defaultName is set (bug 56342 and 63891)
+                    settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
+                });
+                settings.save();
             });
         }
     }, {
