@@ -234,6 +234,7 @@
         'fa-info-circle': '\uf05a',
         'fa-mail-forward': '\uf064',
         'fa-paperclip': '\uf0c6',
+        'fa-pencil': '\uf040',
         'fa-play': '\uf04b',
         'fa-phone': '\uf095',
         'fa-question': '\uf128',
