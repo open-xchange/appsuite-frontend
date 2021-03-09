@@ -39,7 +39,6 @@ define('io.ox/core/main/addLauncher', [], function () {
 
         //construct
         node.append(function () {
-            console.log(label[0].tagName);
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="-1">').text(label);
             } else if (label[0].tagName === 'I' || label[0].tagName === 'svg') {

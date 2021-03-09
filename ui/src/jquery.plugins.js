@@ -246,7 +246,9 @@
         'fa-search-plus': '\uf00e',
         'fa-square-o': '\uf096',
         'fa-star': '\uf005',
+        'fa-star-o': '\uf006',
         'fa-stop': '\uf04d',
+        'fa-thumbs-up': '\uf164',
         'fa-times': '\uf00d',
         'fa-times-circle': '\uf00d',
         'fa-th-large': '\uf009',
@@ -264,7 +266,7 @@
         if (ox.debug && name && !faClassHash[name]) console.error('Svg icon not found. Please add it to the list', name, title, classList);
         title = title ? '<title>' + title + '</title>' : '';
         classList = classList ? ' ' + classList : '';
-        return '<svg viewbox="0 0 100 100" class="fa fasvg ' + classList + '" aria-hidden="true">' + title + '<text x="50" y="86" text-anchor="middle">' + icon + '</text></svg>';
+        return '<svg viewbox="0 0 100 100" class="fa fasvg' + classList + '" aria-hidden="true">' + title + '<text x="50" y="86" text-anchor="middle">' + icon + '</text></svg>';
     };
 
     $.checkbox = function () {
