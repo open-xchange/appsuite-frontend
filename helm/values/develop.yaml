@@ -1,0 +1,19 @@
+replicaCount: 2
+server: http://10.20.28.164/appsuite/
+ingress:
+  annotations:
+    {
+      kubernetes.io/ingress.class: traefik
+    }
+  host: e2e-develop.k3s.os.oxui.de
+  path: /
+service:
+  port: 8337
+  # targetPort: 8337
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 200m
+  limits:
+    memory: 396Mi
+    cpu: 500m

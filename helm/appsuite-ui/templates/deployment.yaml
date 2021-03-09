@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-appsuite-ui
+  labels:
+    app.kubernetes.io/name: appsuite-ui
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: appsuite-ui
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: appsuite-ui
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: appserver
+          image: gitlab.open-xchange.com:4567/frontend/core:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVER
+              value: "{{ required "Values.server required" .Values.server }}"
+          ports:
+            - name: http
+              containerPort: 8337
+          startupProbe:
+            httpGet:
+              path: /appsuite/ui
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /appsuite/ui
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /appsuite/api/apps/manifests?action=config
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
