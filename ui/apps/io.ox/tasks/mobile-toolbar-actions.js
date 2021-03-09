@@ -27,14 +27,14 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('New task'),
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-pencil',
+            icon: 'fa-pencil',
             title: gt('Edit'),
             ref: 'io.ox/tasks/actions/edit',
             drawDisabled: true
@@ -42,7 +42,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         'delete': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             title: gt('Delete'),
             ref: 'io.ox/tasks/actions/delete',
             drawDisabled: true
@@ -50,7 +50,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         'done': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-check',
+            icon: 'fa-check',
             title: gt('Mark as done'),
             ref: 'io.ox/tasks/actions/done',
             drawDisabled: true

@@ -355,7 +355,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadcomposeattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }

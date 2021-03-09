@@ -29,7 +29,7 @@ define([
     // define links
     ext.point(POINT + '/links').extend(
         { id: 'one', title: 'One', prio: 'hi', ref: POINT + '/actions/one', section: 'a' },
-        { id: 'two', title: 'Two', prio: 'hi', ref: POINT + '/actions/two', icon: 'fa fa-trash', section: 'a' },
+        { id: 'two', title: 'Two', prio: 'hi', ref: POINT + '/actions/two', icon: 'fa-trash', section: 'a' },
         { id: 'three', label: 'Three', prio: 'hi', ref: POINT + '/actions/three', drawDisabled: true, section: 'a' },
         { id: 'four', title: 'Four', prio: 'lo', ref: POINT + '/actions/four', section: 'b' },
         { id: 'five', title: 'Five', prio: 'lo', ref: POINT + '/actions/five', section: 'b' },

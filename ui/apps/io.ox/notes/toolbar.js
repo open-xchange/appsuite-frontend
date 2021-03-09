@@ -55,14 +55,14 @@ define('io.ox/notes/toolbar', [
         'download': {
             prio: 'hi',
             title: gt('Download'),
-            icon: 'fa fa-download',
+            icon: 'fa-download',
             drawDisabled: true,
             ref: 'io.ox/files/actions/download'
         },
         'send': {
             prio: 'hi',
             title: gt('Send by mail'),
-            icon: 'fa fa-envelope-o',
+            icon: 'fa-envelope-o',
             drawDisabled: true,
             ref: 'io.ox/files/actions/send',
             section: 'share'
@@ -70,7 +70,7 @@ define('io.ox/notes/toolbar', [
         'delete': {
             prio: 'hi',
             title: gt('Delete'),
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             drawDisabled: true,
             ref: 'io.ox/files/actions/delete'
         }

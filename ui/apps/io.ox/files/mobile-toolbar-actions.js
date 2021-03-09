@@ -28,7 +28,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             dropdown: 'io.ox/files/toolbar/new',
             drawDisabled: true,
             caret: false
@@ -36,7 +36,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         'upload': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-cloud-upload',
+            icon: 'fa-cloud-upload',
             dropdown: 'io.ox/files/toolbar/upload',
             drawDisabled: true,
             caret: false
@@ -45,7 +45,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show icons'),
-            icon: 'fa fa-th',
+            icon: 'fa-th',
             ref: 'io.ox/files/actions/layout-icon',
             drawDisabled: true
         },
@@ -53,7 +53,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show tiles'),
-            icon: 'fa fa-th-large',
+            icon: 'fa-th-large',
             ref: 'io.ox/files/actions/layout-tile',
             drawDisabled: true
         },
@@ -61,7 +61,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show list'),
-            icon: 'fa fa-align-justify',
+            icon: 'fa-align-justify',
             ref: 'io.ox/files/actions/layout-list',
             drawDisabled: true
         }

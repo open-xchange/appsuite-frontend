@@ -28,7 +28,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('New contact'),
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/create'
         },
@@ -36,7 +36,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Send email'),
-            icon: 'fa fa-envelope-o',
+            icon: 'fa-envelope-o',
             ref: 'io.ox/contacts/actions/send',
             drawDisabled: true
         },
@@ -58,7 +58,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Invite to appointment'),
-            icon: 'fa fa-calendar-o',
+            icon: 'fa-calendar-o',
             ref: 'io.ox/contacts/actions/invite',
             drawDisabled: true
         },
@@ -66,7 +66,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Edit'),
-            icon: 'fa fa-pencil',
+            icon: 'fa-pencil',
             ref: 'io.ox/contacts/actions/update',
             drawDisabled: true
 
@@ -75,7 +75,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Delete'),
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/delete'
         },

@@ -1283,7 +1283,7 @@ define('io.ox/files/actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Download'),
-            icon: 'fa fa-download',
+            icon: 'fa-download',
             ref: 'io.ox/files/actions/download'
         },
         {
@@ -1297,7 +1297,7 @@ define('io.ox/files/actions', [
             id: 'delete',
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             title: gt('Delete'),
             ref: 'io.ox/files/actions/delete'
         },
