@@ -712,7 +712,7 @@ define('io.ox/mail/common-extensions', [
                 self.append(
                     $('<span class="unread-toggle">')
                     .attr('aria-label', gt('Marked as unread'))
-                    .append($('<i class="fa fa-fircle" aria-hidden="true">'))
+                    .append($('<i class="fa fa-circle" aria-hidden="true">'))
                 );
             });
         },
