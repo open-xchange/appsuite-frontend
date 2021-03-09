@@ -30,7 +30,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Create'),
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
         },
@@ -38,7 +38,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('List view'),
-            icon: 'fa fa-list',
+            icon: 'fa-list',
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/switch-to-list-view'
         },
@@ -46,7 +46,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Calendar view'),
-            icon: 'fa fa-table',
+            icon: 'fa-table',
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/switch-to-month-view'
         },
@@ -54,7 +54,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Show next month'),
-            icon: 'fa fa-chevron-right',
+            icon: 'fa-chevron-right',
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/showNext'
         },
@@ -62,7 +62,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Show previous month'),
-            icon: 'fa fa-chevron-left',
+            icon: 'fa-chevron-left',
             drawDisabled: true,
             ref: 'io.ox/calendar/actions/showPrevious'
         },
@@ -77,7 +77,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Move'),
-            icon: 'fa fa-sign-in',
+            icon: 'fa-sign-in',
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/move'
         },
@@ -85,7 +85,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('Delete'),
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/delete'
         },
@@ -111,11 +111,11 @@ define('io.ox/calendar/mobile-toolbar-actions', [
         ext.point('io.ox/calendar/links/inline').list().map(function (item) {
             item = _(item).pick('id', 'index', 'prio', 'mobile', 'icon', 'title', 'ref', 'section', 'sectionTitle');
             switch (item.id) {
-                case 'edit': item.icon = 'fa fa-pencil'; break;
-                case 'accept': item.mobile = 'hi'; item.icon = 'fa fa-check'; break;
+                case 'edit': item.icon = 'fa-pencil'; break;
+                case 'accept': item.mobile = 'hi'; item.icon = 'fa-check'; break;
                 case 'decline': item.mobile = 'lo'; break;
-                case 'delete': item.mobile = 'hi'; item.icon = 'fa fa-trash'; break;
-                case 'send mail': item.mobile = 'hi'; item.icon = 'fa fa-envelope-o'; break;
+                case 'delete': item.mobile = 'hi'; item.icon = 'fa-trash'; break;
+                case 'send mail': item.mobile = 'hi'; item.icon = 'fa-envelope-o'; break;
                 // no default
             }
             return item;
