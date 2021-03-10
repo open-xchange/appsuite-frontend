@@ -74,6 +74,11 @@ define('io.ox/mail/actions', [
         };
     }
 
+    function setFocus(baton) {
+        if (baton.e.clientX && baton.e.clientY) return;
+        $('.io-ox-mail-window .list-item[tabindex="0"]').trigger('focus');
+    }
+
     new Action('io.ox/mail/actions/reply', {
         collection: 'some && toplevel',
         matches: matchesReply,
@@ -206,7 +211,7 @@ define('io.ox/mail/actions', [
             return !_(baton.array()).every(util.isFlagged);
         },
         action: function (baton) {
-            api.flag(baton.data, true);
+            api.flag(baton.data, true).then(function () { setFocus(baton); });
         }
     });
 
@@ -217,7 +222,7 @@ define('io.ox/mail/actions', [
             return _(baton.array()).any(util.isFlagged);
         },
         action: function (baton) {
-            api.flag(baton.data, false);
+            api.flag(baton.data, false).then(function () { setFocus(baton); });
         }
     });
 
@@ -229,14 +234,13 @@ define('io.ox/mail/actions', [
         },
         action: function (baton) {
             var list = _.isArray(baton.data) ? baton.data : [baton.data];
-            api.archive(list);
+            api.archive(list).then(function () { setFocus(baton); });
         }
     });
 
     new Action('io.ox/mail/actions/triggerFlags', {
         collection: 'some',
-        action: function (baton) {
-            console.log(baton.e);
+        action: function () {
             var dropDown = $('.dropdown.flag-picker').data();
             $(document).trigger('click.bs.dropdown.data-api');
             _.delay(function () {
@@ -286,7 +290,7 @@ define('io.ox/mail/actions', [
         action: function (baton) {
             // we don't process sent items
             var list = folderAPI.ignoreSentItems(baton.array());
-            api.markUnread(list);
+            api.markUnread(list).then(function () { setFocus(baton); });
         }
     });
 
@@ -300,7 +304,7 @@ define('io.ox/mail/actions', [
         action: function (baton) {
             // we don't process sent items
             var list = folderAPI.ignoreSentItems(baton.array());
-            api.markRead(list);
+            api.markRead(list).then(function () { setFocus(baton); });
         }
     });
 
@@ -315,6 +319,7 @@ define('io.ox/mail/actions', [
                 .done(function (result) {
                     var error = _(result).chain().pluck('error').compact().first().value();
                     if (error) notifications.yell(error);
+                    setFocus(baton);
                 })
                 .fail(function (error) {
                     notifications.yell(error);
@@ -346,6 +351,7 @@ define('io.ox/mail/actions', [
             api.noSpam(baton.array()).done(function (result) {
                 var error = _(result).chain().pluck('error').compact().first().value();
                 if (error) notifications.yell(error);
+                setFocus(baton);
             });
         }
     });

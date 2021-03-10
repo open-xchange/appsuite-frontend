@@ -120,17 +120,16 @@ define('io.ox/core/tk/flag-picker', [
         },
 
         change: function (e) {
-
             e.preventDefault();
 
             var data = e.data.data,
-                color = $(e.currentTarget).attr('data-color') || '0',
-                node = $(this).closest('.flag-picker');
+                color = $(e.currentTarget).attr('data-color') || '0';
 
             data = folderAPI.ignoreSentItems(data);
-            api.changeColor(data, color);
-
-            node.find('.dropdown-toggle').focus();
+            api.changeColor(data, color).then(function () {
+                if (e.clientX && e.clientY) return;
+                $('.io-ox-mail-window:visible .list-item[tabindex="0"]').trigger('focus');
+            });
         },
 
         update: function (model) {

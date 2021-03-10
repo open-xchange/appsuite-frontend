@@ -93,6 +93,11 @@ define('io.ox/mail/actions/delete', [
 
     })();
 
+    function setFocus(baton) {
+        if (baton.e.clientX && baton.e.clientY) return;
+        $('.io-ox-mail-window .list-item[tabindex="0"]').trigger('focus');
+    }
+
     return function (baton) {
         var list = folderAPI.ignoreSentItems(baton.array()),
             all = list.slice(),
@@ -110,7 +115,9 @@ define('io.ox/mail/actions/delete', [
                     new ModalDialog({ title: gt('Delete mail'), description: getQuestion(list) })
                         .addCancelButton()
                         .addButton({ label: gt('Delete'), action: 'delete' })
-                        .on('delete', function () { api.remove(list, all).fail(notifications.yell); })
+                        .on('delete', function () {
+                            api.remove(list, all).fail(notifications.yell).then(function () { setFocus(baton); });
+                        })
                         // trigger back event, used for mobile swipe delete reset
                         .on('cancel', function () { ox.trigger('delete:canceled', list); })
                         .open();
@@ -120,7 +127,7 @@ define('io.ox/mail/actions/delete', [
                     // mail quota exceeded? see above
                     if (e.code === 'MSG-0039') return;
                     notifications.yell(e);
-                });
+                }).then(function () { setFocus(baton); });
             }
         }, function cancel() {
             ox.trigger('delete:canceled', all);
