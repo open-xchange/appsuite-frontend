@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-25 14:11+0100\n"
+"PO-Revision-Date: 2021-03-10 10:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -879,6 +879,16 @@ msgstr "Zoom: %1$d%"
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Zoom"
 msgstr "Zoom"
+
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate left"
+msgstr "Nach links drehen"
+
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate right"
+msgstr "Nach rechts drehen"
 
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Remove photo"
@@ -6639,7 +6649,6 @@ msgstr "Über"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Ihr Gerät verbinden"
 
@@ -10016,11 +10025,23 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
+"The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet das "
-"Infostore-Speicherlimit von %2$s."
+"Der Anhang kann nicht hochgeladen werden, da er das Infostore-Speicherlimit "
+"von %2$s überschreitet"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+msgstr ""
+"Der hochgeladene Anhang überschreitet die maximale E-Mail-Größe von %1$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file cannot be uploaded because it exceeds the maximum email size of %1$s"
+msgstr ""
+"Die Datei kann nicht hochgeladen werden, da sie die maximale E-Mail-Größe "
+"von %1$s überschreitet"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -12912,6 +12933,7 @@ msgstr "Unvollständige Konfiguration."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Ihr Gerät verbinden"
 
@@ -12944,11 +12966,13 @@ msgstr ""
 "synchronisieren, geben Sie bitte die folgenden Einstellungen ein:"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -16052,6 +16076,13 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the infostore "
+#~ "quota limit of %2$s"
+#~ msgstr ""
+#~ "Die Datei \"%1$s\" kann nicht hochgeladen werden. Sie überschreitet das "
+#~ "Infostore-Speicherlimit von %2$s."
 
 #, fuzzy
 #~ msgid "Chage image"
