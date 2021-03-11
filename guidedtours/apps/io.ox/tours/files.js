@@ -145,19 +145,18 @@ define('io.ox/tours/files', [
                 .on('before:show', function () {
                     $('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"]').click();
                 })
-                .on('back', function () {
-                    $('.viewer-toolbar [data-action="close"]').click();
+                .on('hide', function () {
+                    $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
                 })
                 .waitFor('.io-ox-viewer .viewer-toolbar')
                 .spotlight('.viewer-toolbar [data-action="editor"]', { position: 'left' })
                 .hotspot('.viewer-toolbar [data-action="editor"]', { position: 'bottom' })
-                .end()
-            .step()
+                .end();
+
+        if (capabilities.has('invite_guests') && capabilities.has('share_links')) {
+            tour.step()
                 .title(gt('Share files'))
                 .content(gt('Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different access rights.'))
-                .on('before:show', function () {
-                    $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
-                })
 
                 .waitFor('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]')
                 .spotlight('.classic-toolbar-container [data-dropdown="io.ox/files/toolbar/share"]', { position: 'right' })
@@ -190,15 +189,20 @@ define('io.ox/tours/files', [
                 .on('next', function () {
                     $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                 })
-                .end()
-            .step()
+                .end();
+        }
+
+        if (capabilities.has('text') && capabilities.has('spreadsheet')) {
+            tour.step()
                 .title(gt('Edit documents'))
                 .content(gt('Did you know that you can edit text documents and spreadsheets online? Drive will automatically update your edited file, but thanks to versioning the original file stays available.'))
 
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
-                .end()
-            .step()
+                .end();
+        }
+
+        tour.step()
                 .title(gt('File details'))
                 .content(gt('The file details side bar offers additional information about your files. Just enable the File details option from the View drop down menu and select a file to see the details.'))
 
@@ -207,7 +211,7 @@ define('io.ox/tours/files', [
                         $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                     }
                     if ($('.viewer-sidebar:visible').length === 0) {
-                        $('.classic-toolbar-container [data-dropdown="io.ox/files/action/view"] li [data-name="details"]').click();
+                        $('.classic-toolbar-container [data-dropdown="view"] li [data-name="details"]').click();
                     }
                 })
                 .spotlight('.viewer-sidebar', { position: 'left' })
@@ -223,9 +227,6 @@ define('io.ox/tours/files', [
                 .hotspot('a[data-action="add-storage-account"]', { position: 'right' })
                 .end()
             .on('stop', cleanup);
-        if (!capabilities.has('text') || !capabilities.has('spreadsheet')) {
-            tour.steps.splice(10, 2);
-        }
 
         $.when(
             api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }),
