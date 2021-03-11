@@ -58,12 +58,12 @@ define('io.ox/tours/files', [
                 .title(gt('The Drive app'))
                 .content(gt('Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  '))
                 .on('wait', function () {
-                    if ($('.launcher-dropdown:visible').length === 0) $('.launcher-btn').click();
+                    if ($('.launcher-dropdown:visible').length === 0) $('#io-ox-launcher .dropdown-toggle').click();
                     $('#io-ox-launcher').attr('forceOpen', true);
                 })
                 .on('hide', function () {
                     $('#io-ox-launcher').attr('forceOpen', false);
-                    if ($('.launcher-dropdown:visible').length) $('.launcher-btn').click();
+                    if ($('.launcher-dropdown:visible').length) $('#io-ox-launcher .dropdown-toggle').click();
                 })
                 .waitFor('.launcher-dropdown:visible')
                 .hotspot('.launcher-dropdown [data-app-name="io.ox/files"]')
@@ -145,19 +145,18 @@ define('io.ox/tours/files', [
                 .on('before:show', function () {
                     $('.classic-toolbar-container [data-action="io.ox/files/actions/viewer"]').click();
                 })
-                .on('back', function () {
-                    $('.viewer-toolbar [data-action="close"]').click();
+                .on('hide', function () {
+                    $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
                 })
                 .waitFor('.io-ox-viewer .viewer-toolbar')
                 .spotlight('.viewer-toolbar [data-action="editor"]', { position: 'left' })
                 .hotspot('.viewer-toolbar [data-action="editor"]', { position: 'bottom' })
-                .end()
-            .step()
+                .end();
+
+        if (capabilities.has('invite_guests') && capabilities.has('share_links')) {
+            tour.step()
                 .title(gt('Share files'))
                 .content(gt('Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different rights.'))
-                .on('before:show', function () {
-                    $('.viewer-toolbar [data-action="io.ox/core/viewer/actions/toolbar/close"]').click();
-                })
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'right' })
                 .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]', { position: 'left' })
                 .end()
@@ -198,8 +197,11 @@ define('io.ox/tours/files', [
                 .on('next', function () {
                     $('.share-permissions-dialog .modal-dialog [data-action="abort"]').click();
                 })
-                .end()
-            .step()
+                .end();
+        }
+
+        if (capabilities.has('text') && capabilities.has('spreadsheet')) {
+            tour.step()
                 .title(gt('Edit documents'))
                 .content(gt('Did you know that you can edit text documents and spreadsheets online? Drive will automatically update your edited file, but thanks to versioning the original file stays available.'))
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/editor"]', { position: 'right' })
@@ -207,8 +209,10 @@ define('io.ox/tours/files', [
                 .on('back', function () {
                     $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').click();
                 })
-                .end()
-            .step()
+                .end();
+        }
+
+        tour.step()
                 .title(gt('File details'))
                 .content(gt('The file details side bar offers additional information about your files. Just enable the File details option from the View drop down menu and select a file to see the details.'))
 
@@ -217,7 +221,7 @@ define('io.ox/tours/files', [
                         $('.classic-toolbar-container [data-action="io.ox/files/actions/invite"]').closest('.dropdown').removeClass('open').attr('forceOpen', false);
                     }
                     if ($('.viewer-sidebar:visible').length === 0) {
-                        $('.classic-toolbar-container [data-dropdown="io.ox/files/action/view"] li [data-name="details"]').click();
+                        $('.classic-toolbar-container [data-dropdown="view"] li [data-name="details"]').click();
                     }
                 })
                 .spotlight('.viewer-sidebar', { position: 'left' })
@@ -233,9 +237,6 @@ define('io.ox/tours/files', [
                 .hotspot('a[data-action="add-storage-account"]', { position: 'right' })
                 .end()
             .on('stop', cleanup);
-        if (!capabilities.has('text') || !capabilities.has('spreadsheet')) {
-            tour.steps.splice(10, 2);
-        }
 
         $.when(
             api.upload({ folder: standardFolder, file: blob, filename: gt('The Drive app tour.txt') }),
