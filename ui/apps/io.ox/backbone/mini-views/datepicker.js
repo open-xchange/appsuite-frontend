@@ -182,6 +182,10 @@ define('io.ox/backbone/mini-views/datepicker', [
             return this;
         },
 
+        getFallback: function () {
+            return this.model.get('zone') ? 'UTC' : moment().tz();
+        },
+
         updateView: function () {
             var timestamp;
             if (!this.chronos) {
@@ -192,7 +196,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 }
                 timestamp = parseInt(this.model.getDate ? this.model.getDate(this.attribute, { fulltime: this.isFullTime() }) : this.model.get(this.attribute), 10);
                 if (_.isNaN(timestamp)) return;
-                timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute) || moment().tz());
+                timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute) || this.getFallback());
             } else {
                 timestamp = this.model.getMoment(this.attribute);
             }
@@ -268,7 +272,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
 
             // parse string to timestamp
-            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute) || moment().tz());
+            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute) || this.getFallback());
             if (this.chronos) {
                 if (this.isFullTime()) return { value: parsedDate.format('YYYYMMDD') };
                 return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment().tz() };
