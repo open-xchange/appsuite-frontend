@@ -139,7 +139,7 @@ define('io.ox/mail/actions', [
         action: function (baton) {
             var data = baton.first();
             ox.registry.call('mail-compose', 'open', {
-                type: 'copy', original: { folderId: data.folder_id, id: data.id }
+                type: 'copy', original: { folderId: data.folder_id, id: data.id, security: data.security }
             })
             .done(function (window) {
                 var model = window.app.model;
