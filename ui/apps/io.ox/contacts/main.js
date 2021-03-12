@@ -240,9 +240,12 @@ define('io.ox/contacts/main', [
                         var url = api.getContactPhotoUrl(data, 48);
                         var node = fields.photo.empty();
                         if (url) {
-                            node.css('background-image', url ? 'url(' + url + ')' : '');
+                            node.css('background-image', 'url(' + url + ')');
                         } else {
-                            node.addClass('empty').append(svg.circleAvatar(util.getInitials(data)));
+                            node
+                                .css('background-image', '')
+                                .addClass('empty')
+                                .append(svg.circleAvatar(util.getInitials(data)));
                         }
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
