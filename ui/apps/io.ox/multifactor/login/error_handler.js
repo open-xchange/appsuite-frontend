@@ -17,8 +17,7 @@ define('io.ox/multifactor/login/error_handler', [
                     console.error('MF login failed, reload required');
                     ox.session = '';
                     http.resetDisconnect(response);
-                    ox.relogin();
-                    location.reload();
+                    ox.trigger('relogin:required');
                 } else {
                     http.reconnect();
                 }
