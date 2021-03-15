@@ -157,6 +157,7 @@ define.async('io.ox/core/boot/main', [
 
         'login:success': function (data) {
             Stage.abortAll('io.ox/core/boot/login');
+            util.debugSession('login process successful');
 
             $('#background-loader').fadeIn(util.DURATION, function () {
                 $('#io-ox-login-screen').hide().empty();
@@ -181,6 +182,7 @@ define.async('io.ox/core/boot/main', [
                 // do not propagate the received login that all tabs received too to all the tabs again
                 if (data && data.tabSessionLogin) return;
                 require(['io.ox/core/api/tab'], function (tabAPI) {
+                    util.debugSession('propagateLogin', ox.session);
                     tabAPI.propagate('propagateLogin', {
                         session: ox.session,
                         language: ox.language,

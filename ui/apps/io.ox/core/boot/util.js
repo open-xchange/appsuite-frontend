@@ -61,6 +61,8 @@ define('io.ox/core/boot/util', [], function () {
 
         debug: $.noop,
 
+        debugSession: $.noop,
+
         gt: _.identity,
 
         setPageTitle: function (title) {
@@ -225,6 +227,14 @@ define('io.ox/core/boot/util', [], function () {
         exports.debug = function () {
             var args = _(arguments).toArray(), t = _.now() - ox.t0;
             args.unshift('boot (' + (t / 1000).toFixed(1) + 's): ');
+            console.log.apply(console, args);
+        };
+    }
+
+    if (/\bsession/.test(_.url.hash('debug'))) {
+        exports.debugSession = function () {
+            var args = _(arguments).toArray(), t = _.now() - ox.t0;
+            args.unshift('session (' + (t / 1000).toFixed(1) + 's): ');
             console.log.apply(console, args);
         };
     }
