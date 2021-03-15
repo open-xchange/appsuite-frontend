@@ -178,7 +178,8 @@ define.async('io.ox/core/boot/main', [
                 return Stage.run('io.ox/core/boot/load', baton);
             }).then(function () {
                 if (!util.checkTabHandlingSupport()) return;
-
+                // do not propagate the received login that all tabs received too to all the tabs again
+                if (data && data.tabSessionLogin) return;
                 require(['io.ox/core/api/tab'], function (tabAPI) {
                     tabAPI.propagate('propagateLogin', {
                         session: ox.session,

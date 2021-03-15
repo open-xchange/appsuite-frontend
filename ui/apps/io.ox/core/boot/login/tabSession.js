@@ -35,6 +35,9 @@ define('io.ox/core/boot/login/tabSession', [
         ox.session = loginData.session;
         ox.secretCookie = true;
         util.debug('TabSession: logged in');
+        // reminder: do not not propagate this login again, because it's
+        // not a new login and all other tabs have this session already
+        loginData.tabSessionLogin = true;
         ox.trigger('login:success', loginData);
     }
 
