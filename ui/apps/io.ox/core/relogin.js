@@ -183,6 +183,7 @@ define('io.ox/core/relogin', [
     function relogin(request, deferred, error) {
 
         function abortWithSuccess(loginData) {
+            util.debugSession('relogin abort with success', _.clone(loginData), _.clone(baton.data));
             // we know that we have a new valid session from the event
             baton.data.reloginState = 'success';
             baton.data.receivedSession = loginData ? loginData.session : '';
@@ -194,6 +195,7 @@ define('io.ox/core/relogin', [
         if (!pending) {
             ox.trigger('before:relogin');
 
+            util.debugSession('relogin process START');
             // enqueue last request
             queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
 
@@ -219,6 +221,7 @@ define('io.ox/core/relogin', [
                 // this way, but at the same time it can be solved in almost all cases simply by using the received session
                 // from this login. So try to repair the session with this data.
                 if (!ox.session) {
+                    util.debugSession('relogin success but no session, trying to repair');
                     // note: baton is by reference, 'receivedSession' is always the session
                     // received by the latest 'login:success' events
                     ox.session = baton.data.receivedSession;
@@ -230,6 +233,7 @@ define('io.ox/core/relogin', [
 
                 if (util.checkTabHandlingSupport()) {
                     require(['io.ox/core/api/tab'], function (tabAPI) {
+                        util.debugSession('propagateLogin', ox.session);
                         tabAPI.propagate('propagateLogin', {
                             session: ox.session,
                             language: ox.language,
@@ -253,6 +257,7 @@ define('io.ox/core/relogin', [
                             .fail(item.deferred.fail);
                     }
                 }
+                util.debugSession('relogin process DONE');
                 // set flag
                 pending = false;
             });
