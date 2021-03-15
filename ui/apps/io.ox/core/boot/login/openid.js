@@ -125,6 +125,7 @@ define('io.ox/core/boot/login/openid', [
                 return openIdConnectLogin({ flow: 'login' });
             },
             relogin: function (baton) {
+                util.debug('Open ID Relogin ...');
                 return silentRelogin().then(function () {
                     baton.stopPropagation();
                     baton.preventDefault();
