@@ -128,10 +128,17 @@ define('io.ox/core/relogin', [
             if (baton.data.reloginState !== 'success') return gotoLoginLocation();
         }
     });
-
     function showDialog(error) {
         var def = $.Deferred();
-        new ModalDialog({
+        var dialog;
+
+        function closeDialog() {
+            if (!dialog || dialog.disposed) return;
+            dialog.trigger('relogin:continue');
+            dialog.close();
+        }
+
+        dialog = new ModalDialog({
             async: true,
             enter: 'relogin',
             backdrop: 'static',
@@ -152,7 +159,10 @@ define('io.ox/core/relogin', [
         })
         .open();
 
+        ox.on('login:success', closeDialog);
+
         return def.done(function () {
+            ox.off('login:success', closeDialog);
             $('html').removeClass('relogin-required');
             $('#io-ox-core').removeClass('blur');
         });
