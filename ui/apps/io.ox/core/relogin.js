@@ -126,21 +126,6 @@ define('io.ox/core/relogin', [
         id: 'default',
         relogin: function (baton) {
             if (baton.data.reloginState !== 'success') return gotoLoginLocation();
-            if (util.checkTabHandlingSupport()) {
-                require(['io.ox/core/api/tab'], function (tabAPI) {
-                    tabAPI.propagate('propagateLogin', {
-                        session: ox.session,
-                        language: ox.language,
-                        theme: ox.theme,
-                        user: ox.user,
-                        user_id: ox.user_id,
-                        context_id: ox.context_id,
-                        relogin: true,
-                        exceptWindow: tabAPI.getWindowName(),
-                        storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
-                    });
-                });
-            }
         }
     });
 
@@ -187,9 +172,17 @@ define('io.ox/core/relogin', [
     var queue = [], pending = false;
     function relogin(request, deferred, error) {
 
+        function abortWithSuccess(loginData) {
+            // we know that we have a new valid session from the event
+            baton.data.reloginState = 'success';
+            baton.data.receivedSession = loginData ? loginData.session : '';
+            Stage.abortAll('io.ox/core/boot/login');
+        }
+
         if (!ox.online) return;
 
         if (!pending) {
+            ox.trigger('before:relogin');
 
             // enqueue last request
             queue = (request && deferred) ? [{ request: request, deferred: deferred }] : [];
@@ -199,8 +192,48 @@ define('io.ox/core/relogin', [
 
             var Stage = require('io.ox/core/extPatterns/stage');
             var baton = ext.Baton.ensure({ error: error, reloginState: 'pending' });
-            Stage.run('io.ox/core/boot/login', baton, { methodName: 'relogin' }).then(function () {
+
+            ox.on('login:success', abortWithSuccess);
+
+            Stage.run('io.ox/core/boot/login', baton, { methodName: 'relogin' })
+            .then(function () {
+                // must always be called
+                ox.off('login:success', abortWithSuccess);
+
                 if (baton.data.reloginState !== 'success') return;
+
+                // With very bad timing, it is possible that a late returning request with a session error
+                // removes ox.session (see http.js) while in a running relogin unwanted, resulting in a
+                // empty ox.session. The root problem is that ox.session can be removed in a running relogin process.
+                // This edge-case is more likely to happen when the relogin was 'abortedWithSuccess', because it's faster
+                // this way, but at the same time it can be solved in almost all cases simply by using the received session
+                // from this login. So try to repair the session with this data.
+                if (!ox.session) {
+                    // note: baton is by reference, 'receivedSession' is always the session
+                    // received by the latest 'login:success' events
+                    ox.session = baton.data.receivedSession;
+                }
+
+                // process finished, we have a valid session
+                // needed to reload documents in single tab cases (either real single tab config or just one tab left open)
+                ox.trigger('relogin:success');
+
+                if (util.checkTabHandlingSupport()) {
+                    require(['io.ox/core/api/tab'], function (tabAPI) {
+                        tabAPI.propagate('propagateLogin', {
+                            session: ox.session,
+                            language: ox.language,
+                            theme: ox.theme,
+                            user: ox.user,
+                            user_id: ox.user_id,
+                            context_id: ox.context_id,
+                            relogin: true,
+                            exceptWindow: tabAPI.getWindowName(),
+                            storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+                        });
+                    });
+                }
+
                 // process queue
                 var i = 0, item, http = require('io.ox/core/http');
                 for (; (item = queue[i]); i++) {
