@@ -210,13 +210,13 @@ define('io.ox/switchboard/views/call-history', [
             return moment(t).format('l');
         },
         getName: function () {
-            return this.model.get('name') || this.model.get('number') || this.model.get('email');
+            return this.model.get('name') || this.model.get('number') || this.model.get('email') || gt('Unknown');
         },
         getCaption: function () {
             switch (this.type) {
                 //#. used for unknown callers in our call history
                 case 'phone': return this.model.get('name') ? this.model.get('number') : gt('Unknown');
-                case 'jisti': return 'Jitsi';
+                case 'jitsi': return 'Jitsi';
                 case 'zoom': return 'Zoom';
                 // no default
             }
