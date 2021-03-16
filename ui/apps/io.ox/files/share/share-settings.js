@@ -180,6 +180,8 @@ define('io.ox/files/share/share-settings', [
                 return !model.isFolder() || util.is('drive', model.attributes);
             });
             if (!isDrive || !baton.model.attributes || !baton.model.attributes.files) {
+                // needed so dirty check works correctly
+                baton.model.originalAttributes.includeSubfolders = false;
                 return baton.model.set('includeSubfolders', false, { silent: true });
             }
             var onlyFiles = true;
