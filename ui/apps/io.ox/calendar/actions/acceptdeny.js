@@ -161,7 +161,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                                         return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === confirmId;
                                     }) : undefined;
                                 requestData = {
-                                    attendee: previousConfirmation,
+                                    // make a proper copy here
+                                    attendee: JSON.parse(JSON.stringify(previousConfirmation)),
                                     id: appointmentData.id,
                                     folder: appointmentData.folder
                                 };
