@@ -85,6 +85,7 @@ define('io.ox/mail/compose/model', [
                 if (!this.prevAttributes) this.prevAttributes = data;
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
             }.bind(this));
+            this.pendingDeletedAttachments = $.when();
         },
 
         initialPatch: function () {
@@ -138,7 +139,14 @@ define('io.ox/mail/compose/model', [
             if (this.destroyed) return;
 
             model.trigger('destroy');
-            if (model.get('id')) attachmentsAPI.remove(this.get('id'), model.get('id'));
+
+            if (model.get('id')) {
+                var def = attachmentsAPI.remove(this.get('id'), model.get('id'));
+                this.pendingDeletedAttachments = this.pendingDeletedAttachments
+                .catch(_.constant()).then(function () {
+                    return def;
+                });
+            }
         },
 
         quoteMessage: (function () {
@@ -307,7 +315,11 @@ define('io.ox/mail/compose/model', [
             // that prevents any edge cases of "composition space not found"
             return $.when(_(this.get('attachments')).pluck('done').map(function (def) {
                 return $.when(def).catch();
-            })).then(function () {
+            }))
+            .then(function () {
+                return this.pendingDeletedAttachments;
+            }.bind(this))
+            .then(function () {
                 return composeAPI.space.remove(this.get('id'));
             }.bind(this));
         },
