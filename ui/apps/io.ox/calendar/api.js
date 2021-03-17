@@ -542,7 +542,7 @@ define('io.ox/calendar/api', [
                 // if comment should be deleted, send null. Just like in settings
                 if (obj.attendee.comment === '') delete obj.attendee.comment;
 
-                // make sure alarms are explicitely set to null when declining, otherwise the user is reminded of declined appointments, we don't want that
+                // make sure alarms are explicitly set to null when declining, otherwise the user is reminded of declined appointments, we don't want that
                 // do this in api to catch all cases (shortcut buttons, full dialogs, mail invitations etc)
                 if (obj.attendee.partStat === 'DECLINED') obj.alarms = null;
 
