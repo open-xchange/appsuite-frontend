@@ -942,7 +942,9 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
-        // returns array of {mail, displayName} objects
+        // returns array of {mail, displayName} objects + additional fields depending on type
+        // contacts have additional fields: first_name, last_name
+        // internal users have additional fields: first_name, last_name, type 1, id
         // resolves groups, eliminates duplicates, uses provided mail address of attendee, filters out resources
         resolveAttendees: function (data, options) {
             options = options || {};
@@ -956,7 +958,8 @@ define('io.ox/calendar/util', [
                 return p.mail === data.organizer.email;
             });
 
-            if (data.organizer && !organizerIsExternalParticipant) {
+            // add organizer if not already part of attendees and not external
+            if (data.organizer && !organizerIsExternalParticipant && !(data.organizer.entity && _(_(attendees).pluck('entity')).contains(data.organizer.entity))) {
                 attendees.unshift(data.organizer);
             }
 
@@ -965,15 +968,25 @@ define('io.ox/calendar/util', [
                     case undefined:
                     case 'INDIVIDUAL':
                         if (!attendee.email) return;
+                        var data = {
+                            display_name: attendee.cn,
+                            mail: attendee.email
+                        };
+
                         // internal user
                         if (attendee.entity) {
                             if (options.filterSelf && attendee.entity === ox.user_id) return;
                             users.push(attendee.entity);
+                            data.type = 1;
+                            data.id = attendee.entity;
                         }
-                        result.push({
-                            display_name: attendee.cn,
-                            mail: attendee.email
-                        });
+
+                        if (attendee.contact) {
+                            data.first_name = attendee.contact.first_name;
+                            data.last_name = attendee.contact.last_name;
+                        }
+
+                        result.push(data);
                         break;
                     // group
                     case 'GROUP':
@@ -1005,7 +1018,11 @@ define('io.ox/calendar/util', [
                     return result.concat(_(_(users).map(function (user) {
                         return {
                             display_name: user.display_name,
-                            mail:  user.email1 || user.email2 || user.email3
+                            first_name: user.first_name,
+                            last_name:  user.last_name,
+                            type: 1,
+                            mail:  user.email1 || user.email2 || user.email3,
+                            id: user.id
                         };
                     })).filter(function (user) {
                         // don't add if mail address is missing (yep, edge-case)

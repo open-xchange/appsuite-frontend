@@ -49,15 +49,15 @@ define('io.ox/tours/settings', [
         .step()
             .title(gt('Opening the help'))
             .content(gt('To open the help, click the help icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.'))
-            .hotspot('#topbar-settings-dropdown a.io-ox-context-help')
-            .spotlight('#topbar-settings-dropdown a.io-ox-context-help')
-            .referTo('#topbar-settings-dropdown')
-            .waitFor('.smart-dropdown-container #topbar-settings-dropdown a.io-ox-context-help')
+            .hotspot('#topbar-help-dropdown a.io-ox-context-help')
+            .spotlight('#topbar-help-dropdown a.io-ox-context-help')
+            .referTo('#topbar-help-dropdown')
+            .waitFor('.smart-dropdown-container #topbar-help-dropdown a.io-ox-context-help')
             .on('before:show', function () {
-                $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
+                $('#topbar-help-dropdown:not(:visible)').dropdown('toggle');
             })
             .on('hide', function () {
-                $('#topbar-settings-dropdown:visible').dropdown('toggle');
+                $('#topbar-help-dropdown:visible').dropdown('toggle');
             })
             .end();
 
@@ -66,15 +66,15 @@ define('io.ox/tours/settings', [
             tour.step()
                 .title(gt('Signing out'))
                 .content(gt('To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out.'))
-                .hotspot('#topbar-settings-dropdown a[data-name="logout"]')
-                .spotlight('#topbar-settings-dropdown a[data-name="logout"]')
-                .referTo('#topbar-settings-dropdown')
-                .waitFor('#topbar-settings-dropdown a[data-name="logout"]')
+                .hotspot('#topbar-account-dropdown a[data-name="logout"]')
+                .spotlight('#topbar-account-dropdown a[data-name="logout"]')
+                .referTo('#topbar-account-dropdown')
+                .waitFor('#topbar-account-dropdown a[data-name="logout"]')
                 .on('wait', function () {
-                    $('#topbar-settings-dropdown:not(:visible)').dropdown('toggle');
+                    $('#topbar-account-dropdown:not(:visible)').dropdown('toggle');
                 })
                 .on('hide', function () {
-                    $('#topbar-settings-dropdown:visible').dropdown('toggle');
+                    $('#topbar-account-dropdown:visible').dropdown('toggle');
                 })
                 .end();
 
