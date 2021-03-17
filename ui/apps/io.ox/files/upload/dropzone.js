@@ -48,6 +48,20 @@ define('io.ox/files/upload/dropzone', [
         }
     });
 
+    // Resize visible dropzones based on those enabled
+    function resize(baton) {
+        if (baton.dropZones.length <= 1) return; // ntd
+        var enabled = baton.dropZones.filter(function (zone) { return zone.isEnabled(); });
+        var size = 100 / enabled.length;
+        enabled.map(function (zone, position) {
+            zone.$el
+                .css({
+                    top: position * size + '%',
+                    height: size + '%'
+                });
+        });
+    }
+
     ext.point('io.ox/files/mediator').extend({
         id: 'files-dropzone',
         index: 1000000000000,
@@ -80,7 +94,9 @@ define('io.ox/files/upload/dropzone', [
 
                         };
                     }
-
+                    zone.on('show', function () {
+                        resize(baton);
+                    });
                     return zone.render().$el
                         .addClass('abs')
                         .css({
@@ -89,6 +105,7 @@ define('io.ox/files/upload/dropzone', [
                         });
                 })
             );
+
         }
     });
 });
