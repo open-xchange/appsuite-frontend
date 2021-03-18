@@ -72,8 +72,9 @@ define('io.ox/switchboard/views/zoom-meeting', [
         },
 
         copyToLocation: function () {
-            //#. %1$s contains the URL to join the meeting
-            this.appointment.set('location', gt('Zoom Meeting: %1$s', this.getJoinURL()));
+            // just add the plain link without a text prefix. Gmail will not
+            // recognize the link if there is text prefix on th link
+            this.appointment.set('location', this.getJoinURL());
         },
 
         copyToDescriptionHandler: function (e) {
