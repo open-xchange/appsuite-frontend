@@ -83,7 +83,7 @@ class CodeceptRerunner extends Codecept {
 }
 
 (async () =>{
-    const codeceptDir = fsPath.resolve(__dirname, '../');
+    const codeceptDir = process.cwd();
     const conf = getConfig(codeceptDir);
     const [test] = process.argv.slice(2);
     const customRunner = new CodeceptRerunner(conf, { fgrep: test, colors: true });
@@ -91,7 +91,7 @@ class CodeceptRerunner extends Codecept {
 
     try {
         await customRunner.bootstrap();
-        customRunner.loadTests('./e2e/tests/**/*_test.js');
+        customRunner.loadTests();
         // run tests
         await customRunner.run();
         process.exitCode = 0;
