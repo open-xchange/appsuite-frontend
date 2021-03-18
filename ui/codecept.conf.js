@@ -169,7 +169,7 @@ module.exports.config = {
         }
 
         if (typeof testRunContext.id !== 'undefined') helperConfig.contextId = testRunContext.id;
-        await seleniumReady.catch(err => console.err(err));
+        await seleniumReady.catch(err => console.error(err));
 
     },
     teardown: async function () {
