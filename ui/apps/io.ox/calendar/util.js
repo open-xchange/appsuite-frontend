@@ -1531,6 +1531,31 @@ define('io.ox/calendar/util', [
                 }
                 return temp;
             });
+        },
+        confirmWithConflictCheck: function (requestData, options) {
+            options = options || {};
+            var def = new $.Deferred();
+
+            require(['io.ox/calendar/api'], function (calendarAPI) {
+                calendarAPI.confirm(requestData, options).then(function (data) {
+
+                    if (data && data.conflicts) {
+                        require(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                            conflictView.dialog(data.conflicts)
+                                .on('cancel', function () {
+                                    def.reject();
+                                })
+                                .on('ignore', function () {
+                                    options.checkConflicts = false;
+                                    that.confirmWithConflictCheck(requestData, options).then(def.resolve, def.reject);
+                                });
+                        });
+                        return;
+                    }
+                    def.resolve(data);
+                }, def.reject);
+            });
+            return def;
         }
     };
 

@@ -479,9 +479,8 @@ define('io.ox/calendar/actions', [
                     if (action === 'cancel') return;
                     if (action === 'series') delete appointment.recurrenceId;
                     $(baton.e.target).addClass('disabled');
-                    // those links are for fast accept/decline, so don't check conflicts
-                    api.confirm(appointment, util.getCurrentRangeOptions()).fail(function (e) {
-                        yell(e);
+                    util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
+                        if (e) yell(e);
                         $(baton.e.target).removeClass('disabled');
                     });
                 })
@@ -489,9 +488,8 @@ define('io.ox/calendar/actions', [
                 return;
             }
             $(baton.e.target).addClass('disabled');
-            // those links are for fast accept/decline, so don't check conflicts
-            api.confirm(appointment).fail(function (e) {
-                yell(e);
+            util.confirmWithConflictCheck(appointment, { checkConflicts: true }).fail(function (e) {
+                if (e) yell(e);
                 $(baton.e.target).removeClass('disabled');
             });
         });
