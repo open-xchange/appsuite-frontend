@@ -199,7 +199,7 @@ define('io.ox/core/links', [
 
         var node = $(this), data = node.data(), address, name, tmp, params = {};
 
-        require(['io.ox/mail/sanitizer'], function (sanitizer) {
+        require(['io.ox/mail/sanitizer', 'settings!io.ox/mail'], function (sanitizer, mailSettings) {
 
             // has data?
             if (data.address) {
@@ -217,6 +217,8 @@ define('io.ox/core/links', [
                 // process additional parameters; all lower-case (see bug #31345)
                 params = _.deserialize(tmp[1]);
                 for (var key in params) params[key.toLowerCase()] = params[key];
+                // fix linebreaks in mailto body (OXUIB-776)
+                if (params.body && mailSettings.get('messageFormat') !== 'text') params.body = params.body.replace(/\n/g, '<br>');
             }
 
             // go!
