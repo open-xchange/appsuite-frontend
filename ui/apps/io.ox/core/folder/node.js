@@ -70,6 +70,7 @@ define('io.ox/core/folder/node', [
 
             var o = this.options,
                 models = this.collection.filter(this.getFilter()),
+                isFavoriteRootFolder = this.model.get('id').indexOf('virtual/favorites') === 0,
                 exists = {};
 
             // recycle existing nodes / use detach to keep events
@@ -79,7 +80,13 @@ define('io.ox/core/folder/node', [
 
             // append nodes
             this.$.subfolders.append(
-                models.map(function (model) {
+                models.filter(function (model) {
+                    // favorites are kinda special. They may contain unsubscribed folders (we don't remove them from favorites, so they show up as favorites again when they are resubscribed)
+                    if (isFavoriteRootFolder) {
+                        return !!model.get('subscribed');
+                    }
+                    return true;
+                }).map(function (model) {
                     return (exists[model.id] || this.getTreeNode(model).render()).$el;
                 }, this)
             );
