@@ -139,7 +139,7 @@ define('io.ox/switchboard/views/zoom-meeting', [
                     if (ox.debug) console.debug('createMeeting', result);
                     this.appointment.set('conferences', [{
                         uri: result.join_url,
-                        features: ['AUDIO', 'VIDEO'],
+                        features: ['VIDEO'],
                         label: gt('Zoom Meeting'),
                         extendedParameters: {
                             'X-OX-TYPE': 'zoom',

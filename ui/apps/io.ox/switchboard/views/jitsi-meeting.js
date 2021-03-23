@@ -85,7 +85,7 @@ define('io.ox/switchboard/views/jitsi-meeting', [
             var meeting = api.createJitsiMeeting();
             this.appointment.set('conferences', [{
                 uri: meeting.joinURL,
-                features: ['AUDIO', 'VIDEO'],
+                features: ['VIDEO'],
                 label: gt('Jitsi Meeting'),
                 extendedParameters: {
                     'X-OX-TYPE': 'jitsi',
