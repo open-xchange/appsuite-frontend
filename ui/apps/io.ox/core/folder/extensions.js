@@ -930,7 +930,7 @@ define('io.ox/core/folder/extensions', [
                 this.append(placeholder);
 
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
-                api.flat({ module: moduleName, all: /^(event|contacts|tasks)$/.test(moduleName) }).always(function () {
+                api.flat({ module: moduleName }).always(function () {
 
                     privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private'), filter: function (id, model) { return !!model.get('subscribed'); } }));
 

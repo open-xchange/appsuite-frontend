@@ -874,7 +874,8 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-        options = _.extend({ module: undefined, cache: true, force: false }, options);
+        // all modules with flat foldertrees need the full request here as default (contacts/tasks/calendar)
+        options = _.extend({ module: undefined, cache: true, force: false, all: true }, options);
         if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
@@ -888,7 +889,8 @@ define('io.ox/core/folder/api', [
             collection = getFlatCollection(module, 'private'),
             cached = {};
 
-        if (collection.fetched && options.cache === true) {
+        // no caching if options.all is set to false
+        if (options.all && collection.fetched && options.cache === true) {
             cached.private = collection.toJSON();
             ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
                 var collection = getFlatCollection(module, section);
@@ -964,16 +966,23 @@ define('io.ox/core/folder/api', [
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
-                pool.addCollection(collectionId, sections[id] = array, { reset: true });
+                sections[id] = array;
+                // only cache when options.all is set or we get strange side effects
+                if (!options.all) return;
+                pool.addCollection(collectionId, array, { reset: true });
             });
             // add collection for hidden folders
             collectionId = getFlatCollectionId(module, 'hidden');
             hidden = processListResponse(collectionId, hidden);
-            pool.addCollection(collectionId, sections.hidden = hidden, { reset: true });
+            sections.hidden = hidden;
+            // only cache when options.all is set or we get strange side effects
+            if (options.all) pool.addCollection(collectionId, hidden, { reset: true });
             // add collection for folders shared by me
             collectionId = getFlatCollectionId(module, 'sharing');
             sharing = processListResponse(collectionId, sharing);
-            pool.addCollection(collectionId, sections.sharing = sharing, { reset: true });
+            sections.sharing = sharing;
+            // only cache when options.all is set or we get strange side effects
+            if (options.all) pool.addCollection(collectionId, sharing, { reset: true });
 
             api.trigger('after:flat:' + options.module);
             // done
@@ -1534,7 +1543,7 @@ define('io.ox/core/folder/api', [
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            defs.push(flat({ module: module, all: module === 'event', cache: false }));
+            defs.push(flat({ module: module, cache: false }));
         });
 
         // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool
