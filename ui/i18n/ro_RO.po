@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:42+0100\n"
+"PO-Revision-Date: 2021-03-25 14:07+0100\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -13913,13 +13913,12 @@ msgstr "În prezent sunteți conectat cu următoarele dispozitive"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from all clients"
-msgstr "Desconectare de la toți clienții"
+msgstr "Deconectare de la toți clienții"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
-"Sigur doriți să vă desconectați de la toți clienții, cu excepția celui "
-"curent?"
+"Sigur doriți să vă deconectați de la toți clienții, cu excepția celui curent?"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
