@@ -555,11 +555,13 @@ define('io.ox/core/tk/contenteditable-editor', [
                 container = el.closest('.window-container'),
                 header = container.find('.window-header:visible').outerHeight() || 0,
                 footer = container.find('.window-footer:visible').outerHeight() || 0,
-                padding = 0;
+                padding = 0,
+                tinymcepadding = 26;
 
             if (_.device('smartphone')) {
                 h = $(window).height();
                 top = el.offset().top;
+                tinymcepadding = 0;
             } else {
                 h = el.closest('.window-content').height();
                 top = el.parent().find('.mail-compose-fields').outerHeight();
@@ -573,8 +575,14 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
 
             editor.css('min-height', availableHeight + 'px');
-            iframe.css('min-height', availableHeight + 'px');
-            iframe.contents().find('#tinymce').css('min-height', availableHeight + 'px');
+            iframe.css('min-height', _.device('smartphone') ?
+                availableHeight + 'px' :
+                (availableHeight + footer) + 'px'
+            );
+            iframe.contents().find('#tinymce').css('min-height', _.device('smartphone') ?
+                availableHeight + 'px' :
+                (availableHeight - tinymcepadding + footer) + 'px'
+            );
             if (opt.css) editor.css(opt.css);
         }
 
