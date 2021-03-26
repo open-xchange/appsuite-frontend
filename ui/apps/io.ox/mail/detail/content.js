@@ -74,7 +74,7 @@ define('io.ox/mail/detail/content', [
         },
 
         whitespace: function (baton) {
-            // espeically firefox doesn't like those regex for large messages
+            // especially firefox doesn't like those regex for large messages
             if (baton.isLarge) return;
             baton.source = baton.source
                 // remove leading white-space
@@ -484,7 +484,8 @@ define('io.ox/mail/detail/content', [
             id: 'white-space',
             process: function (baton) {
                 // maintain spaces after opening tags as well as subsequent spaces (see bug 56851)
-                baton.data = baton.data.replace(/((>) |( ) )/g, '$1&nbsp;');
+                // $1 is the first saved group $2 is the second. Since we use | only one is filled. Correct grouping here is important or we might create additional whitepaces, see OXUIB-784
+                baton.data = baton.data.replace(/(>) |( ) /g, '$1$2&nbsp;');
             }
         }
     );
