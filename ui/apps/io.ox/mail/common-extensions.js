@@ -528,7 +528,7 @@ define('io.ox/mail/common-extensions',
                 var view = e.data.view, obj = _.cid(view.model.cid);
                 view.model.set('disp_notification_to', '');
                 skip[view.model.cid] = true;
-                api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
+                api.ack({ folder: obj.folder_id, id: obj.id, to: e.data.model.get('to') }).done(function () {
                     notifications.yell(
                         'success',
                         //#. read receipt; German "Lesebestätigung"
@@ -573,8 +573,8 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.disposition-notification .btn', { view: baton.view }, returnReceipt);
-                this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
+                this.on('click', '.disposition-notification .btn', { view: baton.view, model: baton.model }, returnReceipt);
+                this.on('click', '.disposition-notification .close', { view: baton.view, model: baton.model }, cancel);
                 baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
 
