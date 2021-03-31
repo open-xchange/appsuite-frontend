@@ -13,7 +13,7 @@
 
 /// <reference path="../../steps.d.ts" />
 var fs = require('fs');
-
+const path = require('path');
 Feature('Drive');
 
 Before(async ({ users }) => {
@@ -74,10 +74,14 @@ Scenario('[C7887] Disable hidden folders and files', async function ({ I, drive 
 
 Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     //Generate TXT file for upload
-    let timestamp1 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1);
+    let timestamp1 = Math.round(+new Date() / 1000).toString();
+    const outputPath = path.join(global.codecept_dir, 'build/e2e');
+    if (!fs.existsSync(outputPath)) fs.mkdirSync(outputPath, { recursive: true });
+    const filePath = path.join(outputPath, 'C45046.txt');
+
+    await fs.promises.writeFile(filePath, timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'build/e2e/C45046.txt');
+    await I.haveFile(infostoreFolderID, path.relative(global.codecept_dir, filePath));
 
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -88,9 +92,9 @@ Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     I.waitForElement('.io-ox-viewer');
 
     I.waitForText(timestamp1);
-    let timestamp2 = Math.round(+new Date() / 1000);
+    let timestamp2 = Math.round(+new Date() / 1000).toString();
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
-    I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
+    I.attachFile('.io-ox-viewer input.file-input', path.relative(global.codecept_dir, filePath));
     I.click('Upload', '.modal-dialog');
 
     I.waitForText(timestamp2, 30);
