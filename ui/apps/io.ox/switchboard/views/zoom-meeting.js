@@ -159,7 +159,8 @@ define('io.ox/switchboard/views/zoom-meeting', [
 
         getMeeting: function () {
             var url = this.getJoinURL(),
-                id = String(url).replace(/^.+\/j\/(\w+).+$/, '$1');
+                // careful here, url can be with or without password, depending on the setting. Make sure this works correctly in both cases
+                id = String(url).replace(/^.+\/j\/(\w+).*$/, '$1');
             zoom.getMeeting(id).then(
                 function success(result) {
                     if (ox.debug) console.debug('getMeeting', result);
