@@ -1638,8 +1638,8 @@ define('io.ox/calendar/week/view', [
                     date.startOf('day');
                     break;
                 case 'workweek':
-                    // settings independent, set startDate to Monday of the current week
-                    date.startOf('week').day(settings.get('workweekStart'));
+                    // settings independent, assume week from Mon-Sun
+                    date.startOf('isoWeek').add((6 + settings.get('workweekStart')) % 7, 'days');
                     break;
                 default:
                 case 'week':

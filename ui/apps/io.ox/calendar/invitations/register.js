@@ -820,7 +820,8 @@ define('io.ox/calendar/invitations/register', [
                         imip: imip,
                         container: self,
                         yell: yell,
-                        mailModel: self.model
+                        mailModel: self.model,
+                        conflicts: change.conflicts
                     });
                     self.$el.append(
                         extView.render().$el
