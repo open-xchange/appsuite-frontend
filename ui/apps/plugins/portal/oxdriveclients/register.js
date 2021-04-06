@@ -99,7 +99,7 @@ define('plugins/portal/oxdriveclients/register', [
             link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
 
         // simple fallback for typical wrong configured customer systems (OX Drive for windows)
-        if (settings.get('linkTo/' + platform) === '') {
+        if (_.isEmpty(settings.get('linkTo/' + platform))) {
             console.warn('OX Drive for windows settings URL not present! Please configure "plugins/portal/oxdriveclients/linkTo/Windows" correctly');
             //#. Points the user to a another place in the UI to download an program file. Variable will be the product name, ie. "OX Drive"
             link = $('<p style="font-weight: bold">').text(gt('Please use the "Connect your device" wizard to download %s', settings.get('productName')));
@@ -150,7 +150,8 @@ define('plugins/portal/oxdriveclients/register', [
             ul.append($('<li>').append($('<h3>').text(gt('%s is also available for other platforms:', settings.get('productName')))));
 
             _.each(getAllOtherPlatforms(), function (os) {
-                if (settings.get('linkTo/' + os) !== '') ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));
+                // use isEmpty here to detect missing settings, null, undefined and emtpystring
+                if (!_.isEmpty(settings.get('linkTo/' + os))) ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));
             });
         }
     });
