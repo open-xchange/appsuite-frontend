@@ -79,7 +79,7 @@ define('io.ox/files/share/public-link', [
                 $('<div class="row"></div>')
                 .append(
                     $('<div class="col-sm-1 col-xs-2 text-center"><i class="fa fa-link" aria-hidden="true"></i></div>'),
-                    $('<div class="col-sm-5 col-xs-6"></div>').text(linkLabel), // TODO YRI DOCS-3099 Folder, Tasks, Calendar
+                    $('<div class="col-sm-5 col-xs-6"></div>').text(linkLabel),
                     $('<div class="col-sm-6 col-xs-4 text-left"></div>').append(copyLinkButton.render().$el)
                 )
             );

@@ -883,7 +883,7 @@ define('io.ox/files/share/permissions', [
 
             this.append(
                 $('<div class="access-select"></div>').append(
-                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(accessLabel), // TODO YRI DOCS-3099 File, Calendar
+                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(accessLabel),
                     $('<div>').addClass('row vertical-align-center').append($('<div>').addClass('form-group col-sm-6').append(select.attr('id', guid)))
                 )
             );
