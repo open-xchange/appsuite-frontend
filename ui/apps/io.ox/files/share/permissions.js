@@ -869,10 +869,21 @@ define('io.ox/files/share/permissions', [
                 }
                 select.append(option);
             });
+            // File linkModel.get('files')[0].get('filename')
+            // Calendar linkModel.get('files')[0].get('module') === calendar
+            var accessLabel;
+            var model = linkModel.get('files')[0];
+            if (model.isFile()) {
+                accessLabel = gt('Who can access this file?');
+            } else if (model.get('module') === 'calendar') {
+                accessLabel = gt('Who can access this calendar?');
+            } else {
+                accessLabel = gt('Who can access this folder?');
+            }
 
             this.append(
                 $('<div class="access-select"></div>').append(
-                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(gt('Who can access this folder?')),
+                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(accessLabel), // TODO YRI DOCS-3099 File, Calendar
                     $('<div>').addClass('row vertical-align-center').append($('<div>').addClass('form-group col-sm-6').append(select.attr('id', guid)))
                 )
             );
@@ -944,11 +955,20 @@ define('io.ox/files/share/permissions', [
                 width: '35.25rem',
                 share: false }, options);
 
+            var objectType;
+            if (objModel.get('module') === 'calendar') {
+                objectType = gt('calendar');
+            } else if (objModel.isFile()) {
+                objectType = gt('file');
+            } else {
+                objectType = gt('folder');
+            }
+
             options.title = options.title || (options.share ?
                 //#. %1$s determines whether setting permissions for a file or folder
                 //#. %2$s is the file or folder name
                 gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
+                gt('Permissions for %1$s "%2$s"', objectType, objModel.getDisplayName()));
 
             options.point = 'io.ox/files/share/permissions/dialog';
 
