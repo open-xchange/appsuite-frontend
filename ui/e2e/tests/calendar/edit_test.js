@@ -222,7 +222,7 @@ Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, user
     I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Share / Permissions');
-    I.waitForText('Permissions for folder "New calendar"');
+    I.waitForText('Permissions for calendar "New calendar"');
     I.waitForDetached(busystate);
     I.wait(0.5);
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
