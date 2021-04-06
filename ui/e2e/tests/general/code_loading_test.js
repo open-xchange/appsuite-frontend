@@ -38,8 +38,8 @@ Scenario('[OXUIB-645] XSS using script code as module at app loader', async func
     I.wait(1);
     I.click('Close');
     I.click(locate('.list-item').withText('OXUIB-645.js'));
-    drive.shareItem();
-    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    drive.shareItem(true);
+    I.selectOption('Who can access this file?', 'Anyone with the link and invited people');
     I.waitForNetworkTraffic();
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
     let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
