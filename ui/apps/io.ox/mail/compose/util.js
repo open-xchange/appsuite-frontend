@@ -35,6 +35,14 @@ define('io.ox/mail/compose/util', [
                 def,
                 instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
+            model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
+                var def = new $.Deferred();
+                attachment.once('upload:complete', def.resolve);
+                attachment.once('upload:aborted', def.resolve);
+                attachment.once('upload:failed', def.reject);
+                return _.constant(def);
+            })());
+
             function process() {
                 if (!data) return;
                 if (instantAttachmentUpload === false) return;
@@ -47,12 +55,18 @@ define('io.ox/mail/compose/util', [
                 return def.progress(function (e) {
                     attachment.set('uploaded', Math.min(e.loaded / e.total, 0.999));
                 }).then(function success(data) {
+                    if (attachment.destroyed) {
+                        var attachmentDef = composeAPI.space.attachments.remove(model.id, data.id);
+                        model.pendingDeletedAttachments = model.pendingDeletedAttachments.catch(_.constant()).then(function () {
+                            return attachmentDef;
+                        });
+                    }
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
                     attachment.set(data);
                     // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
                     attachment.trigger('upload:complete', data);
                 }, function fail(error) {
-                    if (error.error === 'abort') return;
+                    if (error.error === 'abort') return attachment.trigger('upload:aborted');
                     // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
                     attachment.trigger('upload:failed', error);
                     // yell error, magically disappearing attachments are bad ux (some quota errors can even be solved by users)
@@ -69,7 +83,9 @@ define('io.ox/mail/compose/util', [
             // is handled either when user removes the attachment or composition space is discarded
             attachment.on('destroy', function () {
                 data = undefined;
+                this.destroyed = true;
                 if (def && def.state() === 'pending') def.abort();
+                else if (!def) attachment.trigger('upload:aborted');
             });
             attachment.done = def;
 
