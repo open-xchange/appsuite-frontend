@@ -108,6 +108,7 @@ define('io.ox/mail/compose/model', [
                 this.listenTo(composeAPI, 'mail-compose-claim:' + data.id, this.onExternalClaim);
             }.bind(this));
             this.pendingDeletedAttachments = $.when();
+            this.pendingUploadingAttachments = $.when();
         },
 
         initialPatch: function () {
