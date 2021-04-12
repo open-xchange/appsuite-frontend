@@ -60,6 +60,21 @@ define('io.ox/files/upload/dropzone', [
                 app: app,
                 dropZones: []
             });
+
+            // Resize visible dropzones based on those enabled
+            var resize = _.debounce(function doResize(baton) {
+                if (baton.dropZones.length <= 1) return; // ntd
+                var enabled = baton.dropZones.filter(function (zone) { return zone.isEnabled(); });
+                var size = 100 / enabled.length;
+                enabled.map(function (zone, position) {
+                    zone.$el
+                        .css({
+                            top: position * size + '%',
+                            height: size + '%'
+                        });
+                });
+            }, 200, baton);
+
             ext.point('io.ox/files/dropzone').invoke('getDropZones', this, baton);
 
             var size = 100 / baton.dropZones.length;
@@ -80,7 +95,9 @@ define('io.ox/files/upload/dropzone', [
 
                         };
                     }
-
+                    zone.on('show', function () {
+                        resize(baton);
+                    });
                     return zone.render().$el
                         .addClass('abs')
                         .css({
@@ -89,6 +106,7 @@ define('io.ox/files/upload/dropzone', [
                         });
                 })
             );
+
         }
     });
 });
