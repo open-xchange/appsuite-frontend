@@ -39,11 +39,11 @@ Scenario('[C7799] Filter mail on mailing list', async ({ I, users, mail, mailfil
     mailfilter.setFlag('Red');
 
     // save the form
-    I.click('Save and apply');
+    I.click('Save and apply rule now');
 
-    I.waitForText('Select the folder to apply the rule to');
+    I.waitForText('Please select the folder to apply the rule to');
     I.waitForVisible('li.selected[data-id="default0/INBOX"]');
-    I.click('Apply', '.modal-dialog');
+    I.click('Apply filter rule', '.modal-dialog');
 
     I.waitForVisible('.settings-detail-pane li.settings-list-item[data-id="0"]');
 
