@@ -111,7 +111,7 @@ Scenario('[C290530] Create and apply new filter rule', async ({ I, users, dialog
     dialogs.clickButton('Select');
 
     I.waitForText('Create new rule', 5, dialogs.locators.header);
-    dialogs.clickButton('Save and apply');
+    dialogs.clickButton('Save and apply rule now');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
@@ -129,9 +129,9 @@ Scenario('[C290531] Edit and apply existing filter rule', async ({ I, users, dia
     dialogs.waitForVisible();
     I.fillField('Rule name', 'no foo in inbox');
     I.fillField('Subject Contains', 'foo');
-    dialogs.clickButton('Save and apply');
+    dialogs.clickButton('Save and apply rule now');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    dialogs.clickButton('Apply');
+    dialogs.clickButton('Apply filter rule');
 
     checkForFilteredMail(I);
 });
