@@ -217,8 +217,8 @@ define('io.ox/onboarding/main', [
         this.$('div[role="document"]').addClass('connect-wizard');
         this.$('.wizard-title').text(title);
         this.$('.wizard-footer').empty().append(
-            $('<button type="button" class="btn btn-default col-xs-12 col-sm-3" data-action="close">').text(gt('Close')),
-            this.parent.currentStep === 0 ? '' : $('<button type="button" class="btn btn-default col-xs-12 col-sm-3" data-action="back">').text(gt('Back'))
+            $('<button type="button" class="btn btn-default" data-action="close">').text(gt('Close')),
+            this.parent.currentStep === 0 ? '' : $('<button type="button" class="btn btn-default" data-action="back">').text(gt('Back'))
         );
     }
 
