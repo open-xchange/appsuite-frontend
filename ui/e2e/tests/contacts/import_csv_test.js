@@ -39,6 +39,8 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     await I.haveSetting({ 'io.ox/contacts': { startInGlobalAddressbook: false } });
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
+    I.doubleClick('My address books');
+    I.click('Contacts', '~Contacts');
 
     // do everything twice
     ['csv', 'vcf'].forEach(function (type) {
