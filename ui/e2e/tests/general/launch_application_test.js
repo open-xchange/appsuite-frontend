@@ -21,21 +21,18 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7343] Launch "Portal" application', async function ({ I }) {
+Scenario('[C7343] Launch "Portal" application', async function ({ I, mail }) {
     I.login('app=io.ox/mail');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
-
+    mail.waitForApp();
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
     I.click('Portal');
     I.waitForElement('.greeting-phrase');
 });
 
-Scenario('[C7344] Launch "E-Mail" application', async function ({ I }) {
+Scenario('[C7344] Launch "E-Mail" application', async function ({ I, portal }) {
     I.login('app=io.ox/portal');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    portal.waitForApp();
     I.waitForElement('#io-ox-launcher');
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
@@ -43,10 +40,9 @@ Scenario('[C7344] Launch "E-Mail" application', async function ({ I }) {
     I.waitForText('Compose');
 });
 
-Scenario('[C7345] Launch "Address Book" application', async function ({ I }) {
+Scenario('[C7345] Launch "Address Book" application', async function ({ I, portal }) {
     I.login('app=io.ox/portal');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    portal.waitForApp();
     I.waitForElement('#io-ox-launcher');
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
@@ -55,10 +51,9 @@ Scenario('[C7345] Launch "Address Book" application', async function ({ I }) {
     I.seeElement('.classic-toolbar[aria-label="Address Book toolbar. Use cursor keys to navigate."]');
 });
 
-Scenario('[C7346] Launch "Calendar" application', async function ({ I }) {
+Scenario('[C7346] Launch "Calendar" application', async function ({ I, portal }) {
     I.login('app=io.ox/portal');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    portal.waitForApp();
     I.waitForElement('#io-ox-launcher');
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
@@ -67,10 +62,9 @@ Scenario('[C7346] Launch "Calendar" application', async function ({ I }) {
     I.seeElement('.classic-toolbar[aria-label="Calendar toolbar. Use cursor keys to navigate."]');
 });
 
-Scenario('[C7347] Launch "Drive" application', async function ({ I }) {
+Scenario('[C7347] Launch "Drive" application', async function ({ I, portal }) {
     I.login('app=io.ox/portal');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    portal.waitForApp();
     I.waitForElement('#io-ox-launcher');
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');
@@ -78,29 +72,26 @@ Scenario('[C7347] Launch "Drive" application', async function ({ I }) {
     I.waitForText('My files');
 });
 
-Scenario('[C7350] Launch "Settings" application', async function ({ I }) {
+Scenario('[C7350] Launch "Settings" application', async function ({ I, mail }) {
     I.login('app=io.ox/mail');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    mail.waitForApp();
     I.waitForElement('#io-ox-settings-topbar-icon');
     I.click('~Settings', '#io-ox-settings-topbar-icon');
     I.waitForElement('.settings-detail-pane');
     I.seeElement('.settings-detail-pane');
 });
 
-Scenario('[C7351] Trigger refresh', async function ({ I }) {
+Scenario('[C7351] Trigger refresh', async function ({ I, mail }) {
     I.login('app=io.ox/mail');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    mail.waitForApp();
     I.click('#io-ox-refresh-icon');
     I.waitForElement('.fa-spin.fa-refresh');
     I.waitForElement('.fa-spin-paused.fa-refresh');
 });
 
-Scenario('[C234516] Launch "Tasks" application', async function ({ I }) {
+Scenario('[C234516] Launch "Tasks" application', async function ({ I, mail }) {
     I.login('app=io.ox/mail');
-    I.waitForElement('.fa-spin.fa-refresh');
-    I.waitForElement('.fa-spin-paused.fa-refresh');
+    mail.waitForApp();
     I.waitForElement('#io-ox-launcher');
     I.click('#io-ox-launcher');
     I.waitForElement('.launcher-dropdown');

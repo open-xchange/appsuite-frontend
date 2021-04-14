@@ -26,7 +26,7 @@ Scenario('[XSS] [OXUIB-400] No malicious code execution when code loading fails'
     drive.waitForApp();
 });
 
-Scenario('[OXUIB-645] XSS using script code as module at app loader', async function (I, drive) {
+Scenario('[OXUIB-645] XSS using script code as module at app loader', async function ({ I, drive }) {
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.clickToolbar('New');
