@@ -16,8 +16,9 @@ define('io.ox/backbone/views/actions/util', [
     'io.ox/core/upsell',
     'io.ox/core/folder/api',
     'io.ox/core/collection',
-    'io.ox/core/capabilities'
-], function (ext, upsell, api, Collection, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/core'
+], function (ext, upsell, api, Collection, capabilities, settings) {
 
     'use strict';
 
@@ -167,7 +168,7 @@ define('io.ox/backbone/views/actions/util', [
 
         renderListItem: function ($li, baton, item) {
 
-            function checkUpsell(item) {
+            function isUpsell(item) {
                 if (!item.actions[0]) return false;
                 var requires = item.actions[0].capabilities;
                 return !upsell.has(requires) && upsell.enabled(requires);
@@ -187,8 +188,11 @@ define('io.ox/backbone/views/actions/util', [
                     .attr({ 'data-action': item.link.ref });
                 applyIconTitleTooltip($a, item.link, baton, item.enabled);
                 if (!item.enabled) $a.addClass('disabled').attr('aria-disabled', true);
-                if (checkUpsell(item)) $a.addClass('upsell').append($('<i class="fa fa-star">'));
-                return $a;
+                if (!isUpsell(item)) return $a;
+                // add upsell icon
+                return $a.addClass('upsell').append(
+                    $('<i class="upsell-icon fa">').addClass(settings.get('upsell/defaultIcon', 'fa-star'))
+                );
             });
         },
 
