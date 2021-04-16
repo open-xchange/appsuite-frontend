@@ -460,7 +460,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
             if (isError) return false;
             if (model.isFile() && !baton.collection.has('read')) return false;
-            return model.isOffice() || model.isPDF();
+            return model.isOffice() || model.isPDF() || (model.isImage() && !model.isTiff()) || model.isText();
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
