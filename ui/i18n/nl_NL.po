@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:41+0100\n"
+"PO-Revision-Date: 2021-04-16 11:40+0200\n"
 "Last-Translator: Tim <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -9385,7 +9385,7 @@ msgstr "Één jaar"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
 msgid "Expiration"
-msgstr "Verloopt op"
+msgstr "Verloopt na"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Password (optional)"
