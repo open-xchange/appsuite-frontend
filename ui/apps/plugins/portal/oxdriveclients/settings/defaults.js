@@ -8,7 +8,7 @@
  *
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Alexander Quast <alexander.quat@open-xchange.com>
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
 define('plugins/portal/oxdriveclients/settings/defaults', function () {
