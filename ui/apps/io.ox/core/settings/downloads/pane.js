@@ -40,9 +40,11 @@ define('io.ox/core/settings/downloads/pane', [
 
     // add OX Drive download links
     if (capabilities.has('drive')) {
-
         var productName = driveClientsSettings.get('productName'),
             linkTo = driveClientsSettings.get('linkTo');
+
+        // workaround, see OXUIB-795
+        linkTo['Mac OS'] = linkTo.MacOS || linkTo['Mac OS'];
 
         var getShopLinkWithImage = function (platform, url) {
             var lang = ox.language.split('_')[0],

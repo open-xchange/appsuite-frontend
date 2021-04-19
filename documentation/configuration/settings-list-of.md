@@ -748,16 +748,16 @@ Receive notifications when a task in which you participate is created, modified 
 
 # Portal: OX Drive Clients Widget
 
-<config>plugins/portal//oxdriveclients/appIconAsBase64=`<string>`</config>
+<config>plugins/portal/oxdriveclients//appIconAsBase64=`<string>`</config>
 App icon encoded as base64 string.
 
-<config>plugins/portal//oxdriveclients/l10nImages=`<array>`</config>
+<config>plugins/portal/oxdriveclients//l10nImages=`<array>`</config>
 Array of language strings like 'en,de,es'. This will indicate which localized app store images are present. Default `['de', 'en', 'es', 'fr', 'it', 'nl']`
 
-<config>plugins/portal//oxdriveclients/linkTo/[windows|android|ios|macos]=`<string>`</config>
+<config>plugins/portal/oxdriveclients//linkTo/[Windows|Android|iOS|MacOS]=`<string>`</config>
 Link to Appstore or download location
 
-<config>plugins/portal//oxdriveclients/productName=`<string>`</config>
+<config>plugins/portal/oxdriveclients//productName=`<string>`</config>
 Customized product name for OX Drive. Default `OX Drive`
 
 # Misc
