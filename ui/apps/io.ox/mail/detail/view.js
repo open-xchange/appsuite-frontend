@@ -562,6 +562,9 @@ define('io.ox/mail/detail/view', [
                                 )
                             )
                         );
+
+                    // adjust height again
+                    $(this.contentWindow).trigger('complete');
                 }.bind(this));
             });
         }
