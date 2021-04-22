@@ -266,7 +266,7 @@ define('io.ox/calendar/toolbar', [
 
             var toolbar = $('<div class="generic-toolbar calendar bottom visual-focus" role="region">').append(
                 $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Open folder view')).append(
-                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                    $.icon('fa-angle-double-right', gt('Open folder view'))
                 ).on('click', { state: true }, app.toggleFolderView)
             );
 

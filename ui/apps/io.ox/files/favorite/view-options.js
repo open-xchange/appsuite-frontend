@@ -95,7 +95,7 @@ define('io.ox/files/favorite/view-options', [
             this.append(
                 $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">')
                 .attr('title', gt('Open folder view'))
-                .append($('<i class="fa fa-angle-double-right" aria-hidden="true">'))
+                .append($.icon('fa-angle-double-right', gt('Open folder view')))
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 

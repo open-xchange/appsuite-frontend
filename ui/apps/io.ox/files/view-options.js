@@ -290,7 +290,7 @@ define('io.ox/files/view-options', [
 
             this.append(
                 $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
-                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                    $.icon('fa-angle-double-right', gt('Open folder view'))
                 ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
@@ -310,7 +310,7 @@ define('io.ox/files/view-options', [
             this.addClass('bottom-toolbar').append(
                 $('<div class="generic-toolbar bottom visual-focus" role="region">').append(
                     $('<button class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                        $.icon('fa-angle-double-left', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );

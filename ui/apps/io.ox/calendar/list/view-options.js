@@ -45,7 +45,7 @@ define('io.ox/calendar/list/view-options', [
             this.addClass('visual-focus').append(
                 $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
                 .attr('aria-label', gt('Open folder view'))
-                .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
+                .append($.icon('fa-angle-double-right', gt('Open folder view')))
                 .on('click', { state: true }, app.toggleFolderView)
             );
 

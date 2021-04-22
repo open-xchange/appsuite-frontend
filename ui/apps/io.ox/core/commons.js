@@ -605,7 +605,7 @@ define('io.ox/core/commons', [
                     this.addClass('visual-focus').append(
                         $('<button type="button" class="btn btn-link toolbar-item" data-action="open-folder-view">')
                         .attr('aria-label', gt('Open folder view'))
-                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
+                        .append($.icon('fa-angle-double-right', gt('Open folder view')))
                         .on('click', { app: app, state: true }, toggleFolderView)
                     );
                 }
@@ -621,7 +621,7 @@ define('io.ox/core/commons', [
                         $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
                             $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
-                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                                $.icon('fa-angle-double-left', gt('Close folder view'))
                             )
                             .on('click', { app: app, state: false }, toggleFolderView)
                         )
@@ -672,7 +672,7 @@ define('io.ox/core/commons', [
                         $('<div class="generic-toolbar bottom visual-focus" role="region">').attr('aria-labelledby', guid).append(
                             $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr({ id: guid, 'aria-label': gt('Close folder view') })
                             .append(
-                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                                $.icon('fa-angle-double-left', gt('Close folder view'))
                             )
                             .on('click', { state: false }, app.toggleFolderView)
                         )
