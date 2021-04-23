@@ -814,11 +814,8 @@ define('io.ox/calendar/edit/extensions', [
                 var colorLabel = gt('none');
                 if (!self.model.get('color')) {
                     // try to get the folder color
-                    var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
-                        props = model.get('com.openexchange.calendar.extendedProperties') || {},
-                        color = '#fff';
+                    var color = calendarUtil.getFolderColor(folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model());
 
-                    if (props.color && props.color.value) color = props.color.value;
                     pickedColor.css({ 'background-color': color });
                     if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;
                     pickedColorLabel.text(colorLabel);
