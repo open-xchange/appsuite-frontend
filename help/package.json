@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite-help",
-  "version": "7.8.4-65",
+  "version": "7.8.4-66",
   "dependencies": {},
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
