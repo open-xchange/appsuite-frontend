@@ -448,10 +448,6 @@ define('io.ox/core/viewer/views/types/documentview', [
          */
         render: function () {
             this.documentContainer = $('<div class="document-container io-ox-core-pdf">');
-            this.documentContainer.enableTouch({
-                tapHandler: this.onTap.bind(this),
-                pinchHandler: this.onPinch.bind(this)
-            });
             this.$el.empty();
             return this;
         },
@@ -627,6 +623,10 @@ define('io.ox/core/viewer/views/types/documentview', [
                     return;
                 }
 
+                this.documentContainer.enableTouch({
+                    tapHandler: this.onTap.bind(this),
+                    pinchHandler: this.onPinch.bind(this)
+                });
                 // attach the document container to the slide
                 this.$el.empty().append(this.documentContainer);
 
