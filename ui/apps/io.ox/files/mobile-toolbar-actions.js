@@ -77,7 +77,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         ext.point('io.ox/files/links/inline').list().map(function (item) {
             item = _(item).pick('id', 'index', 'prio', 'mobile', 'icon', 'title', 'ref', 'section', 'sectionTitle');
             switch (item.id) {
-                case 'openviewer': item.icon = 'fa fa-eye'; break;
+                case 'openviewer': item.icon = 'fa-eye'; break;
                 // no default
             }
             return item;

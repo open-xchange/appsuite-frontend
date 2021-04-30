@@ -1327,7 +1327,7 @@ define('io.ox/files/actions', [
             id: 'send',
             prio: 'lo',
             mobile: 'hi',
-            icon: _.device('smartphone') ? 'fa fa-envelope-o' : '',
+            icon: _.device('smartphone') ? 'fa-envelope-o' : '',
             title: gt('Send by email'),
             ref: 'io.ox/files/actions/send',
             section: 'share'
