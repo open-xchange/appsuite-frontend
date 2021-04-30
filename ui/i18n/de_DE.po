@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-03-10 10:52+0100\n"
+"PO-Revision-Date: 2021-04-29 14:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -316,7 +316,6 @@ msgstr "Keine Erinnerung"
 msgid "Edit reminders"
 msgstr "Erinnerungen bearbeiten"
 
-#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -9316,14 +9315,20 @@ msgid "Anyone with the link and invited people"
 msgstr "Jeder mit dem Link und eingeladene Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Wer kann auf diese Datei zugreifen?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Wer kann auf diesen Kalender zugreifen?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Wer kann auf diesen Ordner zugreifen?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "%1$s \"%2$s\" freigeben"
+msgid "calendar"
+msgstr "Kalender"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9336,6 +9341,12 @@ msgstr "Datei"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "Ordner"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "%1$s \"%2$s\" freigeben"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9385,6 +9396,14 @@ msgstr "Link kopieren"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Jeder im Internet mit dem Link kann die Datei anzeigen."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Jeder im Internet mit dem Link kann den Kalender anzeigen."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Jeder im Internet mit dem Link kann den Ordner anzeigen."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -11092,8 +11111,8 @@ msgid "Edit rule"
 msgstr "Regel bearbeiten"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Save and apply"
-msgstr "Speichern und Anwenden"
+msgid "Save and apply rule now"
+msgstr "Regel jetzt speichern und anwenden"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -11121,8 +11140,13 @@ msgid "Drag to reorder filter rules"
 msgstr "Zum Neusortieren der Filterregeln ziehen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Select the folder to apply the rule to"
+msgid "Please select the folder to apply the rule to"
 msgstr "Wählen Sie den Ordner aus, auf den die Regel angewendet werden soll"
+
+#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Apply filter rule"
+msgstr "Filterregel anwenden"
 
 #. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -14288,11 +14312,6 @@ msgstr "Jitsi-Meeting: %1$s"
 msgid "Connecting to Zoom ..."
 msgstr "Verbinden mit Zoom ..."
 
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Zoom Meeting: %1$s"
-msgstr "Zoom-Meeting: %1$s"
-
 #. %1$s contains a password
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
 msgid "Meeting password: %1$s"
@@ -16076,6 +16095,15 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Save and apply"
+#~ msgstr "Speichern und Anwenden"
+
+#~ msgid "Select the folder to apply the rule to"
+#~ msgstr "Wählen Sie den Ordner aus, auf den die Regel angewendet werden soll"
+
+#~ msgid "Zoom Meeting: %1$s"
+#~ msgstr "Zoom-Meeting: %1$s"
 
 #~ msgid ""
 #~ "The file \"%1$s\" cannot be uploaded because it exceeds the infostore "
