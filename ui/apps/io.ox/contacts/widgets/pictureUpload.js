@@ -80,7 +80,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
             this.openEditDialog();
         },
 
-        onClickContainer: function () {
+        onClickContainer: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
             return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
         },
 
