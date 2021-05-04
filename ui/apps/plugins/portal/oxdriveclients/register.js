@@ -21,6 +21,10 @@ define('plugins/portal/oxdriveclients/register', [
 
     'use strict';
 
+    var linkTo = settings.get('linkTo', {});
+    // workaround, see OXUIB-795
+    linkTo['Mac OS'] = linkTo.MacOS || linkTo['Mac OS'];
+
     function getPlatform() {
         var isAndroid = _.device('android'),
             isIOS = _.device('ios'),
@@ -96,10 +100,10 @@ define('plugins/portal/oxdriveclients/register', [
 
     function getText(baton) {
         var ul, platform = getPlatform(),
-            link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
+            link = getShopLinkWithImage(platform, linkTo[platform]);
 
         // simple fallback for typical wrong configured customer systems (OX Drive for windows)
-        if (settings.get('linkTo/' + platform) === '') {
+        if (_.isEmpty(linkTo[platform])) {
             console.warn('OX Drive for windows settings URL not present! Please configure "plugins/portal/oxdriveclients/linkTo/Windows" correctly');
             //#. Points the user to a another place in the UI to download an program file. Variable will be the product name, ie. "OX Drive"
             link = $('<p style="font-weight: bold">').text(gt('Please use the "Connect your device" wizard to download %s', settings.get('productName')));
@@ -133,7 +137,7 @@ define('plugins/portal/oxdriveclients/register', [
             //#, c-format
             baton.teaser = gt('The %1$s client lets you store and share your photos, files, documents and videos, anytime, ' +
                 'anywhere. Access any file you save to %1$s from all your computers, iPhone, iPad or from within %2$s itself.', settings.get('productName'), ox.serverConfig.productName);
-            baton.link = settings.get('linkTo/' + getPlatform());
+            baton.link = linkTo[getPlatform()];
 
             return def.resolve();
         },
@@ -150,7 +154,10 @@ define('plugins/portal/oxdriveclients/register', [
             ul.append($('<li>').append($('<h3>').text(gt('%s is also available for other platforms:', settings.get('productName')))));
 
             _.each(getAllOtherPlatforms(), function (os) {
-                if (settings.get('linkTo/' + os) !== '') ul.append($('<li class="link">').append(getShopLinkWithImage(os, settings.get('linkTo/' + os))));
+                // use isEmpty here to detect missing settings, null, undefined and emptystring
+                if (!_.isEmpty(linkTo[os])) {
+                    ul.append($('<li class="link">').append(getShopLinkWithImage(os, linkTo[os])));
+                }
             });
         }
     });

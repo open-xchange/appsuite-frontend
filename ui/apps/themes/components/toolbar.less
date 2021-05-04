@@ -233,9 +233,9 @@
         float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
-        & >a.upsell i.fa.fa-star {
+        & > a.upsell i.upsell-icon {
+            color: @upsell-icon-color;
             margin-left: 4px;
-            color: #ffc107;
             font-size: 14px;
         }
 
@@ -305,9 +305,9 @@
                 outline: 0;
                 text-decoration: none;
             }
-            &.upsell i.fa.fa-star {
+            &.upsell i.upsell-icon {
+                color: @upsell-icon-color;
                 margin-left: 4px;
-                color: #ffc107;
                 font-size: 14px;
             }
         }

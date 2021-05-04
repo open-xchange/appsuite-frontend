@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:40+0100\n"
+"PO-Revision-Date: 2021-04-23 13:14+0200\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -15312,7 +15312,7 @@ msgstr "your platform"
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 #, c-format
 msgid "Download %s"
-msgstr "Downloads %s"
+msgstr "Download %s"
 
 #. Points the user to a another place in the UI to download an program file. Variable will be the product name, ie. "OX Drive"
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
