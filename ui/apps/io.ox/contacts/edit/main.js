@@ -199,7 +199,9 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.settings.personaldata.html';
+            return this.view.model.isUserMode() ?
+                'ox.appsuite.user.sect.settings.personaldata.html' :
+                'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         return app;
