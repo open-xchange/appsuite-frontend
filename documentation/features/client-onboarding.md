@@ -37,8 +37,12 @@ point: io.ox/portal/widget/client-onboarding/settings
 ```
 
 # Platforms, devices and scenarios
+The new onboarding wizard is configured via settings and capabilities, please see:
+https://documentation.open-xchange.com/7.10.5/ui/configuration/settings-list-of.html#onboarding
 
-Please refer to the middleware feature [config documentation](https://oxpedia.org/wiki/index.php?title=AppSuite:Client_Onboarding) for more details.
+The old wizard can still be enabled via setting:
+<config>io.ox/core//onboardingWizard=false</config>
+Please refer to the middleware feature [config documentation](https://oxpedia.org/wiki/index.php?title=AppSuite:Client_Onboarding) for more details about the old wizard.
 
 # Upsell
 
