@@ -164,7 +164,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             perform: function (baton) {
                 var def = baton.data.id ? snippets.update(baton.data) : snippets.create(baton.data);
                 return def.done(function () {
-                    snippets.getAll('signature').done(function (signatures) {
+                    snippets.getAll({ timeout: 0 }).done(function (signatures) {
                         // set very first signature as default if no other signatures exist
                         if (signatures.length === 1) settings.set('defaultSignature', signatures[0].id).save();
                         baton.view.close();
@@ -398,8 +398,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 });
 
                 function load() {
-                    snippets.getAll('signature').then(function (sigs) {
-                        collection.reset(sigs);
+                    snippets.getAll({ timeout: 0 }).then(function (list) {
+                        collection.reset(list);
                     });
                 }
             }

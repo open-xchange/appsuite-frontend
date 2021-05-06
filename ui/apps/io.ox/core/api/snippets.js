@@ -48,8 +48,8 @@ define('io.ox/core/api/snippets', [
         return collection;
     };
 
-    api.getAll = function () {
-
+    api.getAll = function (options) {
+        var opt = _.extend({ timeout: 15000 }, options);
         if (cache) return $.Deferred().resolve(cache);
 
         return http.GET({
@@ -57,8 +57,8 @@ define('io.ox/core/api/snippets', [
             params: {
                 action: 'all'
             },
-            // See bug 62222, we add a timeout as this should be a highly available service and should not block the ui
-            timeout: 15000
+            // See: bug 62222, OXUIB-823
+            timeout: opt.timeout
         })
         .then(
             function success(data) {
