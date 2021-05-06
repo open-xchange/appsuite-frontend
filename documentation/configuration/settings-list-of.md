@@ -746,6 +746,13 @@ Receive notifications when a participant accepted or declined a task in which yo
 <config>io.ox/tasks//notifyNewModifiedDeleted=`<bool>`</config>
 Receive notifications when a task in which you participate is created, modified or deleted. Default `false`
 
+# Settings: Downloads
+
+Please see section <i>Portal: OX Drive Clients Widget</i> for more related settings.
+
+<config>plugins/portal/oxdriveclients//standaloneWindowsClient=`<boolean>`</config>
+Enables download link of standalone window client on settings download page. Default `false`
+
 # Portal: OX Drive Clients Widget
 
 <config>plugins/portal/oxdriveclients//appIconAsBase64=`<string>`</config>
