@@ -76,8 +76,7 @@ define('io.ox/chat/views/chatListEntry', [
                             if (this.model.isPrivate()) {
                                 this.$('.title').text(summary.text || this.model.getTitle());
                             } else {
-                                this.$('.title').empty().append(
-                                    this.model.getTitle(),
+                                this.$('.title').empty().text(this.model.getTitle()).append(
                                     $('<span class="typing">').text(summary.text)
                                 );
                             }
