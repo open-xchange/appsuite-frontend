@@ -36,7 +36,7 @@ Scenario('Show available setup scenarios based on capabilites', async ({ I, topb
         I.waitForText('OX Drive');
         I.click('OX Drive');
         I.waitForElement(
-            locate('.btn-link.download')
+            locate('.btn.download')
             .withText('OX Drive for Windows')
         );
         I.click('.progress-btn[data-action="reset"]');
