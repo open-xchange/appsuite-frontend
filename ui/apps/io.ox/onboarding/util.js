@@ -82,7 +82,7 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-cloud',
             'app': 'drive',
             'platform': 'windows',
-            'cap': 'infostore'
+            'cap': 'infostore drive'
         },
         {
             'title': gt('Mail'),
@@ -125,7 +125,7 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'android',
-            'cap': 'infostore'
+            'cap': 'infostore drive'
         },
         {
             'title': gt('Email with Apple Mail'),
@@ -153,7 +153,7 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-cloud',
             'app': 'drive',
             'platform': 'macos',
-            'cap': 'infostore'
+            'cap': 'infostore drive'
         },
         {
             'title': gt('Email with iOS Mail'),
@@ -189,7 +189,7 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'ios',
-            'cap': 'infostore'
+            'cap': 'infostore drive'
         },
         {
             'title': gt('Exchange Active Sync'),
