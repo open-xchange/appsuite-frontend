@@ -91,7 +91,7 @@ define('io.ox/chat/views/content', [
             } else if (model.isDeleted()) {
                 this.$body.text(gt('This message was deleted'));
             } else if (model.isSystem()) {
-                this.$body.append(systemMessage.render(model));
+                this.$body.text(systemMessage.render(model));
             } else {
                 var content = model.getContent();
                 // +350 so that if we load a message, we load at least 500 more chars a not only e.g. 10
