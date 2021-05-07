@@ -136,7 +136,7 @@ define('io.ox/onboarding/views', [
                     $('<p class="prompt">').text(gt('Download %1$s for Windows', util.titles.windows.drive))
                 ),
                 //#. 1$s name of the product, usually OX Drive
-                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('%1$s for Windows', util.titles.windows.drive)).append(
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('%1$s for Windows', util.titles.windows.drive)).append(
                     $('<i class="fa fa-download">')
                 )
             );
