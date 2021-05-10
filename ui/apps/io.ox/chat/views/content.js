@@ -91,6 +91,7 @@ define('io.ox/chat/views/content', [
             } else if (model.isDeleted()) {
                 this.$body.text(gt('This message was deleted'));
             } else if (model.isSystem()) {
+                // yes append is correct. system messages may contain html
                 this.$body.append(systemMessage.render(model));
             } else {
                 var content = model.getContent();

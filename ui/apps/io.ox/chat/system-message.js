@@ -40,6 +40,7 @@ define('io.ox/chat/system-message', ['io.ox/chat/api', 'gettext!io.ox/chat'], fu
             type: json.type
         };
 
+        // always make sure user content is properly escaped as this is uses with append function not text function
         switch (deriveType(context)) {
             case 'room:created':
                 if (me) return gt('You created this conversation');
@@ -68,35 +69,35 @@ define('io.ox/chat/system-message', ['io.ox/chat/api', 'gettext!io.ox/chat'], fu
                 //#. %1$s: name of a chat participant
                 return gt('%1$s changed the group image', getOriginatorName(context));
             case 'title:changed':
-                if (me) return gt('You changed the group title to "%1$s"', json.title);
+                if (me) return gt('You changed the group title to "%1$s"', _.escape(json.title));
                 //#. %1$s: name of a chat participant
                 //#. %2$s: the new title
-                return gt('%1$s changed the group title to "%2$s"', getOriginatorName(context), json.title);
+                return gt('%1$s changed the group title to "%2$s"', getOriginatorName(context), _.escape(json.title));
             case 'chat:deleted':
                 if (me) return gt('You deleted this chat');
                 //#. %1$s: name of a chat participant
                 //#. %2$s: the new title
                 return gt('This chat has been deleted by "%1$s"', getOriginatorName(context));
             case 'changeDescription':
-                if (me) return gt('You changed the group description to "%1$s"', json.description);
+                if (me) return gt('You changed the group description to "%1$s"', _.escape(json.description));
                 //#. %1$s: name of a chat participant
                 //#. %2$s: the new description
-                return gt('%1$s changed the group description to "%2$s"', getOriginatorName(context), json.description);
+                return gt('%1$s changed the group description to "%2$s"', getOriginatorName(context), _.escape(json.description));
             case 'room:left':
                 if (me) return gt('You left the conversation');
                 //#. %1$s: name of a chat participant
                 return gt('%1$s left the conversation', getOriginatorName(context));
             case 'me':
                 // no need to translate this
-                return getOriginatorName(context) + ' ' + json.message;
+                return getOriginatorName(context) + ' ' + _.escape(json.message);
             case 'text':
-                return json.message;
+                return _.escape(json.message);
             case 'decryption:failed':
                 //#. If it fails to load and decrypt a chat message a system message will be shown
                 return gt('Message could not be loaded');
             default:
                 //#. %1$s: messagetext
-                return model.getContent() || gt('Unknown system message: %1$s', json.type);
+                return model.getContent() || gt('Unknown system message: %1$s', _.escape(json.type));
         }
     }
 
