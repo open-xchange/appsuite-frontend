@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2021 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -14,17 +14,47 @@
 
 define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/contacts'
-], function (ModalDialog, gt) {
+    'io.ox/backbone/mini-views/common',
+    'gettext!io.ox/contacts',
+    'less!io.ox/contacts/enterprisepicker/style'
+], function (ModalDialog, Mini, gt) {
 
     'use strict';
 
     var open = function (callback) {
 
+        var model = new Backbone.Model({
+            searchQuery: '',
+            filterQuery: '',
+            selectedList: null
+        });
         return new ModalDialog({
             point: 'io.ox/contacts/enterprisepicker-dialog',
             help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
             title: gt('Global address list')
+        })
+        .extend({
+            addClass: function () {
+                this.$el.addClass('enterprise-picker');
+            },
+            header: function () {
+                this.$('.modal-header').append(
+                    $('<div class="top-bar">').append(
+                        $('<label>').text(gt('Search')).append(
+                            new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
+                            .attr('placeholder', gt('Search for name, department, position'))
+                        ),
+                        $('<label>').text(gt('Filter')).append(
+                            new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
+                            .attr('placeholder', gt('Filter address lists'))
+                        ),
+                        $('<label>').text(gt('Address list')).append(
+                            new Mini.SelectView({ name: 'selectedList', model: model }).render().$el
+                            .attr('placeholder', gt('Choose address list'))
+                        )
+                    )
+                );
+            }
         })
         .on({
             'select': function () {
