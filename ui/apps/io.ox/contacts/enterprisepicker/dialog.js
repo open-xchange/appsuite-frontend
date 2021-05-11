@@ -15,57 +15,93 @@
 define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common',
+    'io.ox/backbone/views/disposable',
+    'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/enterprisepicker/style'
-], function (ModalDialog, Mini, gt) {
+], function (ModalDialog, Mini, DisposableView, api, gt) {
 
     'use strict';
 
-    var open = function (callback) {
+    var mockData = {};
 
-        var model = new Backbone.Model({
-            searchQuery: '',
-            filterQuery: '',
-            selectedList: null
-        });
-        return new ModalDialog({
-            point: 'io.ox/contacts/enterprisepicker-dialog',
-            help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
-            title: gt('Global address list')
-        })
-        .extend({
-            addClass: function () {
-                this.$el.addClass('enterprise-picker');
-            },
-            header: function () {
-                this.$('.modal-header').append(
-                    $('<div class="top-bar">').append(
-                        $('<label>').text(gt('Search')).append(
-                            new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
-                            .attr('placeholder', gt('Search for name, department, position'))
-                        ),
-                        $('<label>').text(gt('Filter')).append(
-                            new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
-                            .attr('placeholder', gt('Filter address lists'))
-                        ),
-                        $('<label>').text(gt('Address list')).append(
-                            new Mini.SelectView({ name: 'selectedList', model: model }).render().$el
-                            .attr('placeholder', gt('Choose address list'))
+    var ContactListView = DisposableView.extend({
+        className: 'contact-list-view',
+
+        render: function () {
+            this.$el.empty();
+            var contacts = this.model.get('contacts');
+            if (contacts.length === 0) {
+                contacts = this.model.get('lastContacts');
+                if (contacts.length === 0) return this;
+                //#. This is followed by a list of contacts from the address book
+                this.$el.append($('<div class="last-searched-label">').text(gt('Last searched for')));
+            }
+            return this;
+        }
+    });
+
+    var open = function (callback) {
+        // use our gab to generate mock data for now
+        return api.getAll({ columns: '20,1,101,500,501,502,505,519,520,521,522,524,543,555,556,557,569,602,606,607,616,617,5,2' }, false).then(function (data) {
+
+            mockData = _(data).groupBy('department');
+            var lists = _(mockData).keys().map(function (department) {
+                // later on this is folder name and id, but since this is mock data...
+                return { label: department, value: department };
+            });
+
+            lists.unshift({ label: gt('Choose address list'), value: 'no-list-selected' });
+
+            var model = new Backbone.Model({
+                searchQuery: '',
+                filterQuery: '',
+                selectedList: 'no-list-selected',
+                contacts: new Backbone.Collection(),
+                lastContacts: new Backbone.Collection(_(data).sample(3)),
+                addressLists: lists
+            });
+            return new ModalDialog({
+                point: 'io.ox/contacts/enterprisepicker-dialog',
+                help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
+                title: gt('Global address list')
+            })
+            .extend({
+                addClass: function () {
+                    this.$el.addClass('enterprise-picker');
+                },
+                header: function () {
+                    this.$('.modal-header').append(
+                        $('<div class="top-bar">').append(
+                            $('<label>').text(gt('Search')).append(
+                                new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
+                                .attr('placeholder', gt('Search for name, department, position'))
+                            ),
+                            $('<label>').text(gt('Filter')).append(
+                                new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
+                                .attr('placeholder', gt('Filter address lists'))
+                            ),
+                            $('<label>').text(gt('Address list')).append(
+                                new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el
+                            )
                         )
-                    )
-                );
-            }
-        })
-        .on({
-            'select': function () {
-                var selection = [];
-                if (_.isFunction(callback)) callback(selection);
-            }
-        })
-        .addCancelButton()
-        //#. Context: Add selected contacts; German "Auswählen", for example
-        .addButton({ label: gt('Select'), action: 'select' })
-        .open();
+                    );
+                },
+                body: function () {
+                    this.$('.modal-body').append(new ContactListView({ model: model }).render().$el);
+                }
+            })
+            .on({
+                'select': function () {
+                    var selection = [];
+                    if (_.isFunction(callback)) callback(selection);
+                }
+            })
+            .addCancelButton()
+            //#. Context: Add selected contacts; German "Auswählen", for example
+            .addButton({ label: gt('Select'), action: 'select' })
+            .open();
+        });
     };
 
     // use same names as default addressbook picker, to make it easier to switch between the two
