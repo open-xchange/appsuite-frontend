@@ -284,7 +284,7 @@ To disable or enable different apps for client onboarding, the onboarding wizard
 The corresponding capabilites for the different apps are:
 
 - Mail App: `webmail mobile_mail_app`
-- Drive App: `infostore`
+- Drive App: `infostore drive`
 - Calendar/ CalDav: `calendar caldav`
 - Address Book/ CardDav: `contacts carddav`
 - Exchange Active Sync: `active_sync`
