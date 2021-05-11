@@ -133,6 +133,12 @@ define('io.ox/onboarding/main', [
                     description: gt('To synchronize Calendar with your phone, please enter the following settings in your CalDav client:'),
                     config: getCalendarConfig()
                 });
+            },
+            'eassync': function () {
+                return new views.SyncView({
+                    description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
+                    config: getEasConfig()
+                });
             }
         },
         'macos': {
