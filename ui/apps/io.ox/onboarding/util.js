@@ -128,6 +128,13 @@ define('io.ox/onboarding/util', [
             'cap': 'infostore drive'
         },
         {
+            'title': gt('Exchange Active Sync'),
+            'icon': 'fa-users',
+            'app': 'eassync',
+            'platform': 'android',
+            'cap': 'active_sync'
+        },
+        {
             'title': gt('Email with Apple Mail'),
             'icon': 'fa-envelope',
             'app': 'mailsync',
