@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 const moment = require('moment-timezone');
@@ -26,7 +26,7 @@ Scenario('Create appointment and switch timezones', async function ({ I, dialogs
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const time = moment().tz('Europe/Berlin').startOf('week').add(1, 'day').add('16', 'hours');
+    const time = moment().tz('Europe/Berlin').startOf('isoWeek').add('16', 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({
         folder: folder,
@@ -34,7 +34,6 @@ Scenario('Create appointment and switch timezones', async function ({ I, dialogs
         startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
         endDate: { value: moment(time).add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
     });
-
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 

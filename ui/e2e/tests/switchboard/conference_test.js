@@ -224,7 +224,7 @@ Scenario('Remove zoom conference from appointment series and check exception', a
     calendar.newAppointment();
     I.fillField('Subject', 'Series');
     connectZoomCalendar();
-    await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
+    await calendar.setDate('startDate', moment().startOf('isoWeek'));
     I.fillField(calendar.locators.starttime, '12:00 PM');
     calendar.recurAppointment();
     within(calendar.locators.recurrenceview, () => {

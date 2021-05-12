@@ -27,6 +27,7 @@ After(async function ({ users }) {
 Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
     // TODO: Need to add Appointment, latest file(upload?)
     const moment = require('moment');
+    const utcDiff = (moment().utcOffset()) / 60; // offset by X hours for api calls
     let testrailID = 'C7471';
     let testrailName = 'Open items via portal-tile';
     //Create Mail in Inbox
@@ -58,8 +59,7 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
         folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
         first_name: testrailID,
         last_name: testrailID,
-        birthday: moment().add(2, 'days').valueOf()
-
+        birthday: moment().add(2, 'days').add(utcDiff, 'hours').valueOf()
     };
     await I.haveContact(contact, { user: users[0] });
     //Upload File to Infostore
@@ -75,11 +75,11 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
         description: testrailID,
         endDate: {
             tzid: 'Europe/Berlin',
-            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: moment().add(4 + utcDiff, 'hours').format('YYYYMMDD[T]HHmm00')
         },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: moment().add(2 + utcDiff, 'hours').format('YYYYMMDD[T]HHmm00')
         }
     }, { user: users[0] });
 

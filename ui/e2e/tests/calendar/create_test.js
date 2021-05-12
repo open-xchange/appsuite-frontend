@@ -926,7 +926,7 @@ Scenario('[C256455] Create all-day appointment via date label', async ({ I, cale
     calendar.waitForApp();
 
     // today is visible on calendar start, so we can just use the start of the current week to get the apps currently displayed time.
-    const startDate = moment().startOf('week');
+    let startDate = moment().startOf('week');
 
     const createOnfirstDay = async () => {
         I.click('.io-ox-pagecontroller.current .weekday:first-child');
@@ -945,7 +945,7 @@ Scenario('[C256455] Create all-day appointment via date label', async ({ I, cale
 
     await createOnfirstDay();
 
-    startDate.add(1, 'days');
+    startDate = moment().startOf('isoWeek');
     calendar.switchView('Workweek');
     I.wait(1);
 
@@ -987,6 +987,8 @@ Scenario('[C7440] Start/End date autoadjustment', async function ({ I, calendar 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     calendar.newAppointment();
+    I.fillField(calendar.locators.starttime, '12:00 PM');
+    I.fillField(calendar.locators.endtime, '1:00 PM');
 
     // strings are usually the same, but if this test is run around midnight, we may get a one day difference, so we must calculate that
     var startString = await calendar.getDate('startDate'),
@@ -1248,6 +1250,7 @@ Scenario('[C274651] Create secret appointment', async function ({ I, users, cale
     // Check secret appointment in all views
     ['Workweek', 'Week', 'Day', 'Month'].forEach((view) => {
         calendar.switchView(view);
+        if (moment().day() === 0 && view === 'Workweek') I.click('~Next Week');
         if (view === 'Day') I.click(`.date-picker [aria-label*="${startDate.format('M/D/YYYY')}"]`);
         I.waitForElement('.page.current .private-flag');
     });
@@ -1852,6 +1855,7 @@ Scenario('[OXUIB-182] Choose correct start time on time change dates', function 
         I.waitForEnabled(startTimeslot);
         I.waitForVisible(endTimeslot);
         I.wait(0.2);
+        I.scrollTo(endTimeslot);
         I.dragAndDrop(startTimeslot, endTimeslot);
         verifyTime('10:00 AM', '12:00 PM');
     };
