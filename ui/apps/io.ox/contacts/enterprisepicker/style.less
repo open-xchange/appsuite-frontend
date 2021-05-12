@@ -53,6 +53,35 @@
     }
 
     .modal-body {
-        min-height: 27.5rem
+        min-height: 27.5rem;
+
+        li {
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            &:hover {
+                background-color: #e6e6e6;
+            }
+
+            input {
+                height: 60px;
+            }
+
+            .contact-picture {
+                height: 60px;
+                width: 60px;
+                background-size: cover;
+                border-radius: 50%;
+            }
+
+            .contact-container {
+                width: 260px;
+                // empty fields should still take up space, to keep the layout consistent
+                div {
+                    min-height: 30px;
+                }
+            }
+        }
     }
  }
