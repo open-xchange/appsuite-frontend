@@ -99,13 +99,8 @@ define('io.ox/core/whatsnew/main', [
             // just keep the index before the tours, see OXUIB-665
             index: 950,
             run: function () {
-                // see bug OXUIB-839
-                var popovers = _.device('smartphone') ? $('.popover') : $();
                 if (_.device('karma')) return $.when();
-                popovers.toggleClass('hidden', true);
-                return showDialog().done(function () {
-                    popovers.toggleClass('hidden', false);
-                });
+                return showDialog();
             }
         });
     }
