@@ -46,7 +46,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         return api.getAll({ columns: '20,1,101,500,501,502,505,519,520,521,522,524,543,555,556,557,569,602,606,607,616,617,5,2' }, false).then(function (data) {
 
             mockData = _(data).groupBy('department');
-            var lists = _(mockData).keys().map(function (department) {
+            var lists = _(_(mockData).keys().sort()).map(function (department) {
                 // later on this is folder name and id, but since this is mock data...
                 return { label: department, value: department };
             });
@@ -71,18 +71,47 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     this.$el.addClass('enterprise-picker');
                 },
                 header: function () {
+                    var listSelectBox = new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
+
+                    model.on('change:filterQuery', function () {
+                        var query = model.get('filterQuery').trim().toLowerCase(),
+                            options = listSelectBox.find('option');
+                        if (!query) return options.show();
+
+                        _(listSelectBox.find('option')).each(function (option) {
+                            // never hide the placeholder option
+                            if ($(option).val() === 'no-list-selected') return;
+                            $(option).toggle(option.text.toLowerCase().indexOf(query) !== -1);
+                        });
+                    });
+
                     this.$('.modal-header').append(
                         $('<div class="top-bar">').append(
                             $('<label>').text(gt('Search')).append(
-                                new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
-                                .attr('placeholder', gt('Search for name, department, position'))
+                                $('<div class="input-group">').append(
+                                    new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
+                                        .attr('placeholder', gt('Search for name, department, position')),
+                                    $('<span class="input-group-btn">').append(
+                                        $('<button type="button" class="search-button btn btn-default">')
+                                            //#. used as a verb
+                                            .attr({ title: gt('Search') })
+                                            .append($.icon('fa-search'))
+                                    )
+                                )
                             ),
                             $('<label>').text(gt('Filter')).append(
-                                new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
-                                .attr('placeholder', gt('Filter address lists'))
+                                $('<div class="input-group">').append(
+                                    new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
+                                        .attr('placeholder', gt('Filter address lists')),
+                                    $('<span class="input-group-btn">').append(
+                                        $('<button type="button" class="filter-button btn btn-default">')
+                                            .attr({ title: gt('Filter address lists') })
+                                            .append($.icon('fa-filter'))
+                                    )
+                                )
                             ),
                             $('<label>').text(gt('Address list')).append(
-                                new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el
+                                listSelectBox
                             )
                         )
                     );
