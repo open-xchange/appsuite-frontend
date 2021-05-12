@@ -289,6 +289,7 @@
         'fa-file-video-o': '\uf1c8',
         'fa-file-word-o': '\uf1c2',
         'fa-film': '\uf008',
+        'fa-filter': '\uf0b0',
         'fa-folder': '\uf07b',
         'fa-folder-o': '\uf114',
         'fa-folder-open-o': '\uf115',
