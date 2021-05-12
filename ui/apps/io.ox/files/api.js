@@ -304,10 +304,11 @@ define('io.ox/files/api', [
             vcf:   (/^(vcf)$/),
             doc:   (/^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/),
             xls:   (/^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/),
-            ppt:   (/^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg|odf|otf)$/),
+            ppt:   (/^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/),
             pdf:   (/^pdf$/),
             zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
             txt:   (/^(txt|md)$/),
+            otf:   (/^(otf|odf)$/),
             guard: (/^(grd|grd2|pgp)$/i) // added case insensitive flag, was used by previous guard code that was refactored
         },
 
