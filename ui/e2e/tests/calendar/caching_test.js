@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 const moment = require('moment');
@@ -64,6 +64,9 @@ Scenario('Create never ending appointment and check display in several views', a
 
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
+
+    // ensures for midnight-testing that the appointment is not 2 days long
+    await calendar.setDate('endDate', moment().startOf('week').add('1', 'day'));
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');

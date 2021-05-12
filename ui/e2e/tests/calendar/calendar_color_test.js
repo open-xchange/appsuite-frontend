@@ -24,7 +24,7 @@ After(async function ({ users }) {
 });
 
 Scenario('Create appointment and check if the color is correctly applied and removed', async function ({ I, users, calendar }) {
-    const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
+    const time = moment().startOf('isoWeek').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
@@ -88,7 +88,7 @@ Scenario('Create appointment and check if the color is correctly applied and rem
 
 Scenario('Changing calendar color should change appointment color that uses calendar color', async function ({ I, users, calendar }) {
     const folder = await calendar.defaultFolder();
-    const time = moment().startOf('week').add(1, 'day').add(16, 'hours');
+    const time = moment().startOf('isoWeek').add(16, 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await Promise.all([
         I.haveAppointment({

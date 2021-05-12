@@ -49,11 +49,11 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         calendar.waitForApp();
         calendar.newAppointment();
         I.fillField('Subject', 'MySubject');
-        await calendar.setDate('startDate', startDate);
-        await calendar.setDate('endDate', endDate);
         I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
         I.clearField(calendar.locators.endtime);
         I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
+        await calendar.setDate('startDate', startDate);
+        await calendar.setDate('endDate', endDate);
         await calendar.addParticipant(users[1].userdata.primaryEmail, false);
         I.click('Create');
         I.waitForDetached('.io-ox-calendar-edit-window');
@@ -165,11 +165,11 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     calendar.waitForApp();
     calendar.newAppointment();
     I.fillField('Subject', 'MySubject');
-    await calendar.setDate('startDate', startDate);
-    await calendar.setDate('endDate', endDate);
     I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
     I.clearField(calendar.locators.endtime);
     I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
+    await calendar.setDate('startDate', startDate);
+    await calendar.setDate('endDate', endDate);
     await calendar.addParticipant(users[1].userdata.primaryEmail, false);
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');

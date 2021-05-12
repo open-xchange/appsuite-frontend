@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  * © 2018 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <chrsitoph.kopp@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 const moment = require('moment');
@@ -73,8 +73,7 @@ Scenario('Create new appointment and check display in portal widget', async func
     // check in week view
     calendar.switchView('Week');
     await goToDate(I, day);
-    I.waitForVisible('.weekview-container.week button.weekday.today');
-
+    I.waitForVisible('.weekview-container.week .appointment .title');
     I.see('test portal widget', '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 1);
 
