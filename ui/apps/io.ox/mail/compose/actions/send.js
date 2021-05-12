@@ -157,8 +157,9 @@ define('io.ox/mail/compose/actions/send', [
             index: 3100,
             perform: function (baton) {
                 if (!baton.errors && baton.warning) {
-                    // no clue if warning(s) is always object or if it might also be a simple string (see bug 42714)
-                    var message = baton.warning.error || baton.warning;
+                    // no clue if warning(s) is always object, a list or if it might also be a simple string (see bug 42714)
+                    var warning = [].concat(baton.warning)[0],
+                        message = warning.error || warning.warning;
                     notifications.yell('warning', message);
                     baton.view.dirty(false);
                     baton.app.quit();
