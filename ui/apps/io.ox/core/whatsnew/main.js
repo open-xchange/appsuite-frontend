@@ -98,8 +98,9 @@ define('io.ox/core/whatsnew/main', [
             id: 'whatsnewdialog',
             // just keep the index before the tours, see OXUIB-665
             index: 950,
-            run: function () {
+            run: function (baton) {
                 if (_.device('karma')) return $.when();
+                baton.data.popups.push({ name: 'whats-new-dialog' });
                 return showDialog();
             }
         });

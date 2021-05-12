@@ -15,6 +15,7 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/session',
     'io.ox/core/http',
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/stage',
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/helplink',
@@ -27,7 +28,7 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/core/api/user',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
+], function (session, http, ext, Stage, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, userAPI, settings, gt) {
 
     function getHelp() {
         var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
@@ -623,10 +624,10 @@ define('io.ox/core/main/topbar_right', [
         });
     })();
 
-    ext.point('io.ox/core/appcontrol/right').extend({
+    new Stage('io.ox/core/stages', {
         id: 'client-onboarding-hint',
-        index: 2200,
-        draw: function () {
+        index: 3000,
+        run: function (baton) {
             if (capabilities.has('!client-onboarding')) return;
             if (!_.device('smartphone')) return;
             // exit: tab reload with autologin
@@ -635,8 +636,10 @@ define('io.ox/core/main/topbar_right', [
             var conf = _.extend({ enabled: true, remaining: 2 }, settings.get('features/clientOnboardingHint', {}));
             // server prop
             if (!conf.enabled || !conf.remaining) return;
+            baton.data.popups.push({ name: 'client-onboarding-hint' });
+
             // banner action, topbar action, dropdown action
-            var link = this.find('#io-ox-topbar-account-dropdown-icon > a');
+            var link = $('#io-ox-appcontrol #io-ox-topbar-account-dropdown-icon > a');
             // popover
             link.popover({
                 //#. %1$s is the product name
