@@ -17,16 +17,49 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/views/disposable',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/enterprisepicker/style'
-], function (ModalDialog, Mini, DisposableView, api, gt) {
+], function (ModalDialog, Mini, DisposableView, api, util, gt) {
 
     'use strict';
 
     var mockData = {};
 
     var ContactListView = DisposableView.extend({
-        className: 'contact-list-view',
+        tagName: 'ul',
+        className: 'contact-list-view list-unstyled',
+
+        renderContact: function (contact) {
+            console.log(contact);
+
+            var node = $('<li>').append(
+                new Mini.CheckboxView({ name: 'selected', model: contact }).render().$el,
+                $('<div class="contact-picture" aria-hidden="true">').css('background-image', 'url(' + util.getImage(contact.attributes) + ')'),
+                $('<div class="contact-container">').append(
+                    $('<div class="name" aria-hidden="true">').text(util.getFullName(contact.attributes, false)),
+                    $('<div class="department" aria-hidden="true">').text(contact.get('department'))
+                ),
+                $('<div class="contact-container">').append(
+                    $('<div class="telephone" aria-hidden="true">').text(
+                        // try to find a phone number, there are still more phone number fields. Not sure if we need all
+                        contact.get('telephone_business1') ||
+                        contact.get('telephone_business2') ||
+                        contact.get('telephone_company') ||
+                        contact.get('cellular_telephone1') ||
+                        contact.get('cellular_telephone2') ||
+                        contact.get('telephone_home1') ||
+                        contact.get('telephone_home2') ||
+                        contact.get('telephone_other')),
+                    $('<div class="position" aria-hidden="true">').text(contact.get('position'))
+                ),
+                $('<div class="contact-container">').append(
+                    $('<div class="mail" aria-hidden="true">').text(util.getMail(contact.attributes)),
+                    $('<div class="room" aria-hidden="true">').text(contact.get('room_number'))
+                )
+            );
+            this.$el.append(node);
+        },
 
         render: function () {
             this.$el.empty();
@@ -37,6 +70,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 //#. This is followed by a list of contacts from the address book
                 this.$el.append($('<div class="last-searched-label">').text(gt('Last searched for')));
             }
+            contacts.each(this.renderContact.bind(this));
             return this;
         }
     });
