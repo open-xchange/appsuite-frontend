@@ -382,7 +382,8 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             var point = this;
             return point.reduce(function (def, ext) {
                 if (!def || !def.then) def = $.when(def);
-                return def.then(function success() {
+                return def.then(function success(obj) {
+                    if (obj && obj.warnings) baton.warning = obj.warnings;
                     if (baton.isPropagationStopped()) return;
                     if (baton.isDisabled(point.id, ext.id)) return;
                     return ext.perform.apply(context, [baton]);
