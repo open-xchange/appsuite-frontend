@@ -88,6 +88,6 @@ trigger documents pipeline:
   needs:
     - upload
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/ || $CI_COMMIT_REF_NAME =~ /^bug\/DOCS-/'
       when: on_success
       allow_failure: true
