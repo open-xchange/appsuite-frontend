@@ -15,6 +15,10 @@
  .modal.flex.enterprise-picker .modal-dialog {
     width: 60rem;
 
+    .modal-content {
+        height: 660px;
+    }
+
     .modal-header {
         border-bottom: 1px solid #e5e5e5;
 
@@ -52,8 +56,7 @@
         }
     }
 
-    .modal-body {
-        height: 27.5rem;
+    .modal-body .contact-list-view{
 
         li {
             padding: 8px;
@@ -85,6 +88,40 @@
                     white-space: nowrap;
                 }
             }
+        }
+    }
+
+    .selected-contacts-view {
+        border-top: 1px solid #e5e5e5;
+        text-align: left;
+        padding: 0;
+        padding: 16px;
+
+        &.empty {
+            display: none;
+        }
+
+        li {
+            background: #e6e6e6;
+            display: inline-block;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        .name {
+            display:inline;
+            vertical-align: middle;
+            padding: 0 4px;
+        }
+
+        button {
+            background: #e6e6e6;
+            width: 24px;
+            padding: 2px 0 0 0;
+            height: 24px;
+            border-radius: 4px;
         }
     }
  }
