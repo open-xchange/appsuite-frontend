@@ -11,7 +11,6 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-
 define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views/common',
@@ -27,14 +26,25 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     var mockData = {};
 
     var ContactListView = DisposableView.extend({
+
         tagName: 'ul',
         className: 'contact-list-view list-unstyled',
 
-        renderContact: function (contact) {
-            console.log(contact);
+        events: {
+            'click li': 'updateSelection'
+        },
 
-            var node = $('<li>').append(
-                new Mini.CheckboxView({ name: 'selected', model: contact }).render().$el,
+        initialize: function () {
+            this.model.get('contacts').on('add reset remove', this.render.bind(this));
+        },
+
+        dispose: function () {
+            this.model.get('contacts').off('add reset remove');
+        },
+
+        renderContact: function (contact) {
+            var node = $('<li>').attr('data-id', contact.get('id')).append(
+                $('<input type="checkbox">').attr('checked', this.model.get('selectedContacts').indexOf(contact.get('id')) > -1),
                 $('<div class="contact-picture" aria-hidden="true">').css('background-image', 'url(' + util.getImage(contact.attributes) + ')'),
                 $('<div class="contact-container">').append(
                     $('<div class="name" aria-hidden="true">').text(util.getFullName(contact.attributes, false)),
@@ -72,6 +82,21 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             }
             contacts.each(this.renderContact.bind(this));
             return this;
+        },
+
+        updateSelection: function (e) {
+            e.stopPropagation();
+            var target = e.currentTarget,
+                id = target.getAttribute('data-id'),
+                isSelected = this.model.get('selectedContacts').indexOf(id) > -1;
+
+            if (isSelected) {
+                this.model.set('selectedContacts', _(this.model.get('selectedContacts')).without(id));
+            } else {
+                this.model.get('selectedContacts').push(id);
+            }
+
+            $(e.currentTarget).find('input').attr('checked', !isSelected);
         }
     });
 
@@ -91,10 +116,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 searchQuery: '',
                 filterQuery: '',
                 selectedList: 'no-list-selected',
+                selectedContacts: [],
                 contacts: new Backbone.Collection(),
                 lastContacts: new Backbone.Collection(_(data).sample(3)),
                 addressLists: lists
             });
+
+            model.on('change:selectedList', function (model, selectedList) {
+                model.get('contacts').reset(mockData[selectedList] || []);
+            });
+
             return new ModalDialog({
                 point: 'io.ox/contacts/enterprisepicker-dialog',
                 help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
