@@ -53,7 +53,7 @@
     }
 
     .modal-body {
-        min-height: 27.5rem;
+        height: 27.5rem;
 
         li {
             padding: 8px;
@@ -76,10 +76,13 @@
             }
 
             .contact-container {
-                width: 260px;
+                width: 250px;
                 // empty fields should still take up space, to keep the layout consistent
                 div {
                     min-height: 30px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
             }
         }
