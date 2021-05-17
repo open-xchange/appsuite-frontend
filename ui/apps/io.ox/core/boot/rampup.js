@@ -80,6 +80,12 @@ define('io.ox/core/boot/rampup', [
             http.GET({
                 module: 'onboarding',
                 params: { action: 'config' }
+            }).then(function (data) {
+                var onboardingDevices = {};
+                _(data.devices).each(function (device) {
+                    onboardingDevices[device.id] = device.enabled;
+                });
+                return onboardingDevices;
             }).then(storeIn(baton.data, 'onboardingDevices'));
         }
     }, {
