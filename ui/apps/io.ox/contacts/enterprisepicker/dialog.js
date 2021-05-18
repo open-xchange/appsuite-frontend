@@ -83,20 +83,25 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         initialize: function () {
             this.model.get('contacts').on('add reset remove', this.render.bind(this));
             this.model.get('selectedContacts').on('add reset remove', this.updateCheckboxes.bind(this));
+            this.model.on('change:searchQuery', this.render.bind(this));
         },
 
         dispose: function () {
             this.model.get('contacts').off('add reset remove');
             this.model.get('selectedContacts').off('add reset remove');
+            this.model.off('change:searchQuery');
         },
 
         renderContact: function (contact) {
+            var name = util.getFullName(contact.attributes, false),
+                query = this.model.get('searchQuery').trim().toLowerCase();
+            if (query !== '' && name.toLowerCase().indexOf(query) === -1) return;
             var node = $('<li>').attr('data-id', contact.get('id')).append(
                 $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }),
                 $('<div class="contact-picture" aria-hidden="true">')
                     .css('background-image', 'url(' + (contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage()) + ')'),
                 $('<div class="contact-container">').append(
-                    $('<div class="name" aria-hidden="true">').text(util.getFullName(contact.attributes, false)),
+                    $('<div class="name" aria-hidden="true">').text(name),
                     $('<div class="department" aria-hidden="true">').text(contact.get('department'))
                 ),
                 $('<div class="contact-container">').append(

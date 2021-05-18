@@ -56,7 +56,6 @@ define('io.ox/backbone/mini-views/addresspicker', [
             require([picker], function (popup) {
                 var useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));
                 popup.open(function (result) {
-                    debugger;
                     _.each(result, function (singleData) {
                         if (self.opt.processRaw) return self.opt.process(e, singleData);
                         var member;
