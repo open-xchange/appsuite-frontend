@@ -49,8 +49,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
         onClick: function openAddressBookPicker(e) {
             e.preventDefault();
             var self = this,
-                useEnterprisePicker = true,
-                picker = useEnterprisePicker ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = capabilities.has('enterprise_picker') ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
             require([picker], function (popup) {
                 self.opt.useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));

@@ -68,7 +68,6 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             e.stopPropagation();
             this.model.get('selectedContacts').remove(e.currentTarget.getAttribute('data-id'));
         }
-
     });
 
     var ContactListView = DisposableView.extend({
@@ -80,23 +79,33 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             'click li': 'updateSelection'
         },
 
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options;
             this.model.get('contacts').on('add reset remove', this.render.bind(this));
             this.model.get('selectedContacts').on('add reset remove', this.updateCheckboxes.bind(this));
+            this.model.on('change:searchQuery', this.render.bind(this));
         },
 
         dispose: function () {
             this.model.get('contacts').off('add reset remove');
             this.model.get('selectedContacts').off('add reset remove');
+            this.model.off('change:searchQuery');
         },
 
         renderContact: function (contact) {
+            var name = util.getFullName(contact.attributes, false),
+                query = this.model.get('searchQuery').trim().toLowerCase(),
+                contactPicture;
+
+            if (query !== '' && name.toLowerCase().indexOf(query) === -1) return;
             var node = $('<li>').attr('data-id', contact.get('id')).append(
                 $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }),
-                $('<div class="contact-picture" aria-hidden="true">')
-                    .css('background-image', 'url(' + (contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage()) + ')'),
+                contactPicture = $('<i class="contact-picture" aria-hidden="true">')
+                    .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
+                        $(this).css('background-image', 'url(' + e.data.url + ')');
+                    }),
                 $('<div class="contact-container">').append(
-                    $('<div class="name" aria-hidden="true">').text(util.getFullName(contact.attributes, false)),
+                    $('<div class="name" aria-hidden="true">').text(name),
                     $('<div class="department" aria-hidden="true">').text(contact.get('department'))
                 ),
                 $('<div class="contact-container">').append(
@@ -118,18 +127,26 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 )
             );
             this.$el.append(node);
+            contactPicture.lazyload({ container: this.options.modalBody });
         },
 
         render: function () {
             this.$el.empty();
-            var contacts = this.model.get('contacts');
-            if (contacts.length === 0) {
-                contacts = this.model.get('lastContacts');
-                if (contacts.length === 0) return this;
-                //#. This is followed by a list of contacts from the address book
-                this.$el.append($('<div class="last-searched-label">').text(gt('Last searched for')));
-            }
+            var query = this.model.get('searchQuery').trim(),
+                isLastSearched = this.model.get('selectedList') === 'all' && query === '',
+                contacts = isLastSearched ? this.model.get('lastContacts') : this.model.get('contacts');
+
             contacts.each(this.renderContact.bind(this));
+
+            if (isLastSearched && this.$el.children().length > 0) {
+                //#. This is followed by a list of contacts from the address book
+                this.$el.prepend($('<div class="list-label">').text(gt('Last searched for')));
+            }
+
+            if (query !== '' && this.$el.children().length === 0) {
+                this.$el.prepend($('<div class="list-label">').text(gt('No contacts found.')));
+            }
+
             return this;
         },
 
@@ -159,21 +176,22 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
     var open = function (callback) {
         // use our gab to generate mock data for now
-        return api.getAll({ columns: '20,1,101,500,501,502,505,519,520,521,522,524,543,555,556,557,569,602,606,607,616,617,5,2' }, false).then(function (data) {
+        return api.getAll({ columns: '20,1,101,500,501,502,505,519,520,521,522,524,542,543,547,548,549,551,552,553,555,556,557,569,602,606,607,616,617,5,2' }, false).then(function (data) {
             mockData = _(data).groupBy('department');
             var lists = _(_(mockData).keys().sort()).map(function (department) {
                 // later on this is folder name and id, but since this is mock data...
                 return { label: department, value: department };
             });
 
-            lists.unshift({ label: gt('Choose address list'), value: 'no-list-selected' });
+            mockData.all = data;
+            lists.unshift({ label: gt('Choose address list'), value: 'all' });
 
             var model = new Backbone.Model({
                 searchQuery: '',
                 filterQuery: '',
-                selectedList: 'no-list-selected',
+                selectedList: 'all',
                 selectedContacts: new Backbone.Collection(),
-                contacts: new Backbone.Collection(),
+                contacts: new Backbone.Collection(mockData.all),
                 lastContacts: new Backbone.Collection(_(data).sample(3)),
                 addressLists: lists
             });
@@ -198,7 +216,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                     _(listSelectBox.find('option')).each(function (option) {
                         // never hide the placeholder option
-                        if ($(option).val() === 'no-list-selected') return;
+                        if ($(option).val() === 'all') return;
                         $(option).toggle(option.text.toLowerCase().indexOf(query) !== -1);
                     });
                 });
@@ -208,24 +226,21 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         $('<label>').text(gt('Search')).append(
                             $('<div class="input-group">').append(
                                 new Mini.InputView({ name: 'searchQuery', model: model }).render().$el
-                                        .attr('placeholder', gt('Search for name, department, position')),
-                                $('<span class="input-group-btn">').append(
-                                    $('<button type="button" class="search-button btn btn-default">')
-                                            //#. used as a verb
-                                            .attr({ title: gt('Search') })
-                                            .append($.icon('fa-search'))
-                                )
+                                        .attr('placeholder', gt('Search for name, department, position'))
+                                        .on('keyup', _.debounce(function () {
+                                            model.set('searchQuery', this.value);
+                                        }, 300)),
+                                $('<span class="input-group-addon">').append($.icon('fa-search', gt('Search for name, department, position')))
                             )
                         ),
                         $('<label>').text(gt('Filter')).append(
                             $('<div class="input-group">').append(
                                 new Mini.InputView({ name: 'filterQuery', model: model }).render().$el
-                                        .attr('placeholder', gt('Filter address lists')),
-                                $('<span class="input-group-btn">').append(
-                                    $('<button type="button" class="filter-button btn btn-default">')
-                                            .attr({ title: gt('Filter address lists') })
-                                            .append($.icon('fa-filter'))
-                                )
+                                        .attr('placeholder', gt('Filter address lists'))
+                                        .on('keyup', _.debounce(function () {
+                                            model.set('filterQuery', this.value);
+                                        }, 300)),
+                                $('<span class="input-group-addon">').append($.icon('fa-filter', gt('Filter address lists')))
                             )
                         ),
                         $('<label>').text(gt('Address list')).append(
@@ -233,12 +248,32 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         )
                     )
                 );
-                this.$('.modal-body').append(new ContactListView({ model: model }).render().$el);
-                this.$('.modal-body').after(new SelectedContactsView({ model: model }).render().$el);
+                this.$('.modal-body').append(new ContactListView({ model: model, modalBody: this.$('.modal-body') }).render().$el)
+                    .after(new SelectedContactsView({ model: model }).render().$el);
             })
             .on({
                 'select': function () {
-                    if (_.isFunction(callback)) callback(model.get('selectedContacts').toJSON());
+
+                    var list = _(model.get('selectedContacts').toJSON()).chain()
+                        .filter(function (item) {
+                            item.mail_full_name = util.getMailFullName(item);
+                            item.email = $.trim(item.email1 || item.email2 || item.email3).toLowerCase();
+                            return item.email;
+                        })
+                        .map(function (item) {
+                            var name = item.mail_full_name, mail = item.mail || item.email;
+                            return {
+                                array: [name || null, mail || null],
+                                display_name: name,
+                                id: item.id,
+                                folder_id: item.folder_id,
+                                email: mail,
+                                user_id: item.user_id
+                            };
+                        }, this)
+                        .uniq(function (item) { return item.email; })
+                        .value();
+                    if (_.isFunction(callback)) callback(list);
                 },
                 'close': function () {
                     model = null;
