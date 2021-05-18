@@ -332,8 +332,11 @@ define('io.ox/mail/compose/extensions', [
 
             function openAddressBookPicker(e) {
                 e.preventDefault();
-                var attr = e.data.attr, model = e.data.model;
-                require(['io.ox/contacts/addressbook/popup'], function (popup) {
+                var attr = e.data.attr,
+                    model = e.data.model,
+                    picker = capabilities.has('enterprise_picker') ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+
+                require([picker], function (popup) {
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));

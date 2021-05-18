@@ -28,8 +28,9 @@ define('io.ox/chat/views/addMember', [
     'io.ox/chat/api',
     'io.ox/chat/util',
     'gettext!io.ox/chat',
+    'io.ox/core/capabilities',
     'io.ox/participants/add'
-], function (Disposable, Typeahead, pModel, data, api, util, gt) {
+], function (Disposable, Typeahead, pModel, data, api, util, gt, capabilities) {
 
     'use strict';
 
@@ -84,9 +85,11 @@ define('io.ox/chat/views/addMember', [
         },
 
         openAddressBookPicker: function (e) {
-            var self = this;
+            var self = this,
+                picker = capabilities.has('enterprise_picker') ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
             e.preventDefault();
-            require(['io.ox/contacts/addressbook/popup'], function (popup) {
+
+            require([picker], function (popup) {
                 popup.open(function (result) {
                     result.forEach(function (data) {
                         self.addParticipant(new Backbone.Model(data));
