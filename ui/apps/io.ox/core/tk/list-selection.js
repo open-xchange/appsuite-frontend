@@ -202,7 +202,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         isCheckmark: function (e) {
-            return e && $(e.target).is('.list-item-checkmark, .fa.fa-checkmark');
+            return e && $(e.target).is('.list-item-checkmark, .fa.fa-checkmark, .checkmark, .checkbox');
         },
 
         isMultiple: function (e) {
