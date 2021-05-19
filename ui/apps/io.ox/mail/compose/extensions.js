@@ -334,7 +334,7 @@ define('io.ox/mail/compose/extensions', [
                 e.preventDefault();
                 var attr = e.data.attr,
                     model = e.data.model,
-                    picker = capabilities.has('enterprise_picker') ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                    picker = settingsContacts.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
                 require([picker], function (popup) {
                     popup.open(function (result) {

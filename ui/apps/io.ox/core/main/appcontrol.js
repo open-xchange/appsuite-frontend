@@ -28,9 +28,10 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/icons',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
+], function (http, upsell, ext, capabilities, icons, Dropdown, settings, contactSettings, gt) {
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -443,6 +444,25 @@ define('io.ox/core/main/appcontrol', [
             extensions.launcher.call(this);
         }
     });
+
+    if (contactSettings.get('useEnterprisePicker', false)) {
+        ext.point('io.ox/core/appcontrol/right').extend({
+            id: 'enterprisePicker',
+            index: 130,
+            draw: function () {
+                if (_.device('smartphone')) return;
+                var node = $('<li role="presentation" class="launcher">').append(
+                    $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').append($.icon('fa-address-book'))
+                        .on('click', _.debounce(function () {
+                            require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                                popup.open();
+                            });
+                        }, 300))
+                );
+                this.append(node);
+            }
+        });
+    }
 
     // deactivated since 7.10.0
     ext.point('io.ox/core/appcontrol').extend({
