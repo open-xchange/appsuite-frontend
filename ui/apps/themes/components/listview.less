@@ -367,11 +367,9 @@
     .list-view .list-item .list-item-checkmark .fa-checkmark {
         top: 8px;
     }
-    .list-item .list-item-checkmark .fa-checkmark:before {
-        content: "\f1db"; // fa-circle-thin
-    }
-    .list-item.selected:not(.no-checkbox) .fa-checkmark:before {
-        content: "\f058"; // fa-check-circle
+
+    .list-item.selected:not(.no-checkbox) {
+        .fa-checkmark > .checkmark, .checkbox  { fill: @brand-primary; }
     }
 }
 

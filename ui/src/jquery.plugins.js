@@ -379,6 +379,10 @@
         return '<svg viewbox="0 0 100 100" class="fa fa-checkmark fasvg" aria-hidden="true"><text x="50" y="86" text-anchor="middle" class="checkmark">\uf14a</text><text x="50" y="86" text-anchor="middle" class="checkbox">\uf096</text></svg>';
     };
 
+    $.mobileCheckbox = function () {
+        return '<svg viewbox="0 0 100 100" class="fa fa-checkmark fasvg" aria-hidden="true"><text x="50" y="86" text-anchor="middle" class="checkmark">\uf058</text><text x="50" y="86" text-anchor="middle" class="checkbox">\uf1db</text></svg>';
+    };
+
     $.fn.scrollable = function () {
         return $('<div class="scrollable-pane">').appendTo(this.addClass('scrollable'));
     };

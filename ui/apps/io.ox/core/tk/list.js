@@ -46,7 +46,7 @@ define('io.ox/core/tk/list', [
 
         scaffold: $(
             '<li class="list-item">' +
-            '<div class="list-item-checkmark">' + $.checkbox() + '</div>' +
+            '<div class="list-item-checkmark">' + (_.device('smartphone') ? $.mobileCheckbox() : $.checkbox()) + '</div>' +
             '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
