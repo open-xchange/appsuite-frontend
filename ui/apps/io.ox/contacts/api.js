@@ -176,6 +176,11 @@ define('io.ox/contacts/api', [
                     if (defaultBehaviour) {
                         data = _(data).extend(queryField.names);
                     }
+                    if (opt.folder) {
+                        data.folder = opt.folder;
+                        // folder may be an array, delete this so it isn't used in the url. Arrays don't work there anyway
+                        delete opt.folder;
+                    }
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
@@ -185,6 +190,7 @@ define('io.ox/contacts/api', [
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
                 extendColumns: 'io.ox/contacts/api/list',
+                omitFolder: true,
                 // magic sort field: ignores asc/desc
                 sort: '607',
                 getData: function (query, opt) {
@@ -198,7 +204,8 @@ define('io.ox/contacts/api', [
                             'telephone_other fax_business telephone_callback telephone_car telephone_company ' +
                             'fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn ' +
                             'telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd ' +
-                            'telephone_ip telephone_assistant').split(' ')
+                            'telephone_ip telephone_assistant').split(' '),
+                            job: ('employee_type department position room_number profession').split(' ')
                         },
                         filter = ['or'],
                         data,
@@ -225,6 +232,12 @@ define('io.ox/contacts/api', [
                         });
                     }
                     data = { 'filter': filter };
+
+                    if (opt.folders) {
+                        // make sure this is an array
+                        data.folders = [].concat(opt.folders);
+                    }
+
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;

@@ -543,6 +543,7 @@ define('io.ox/core/api/factory', [
 
                 if (o.requests.advancedsearch.omitFolder && options.omitFolder !== false) {
                     delete opt.folder;
+                    delete opt.folders;
                 }
 
                 // remove omitFolder & getData functions
