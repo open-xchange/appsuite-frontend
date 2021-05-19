@@ -65,13 +65,46 @@
 
             .contact-picture {
                 height: 60px;
-                width: 60px;
-                background-size: cover;
+                min-width: 60px;
+                margin: 0 16px;
+                padding: 12px;
                 border-radius: 50%;
+                background-size: cover;
+                background-color: #eee;
+                color: rgba(0, 0, 0, 0.60);
+                font-weight: bold;
+                font-size: 24px;
+                text-align: center;
+
+                &.initials {
+                    &.gray { color: #000; }
+                    &.red { background-color: #FFA0A5; }
+                    &.orange { background-color: #FFA77B; }
+                    &.yellow { background-color: #FFD23A; }
+                    &.green { background-color: #BFDE45; }
+                    &.cyan { background-color: #99E4FB; }
+                    &.blue { background-color: #95CEFF; }
+                    &.purple { background-color: #E5B0FF; }
+                    &.pink { background-color: #FFC2DE; }
+                }
             }
 
-            .contact-container {
-                width: 250px;
+            .picture-container {
+                display: flex;
+            }
+
+            // to group things together
+            .flex-container {
+                width: 32%;
+
+                input {
+                    margin: 0;
+                }
+            }
+
+            // so we can have 2 rows
+            .data-container {
+                overflow: hidden;
                 // empty fields should still take up space, to keep the layout consistent
                 div {
                     min-height: 30px;

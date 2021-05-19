@@ -95,20 +95,24 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         renderContact: function (contact) {
             var name = util.getFullName(contact.attributes, false),
                 query = this.model.get('searchQuery').trim().toLowerCase(),
+                initials = util.getInitials(contact.attributes),
+                initialsColor = util.getInitialsColor(initials),
                 contactPicture;
 
             if (query !== '' && name.toLowerCase().indexOf(query) === -1) return;
             var node = $('<li>').attr('data-id', contact.get('id')).append(
-                $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }),
-                contactPicture = $('<i class="contact-picture" aria-hidden="true">')
-                    .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
-                        $(this).css('background-image', 'url(' + e.data.url + ')');
-                    }),
-                $('<div class="contact-container">').append(
-                    $('<div class="name" aria-hidden="true">').text(name),
-                    $('<div class="department" aria-hidden="true">').text(contact.get('department'))
+                $('<div class="flex-container picture-container">').append(
+                    $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }),
+                    (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
+                        .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
+                            $(this).css('background-image', 'url(' + e.data.url + ')');
+                        }) : $('<div class="contact-picture initials" aria-hidden="true">').text(initials).addClass(initialsColor)),
+                    $('<div class="data-container">').append(
+                        $('<div class="name" aria-hidden="true">').text(name),
+                        $('<div class="department" aria-hidden="true">').text(contact.get('department'))
+                    )
                 ),
-                $('<div class="contact-container">').append(
+                $('<div class="flex-container data-container">').append(
                     $('<div class="telephone" aria-hidden="true">').text(
                         // try to find a phone number, there are still more phone number fields. Not sure if we need all
                         contact.get('telephone_business1') ||
@@ -121,12 +125,13 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         contact.get('telephone_other')),
                     $('<div class="position" aria-hidden="true">').text(contact.get('position'))
                 ),
-                $('<div class="contact-container">').append(
+                $('<div class="flex-container data-container">').append(
                     $('<div class="mail" aria-hidden="true">').text(util.getMail(contact.attributes)),
                     $('<div class="room" aria-hidden="true">').text(contact.get('room_number'))
                 )
             );
             this.$el.append(node);
+            if (!contactPicture) return;
             contactPicture.lazyload({ container: this.options.modalBody });
         },
 
@@ -184,7 +189,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             });
 
             mockData.all = data;
-            lists.unshift({ label: gt('Choose address list'), value: 'all' });
+            lists.unshift({ label: gt('Search all address lists'), value: 'all' });
 
             var model = new Backbone.Model({
                 searchQuery: '',
