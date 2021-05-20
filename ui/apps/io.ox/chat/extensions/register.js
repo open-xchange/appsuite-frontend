@@ -282,7 +282,7 @@ define('io.ox/chat/extensions/register', [
 
     // Settings
     ext.point('io.ox/settings/pane/main').extend({
-        id: 'chat',
+        id: 'io.ox/chat',
         title: gt('Chat'),
         ref: 'io.ox/chat',
         index: 120
