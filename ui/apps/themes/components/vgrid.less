@@ -149,6 +149,8 @@
     &.top-toolbar .vgrid-toolbar.top,
     &.bottom-toolbar .vgrid-toolbar.bottom { display: flex; }
 
+    &:not(.bottom-toolbar) .vgrid-toolbar.bottom { display: none; }
+
     &.top-toolbar .vgrid-scrollpane { top: @toolbar-height; }
 
     &.bottom-toolbar .vgrid-scrollpane { bottom: @toolbar-height; }
