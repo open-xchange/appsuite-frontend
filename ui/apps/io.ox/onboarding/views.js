@@ -30,6 +30,14 @@ define('io.ox/onboarding/views', [
     }
 
     function getDownloadUrl(type) {
+        if (type === 'eas') {
+            return $.when(ox.abs + ox.apiRoot +
+                '/onboarding?action=execute' +
+                '&id=apple.iphone/eassync' +
+                '&action_id=download' +
+                '&client=apple.iphone' +
+                '&session=' + ox.session);
+        }
         return http.GET({
             module: 'onboarding',
             params: {
