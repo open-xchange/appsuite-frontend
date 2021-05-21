@@ -53,16 +53,23 @@ define('io.ox/calendar/extensions', [
                 if (colorName) node.attr('aria-label', getTitle(model) + ', ' + gt('Category') + ': ' + colorName);
             }
 
+            function addModifyClass(node, model) {
+                var folderId = model.get('folder'),
+                    folderModel = folderAPI.pool.getModel(folderId),
+                    folder = folderModel.toJSON();
+                node.toggleClass('modify', folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model.toJSON(), folderModel));
+            }
+
             function getTitle(model) {
                 return _([model.get('summary'), model.get('location')]).compact().join(', ');
             }
 
             return function (baton) {
-
                 var model = baton.model,
-                    folderModel = folderAPI.pool.getModel(model.get('folder')),
+                    folderId = model.get('folder'),
+                    folderModel = folderAPI.pool.getModel(folderId),
                     folder = folderModel.toJSON(),
-                    folderId = model.get('folder');
+                    incomplete = !folder.permissions;
 
                 // cleanup classes to redraw correctly
                 this.removeClass('free modify private disabled needs-action accepted declined tentative');
@@ -78,11 +85,12 @@ define('io.ox/calendar/extensions', [
                 if (util.isPrivate(model) && ox.user_id !== (model.get('createdBy') || {}).entity && !folderAPI.is('private', folder)) {
                     this.addClass('private disabled');
                 } else {
-                    var canModifiy = folderAPI.can('write', folder, model.attributes) && util.allowedToEdit(model.toJSON(), folderModel),
-                        conf = util.getConfirmationStatus(model);
+                    var conf = util.getConfirmationStatus(model);
                     if (util.isPrivate(model)) this.addClass('private');
-                    if (canModifiy) this.addClass('modify');
                     this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf));
+
+                    addModifyClass(this, model);
+                    if (incomplete) folderModel.once('change', addModifyClass.bind(undefined, this, model));
                 }
 
                 this
