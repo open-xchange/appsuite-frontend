@@ -49,7 +49,7 @@ Scenario('Last used chat will not be re-opened on next start', async ({ I, users
     I.click('~Settings');
     I.clickDropdown('Settings');
     I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
     I.waitForText('View options', 3, '.scrollable-pane');
     I.click('Select last chat on start', '.scrollable-pane');
 
@@ -109,7 +109,7 @@ Scenario('Sort and group chats', async ({ I, users, contexts, chat, dialogs }) =
     I.click('~Settings');
     I.clickDropdown('Settings');
     I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
     I.waitForText('View options', 3, '.scrollable-pane');
     I.click('Select last chat on start', '.scrollable-pane');
 

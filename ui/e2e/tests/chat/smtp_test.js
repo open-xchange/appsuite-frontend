@@ -94,8 +94,7 @@ Scenario.skip('Do not receive email notifications from a private chat', async ({
         I.login({ user: users[1] });
         I.click('~Settings');
         I.clickDropdown('Settings');
-        I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-        I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+        I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
         I.waitForElement('#settings-emailNotification');
         I.selectOption('#settings-emailNotification', 'Do not send any email notifications');
         I.logout();
@@ -125,7 +124,7 @@ Scenario.skip('Do only receive email notifications from private chats', async ({
     I.click('~Settings');
     I.clickDropdown('Settings');
     I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
     I.waitForElement('#settings-emailNotification');
     I.selectOption('#settings-emailNotification', 'Send email notifications for my private chats');
     I.waitForNetworkTraffic();

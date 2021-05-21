@@ -209,7 +209,7 @@ Scenario('Check layouts: compact, standard and detailed', async ({ I, users, con
     I.click('~Settings');
     I.clickDropdown('Settings');
     I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
     I.waitForText('View options', 3, '.scrollable-pane');
 
     // check density 'Compact'
