@@ -1067,11 +1067,14 @@ define('io.ox/calendar/api', [
         },
 
         getByFolder: function (folder) {
-            var regex = new RegExp('(folders=[^&]*' + folder + '|folder=' + folder + '&)');
+            var regex = new RegExp('(folders=[^&]*' + folder + '|folder=' + folder + '&)'),
+                allpublic = new RegExp('(folders=[^&]*cal://0/allPublic|folder=cal://0/allPublic&)'),
+                folderData = folderApi.pool.getModel(folder),
+                isPublic = folderData && folderData.is('public');
             return _(this.getCollections())
                 .chain()
                 .filter(function (entry, id) {
-                    return regex.test(id);
+                    return regex.test(id) || (isPublic && allpublic.test(id));
                 })
                 .pluck('collection')
                 .value();
