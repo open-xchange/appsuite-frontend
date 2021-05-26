@@ -1,3 +1,4 @@
+/* eslint-disable license-header/header */
 /**
  *
  * Based on EXIF Reader and Binary Ajax (http://blog.nihilogic.dk/)

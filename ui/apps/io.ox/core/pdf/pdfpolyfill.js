@@ -1,3 +1,4 @@
+/* eslint-disable license-header/header */
 /*
  * https://github.com/remy/polyfills
  *
