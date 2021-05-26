@@ -3,5 +3,20 @@
     "extends": ["open-xchange-appsuite"],
     "globals": {
         "staticGt": true
-    }
+    },
+    "rules": {
+        "license-header/header": ["error", "./LICENSE"]
+    },
+    "plugins": [
+        "license-header"
+    ],
+    "overrides": [
+        {
+            "files": ["*.conf.js", "Gruntfile.js"],
+            "excludedFiles": ["codecept.conf.js"],
+            "rules": {
+                "license-header/header": "off"
+            }
+        }
+    ]
 }
