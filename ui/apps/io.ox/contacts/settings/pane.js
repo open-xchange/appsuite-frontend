@@ -156,7 +156,7 @@ define('io.ox/contacts/settings/pane', [
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({
                             module: 'contacts',
-                            help: 'ox.appsuite.user.sect.contacts.folder.displayshared.html',
+                            help: 'ox.appsuite.user.sect.contacts.folder.subscribeshared.html',
                             title: gt('Subscribe to shared address books'),
                             point: 'io.ox/core/folder/subscribe-shared-address-books',
                             sections: {
