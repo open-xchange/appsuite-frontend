@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/whatsnew/meta', [
+    'io.ox/core/extensions',
     'gettext!io.ox/core',
     'settings!io.ox/core',
     'io.ox/core/capabilities'
-], function (gt, settings, capabilities) {
+], function (ext, gt, settings, capabilities) {
 
     'use strict';
 
@@ -105,6 +106,13 @@ define('io.ox/core/whatsnew/meta', [
     var helpLinks = settings.get('whatsNew/helpLinks', false);
     // no custom fallback link? use en_US
     if (helpLinks) helpLinks.fallback = helpLinks.fallback || helpLinks.en_US;
+
+    // allow customization of the feature list, be careful to use the same versioning as the original list or we will get bugs
+    var customfeatures = ext.point('io.ox/core/whatsnew/dialog/featurelist').invoke('customize', null, features).valueOf();
+
+    if (customfeatures.length > 0) {
+        features = _(customfeatures).flatten();
+    }
 
     // get the latest version that has features in the list
     var getLatestVersion = function () {
