@@ -623,7 +623,8 @@ define('io.ox/mail/compose/view', [
                 if (to) { this.model.set('to', parseRecipients(to), { silent: true }); }
                 if (params.cc) { this.model.set('cc', parseRecipients(params.cc), { silent: true }); }
                 if (params.bcc) { this.model.set('bcc', parseRecipients(params.bcc), { silent: true }); }
-
+                // fix linebreaks in mailto body (OXUIB-776)
+                if (params.body && settings.get('messageFormat') !== 'text') params.body = params.body.replace(/\n/g, '<br>');
                 params.body = sanitizer.sanitize({ content: params.body, content_type: 'text/html' }, { WHOLE_DOCUMENT: false }).content;
                 this.setSubject(params.subject || '');
                 this.model.set('content', params.body || '');

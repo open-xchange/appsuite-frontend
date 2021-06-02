@@ -131,6 +131,9 @@ define('io.ox/files/api', [
         isSVG: function (type) {
             return (/^image\/svg/).test(type || this.getMimeType());
         },
+        isTiff: function (type) {
+            return (/^image\/tif?f/).test(type || this.getMimeType());
+        },
         isImage: function (type) {
             return (
                 (/^image\//).test(type || this.getMimeType()) &&
