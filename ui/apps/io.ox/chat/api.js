@@ -19,8 +19,9 @@ define('io.ox/chat/api', [
 
     'use strict';
 
-    var host = _.url.hash('chatHost') || ox.serverConfig.chatHost || settings.get('host');
-    var url = _.device('!IE') ? new URL('https://' + host.replace(/^https?:\/\//, '')) :
+    // use '' as fallback so one missing chathost doesn't block the whole UI
+    var host = ox.serverConfig.chatHost || settings.get('host') || '';
+    var url = (_.device('!IE') && host !== '') ? new URL('https://' + host.replace(/^https?:\/\//, '')) :
         // simple fallback, might not work for every host url
         {
             href: 'https://' + host.replace(/^https?:\/\//, '').replace(/\/$/, '') + '/',

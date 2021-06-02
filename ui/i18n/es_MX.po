@@ -4269,7 +4269,7 @@ msgid ""
 "This dialog is limited to %1$d entries and your address book exceeds this "
 "limitation. Therefore, some entries are not listed."
 msgstr ""
-"Este cuadro de diálogo está limitado a $1$d elementos, y su libreta de "
+"Este cuadro de diálogo está limitado a %1$d elementos, y su libreta de "
 "direcciones supera dicho límite. Por tanto, algunos elementos no se han "
 "listado."
 

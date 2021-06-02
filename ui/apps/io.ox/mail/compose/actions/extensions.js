@@ -34,30 +34,17 @@ define('io.ox/mail/compose/actions/extensions', [
 
 
     api.waitForPendingUploads = function (baton) {
-        var deferreds = baton.model.get('attachments')
-            .chain()
-            .map(function (model) {
-                if (model.get('uploaded') >= 1) return;
-                var def = new $.Deferred();
-                model.trigger('force:upload');
-                model.once('upload:complete', def.resolve);
-                model.once('upload:failed', function (error) {
-                    // to stop the cascade and result in an idle window instead of closing (prevent data loss)
-                    baton.stopPropagation();
-                    def.reject(error);
-                });
-                return def;
-            })
-            .compact()
-            .value();
-        if (deferreds.length <= 0) return;
-        return $.when.apply($, deferreds).then(function () {
+        if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
+        return baton.model.pendingUploadingAttachments.then(function () {
             baton.view.syncMail();
         });
     };
 
     api.waitForPendingDeleteRequests = function (baton) {
-        return baton.model.pendingDeletedAttachments;
+        if (baton.model.pendingDeletedAttachments.state() !== 'pending') return;
+        return baton.model.pendingDeletedAttachments.then(function () {
+            baton.view.syncMail();
+        });
     };
 
     api.removeUnusedInlineImages = function (baton) {

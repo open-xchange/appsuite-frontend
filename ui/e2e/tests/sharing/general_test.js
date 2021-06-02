@@ -147,7 +147,7 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function ({ I, driv
     I.waitForElement(myfiles);
     I.selectFolder('Music');
     drive.waitForApp();
-    drive.shareItem('Create sharing link');
+    drive.shareItem();
     I.waitForVisible('.clippy');
     let url = await I.grabValueFrom('.share-wizard input[type="text"]');
     url = Array.isArray(url) ? url[0] : url;
@@ -165,9 +165,9 @@ Scenario.skip('[C83385] Copy to clipboard @puppeteer', async function ({ I, driv
 });
 // TODO: shaky (element (.fa-spin.fa-refresh) still not present on page after 30 )
 Scenario('[C85625] My Shares default sort order', async function ({ I, drive, dialogs }) {
-    function share(item) {
+    function share(item, file) {
         I.retry(5).click(locate('li.list-item').withText(item));
-        drive.shareItem();
+        drive.shareItem(file);
         dialogs.waitForVisible();
         I.selectOption('.form-group select', 'Anyone with the link and invited people');
         I.waitForNetworkTraffic();
@@ -190,10 +190,10 @@ Scenario('[C85625] My Shares default sort order', async function ({ I, drive, di
     ]);
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
-    share('document.txt');
+    share('document.txt', true);
     selectAndWait('Testfolder');
-    share('testdocument.rtf');
-    share('testpresentation.ppsm');
+    share('testdocument.rtf', true);
+    share('testpresentation.ppsm', true);
     selectAndWait('My files');
     share('Testfolder');
 

@@ -14,9 +14,13 @@ module.exports = {
     waitForViewer() {
         I.waitForText('Details', 10, '.io-ox-viewer .sidebar-panel-title');
     },
-    shareItem() {
+    shareItem(file) {
         I.clickToolbar('Share');
         dialogs.waitForVisible();
-        I.waitForText('Who can access this folder?');
+        if (file) {
+            I.waitForText('Who can access this file?');
+        } else {
+            I.waitForText('Who can access this folder?');
+        }
     }
 };

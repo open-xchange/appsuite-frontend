@@ -30,6 +30,14 @@ define('io.ox/onboarding/views', [
     }
 
     function getDownloadUrl(type) {
+        if (type === 'eas') {
+            return $.when(ox.abs + ox.apiRoot +
+                '/onboarding?action=execute' +
+                '&id=apple.iphone/eassync' +
+                '&action_id=download' +
+                '&client=apple.iphone' +
+                '&session=' + ox.session);
+        }
         return http.GET({
             module: 'onboarding',
             params: {
@@ -136,7 +144,7 @@ define('io.ox/onboarding/views', [
                     $('<p class="prompt">').text(gt('Download %1$s for Windows', util.titles.windows.drive))
                 ),
                 //#. 1$s name of the product, usually OX Drive
-                $('<button type="button" data-action="download" class="btn btn-link download">').text(gt('%1$s for Windows', util.titles.windows.drive)).append(
+                $('<button type="button" data-action="download" class="btn btn-primary download">').text(gt('%1$s for Windows', util.titles.windows.drive)).append(
                     $('<i class="fa fa-download">')
                 )
             );
@@ -365,7 +373,7 @@ define('io.ox/onboarding/views', [
                 );
             }
             this.$el.append(
-                //$('<a href="#" role="button" class="manual-toggle" aria-expanded="false">').text(gt('Show manual configuration options')),
+                !needsDescription ? $('<a href="#" role="button" class="manual-toggle" aria-expanded="false">').text(gt('Show manual configuration options')) : '',
                 $('<div class="manual-container">').toggle(needsDescription)
             );
             this.renderManualConfig();
@@ -524,10 +532,11 @@ define('io.ox/onboarding/views', [
             var platform = this.model.get('platform'),
                 app = this.model.get('app'),
                 platformTitle = platform ? util.titles[platform].title : undefined,
-                appTitle = app ? util.titles[platform][app] : undefined;
+                appTitle = app ? util.titles[platform][app] : undefined,
+                isSmartphone = _.device('smartphone');
             var $steps = $('<ul class="progress-steps">'),
                 stepOneLabel;
-            if (_.device('smartphone')) {
+            if (isSmartphone) {
                 stepOneLabel = appTitle ? appTitle : gt('App');
             } else {
                 stepOneLabel = platformTitle ? platformTitle : gt('Platform');
@@ -545,7 +554,7 @@ define('io.ox/onboarding/views', [
                 .addClass((!platform || _.device('smartphone')) && !app ? 'active' : '')
                 .append($('<span class="progress-description aria-hidden="true">').text(stepOneLabel))
             );
-            if (!_.device('smartphone')) {
+            if (!isSmartphone) {
                 $steps.append($('<li class="progress-step-two">')
                     .append(
                         $('<button type="button" class="btn progress-btn" data-action="back">')
@@ -564,7 +573,7 @@ define('io.ox/onboarding/views', [
                     $('<button type="button" class="btn progress-btn">')
                     .prop('disabled', true)
                     .append(
-                        $('<span>').text('3'),
+                        $('<span>').text(isSmartphone ? '2' : '3'),
                         $('<span class="sr-only">').text(gt('Setup'))
                     )
                 )

@@ -40,7 +40,7 @@ define('io.ox/onboarding/main', [
         return settings.get(platform + '/storeIcon').replace('$country', country);
     }
 
-    function getOnbboardingConfig(actionId) {
+    function getOnboardingConfig(actionId) {
         if (!config) {
             config = http.GET({
                 module: 'onboarding',
@@ -60,7 +60,7 @@ define('io.ox/onboarding/main', [
 
     function getMailConfig() {
         var configModel = new Backbone.Model();
-        getOnbboardingConfig('display/mailmanual').then(function (data) {
+        getOnboardingConfig('display/mailmanual').then(function (data) {
             configModel.set('data', data);
         });
         return configModel;
@@ -68,7 +68,7 @@ define('io.ox/onboarding/main', [
 
     function getCalendarConfig() {
         var configModel = new Backbone.Model();
-        getOnbboardingConfig('display/davmanual').then(function (data) {
+        getOnboardingConfig('display/davmanual').then(function (data) {
             configModel.set('url', data.caldav_url);
             configModel.set('login', data.caldav_login);
         });
@@ -77,7 +77,7 @@ define('io.ox/onboarding/main', [
 
     function getContactsConfig() {
         var configModel = new Backbone.Model();
-        getOnbboardingConfig('display/davmanual').then(function (data) {
+        getOnboardingConfig('display/davmanual').then(function (data) {
             configModel.set('url', data.carddav_url);
             configModel.set('login', data.carddav_login);
         });
@@ -86,7 +86,7 @@ define('io.ox/onboarding/main', [
 
     function getEasConfig() {
         var configModel = new Backbone.Model();
-        getOnbboardingConfig('display/easmanual').then(function (data) {
+        getOnboardingConfig('display/easmanual').then(function (data) {
             configModel.set('url', data.eas_url);
             configModel.set('login', data.eas_login);
         });
@@ -132,6 +132,12 @@ define('io.ox/onboarding/main', [
                 return new views.SyncView({
                     description: gt('To synchronize Calendar with your phone, please enter the following settings in your CalDav client:'),
                     config: getCalendarConfig()
+                });
+            },
+            'eassync': function () {
+                return new views.SyncView({
+                    description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
+                    config: getEasConfig()
                 });
             }
         },
@@ -187,6 +193,12 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ title: util.titles.ios.driveapp, url: settings.get('ios/driveapp/url') });
             },
             'eassync': function () {
+                if (_.device('smartphone')) {
+                    return new views.DownloadConfigView({
+                        type: 'eas',
+                        config: getEasConfig()
+                    });
+                }
                 return new views.SyncView({
                     description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
                     config: getEasConfig()
@@ -351,7 +363,7 @@ define('io.ox/onboarding/main', [
         },
         load: function () {
             settings.load();
-            getOnbboardingConfig();
+            getOnboardingConfig();
             getUserData().then(function (data) {
                 config.userData = data;
                 wizard.run();

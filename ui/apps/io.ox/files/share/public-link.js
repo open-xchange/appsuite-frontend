@@ -65,12 +65,21 @@ define('io.ox/files/share/public-link', [
                 }
             });
 
+            var file = baton.model.get('files')[0];
+            var linkLabel;
+            if (file.isFile()) {
+                linkLabel = gt('Anyone on the internet with the link can view the file.');
+            } else if (file.get('module') === 'calendar') {
+                linkLabel = gt('Anyone on the internet with the link can view the calendar.');
+            } else {
+                linkLabel = gt('Anyone on the internet with the link can view the folder.');
+            }
             this.append(
                 // input,
                 $('<div class="row"></div>')
                 .append(
                     $('<div class="col-sm-1 col-xs-2 text-center"><i class="fa fa-link" aria-hidden="true"></i></div>'),
-                    $('<div class="col-sm-5 col-xs-6"></div>').text(gt('Anyone on the internet with the link can view the file.')),
+                    $('<div class="col-sm-5 col-xs-6"></div>').text(linkLabel),
                     $('<div class="col-sm-6 col-xs-4 text-left"></div>').append(copyLinkButton.render().$el)
                 )
             );

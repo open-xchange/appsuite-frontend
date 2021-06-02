@@ -104,9 +104,12 @@ define('io.ox/core/boot/login/openid', [
                 var dialog = this;
                 function retry() {
                     silentRelogin().then(function () {
+                        if (!dialog || dialog.disposed) return;
                         dialog.trigger('relogin:success');
                         dialog.close();
                     }, function (result) {
+                        // bind retry to lifetime of dialog, e.g. 'abortWithSuccess' does close the dialog
+                        if (!dialog || dialog.disposed) return;
                         if (result.reason === 'timeout') retry();
                     });
                 }
@@ -122,6 +125,7 @@ define('io.ox/core/boot/login/openid', [
                 return openIdConnectLogin({ flow: 'login' });
             },
             relogin: function (baton) {
+                util.debug('Open ID Relogin ...');
                 return silentRelogin().then(function () {
                     baton.stopPropagation();
                     baton.preventDefault();

@@ -260,7 +260,7 @@ define('io.ox/chat/views/chat', [
         },
 
         renderTitle: function () {
-            return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
+            return $('<h2 class="title">').text(this.model.getTitle() || '\u00a0');
         },
 
         isScrolledToBottom: function () {

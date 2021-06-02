@@ -19,8 +19,14 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
 
     var initialized = false,
 
-        // An Object for Session Handling
-        TabSession;
+        // an Object for Session Handling
+        TabSession,
+
+        // state whether an outdated session is deteted in any tab for this user
+        outdatedSessionDetected = false,
+
+        // whether a relogin process is currently running
+        inRelogin = false;
 
     /**
      * Initialize localStorage listener if localStorage is available
@@ -44,25 +50,65 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
      * Initialize listener for storage events and listener for propagation
      */
     function initListener() {
-        TabSession.events.listenTo(TabSession.events, 'getSession', function (parameters) {
-            var tabAPI = require('io.ox/core/api/tab');
-            tabAPI.propagate('propagateLogin', _.extend(parameters, {
-                exceptWindow: tabAPI.getWindowName(),
-                storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
-            }));
-        });
-
         TabSession.events.listenTo(TabSession.events, 'propagateLogin', function (parameters) {
-            if (!(ox.signin || reloginBySameUser(parameters))) return;
             require(['io.ox/core/boot/login/tabSession'], function (tabSessionLogin) {
                 tabSessionLogin(parameters);
             });
         });
+
+        // invalidate session for all tabs to prevent sharing of outdated sessions
+        // case: tab1 has session lost, user opens a new tab via bookmark, new tab
+        //       must not get an outdated session from tab1
+        ox.on('relogin:required', function () {
+            util.debugSession('TabSession: received relogin:required');
+            if (outdatedSessionDetected) { return; }
+
+            // while relogin process is running, sessions may change back and forth,
+            // but only the final result is important, so ignore
+            if (inRelogin) { return; }
+
+            outdatedSessionDetected = true;
+            propagateOutdatedSession();
+        });
+
+        // must be done at the endpoint of every process were a new session by MW is possibly provided,
+        // login and relogin are such endpoints
+        ox.on('login:success', function () {
+            util.debugSession('TabSession: received login:success');
+            outdatedSessionDetected = false;
+        });
+
+        ox.on('before:relogin', function () {
+            util.debugSession('TabSession: received before:relogin');
+            inRelogin = true;
+        });
+        ox.on('relogin:success', function () {
+            util.debugSession('TabSession: received relogin:success');
+            outdatedSessionDetected = false;
+            inRelogin = false;
+        });
     }
 
     function reloginBySameUser(parameters) {
-        var isSameUser = (ox.user_id === parameters.user_id) && (ox.user === parameters.user) && (ox.context_id === parameters.context_id);
-        return (parameters.relogin && isSameUser);
+        return (parameters.relogin && bySameUser(parameters));
+    }
+
+    function bySameUser(parameters) {
+        return (ox.user_id === parameters.user_id) && (ox.user === parameters.user) && (ox.context_id === parameters.context_id);
+    }
+
+    function propagateOutdatedSession () {
+        util.debugSession('TabSession: called propagateOutdatedSession');
+        var tabAPI = require('io.ox/core/api/tab');
+        var userData = {
+            user: ox.user,
+            user_id: ox.user_id,
+            context_id: ox.context_id,
+        }
+        tabAPI.propagate('propagateOutdatedSession', _.extend(userData, {
+            exceptWindow: tabAPI.getWindowName(),
+            storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION
+        }));
     }
 
     // PUBLIC --------------------------------------------------
@@ -75,6 +121,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          * Ask over localStorage if another tab has a session
          */
         propagateGetSession: function () {
+            util.debugSession('TabSession: called propagateGetSession');
             if (ox.session) return;
             var windowName = window.name || JSON.stringify({}),
                 windowNameObject,
@@ -92,7 +139,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                 } else {
                     var param = {};
                     if (_.url.hash('session')) _.extend(param, { session: _.url.hash('session') });
-                    tabAPI.propagate('getSession', { parameters: param, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
+                    tabAPI.propagate('requestGetSession', { parameters: param, exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 }
             }
         },
@@ -126,7 +173,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
 
             this.propagateGetSession();
 
-            this.events.listenTo(TabSession.events, 'propagateSession', function (loginData) {
+            this.events.listenTo(TabSession.events, 'responseGetSession', function (loginData) {
                 if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {
                     disable();
                     def.reject();
@@ -147,18 +194,21 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          *  parameters to be propagated
          */
         propagateSession: function (parameters) {
+            util.debugSession('TabSession: called propagateSession', parameters);
             var tabAPI = require('io.ox/core/api/tab');
 
             // the login process is finished when session, user and user_id are set in the ox object
             if (!ox.session || !ox.user || !ox.user_id) {
-                tabAPI.propagate('propagateNoSession', { exceptWindow: tabAPI.getWindowName(), storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION });
                 return;
             }
             // the requested session is differently to ox.session. e.g. guest user vs normal login
             if (parameters.session && parameters.session !== ox.session) {
                 return;
             }
-            tabAPI.propagate('propagateSession', {
+
+            if (outdatedSessionDetected) { return; }
+            util.debugSession('responseGetSession');
+            tabAPI.propagate('responseGetSession', {
                 session: ox.session,
                 language: ox.language,
                 theme: ox.theme,
@@ -181,16 +231,16 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
          */
         handleListener: function (data) {
             switch (data.propagate) {
-                case 'getSession':
+                case 'requestGetSession':
+                    util.debugSession('TabSession: received requestGetSession');
                     this.propagateSession(data.parameters);
                     break;
-                case 'propagateSession':
+                case 'responseGetSession':
+                    util.debugSession('TabSession: received responseGetSession');
                     this.events.trigger(data.propagate, data.parameters);
                     break;
-                case 'propagateNoSession':
-                    this.events.trigger(data.propagate);
-                    break;
                 case 'propagateLogout':
+                    util.debugSession('TabSession: received propagateLogout');
                     if (ox.signin) return;
                     this.events.trigger('before:propagatedLogout');
                     require('io.ox/core/main').logout({
@@ -200,8 +250,22 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                     });
                     break;
                 case 'propagateLogin':
-                    if (ox.session && !reloginBySameUser(data.parameters)) return;
+                    util.debugSession('TabSession: received propagateLogin', data && _.clone(data.parameters), ox.signin);
+
+                    // always use the newest session by the same user in the tab cluster, but override on the signin were no user exists
+                    if (!ox.signin && !bySameUser(data.parameters)) { return; }
+                    // no error case known currently, but as a safety check to make sure that a damaged login event can't break this tab
+                    if (!data.parameters.session) { return; }
+
                     this.events.trigger(data.propagate, data.parameters);
+                    break;
+                case 'propagateOutdatedSession':
+                    util.debugSession('TabSession: received propagateOutdatedSession');
+                    if (!bySameUser(data.parameters)) return;
+                    // late arriving requests can invalidate the session again in a relogin process, ignore these
+                    if (inRelogin) return;
+                    util.debugSession('TabSession: outdated session detected');
+                    outdatedSessionDetected = true;
                     break;
                 default:
                     break;

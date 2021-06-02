@@ -598,7 +598,7 @@ define('io.ox/calendar/freetime/timeView', [
                 until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth() - 1), 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours').utc();
             } else {
                 from = moment(this.model.get('startDate')).startOf('day').utc();
-                until = moment(from).add(1, this.model.get('dateRange') + 's').utc();
+                until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth()), 'days').utc();
             }
             return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) }).done(function (items) {
 
@@ -667,11 +667,11 @@ define('io.ox/calendar/freetime/timeView', [
             var start = moment(this.model.get('startDate')).startOf('day'),
                 end = moment(start).add(1, 'days'),
                 day = 0,
-                // if we have a daylight saving time change within the week we need to compensate the loss/addition of an hour
-                dstOffset = this.model.get('onlyWorkingHours') ? 24 - end.diff(start, 'hours') : 0,
+                // if we have a daylight saving time change we need to compensate the loss/addition of an hour
+                dstOffset = (moment(timestamp)._offset - (this.model.get('onlyWorkingHours') ? moment(timestamp).startOf('day').add(this.model.get('startHour'), 'hours')._offset : moment(timestamp).startOf('day')._offset)) / 60,
                 numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth(),
-                width = 100 / (numberOfDays * (this.model.get('endHour') - this.model.get('startHour') + 1)),
-                prevStart,
+                hours = this.model.get('onlyWorkingHours') ? this.model.get('endHour') - this.model.get('startHour') + 1 : 24,
+                width = 100 / (numberOfDays * hours),
                 percent = 100 / numberOfDays,
                 notOnScale = false;
 
@@ -698,15 +698,11 @@ define('io.ox/calendar/freetime/timeView', [
                     break;
                 }
 
-                prevStart = start.clone();
                 start.add(1, 'days');
-                if (this.model.get('onlyWorkingHours') && dstOffset === 0) {
-                    dstOffset = 24 - start.diff(prevStart, 'hours');
-                }
                 end.add(1, 'days');
             }
 
-            return day * percent + (notOnScale ? 0 : ((timestamp - start.valueOf()) / (end.valueOf() - start.valueOf()) * percent) + dstOffset * width);
+            return day * percent + (notOnScale ? 0 : ((timestamp - start.valueOf()) / (hours * 3600000) * percent) + dstOffset * width);
         },
 
         // utility function, position is given in %

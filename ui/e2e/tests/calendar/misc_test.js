@@ -466,7 +466,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
     I.wait(0.2); // Just wait a little extra for all event listeners
     I.click('Share / Permissions');
     dialogs.waitForVisible();
-    I.waitForText('Permissions for folder "New calendar"');
+    I.waitForText('Permissions for calendar "New calendar"');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`, undefined, '.tt-dropdown-menu');
     I.pressKey('ArrowDown');
