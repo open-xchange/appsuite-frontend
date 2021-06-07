@@ -61,8 +61,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 container;
             this.$body.append(
                 $('<div class="form-group">').css({
-                    'min-height': '266px',
-                    'height': '266px'
+                    'min-height': '266px'
                 }).append(
                     container = $('<div class="editor">').attr('data-editor-id', editorId),
                     $('<div class="tinymce-toolbar">').attr('data-editor-id', editorId)
