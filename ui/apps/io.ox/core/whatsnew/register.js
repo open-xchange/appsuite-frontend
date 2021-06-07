@@ -1,10 +1,10 @@
-define('io.ox/core/whatsnew/plugin', [
+define('io.ox/core/whatsnew/register', [
     'io.ox/core/extensions'
 ], function (ext) {
 
     'use strict';
 
-    console.log('loading pkugin');
+    console.log('loading plugin');
 
     ext.point('io.ox/core/whatsnew/dialog/featurelist').extend({
         id: 'myCustomList',
