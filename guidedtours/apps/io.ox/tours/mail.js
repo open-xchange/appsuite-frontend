@@ -88,7 +88,8 @@ define('io.ox/tours/mail', [
                 }
             })
             .title(gt('Sorting your emails'))
-            .content(gt('To sort the emails, click on Sort by. Select a sort criteria.'))
+            //#. Sort is the label of a dropdown menu
+            .content(gt('To sort the emails, click on Sort. Select a sort criteria.'))
             .waitFor('.io-ox-mail-window')
             .hotspot('.list-view-control > .toolbar > .dropdown:last')
             .navigateTo('io.ox/mail/main')
@@ -113,7 +114,8 @@ define('io.ox/tours/mail', [
             .end()
         .step()
             .title(gt('Reading email conversations'))
-            .content(gt('To open or close an email in a conversation, click on a free area in the header.'))
+            //#. Sort is the label of a dropdown menu, keep this consistent
+            .content(gt('If conversations are enabled in the Sort menu, you can collapse or expand an email in a conversation. To do so, click on a free area in the email headline.'))
             .hotspot('.thread-view .detail-view-header')
             .end()
         .step()
