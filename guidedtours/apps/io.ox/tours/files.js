@@ -116,7 +116,7 @@ define('io.ox/tours/files', [
                 .end()
             .step()
                 .title(gt('Upload a new file'))
-                .content(gt('To upload a new file from your local device, simply click on Add local file and select the file you would like to upload. It is even easier if you just drag and drop files from your local device into Drive. The uploaded file is now available in Drive on all your devices.'))
+                .content(gt('To upload a new file from your local device, simply click on Upload, then choose File in the dropdown menu and select the file you would like to upload. It is even easier if you just drag and drop files from your local device into Drive. The uploaded file is now available in Drive on all your devices.'))
                 .spotlight('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]', { position: 'left' })
                 .hotspot('.classic-toolbar-container [data-action="io.ox/files/actions/upload"]', { position: 'top' })
                 .on('before:show', function () {

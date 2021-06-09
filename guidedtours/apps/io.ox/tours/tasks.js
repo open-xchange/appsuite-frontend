@@ -31,7 +31,7 @@ define('io.ox/tours/tasks', [
         var taskTour = new Tour()
         .step()
             .title(gt('Creating a new task'))
-            .content(gt('To create a new task, click on New in the toolbar.'))
+            .content(gt('To create a new task, click on New task in the toolbar.'))
             .spotlight('.io-ox-tasks-window .primary-action .btn:visible, [data-ref="io.ox/tasks/actions/create"]:visible')
             .on('before:show', function () {
                 if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
@@ -131,7 +131,7 @@ define('io.ox/tours/tasks', [
             .end()
         .step()
             .title(gt('Sorting tasks'))
-            .content(gt('To sort the tasks, click on Sort by. Select a sort criteria.'))
+            .content(gt('To sort the tasks, click on the sort icon above the list. Select a sort criteria.'))
             .navigateTo('io.ox/tasks/main')
             .waitFor('.grid-options.dropdown')
             .spotlight('.grid-options.dropdown')
