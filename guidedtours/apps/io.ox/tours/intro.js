@@ -91,7 +91,7 @@ define('io.ox/tours/intro', [
                         .step()
                             .title(gt('Cancel tour'))
                             //#. %s is the "getting started" tour button label
-                            .content(gt('You can restart this tour at any time by clicking on the help icon and choose "%s"',
+                            .content(gt('You can restart this tour at any time by clicking on the help icon and choose "%s".',
                                 //#. Tour name; general introduction
                                 gt('Getting started')))
                             .end()
