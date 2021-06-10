@@ -16,9 +16,10 @@ define('io.ox/tours/mail', [
     'io.ox/core/tk/wizard',
     'io.ox/core/notifications',
     'io.ox/tours/utils',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, notifications, utils, settings, gt) {
+], function (Tour, notifications, utils, capabilities, settings, gt) {
 
     'use strict';
 
@@ -139,16 +140,28 @@ define('io.ox/tours/mail', [
                 })
                 .end();
         }
-        emailTour.step()
-            .title(gt('Opening the email settings'))
-            .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
-            .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
-            .spotlight('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown')
-            .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
-            .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
-            .end()
-        .on('stop', function () {
+
+        if (capabilities.has('client-onboarding')) {
+            emailTour.step()
+                .title(gt('Opening the email settings'))
+                .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
+                .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
+                .spotlight('#topbar-settings-dropdown')
+                .waitFor('#topbar-settings-dropdown')
+                .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
+                .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
+                .end();
+        } else {
+            emailTour.step({ back: false, noAutoAlign: true })
+                .title(gt('Opening the email settings'))
+                .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Click on Mail on the left side.'))
+                .hotspot('#io-ox-settings-topbar-icon i', { top: 12, left: 6 })
+                .spotlight('#io-ox-settings-topbar-icon')
+                .waitFor('#io-ox-settings-topbar-icon')
+                .end();
+        }
+
+        emailTour.on('stop', function () {
             if (composeApp) {
                 //prevent app from asking about changed content
                 composeApp.view.dirty(false);
