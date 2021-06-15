@@ -366,13 +366,25 @@
         'fa-xing': '\uf168'
     };
 
+    // some icons are not aligned correctly, default is y=86
+    var faAlignmentHash = {
+        'fa-check-square-o': 89,
+        'fa-cloud': 88,
+        'fa-comment': 80,
+        'fa-comment-o': 80,
+        'fa-envelope-o': 80,
+        'fa-phone': 90,
+        'fa-th': 90,
+        'fa-th-large': 89
+    };
+
     $.icon = function (name, title, classList) {
         var icon = faClassHash[name] || '';
         // give notice so devs can add missing icons
         if (ox.debug && name && !faClassHash[name]) console.error('Svg icon not found. Please add it to the list', name, title, classList);
         title = title ? '<title>' + title + '</title>' : '';
         classList = classList ? ' ' + classList : '';
-        return '<svg viewbox="0 0 100 100" class="fa fasvg' + classList + '" aria-hidden="true">' + title + '<text x="50" y="86" text-anchor="middle">' + icon + '</text></svg>';
+        return '<svg viewbox="0 0 100 100" class="fa fasvg' + classList + '" aria-hidden="true">' + title + '<text x="50" y="' + (faAlignmentHash[name] || 86) + '" text-anchor="middle">' + icon + '</text></svg>';
     };
 
     $.checkbox = function () {
