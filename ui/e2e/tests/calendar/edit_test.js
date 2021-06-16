@@ -140,6 +140,31 @@ Scenario('[C7450] Edit private appointment', async ({ I, calendar }) => {
 
 });
 
+Scenario('[OXUIB-818] Edit public appointment when folder not checked', async ({ I, calendar }) => {
+    const folder = await I.haveFolder({ title: 'myPublic', module: 'event', subscribed: '1', parent: '2' });
+    const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
+    I.say(folder);
+    await I.haveAppointment({
+        folder,
+        summary: 'Testappointment',
+        startDate: { tzid: 'Europe/Berlin', value: time.format('YYYYMMDD[T]HHmmss') },
+        endDate:   { tzid: 'Europe/Berlin', value: time.add(1, 'hour').format('YYYYMMDD[T]HHmmss') },
+        class: 'PUBLIC'
+    });
+
+    // load
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+    I.waitForText('Testappointment');
+
+    // check
+    I.doubleClick('.page.current .appointment');
+    I.waitForVisible('.io-ox-calendar-edit-window');
+    I.waitForText('Save');
+    I.click('Save');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+});
+
 Scenario('[C7451] Edit yearly series via doubleclick', async ({ I, calendar }) => {
     const time = moment('1612', 'DDMM').add(10, 'hours');
     await I.haveAppointment({

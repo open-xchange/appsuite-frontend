@@ -237,7 +237,7 @@ define('io.ox/core/folder/extensions', [
 
             subscribe.open({
                 module: module,
-                help: isContact ? 'ox.appsuite.user.sect.contacts.folder.displayshared.html' : 'ox.appsuite.user.sect.tasks.folder.displayshared.html',
+                help: isContact ? 'ox.appsuite.user.sect.contacts.folder.subscribeshared.html' : 'ox.appsuite.user.sect.tasks.folder.subscribeshared.html',
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
                 tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
@@ -1104,7 +1104,7 @@ define('io.ox/core/folder/extensions', [
                 require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                     subscribe.open({
                         module: 'calendar',
-                        help: 'ox.appsuite.user.sect.calendar.folder.displayshared.html',
+                        help: 'ox.appsuite.user.sect.calendar.folder.subscribeshared.html',
                         title: gt('Subscribe to shared calendars'),
                         point: 'io.ox/core/folder/subscribe-shared-calendar',
                         sections: {
