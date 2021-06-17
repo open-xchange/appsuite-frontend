@@ -141,6 +141,21 @@
         .header {
             padding: .5rem 8px ~"calc(.5rem - 1px)" 16px;
         }
+
+        .connection-problem-banner {
+            font-size: 0.9375rem;
+            font-weight: bold;
+            height: 0px;
+            color: #fff;
+            background-color: #cc0000;
+            text-align: center;
+            transition: height 0.3s;
+
+            &.disconnected {
+                height: 1.5rem;
+                padding: 3px;
+            }
+        }
     }
 
     .classic-toolbar {
