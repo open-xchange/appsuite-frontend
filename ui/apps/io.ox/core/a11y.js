@@ -250,7 +250,10 @@ define('io.ox/core/a11y', [], function () {
                 // skip tabbable elements of contenteditables
                 return !$(this).closest('[contenteditable="true"]').length;
             })
-            .filter(':visible');
+            .filter(':visible')
+            // don't use :enabled here as it works slightly different for nodes that don't have the attribute at all
+            .filter(':not(:disabled)');
+
         return $($.map(filteredItems, function (item) {
             // if tabbable element is actually an iframe we need to expand it to its tabbable contents
             return $(item).is('iframe') ? getTabbable($(item).contents().find('html')).toArray() : item;
