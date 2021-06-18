@@ -595,7 +595,7 @@ define('io.ox/core/tk/vgrid', [
         }
 
         paint = (function () {
-
+            var keepFocus;
             function cont(chunk) {
 
                 // vars
@@ -646,6 +646,7 @@ define('io.ox/core/tk/vgrid', [
                 // any nodes left to clear?
                 if ($i < numRows) {
                     for (; i < numRows; i++) {
+                        if ($(pool[i].node).is(':focus')) keepFocus = true;
                         detachPoolItem(i, defaultClassName);
                     }
                 }
@@ -687,6 +688,10 @@ define('io.ox/core/tk/vgrid', [
                                 // select element which has been set as preselected
                                 self.selection.set(preSelection);
                                 preSelection = undefined;
+                            }
+                            if (keepFocus) {
+                                container.find('[aria-selected="true"]').trigger('focus');
+                                keepFocus = false;
                             }
                         }
                         // no fail handling here otherweise we get empty blocks
