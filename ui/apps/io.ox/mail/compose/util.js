@@ -15,7 +15,7 @@ define('io.ox/mail/compose/util', [
     'io.ox/mail/compose/api',
     'io.ox/mail/compose/resize',
     'settings!io.ox/mail',
-    'setting!io.ox/files'
+    'settings!io.ox/files'
 ], function (composeAPI, resize, settings, fileSettings) {
 
     'use strict';
