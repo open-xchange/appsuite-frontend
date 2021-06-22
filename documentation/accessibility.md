@@ -9,7 +9,7 @@ icon: fa-universal-access
 
 Accessibility typically covers keyboard support, tab order, focus management, color contrast, semantic markup, WAI-ARIA support, and screen reader support.
 
-We perform screen reader testing with the following typical setups: [NVDA][NVDA] with Firefox, [JAWS][Jaws] with Internet Explorer and [Voiceover][VO] with Safari (with accessibility option turned on, i.e. tab highlights each item).
+We perform screen reader testing with the following typical setups on desktop devices: [NVDA][NVDA] with Firefox, [JAWS][Jaws] with Internet Explorer and [Voiceover][VO] with Safari (with accessibility option turned on, i.e. tab highlights each item).
 
 Automated testing with [axe-core][AXE] is also part of e2e tests in our build pipeline.
 
