@@ -399,8 +399,12 @@ define('io.ox/core/desktop', [
                 win.floating = new FloatingWindow.View({ el: win.nodes.outer, model: model }).render();
 
                 win.floating.listenTo(model, 'quit', function () {
+                    // prevent multiple clicks on quit button etc
+                    win.floating.$header.attr('disabled', 'disabled').find('.controls button').attr('disabled', 'disabled');
                     win.app.quit().done(function () {
                         model.trigger('close');
+                    }).fail(function () {
+                        win.floating.$header.attr('disabled', false).find('.controls button').attr('disabled', false);
                     });
                 });
 
