@@ -213,7 +213,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                 var self = this,
                     defs = [],
-                    lastSearchedContacts = settings.get('lastSearchedContacts', []);
+                    lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
 
                 defs.push(folderApi.flat({ module: 'contacts', all: true }));
                 _(lastSearchedContacts).each(function (contact) {
@@ -226,8 +226,23 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                 $.when.apply($, defs).then(function (folders) {
 
-                    // flat request returns folders in sections, add them to a single array, leave out the hidden section
-                    folders = _([].concat(folders.private, folders.shared, folders.public)).compact();
+                    // flat request returns folders in sections, add them to a single array, leave out the hidden section if not configured otherwise
+                    folders = _([].concat(
+                        settings.get('enterprisePicker/includePrivateFolders', true) ? folders.private : [],
+                        settings.get('enterprisePicker/includeSharedFolders', true) ? folders.shared : [],
+                        settings.get('enterprisePicker/includePublicFolders', true) ? folders.public : [],
+                        settings.get('enterprisePicker/includeHiddenFolders', false) ? folders.hidden : []))
+                        .compact()
+                        // filter folders according to settings
+                        .filter(function (folder) {
+                            // only use folders that have the "used in picker" flag if not configured otherwise
+                            if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
+
+                            return folder['com.openexchange.contacts.extendedProperties'] &&
+                                   folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
+                                   folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value;
+                        });
+
                     var lists = _(folders).map(function (folder) {
                             return { label: folder.title, value: folder.id };
                         }),
@@ -240,7 +255,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     lastSearchedContacts = lastSearchedContacts.filter(function (contact) {
                         return !contact.error;
                     });
-                    settings.set('lastSearchedContacts', _(lastSearchedContacts).map(function (contact) {
+                    settings.set('enterprisePicker/lastSearchedContacts', _(lastSearchedContacts).map(function (contact) {
                         return { folder_id: contact.folder_id, id: contact.id };
                     })).save();
                     model = new Backbone.Model({
@@ -262,7 +277,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         lastContacts.unshift(contacts);
                         // limit to 10 for now
                         lastContacts.reset(lastContacts.slice(0, 10));
-                        settings.set('lastSearchedContacts', _(lastContacts.models).map(function (contact) {
+                        settings.set('enterprisePicker/lastSearchedContacts', _(lastContacts.models).map(function (contact) {
                             return { folder_id: contact.get('folder_id'), id: contact.get('id') };
                         })).save();
                     };
@@ -277,22 +292,23 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             .then(updateContactsAfterSearch);
                             return;
                         }
-                        api.getAll({ folder: selectedList, columns: columns })
-                        .then(function (contacts) {
-                            model.get('contacts').reset(contacts);
-                        });
+                        // no cache for now, cache ignores column list and we might get incomplete data
+                        api.getAll({ folder: selectedList, columns: columns }, false)
+                            .then(function (contacts) {
+                                model.get('contacts').reset(contacts);
+                            });
                     });
 
                     model.on('change:searchQuery', function (model, query) {
                         var selectedList = model.get('selectedList');
                         // no search query? show full selected list
                         if (query.length === 0) return model.trigger('change:selectedList', model, selectedList);
-                        // less than 2 characters no change (MW request requires a minimum of 2 characters)
-                        if (query.length < 2) return;
+                        // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
+                        if (query.length < settings.get('search/minimumQueryLength', 2)) return;
                         if (selectedList === 'all') selectedList = folderList;
                         self.$('.modal-content').busy();
                         api.advancedsearch(query, { omitFolder: true, folders: selectedList, columns: columns, names: 'on', phones: 'on', job: 'on' })
-                        .then(updateContactsAfterSearch);
+                            .then(updateContactsAfterSearch);
                     });
 
                     self.$('.modal-content').idle();
@@ -352,6 +368,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         .filter(function (item) {
                             item.mail_full_name = util.getMailFullName(item);
                             item.email = $.trim(item.email1 || item.email2 || item.email3 || item.mail).toLowerCase();
+                            item.mail_field = item.mail_field || ('email' + (util.calcMailField(item, item.email) || 1));
                             return item.email || item.mark_as_distributionlist;
                         })
                         .map(function (item) {
@@ -363,10 +380,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                                     id: item.id,
                                     folder_id: item.folder_id,
                                     email: mail,
-                                    user_id: item.user_id
+                                    field: item.mail_field || 'email1',
+                                    user_id: item.user_id || item.internal_userid
                                 };
-                                // mail_field is used in distribution lists
-                            if (item.mail_field) result.field = item.mail_field;
                             return result;
                         }, this)
                         .flatten()
