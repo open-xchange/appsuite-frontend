@@ -28,7 +28,8 @@ define('io.ox/mail/compose/main', [
     // via point.cascade
 
     var POINT = ext.point('io.ox/mail/compose/boot'),
-        INDEX = 0;
+        INDEX = 0,
+        skipYell;
 
     POINT.extend({
         id: 'bundle',
@@ -322,6 +323,7 @@ define('io.ox/mail/compose/main', [
             switch (error.code) {
                 case 'UI-SPACEMISSING':
                 case 'MSGCS-0007':
+                    skipYell = true;
                     error.message = gt('The mail draft could not be found on the server. It was sent or deleted in the meantime.');
                     break;
                 case 'MSGCS-0010':
@@ -474,7 +476,11 @@ define('io.ox/mail/compose/main', [
                 break;
         }
         require(['io.ox/core/yell'], function (yell) {
-            yell(error);
+            // skip the error if it was already displayed
+            setTimeout(function () {
+                if (!skipYell) yell(error);
+                skipYell = false;
+            }, 200);
         });
     });
 
