@@ -12,10 +12,11 @@
  */
 
 define('io.ox/core/whatsnew/meta', [
+    'io.ox/core/extensions',
     'gettext!io.ox/core',
     'settings!io.ox/core',
     'io.ox/core/capabilities'
-], function (gt, settings, capabilities) {
+], function (ext, gt, settings, capabilities) {
 
     'use strict';
 
@@ -24,12 +25,17 @@ define('io.ox/core/whatsnew/meta', [
     var features = [
         {
             version: 1,
-            capabilities: 'infostore',
+            capabilities: 'infostore && (filestorage_xox || filestorage_xctx)',
             name: gt('Federated Sharing of Files'),
             description: gt('The sharing dialogs have been significantly updated to simplify the whole sharing process, and to facilitate the sharing of files between contexts and other deployments.')
         },
         {
             version: 1,
+            capabilities: 'client-onboarding',
+            // this feature needs a custom check because capabilities are not sufficient here. Customers may still have the old wizard configured
+            check: function () {
+                return settings.get('onboardingWizard', true);
+            },
             name: gt('Improved "Connect your device" Wizard'),
             description: gt('The "Connect your device" wizard now features simplified device selection, as well as the use of QR codes to make setting up your device even easier.')
         },
@@ -101,6 +107,13 @@ define('io.ox/core/whatsnew/meta', [
     // no custom fallback link? use en_US
     if (helpLinks) helpLinks.fallback = helpLinks.fallback || helpLinks.en_US;
 
+    // allow customization of the feature list, be careful to use the same versioning as the original list or we will get bugs
+    var customfeatures = ext.point('io.ox/core/whatsnew/dialog/featurelist').invoke('customize', null, features).valueOf();
+
+    if (customfeatures.length > 0) {
+        features = _(customfeatures).flatten();
+    }
+
     // get the latest version that has features in the list
     var getLatestVersion = function () {
             return _.max(_(features).pluck('version'));
@@ -113,9 +126,12 @@ define('io.ox/core/whatsnew/meta', [
                 // not seen by user or from the latest version (we always want to show the features from the latest version because empty lists are boring)
                 // also user must have the correct capabilities
                 // some features may also be device specific (disabled on smartphones etc)
+                // if there is a custom check function, run that too
                 return (feature.version > settings.get('whatsNew/lastSeenVersion', -1) || feature.version === latestVersion) &&
                        (!feature.capabilities || capabilities.has(feature.capabilities) &&
-                       (!feature.device || _.device(feature.device)));
+                       (!feature.device || _.device(feature.device)) &&
+                       (!feature.check || feature.check())
+                       );
             });
         },
         // returns language specific help url or fallback if configured

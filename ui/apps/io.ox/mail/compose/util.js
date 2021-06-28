@@ -14,8 +14,9 @@
 define('io.ox/mail/compose/util', [
     'io.ox/mail/compose/api',
     'io.ox/mail/compose/resize',
-    'settings!io.ox/mail'
-], function (composeAPI, resize, settings) {
+    'settings!io.ox/mail',
+    'settings!io.ox/files'
+], function (composeAPI, resize, settings, fileSettings) {
 
     'use strict';
 
@@ -84,7 +85,7 @@ define('io.ox/mail/compose/util', [
             attachment.on('destroy', function () {
                 data = undefined;
                 this.destroyed = true;
-                if (def && def.state() === 'pending') def.abort();
+                if (def && def.state() === 'pending' && !fileSettings.get('uploadSpooling')) def.abort();
                 else if (!def) attachment.trigger('upload:aborted');
             });
             attachment.done = def;

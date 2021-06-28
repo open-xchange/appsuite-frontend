@@ -1203,6 +1203,20 @@ define('io.ox/chat/data', [
                 data.chats.remove(roomId);
                 data.channels.remove(roomId);
             });
+
+            socket.on('disconnect', function () {
+                events.trigger('socket:disconnected');
+            });
+            socket.on('error', function () {
+                if (socket.connected) return;
+                events.trigger('socket:disconnected');
+            });
+            socket.on('connect', function () {
+                events.trigger('socket:connected');
+            });
+            socket.on('reconnect', function () {
+                events.trigger('socket:connected');
+            });
         },
 
         waitForMessage: function () {

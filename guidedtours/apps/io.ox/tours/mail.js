@@ -16,9 +16,10 @@ define('io.ox/tours/mail', [
     'io.ox/core/tk/wizard',
     'io.ox/core/notifications',
     'io.ox/tours/utils',
+    'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, notifications, utils, settings, gt) {
+], function (Tour, notifications, utils, capabilities, settings, gt) {
 
     'use strict';
 
@@ -88,7 +89,8 @@ define('io.ox/tours/mail', [
                 }
             })
             .title(gt('Sorting your emails'))
-            .content(gt('To sort the emails, click on Sort by. Select a sort criteria.'))
+            //#. Sort is the label of a dropdown menu
+            .content(gt('To sort the emails, click on Sort. Select a sort criteria.'))
             .waitFor('.io-ox-mail-window')
             .hotspot('.list-view-control > .toolbar > .dropdown:last')
             .navigateTo('io.ox/mail/main')
@@ -113,7 +115,8 @@ define('io.ox/tours/mail', [
             .end()
         .step()
             .title(gt('Reading email conversations'))
-            .content(gt('To open or close an email in a conversation, click on a free area in the header.'))
+            //#. Sort is the label of a dropdown menu, keep this consistent
+            .content(gt('If conversations are enabled in the Sort menu, you can collapse or expand an email in a conversation. To do so, click on a free area in the email headline.'))
             .hotspot('.thread-view .detail-view-header')
             .end()
         .step()
@@ -137,16 +140,28 @@ define('io.ox/tours/mail', [
                 })
                 .end();
         }
-        emailTour.step()
-            .title(gt('Opening the email settings'))
-            .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
-            .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
-            .spotlight('#topbar-settings-dropdown')
-            .waitFor('#topbar-settings-dropdown')
-            .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
-            .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
-            .end()
-        .on('stop', function () {
+
+        if (capabilities.has('client-onboarding')) {
+            emailTour.step()
+                .title(gt('Opening the email settings'))
+                .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Select Settings. Click on Mail on the left side.'))
+                .hotspot('#io-ox-topbar-settings-dropdown-icon i', { top: 12, left: 6 })
+                .spotlight('#topbar-settings-dropdown')
+                .waitFor('#topbar-settings-dropdown')
+                .on('wait', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', true); })
+                .on('hide', function () { $('#io-ox-topbar-settings-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-settings-dropdown-icon').attr('forceOpen', false); })
+                .end();
+        } else {
+            emailTour.step({ back: false, noAutoAlign: true })
+                .title(gt('Opening the email settings'))
+                .content(gt('To open the email settings, click the Settings menu icon on the upper right side of the menu bar. Click on Mail on the left side.'))
+                .hotspot('#io-ox-settings-topbar-icon i', { top: 12, left: 6 })
+                .spotlight('#io-ox-settings-topbar-icon')
+                .waitFor('#io-ox-settings-topbar-icon')
+                .end();
+        }
+
+        emailTour.on('stop', function () {
             if (composeApp) {
                 //prevent app from asking about changed content
                 composeApp.view.dirty(false);

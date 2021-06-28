@@ -29,7 +29,7 @@ Scenario.skip('Getting started tour', async function ({ I, topbar }) {
     // test cancel mechanism
     I.click('.wizard-close');
 
-    I.waitForText('You can restart this tour at any time by clicking on the account icon and choose "Getting started"');
+    I.waitForText('You can restart this tour at any time by clicking on the help icon and choose "Getting started".');
     I.click({ css: '[data-action="done"]' });
 
     // test tour
@@ -51,5 +51,5 @@ Scenario.skip('Getting started tour', async function ({ I, topbar }) {
     I.click({ css: '[data-action="done"]' });
 
     I.dontSeeElement('.wizard-container .wizard-content');
-    I.dontSee('You can restart this tour at any time by clicking on the account icon and choose "Getting started"');
+    I.dontSee('You can restart this tour at any time by clicking on the help icon and choose "Getting started".');
 });

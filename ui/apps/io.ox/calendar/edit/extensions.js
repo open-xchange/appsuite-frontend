@@ -131,11 +131,12 @@ define('io.ox/calendar/edit/extensions', [
                     if (attachments.length) {
                         var attachmentData = [];
                         _(attachments).each(function (attachment) {
-                            attachmentData.push({
+                            var data = {
                                 filename: attachment.filename,
-                                fmtType: attachment.file.type,
                                 uri: 'cid:' + 'file_' + attachment.cid
-                            });
+                            };
+                            if (attachment.file.type) data.fmtType = attachment.file.type;
+                            attachmentData.push(data);
                         });
                         // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
                         attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);

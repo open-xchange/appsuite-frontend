@@ -32,7 +32,7 @@ define('io.ox/tours/calendar', [
         new Tour()
             .step()
                 .title(gt('Creating a new appointment'))
-                .content(gt('To create a new appointment, click on New in the toolbar.'))
+                .content(gt('To create a new appointment, click on New appointments in the toolbar.'))
                 .spotlight('.io-ox-calendar-window .primary-action .btn:visible, [data-ref="io.ox/calendar/detail/actions/create"]:visible')
                 .on('before:show', function () {
                     if (createApp && !createApp.getWindow().floating.model.get('minimized')) {

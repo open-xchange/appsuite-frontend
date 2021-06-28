@@ -61,8 +61,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 container;
             this.$body.append(
                 $('<div class="form-group">').css({
-                    'min-height': '266px',
-                    'height': '266px'
+                    'min-height': '266px'
                 }).append(
                     container = $('<div class="editor">').attr('data-editor-id', editorId),
                     $('<div class="tinymce-toolbar">').attr('data-editor-id', editorId)
@@ -217,9 +216,9 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             // invoke extensions as a waterfall
             var baton = new ext.Baton({ view: this });
             return ext.point('io.ox/mail/settings/signature-dialog/save')
-                    .cascade(this, baton).always(function () {
-                        // idle in case it wasn't closed/destroyed yet (error case)
-                        if (this && this.idle) this.idle();
+                    .cascade(this, baton).always(function (response) {
+                        // response is a integer (success) or is an error object (idle in that case)
+                        if (this && this.idle && _.isObject(response)) this.idle();
                     }.bind(this));
         })
         .on('close', function () { if (this.editor) this.editor.destroy(); })

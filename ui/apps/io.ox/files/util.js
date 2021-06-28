@@ -270,7 +270,7 @@ define('io.ox/files/util', [
             if (formFilename !== '' && formFilename.split('.').length === 1 && extServer !== '') {
                 // file extension ext removed
                 message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
-            } else if (extServer !== extForm && extServer !== '') {
+            } else if (extServer.toLowerCase() !== extForm.toLowerCase() && extServer !== '') {
                 // ext changed
                 message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
             }
