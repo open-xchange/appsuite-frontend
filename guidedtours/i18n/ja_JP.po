@@ -3,7 +3,7 @@
 msgid ""
 msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-08 15:09+0100\n"
+"PO-Revision-Date: 2021-06-16 13:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -19,8 +19,8 @@ msgid "Creating a new appointment"
 msgstr "新規予定の作成"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "新規予定を作成するには、ツールバーで、[新規予定] をクリックします。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -205,11 +205,12 @@ msgstr "新規ファイルをアップロード"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr "新規ファイルをローカルデバイスからアップロードするには、ローカルファイルを追加をクリックし、アップロードしたいファイルを選択します。ローカルデバイスから ドライブファイルをドラッグし、ここにドロップすると、さらに簡単に行えます。これで、アップロードファイルはすべてのご利用のデバイスの ドライブで利用できます。"
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
+msgstr "新規ファイルをローカルデバイスからアップロードするには、\"アップロード\"をクリックし、ドロップダウンメニューの\"ファイル\"を選び、アップロードしたいファイルを選択します。ローカルデバイスから ドライブにファイルをドラッグし、ドロップすれば、さらに簡単にです。これで、アップロードファイルはすべてのご利用のデバイスの ドライブで利用できます。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -245,8 +246,8 @@ msgstr "共有オプション - 共有に招待"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr "ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理し、宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用します。内部および外部参加者も共同して、ドキュメントを同時に作業することができます。"
@@ -351,9 +352,9 @@ msgstr "ツアーを中止"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
-msgstr "アカウントアイコンをクリックして\"%s\"を選択すると、いつでも本ツアーを再開できます。"
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
+msgstr "ヘルプアイコンをクリックして\"%s\"を選択すると、いつでも本ツアーを再開できます。"
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -419,8 +420,9 @@ msgstr "メールを送信するには、送信をクリックします。"
 msgid "Sorting your emails"
 msgstr "メールのソート"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr "メールをソートするには、ソート条件をクリックします。ソート条件を選択します。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -443,11 +445,13 @@ msgstr "一覧でメールをダブルクリックすると、別のウィンド
 msgid "Reading email conversations"
 msgstr "メールスレッドの表示"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
-msgstr "スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックします。"
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
+msgstr "ソートメニューでスレッドが有効の場合、スレッドでメールを展開したり、折りたたんだりできます。スレッドのメールを展開または折りたたむには、ヘッドラインの空いている領域をクリックします。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -479,6 +483,12 @@ msgid ""
 "To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr "メール設定を表示するには、メニューバーの右上の設定メニューアイコンをクリックします。設定 を選択します。左側のメールをクリックします。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr "メール設定を表示するには、メニューバーの右上の設定メニューアイコンをクリックします。左側のメールをクリックします。"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -652,8 +662,8 @@ msgid "Creating a new task"
 msgstr "新規のタスクの作成"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "新規のタスクを作成するには、ツールバーで、[新規] をクリックします。"
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "新規のタスクを作成するには、ツールバーで、[新規のタスク] をクリックします。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -720,8 +730,10 @@ msgid "Sorting tasks"
 msgstr "タスクのソート"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "タスクをソートするには、ソート条件をクリックします。ソート条件を選択します。"
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
+msgstr "タスクをソートするには、リストの上のソートアイコンをクリックします。ソート条件を選択します。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -733,6 +745,59 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "複数のタスクを一度に編集するには、メールの左側にあるチェックボックスを有効にします。チェックボックスが表示されていない場合は、ツールバーの右側にある [ビュー] → [チェックボックス] の順にクリックします。"
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "新規予定を作成するには、ツールバーで、[新規] をクリックします。"
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "新規ファイルをローカルデバイスからアップロードするには、ローカルファイルを"
+#~ "追加をクリックし、アップロードしたいファイルを選択します。ローカルデバイス"
+#~ "から ドライブファイルをドラッグし、ここにドロップすると、さらに簡単に行え"
+#~ "ます。これで、アップロードファイルはすべてのご利用のデバイスの ドライブで"
+#~ "利用できます。"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "ファイルやフォルダーの共有方法を２つの方法から選びます。アクセス権限を管理"
+#~ "し、宛先がファイルの作成や編集をできるようにしたい場合は、招待を使用しま"
+#~ "す。内部および外部参加者も共同して、ドキュメントを同時に作業することができ"
+#~ "ます。"
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "アカウントアイコンをクリックして\"%s\"を選択すると、いつでも本ツアーを再開"
+#~ "できます。"
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "メールをソートするには、ソート条件をクリックします。ソート条件を選択しま"
+#~ "す。"
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "スレッドのメールを開いたり閉じるには、ヘッダの空いている領域をクリックしま"
+#~ "す。"
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "新規のタスクを作成するには、ツールバーで、[新規] をクリックします。"
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "タスクをソートするには、ソート条件をクリックします。ソート条件を選択しま"
+#~ "す。"
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

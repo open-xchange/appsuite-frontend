@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-19 15:39+0300\n"
+"PO-Revision-Date: 2021-06-20 18:01+0300\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,16 +10,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Yeni randevu oluşturma"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
 msgstr ""
-"Yeni randevu oluşturmak için araç çubuğundaki \"Yeni\" düğmesine tıklayın."
+"Yeni randevu oluşturmak için araç çubuğundan \"Yeni randevular\"a tıklayın."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -243,15 +243,17 @@ msgstr "Yeni dosya yükleme"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Cihazınızda bulunan bir dosyayı yüklemek için \"Yerel dosya ekle\"ye "
-"tıklamanız ve yüklenecek dosyayı seçmeniz yeterlidir. Hatta yerel "
-"sürücünüzdeki dosyaları sürükleyip Drive'a bırakarak yüklemeniz de mümkün. "
-"Yüklediğiniz dosyalara daha sonra tüm cihazlarınızdan ulaşabilirsiniz."
+"Yerel cihazınızdan yeni bir dosya yüklemek isterseniz \"Yükle\"ye tıklayın, "
+"ardından açılır menüden \"Dosya\"yı seçin ve yüklemek istediğiniz dosyayı "
+"seçin. Ayrıca isterseniz dosyaları cihazınızdan Drive'a sürükleyip "
+"bırakabilirsiniz. Yüklediğiniz dosyaya Drive aracılığıyla tüm "
+"cihazlarınızdan ulaşabilirsiniz."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -294,16 +296,15 @@ msgstr "Paylaşım seçeneği - Başkasını davet et"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
-"Dosyalarınızı ve klasörünüzü paylaşmak için iki alternatiften birini "
-"seçebilirsiniz. Erişim haklarını yönetmek ve alıcıların dosya oluşturup "
-"düzenlemesine izin vermek istiyorsanız \"Yalnızca davet edilenler\"i seçin. "
-"Dahili ve harici katılımcılar da belgeler üzerinde sizinle birlikte "
-"çalışabilecektir."
+"Dosya ve klasörlerinizi paylaşmak için iki seçeneğiniz var. Erişim haklarını "
+"yönetmek ve alıcıların dosya oluşturup düzenlemesine izin vermek "
+"istiyorsanız \"Yalnızca davet edilenler\"i kullanın. İç ve dış katılımcılar "
+"da belgeler üzerinde sizinle aynı anda düzenleme yapabilir."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -423,10 +424,10 @@ msgstr "Turdan vazgeç"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Bu turu yeniden başlatmak isterseniz hesap simgesine tıklayıp \"%s\" "
+"Bu turu yeniden başlatmak isterseniz yardım simgesine tıklayıp \"%s\" "
 "seçeneğini seçebilirsiniz."
 
 #. Tour name; general introduction
@@ -501,11 +502,12 @@ msgstr "E-postayı göndermek için Gönder düğmesine tıklayın"
 msgid "Sorting your emails"
 msgstr "E-postalarınızı sıralama"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
-"seçin."
+"E-postaları sıralamak için \"Sırala\"ya tıklayın ve istediğiniz sıralama "
+"ölçütünü seçin."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -530,13 +532,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "E-posta yazışmalarını okuma"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş bir "
-"alana tıklayın."
+"\"Sırala\" menüsünde yazışmalar etkinleştirilmişse yazışmalardaki e-"
+"postaları daraltabilir ve genişletebilirsiniz. Bunun için e-posta "
+"başlığındaki boş bir yere tıklamanız yeterlidir."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -575,6 +580,14 @@ msgid ""
 msgstr ""
 "E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Ayarlar "
 "simgesine tıklayın, \"Ayarlar\"ı seçin, sol taraftaki \"E-posta\"ya tıklayın."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"E-posta ayarlarını açmak için menü çubuğunun sağ üst tarafındaki Ayarlar "
+"simgesine tıklayın ve sol taraftaki \"E-posta\"ya tıklayın."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -782,9 +795,9 @@ msgid "Creating a new task"
 msgstr "Yeni görev oluşturma"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+msgid "To create a new task, click on New task in the toolbar."
 msgstr ""
-"Yeni bir görev oluşturmak için araç çubuğundaki Yeni düğmesine tıklayın."
+"Yeni bir görev oluşturmak için araç çubuğundaki \"Yeni görev\"e tıklayın."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -856,9 +869,12 @@ msgid "Sorting tasks"
 msgstr "Görevleri sıralama"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Görevleri sıralamak için \"Sırala\"ya tıklayıp bir sıralama ölçütü seçin."
+"Görevleri sıralamak için listenin üstündeki sıralama simgesine tıklayın ve "
+"istediğiniz sıralama kriterini seçin."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -873,6 +889,61 @@ msgstr ""
 "Birden çok görevi aynı anda düzenlemek için görevlerin sol tarafındaki onay "
 "kutularına tıklayın. Onay kutuları görünmüyorsa araç çubuğunun sağ "
 "tarafındaki \"Görünüm > Onay kutuları\"na tıklayın."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Yeni randevu oluşturmak için araç çubuğundaki \"Yeni\" düğmesine tıklayın."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Cihazınızda bulunan bir dosyayı yüklemek için \"Yerel dosya ekle\"ye "
+#~ "tıklamanız ve yüklenecek dosyayı seçmeniz yeterlidir. Hatta yerel "
+#~ "sürücünüzdeki dosyaları sürükleyip Drive'a bırakarak yüklemeniz de "
+#~ "mümkün. Yüklediğiniz dosyalara daha sonra tüm cihazlarınızdan "
+#~ "ulaşabilirsiniz."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Dosyalarınızı ve klasörünüzü paylaşmak için iki alternatiften birini "
+#~ "seçebilirsiniz. Erişim haklarını yönetmek ve alıcıların dosya oluşturup "
+#~ "düzenlemesine izin vermek istiyorsanız \"Yalnızca davet edilenler\"i "
+#~ "seçin. Dahili ve harici katılımcılar da belgeler üzerinde sizinle "
+#~ "birlikte çalışabilecektir."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Bu turu yeniden başlatmak isterseniz hesap simgesine tıklayıp \"%s\" "
+#~ "seçeneğini seçebilirsiniz."
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "E-postaları sıralamak için \"Sırala\"ya tıklayın ve bir sıralama ölçütü "
+#~ "seçin."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Bir e-posta yazışmasını açmak veya kapatmak için başlık kısmındaki boş "
+#~ "bir alana tıklayın."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr ""
+#~ "Yeni bir görev oluşturmak için araç çubuğundaki Yeni düğmesine tıklayın."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Görevleri sıralamak için \"Sırala\"ya tıklayıp bir sıralama ölçütü seçin."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

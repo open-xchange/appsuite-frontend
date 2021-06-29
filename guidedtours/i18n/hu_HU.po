@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-23 13:54+0100\n"
+"PO-Revision-Date: 2021-06-17 19:07+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -19,8 +19,8 @@ msgid "Creating a new appointment"
 msgstr "Új találkozó létrehozása"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Új találkozó létrehozásához kattintson az eszköztárban található Új ikonra."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "Új találkozó létrehozásához kattintson az eszköztáron az Új találkozók elemre."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -205,11 +205,12 @@ msgstr "Új fájl feltöltése"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
-msgstr "Ha fel szeretne tölteni egy új fájlt a valamely eszközéről, akkor kattintson a Helyi fájl hozzáadására és válassza ki a feltölteni kívánt fájlt. Még ennél is egyszerűbb, ha egyszerűen odahozza a fájlt a Drive-ba. Ettől kezdve a feltöltött fájl elérhető az összes eszközén a Drive-on keresztül."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
+msgstr "Ha fel szeretne tölteni egy új fájlt valamely eszközéről, akkor kattintson a Feltöltés gombra, majd válassza ki a Fájlt a legördülő menüből és adja hozzá ki a feltölteni kívánt fájlt. Még ennél is egyszerűbb, ha egyszerűen odahozza a fájlt a Drive-ba. Ettől kezdve a feltöltött fájl elérhető az összes eszközén a Drive-on keresztül."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -245,11 +246,11 @@ msgstr "Megosztás - Meghívás"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
-msgstr "Két lehetőség közül választhat a fájlok és a mappa megosztására. Használja a „Csak meghívott személyek” lehetőséget, ha azt szeretné kezelni a hozzáférési jogokat, és engedélyezze a címzetteknek a fájlok létrehozását és szerkesztését. A külső és a belső felhasználókkal közösen, egyszerre dolgozhatnak szöveges fájlokon és táblázatokon."
+msgstr "Két lehetőség közül választhat a fájlok és mappák megosztására. Használja a „Csak meghívott személyek” funkciót a hozzáférési jogok beállításához és lehetővé teszi a címzettek számára fájlok létrehozását és szerkesztését. A belső és külső résztvevőkkel egyidejűleg dolgozhat a dokumentumokon."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -351,9 +352,9 @@ msgstr "Bemutató megszakítása"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
-msgstr "Bármikor újraindíthatja ezt a bemutatót, ha rákattint a felhasználói fiók ikonjára, és kiválasztja a(z) \"%s\" lehetőséget."
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
+msgstr "Bármikor újraindíthatja ezt a bemutatót, ha rákattint a felhasználói súgó ikonra, és kiválasztja a(z) \"%s\" lehetőséget."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -419,9 +420,10 @@ msgstr "A levél elküldéséhez kattintson a Küldés gombra"
 msgid "Sorting your emails"
 msgstr "Levelek rendezése"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr "A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy rendezési módot."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr "Feladatok rendezéséhez kattintson a Rendezésre és válasszon egy rendezési módot."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -443,11 +445,13 @@ msgstr "Amennyiben egy levélre duplán kattint a listában, akkor a levél kül
 msgid "Reading email conversations"
 msgstr "E-mail társalgások olvasása"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
-msgstr "Az E-mail társalgások megnyitásához vagy bezárásához kattintson a fejléc szabad területére."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
+msgstr "Ha a Rendezés menüben engedélyezve vannak a beszélgetések, akkor az e-maileket ezek szerint szervezheti, összecsukhatja vagy kinyithatja őket. Ehhez kattintson egy szabad területre az e-mail címsorában."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -479,6 +483,12 @@ msgid ""
 "To open the email settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on Mail on the left side."
 msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső részén található Beállítások ikonra. Válassza ki a Beállításokat és kattintson az E-mail beállításokra a bal oldalon."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr "A levelezés beállításainak megnyitásához kattintson a menüsor jobb felső részén található Beállítások ikonra és kattintson az E-mail beállításokra a bal oldalon."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -652,8 +662,8 @@ msgid "Creating a new task"
 msgstr "Új feladat létrehozása"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Új feladat létrehozásához kattintson az eszköztárban található Új ikonra."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "Új feladat létrehozásához kattintson az eszköztárban található Új feladat ikonra."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -720,8 +730,10 @@ msgid "Sorting tasks"
 msgstr "Feladatok rendezése"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy rendezési módot."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
+msgstr "A feladatok rendezéséhez kattintson a rendezés ikonra és válasszon egy rendezési módot."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -733,6 +745,63 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr "Több feladat egyszerre történő szerkesztéséhez használja a feladatok bal oldalán található jelölőnégyzetet Amennyiben a jelölőnégyzetek nem láthatók, kattintson a eszköztár jobb oldalán található Nézet > Jelelölőnégyzetek ikonra."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Új találkozó létrehozásához kattintson az eszköztárban található Új "
+#~ "ikonra."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Ha fel szeretne tölteni egy új fájlt a valamely eszközéről, akkor "
+#~ "kattintson a Helyi fájl hozzáadására és válassza ki a feltölteni kívánt "
+#~ "fájlt. Még ennél is egyszerűbb, ha egyszerűen odahozza a fájlt a Drive-"
+#~ "ba. Ettől kezdve a feltöltött fájl elérhető az összes eszközén a Drive-on "
+#~ "keresztül."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Két lehetőség közül választhat a fájlok és a mappa megosztására. "
+#~ "Használja a „Csak meghívott személyek” lehetőséget, ha azt szeretné "
+#~ "kezelni a hozzáférési jogokat, és engedélyezze a címzetteknek a fájlok "
+#~ "létrehozását és szerkesztését. A külső és a belső felhasználókkal "
+#~ "közösen, egyszerre dolgozhatnak szöveges fájlokon és táblázatokon."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Bármikor újraindíthatja ezt a bemutatót, ha rákattint a felhasználói fiók "
+#~ "ikonjára, és kiválasztja a(z) \"%s\" lehetőséget."
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy "
+#~ "rendezési módot."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Az E-mail társalgások megnyitásához vagy bezárásához kattintson a fejléc "
+#~ "szabad területére."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr ""
+#~ "Új feladat létrehozásához kattintson az eszköztárban található Új ikonra."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "A feladatok rendezéséhez kattintson a Rendezésre és válasszon egy "
+#~ "rendezési módot."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

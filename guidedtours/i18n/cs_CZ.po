@@ -1,10 +1,10 @@
-# Robert Kratky <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2020.
+# Robert Kratky <robert@workshop-chapina.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2020, 2021.
 # Antje Faber, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-31 19:52+0100\n"
+"PO-Revision-Date: 2021-06-20 17:37+0200\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -21,9 +21,10 @@ msgid "Creating a new appointment"
 msgstr "Vytvoření nové schůzky"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
 msgstr ""
-"Chcete-li vytvořit novou schůzku, klikněte na Nové na nástrojové liště."
+"Chcete-li vytvořit novou schůzku, klikněte na Nové schůzky na nástrojové"
+" liště."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -241,15 +242,16 @@ msgstr "Nahrát nový soubor"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Chcete-li nahrát nový soubor ze svého místního zařízení, klikněte na Přidat "
-"místní soubor a zvolte soubor, který chcete nahrát. Ještě jednodušší je "
-"soubory přetáhnout ze zařízení do Drive. Nahraný soubor pak bude dostupný "
-"přes Drive ve všech vašich zařízeních."
+"Chcete-li nahrát nový soubor ze svého místního zařízení, klikněte na Nahrát,"
+" zvolte Soubor v rozbalovacím menu a vyberte soubor, který chcete nahrát."
+" Ještě jednodušší je soubory přetáhnout z místního zařízení do Drive. Nahraný"
+" soubor pak bude dostupný přes Drive ve všech vašich zařízeních."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -289,8 +291,8 @@ msgstr "Možnost sdílení - Pozvat lidi"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
@@ -309,9 +311,9 @@ msgid ""
 "your files. You can use an expiration date and password protection if you "
 "like."
 msgstr ""
-"Také je možné získat odkaz pro sdílení, který ostatním umožní soubory"
-" zobrazit či stáhnout. Chcete-li, můžete nastavit datum pro vypršení a"
-" ochranu heslem."
+"Také je možné získat odkaz pro sdílení, který ostatním umožní soubory "
+"zobrazit či stáhnout. Chcete-li, můžete nastavit datum pro vypršení a "
+"ochranu heslem."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -413,11 +415,11 @@ msgstr "Opustit průvodce"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Průvodce můžete kdykoliv spustit znovu kliknutím na ikonu účtu a vybráním "
-"„%s“"
+"Průvodce můžete kdykoliv spustit znovu kliknutím na ikonu účtu a vybráním „"
+"%s“."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -490,10 +492,10 @@ msgstr "Zprávu odešlete kliknutím na Poslat"
 msgid "Sorting your emails"
 msgstr "Řazení zpráv"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"Chcete-li zpráv seřadit, klikněte Řadit podle. Pak zvolte kritérium řazení."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr "Chcete-li zprávy seřadit, klikněte Řadit. Pak zvolte kritérium řazení."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -519,13 +521,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Čtení e-mailových konverzací"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Chcete-li otevřít či zavřít zprávu v rámci konverzace, klikněte na prázdné "
-"místo hlavičky."
+"Pokud jsou v menu řazení povoleny konverzace, můžete v rámci konverzací"
+" sbalit či rozbalit e-maily. Provedete to kliknutím na prázdnou plochu v"
+" nadpisu e-mailu."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -564,6 +569,14 @@ msgid ""
 msgstr ""
 "Chcete-li otevřít nastavení pošty, klikněte na ikonu Nastavení v pravé horní "
 "části lišty menu. Zvolte Nastavení a klikněte na Pošta na levé straně."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Chcete-li otevřít nastavení pošty, klikněte na ikonu Nastavení v pravé horní"
+" části lišty menu a klikněte na Pošta na levé straně."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -764,8 +777,9 @@ msgid "Creating a new task"
 msgstr "Vytvoření nového úkolu"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Chcete-li vytvořit nový úkol, klikněte na Nové na nástrojové liště."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr ""
+"Chcete-li vytvořit nový úkol, klikněte na Nový úkol na nástrojové liště."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -836,9 +850,12 @@ msgid "Sorting tasks"
 msgstr "Řazení úkolů"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Chcete-li úkoly seřadit, klikněte na Řadit podle a zvolte kritéria řazení."
+"Chcete-li úkoly seřadit, klikněte na ikonu řazení nad seznamem a zvolte"
+" kritéria řazení."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -853,6 +870,58 @@ msgstr ""
 "Chcete-li upravovat více úkolů najednou, zaškrtněte políčka na levé straně "
 "úkolů. Pokud políčka nejsou zobrazená, klikněte na Pohled > Zaškrtávací pole "
 "na pravé straně nástrojové lišty."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Chcete-li vytvořit novou schůzku, klikněte na Nové na nástrojové liště."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Chcete-li nahrát nový soubor ze svého místního zařízení, klikněte na "
+#~ "Přidat místní soubor a zvolte soubor, který chcete nahrát. Ještě "
+#~ "jednodušší je soubory přetáhnout ze zařízení do Drive. Nahraný soubor pak "
+#~ "bude dostupný přes Drive ve všech vašich zařízeních."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Zvolte ze dvou možností pro sdílení svých souborů a složek. Chcete-li "
+#~ "spravovat přístupová práva a umožnit uživatelům vytvářet a upravovat "
+#~ "soubory, zvolte „Jen pozvaní“. Interní a externí účastníci s vámi také "
+#~ "mohou na souborech pracovat ve stejnou dobu."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Průvodce můžete kdykoliv spustit znovu kliknutím na ikonu účtu a vybráním "
+#~ "„%s“"
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Chcete-li zpráv seřadit, klikněte Řadit podle. Pak zvolte kritérium "
+#~ "řazení."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Chcete-li otevřít či zavřít zprávu v rámci konverzace, klikněte na "
+#~ "prázdné místo hlavičky."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "Chcete-li vytvořit nový úkol, klikněte na Nové na nástrojové liště."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Chcete-li úkoly seřadit, klikněte na Řadit podle a zvolte kritéria řazení."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

@@ -1,4 +1,4 @@
-# Ivar Snaaijer <ivar@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020.
+# Ivar Snaaijer <ivar@workshop-chapina.com>, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021.
 # Tim van Oosten <tim@workshop-chapina.com>, 2020.
 # Reinout van Schouwen <reinout@workshop-chapina.com>, 2012, 2013, 2014, 2015.
 # Antje Faber <antje.faber@open-xchange.com>, 2010, 2011, 2013.
@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-15 21:58+0100\n"
+"PO-Revision-Date: 2021-06-23 19:58+0200\n"
 "Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -21,8 +21,9 @@ msgid "Creating a new appointment"
 msgstr "Een nieuwe afspraak maken"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Om een nieuwe afspraak te maken klikt u op Nieuw in de werkbalk."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr ""
+"Om een nieuwe afspraak te maken klikt u op Nieuwe afspraken in de werkbalk."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -86,7 +87,7 @@ msgstr "Een afspraak maken"
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
 msgstr ""
-"Om een afspraak aan te maken klikt u op Aanmaken aan de linker-onderkant."
+"Om een afspraak aan te maken klikt u op Aanmaken aan de linkeronderkant."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
@@ -97,24 +98,24 @@ msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"Om een overzicht te kiezen als Dag, Maand of Lijst, klikt u op Overzicht in "
-"de werkbalk. Selecteer een item uit de Layout sectie."
+"Om een layout te kiezen als Dag, Maand of Lijst, klikt u op Weergave in de "
+"werkbalk. Selecteer een menu item uit de Layout sectie."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
-msgstr "De agendaoverzichten"
+msgstr "De agendaweergave"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr ""
-"Het agendaoverzicht toont een kalenderblad met de afspraken voor de gekozen "
+"De agendaweergave toont een kalenderblad met de afspraken voor de gekozen "
 "tijdsinterval."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
-msgstr "Het Lijstoverzicht"
+msgstr "De Lijst layout"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -122,7 +123,7 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
-"Het Lijstoverzicht toont een lijst van afspraken in de huidige map. Als u op "
+"Het Lijst layout toont een lijst van afspraken in de huidige map. Als u op "
 "een afspraak klikt worden de gegevens van de afspraak en een aantal functies "
 "getoond in het Detailoverzicht."
 
@@ -171,8 +172,8 @@ msgid ""
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "Om meerdere contacten in één keer te bewerken moet u het selectievakje aan "
-"de linkerzijde van het contact inschakelen. Als de selectievakjes niet "
-"worden getoond, klikt u Overzicht > Selectievakken aan de rechterkant van de "
+"de linkerzijde van het contact aanvinken. Als de selectievakjes niet worden "
+"getoond, klikt u Weergave > Selectievakken aan de rechterkant van de "
 "werkbalk."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -216,17 +217,17 @@ msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
 msgstr ""
-"Als u op een map klikt toont alle submappen, documenten, media en andere "
+"Als u op een map klikt worden alle submappen, documenten, media en andere "
 "bestanden dat deze map bevat."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
-msgstr "Selecteer een overzicht"
+msgstr "Selecteer een layout"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr ""
-"Verschillende overzichten zijn beschikbaar. Kies het overzicht dat u het "
+"Verschillende layouts zijn beschikbaar. Kies het overzicht dat u het "
 "plezierigst vindt."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -238,8 +239,8 @@ msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
 msgstr ""
-"Aan de bovenzijde vind u een werkbalk met veel functies een extra opties. U "
-"kan eenvoudige nieuwe mappen en bestanden aanmaken en nog veel meer."
+"Aan de bovenzijde vindt u een werkbalk met veel functies en extra opties. U "
+"kan eenvoudig nieuwe mappen en bestanden aanmaken en nog veel meer."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Upload a new file"
@@ -247,16 +248,17 @@ msgstr "Een nieuw bestand uploaden"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Om een nieuw bestand te uploaden vanaf uw lokale apparaat klikt u eenvoudig "
-"op Lokaal bestand toevoegen en selecteert u het bestand dat u wilt "
-"toevoegen. Het is zelfs eenvoudiger als u de bestanden vanaf uw lokale "
-"apparaat Drive in sleept. Het geüploade bestand is nu beschikbaar op al uw "
-"apparaten."
+"Om een nieuw bestand te uploaden van uw lokale apparaat klikt u eenvoudig op "
+"Upload, kies vervolgens Bestand in het contextmenu en selecteer het bestand "
+"dat u wilt uploaden. Het is zelfs eenvoudiger om het bestand van uw lokale "
+"apparaat te verslepen naar Drive. Het geüploade bestand is nu beschikbaar in "
+"Drive en al uw andere apparaten."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -289,8 +291,8 @@ msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different rights."
 msgstr ""
-"Hier kan u bestanden delen met uw collega's en externe contacten. U kan ook"
-" deelnemen met een document en verschillende rechten instellen."
+"Hier kan u bestanden delen met uw collega's en externe contacten. U kan ook "
+"deelnemen met een document en verschillende rechten instellen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Invite people"
@@ -298,15 +300,15 @@ msgstr "Deel-optie - Mensen uitnodigingen"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
-"Kies uit twee alternatieven om uw bestanden en mappen te delen. Gebruik"
-" \"Alleen genodigden\" als u de rechten wilt beheren en deelnemers het recht"
-" te geven bestanden te maken en bewerken. Interne en externe deelnemers"
-" kunnen ook op het zelfde moment met u samenwerken aan documenten."
+"Kies uit twee alternatieven om uw bestanden en mappen te delen. Gebruik "
+"\"Alleen genodigden\" als u de rechten wilt beheren en deelnemers het recht "
+"te geven bestanden te maken en bewerken. Interne en externe deelnemers "
+"kunnen ook op het zelfde moment met u samenwerken aan documenten."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -318,9 +320,9 @@ msgid ""
 "your files. You can use an expiration date and password protection if you "
 "like."
 msgstr ""
-"Het is ook mogelijk om een link te delen om anderen uw bestanden te laten"
-" zien of downloaden. U kan een verloopdatum opgeven en wachtwoordbeveiliging"
-" toevoegen."
+"Het is ook mogelijk om een link te delen om anderen uw bestanden te laten "
+"zien of downloaden. U kan een verloopdatum opgeven en wachtwoordbeveiliging "
+"toevoegen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -347,8 +349,8 @@ msgid ""
 "a file to see the details."
 msgstr ""
 "De bestandsdetails in de zijbalk geven extra informatie over uw bestanden. "
-"Schakel deze Bestandsdetailoptie in vanuit het Beeld menu en selecteer een "
-"bestand om deze te zien."
+"Schakel deze Bestandsdetailoptie in vanuit het Weergave menu en selecteer "
+"een bestand om deze te zien."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
@@ -360,10 +362,10 @@ msgid ""
 "cloud storage account you use to save and sync your files. Simply click on "
 "the appropriate logo to access your existing data."
 msgstr ""
-"Drive maakt het mogelijk andere opslagmogelijkheden te koppelen. Als u al "
-"een cloud-opslagaccount heeft om uw bestanden op te slaan en te "
-"synchroniseren. Klik hiervoor op het overeenkomstige pictogram om uw "
-"bestaande gegevens te benaderen."
+"Drive maakt het mogelijk andere opslagmogelijkheden te koppelen als u al een "
+"cloud-opslagaccount heeft om uw bestanden op te slaan en te synchroniseren. "
+"Klik hiervoor op het overeenkomstige pictogram om uw bestaande gegevens te "
+"benaderen."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app tour.txt"
@@ -426,11 +428,11 @@ msgstr "Rondleiding annuleren"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"U kunt altijd deze rondleiding hervatten door op het accountpictogram te "
-"klikken en \"%s\" te kiezen"
+"U kunt altijd deze rondleiding hervatten door op het help-pictogram te "
+"klikken en \"%s\" te kiezen."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -439,13 +441,12 @@ msgstr "Aan de slag"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Composing a new email"
-msgstr "Nieuw e-mailbericht opstellen"
+msgstr "Nieuw bericht"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
-"Om een nieuw e-mailbericht te maken klikt u op Nieuw e-mailbericht opstellen "
-"in de werkbalk."
+"Om een nieuw e-mailbericht te maken klikt u op Nieuw bericht in de werkbalk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -507,43 +508,47 @@ msgstr "Om een e-mailbericht te versturen klikt u op Verzenden"
 msgid "Sorting your emails"
 msgstr "Sorteren van e-mailberichten"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"Om e-mailberichten te sorteren klikt u op Sorteren op en kiest u een sorteer "
-"optie."
+"Om e-mails te sorteren klikt u op Sorteren. Selecteer vervolgens een sorteer"
+" optie."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
-"Om the kiezen tussen verschillende overzichten. Klikt u op Overzicht in de "
+"Om te kiezen tussen verschillende layouts, klikt u op Weergave in de "
 "werkbalk. Selecteer een menu item in de layout sectie."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening an email in a separate window"
-msgstr "Een e-mailbericht openen in een apert scherm"
+msgstr "Een e-mailbericht openen in een apart scherm"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "If double-clicking on an email in the list, the email is opened in a "
 "separate window."
 msgstr ""
-"Als u dubbelklikt opeen e-mailbericht uit de lijst wordt het e-mailbericht "
+"Als u dubbelklikt op een e-mailbericht uit de lijst wordt het e-mailbericht "
 "geopend in een apart scherm."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Reading email conversations"
 msgstr "E-mailconversaties lezen"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Om een E-mail uit een conversatie te openen of te sluiten klikt u op het "
-"vrije gebied in de kop."
+"Als conversaties zijn ingeschakeld in het Sorteermenu, kan u e-"
+"mailconversaties inklappen of uitvouwen. U kan dit doen door in het vrije "
+"gebied in de e-mailkop te klikken."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -568,9 +573,9 @@ msgid ""
 "Checkboxes on the right side of the toolbar."
 msgstr ""
 "Om meerdere e-mailberichten in één keer te bewerken moet u het "
-"selectievakjes aan de linkerzijde van de e-mailberichten inschakelen. Als de "
-"selectievakjes niet worden getoond, klikt u op Overzicht > Selectievakken "
-"aan de rechterkant van de werkbalk."
+"selectievakjes aan de linkerzijde van de e-mailberichten aanvinken. Als de "
+"selectievakjes niet worden getoond, klikt u op Weergave > Selectievakken aan "
+"de rechterkant van de werkbalk."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the email settings"
@@ -584,6 +589,14 @@ msgstr ""
 "Om de e-mailinstellingen te openen klikt u op het Instellingenmenu pictogram "
 "in de rechterbovenhoek van de menubalk. Kies Instellingen. Klik op Mail aan "
 "de linkerzijde."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Om de e-mailinstellingen te openen klikt u op het Instellingenmenu pictogram "
+"in de rechterbovenhoek van de menubalk. Klik op Mail aan de linkerzijde."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -792,8 +805,8 @@ msgid "Creating a new task"
 msgstr "Nieuwe taak aanmaken"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Om een nieuwe taak aan te maken klikt u op Nieuw in de werkbalk."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "Om een nieuwe taak te maken klikt u op Nieuwe taak in de werkbalk."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -857,16 +870,19 @@ msgstr "De taak aanmaken"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
-msgstr "Om de taak een te maken klikt u op Aanmaken."
+msgstr "Om de taak aan te maken klikt u op Aanmaken."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Sorting tasks"
 msgstr "Taken sorteren"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Om taken te sorteren klikt u op Sorteren op. Selecteer een sorteer optie."
+"Om taken te sorteren klikt u op het sorteren pictogram boven de lijst."
+" Selecteer vervolgens een sorteer optie."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -879,8 +895,63 @@ msgid ""
 "on the right side of the toolbar."
 msgstr ""
 "Om meerdere taken in één keer te bewerken moet u het selectievakje aan de "
-"linkerzijde van de taak inschakelen. Als de selectievakjes niet worden "
-"getoond, kan u het pictogram aan de linker onderkant klikken."
+"linkerzijde van de taak aanvinken. Als de selectievakjes niet worden "
+"getoond, klikt u Weergave > Selectievakken aan de rechterkant van de "
+"werkbalk."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "Om een nieuwe afspraak te maken klikt u op Nieuw in de werkbalk."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Om een nieuw bestand te uploaden vanaf uw lokale apparaat klikt u "
+#~ "eenvoudig op Lokaal bestand toevoegen en selecteert u het bestand dat u "
+#~ "wilt toevoegen. Het is zelfs eenvoudiger als u de bestanden vanaf uw "
+#~ "lokale apparaat Drive in sleept. Het geüploade bestand is nu beschikbaar "
+#~ "op al uw apparaten."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Kies uit twee alternatieven om uw bestanden en mappen te delen. Gebruik "
+#~ "\"Alleen genodigden\" als u de rechten wilt beheren en deelnemers het "
+#~ "recht te geven bestanden te maken en bewerken. Interne en externe "
+#~ "deelnemers kunnen ook op het zelfde moment met u samenwerken aan "
+#~ "documenten."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "U kunt altijd deze rondleiding hervatten door op het accountpictogram te "
+#~ "klikken en \"%s\" te kiezen"
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Om e-mailberichten te sorteren klikt u op Sorteren op en kiest u een "
+#~ "sorteer optie."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Om een E-mail uit een conversatie te openen of te sluiten klikt u op het "
+#~ "vrije gebied in de kop."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "Om een nieuwe taak aan te maken klikt u op Nieuw in de werkbalk."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Om taken te sorteren klikt u op Sorteren op. Selecteer vervolgens een "
+#~ "sorteer optie."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

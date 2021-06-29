@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-05-19 13:00+0200\n"
+"PO-Revision-Date: 2021-06-25 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -22,9 +22,10 @@ msgid "Creating a new appointment"
 msgstr "Einen neuen Termin anlegen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
 msgstr ""
-"Um einen neuen Termin anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+"Um einen neuen Termin zu erstellen, klicken Sie in der Werkzeugleiste auf "
+"Neue Termine."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -247,16 +248,17 @@ msgstr "Eine neue Datei hochladen"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
 "Um eine neue Datei von Ihrem lokalen Gerät hochzuladen, klicken Sie einfach "
-"auf \"Lokale Datei hinzufügen\" und wählen Sie die Datei, die Sie hochladen "
-"möchten. Es ist sogar noch einfacher, wenn Sie Dateien mit Drag & Drop von "
-"Ihrem lokalen Gerät in Drive ziehen. Die hochgeladene Datei ist nun auf "
-"allen Ihren Geräten in Drive verfügbar."
+"auf Hochladen, wählen Sie dann Datei im Aufklapp-Menü und wählen Sie die "
+"Datei aus, die Sie hochladen möchten. Es ist sogar noch einfacher, wenn Sie "
+"Dateien von Ihrem lokalen Gerät in Drive ziehen und ablegen. Die "
+"hochgeladene Datei ist jetzt in Drive auf all Ihren Geräten verfügbar."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -429,7 +431,7 @@ msgstr "Tour abbrechen"
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "You can restart this tour at any time by clicking on the help icon and "
-"choose \"%s\""
+"choose \"%s\"."
 msgstr ""
 "Sie können diese Tour jederzeit neu starten, indem Sie auf das Hilfesymbol "
 "klicken und \"%s\" auswählen."
@@ -510,10 +512,11 @@ msgstr "Um die E-Mail zu senden, klicken Sie auf Senden"
 msgid "Sorting your emails"
 msgstr "Ihre E-Mails sortieren"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"Um die E-Mails zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie ein "
+"Um die E-Mails zu sortieren, klicken Sie auf Sortieren. Wählen Sie ein "
 "Sortierkriterium."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -540,13 +543,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "E-Mail-Konversationen lesen"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Um eine E-Mail einer Konversation zu öffnen oder zu schließen, klicken Sie "
-"im Header auf eine freie Stelle."
+"Wenn Konversationen im Menü Sortieren aktiviert sind, können Sie eine E-Mail "
+"in einer Konversation ein- oder ausklappen. Um dies zu tun, klicken Sie auf "
+"einen freien Bereich in der E-Mail-Kopfzeile."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -587,6 +593,15 @@ msgstr ""
 "Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol "
 "Einstellungen in der oberen rechten Seite der Menüleiste. Wählen Sie "
 "Einstellungen. Klicken Sie auf der linken Seite auf E-Mail."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Um die E-Mail-Einstellungen zu öffnen, klicken Sie auf das Symbol "
+"Einstellungen in der oberen rechten Seite der Menüleiste. Klicken Sie auf "
+"der linken Seite auf E-Mail."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -793,9 +808,10 @@ msgid "Creating a new task"
 msgstr "Eine neue Aufgabe anlegen"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+msgid "To create a new task, click on New task in the toolbar."
 msgstr ""
-"Um eine neue Aufgabe anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+"Um eine neue Aufgabe zu erstellen, klicken Sie in der Werkzeugleiste auf "
+"Neue Aufgabe."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -872,10 +888,12 @@ msgid "Sorting tasks"
 msgstr "Aufgaben sortieren"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Um die Aufgaben zu sortieren, klicken Sie auf das Symbol Sortieren. Wählen "
-"Sie ein Sortierkriterium."
+"Um die Aufgaben zu sortieren, klicken Sie auf das Sortiersymbol oberhalb der "
+"Liste. Wählen Sie ein Sortierkriterium."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -891,6 +909,51 @@ msgstr ""
 "Kontrollfelder links neben den Aufgaben. Wenn die Kontrollfelder nicht "
 "angezeigt werden, klicken Sie rechts in der Werkzeugleiste auf Ansicht > "
 "Kontrollfelder."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Um einen neuen Termin anzulegen, klicken Sie in der Werkzeugleiste auf "
+#~ "Neu."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Um eine neue Datei von Ihrem lokalen Gerät hochzuladen, klicken Sie "
+#~ "einfach auf \"Lokale Datei hinzufügen\" und wählen Sie die Datei, die Sie "
+#~ "hochladen möchten. Es ist sogar noch einfacher, wenn Sie Dateien mit Drag "
+#~ "& Drop von Ihrem lokalen Gerät in Drive ziehen. Die hochgeladene Datei "
+#~ "ist nun auf allen Ihren Geräten in Drive verfügbar."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the help icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Sie können diese Tour jederzeit neu starten, indem Sie auf das "
+#~ "Hilfesymbol klicken und \"%s\" auswählen."
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Um die E-Mails zu sortieren, klicken Sie auf Sortieren nach. Wählen Sie "
+#~ "ein Sortierkriterium."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Um eine E-Mail einer Konversation zu öffnen oder zu schließen, klicken "
+#~ "Sie im Header auf eine freie Stelle."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr ""
+#~ "Um eine neue Aufgabe anzulegen, klicken Sie in der Werkzeugleiste auf Neu."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Um die Aufgaben zu sortieren, klicken Sie auf das Symbol Sortieren. "
+#~ "Wählen Sie ein Sortierkriterium."
 
 #~ msgid ""
 #~ "You can restart this tour at any time by clicking on the account icon and "

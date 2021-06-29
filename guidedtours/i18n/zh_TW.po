@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-11 22:47+0800\n"
+"PO-Revision-Date: 2021-06-17 01:08+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -12,15 +12,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "新增約會"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "要建立新約會，點選工具列中的新增。"
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "要建立新約會，點選工具列中的新增約會。"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -220,14 +220,15 @@ msgstr "上傳新檔案"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"若要從您的本機電腦上傳檔案，只要點擊「新增本機檔案」然後選擇想要上傳的檔案即"
-"可。另一個更簡單的方式是直接從您的電腦中拖曳至 Drive。上傳的檔案就可透過 "
-"Drive 在所有裝置中使用。"
+"點擊「上傳」，然後從選單中選擇「檔案」，再選擇想要上傳的檔案，即可從您的本機"
+"裝置上傳新檔案。您也可以用更簡單的方式：直接將檔案從本機裝置拖曳到 Drive 進行"
+"上傳，完成上傳後，即可在所有裝置中看到該檔案。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -265,13 +266,13 @@ msgstr "分享選項 - 邀請人員"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "從兩種方式中選擇一種來分享檔案與資料夾。若您想要管理存取權，並允許收件者建立"
-"或編輯檔案，使用「僅受邀人員」。內部與外部參與者也可以同事與您一起編輯文件。"
+"或編輯檔案，使用「僅受邀人員」。內部與外部參與者也可以同時與您一起編輯文件。"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -381,9 +382,9 @@ msgstr "取消導覽"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
-msgstr "您可以隨時點擊帳號圖示，選擇「%s」重新進行此導覽"
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
+msgstr "您可以隨時點擊說明圖示，選擇「%s」重新進行此導覽。"
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -453,9 +454,10 @@ msgstr "要傳送郵件，點擊傳送"
 msgid "Sorting your emails"
 msgstr "排序您的郵件"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr "要排序郵件，點選右上角的「排序」，然後選擇排序條件。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -477,11 +479,15 @@ msgstr "若雙擊清單中的郵件，將於不同視窗中開啟該郵件。"
 msgid "Reading email conversations"
 msgstr "閱讀郵件討論串"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
-msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
+msgstr ""
+"若「排序」選單中開啟了對話，您可以摺疊或展開對話中的郵件。要這樣做，點擊郵件"
+"標題中的空白區域。"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -517,6 +523,14 @@ msgid ""
 msgstr ""
 "要開啟電子郵件設定，點擊右上角選單列的「設定」選單圖示，然後選擇「設定」。接"
 "下來點擊左邊的「郵件」。"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"要開啟電子郵件設定，點擊選單列右上角的「設定」選單圖示，接下來點擊左邊的「郵"
+"件」。"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -695,8 +709,8 @@ msgid "Creating a new task"
 msgstr "新建工作"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "要建立新任務，點選工具列中的新增。"
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "要建立新任務，點選工具列中的「新增任務」。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -765,8 +779,10 @@ msgid "Sorting tasks"
 msgstr "排序任務"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "要排序任務，點選排序依照。選擇排序條件。"
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
+msgstr "點擊清單上方的排序圖示即可排序任務。選擇一種排序方式。"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -780,6 +796,48 @@ msgid ""
 msgstr ""
 "要一次編輯多個任務，點選任務左邊的選取盒。若選取盒未顯示，點選工具列右邊的視"
 "圖 > 選取盒。"
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "要建立新約會，點選工具列中的新增。"
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "若要從您的本機電腦上傳檔案，只要點擊「新增本機檔案」然後選擇想要上傳的檔案"
+#~ "即可。另一個更簡單的方式是直接從您的電腦中拖曳至 Drive。上傳的檔案就可透"
+#~ "過 Drive 在所有裝置中使用。"
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "從兩種方式中選擇一種來分享檔案與資料夾。若您想要管理存取權，並允許收件者建"
+#~ "立或編輯檔案，使用「僅受邀人員」。內部與外部參與者也可以同事與您一起編輯文"
+#~ "件。"
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr "您可以隨時點擊帳號圖示，選擇「%s」重新進行此導覽"
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr "要排序郵件，點選右上角的排序依照，然後選擇排序條件。"
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr "要開啟或關閉討論串中的郵件，點選檔頭旁的空白區域。"
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "要建立新任務，點選工具列中的新增。"
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr "要排序任務，點選排序依照。選擇排序條件。"
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "
