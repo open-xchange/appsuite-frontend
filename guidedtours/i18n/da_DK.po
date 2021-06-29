@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-21 07:08+0100\n"
+"PO-Revision-Date: 2021-06-23 13:39+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,15 +13,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Opretter en ny aftale"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "For at oprette en ny aftale, klik på Nye aftaler i værktøjslinjen."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -239,15 +239,16 @@ msgstr "Overfør en ny fil"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"For at overføre en ny fil fra din lokale enhed, klik på Tilføj lokal fil og "
-"vælg filen du gerne vil overføre. Det er endnu lettere, hvis du bare trækker "
-"filerne fra din lokale enhed og ind i Drive. Den overførte fil er nu "
-"tilgængelig i Drive på alle dine enheder."
+"For at overføre en ny fil fra din enhed, trykker du bare på Overfør, og "
+"vælger så den fil du gerne vil overføre fra menuen. Du kan også trække og "
+"slippe filen fra din lokale enhed til Drive. Den overførte fil er til "
+"rådighed i Drive på alle dine enheder."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -288,15 +289,15 @@ msgstr "Delingsmulighed - Invitér folk"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "Vælg imellem to måder at dele dine filer og mapper på. Brug \"Kun inviterede "
 "folk\" hvis du vil håndtere adgangsrettigheder, og give modtageren lov til "
 "at lave og redigere filer. Både interne og eksterne deltagere kan arbejde "
-"sammen med dig, på dine filer, på samme tid."
+"sammen med dig, på dine dokumenter, på samme tid."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -414,11 +415,11 @@ msgstr "Afbryd rundvisning"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Du kan på ethvert tidspunkt starte rundvisingen igen fra kontoikonet ved at "
-"vælge \"%s\""
+"Du kan på ethvert tidspunkt starte rundvisingen igen fra hjælpe-ikonet ved "
+"at vælge \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -492,8 +493,9 @@ msgstr "For at sende e-mail'en, klik på »Send«."
 msgid "Sorting your emails"
 msgstr "Sortering af dine e-mails"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
 "For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
 
@@ -521,13 +523,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Læs e-mail-samtaler"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
-"brevhovedet."
+"Hvis samtaler er aktiveret i menuen Sortér, kan du samle eller udvide en e-"
+"mail til en samtale. For at gøre det, kan du trykke på et frit område i e-"
+"mail'ens overskrift."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -566,6 +571,14 @@ msgid ""
 msgstr ""
 "For at åbne indstillingerne til e-mail, klik på systemmenu-ikonet i øverste "
 "højre side af menulinjen. Vælg indstillinger. Klik på e-mail i venstre side."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"For at åbne indstillingerne til e-mail, klik på indstillings-ikonet i "
+"øverste højre side af menulinjen. Klik på E-mail i venstre side."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -769,7 +782,7 @@ msgid "Creating a new task"
 msgstr "Opretter en ny opgave"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+msgid "To create a new task, click on New task in the toolbar."
 msgstr "For at oprette en ny opgave, klik på Ny i værktøjslinjen."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -841,9 +854,12 @@ msgid "Sorting tasks"
 msgstr "Sorterer opgaver"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"For at sortere opgaver, klik på Sortér efter. Vælg et sorteringskriterie."
+"For at sortere opgaverne, kan du trykke på ikonet over listen. Vælg et "
+"kritere at sortere efter."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -858,6 +874,56 @@ msgstr ""
 "For at redigere flere opgaver på én gang, aktivér tjekboksene på venstre "
 "side af opgaverne. Hvis tjekboksene ikke er vist, klik på Visning > "
 "Tjekbokse i højre side af værktøjslinjen."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "For at oprette en aftale, klik på Ny i værktøjslinjen."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "For at overføre en ny fil fra din lokale enhed, klik på Tilføj lokal fil "
+#~ "og vælg filen du gerne vil overføre. Det er endnu lettere, hvis du bare "
+#~ "trækker filerne fra din lokale enhed og ind i Drive. Den overførte fil er "
+#~ "nu tilgængelig i Drive på alle dine enheder."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Vælg imellem to måder at dele dine filer og mapper på. Brug \"Kun "
+#~ "inviterede folk\" hvis du vil håndtere adgangsrettigheder, og give "
+#~ "modtageren lov til at lave og redigere filer. Både interne og eksterne "
+#~ "deltagere kan arbejde sammen med dig, på dine filer, på samme tid."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Du kan på ethvert tidspunkt starte rundvisingen igen fra kontoikonet ved "
+#~ "at vælge \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "For at sortere e-mail, klik på Sortér efter. Vælg et sorteringskriterie."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "For at åbne eller lukke en e-mail i en samtale, klik på et frit område i "
+#~ "brevhovedet."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "For at oprette en ny opgave, klik på Ny i værktøjslinjen."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "For at sortere opgaver, klik på Sortér efter. Vælg et sorteringskriterie."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

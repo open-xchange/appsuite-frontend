@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: tours\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-12 05:41+0100\n"
+"PO-Revision-Date: 2021-06-20 15:48+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -21,8 +21,8 @@ msgid "Creating a new appointment"
 msgstr "Skapa ett nytt möte"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "För att skapa ett nytt möte, klicka på Nytt i verktygsraden."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "För att skapa ett nytt möte, klicka på Nya möten i verktygsfältet."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -241,15 +241,17 @@ msgstr "Ladda upp en ny fil"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"För att ladda upp en ny fil från din lokala enhet, klicka på Lägg till lokal "
-"fil och markera filen du vill ladda upp. Det är ännu enklare om du bara drar "
-"och släpper filerna från din lokala enhet till Drive. Den uppladdade filen "
-"är nu tillgänglig från Drive på alla dina enheter."
+"För att ladda upp en ny fil från din lokala enhet, klicka bara på Ladda upp, "
+"och välj sedan Fil i den utfällbara menyn och välj filen som du vill ladda "
+"upp. Det är ännu enklare om du bara drar och släpper filer från din lokala "
+"enhet till Drive. Den uppladdade filen är nu tillgänglig i Drive på alla "
+"dina enheter."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -291,15 +293,15 @@ msgstr "Delningsalternativ - Bjud in folk"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
-"Välj mellan två alternativ för att dela dina filer och mappar. Använd \"Bjud "
-"endast in folk\" om du vill hantera åtkomsträttigheter och tillåta mottagare "
-"att skapa och redigera filer. Interna och externa deltagare kan också "
-"samarbeta med dig samtidigt på dokument."
+"Välj ett av två alternativ för att dela dina filer och mappar. Använd "
+"\"Endast inbjudna\" om du vill hantera åtkomsträttigheter och tillåta "
+"mottagare att skapa och redigera filer. Interna och externa deltagare kan "
+"också samarbeta med dig i dokument samtidigt."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -418,11 +420,11 @@ msgstr "Avbryt rundtur"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Du kan starta om rundturen när som helst genom att klicka på kontoikonen och "
-"välja \"%s\""
+"Du kan starta om rundturen när som helst genom att klicka på hjälpikonen och "
+"välja \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -498,10 +500,12 @@ msgstr "För att skicka meddelandet, klicka på Skicka"
 msgid "Sorting your emails"
 msgstr "Sortera din e-post"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"För att sortera din e-post, klicka på Sortera efter. Välj ett kriterium."
+"För att sortera meddelandena, klicka på Sortera. Välj ett "
+"sorteringskriterium."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -527,13 +531,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Läsa e-postkonversationer"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"För att öppna eller stänga meddelanden i en konversation, klicka på en ledig "
-"yta i sidhuvudet."
+"Om konversationer är aktiverade i sorteringsmenyn kan du fälla ihop eller "
+"expandera ett meddelande i en konversation. För att göra det, klicka på en "
+"tom yta i meddelandets ämnesrad."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -573,6 +580,14 @@ msgstr ""
 "För att öppna e-postinställningarna, klicka på menyikonen för Inställningar "
 "längst upp till höger i menyfältet. Välj Inställningar. Klicka på E-post "
 "till vänster."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"För att öppna e-postinställningarna, klicka på menyikonen för Inställningar "
+"längst upp till höger i menyfältet. Klicka på E-post till vänster."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -778,8 +793,8 @@ msgid "Creating a new task"
 msgstr "Skapa en ny uppgift"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "För att skapa en ny uppgift, klicka på Nytt i verktygsraden."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "För att skapa en ny uppgift, klicka på Ny uppgift i verktygsfältet."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -850,10 +865,12 @@ msgid "Sorting tasks"
 msgstr "Sortera uppgifter"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"För att sortera uppgifterna, klicka på Sortera efter. Välj ett "
-"sorteringskriterium."
+"För att sortera uppgifterna, klicka på sorteringsikonen ovanför listan. Välj "
+"ett sorteringskriterium."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -868,6 +885,57 @@ msgstr ""
 "För att redigera flera uppgifter samtidigt, aktivera kryssrutorna till "
 "vänster om uppgifterna. Om kryssrutorna inte visas, klicka på Visa > "
 "Kryssrutor till höger i verktgysraden."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "För att skapa ett nytt möte, klicka på Nytt i verktygsraden."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "För att ladda upp en ny fil från din lokala enhet, klicka på Lägg till "
+#~ "lokal fil och markera filen du vill ladda upp. Det är ännu enklare om du "
+#~ "bara drar och släpper filerna från din lokala enhet till Drive. Den "
+#~ "uppladdade filen är nu tillgänglig från Drive på alla dina enheter."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Välj mellan två alternativ för att dela dina filer och mappar. Använd "
+#~ "\"Bjud endast in folk\" om du vill hantera åtkomsträttigheter och tillåta "
+#~ "mottagare att skapa och redigera filer. Interna och externa deltagare kan "
+#~ "också samarbeta med dig samtidigt på dokument."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Du kan starta om rundturen när som helst genom att klicka på kontoikonen "
+#~ "och välja \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "För att sortera din e-post, klicka på Sortera efter. Välj ett kriterium."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "För att öppna eller stänga meddelanden i en konversation, klicka på en "
+#~ "ledig yta i sidhuvudet."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "För att skapa en ny uppgift, klicka på Nytt i verktygsraden."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "För att sortera uppgifterna, klicka på Sortera efter. Välj ett "
+#~ "sorteringskriterium."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "
