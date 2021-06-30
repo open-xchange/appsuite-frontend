@@ -1,4 +1,19 @@
 {
     "root": true,
-    "extends": ["open-xchange-appsuite"]
+    "extends": ["open-xchange-appsuite"],
+    "rules": {
+        "license-header/header": ["error", "./license-header"]
+    },
+    "plugins": [
+        "license-header"
+    ],
+    "overrides": [
+        {
+            "files": ["*.conf.js", "Gruntfile.js"],
+            "excludedFiles": [],
+            "rules": {
+                "license-header/header": "off"
+            }
+        }
+    ]
 }
