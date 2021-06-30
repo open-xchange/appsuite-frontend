@@ -19,13 +19,3 @@
 * Any use of the work other than as authorized under this license or copyright law is prohibited.
 *
 */
-
-'use strict';
-
-module.exports = function (grunt) {
-    //disable static files
-    grunt.registerTask('install:static', []);
-    //disable language specific files
-    grunt.registerTask('install:languages', []);
-};
-

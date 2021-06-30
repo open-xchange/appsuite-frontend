@@ -5,7 +5,7 @@
         "staticGt": true
     },
     "rules": {
-        "license-header/header": ["error", "./LICENSE"]
+        "license-header/header": ["error", "./license-header"]
     },
     "plugins": [
         "license-header"

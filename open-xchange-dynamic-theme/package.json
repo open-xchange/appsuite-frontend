@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
-  "license": "CC-BY-NC-SA-2.5",
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "less": "1.7.3"
   },
@@ -34,6 +34,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "eslint-plugin-license-header": "^0.2.0",
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0"
   }

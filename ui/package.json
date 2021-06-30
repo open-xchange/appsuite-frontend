@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
-  "license": "CC-BY-NC-SA-2.5",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "e2e": "codeceptjs run",
     "test": "grunt copy:specs karma:continuous",
@@ -109,6 +109,6 @@
     }
   },
   "lint-staged": {
-    "*.js(on)?": "eslint --cache --fix"
+    "*.js": "eslint --cache --fix"
   }
 }
