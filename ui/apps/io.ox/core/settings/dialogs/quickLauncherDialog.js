@@ -28,8 +28,9 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
     'io.ox/core/upsell',
     'io.ox/backbone/mini-views/common',
     'settings!io.ox/core',
-    'io.ox/core/main/appcontrol'
-], function (DisposableView, gt, ModalDialog, apps, upsell, mini, settings, appcontrol) {
+    'io.ox/core/main/appcontrol',
+    'io.ox/core/extensions'
+], function (DisposableView, gt, ModalDialog, apps, upsell, mini, settings, appcontrol, ext) {
 
     'use strict';
 
@@ -41,7 +42,12 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
             label: o.getTitle(),
             value: o.get('path')
         };
-    }).concat([{ label: gt('None'), value: 'none' }]);
+    }).concat(_(ext.point('io.ox/core/appcontrol/customQuickLaunchers').list()).map(function (customLauncher) {
+        return {
+            label: customLauncher.label,
+            value: 'io.ox/core/appcontrol/customQuickLaunchers/' + customLauncher.id
+        };
+    }), [{ label: gt('None'), value: 'none' }]);
 
     // Check that the app exists in available applications
     function getAvailablePath(app) {

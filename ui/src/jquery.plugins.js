@@ -220,6 +220,7 @@
     var faClassHash = {
         'fa-address-book': '\uf2b9',
         'fa-address-book-o': '\uf2ba',
+        'fa-address-card-o': '\uf2bc',
         'fa-align-justify': '\uf039',
         'fa-android': '\uf17b',
         'fa-angle-double-down': '\uf103',
