@@ -625,7 +625,7 @@ define('io.ox/core/tk/dialogs', [
 
         function isWhitelisted(target) {
             var whiteList = [
-                //check if we are inside a floating-window, a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+                // check if we are inside a floating-window, a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
                 '.io-ox-dialog-popup',
                 '.modal.in',
                 '.modal-backdrop.in',
@@ -637,7 +637,7 @@ define('io.ox/core/tk/dialogs', [
                 // see bug 41822
                 '.io-ox-dialog-sidepopup-toggle'
             ].join(', ');
-            return target.closest(whiteList).length > 0;
+            return target.closest(whiteList).length > 0 || target.is('html');
         }
 
         if (target.hasClass('apptitle')) {
