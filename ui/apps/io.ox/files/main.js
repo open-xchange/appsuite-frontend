@@ -1778,7 +1778,7 @@ define('io.ox/files/main', [
 
     var switchToDefaultFolder = _.debounce(function (error) {
         var model = folderAPI.pool.getModel(app.folder.get());
-        if (model && model.get('folder_id')) folderAPI.list(model.get('folder_id'), { cache: false });
+        if (model && model.get('folder_id') !== undefined) folderAPI.list(model.get('folder_id'), { cache: false });
         app.folder.setDefault();
         if (!error) return;
         folderAPI.path(model.get('folder_id')).done(function (folder) {
