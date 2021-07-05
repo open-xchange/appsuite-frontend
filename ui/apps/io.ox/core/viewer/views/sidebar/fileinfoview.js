@@ -62,6 +62,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     }
 
     function renderFileName(model, options) {
+        var folder = folderAPI.pool.getModel(model.get('folder_id'));
         var name = model.getDisplayName() || '-';
         var disableLink = options.disableLink || false;
 
@@ -70,6 +71,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
         // fix for 56070
         if (disableLink) return $.txt(name);
+
+        // missing support
+        if (!folder.supports('permissions')) return $.txt(name);
 
         var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
 
