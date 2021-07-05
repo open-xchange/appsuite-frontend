@@ -77,7 +77,9 @@ define('io.ox/core/main/warning', [
                 /^SHR_NOT-\d{4}$/,
                 /^RSS-0007/,
                 // IMAP-specific on unified inbox folders (see Bug 50799)
-                /^MSG-1001/
+                /^MSG-1001/,
+                // imap folder created successfully but subscription failed (see MWB-1167)
+                /^IMAP-2062/
             ];
         return function (code) {
             // return true in case at least one regex matched
