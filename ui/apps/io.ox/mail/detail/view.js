@@ -559,7 +559,8 @@ define('io.ox/mail/detail/view', [
                     });
 
                     $(this.contentDocument)
-                        .find('body .mail-detail-content')
+                        // plaintext mail vs. html mail
+                        .find('.mail-detail-content')
                         .append(
                             $('<div class="max-size-warning">').append(
                                 $.txt(gt('This message has been truncated due to size limitations.')), $.txt(' '),
