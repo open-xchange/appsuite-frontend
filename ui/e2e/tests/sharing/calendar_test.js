@@ -35,7 +35,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sharing link', async ({ I, users, calendar, dialogs }) => {
+Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async ({ I, users, calendar, dialogs }) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
     await Promise.all([
@@ -73,12 +73,13 @@ Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sha
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 10, '.permissions-view');
         I.waitForText('Invited people only');
-        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.selectOption('Who can access this calendar?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
         url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
         url = Array.isArray(url) ? url[0] : url;
+        I.fillField('.message-text', 'Some text to trigger a mail');
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
         I.say(url);

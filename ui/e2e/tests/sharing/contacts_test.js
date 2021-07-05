@@ -33,7 +33,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104306] contact folders using “Permisions” dialog and sharing link', async ({ I, users, contacts, mail, dialogs }) => {
+Scenario('[C104306] contact folders using “Permisions” dialog and sharing link', async ({ I, users, contacts, mail, dialogs }) => {
     let url;
     // Alice shares a folder with 2 contacts
     await session('Alice', async () => {
@@ -71,9 +71,9 @@ Scenario.skip('[C104306] contact folders using “Permisions” dialog and shari
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
         url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
         url = Array.isArray(url) ? url[0] : url;
+        I.fillField('.message-text', 'Some text to trigger a mail');
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
-        //I.click('Close');
     });
 
     // Bob receives the share
