@@ -2185,6 +2185,13 @@ eslint-plugin-json@^1.2.0:
   dependencies:
     vscode-json-languageservice "^3.2.1"
 
+eslint-plugin-license-header@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-license-header/-/eslint-plugin-license-header-0.2.0.tgz#97bfb3da7ae9605d998ee0602c252ff14cf1de7d"
+  integrity sha512-HAyRJa8veCE4LnJM62hxc6FGZCBIXikv2DevDz45i6AvRFlVSsCJZdNTB4CZ/9KSxKkt+EmjImjkmGW85G69tQ==
+  dependencies:
+    requireindex "^1.2.0"
+
 eslint-plugin-requirejs@^3.1.1:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-requirejs/-/eslint-plugin-requirejs-3.2.0.tgz#ea5dcfcd9ce4f95e8e5ca83f74a1fdb3b84d697b"
@@ -5706,6 +5713,11 @@ requireg@^0.2.2:
     nested-error-stacks "~2.0.1"
     rc "~1.2.7"
     resolve "~1.7.1"
+
+requireindex@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
+  integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
 requireindex@~1.1.0:
   version "1.1.0"

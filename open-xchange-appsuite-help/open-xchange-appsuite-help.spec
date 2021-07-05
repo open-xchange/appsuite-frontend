@@ -7,7 +7,7 @@ Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
 Packager:       Julian Baeume <julian.baeume@open-xchange.com>
-License:        CC-BY-NC-SA
+License:        AGPL-3.0-only
 Summary:        OX App Suite online help
 Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root

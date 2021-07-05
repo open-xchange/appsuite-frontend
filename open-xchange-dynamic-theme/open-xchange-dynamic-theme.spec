@@ -4,7 +4,7 @@ Version:        @OXVERSION@
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
-License:        CC-BY-NC-SA-3.0
+License:        AGPL-3.0-only
 Summary:        Dynamic theme with colors read from ConfigCascade
 Source:         %{name}_%{version}.orig.tar.bz2
 

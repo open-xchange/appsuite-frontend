@@ -1,26 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Tobias Prinz <tobias.prinz@open-xchange.com>
- * TODO:
- * - Error handling - reauthorize / create xing account
- * - post status
- * - add message to xing invite
- * - add message to xing contact request
- * - assumption: the "share link" function (currently experimental) will be different from normal activity sharing (see actions.js)
- * - "ignore" action not implemented by server yet.
- * - "liking" does not toggle to un/disliking
- * - revoke xing invitations
- * - pre-select the correct language in createXingAccount by matching the first part of locale
- * - error handling when looking up e-mails for add/invite-to
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('plugins/portal/xing/register', [
     'io.ox/core/extensions',

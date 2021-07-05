@@ -1,16 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/files/main', [
     'io.ox/core/commons',
@@ -1770,7 +1778,7 @@ define('io.ox/files/main', [
 
     var switchToDefaultFolder = _.debounce(function (error) {
         var model = folderAPI.pool.getModel(app.folder.get());
-        if (model) folderAPI.list(model.get('folder_id'), { cache: false });
+        if (model && model.get('folder_id') !== undefined) folderAPI.list(model.get('folder_id'), { cache: false });
         app.folder.setDefault();
         if (!error) return;
         folderAPI.path(model.get('folder_id')).done(function (folder) {

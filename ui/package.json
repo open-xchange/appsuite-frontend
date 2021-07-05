@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
-  "license": "CC-BY-NC-SA-2.5",
+  "license": "AGPL-3.0-only",
   "scripts": {
     "e2e": "codeceptjs run",
     "test": "grunt copy:specs karma:continuous",
@@ -27,6 +27,7 @@
     "eslint": "^6.2.2",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
     "eslint-plugin-codeceptjs": "^1.0.0",
+    "eslint-plugin-license-header": "^0.2.0",
     "grunt": "^1.0.4",
     "grunt-bump": "0.8.0",
     "grunt-check-dependencies": "1.0.0",
@@ -108,6 +109,6 @@
     }
   },
   "lint-staged": {
-    "*.js(on)?": "eslint --cache --fix"
+    "*.js": "eslint --cache --fix"
   }
 }

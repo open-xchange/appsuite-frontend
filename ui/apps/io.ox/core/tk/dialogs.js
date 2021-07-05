@@ -1,15 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/core/tk/dialogs', [
     'io.ox/core/event',
@@ -616,7 +625,7 @@ define('io.ox/core/tk/dialogs', [
 
         function isWhitelisted(target) {
             var whiteList = [
-                //check if we are inside a floating-window, a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
+                // check if we are inside a floating-window, a modal dialog or pressed a button in the footer (footer buttons usually close the dialog so check with .io-ox-dialog-popup would fail)
                 '.io-ox-dialog-popup',
                 '.modal.in',
                 '.modal-backdrop.in',
@@ -628,7 +637,7 @@ define('io.ox/core/tk/dialogs', [
                 // see bug 41822
                 '.io-ox-dialog-sidepopup-toggle'
             ].join(', ');
-            return target.closest(whiteList).length > 0;
+            return target.closest(whiteList).length > 0 || target.is('html');
         }
 
         if (target.hasClass('apptitle')) {

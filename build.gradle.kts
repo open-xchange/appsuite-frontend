@@ -34,7 +34,7 @@ subprojects {
 configure<com.openexchange.build.licensing.LicensingExtension> {
     licenses {
         register("core/ui") {
-            this.sourceFile = File(project.projectDir, "LICENSE")
+            this.sourceFile = File(project.projectDir, "COPYING")
         }
     }
 }
