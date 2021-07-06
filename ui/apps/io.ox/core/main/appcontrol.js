@@ -470,7 +470,7 @@ define('io.ox/core/main/appcontrol', [
             });
         }
 
-        if (contactSettings.get('enterprisePicker/addLauncher', true)) {
+        if (contactSettings.get('enterprisePicker/showLauncher', true)) {
             ext.point('io.ox/core/appcontrol/customLaunchers').extend({
                 id: 'enterprisePicker',
                 index: 100,
