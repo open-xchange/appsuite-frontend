@@ -42,30 +42,31 @@ define('io.ox/tours/intro', [
             showStepNumbers: true
         })
             .step({ noAutoAlign: true })
-                //#. %s is the product name, e.g. OX App Suite
-                .title(gt('Welcome to %s', ox.serverConfig.productName))
-                .content(gt('This tour will give you a quick introduction to the product in five steps.'))
-                .end()
+            //#. %s is the product name, e.g. OX App Suite
+            .title(gt('Welcome to %s', ox.serverConfig.productName))
+            .content(gt('This tour will give you a quick introduction to the product in five steps.'))
+            .end()
             .step({ back: false, noAutoAlign: true })
-                .title(gt('Navigation'))
-                .content(gt('All apps can be found in the app menu on the top left.'))
-                .hotspot('#io-ox-launcher i', { top: 9, left: 9 })
-                .spotlight('.launcher-dropdown')
-                .waitFor('.launcher-dropdown')
-                .on('wait', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', true); })
-                .on('hide', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', false); })
-                .end()
+            .title(gt('Navigation'))
+            .content(gt('All apps can be found in the app menu on the top left.'))
+            .hotspot('#io-ox-launcher i', { top: 9, left: 9 })
+            .spotlight('.launcher-dropdown')
+            .waitFor('.launcher-dropdown')
+            .on('wait', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', true); })
+            .on('hide', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', false); })
+            .end()
             .step({ back: false, noAutoAlign: true })
-                .title(gt('Personal settings'))
-                .content(gt('Your personal data can be changed in the account dropdown. You can also sign out from there.'))
-                .hotspot('#io-ox-topbar-account-dropdown-icon .contact-picture', { top: 16, left: 16 })
-                .spotlight('#topbar-account-dropdown')
-                .waitFor('#topbar-account-dropdown')
-                .on('wait', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', true); })
-                .on('hide', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', false); })
-                .end();
+            .title(gt('Personal settings'))
+            .content(gt('Your personal data can be changed in the account dropdown. You can also sign out from there.'))
+            .hotspot('#io-ox-topbar-account-dropdown-icon .contact-picture', { top: 16, left: 16 })
+            .spotlight('#topbar-account-dropdown')
+            .waitFor('#topbar-account-dropdown')
+            .on('wait', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', true); })
+            .on('hide', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', false); })
+            .end();
 
-        if (capabilities.has('client-onboarding')) {
+        // single item or dropdown
+        if (ext.point('io.ox/core/appcontrol/right/settings').list().length > 1) {
             tour.step({ back: false, noAutoAlign: true })
                 .title(gt('Settings'))
                 .content(gt('Customize the product to your needs in the settings area.'))
@@ -86,23 +87,23 @@ define('io.ox/tours/intro', [
         }
 
         tour.step({ back: false, noAutoAlign: true })
-                .title(gt('Help'))
-                .content(gt('If you need assistance or have further questions, you can use the help app.'))
-                .hotspot('#io-ox-topbar-help-dropdown-icon i', { top: 12, left: 6 })
-                .spotlight('#io-ox-topbar-help-dropdown-icon')
-                .on('wait', function () { $('#io-ox-topbar-help-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-help-dropdown-icon').attr('forceOpen', true); })
-                .on('hide', function () { $('#io-ox-topbar-help-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-help-dropdown-icon').attr('forceOpen', false); })
-                .end()
+            .title(gt('Help'))
+            .content(gt('If you need assistance or have further questions, you can use the help app.'))
+            .hotspot('#io-ox-topbar-help-dropdown-icon i', { top: 12, left: 6 })
+            .spotlight('#io-ox-topbar-help-dropdown-icon')
+            .on('wait', function () { $('#io-ox-topbar-help-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-help-dropdown-icon').attr('forceOpen', true); })
+            .on('hide', function () { $('#io-ox-topbar-help-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-help-dropdown-icon').attr('forceOpen', false); })
+            .end()
             .on('stop', function () {
                 if (showAbortDialog) {
                     new Tour()
                         .step()
-                            .title(gt('Cancel tour'))
-                            //#. %s is the "getting started" tour button label
-                            .content(gt('You can restart this tour at any time by clicking on the help icon and choose "%s".',
-                                //#. Tour name; general introduction
-                                gt('Getting started')))
-                            .end()
+                        .title(gt('Cancel tour'))
+                        //#. %s is the "getting started" tour button label
+                        .content(gt('You can restart this tour at any time by clicking on the help icon and choose "%s".',
+                            //#. Tour name; general introduction
+                            gt('Getting started')))
+                        .end()
                         .start();
                 }
             })
