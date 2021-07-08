@@ -327,6 +327,7 @@ define('io.ox/calendar/settings/pane', [
                             help: 'ox.appsuite.user.sect.calendar.folder.subscribeshared.html',
                             title: gt('Subscribe to shared calendars'),
                             point: 'io.ox/core/folder/subscribe-shared-calendar',
+                            noSync: !capabilities.has('caldav'),
                             sections: {
                                 public: gt('Public calendars'),
                                 shared: gt('Shared calendars'),
