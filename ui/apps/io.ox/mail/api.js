@@ -1787,12 +1787,16 @@ define('io.ox/mail/api',
         delete data.to;
         return accountAPI.getAddressesFromFolder(data.folder).then(function (addresses) {
             // prefer alias for ack in case mail was addressed to it
-            var alias = _.find(addresses.aliases, function (alias) { return alias[1] === to[1]; }),
+            var alias = _.find(addresses.aliases, function (alias) { return alias[1].toLowerCase() === (to[1] || '').toLowerCase(); }),
                 addressArray = alias ? alias : addresses.primary,
                 name = addressArray[0],
-                address = addressArray[1],
-                from = !name ? address : '"' + name + '" <' + address + '>';
+                address = addressArray[1];
 
+            // default or custom display name
+            var custom = settings.get(['customDisplayNames', address], {});
+            name = (custom.overwrite ? custom.name : name || custom.defaultName) || '';
+
+            var from = !name ? address : '"' + name + '" <' + address + '>';
             return http.PUT({
                 module: 'mail',
                 params: { action: 'receipt_ack' },

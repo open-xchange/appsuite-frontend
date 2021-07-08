@@ -359,7 +359,7 @@ define('io.ox/core/api/account',
      * @param  {object} account
      * @return {deferred} returns array the personal name and a list of (alias) addresses
      */
-    function getSenderAddress(account) {
+    api.getSenderAddress = function (account) {
 
         // just for robustness
         if (!account) return [];
@@ -378,7 +378,7 @@ define('io.ox/core/api/account',
                 display_name = anonymouse ? '' : account.personal;
             return getAddressArray(display_name, address);
         });
-    }
+    };
 
     /**
      * get a list of addresses that can be used when sending mails
@@ -388,7 +388,7 @@ define('io.ox/core/api/account',
     api.getSenderAddresses = function (accountId) {
         return this.get(accountId || 0)
             .then(ensureDisplayName)
-            .then(getSenderAddress);
+            .then(api.getSenderAddress);
     };
 
     /**
@@ -404,7 +404,7 @@ define('io.ox/core/api/account',
             return _(arguments).flatten(true);
         })
         .then(function (list) {
-            return $.when.apply($, _(list).map(getSenderAddress));
+            return $.when.apply($, _(list).map(api.getSenderAddress));
         })
         .then(function () {
             return _(arguments).flatten(true);
