@@ -1372,7 +1372,7 @@ define('io.ox/files/share/permissions', [
                             }
                         );
                     });
-                })
+                });
             });
 
             dialog.on('abort', function () {
