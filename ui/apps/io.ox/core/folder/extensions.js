@@ -250,6 +250,7 @@ define('io.ox/core/folder/extensions', [
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
                 tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
+                noSync: isContact && !capabilities.has('carddav'),
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
                     shared: isContact ? gt('Shared address books') : gt('Shared tasks folders'),
@@ -1116,6 +1117,7 @@ define('io.ox/core/folder/extensions', [
                         help: 'ox.appsuite.user.sect.calendar.folder.subscribeshared.html',
                         title: gt('Subscribe to shared calendars'),
                         point: 'io.ox/core/folder/subscribe-shared-calendar',
+                        noSync: !capabilities.has('caldav'),
                         sections: {
                             public: gt('Public calendars'),
                             shared: gt('Shared calendars'),

@@ -465,7 +465,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     // share folder for preconditions
     // TODO should be part of the haveFolder helper
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&cap=caldav');
     calendar.waitForApp();
 
     I.waitForText('New calendar');
@@ -484,7 +484,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
     I.logout();
 
-    I.login('app=io.ox/calendar', { user: users[1] });
+    I.login('app=io.ox/calendar&cap=caldav', { user: users[1] });
 
     I.retry(5).doubleClick('~Shared calendars');
     I.waitForText(sharedCalendarName);
@@ -532,7 +532,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 Scenario('Manage public Calendars', async function ({ I, users, calendar, dialogs }) {
     const publicCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New public`;
 
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&cap=caldav');
     calendar.waitForApp();
     // create public calendar
     I.say('Create public calendar');
@@ -571,7 +571,7 @@ Scenario('Manage public Calendars', async function ({ I, users, calendar, dialog
 
     I.logout();
 
-    I.login('app=io.ox/calendar', { user: users[1] });
+    I.login('app=io.ox/calendar&cap=caldav', { user: users[1] });
 
     I.retry(5).doubleClick('~Public calendars');
     I.waitForText(publicCalendarName);
@@ -591,7 +591,7 @@ Scenario('Manage public Calendars', async function ({ I, users, calendar, dialog
     I.logout();
 
     // cleanup
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&cap=caldav');
     calendar.waitForApp();
 
     // remove public calendar
