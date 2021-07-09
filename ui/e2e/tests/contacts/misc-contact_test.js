@@ -64,6 +64,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     await I.haveSetting({
         'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false }
     });
+    await users[1].context.hasCapability('caldav');
 
     const defaultFolder = await I.grabDefaultFolder('contacts');
     const sharedAddressBookName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New address book`;

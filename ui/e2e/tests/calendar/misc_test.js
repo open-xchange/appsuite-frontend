@@ -462,6 +462,8 @@ Scenario('[C265147] Appointment organizer should be marked in attendee list', as
 Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared Calendar', async function ({ I, users, calendar, dialogs }) {
     const sharedCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New calendar`;
     await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
+    await users[0].context.hasCapability('caldav');
+    await users[1].context.hasCapability('caldav');
 
     // share folder for preconditions
     // TODO should be part of the haveFolder helper
@@ -531,6 +533,7 @@ Scenario('[C274410] Subscribe shared Calendar and [C274410] Unsubscribe shared C
 
 Scenario('Manage public Calendars', async function ({ I, users, calendar, dialogs }) {
     const publicCalendarName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New public`;
+    await users[1].context.hasCapability('caldav');
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
