@@ -203,10 +203,9 @@ define('io.ox/mail/compose/model', [
         },
 
         exceedsThreshold: function () {
-            var threshold = settings.get('compose/shareAttachments/threshold', 0),
-                sharedAttachments = this.get('sharedAttachments') || {};
+            var threshold = settings.get('compose/shareAttachments/threshold', 0);
 
-            if (threshold <= 0 || sharedAttachments.enabled) return;
+            if (threshold <= 0) return false;
 
             var actualAttachmentSize = this.get('attachments').reduce(function (memo, model) {
                 // count only attachments relvant for attachments
