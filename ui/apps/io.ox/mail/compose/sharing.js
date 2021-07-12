@@ -222,8 +222,8 @@ define('io.ox/mail/compose/sharing', [
 
         updateVisibility: function () {
             if (!this.optionsButton) return;
-
-            if (!this.model.saving && this.model.exceedsThreshold()) {
+            var overThreshold = this.model.exceedsThreshold();
+            if (!this.model.saving && overThreshold && !this.sharingModel.get('enabled')) {
                 //#. %1$s is usually "Drive Mail" (product name; might be customized)
                 yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
                 this.sharingModel.set('enabled', true);
@@ -232,6 +232,8 @@ define('io.ox/mail/compose/sharing', [
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
             this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));
+            // if we are over the threshold users should not be able to untoggle drive mail
+            this.enabledCheckbox.toggleClass('disabled', overThreshold).find('input').attr('disabled', overThreshold);
         },
 
         syncToSharingModel: function () {
@@ -264,7 +266,7 @@ define('io.ox/mail/compose/sharing', [
             if (this.isRendered) return this;
 
             this.$el.append(
-                new mini.CustomCheckboxView({
+                this.enabledCheckbox = new mini.CustomCheckboxView({
                     model: this.sharingModel,
                     name: 'enabled',
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
