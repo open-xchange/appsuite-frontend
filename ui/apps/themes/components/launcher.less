@@ -129,6 +129,13 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     display: flex;
     align-content: center;
 
+    // correct some icon alignments
+    .fa-comment { padding-bottom: 3px; }
+    .fa-envelope-o { padding-bottom: 5px; }
+    .fa-comment-o { padding-bottom: 7px; }
+    .fa-calendar,
+    .fa-address-book-o { padding-bottom: 4px; }
+
     .smartphone & {
         height: @appcontrol-height-smartphone;
     }
@@ -198,7 +205,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         color: @quicklaunch-button-color;
         margin-top: initial;
         & > .lcell > .icon {
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
     }
 
@@ -335,7 +342,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             }
         }
 
-        .launcher-icon.fa-question { font-size: 24px; }
+        .launcher-icon.fa-question { font-size: 22px; }
         .launcher-icon.fa-refresh { position: relative; }
 
         .contact-picture {

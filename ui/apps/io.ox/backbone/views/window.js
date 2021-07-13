@@ -401,10 +401,12 @@ define('io.ox/backbone/views/window', [
             });
         },
 
-        toggleMode: function () {
+        toggleMode: function (e) {
             // do nothing if the minimizing animation is playing
             if (this.minimizing) return;
             if (this.model.get('resizable') === false) return;
+            // click on disabled header should not toggle the window
+            if (e && $(e.currentTarget).attr('disabled') === 'disabled') return;
             this.model.set('mode', this.model.get('mode') === 'maximized' ? 'normal' : 'maximized');
         },
 
