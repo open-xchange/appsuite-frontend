@@ -137,16 +137,13 @@ define('io.ox/mail/invitations/register', [
                 params: { action: action },
                 data: data
             }).then(
-                function done(result) {
+                function done() {
+                    if (action === 'unsubscribe') folderAPI.removeFromPool(self.model.get('folder'));
                     // add/remove new accounts in the filestorage cache
-                    if (result && result.account !== undefined) {
-                        require(['io.ox/core/api/filestorage'], function (filestorageAPI) {
-                            filestorageAPI.getAllAccounts(false)
-                                .then(refreshFolder.bind(self, self.model.get('module')));
-                        });
-                    } else {
-                        refreshFolder(self.model.get('module'));
-                    }
+                    require(['io.ox/core/api/filestorage'], function (filestorageAPI) {
+                        filestorageAPI.getAllAccounts(false)
+                            .then(refreshFolder.bind(self, self.model.get('module')));
+                    });
                     if (self.options.yell !== false) yell('success', messages[action]);
                 },
                 function failed(e) {
