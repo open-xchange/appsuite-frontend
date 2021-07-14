@@ -269,6 +269,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3010': 'com.openexchange.publish.publicationFlag',
                 '3020': 'com.openexchange.subscribe.subscriptionFlag',
                 '3030': 'com.openexchange.folderstorage.displayName',
+                '3031': 'com.openexchange.folderstorage.accountError',
                 // 3040 exists; around EAS; no need for it
                 '3050': 'com.openexchange.imap.extAccount',
                 '3060': 'com.openexchange.share.extendedPermissions',
@@ -277,7 +278,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3220': 'com.openexchange.caldav.url',
                 '3204': 'com.openexchange.calendar.accountError',
                 '3205': 'com.openexchange.calendar.config',
-                '3031': 'com.openexchange.folderstorage.accountError'
+                '3301': 'com.openexchange.contacts.extendedProperties'
             },
             'user': {
                 '610': 'aliases',
