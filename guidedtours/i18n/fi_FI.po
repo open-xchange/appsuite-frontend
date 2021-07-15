@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-13 22:24+0200\n"
+"PO-Revision-Date: 2021-07-15 13:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -18,9 +18,9 @@ msgid "Creating a new appointment"
 msgstr "Uuden tapaamisen luominen"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
 msgstr ""
-"Luo uusi tapaaminen napsauttamalla työkalupalkin Uusi tapaaminen -kuvaketta."
+"Jos haluat luoda uuden tapaamisen, valitse työkaluriviltä Uudet tapaamiset."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -240,15 +240,17 @@ msgstr "Lataa uusi tiedosto"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Ladataksesi uuden tiedoston paikalliselta laitteeltasi klikkaa 'Lisää "
-"paikallinen tiedosto' ja valitse tiedosto, jonka haluat ladata. On vieläkin "
-"helpompaa vetää ja pudottaa tiedostoja paikalliselta laitteeltasi Drivelle. "
-"Ladattu tiedosto on nyt saatavilla Drivellä kaikilla laitteillasi."
+"Jos haluat ladata uuden tiedoston paikallisesta laitteesta, napsauta lataa, "
+"valitse sitten avautuvasta valikosta Tiedosto ja valitse tiedosto, jonka "
+"haluat ladata. Vielä helpompaa on raahata ja pudottaa tiedostoja "
+"paikallisesta laitteesta Driveen. Ladattu tiedosto on nyt käytettävissä "
+"Drivessa kaikilla laitteillasi."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -289,16 +291,15 @@ msgstr "Jakamisvaihtoehto - Kutsu ihmisiä"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "Voit jakaa tiedostot ja kansion valitsemalla kahdesta vaihtoehdosta. Käytä "
-"vain kutsuttuja käyttäjiä, jos haluat hallita käyttöoikeuksia ja sallia "
+"\"Vain kutsutut käyttäjät\", jos haluat hallita käyttöoikeuksia ja sallia "
 "vastaanottajien luoda ja muokata tiedostoja. Sisäiset ja ulkoiset "
-"osallistujat voivat myös tehdä kanssasi yhteistyötä asiakirjojen kanssa "
-"samanaikaisesti."
+"osallistujat voivat myös työstää asiakirjoja samanaikaisesti kanssasi."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -419,11 +420,11 @@ msgstr "Peruuta opastus"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Voit käynnistää esittelyn milloin tahansa napsauttamalla tili-kuvaketta ja "
-"valitsemalla \"%s\""
+"Voit käynnistää tämän esittelyn uudelleen milloin tahansa napsauttamalla "
+"ohjekuvaketta ja valitsemalla \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -496,9 +497,11 @@ msgstr "Lähetä sähköposti napsauttamalla Lähetä"
 msgid "Sorting your emails"
 msgstr "Sähköpostien lajittelu"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr "Lajitellaksesi viestejä, napsauta lajittele. Valitse lajitteluperuste."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr ""
+"Jos haluat lajitella sähköpostit, napsauta Lajittele. Valitse lajitteluehdot."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -523,13 +526,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Sähköpostikeskustelun lukeminen"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Keskustelun viestin avataksesi tai sulkeaksesi, paina tyhjää kohtaa "
-"otsakkeesta."
+"Jos keskustelut ovat käytössä Lajittele-valikossa, voit kutistaa tai "
+"laajentaa keskustelun sähköpostiviestin. Voit tehdä tämän napsauttamalla "
+"tyhjää aluetta sähköpostin otsikossa."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -569,6 +575,15 @@ msgstr ""
 "Voit avata sähköpostiasetukset napsauttamalla valikkorivin oikeassa "
 "yläkulmassa olevaa Asetukset-valikkokuvaketta. Valitse Asetukset. Klikkaa "
 "vasemmalla puolella Mail."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Voit avata sähköpostiasetukset napsauttamalla valikkorivin oikeassa "
+"yläkulmassa olevaa Asetukset-valikkokuvaketta. Klikkaa vasemmalla puolella "
+"Sähköposti."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -769,8 +784,8 @@ msgid "Creating a new task"
 msgstr "Uuden tehtävän luominen"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Voit luoda uuden tehtävän  napsauttamalla työkalupalkista Uusi."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "Jos haluat luoda uuden tehtävän, napsauta työkalurivillä Uusi tehtävä."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -841,9 +856,12 @@ msgid "Sorting tasks"
 msgstr "Tehtävien lajittelu"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Voit lajitella tehtäviä napsauttamalla Lajittele. Valitse lajitteluperuste."
+"Voit lajitella tehtävät napsauttamalla luettelon yläpuolella olevaa "
+"lajittelukuvaketta. Valitse lajitteluehdot."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -858,6 +876,61 @@ msgstr ""
 "Useamman tehtävän muokkaamiseksi, aktivoi valintaruutuja tehtävien "
 "vasemmalla puolella. Jos valintaruudut eivät näy, napsauta Näytä > "
 "Valintaruudut työkalupalkin oikeasta reunasta."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Luo uusi tapaaminen napsauttamalla työkalupalkin Uusi tapaaminen -"
+#~ "kuvaketta."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Ladataksesi uuden tiedoston paikalliselta laitteeltasi klikkaa 'Lisää "
+#~ "paikallinen tiedosto' ja valitse tiedosto, jonka haluat ladata. On "
+#~ "vieläkin helpompaa vetää ja pudottaa tiedostoja paikalliselta "
+#~ "laitteeltasi Drivelle. Ladattu tiedosto on nyt saatavilla Drivellä "
+#~ "kaikilla laitteillasi."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Voit jakaa tiedostot ja kansion valitsemalla kahdesta vaihtoehdosta. "
+#~ "Käytä vain kutsuttuja käyttäjiä, jos haluat hallita käyttöoikeuksia ja "
+#~ "sallia vastaanottajien luoda ja muokata tiedostoja. Sisäiset ja ulkoiset "
+#~ "osallistujat voivat myös tehdä kanssasi yhteistyötä asiakirjojen kanssa "
+#~ "samanaikaisesti."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Voit käynnistää esittelyn milloin tahansa napsauttamalla tili-kuvaketta "
+#~ "ja valitsemalla \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Lajitellaksesi viestejä, napsauta lajittele. Valitse lajitteluperuste."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Keskustelun viestin avataksesi tai sulkeaksesi, paina tyhjää kohtaa "
+#~ "otsakkeesta."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "Voit luoda uuden tehtävän  napsauttamalla työkalupalkista Uusi."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Voit lajitella tehtäviä napsauttamalla Lajittele. Valitse "
+#~ "lajitteluperuste."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

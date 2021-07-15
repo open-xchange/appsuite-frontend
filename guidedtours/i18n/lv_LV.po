@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-05 13:09+0200\n"
+"PO-Revision-Date: 2021-07-15 13:04+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -19,8 +19,8 @@ msgid "Creating a new appointment"
 msgstr "Jauna mītiņa izveide"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr "Lai izveidotu jaunu mītiņu, rīkjoslā noklikšķiniet uz Jauns mītiņš."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -246,16 +246,17 @@ msgstr "Ielādēt jaunu failu"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Lai augšupielādētu failu no jūsu ierīces, vienkārši noklikšķiniet uz "
-"Pievienot lokālo failu un izvēlieties failu, kuru vēlaties augšupielādēt. "
-"Pat vienkāršāk, jūs variet vienkārši pārvilkt un nomest failus no jūsu "
-"ierīces atbilstošajā Drive mapē. Augšupielādētie faili ir pieejami Drive "
-"visās ierīcēs."
+"Lai augšupielādētu jaunu failu no vietējās ierīces, vienkārši noklikšķiniet "
+"uz Augšupielādēt, pēc tam nolaižamajā izvēlnē izvēlieties Fails un atlasiet "
+"failu, kuru vēlaties augšupielādēt. Tas ir vēl vieglāk, ja vienkārši velkat "
+"un nometat failus no lokālās ierīces diskā. Augšupielādētais fails tagad ir "
+"pieejams diskā visās jūsu ierīcēs."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -297,15 +298,15 @@ msgstr "Koplietošanas opcija - Uzaicināt personas"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "Izvēlieties no divām iespējām failu un mapju koplietošanai. Ja vēlaties "
 "pārvaldīt piekļuves tiesības un atļaut citiem izveidot un rediģēt failus, "
 "izvēlieties \"Tikai uzaicinātās personas\". Iekšējie un ārējie dalībnieki "
-"var arī vienlaicīgi kopdarboties ar jums jūsu dokumentos."
+"var arī vienlaicīgi sadarboties ar jums jūsu dokumentos."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -425,11 +426,11 @@ msgstr "Pārtraukt tūri"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"Jūs varat jebkurā pārstartēt tūri, noklikšķinot uz konta ikonas un "
-"izvēloties \"%s\""
+"Jūs varat atsākt šo ceļojumu jebkurā laikā, noklikšķinot uz palīdzības "
+"ikonas un izvēloties \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -506,11 +507,10 @@ msgstr "Lai nosūtītu e-pastu, noklikšķiniet uz Sūtīt"
 msgid "Sorting your emails"
 msgstr "E-pasta šķirošana"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr ""
-"E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties atbilstošo "
-"kritēriju."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr "E-pasta kārtošanai noklikšķiniet uz Kārtot un izvēlieties kritēriju."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -536,13 +536,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "E-pasta sarunu lasīšana"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
-"vietas hederī."
+"Ja izvēlnē Kārtot ir iespējotas sarunas, e-pasta ziņojumu sarunā var sakļaut "
+"vai izvērst. Lai to izdarītu, noklikšķiniet uz brīvas zonas e-pasta "
+"virsrakstā."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -582,6 +585,15 @@ msgstr ""
 "Lai atvērtu e-pasta iestatījumus, noklikšķiniet uz iestatījumu ikonas "
 "izvēlnes joslas augšējā labajā malā. Izvēlieties Iestatījumi. Noklikšķiniet "
 "uz e-pasta izvēlnes kreisajā pusē."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Lai atvērtu e-pasta iestatījumus, izvēlņu joslas augšējā labajā pusē "
+"noklikšķiniet uz izvēlnes ikonas Iestatījumi. Kreisajā pusē noklikšķiniet uz "
+"Pasts."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -789,8 +801,9 @@ msgid "Creating a new task"
 msgstr "Jauna uzdevuma izveide"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķinet uz Jauns."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr ""
+"Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķiniet uz Jauns uzdevums."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -861,10 +874,12 @@ msgid "Sorting tasks"
 msgstr "Uzdevumu kārtošana"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Lai kārtotu uzdevumus, noklikšķiniet uz 'Kārtot pēc' un izvēlieties "
-"kritēriju."
+"Lai kārtotu uzdevumus, noklikšķiniet uz kārtošanas ikonas virs saraksta. "
+"Atlasiet kārtošanas kritēriju."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -879,6 +894,59 @@ msgstr ""
 "Lai rediģētu vairākus uzdevumus vienlaicīgi aktivizējiet izvēles rūtiņas "
 "saraksta kreisajā malā. Ja izvēles rūtiņas nav uzrādītas, rīkjoslas labajā "
 "malā noklikšķiniet uz Skats > Izvēles rūtiņas."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "Jaunas mītiņa izveidošanai, rīkjoslā noklikšķiniet uz Jauns."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Lai augšupielādētu failu no jūsu ierīces, vienkārši noklikšķiniet uz "
+#~ "Pievienot lokālo failu un izvēlieties failu, kuru vēlaties augšupielādēt. "
+#~ "Pat vienkāršāk, jūs variet vienkārši pārvilkt un nomest failus no jūsu "
+#~ "ierīces atbilstošajā Drive mapē. Augšupielādētie faili ir pieejami Drive "
+#~ "visās ierīcēs."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Izvēlieties no divām iespējām failu un mapju koplietošanai. Ja vēlaties "
+#~ "pārvaldīt piekļuves tiesības un atļaut citiem izveidot un rediģēt failus, "
+#~ "izvēlieties \"Tikai uzaicinātās personas\". Iekšējie un ārējie dalībnieki "
+#~ "var arī vienlaicīgi kopdarboties ar jums jūsu dokumentos."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Jūs varat jebkurā pārstartēt tūri, noklikšķinot uz konta ikonas un "
+#~ "izvēloties \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "E-pasta kārtošanai noklikšķiniet uz 'Kārtot pēc' un izvēlieties "
+#~ "atbilstošo kritēriju."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Lai atvērtu vai aizvērtu e-pastu sarunā, noklikšķiniet uz brīvās (tukšās) "
+#~ "vietas hederī."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "Lai izveidotu jaunu uzdevumu, rīkjoslā noklikšķinet uz Jauns."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Lai kārtotu uzdevumus, noklikšķiniet uz 'Kārtot pēc' un izvēlieties "
+#~ "kritēriju."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

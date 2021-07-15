@@ -1,10 +1,10 @@
-# Timothy Friesen <timothy@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2018, 2019, 2020.
+# Timothy Friesen <timothy@workshop-chapina.com>, 2013, 2014, 2015, 2016, 2018, 2019, 2020, 2021.
 # Eric Bischoff <eric@workshop-chapina.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-12-12 15:58-0700\n"
+"PO-Revision-Date: 2021-07-15 13:02+0200\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -12,15 +12,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.08.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Creating a new appointment"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "To create a new appointment, click on New in the tool bar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr ""
+"To create a new appointment, click on New appointments in the tool bar."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -238,15 +239,17 @@ msgstr "Upload a new file"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -286,13 +289,13 @@ msgstr "Sharing option - Invite people"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "Choose from two alternatives to share your files and folders. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 
@@ -412,11 +415,11 @@ msgstr "Cancel tour"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choosing \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -489,9 +492,10 @@ msgstr "To send the email, click on Send"
 msgid "Sorting your emails"
 msgstr "Sorting your email messages"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
-msgstr "To sort the email messages, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr "To sort the emails, click on Sort. Select a sort criteria."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -517,13 +521,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Reading email conversations"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -562,6 +569,14 @@ msgid ""
 msgstr ""
 "To open the e-mail settings, click the Settings menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -766,8 +781,8 @@ msgid "Creating a new task"
 msgstr "Creating a new task"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "To create a new task, click on New in the tool bar."
+msgid "To create a new task, click on New task in the toolbar."
+msgstr "To create a new task, click on New task in the tool bar."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
@@ -838,8 +853,12 @@ msgid "Sorting tasks"
 msgstr "Sorting tasks"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
-msgstr "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
+msgstr ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -854,6 +873,55 @@ msgstr ""
 "To edit multiple tasks at once, enable the checkboxes at the left side of "
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the tool bar."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "To create a new appointment, click on New in the tool bar."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Choose from two alternatives to share your files and folders. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choosing \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "To sort the email messages, click on Sort by. Select a sort criteria."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "To create a new task, click on New in the tool bar."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr "To sort the tasks, click on Sort by. Select a sort criteria."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

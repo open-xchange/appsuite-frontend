@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-03 17:55+0200\n"
+"PO-Revision-Date: 2021-07-15 13:04+0200\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -20,8 +20,9 @@ msgid "Creating a new appointment"
 msgstr "Crearea unei întâlniri noi"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Pentru a crea o întâlnire nouă, apăsați pe Nou în bara de unelte."
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr ""
+"Pentru a crea o întâlnire nouă, apăsați pe Întâlnire nouă în bara de unelte."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -245,16 +246,17 @@ msgstr "Încarcă un fișier nou"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Pentru a încărca un fișier nou de pe dispozitivul dumneavoastră local "
-"trebuie doar să apăsați pe Adaugă fișier local și să selectați fișierul "
-"dorit. Chiar mai simplu, puteți glisa și fixa fișiere de pe dispozitivul "
-"local direct în Drive. Fișierele încărcate vor fi disponibile prin Drive pe "
-"toate dispozitivele dumneavoastră."
+"Pentru a încărca un fișier de pe dispozitivul local, apăsați pe Încărcare, "
+"apoi alegeți Fișier din meniul vertical și selectați fișierul pe care doriți "
+"să îl încărcați. Este și mai ușor să glisați fișierele de pe dispozitivul "
+"local în Drive. Fișierul încărcat va fi disponibil în Drive pe toate "
+"dispozitivele dvs."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -297,8 +299,8 @@ msgstr "Opțiune de partajare - Invitații"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
@@ -427,8 +429,8 @@ msgstr "Anulează turul"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
 "Puteți reporni acest tur în orice moment făcând clic pe pictograma contului "
 "și alegând \"%s\""
@@ -506,11 +508,12 @@ msgstr "Pentru a trimite un e-mail, apăsați pe Trimite"
 msgid "Sorting your emails"
 msgstr "Sortarea e-mailurilor"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"Pentru sortarea e-mailurilor, apăsați pe Sortează după. Selectați un "
-"criteriu de sortare."
+"Pentru sortarea e-mailurilor, apăsați pe Sortare. Selectați un criteriu de "
+"sortare."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -536,13 +539,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Citirea conversațiilor de e-mail"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Pentru a deschide sau a închide un e-mail dintr-o conversație, apăsați pe o "
-"zonă liberă din antet."
+"Dacă conversațiile sunt activate în meniul Sortare, puteți restrânge sau "
+"extinde un e-mail într-o conversație. Pentru a face acest lucru, apăsați pe "
+"o zonă liberă din titlul de e-mail."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -583,6 +589,14 @@ msgstr ""
 "Pentru a deschide setările de e-mail, apăsați pe pictograma meniului Setări "
 "din partea din dreapta sus a barei de meniu. Selectați Setări. Alegeți E-"
 "Mail în partea stângă."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Pentru a deschide setările de e-mail, apăsați pe pictograma meniului Setări "
+"din partea din dreapta sus a barei de meniu. Alegeți E-Mail în partea stângă."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -791,7 +805,7 @@ msgid "Creating a new task"
 msgstr "Crearea unei sarcini noi"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+msgid "To create a new task, click on New task in the toolbar."
 msgstr "Pentru a crea o sarcină nouă, apăsați pe Nou în bara de unelte."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -864,10 +878,12 @@ msgid "Sorting tasks"
 msgstr "Sortarea sarcinilor"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Pentru a sorta sarcinile, apăsați pe Sortează după. Selectați un criteriu de "
-"sortare."
+"Pentru a sorta activitățile, apăsați pe pictograma de sortare de deasupra "
+"listei. Selectați un criteriu de sortare."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
@@ -883,6 +899,60 @@ msgstr ""
 "selectare din stânga sarcinilor. În cazul în care casetele de selectare nu "
 "sunt afișate, apăsați pe Vedere > Casete de selectare în partea dreaptă a "
 "barei de unelte."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr "Pentru a crea o întâlnire nouă, apăsați pe Nou în bara de unelte."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Pentru a încărca un fișier nou de pe dispozitivul dumneavoastră local "
+#~ "trebuie doar să apăsați pe Adaugă fișier local și să selectați fișierul "
+#~ "dorit. Chiar mai simplu, puteți glisa și fixa fișiere de pe dispozitivul "
+#~ "local direct în Drive. Fișierele încărcate vor fi disponibile prin Drive "
+#~ "pe toate dispozitivele dumneavoastră."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Alegeți dintre două alternative pentru a vă partaja fișierele și "
+#~ "dosarele. Utilizați \"Numai persoanele invitate\" dacă doriți să "
+#~ "gestionați drepturile de acces și să permiteți destinatarilor să creeze "
+#~ "și să editeze fișiere. Participanții interni și externi pot, de asemenea, "
+#~ "să colaboreze cu dumneavoastră la documente în același timp."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Puteți reporni acest tur în orice moment făcând clic pe pictograma "
+#~ "contului și alegând \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Pentru sortarea e-mailurilor, apăsați pe Sortează după. Selectați un "
+#~ "criteriu de sortare."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Pentru a deschide sau a închide un e-mail dintr-o conversație, apăsați pe "
+#~ "o zonă liberă din antet."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr "Pentru a crea o sarcină nouă, apăsați pe Nou în bara de unelte."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Pentru a sorta sarcinile, apăsați pe Sortează după. Selectați un criteriu "
+#~ "de sortare."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "
