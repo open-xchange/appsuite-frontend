@@ -208,8 +208,9 @@ define('io.ox/onboarding/main', [
                         config: getEasConfig()
                     });
                 }
-                return new views.SyncView({
-                    description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
+                return new views.DownloadQrView({
+                    description: gt('Scan this code with your phone\'s camera to synchronize your Mail, Calendar and Address Book via Exchange Active Sync:'),
+                    type: 'eas',
                     config: getEasConfig()
                 });
             },
