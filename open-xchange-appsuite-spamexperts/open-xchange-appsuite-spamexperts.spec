@@ -4,7 +4,7 @@ Version:        @OXVERSION@
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
-License:        AGPL-3.0-only
+License:        AGPLv3+
 Summary:        Configuration UI for SpamExperts
 Source:         %{name}_%{version}.orig.tar.bz2
 
