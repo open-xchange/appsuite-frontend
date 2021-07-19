@@ -7,7 +7,7 @@ Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
 Packager:       Julian Baeume <julian.baeume@open-xchange.com>
-License:        AGPL-3.0-only
+License:        AGPLv3+
 Summary:        Manifest and apps included in the OX App Suite HTML5 client
 Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
