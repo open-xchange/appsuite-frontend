@@ -59,7 +59,13 @@ define('io.ox/core/api/jobs', [
                 api.getInfo(_(longRunningJobs).keys()).done(function (data) {
                     var doneJobs = {};
                     _(data).each(function (job) {
-                        if (job.data.done) {
+                        if (job.error) {
+                            // invalid id or no such job. Remove those broken jobs, to avoid creating useless requests and bloating logs.
+                            if (job.error.code === 'SVL-0010') delete longRunningJobs[job.error.error_params[1]];
+                            if (job.error.code === 'JOB-0002') delete longRunningJobs[job.error.error_params[0]];
+                            return;
+                        }
+                        if (job.data && job.data.done) {
                             doneJobs[job.data.id] = longRunningJobs[job.data.id];
                             delete longRunningJobs[job.data.id];
                         }
