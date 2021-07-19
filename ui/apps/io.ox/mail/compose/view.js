@@ -995,6 +995,7 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editorContainer.busy();
+            this.app.get('window').floating.$el.find('.scrollable').toggleClass('scrollable-disabled', this.config.get('editorMode') === 'text');
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {
