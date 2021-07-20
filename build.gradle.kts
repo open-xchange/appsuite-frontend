@@ -1,27 +1,12 @@
 import com.openexchange.build.git.GitExtension
 import com.openexchange.build.git.GitExtension.NewestVersionTagResult.Success
 
-buildscript {
-    repositories {
-        maven {
-            url = uri("https://artifactory.open-xchange.com/artifactory/libs-release")
-        }
-    }
-    dependencies {
-        classpath("com.openexchange.build", "project-type-scanner", "[1.2.1,2.0[")
-        classpath("com.openexchange.build", "gradle-git", "[3.0.1,4.0[")
-        classpath("com.openexchange.build", "install", "[3.0,4.0[")
-        classpath("com.openexchange.build", "licensing")
-        classpath("com.openexchange.build", "packaging", "[5.0,6.0[")
-        classpath("com.openexchange.build", "opensuse-build-service-client", "[1.6,2.0[")
-    }
-}
-
-apply {
-    plugin("com.openexchange.build.licensing")
-    plugin("com.openexchange.build.install")
-    plugin("com.openexchange.build.gradle-git")
-    plugin("com.openexchange.build.opensuse-build-service-client")
+plugins {
+    id("com.openexchange.build.gradle-git") version "3.5.0"
+    id("com.openexchange.build.licensing") version "1.0.4"
+    id("com.openexchange.build.install") version "3.7.0"
+    id("com.openexchange.build.opensuse-build-service-client") version "1.8.0"
+    id("com.openexchange.build.packaging") version "5.7.0" apply false
 }
 
 subprojects {
@@ -31,17 +16,17 @@ subprojects {
     }
 }
 
-configure<com.openexchange.build.licensing.LicensingExtension> {
+licensing {
     licenses {
         register("core/ui") {
-            this.sourceFile = File(project.projectDir, "COPYING")
+            sourceFile = file("debian/copyright")
         }
     }
 }
 
 val backendBranch = "develop"
 
-configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
+buildservice {
     url = "https://buildapi.open-xchange.com"
     login  = System.getenv("OBS_USERNAME")
     password = System.getenv("OBS_PASSWORD")
@@ -73,6 +58,6 @@ configure<com.openexchange.obs.gradle.plugin.BuildserviceExtension> {
     }
 }
 
-configure<com.openexchange.build.install.extension.InstallExtension> {
+install {
     prefix.set(file("/opt/open-xchange"))
 }
