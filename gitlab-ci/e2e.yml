@@ -6,15 +6,10 @@ run e2e tests:
   tags:
     - e2e
     - kubernetes
-  needs:
-    - build ui docker image
-  services:
-    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-      alias: e2e-test.os.oxui.de
   variables:
     # e2e configuration
-    LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
-    PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
+    LAUNCH_URL: https://appsuite-7106.k3s.os.oxui.de/
+    PROVISIONING_URL: https://appsuite-7106.k3s.os.oxui.de/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
@@ -45,16 +40,13 @@ run e2e tests:
     paths:
       - ui/build/e2e/
     expire_in: 1 day
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
-      when: never
-    - changes:
-        - ui/**/*
-      when: on_success
   retry:
     max: 2
     when:
       - runner_system_failure
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      when: always
 
 # deploy e2e environment to well-known location - can be used to develop e2e tests against
 trigger appsuite-stack deployment pipeline:
@@ -75,13 +67,10 @@ merge filter report and rerun:
     - run e2e tests
   needs:
     - run e2e tests
-  services:
-    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-      alias: e2e-test.os.oxui.de
   variables:
     # e2e configuration
-    LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
-    PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
+    LAUNCH_URL: https://appsuite-7106.k3s.os.oxui.de/
+    PROVISIONING_URL: https://appsuite-7106.k3s.os.oxui.de/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
@@ -112,16 +101,13 @@ merge filter report and rerun:
       - ui/build/
       - ui/merged_reports.json
     expire_in: 1 day
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
-      when: never
-    - changes:
-        - ui/**/*
-      when: always
   retry:
     max: 2
     when:
       - runner_system_failure
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+      when: always
 
 generate e2e report:
   stage: report
@@ -149,8 +135,6 @@ generate e2e report:
     expire_in: 1 day
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
-      changes:
-        - ui/**/*
       when: always
 
 publish e2e report:
@@ -174,8 +158,6 @@ publish e2e report:
     on_stop: remove e2e report
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
-      changes:
-        - ui/**/*
       when: always
 
 remove e2e report:
