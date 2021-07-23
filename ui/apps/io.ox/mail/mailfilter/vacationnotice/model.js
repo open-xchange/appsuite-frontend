@@ -109,7 +109,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         },
 
         getDefaultRange: function () {
-            return { dateFrom: +moment(), dateUntil: +moment().add(1, 'week') };
+            return { dateFrom: +moment().startOf('day'), dateUntil: +moment().endOf('day').add(1, 'week') };
         },
 
         toJSON: function () {
