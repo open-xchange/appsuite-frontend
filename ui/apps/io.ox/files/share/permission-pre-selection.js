@@ -31,7 +31,13 @@ define('io.ox/files/share/permission-pre-selection', [
     'use strict';
 
     var INDEX = 100,
-        POINT_PRESELECTION = 'io.ox/files/share/permission-pre-selection';
+        POINT_PRESELECTION = 'io.ox/files/share/permission-pre-selection',
+        // used to label values in the dropdown correctly
+        roles = {
+            Author: gt('Author'),
+            Reviewer: gt('Reviewer'),
+            Viewer: gt('Viewer')
+        };
 
     var PreSelectModel = Backbone.Model.extend({
         defaults: function () {
@@ -50,7 +56,8 @@ define('io.ox/files/share/permission-pre-selection', [
         draw: function (baton) {
             var $el, dropdown;
             $el = $('<div>');
-            dropdown = new DropdownView({ el: $el.addClass('dropdown role')[0], caret: true, label: (baton.view.isForFolder()) ? gt('Author') : gt('Viewer'), model: baton.model, smart: true, buttonToggle: true });
+
+            dropdown = new DropdownView({ el: $el.addClass('dropdown role')[0], caret: true, label: roles[baton.model.get('inviteAs')], model: baton.model, smart: true, buttonToggle: true });
             dropdown.option('inviteAs', 'Viewer', function () {
                 return [$.txt(gt('Viewer')), $.txt(' '), $('<br/><small>').text(gt('Read only'))];
             });
@@ -63,7 +70,7 @@ define('io.ox/files/share/permission-pre-selection', [
                 });
             }
             baton.model.on('change:inviteAs', function (model) {
-                dropdown.$el.find('.dropdown-label').text(model.get('inviteAs'));
+                dropdown.$el.find('.dropdown-label').text(roles[model.get('inviteAs')]);
             });
             dropdown.render();
             this.append($el);
@@ -80,7 +87,7 @@ define('io.ox/files/share/permission-pre-selection', [
         initialize: function (options) {
             this.permissionModel = options.model;
             this.model = new PreSelectModel();
-            this.model.set('inviteAs', (this.isForFolder()) ? 'Author' : 'Viewer');
+            this.model.set('inviteAs', 'Viewer');
             this.baton = ext.Baton({ model: this.model, view: this });
         },
 
