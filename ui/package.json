@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
-  "license": "AGPL-3.0-only",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "e2e": "codeceptjs run",
     "test": "grunt copy:specs karma:continuous",

@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
-  "license": "AGPL-3.0-only",
+  "license": "AGPL-3.0-or-later",
   "description": "A tool to manually update a set of themes for Open-Xchange Appsuite",
   "main": "index.js",
   "scripts": {
