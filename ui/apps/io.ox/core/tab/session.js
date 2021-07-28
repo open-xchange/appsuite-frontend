@@ -1,15 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2019 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Kristof Kamin <kristof.kamin@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
 
@@ -89,22 +98,18 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
         });
     }
 
-    function reloginBySameUser(parameters) {
-        return (parameters.relogin && bySameUser(parameters));
-    }
-
     function bySameUser(parameters) {
         return (ox.user_id === parameters.user_id) && (ox.user === parameters.user) && (ox.context_id === parameters.context_id);
     }
 
-    function propagateOutdatedSession () {
+    function propagateOutdatedSession() {
         util.debugSession('TabSession: called propagateOutdatedSession');
         var tabAPI = require('io.ox/core/api/tab');
         var userData = {
             user: ox.user,
             user_id: ox.user_id,
-            context_id: ox.context_id,
-        }
+            context_id: ox.context_id
+        };
         tabAPI.propagate('propagateOutdatedSession', _.extend(userData, {
             exceptWindow: tabAPI.getWindowName(),
             storageKey: tabAPI.DEFAULT_STORAGE_KEYS.SESSION

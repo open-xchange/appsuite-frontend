@@ -1,15 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define.async('io.ox/core/boot/main', [
 
@@ -170,6 +179,7 @@ define.async('io.ox/core/boot/main', [
                 util.debug('loaded rampup namespace > running rampup phase');
                 return Stage.run('io.ox/core/boot/rampup', baton, { methodName: 'fetch' });
             }).then(function () {
+                ox.rampup = _.clone(baton.data);
                 util.debug('finished rampup phase > getting boot/load namespace', ox.rampup);
                 return require(['io.ox/core/boot/load']);
             }).then(function () {

@@ -1,15 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Viktor Pracht <viktor.pracht@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     var pathname, dirname, data,
@@ -51,11 +60,11 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
         //   then rootpath should become 'less/module/nav/'
         // - If path of imported file is '../mixins.less' and rootpath is 'less/',
         //   then rootpath should become 'less/../'
-        if(newFileInfo.relativeUrls && !/^(?:[a-z-]+:|\/)/.test(file) && j != -1) {
-            var relativeSubDirectory = file.slice(0, j+1);
+        if (newFileInfo.relativeUrls && !/^(?:[a-z-]+:|\/)/.test(file) && j != -1) {
+            var relativeSubDirectory = file.slice(0, j + 1);
             newFileInfo.rootpath = newFileInfo.rootpath + relativeSubDirectory; // append (sub|sup) directory path of imported file
         }
-        newFileInfo.currentDirectory = pathname.replace(/[^\\\/]*$/, "");
+        newFileInfo.currentDirectory = pathname.replace(/[^\\\/]*$/, '');
         newFileInfo.filename = pathname;
 
         callback(null, data, pathname, newFileInfo);
@@ -118,7 +127,7 @@ function recurse(defs, subDir, parent) {
             if (name.indexOf('apps/3rd.party/bootstrap-datepicker/less/') === 0) continue;
             var input = readFile(file.toString(), 'UTF-8');
             compileLess(input,
-                        subDir(name.slice(5, -4) + 'css'), name);
+                subDir(name.slice(5, -4) + 'css'), name);
         }
     }
 }
@@ -132,15 +141,15 @@ function compileLess(input, outputFile, sourceFileName) {
         'apps/themes'
     ];
     var importConfig = {
-            reference: [
-                'variables.less',
-                'mixins.less'
-            ],
-            less: [
-                'definitions.less',
-                themeName + '/definitions.less'
-            ]
-        };
+        reference: [
+            'variables.less',
+            'mixins.less'
+        ],
+        less: [
+            'definitions.less',
+            themeName + '/definitions.less'
+        ]
+    };
     var imports = [];
     for (directive in importConfig) {
         searchPaths.forEach(function (path) {
@@ -199,7 +208,7 @@ function loadStyleSheet(sheet, callback, reload, remaining) {
         }
         try {
             callback(e, root, input, sheet, { local: false, lastModified: 0, remaining: remaining }, sheetName);
-        } catch(e) {
+        } catch (e) {
             error(e, sheetName);
         }
     });
@@ -207,19 +216,19 @@ function loadStyleSheet(sheet, callback, reload, remaining) {
 
 function error(e, filename) {
 
-    var content = "Error : " + filename + "\n";
+    var content = 'Error : ' + filename + '\n';
 
     filename = e.filename || filename;
 
     if (e.message) {
-        content += e.message + "\n";
+        content += e.message + '\n';
     }
 
     var errorline = function (e, i, classname) {
         if (e.extract[i]) {
             content +=
                 String(parseInt(e.line) + (i - 1)) +
-                ":" + e.extract[i] + "\n";
+                ':' + e.extract[i] + '\n';
         }
     };
 

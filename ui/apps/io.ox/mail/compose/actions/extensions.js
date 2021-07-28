@@ -1,16 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Greg Hill <greg.hill@open-xchange.com>
- * @author Julian Bäume <julian.baeume@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/mail/compose/actions/extensions', [
     'io.ox/mail/actions/attachmentEmpty',
@@ -75,13 +83,14 @@ define('io.ox/mail/compose/actions/extensions', [
         }, opt);
 
         return function (baton) {
-            var model = baton.model;
+            var model = baton.model,
+                sharedAttachments = model.get('sharedAttachments') || {};
 
-            if (!model.exceedsThreshold()) return;
+            if (!model.exceedsThreshold() || sharedAttachments.enabled) return;
 
             //#. %1$s is usually "Drive Mail" (product name; might be customized)
             if (opt.yell) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
-            var sharedAttachments = model.get('sharedAttachments') || {};
+
             model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
 
             if (opt.stopPropagation) baton.stopPropagation();

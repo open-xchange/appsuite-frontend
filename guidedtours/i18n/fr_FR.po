@@ -6,25 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tours\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-02 17:33+0900\n"
-"Last-Translator: Sandrine Burriel <sandrine@workshop-chapina.com>\n"
-"Language-Team: French <fr@workshop-chapina.com>\n"
+"PO-Revision-Date: 2021-07-15 13:03+0200\n"
+"Last-Translator: sandrine <sandrine@workshop-chapina.com>\n"
+"Language-Team: French <>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
 msgstr "Créer un nouveau rendez-vous"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
+msgid "To create a new appointment, click on New appointments in the toolbar."
 msgstr ""
-"Pour créer un nouveau rendez-vous, cliquez sur « Nouveau » dans la barre "
-"d'outils."
+"Pour créer un nouveau rendez-vous, cliquez sur « Nouveau rendez-vous » dans "
+"la barre d'outils."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
@@ -47,7 +47,7 @@ msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"Pour créer des rendez-vous qui se répètent, cochez « Répéter ». Des réglages "
+"Pour créer des rendez-vous qui se répètent, cochez « Répéter ». Des réglages "
 "s'affichent afin de permettre de régler la façon dont le rendez-vous se "
 "répète."
 
@@ -62,8 +62,8 @@ msgid ""
 "the upper right side."
 msgstr ""
 "Pour inviter d'autres participants, saisissez leurs noms dans le champ sous "
-"« Participants ». Pour éviter que des rendez-vous ne se chevauchent, cliquez "
-"sur « Trouver un horaire libre » en haut à droite."
+"« Participants ». Pour éviter que des rendez-vous ne se chevauchent, cliquez "
+"sur « Trouver un horaire libre » en haut à droite."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Using the reminder function"
@@ -89,7 +89,7 @@ msgstr "Créer le rendez-vous"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Pour créer un rendez-vous, cliquez sur Créer en bas à gauche."
+msgstr "Pour créer un rendez-vous, cliquez sur « Créer » en bas à gauche."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
@@ -100,9 +100,9 @@ msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
 msgstr ""
-"Pour choisir une des vues telles que « Jour », « Mois » ou « Liste », "
-"cliquez sur « Vue » dans la barre d'outils. Choisissez un élément dans la "
-"section de menu « Disposition »."
+"Pour choisir une des vues telles que « Jour », « Mois » ou « Liste », "
+"cliquez sur « Vue » dans la barre d'outils. Choisissez un élément dans la "
+"section de menu « Disposition »."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
@@ -137,7 +137,7 @@ msgstr "Créer un nouveau contact"
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr ""
-"Pour créer un nouveau contact, cliquez sur « Nouveau > Ajouter un contact » "
+"Pour créer un nouveau contact, cliquez sur « Nouveau > Ajouter un contact » "
 "dans la barre d'outils."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
@@ -162,7 +162,7 @@ msgid ""
 "in the toolbar."
 msgstr ""
 "Pour envoyer un courriel à un contact, cliquez sur une adresse de courriel "
-"ou sur « Envoyer un courriel » dans la barre d'outils."
+"ou sur « Envoyer un courriel » dans la barre d'outils."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
@@ -176,7 +176,7 @@ msgid ""
 msgstr ""
 "Pour modifier plusieurs contacts à la fois, cochez les cases apparaissant à "
 "gauche de ces contacts. Si les cases à cocher ne sont pas affichées, cliquez "
-"sur « Vue > Cases à cocher » à droite de la barre d'outils."
+"sur « Vue > Cases à cocher » à droite de la barre d'outils."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app"
@@ -254,16 +254,18 @@ msgstr "Télécharger un nouveau fichier"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"To upload a new file from your local device, simply click on Add local file "
-"and select the file you would like to upload. It is even easier if you just "
-"drag and drop files from your local device into Drive. The uploaded file is "
-"now available in Drive on all your devices."
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
 msgstr ""
-"Pour télécharger un nouveau fichier depuis votre appareil local, cliquez "
-"simplement sur \"Ajouter un fichier local\" et sélectionnez le fichier que "
-"vous souhaitez transférer. C'est encore plus simple si vous faites glisser-"
-"déposer des fichiers depuis votre appareil local vers Drive. Le fichier "
-"ainsi transféré est alors disponible dans Drive sur tous vos appareils."
+"Pour transférer un nouveau fichier depuis votre appareil local, cliquez "
+"simplement sur « Transférer » puis, dans le menu déroulant, sélectionnez "
+"« Fichier » et choisissez le fichier que vous souhaitez transférer. C'est "
+"encore plus simple si vous faites glisser-déposer des fichiers depuis votre "
+"appareil local vers Drive. Le fichier ainsi transféré est alors disponible "
+"dans Drive sur tous vos appareils."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
@@ -297,8 +299,8 @@ msgid ""
 "also collaborate on a document and set different rights."
 msgstr ""
 "Vous pouvez partager ici des fichiers avec vos collègues et vos contacts "
-"externes. Vous pouvez également travailler de manière collaborative sur "
-"un document et définir différents droits. "
+"externes. Vous pouvez également travailler de manière collaborative sur un "
+"document et définir différents droits."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Invite people"
@@ -306,17 +308,17 @@ msgstr "Option de partage - Inviter des personnes"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
-"Choose from two alternatives to share your files and folder. Use \"Invited "
-"people only\" if you want ot manage access rights and allow recipients to "
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
 "create and edit files. Internal and external participants are also able to "
 "collaborate with you on documents at the same time."
 msgstr ""
 "Choisissez parmi deux solutions alternatives de partage de vos fichiers et "
-"dossiers. Sélectionnez \"Uniquement les personnes invitées\" si vous "
+"dossiers. Sélectionnez « Uniquement les personnes invitées » si vous "
 "souhaitez gérer les droits d'accès et autoriser les destinataires à créer et "
 "modifier des fichiers. Les participants internes et externes sont également "
-"en mesure de travailler avec vous sur des documents de manière "
-"collaborative et simultanée."
+"en mesure de travailler avec vous sur des documents de manière collaborative "
+"et simultanée."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing option - Everyone who has the link"
@@ -328,10 +330,9 @@ msgid ""
 "your files. You can use an expiration date and password protection if you "
 "like."
 msgstr ""
-"Vous pouvez également obtenir un lien de partage qui permet à "
-"d'autres personnes de consulter ou de télécharger vos fichiers. "
-"Si vous le souhaitez, vous pouvez définir une date d'expiration et "
-"une protection par mot de passe."
+"Vous pouvez également obtenir un lien de partage qui permet à d'autres "
+"personnes de consulter ou de télécharger vos fichiers. Si vous le souhaitez, "
+"vous pouvez définir une date d'expiration et une protection par mot de passe."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
@@ -359,7 +360,7 @@ msgid ""
 msgstr ""
 "La barre latérale des détails du fichier vous propose des informations "
 "supplémentaires sur vos fichiers. Il vous suffit d'activer l'option "
-"\"Détails des fichiers\" depuis le menu déroulant \"Vue\". Choisissez "
+"« Détails des fichiers » depuis le menu déroulant « Vue ». Choisissez "
 "ensuite un fichier pour en voir les détails."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
@@ -443,11 +444,11 @@ msgstr "Annuler la visite guidée"
 #. %s is the "getting started" tour button label
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
-"You can restart this tour at any time by clicking on the account icon and "
-"choose \"%s\""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
 msgstr ""
 "Vous pouvez redémarrer cette visite guidée à tout moment en cliquant sur "
-"l'icône du compte et en sélectionnant \"%s\""
+"l'icône d'aide et en sélectionnant « %s »."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
@@ -461,8 +462,8 @@ msgstr "Rédiger un nouveau message"
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To compose a new email, click on Compose in the toolbar."
 msgstr ""
-"Pour rédiger un nouveau courrier électronique, cliquez sur l'icône « Rédiger "
-"» dans la barre d'outils."
+"Pour rédiger un nouveau courrier électronique, cliquez sur l'icône "
+"« Rédiger » dans la barre d'outils."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
@@ -525,10 +526,11 @@ msgstr "Pour envoyer le courriel, cliquez sur « Envoyer »"
 msgid "Sorting your emails"
 msgstr "Trier vos messages"
 
+#. Sort is the label of a dropdown menu
 #: apps/io.ox/tours/mail.js module:io.ox/tours
-msgid "To sort the emails, click on Sort by. Select a sort criteria."
+msgid "To sort the emails, click on Sort. Select a sort criteria."
 msgstr ""
-"Pour trier vos courriels, cliquez sur « Trier par » et choisissez un critère "
+"Pour trier vos courriels, cliquez sur « Trier par » et choisissez un critère "
 "de tri."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
@@ -536,8 +538,8 @@ msgid ""
 "To choose between the different views, click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
-"Pour basculer d'une vue à l'autre, cliquez sur « Vue » dans la barre "
-"d'outils. Choisissez un élément dans la section de menu « Disposition »."
+"Pour basculer d'une vue à l'autre, cliquez sur « Vue » dans la barre "
+"d'outils. Choisissez un élément dans la section de menu « Disposition »."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening an email in a separate window"
@@ -555,13 +557,16 @@ msgstr ""
 msgid "Reading email conversations"
 msgstr "Lire des conversations par courriel"
 
+#. Sort is the label of a dropdown menu, keep this consistent
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
-"To open or close an email in a conversation, click on a free area in the "
-"header."
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
 msgstr ""
-"Pour ouvrir ou fermer un courriel dans un fil de discussion, cliquez sur la "
-"zone vierge de son en-tête."
+"Si les conversations sont activées dans le menu « Tri », vous pouvez réduire "
+"ou déployer un courriel au sein d'une conversation. Pour cela, cliquez sur "
+"une zone vierge dans l'en-tête du courriel."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
@@ -587,7 +592,7 @@ msgid ""
 msgstr ""
 "Pour modifier plusieurs courriels à la fois, cochez les cases apparaissant à "
 "gauche des courriels. Si les cases à cocher ne sont pas affichées, cliquez "
-"sur « Vue > Cases à cocher » à droite de la barre d'outils."
+"sur « Vue > Cases à cocher » à droite de la barre d'outils."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the email settings"
@@ -601,6 +606,15 @@ msgstr ""
 "Pour ouvrir les réglages du courriel, cliquez sur l'icône du « Menu des "
 "réglages » dans le coin en haut à droite de la barre de menu. Sélectionnez "
 "« Réglages ». Cliquez sur « Courriel » dans la partie gauche."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Pour ouvrir les réglages du courriel, cliquez sur l'icône du « Menu des "
+"réglages » dans le coin en haut à droite de la barre de menu.Cliquez sur "
+"« Courriel » dans la partie gauche."
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
 msgid "Second Factor Authentication"
@@ -673,7 +687,7 @@ msgid ""
 msgstr ""
 "Une fonctionnalité de sécurité supplémentaire vous permet désormais d'exiger "
 "une seconde méthode d'authentification, par exemple sous la forme d'un SMS, "
-"avant d'autoriser la connexion à vtre compte. Souhaitez-vous voir davantage "
+"avant d'autoriser la connexion à votre compte. Souhaitez-vous voir davantage "
 "d'informations sur cette fonction ?"
 
 #: apps/io.ox/tours/multifactor.js module:io.ox/tours
@@ -732,7 +746,7 @@ msgid ""
 "on Customize this page."
 msgstr ""
 "Pour afficher à nouveau un pavé ou pour afficher davantage de sources "
-"d'information, cliquez sur « Personnaliser cette page »."
+"d'information, cliquez sur « Personnaliser cette page »."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Opening the settings"
@@ -782,9 +796,9 @@ msgid ""
 "upper part of the window."
 msgstr ""
 "Pour ouvrir l'aide, cliquez sur l'icône d'aide en haut à droite de la barre "
-"de menu. Choisissez « Aide ». L'aide correspondant à l'application "
+"de menu. Choisissez « Aide ». L'aide correspondant à l'application "
 "actuellement utilisée s'affiche alors. Pour parcourir l'aide complète, "
-"cliquez sur « Page de démarrage » ou « Table des matières » en haut de la "
+"cliquez sur « Page de démarrage » ou « Table des matières » en haut de la "
 "fenêtre."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
@@ -796,8 +810,8 @@ msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr ""
-"Pour vous déconnecter, cliquez sur l'icône « Menu système » en haut à droite "
-"de la barre de menus. Choisissez « Se déconnecter »."
+"Pour vous déconnecter, cliquez sur l'icône « Menu système » en haut à droite "
+"de la barre de menus. Choisissez « Se déconnecter »."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -811,9 +825,9 @@ msgid "Creating a new task"
 msgstr "Créer une nouvelle tâche"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
+msgid "To create a new task, click on New task in the toolbar."
 msgstr ""
-"Pour créer une nouvelle tâche, cliquez sur « Nouveau » dans la barre "
+"Pour créer une nouvelle tâche, cliquez sur « Nouvelle tâche » dans la barre "
 "d'outils."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -841,7 +855,7 @@ msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
-"Pour créer des tâches périodiques, cochez « Répéter ». Des réglages "
+"Pour créer des tâches périodiques, cochez « Répéter ». Des réglages "
 "s'affichent afin de permettre de régler la façon dont la tâche se répète."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -862,7 +876,7 @@ msgid ""
 "Participants. You can add documents as attachment to the task."
 msgstr ""
 "Pour inviter d'autres participants, saisissez leurs nom dans le champ en-"
-"dessous de « Participants ». Vous pouvez mettre des documents en pièces "
+"dessous de « Participants ». Vous pouvez mettre des documents en pièces "
 "jointes à la tâche."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -872,8 +886,8 @@ msgstr "Saisir des informations de facturation"
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To enter billing information, click on Show details."
 msgstr ""
-"Pour saisir des informations de facturation, cliquez sur « Afficher les "
-"détails »."
+"Pour saisir des informations de facturation, cliquez sur « Afficher les "
+"détails »."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating the task"
@@ -888,9 +902,11 @@ msgid "Sorting tasks"
 msgstr "Trier les tâches"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
-msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
 msgstr ""
-"Pour trier les tâches, cliquez sur « Trier par » et choisissez un critère de "
+"Pour trier les tâches, cliquez sur « Trier par » et choisissez un critère de "
 "tri."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
@@ -904,8 +920,68 @@ msgid ""
 "on the right side of the toolbar."
 msgstr ""
 "Pour modifier plusieurs tâches à la fois, cochez les cases figurant à gauche "
-"de chaque tâche. Si les cases à cocher ne sont pas affichées, cliquez sur « "
-"Vue > Cases à cocher » à droite de la barre d'outils."
+"de chaque tâche. Si les cases à cocher ne sont pas affichées, cliquez sur "
+"« Vue > Cases à cocher » à droite de la barre d'outils."
+
+#~ msgid "To create a new appointment, click on New in the toolbar."
+#~ msgstr ""
+#~ "Pour créer un nouveau rendez-vous, cliquez sur « Nouveau » dans la barre "
+#~ "d'outils."
+
+#~ msgid ""
+#~ "To upload a new file from your local device, simply click on Add local "
+#~ "file and select the file you would like to upload. It is even easier if "
+#~ "you just drag and drop files from your local device into Drive. The "
+#~ "uploaded file is now available in Drive on all your devices."
+#~ msgstr ""
+#~ "Pour télécharger un nouveau fichier depuis votre appareil local, cliquez "
+#~ "simplement sur \"Ajouter un fichier local\" et sélectionnez le fichier "
+#~ "que vous souhaitez transférer. C'est encore plus simple si vous faites "
+#~ "glisser-déposer des fichiers depuis votre appareil local vers Drive. Le "
+#~ "fichier ainsi transféré est alors disponible dans Drive sur tous vos "
+#~ "appareils."
+
+#~ msgid ""
+#~ "Choose from two alternatives to share your files and folder. Use "
+#~ "\"Invited people only\" if you want ot manage access rights and allow "
+#~ "recipients to create and edit files. Internal and external participants "
+#~ "are also able to collaborate with you on documents at the same time."
+#~ msgstr ""
+#~ "Choisissez parmi deux solutions alternatives de partage de vos fichiers "
+#~ "et dossiers. Sélectionnez \"Uniquement les personnes invitées\" si vous "
+#~ "souhaitez gérer les droits d'accès et autoriser les destinataires à créer "
+#~ "et modifier des fichiers. Les participants internes et externes sont "
+#~ "également en mesure de travailler avec vous sur des documents de manière "
+#~ "collaborative et simultanée."
+
+#~ msgid ""
+#~ "You can restart this tour at any time by clicking on the account icon and "
+#~ "choose \"%s\""
+#~ msgstr ""
+#~ "Vous pouvez redémarrer cette visite guidée à tout moment en cliquant sur "
+#~ "l'icône du compte et en sélectionnant \"%s\""
+
+#~ msgid "To sort the emails, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Pour trier vos courriels, cliquez sur « Trier par » et choisissez un "
+#~ "critère de tri."
+
+#~ msgid ""
+#~ "To open or close an email in a conversation, click on a free area in the "
+#~ "header."
+#~ msgstr ""
+#~ "Pour ouvrir ou fermer un courriel dans un fil de discussion, cliquez sur "
+#~ "la zone vierge de son en-tête."
+
+#~ msgid "To create a new task, click on New in the toolbar."
+#~ msgstr ""
+#~ "Pour créer une nouvelle tâche, cliquez sur « Nouveau » dans la barre "
+#~ "d'outils."
+
+#~ msgid "To sort the tasks, click on Sort by. Select a sort criteria."
+#~ msgstr ""
+#~ "Pour trier les tâches, cliquez sur « Trier par » et choisissez un critère "
+#~ "de tri."
 
 #~ msgid ""
 #~ "Here you can share files with your colleagues and external contacts. You "

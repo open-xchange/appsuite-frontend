@@ -1,16 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Tobias Prinz <tobias.prinz@open-xchange.com>
- * @author Julian Bäume <julian.baeume@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/tours/tasks', [
     'io.ox/core/tk/wizard',
@@ -31,7 +39,7 @@ define('io.ox/tours/tasks', [
         var taskTour = new Tour()
         .step()
             .title(gt('Creating a new task'))
-            .content(gt('To create a new task, click on New in the toolbar.'))
+            .content(gt('To create a new task, click on New task in the toolbar.'))
             .spotlight('.io-ox-tasks-window .primary-action .btn:visible, [data-ref="io.ox/tasks/actions/create"]:visible')
             .on('before:show', function () {
                 if (createApp && !createApp.getWindow().floating.model.get('minimized')) {
@@ -131,7 +139,7 @@ define('io.ox/tours/tasks', [
             .end()
         .step()
             .title(gt('Sorting tasks'))
-            .content(gt('To sort the tasks, click on Sort by. Select a sort criteria.'))
+            .content(gt('To sort the tasks, click on the sort icon above the list. Select a sort criteria.'))
             .navigateTo('io.ox/tasks/main')
             .waitFor('.grid-options.dropdown')
             .spotlight('.grid-options.dropdown')

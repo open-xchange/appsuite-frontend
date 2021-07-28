@@ -1,14 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2017 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Frank Paczynski <frank.paczynski@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 /// <reference path="../../../steps.d.ts" />
 
@@ -61,11 +71,10 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.waitForVisible(checked, 10);
     I.waitForNetworkTraffic();
 
-    // disable and reenable again
+    // try to disable checkbox. Shouldn't be possible when over threshold
     I.uncheckOption(checked);
     I.waitForText('Saved a few seconds ago', 5, '.window-footer .inline-yell');
-    I.checkOption(unchecked);
-    I.waitForVisible(message);
+    I.checkOption(checked);
 
     // remove all file attachments
     I.click('.list-container .remove:last-child');
@@ -78,7 +87,7 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.checkOption(unchecked);
 });
 
-Scenario('Checks when saving', async ({ I, mail }) => {
+Scenario.skip('Checks when saving', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         toggle = locate({ css: '.share-attachments .checkbox.custom label' }),
@@ -118,7 +127,7 @@ Scenario('Checks when saving', async ({ I, mail }) => {
     I.waitForDetached('.io-ox-mail-compose-window');
 });
 
-Scenario('Checks when sending', async ({ I, mail, users }) => {
+Scenario.skip('Checks when sending', async ({ I, mail, users }) => {
     const [user] = users,
         checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),

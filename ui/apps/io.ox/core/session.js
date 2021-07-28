@@ -1,15 +1,24 @@
-/**
- * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
- * LICENSE. This work is protected by copyright and/or other applicable
- * law. Any use of the work other than as authorized under this license
- * or copyright law is prohibited.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
- *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- */
+/*
+*
+* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+* @license AGPL-3.0
+*
+* This code is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU Affero General Public License for more details.
+
+* You should have received a copy of the GNU Affero General Public License
+* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+*
+* Any use of the work other than as authorized under this license or copyright law is prohibited.
+*
+*/
 
 define('io.ox/core/session', [
     'io.ox/core/http',
@@ -94,78 +103,28 @@ define('io.ox/core/session', [
             }
 
             // GET request
-            return (
-                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken')
-                    // no auto-login for server-token-based logins
-                    ? $.Deferred().reject({})
-                    // try auto-login
-                    : withTimeout(http.GET, {
-                        module: 'login',
-                        appendColumns: false,
-                        appendSession: false,
-                        processResponse: false,
-                        params: {
-                            action: 'autologin',
-                            client: that.client(),
-                            rampup: true,
-                            rampUpFor: CLIENT,
-                            version: that.version()
-                        }
-                    })
-            )
-            .then(
-                function success(data) {
-                    ox.secretCookie = true;
-                    ox.rampup = data.rampup || ox.rampup || {};
-                    isAutoLogin = true;
-                    return data;
-                },
-                // If autologin fails, try token login
-                function fail(data) {
-                    if (!_.url.hash('serverToken')) throw (data || {});
-                    return withTimeout(http.POST, {
-                        module: 'login',
-                        jsessionid: _.url.hash('jsessionid'),
-                        appendColumns: false,
-                        appendSession: false,
-                        processResponse: false,
-                        data: {
-                            action: 'tokens',
-                            client: that.client(),
-                            version: that.version(),
-                            serverToken: _.url.hash('serverToken'),
-                            clientToken: _.url.hash('clientToken'),
-                            rampup: true,
-                            rampUpFor: CLIENT
-                        }
-                    })
-                    .then(function (response) {
-                        // make sure we have rampupdata
-                        if (response.data.rampup) {
-                            return response.data;
-                        }
-                        //session needed for rampup call
-                        ox.session = response.data.session;
-                        return that.rampup().then(function (rampupData) {
-                            response.data.rampup = rampupData;
-                            return response.data;
-                        });
-                    });
+            return withTimeout(http.GET, {
+                module: 'login',
+                appendColumns: false,
+                appendSession: false,
+                processResponse: false,
+                params: {
+                    action: 'autologin',
+                    client: that.client(),
+                    rampup: true,
+                    rampUpFor: CLIENT,
+                    version: that.version()
                 }
-            )
-            .then(function (data) {
+            })
+            .then(function success(data) {
+                ox.secretCookie = true;
+                ox.rampup = data.rampup || ox.rampup || {};
+                isAutoLogin = true;
+
                 set(data);
                 // global event
                 ox.trigger('login', data);
                 return data;
-            })
-            .done(function () {
-                _.url.hash({
-                    jsessionid: null,
-                    serverToken: null,
-                    clientToken: null,
-                    'token.autologin': null
-                });
             });
         },
 
@@ -250,24 +209,6 @@ define('io.ox/core/session', [
                 return (ox.rampup = data.rampup || ox.rampup || {});
             });
         },
-
-        /*
-        redeemToken: function (token) {
-            console.warn('WARNING: Redeem-token is deprecated and will be remove in the near future.');
-            return http.POST({
-                processResponse: false,
-                appendSession: false,
-                appendColumns: false,
-                module: 'login',
-                url: 'api/login?action=redeemToken',
-                data: {
-                    authId: uuids.randomUUID(),
-                    token: token,
-                    client: 'mobile-notifier',
-                    secret: 'notifier-123'
-                }
-            });
-        },*/
 
         logout: function () {
             if (ox.online) {
