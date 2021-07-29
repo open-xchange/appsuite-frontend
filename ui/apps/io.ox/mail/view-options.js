@@ -134,7 +134,7 @@ define('io.ox/mail/view-options', [
                     if (!gridOptions.hasClass('disabled')) return;
                     listView.connect(mailAPI.collectionLoader);
                     listView.model.unset('criteria');
-                    gridOptions.removeClass('disabled');
+                    gridOptions.toggleClass('disabled', account.is('sent|drafts', baton.app.folder.get()));
                 })
                 .render();
             });
@@ -199,6 +199,9 @@ define('io.ox/mail/view-options', [
                 // toggle visibily of 'has attachments'
                 link = view.$('a[data-value="602"]');
                 link.toggleClass('hidden', !folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER'));
+                // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
+                link = view.$('a[data-name="thread"]');
+                link.toggleClass('disabled', account.is('sent|drafts', folder)).parent().toggleClass('disabled', account.is('sent|drafts', folder));
             }
         }
     });
@@ -220,9 +223,11 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
             // don't add if thread view is disabled server-side
             if (baton.app.settings.get('threadSupport', true) === false) return;
+            var disabled = account.is('sent|drafts', baton.app.folder.get());
             this.data('view')
                 .divider()
-                .option('thread', true, gt('Conversations'));
+                .option('thread', true, gt('Conversations'))
+                .$ul.find('a[data-name="thread"]').toggleClass('disabled', disabled).parent().toggleClass('disabled', disabled);
         }
     });
 

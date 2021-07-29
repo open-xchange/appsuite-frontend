@@ -1749,7 +1749,8 @@ define('io.ox/mail/api', [
                 };
             }
             // use threads?
-            if (params.thread === true) {
+            // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
+            if (params.thread === true && !accountAPI.is('sent|drafts', params.folder)) {
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
