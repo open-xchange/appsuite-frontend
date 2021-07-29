@@ -22,6 +22,8 @@
 
 /// <reference path="../../steps.d.ts" />
 
+const { expect } = require('chai');
+
 Feature('General > Connect your device wizard');
 
 Before(async ({ users }) => {
@@ -218,4 +220,52 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 
     });
 
+});
+
+Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
+    // access combination groupware disables active_sync capability
+    await users[0].hasAccessCombination('groupware');
+    I.haveSetting('io.ox/core//onboardingWizard', true);
+    I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
+
+    I.login('app=io.ox/mail');
+    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    mail.waitForApp();
+    topbar.connectDeviceWizard();
+
+    await within('.wizard-container', () => {
+        I.waitForText('Which device do you want to configure?');
+        I.click('iPhone or iPad');
+
+        I.waitForText('Which application do you want to use?');
+        I.waitForText('OX Drive');
+        I.click('OX Drive');
+        I.waitForVisible('.qrcode');
+        I.click('Back');
+
+        // check if button is disabled
+        I.waitForText('Which application do you want to use?');
+        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
+        I.click('Exchange Active Sync');
+    });
+    // check if event "upsell:requires-upgrade" was fired by checking console
+    const logs = await I.grabBrowserLogs();
+    const msg = logs.find(log => log._text === 'Event caught');
+    expect(msg).to.exist;
+
+    // enable active_sync again, check if upsell is not offered
+    await users[0].hasAccessCombination('all');
+    I.refreshPage();
+    mail.waitForApp();
+    topbar.connectDeviceWizard();
+
+    await within('.wizard-container', () => {
+        I.waitForText('Which device do you want to configure?');
+        I.click('iPhone or iPad');
+
+        I.waitForText('Which application do you want to use?');
+        I.waitForText('Exchange Active Sync');
+        I.click('Exchange Active Sync');
+        I.waitForVisible('.qrcode');
+    });
 });

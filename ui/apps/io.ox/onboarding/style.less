@@ -189,6 +189,18 @@
                         border-bottom: 2px solid @border-color;
 
                         .list-btn {
+                            &.disabled {
+                                color: #ccc;
+                                cursor: default;
+
+                                .premium-container {
+                                    background-color: fade(@brand-primary, 80%);
+                                    color: @white;
+                                    border-radius: 12px;
+                                    line-height: 32px;
+                                    padding: 0 16px;
+                                }
+                            }
                             &:focus {
                                 outline: 2px solid #000;
                             }
