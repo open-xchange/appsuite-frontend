@@ -293,6 +293,28 @@ define('io.ox/onboarding/main', [
                     });
                     connectWizard.appsView.render();
                     connectWizard.progressView.render();
+
+                    // listen for upsell
+                    connectWizard.model.once('scenario:upsell', function (target) {
+                        require(['io.ox/core/upsell'], function (upsell) {
+                            var app = util.appList.find(function (m) {
+                                return m.get('platform') === connectWizard.model.get('platform') && m.get('app') === target.attr('data-app');
+                            });
+
+                            if (!app) return;
+
+                            var missing = app.get('cap');
+                            if (upsell.has(missing.replace(/,/g, ' '))) return;
+                            // closes wizard
+                            if (connectWizard) connectWizard.trigger('step:close');
+                            upsell.trigger({
+                                type: 'custom',
+                                id: target.attr('data-app'),
+                                missing: missing
+                            });
+                        });
+                    });
+
                     // dont start with platforms view on mobile
                     if (!_.device('smartphone')) {
                         connectWizard.platformsView.render();
