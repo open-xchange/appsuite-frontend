@@ -86,6 +86,10 @@ define('io.ox/core/main/appcontrol', [
         },
         onClick: function () {
             if (!this.checkUpsell()) {
+                if (this.model.options.mobilelazyload) {
+                    // WORKAROUND: OXUIB-932 - lazyload current edited drafts on mobile
+                    return this.model.trigger('mobilelazyload');
+                }
                 // used on mobile
                 if (this.model.get('state') === 'running' && this.model.get('closable')) {
                     this.model.launch();
