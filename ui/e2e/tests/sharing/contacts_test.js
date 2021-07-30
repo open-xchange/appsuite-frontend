@@ -62,8 +62,6 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click({ css: 'button[data-action="select"]' });
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.click('Author', '.permissions-view');
-        I.clickDropdown('Viewer');
         I.waitForText('Invited people only');
         I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);

@@ -150,8 +150,6 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function ({ I, use
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
-        I.click('Author', '.share-pane');
-        I.clickDropdown('Viewer');
         dialogs.waitForVisible();
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
