@@ -238,6 +238,8 @@ define('io.ox/contacts/api', [
                         data.folders = [].concat(opt.folders);
                     }
 
+                    if (opt.folderTypes) data.folderTypes = opt.folderTypes;
+
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;

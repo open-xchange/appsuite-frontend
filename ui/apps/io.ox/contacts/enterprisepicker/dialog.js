@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/backbone/views/modal',
@@ -248,7 +248,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                                 return folder['com.openexchange.contacts.extendedProperties'] &&
                                     folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
-                                    folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value;
+                                    folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
                             });
 
                         var lists = _(folders).map(function (folder) {
@@ -296,8 +296,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                             if (isSearch) {
                                 self.$('.modal-content').busy();
-                                api.advancedsearch(model.get('searchQuery'), { omitFolder: true, folders: selectedList === 'all' ? folderList : selectedList, columns: columns, names: 'on', phones: 'on', job: 'on' })
-                                .then(updateContactsAfterSearch);
+                                var params = { omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                                if (selectedList === 'all') delete params.folders;
+                                api.advancedsearch(model.get('searchQuery'), params)
+                                    .then(updateContactsAfterSearch);
                                 return;
                             }
                             // no cache for now, cache ignores column list and we might get incomplete data
@@ -315,7 +317,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             if (query.length < settings.get('search/minimumQueryLength', 2)) return;
                             if (selectedList === 'all') selectedList = folderList;
                             self.$('.modal-content').busy();
-                            api.advancedsearch(query, { omitFolder: true, folders: selectedList, columns: columns, names: 'on', phones: 'on', job: 'on' })
+                            var params = { omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                            if (selectedList === 'all') delete params.folders;
+                            api.advancedsearch(model.get('searchQuery'), params)
                                 .then(updateContactsAfterSearch);
                         });
 
