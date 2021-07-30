@@ -166,7 +166,7 @@ define('io.ox/core/main/stages', [
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose') + ':compose');
 
             if (app && (app.get('refreshable') || deeplink)) {
-                baton.autoLaunch = appURL.split(/,/);
+                baton.autoLaunch = appURL.split(/,/).filter(function (app) { return !!apps.get(app.replace(/(:.*|\/main)$/, '')); });
                 // no manifest for mail compose, capabilities check is sufficient
             } else if (capabilities.has('webmail') && mailto) {
                 // launch main mail app for mailto links
