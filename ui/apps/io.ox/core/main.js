@@ -1135,7 +1135,7 @@ define('io.ox/core/main',
                 mailto = _.url.hash('mailto') !== undefined && (appURL === ox.registry.get('mail-compose').split('/').slice(0, -1).join('/') + ':compose');
 
             if (manifest && (manifest.refreshable || mailto)) {
-                return appURL.split(/,/);
+                return appURL.split(/,/).filter(function (app) { return !!ox.ui.apps.get(app.replace(/(:.*|\/main)$/, '')); });
             } else {
                 return autoLaunchArray();
             }
