@@ -20,36 +20,12 @@
 *
 */
 
-@media (max-width: @smartphone-breakpoint) {
-    .wizard-step, #apps, #setup {
-        height: 100%;
-        width: 100%;
-        overflow-y: auto;
-        text-align: left;
-        background-color: @white;
-        font-size: 14px;
-        padding-top: 0;
-
-        #dialog-title {
-            text-align: left;
-        }
-
-/*         .progress-steps:after{
-            left: 12px;
-        } */
-    }
-    .wizard-backdrop {
-        z-index: 999;
-    }
-}
-
-.wizard-step {
+#platform, #setup, #apps {
     @border-color: #e5e5e5;
     border-radius: 10px;
     height: 704px;
     width: 600px;
     max-width: 800px;
-
 
     .connect-wizard{
         height: 100%;
@@ -339,5 +315,24 @@
                 .smartphone & { width: 100%; }
             }
         }
+    }
+}
+
+@media (max-width: @smartphone-breakpoint) {
+    #apps, #setup {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        text-align: left;
+        background-color: @white;
+        font-size: 14px;
+        padding-top: 0;
+
+        #dialog-title {
+            text-align: left;
+        }
+    }
+    .wizard-backdrop {
+        z-index: 999;
     }
 }
