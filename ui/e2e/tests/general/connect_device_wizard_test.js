@@ -225,8 +225,7 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
     // access combination groupware disables active_sync capability
     await users[0].hasAccessCombination('groupware');
-    I.haveSetting('io.ox/core//onboardingWizard', true);
-    I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
+    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
 
     I.login('app=io.ox/mail');
     await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
