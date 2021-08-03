@@ -225,13 +225,36 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
     // access combination groupware disables active_sync capability
     await users[0].hasAccessCombination('groupware');
-    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
 
-    I.login('app=io.ox/mail');
-    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    I.login();
+    I.refreshPage();
     mail.waitForApp();
+
     topbar.connectDeviceWizard();
 
+    // Scenario 1: Upsell is not enabled && capability is disabled (don't show EAS entry)
+    await within('.wizard-container', () => {
+        I.waitForText('Which device do you want to configure?');
+        I.click('iPhone or iPad');
+
+        I.waitForText('Which application do you want to use?');
+        I.waitForText('OX Drive');
+        I.click('OX Drive');
+        I.waitForVisible('.qrcode');
+        I.click('Back');
+
+        // check if button is disabled
+        I.waitForText('Which application do you want to use?');
+        I.dontSee('Exchange Active Sync');
+    });
+
+    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
+    I.refreshPage();
+    mail.waitForApp();
+    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    topbar.connectDeviceWizard();
+
+    // Scenario 2: Upsell is enabled && capability is disabled (show locked EAS entry)
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
         I.click('iPhone or iPad');
@@ -258,6 +281,7 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
     mail.waitForApp();
     topbar.connectDeviceWizard();
 
+    // Scenario 3: Upsell is enabled && user does not have capability (show unlocked EAS entry)
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
         I.click('iPhone or iPad');
