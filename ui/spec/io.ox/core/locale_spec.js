@@ -179,7 +179,7 @@ define([
         it('returns valid default locale if en_US is not listed', function () {
             _.setCookie('locale', 'en_US');
             ox.serverConfig.languages = _(locale.meta.getLocales()).omit('en_US');
-            expect(locale.meta.getValidDefaultLocale()).to.equal('ca_ES');
+            expect(locale.meta.getValidDefaultLocale()).to.equal('bg_BG');
         });
 
         it('changes locale (de_CH)', function (done) {

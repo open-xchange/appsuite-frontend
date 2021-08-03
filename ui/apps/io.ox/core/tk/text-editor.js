@@ -234,7 +234,7 @@ define('io.ox/core/tk/text-editor', [
 
             // 12px is the bottom margin, keep in sync with css
             // there is a strange 6px height difference between the text area and the container, couldn't find the cause yet
-            textarea.css('minHeight', Math.max(300, windowContainer.outerHeight() - fields.outerHeight() - windowFooter.outerHeight() - 12 - 6));
+            textarea.css('minHeight', Math.max(300, windowContainer.outerHeight() - fields.outerHeight() - windowFooter.outerHeight()));
         }
 
         this.show = function () {

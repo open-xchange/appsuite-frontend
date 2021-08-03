@@ -382,6 +382,14 @@ define('io.ox/settings/personalData/settings/pane', [
 
                     downloadStatus = handleApiResult(downloadStatus);
 
+                    if (!(downloadStatus.status === 'NONE' || downloadStatus.status === 'DONE') && downloadStatus.workItems && downloadStatus.workItems.length) {
+                        // there is a download pending or currentliy worked on. Enable the modules that were selected for that download, instead of the default set
+                        var selectedModules = _(downloadStatus.workItems).pluck('module');
+                        _(availableModules).each(function (module, name) {
+                            if (module.enabled === undefined) return;
+                            module.enabled = _(selectedModules).contains(name);
+                        });
+                    }
                     var availableModulesModel = availableModulesModel || new Backbone.Model(availableModules),
                         status = new Backbone.Model(downloadStatus),
                         sdView = new selectDataView({ model: availableModulesModel, status: status }),

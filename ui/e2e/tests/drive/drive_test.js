@@ -83,7 +83,7 @@ Scenario('[C7887] Disable hidden folders and files', async function ({ I, drive 
 
 Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     //Generate TXT file for upload
-    let timestamp1 = Math.round(+new Date() / 1000);
+    let timestamp1 = Math.round(+new Date() / 1000).toString();
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await I.haveFile(infostoreFolderID, 'build/e2e/C45046.txt');
@@ -97,7 +97,7 @@ Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     I.waitForElement('.io-ox-viewer');
 
     I.waitForText(timestamp1);
-    let timestamp2 = Math.round(+new Date() / 1000);
+    let timestamp2 = Math.round(+new Date() / 1000).toString();
     await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
     I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
     I.click('Upload', '.modal-dialog');

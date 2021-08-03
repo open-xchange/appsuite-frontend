@@ -33,13 +33,18 @@ define('io.ox/files/actions/edit-description', [
         new ModalDialog({ title: gt('Description') })
             .build(function () {
                 this.$body.append(
-                    this.$textarea = $('<textarea rows="10" class="form-control">').val(data.description)
+                    this.$textarea = $('<textarea rows="10" class="form-control" maxlength="65535" >').val(data.description)
                 );
             })
             .addCancelButton()
             .addButton({ label: gt('Save'), action: 'save' })
             .on('save', function () {
-                return api.update(data, { description: this.$textarea.val() }).fail(notifications.yell);
+                return api.update(data, { description: this.$textarea.val() }).fail(function (error) {
+                    // too long description
+                    //#. %1$d: max number of characters
+                    if (error.code === 'IFO-0100' && error.truncated.toString() === '706') return notifications.yell('error', gt('File description can only be %1$d characters long.', error.problematic[0].max_size));
+                    notifications.yell(error);
+                });
             })
             .open();
     };

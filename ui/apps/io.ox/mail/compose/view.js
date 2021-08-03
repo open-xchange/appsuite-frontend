@@ -872,6 +872,10 @@ define('io.ox/mail/compose/view', [
                 // MWB-783 covers edit-case for 'rdb'
                 return def.resolve();
             })
+            .on('cancel', function () {
+                // reject promise properly, so listeners work correctly
+                return def.reject();
+            })
             .open();
 
             return def.then(function () {
@@ -1005,6 +1009,9 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editorContainer.busy();
+            // OXUIB-905: fix calculation of the height to prevent double scrollbar
+            if (this.app.get('window').floating) this.app.get('window').floating.$el.find('.scrollable').toggleClass('scrollable-disabled', this.config.get('editorMode') === 'text');
+
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {

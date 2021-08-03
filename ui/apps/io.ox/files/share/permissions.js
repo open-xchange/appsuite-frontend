@@ -981,6 +981,7 @@ define('io.ox/files/share/permissions', [
             options.point = 'io.ox/files/share/permissions/dialog';
 
             var dialog = new ModalDialog(options);
+            dialog.waiting = $.when();
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
@@ -1024,6 +1025,7 @@ define('io.ox/files/share/permissions', [
                 if (accessMode === 0) {
                     publicLink.hide();
                     publicLink.removeLink();
+                    dialog.waiting = publicLink.removeLink();
                 } else {
                     publicLink.show();
                     publicLink.fetchLink();
@@ -1321,53 +1323,55 @@ define('io.ox/files/share/permissions', [
             }
 
             function mergePermissionsAndPublicLink(permissions, entity, bits) {
-                var existingEnity = _.findWhere(permissions, { entity: entity });
-                if (!existingEnity) {
+                var existingEntity = _.findWhere(permissions, { entity: entity });
+                if (!existingEntity) {
                     permissions.push({ bits: bits, entity: entity, group: false });
                 }
                 return permissions;
             }
 
             dialog.on('save', function () {
-                var changes, options = dialogConfig.toJSON(), def;
-                var entity = publicLink.model.get('entity');
-                var permissions = permissionsView.collection.toJSON();
-                // Order matters. Share must be called before the update call is invoked. Otherwise a file conflict is created.
-                // publicLink.share().then(this.close, function () {
-                publicLink.share().then(function () {
-                    if (entity && publicLink.hasChanges()) {
-                        permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
-                    }
+                // Order matters. In case there is a unresolved 'removeLink' request this has to be finished first.
+                // Share must be called before the update call is invoked. Otherwise a file conflict is created.
+                $.when(dialog.waiting).always(function () {
+                    var changes, options = dialogConfig.toJSON(), def;
+                    var entity = publicLink.model.get('entity');
+                    var permissions = permissionsView.collection.toJSON();
 
-                    if (objModel.isFolder()) {
-                        changes = { permissions: permissions };
-                        def = folderAPI.update(objModel.get('id'), changes, options);
-                    } else {
-                        changes = { object_permissions: permissions };
-                        def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
-                    }
-
-                    def.then(
-                        function success() {
-                            // refresh the guest group (id = int max value)
-                            groupApi.refreshGroup(2147483647);
-                            objModel.reload().then(
-                                function () {
-                                    dialog.close();
-                                    // we might have new addresses
-                                    contactsAPI.trigger('maybeNewContact');
-                                },
-                                function (error) {
-                                    dialog.idle();
-                                    yell(error);
-                                }
-                            );
-                        },
-                        function fail(error) {
-                            dialog.idle();
-                            yell(error);
+                    publicLink.share().then(function () {
+                        if (entity && publicLink.hasChanges()) {
+                            permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
                         }
-                    );
+                        if (objModel.isFolder()) {
+                            changes = { permissions: permissions };
+                            def = folderAPI.update(objModel.get('id'), changes, options);
+                        } else {
+                            changes = { object_permissions: permissions };
+                            def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
+                        }
+
+                        def.then(
+                            function success() {
+                                // refresh the guest group (id = int max value)
+                                groupApi.refreshGroup(2147483647);
+                                objModel.reload().then(
+                                    function () {
+                                        dialog.close();
+                                        // we might have new addresses
+                                        contactsAPI.trigger('maybeNewContact');
+                                    },
+                                    function (error) {
+                                        dialog.idle();
+                                        yell(error);
+                                    }
+                                );
+                            },
+                            function fail(error) {
+                                dialog.idle();
+                                yell(error);
+                            }
+                        );
+                    });
                 });
             });
 

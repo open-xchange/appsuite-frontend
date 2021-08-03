@@ -1635,6 +1635,13 @@ define('io.ox/core/folder/api', [
     // register pool in util function. Needed for some checks. Cannot be done with require folderAPI or we would either be asynchronous or have circular dependencies
     util.registerPool(pool);
 
+    function removeFromPool(id) {
+        if (!id || !pool.models[id]) return;
+        removeFromAllCollections(pool.models[id]);
+        delete pool.models[id];
+        delete pool.collections[id];
+    }
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -1689,7 +1696,8 @@ define('io.ox/core/folder/api', [
         altnamespace: altnamespace,
         injectIndex: injectIndex,
         multipleLists: multipleLists,
-        renameDefaultCalendarFolders: renameDefaultCalendarFolders
+        renameDefaultCalendarFolders: renameDefaultCalendarFolders,
+        removeFromPool: removeFromPool
     });
 
     return api;

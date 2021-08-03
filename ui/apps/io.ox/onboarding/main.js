@@ -208,8 +208,9 @@ define('io.ox/onboarding/main', [
                         config: getEasConfig()
                     });
                 }
-                return new views.SyncView({
-                    description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
+                return new views.DownloadQrView({
+                    description: gt('Scan this code with your phone\'s camera to synchronize your Mail, Calendar and Address Book via Exchange Active Sync:'),
+                    type: 'eas',
                     config: getEasConfig()
                 });
             },
@@ -292,6 +293,28 @@ define('io.ox/onboarding/main', [
                     });
                     connectWizard.appsView.render();
                     connectWizard.progressView.render();
+
+                    // listen for upsell
+                    connectWizard.model.once('scenario:upsell', function (target) {
+                        require(['io.ox/core/upsell'], function (upsell) {
+                            var app = util.appList.find(function (m) {
+                                return m.get('platform') === connectWizard.model.get('platform') && m.get('app') === target.attr('data-app');
+                            });
+
+                            if (!app) return;
+
+                            var missing = app.get('cap');
+                            if (upsell.has(missing.replace(/,/g, ' '))) return;
+                            // closes wizard
+                            if (connectWizard) connectWizard.trigger('step:close');
+                            upsell.trigger({
+                                type: 'custom',
+                                id: target.attr('data-app'),
+                                missing: missing
+                            });
+                        });
+                    });
+
                     // dont start with platforms view on mobile
                     if (!_.device('smartphone')) {
                         connectWizard.platformsView.render();
@@ -300,7 +323,8 @@ define('io.ox/onboarding/main', [
                             id: 'platform',
                             back: false,
                             next: false,
-                            disableMobileSupport: true
+                            disableMobileSupport: true,
+                            focusWatcher: false
                         })
                         .on('before:show', function () {
                             // draw list of available platforms
@@ -322,7 +346,8 @@ define('io.ox/onboarding/main', [
                         id: 'apps',
                         back: false,
                         next: false,
-                        disableMobileSupport: true
+                        disableMobileSupport: true,
+                        focusWatcher: false
                     })
                     .on('before:show', function () {
                         // draw list of apps for chosen platform
@@ -347,7 +372,8 @@ define('io.ox/onboarding/main', [
                         id: 'setup',
                         back: false,
                         next: false,
-                        disableMobileSupport: true
+                        disableMobileSupport: true,
+                        focusWatcher: false
                     })
                     .on('before:show', function () {
                         var self = this;

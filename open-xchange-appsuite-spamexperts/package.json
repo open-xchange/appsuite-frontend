@@ -11,7 +11,7 @@
   },
   "summary": "Configuration UI for SpamExperts",
   "description": "Configuration UI for SpamExperts",
-  "license": "AGPL-3.0-only",
+  "license": "AGPL-3.0-or-later",
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
     "eslint": "^6.0.1",

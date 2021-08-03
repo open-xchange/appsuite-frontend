@@ -71,11 +71,10 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.waitForVisible(checked, 10);
     I.waitForNetworkTraffic();
 
-    // disable and reenable again
+    // try to disable checkbox. Shouldn't be possible when over threshold
     I.uncheckOption(checked);
     I.waitForText('Saved a few seconds ago', 5, '.window-footer .inline-yell');
-    I.checkOption(unchecked);
-    I.waitForVisible(message);
+    I.checkOption(checked);
 
     // remove all file attachments
     I.click('.list-container .remove:last-child');
@@ -88,7 +87,7 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.checkOption(unchecked);
 });
 
-Scenario('Checks when saving', async ({ I, mail }) => {
+Scenario.skip('Checks when saving', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         toggle = locate({ css: '.share-attachments .checkbox.custom label' }),
@@ -128,7 +127,7 @@ Scenario('Checks when saving', async ({ I, mail }) => {
     I.waitForDetached('.io-ox-mail-compose-window');
 });
 
-Scenario('Checks when sending', async ({ I, mail, users }) => {
+Scenario.skip('Checks when sending', async ({ I, mail, users }) => {
     const [user] = users,
         checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),

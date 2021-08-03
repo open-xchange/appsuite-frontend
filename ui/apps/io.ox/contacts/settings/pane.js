@@ -168,6 +168,7 @@ define('io.ox/contacts/settings/pane', [
                             help: 'ox.appsuite.user.sect.contacts.folder.subscribeshared.html',
                             title: gt('Subscribe to shared address books'),
                             point: 'io.ox/core/folder/subscribe-shared-address-books',
+                            noSync: !capabilities.has('carddav'),
                             sections: {
                                 public: gt('Public address books'),
                                 shared: gt('Shared address books'),

@@ -57,7 +57,8 @@ define('io.ox/editor/main', [
         },
 
         onContentKeydown: function (e) {
-            if (e.which === 13 && e.ctrlKey) {
+            // cmd on mac ctrl everywhere else
+            if (e.which === 13 && ((_.device('!macos') && e.ctrlKey) || (_.device('macos') && e.metaKey))) {
                 e.preventDefault();
                 this.app.save();
             }
@@ -165,7 +166,7 @@ define('io.ox/editor/main', [
                             // editor
                             $('<label class="sr-only">').attr('for', bodyId).text(gt('Note')),
                             $('<textarea class="content form-control">').attr('id', bodyId).val('')
-                                .attr('placeholder', _.device('ios || android') ? '' : gt('You can quick-save your changes via Ctrl+Enter.'))
+                                .attr('placeholder', getPlaceholder())
                         )
                     )
                 )
@@ -180,6 +181,15 @@ define('io.ox/editor/main', [
             return this;
         }
     });
+
+    function getPlaceholder() {
+        if (_.device('ios || android')) return '';
+        //#. This is a placeholder for macOS. Keep in line with local mac keyboard layout
+        if (_.device('macos')) return gt('You can quick-save your changes via Cmd+Enter.');
+
+        // use windows as default
+        return gt('You can quick-save your changes via Ctrl+Enter.');
+    }
 
     // multi instance pattern
     function createInstance() {

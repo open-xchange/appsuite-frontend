@@ -248,7 +248,6 @@ define('io.ox/core/sub/sharedFolders', [
                     name: 'subscribed',
                     model: this.model,
                     label: ''
-
                 }).render().$el.attr('title', this.opt.dialog.options.tooltip || gt('subscribe to calendar')),
                 $('<div class="item-name">').append(
                     $('<div>').text(getItemName(this.model.attributes))

@@ -44,7 +44,8 @@ define('io.ox/core/viewer/views/types/typesutil', [
         audio: 'audioview',
         vcf: 'contactview',
         video: 'videoview',
-        txt: 'textview'
+        txt: 'textview',
+        odfmisc: 'documentview'
     };
 
     var typesUtil = {
