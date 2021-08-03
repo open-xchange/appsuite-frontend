@@ -69,7 +69,10 @@ Scenario('[C223834] iTIP mail alias handling', async function ({ I, users, mail,
     I.logout();
     I.login('app=io.ox/mail', { user: organizer });
     mail.waitForApp();
-    I.waitForText('accepted the invitation: C223834', 10);
-    mail.selectMail(attendees_alias_display_name + ' accepted the invitation: C223834');
+    // check mail recipient
+    item = locate('.person').withText(attendees_alias_display_name);
+    I.waitForElement(item, 30);
+    // select by index as generated mail body may contain only displayname and not alias-displayname
+    mail.selectMailByIndex(0);
     I.waitForText(attendees_alias_address);
 });
