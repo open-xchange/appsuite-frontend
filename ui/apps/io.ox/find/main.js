@@ -477,26 +477,7 @@ define('io.ox/find/main', [
                     app.updateConfig();
                 }
             });
-
-            /**
-             * find:query:result  inform user about number of returned hits
-             */
-            // app.on('find:query:result', function (response) {
-            //     // screenreader
-            //     var n = response.results.length,
-            //         //#. 'no results' message for screenreaders with additional hint to adjust active filters
-            //         empty = gt('No items were found. Please adjust currently used facets.'),
-            //         //#. result count for screenreaders
-            //         //#. %1$s number of items found by search feature
-            //         some = gt.ngettext('%1$d item was found.', '%1$s items were found.', n, n);
-            //     notifications.yell('screenreader', n ? some : empty);
-            // });
         }
-
-        // DEBUG: states
-        // app.on('change:state', function (e, state) {
-        //     console.log('%c' + state, 'color: white; background-color: blue');
-        // });
 
         /**
          * created: app created and accessible via parentapp.get('find')
