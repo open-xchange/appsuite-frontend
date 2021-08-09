@@ -468,8 +468,8 @@ define('io.ox/calendar/actions', [
             }
 
             // check if only one appointment or the whole series should be accepted
-            // exceptions don't have the same id and seriesId
-            if (data.seriesId === data.id && appointment.recurrenceId) {
+            // treat exceptions as part of the series and offer to accept the series as a whole
+            if (data.seriesId && appointment.recurrenceId) {
                 new ModalDialog({
                     title: gt('Change appointment status'),
                     width: 600
@@ -486,7 +486,13 @@ define('io.ox/calendar/actions', [
                 .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
                 .on('action', function (action) {
                     if (action === 'cancel') return;
-                    if (action === 'series') delete appointment.recurrenceId;
+                    if (action === 'series') {
+                        delete appointment.recurrenceId;
+                        // use series id to make it work for exceptions
+                        if (appointment.id !== data.seriesId) {
+                            appointment.id = data.seriesId;
+                        }
+                    }
                     $(baton.e.target).addClass('disabled');
                     util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
                         if (e) yell(e);
