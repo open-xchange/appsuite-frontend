@@ -24,10 +24,11 @@ define('io.ox/backbone/views/actions/util', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'io.ox/core/folder/api',
+    'io.ox/contacts/util',
     'io.ox/core/collection',
     'io.ox/core/capabilities',
     'settings!io.ox/core'
-], function (ext, upsell, api, Collection, capabilities, settings) {
+], function (ext, upsell, api, contactsUtil, Collection, capabilities, settings) {
 
     'use strict';
 
@@ -316,7 +317,7 @@ define('io.ox/backbone/views/actions/util', [
             if (!model) return false;
             var condition = String(action.folder).replace(/\w[\w:]+/ig, function (match) {
                 if (/^(undefined|null|true|false)$/.test(match)) return match;
-                if (match === 'gab') return String(baton.folder_id) === '6';
+                if (match === 'gab') return String(baton.folder_id) === contactsUtil.getGabId();
                 return model.can(match.toLowerCase());
             });
             try {

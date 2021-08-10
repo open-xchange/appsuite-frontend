@@ -1033,7 +1033,7 @@ define('io.ox/contacts/main', [
             return app.grid;
         };
 
-        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = '6';
+        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = util.getGabId();
 
         // go!
         var def = $.Deferred();

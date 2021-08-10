@@ -252,9 +252,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             });
 
                         var lists = _(folders).map(function (folder) {
-                                return { label: folder.title, value: folder.id };
-                            }),
-                            folderList = _(folders).pluck('id');
+                            return { label: folder.title, value: folder.id };
+                        });
                         lists.unshift({ label: gt('Search all address lists'), value: 'all' });
 
                         var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
@@ -315,7 +314,6 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             if (query.length === 0) return model.trigger('change:selectedList', model, selectedList);
                             // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
                             if (query.length < settings.get('search/minimumQueryLength', 2)) return;
-                            if (selectedList === 'all') selectedList = folderList;
                             self.$('.modal-content').busy();
                             var params = { omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
                             if (selectedList === 'all') delete params.folders;
@@ -371,11 +369,18 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                         // triggers focus and fixes "compact" class
                         self.idle();
+                    }, function (error) {
+                        self.idle();
+                        console.log(error);
+                        self.$('.modal-body').append($('<div class="error">').text(gt('Could not load address book.')));
+                        self.$('.modal-footer [data-action="select"]').attr('disabled', 'disabled');
                     });
                 })
                 .on({
                     // this function is called recursively if a distribution list is processed
                     'select':  function processContacts(distributionListMembers) {
+                        if (!model) return [];
+
                         var list = _(distributionListMembers || model.get('selectedContacts').toJSON()).chain()
                             .filter(function (item) {
                                 item.mail_full_name = util.getMailFullName(item);

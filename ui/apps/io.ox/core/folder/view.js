@@ -23,9 +23,10 @@
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/contacts/util',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, api, settings, gt) {
+], function (ext, api, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -338,7 +339,7 @@ define('io.ox/core/folder/view', [
                         folder = _(path).where({ 'id': id })[0],
                         // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
                         // folder 6 is special, it's the global addressbook and the only system folder under public section. Folderdata alone does not give this info.
-                        section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
+                        section = folder.id === contactsUtil.getGabId() ? 'public' : api.getSection(folder.type, folder.id);
 
                     if (section && /(mail|contacts|calendar|tasks|infostore)/.test(tree.module) && tree.flat && tree.context === 'app') {
                         var module = tree.module === 'calendar' ? 'event' : tree.module;

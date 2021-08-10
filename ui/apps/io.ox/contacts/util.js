@@ -29,6 +29,12 @@ define('io.ox/contacts/util', [
 
     'use strict';
 
+    // central function to get gab id. This way we can change things easier
+    // in some cases we work with contacts that are actually user data, return non prefixed folder id instead
+    var getGabId = function (isUser) {
+        return isUser ? '6' : 'con://0/6';
+    };
+
     require(['settings!io.ox/contacts']).then(function (settings) {
         if (!settings.get('showDepartment')) return;
 
@@ -37,7 +43,7 @@ define('io.ox/contacts/util', [
             index: 'last',
             id: 'department',
             draw: function (baton) {
-                if (String(baton.data.folder_id) === '6' &&
+                if (String(baton.data.folder_id) === getGabId() &&
                     !!baton.data.department
                 ) {
                     this.append(
@@ -111,6 +117,8 @@ define('io.ox/contacts/util', [
     }
 
     var that = {
+
+        getGabId: getGabId,
 
         // variant of getFullName without title, all lowercase
         getSortName: function (obj) {
@@ -356,7 +364,7 @@ define('io.ox/contacts/util', [
             var array = [data.position, data.company, data.department];
             // pretty sure we don't **really** need the company when we are in
             // global address book; let's see which bug report will come around.
-            if (String(data.folder_id) === '6') array.splice(1, 1);
+            if (String(data.folder_id) === this.getGabId()) array.splice(1, 1);
             return array.map($.trim).filter(Boolean).join(', ');
         },
 

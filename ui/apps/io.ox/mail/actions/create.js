@@ -55,7 +55,7 @@ define('io.ox/mail/actions/create', [
             then(function (recipients) {
                 // resolve data by mail
                 var apiCalls = _(recipients).map(function (mail) {
-                    return contactAPI.search(mail)
+                    return contactAPI.advancedsearch(mail)
                         .then(function (list) {
                             // ensure minimal contact data
                             return list[0] || { email1: mail, display_name: mail, mail_field: 0 };

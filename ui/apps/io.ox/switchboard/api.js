@@ -23,10 +23,11 @@
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
     'io.ox/core/api/user',
+    'io.ox/contacts/util',
     'io.ox/core/http',
     'io.ox/core/uuids',
     'settings!io.ox/switchboard'
-], function (io, userAPI, http, uuids, settings) {
+], function (io, userAPI, contactsUtil, http, uuids, settings) {
 
     'use strict';
 
@@ -58,7 +59,7 @@ define.async('io.ox/switchboard/api', [
             // call/chat only works for users, so
             // make sure we are in global address book
             return baton.array().every(function (data) {
-                return String(data.folder_id) === '6' && data.email1;
+                return String(data.folder_id) === contactsUtil.getGabId() && data.email1;
             });
         },
 

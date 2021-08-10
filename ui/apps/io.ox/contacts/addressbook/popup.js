@@ -182,7 +182,7 @@ define('io.ox/contacts/addressbook/popup', [
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
-                exclude: useGlobalAddressBook ? [] : ['6'],
+                exclude: useGlobalAddressBook ? [] : [util.getGabId(true)],
                 limit: LIMITS.fetch,
                 lists: true
             }, options);
@@ -192,7 +192,7 @@ define('io.ox/contacts/addressbook/popup', [
             };
 
             if (options.folder === 'all') delete options.folder;
-            if (options.useGABOnly) data.folder = ['6'];
+            if (options.useGABOnly) data.folder = [util.getGabId(true)];
             return http.PUT({
                 module: 'contacts',
                 params: {
@@ -286,7 +286,7 @@ define('io.ox/contacts/addressbook/popup', [
             // add to results
             // do all calculations now; during rendering is more expensive
             var folder_id = String(item.folder_id),
-                department = (useDepartments && folder_id === '6' && $.trim(item.department)) || '',
+                department = (useDepartments && folder_id === util.getGabId() && $.trim(item.department)) || '',
                 full_name = util.getFullName(item).toLowerCase(),
                 initials = util.getInitials(item);
             return {
@@ -313,7 +313,7 @@ define('io.ox/contacts/addressbook/popup', [
                 // allow sorters to have special handling for sortnames and addresses
                 sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title,
-                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i,
+                rank: 1000 + ((folder_id === util.getGabId() ? 10 : 0) + rank) * 10 + i,
                 user_id: item.internal_userid
             };
         }
@@ -461,7 +461,7 @@ define('io.ox/contacts/addressbook/popup', [
                     count = 0;
                 // remove global address book?
                 if (!useGlobalAddressBook && folders.public) {
-                    folders.public = _(folders.public).reject({ id: '6' });
+                    folders.public = _(folders.public).reject({ id: util.getGabId() });
                 }
                 if (this.options.useGABOnly) {
                     folders = _.pick(folders, 'public');
@@ -474,7 +474,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
-                                if (useGABOnly && folder.id !== '6') return;
+                                if (useGABOnly && folder.id !== util.getGabId()) return;
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );

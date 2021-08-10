@@ -24,11 +24,12 @@ define('io.ox/core/api/autocomplete', [
     'io.ox/core/http',
     'io.ox/core/capabilities',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
     'io.ox/core/extensions',
     'settings!io.ox/contacts'
-], function (http, capabilities, contactsAPI, resourceAPI, groupAPI, ext, settings) {
+], function (http, capabilities, contactsAPI, contactsUtil, resourceAPI, groupAPI, ext, settings) {
 
     'use strict';
 
@@ -155,9 +156,9 @@ define('io.ox/core/api/autocomplete', [
                     _.each(self.fields, function (field) {
                         if (obj[field]) {
                             // magic for users beyond global adress book
-                            if (String(obj.folder_id) !== '6' && obj.type === 'user') return;
+                            if (String(obj.folder_id) !== contactsUtil.getGabId() && obj.type === 'user') return;
                             // remove users from contact api results
-                            if (self.options.users && String(obj.folder_id) === '6' && obj.type === 'contact') return;
+                            if (self.options.users && String(obj.folder_id) === contactsUtil.getGabId() && obj.type === 'contact') return;
                             // convert user from contact api to real user
                             if (obj.type === 'user' && obj.internal_userid) {
                                 obj.contact_id = obj.id;

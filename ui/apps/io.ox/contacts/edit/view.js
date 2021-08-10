@@ -256,7 +256,7 @@ define('io.ox/contacts/edit/view', [
 
         isReadonly: function (name) {
             if (this.readonly[name]) return true;
-            if (name === 'email1' && String(this.model.get('folder_id')) === '6') return true;
+            if (name === 'email1' && (String(this.model.get('folder_id')) === util.getGabId(true) || String(this.model.get('folder_id')) === util.getGabId())) return true;
             return false;
         },
 
@@ -869,7 +869,7 @@ define('io.ox/contacts/edit/view', [
 
         isUserMode: function () {
             // 6 is gab 16 is guest user
-            return (String(this.get('folder_id')) === '6' || String(this.get('folder_id')) === '16') && String(this.get('id')) === String(ox.user_id);
+            return (String(this.get('folder_id')) === util.getGabId(true) || String(this.get('folder_id')) === '16') && String(this.get('id')) === String(ox.user_id);
         },
 
         getApi: function () {

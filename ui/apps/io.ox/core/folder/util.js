@@ -41,6 +41,8 @@ define('io.ox/core/folder/util', [
     function getDefaultFolder(type) {
         type = type || 'mail';
         if (type === 'calendar') return calSettings.get('chronos/defaultFolderId');
+        // use addressbooks default folder not contacts. Otherwise we miss the con:// prefix
+        if (type === 'contacts') type = 'addressbooks';
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 

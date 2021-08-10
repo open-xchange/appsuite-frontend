@@ -20,7 +20,8 @@
  *
  */
 
-define('io.ox/contacts/api', [
+// This api is deprecated. Please use the new contacts api, see scr-909.
+define('io.ox/contacts/api-old', [
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/core/api/factory',
@@ -82,11 +83,11 @@ define('io.ox/contacts/api', [
 
     // generate basic API
     var api = apiFactory({
-        module: 'addressbooks',
+        module: 'contacts',
         requests: {
             all: {
                 action: 'all',
-                folder: util.getGabId(),
+                folder: '6',
                 columns:  ox.locale === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
@@ -101,7 +102,7 @@ define('io.ox/contacts/api', [
             get: {
                 action: 'get'
             },
-            /*search: {
+            search: {
                 action: 'search',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
@@ -185,7 +186,7 @@ define('io.ox/contacts/api', [
                         .invoke('getData', data, query, opt);
                     return data;
                 }
-            },*/
+            },
             advancedsearch: {
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
@@ -318,7 +319,7 @@ define('io.ox/contacts/api', [
                 api.trigger('list:ready');
                 return data;
             },
-            //search: convertResponseToGregorian,
+            search: convertResponseToGregorian,
             advancedsearch: convertResponseToGregorian
         }
     });
@@ -394,7 +395,7 @@ define('io.ox/contacts/api', [
 
         var method,
             opt = {
-                module: 'addressbooks',
+                module: 'contacts',
                 data: data,
                 appendColumns: false,
                 fixPost: true
@@ -481,7 +482,7 @@ define('io.ox/contacts/api', [
 
         // go!
         return http.PUT({
-            module: 'addressbooks',
+            module: 'contacts',
             params: {
                 action: 'update',
                 id: o.id,
@@ -555,7 +556,7 @@ define('io.ox/contacts/api', [
             form.append('json', JSON.stringify(changes));
 
             return http.UPLOAD({
-                module: 'addressbooks',
+                module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: _.then() },
                 data: form,
                 fixPost: true
@@ -563,7 +564,7 @@ define('io.ox/contacts/api', [
             .then(filter);
         }
         return http.FORM({
-            module: 'addressbooks',
+            module: 'contacts',
             action: 'update',
             form: file,
             data: changes,
@@ -586,7 +587,7 @@ define('io.ox/contacts/api', [
         list = _.isArray(list) ? list : [list];
         // remove
         return http.PUT({
-            module: 'addressbooks',
+            module: 'contacts',
             params: { action: 'delete', timestamp: _.then(), timezone: 'UTC' },
             appendColumns: false,
             data: _(list).map(function (data) {
@@ -642,6 +643,7 @@ define('io.ox/contacts/api', [
     * @return {deferred} returns exactyl one contact object
     */
     api.getByEmailaddress = function (address) {
+
         address = address || '';
 
         return fetchCache.get(address).then(function (data) {
@@ -655,21 +657,20 @@ define('io.ox/contacts/api', [
             }
             //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
             return http.PUT({
-                module: 'addressbooks',
+                module: 'contacts',
                 params: {
-                    action: 'advancedSearch',
+                    action: 'search',
                     admin: settings.get('showAdmin', false),
                     columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
                     timezone: 'UTC'
                 },
                 sort: 609,
                 data: {
-                    filter: [
-                        'or',
-                        ['=', { field: 'email1' }, address],
-                        ['=', { field: 'email2' }, address],
-                        ['=', { field: 'email3' }, address]
-                    ]
+                    'email1': address,
+                    'email2': address,
+                    'email3': address,
+                    'orSearch': true,
+                    'exactMatch': true
                 }
             })
             .then(function (data) {
@@ -686,7 +687,7 @@ define('io.ox/contacts/api', [
                     // favor contacts in global address book
                     data.sort(function (a, b) {
                         // work with strings and numbers
-                        return String(b.folder_id) === util.getGabId() ? +1 : -1;
+                        return String(b.folder_id) === '6' ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -974,7 +975,7 @@ define('io.ox/contacts/api', [
         // process all updates
         _(list).map(function (o) {
             return http.PUT({
-                module: 'addressbooks',
+                module: 'contacts',
                 params: {
                     action: action || 'update',
                     id: o.id,
@@ -1054,7 +1055,7 @@ define('io.ox/contacts/api', [
             }, options || {});
 
         return http.GET({
-            module: 'addressbooks',
+            module: 'contacts',
             params: params
         }).then(convertResponseToGregorian);
     };
@@ -1170,7 +1171,7 @@ define('io.ox/contacts/api', [
 
             // add query to cache
             add(query, http.GET({
-                module: 'addressbooks',
+                module: 'contacts',
                 params: {
                     action: 'autocomplete',
                     // we just look for the shortest word

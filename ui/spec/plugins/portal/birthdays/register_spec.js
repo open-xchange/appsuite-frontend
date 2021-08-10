@@ -56,7 +56,7 @@ define([
             var clock;
             beforeEach(function () {
                 clock = sinon.useFakeTimers({ now: 1483574400000, toFake: ['Date'] });
-                this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
+                this.server.respondWith('GET', /api\/addressbooks\?action=birthdays/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
@@ -90,7 +90,7 @@ define([
         });
         describe('with empty list of birtdays', function () {
             beforeEach(function () {
-                this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {
+                this.server.respondWith('GET', /api\/addressbooks\?action=birthdays/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '{ "timestamp":1368791630910,"data": []}');
                 });

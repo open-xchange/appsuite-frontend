@@ -29,6 +29,7 @@ define('io.ox/switchboard/extensions', [
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/views/actions/util',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/switchboard/views/conference-select',
     'io.ox/switchboard/views/zoom-meeting',
     'io.ox/switchboard/views/jitsi-meeting',
@@ -38,7 +39,7 @@ define('io.ox/switchboard/extensions', [
     'settings!io.ox/core',
     'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
+], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, contactsUtil, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
 
     'use strict';
 
@@ -104,7 +105,7 @@ define('io.ox/switchboard/extensions', [
                     return { presence: $el };
                 },
                 set: function (data, fields) {
-                    fields.presence.toggle(String(data.folder_id) === '6');
+                    fields.presence.toggle(String(data.folder_id) === contactsUtil.getGabId());
                     var icon = presence.getPresenceIcon(data.email1);
                     fields.presence.replaceWith(icon);
                     fields.presence = icon;

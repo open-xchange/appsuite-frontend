@@ -689,7 +689,7 @@ define('io.ox/contacts/edit/view-form', [
                         // call requires "draw" method
                         (draw[field] || drawDefault).call(node, options, baton.model, baton);
 
-                        if (baton.model.get('folder_id') === 6 && field === 'email1') {
+                        if ((String(baton.model.get('folder_id')) === util.getGabId(true) || String(baton.model.get('folder_id')) === util.getGabId()) && field === 'email1') {
                             node.find('input').prop('disabled', true);
                         }
                         if (id === 'userfields') {

@@ -166,7 +166,7 @@ define('io.ox/core/folder/actions/add', [
         if (!folder || !opt.module) return $.Deferred().reject();
 
         // only address book, calendar, and tasks do have a "public folder" section
-        var hasPublic = /^(contacts|event|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
+        var hasPublic = /^(addressbooks|contacts|event|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
 
         // resolves with created folder-id
         return $.when(hasPublic ? api.get('2') : undefined)

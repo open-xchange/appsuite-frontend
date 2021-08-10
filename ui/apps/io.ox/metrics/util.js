@@ -20,7 +20,7 @@
  *
  */
 
-define('io.ox/metrics/util', ['io.ox/core/folder/api'], function (folderAPI) {
+define('io.ox/metrics/util', ['io.ox/core/folder/api', 'io.ox/contacts/util'], function (folderAPI, contactsUtil) {
 
     'use strict';
 
@@ -272,7 +272,7 @@ define('io.ox/metrics/util', ['io.ox/core/folder/api'], function (folderAPI) {
 
         function getContent(data) {
             // contacts: gab special
-            if (data.module === 'contacts' && data.id === '6') return 'gab';
+            if (data.module === 'contacts' && data.id === contactsUtil.getGabId()) return 'gab';
             // virtual section folders
             var match = data.id.match(reSection)
             if (match) return 'section-' + match[2];

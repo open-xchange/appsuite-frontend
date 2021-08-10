@@ -873,7 +873,7 @@ define('io.ox/contacts/view-detail', [
             if (hideAddressBook()) return;
 
             // don't show folders path for folder 6 if global address book is disabled
-            if (String(id) === '6' && !capabilities.has('gab')) return;
+            if (String(id) === util.getGabId() && !capabilities.has('gab')) return;
 
             this.append(
                 $('<div class="clearfix">'),

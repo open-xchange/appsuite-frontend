@@ -24,11 +24,12 @@ define('io.ox/switchboard/wall', [
     'io.ox/switchboard/presence',
     'io.ox/switchboard/api',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
     'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (presence, api, contactsAPI, ext, actionsUtil, gt) {
+], function (presence, api, contactsAPI, contactsUtil, ext, actionsUtil, gt) {
 
     'use strict';
 
@@ -78,7 +79,7 @@ define('io.ox/switchboard/wall', [
             e.preventDefault();
             var cid = $(e.currentTarget).closest('.wall-message').data('cid');
             var model = this.collection.get(cid);
-            var data = { email1: model.get('from'), folder_id: '6' };
+            var data = { email1: model.get('from'), folder_id: contactsUtil.getGabId() };
             var baton = new ext.Baton({ data: [data] });
             actionsUtil.invoke('io.ox/switchboard/wall-user', baton);
         }

@@ -391,6 +391,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     // See bug #25300
     idMapping.user = $.extend({}, idMapping.contacts, idMapping.common, idMapping.user);
 
+    // new api, same fields
+    idMapping.addressbooks = idMapping.contacts;
+
     var that = {};
 
     var isLoss = function (status) {
