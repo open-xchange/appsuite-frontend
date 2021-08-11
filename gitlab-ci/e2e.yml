@@ -77,11 +77,11 @@ merge filter report and rerun:
     - run e2e tests
   services:
     - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-      alias: e2e-test.os.oxui.de
+      alias: e2e-test.os2.oxui.de
   variables:
     # e2e configuration
-    LAUNCH_URL: http://e2e-test.os.oxui.de:8337/appsuite/
-    PROVISIONING_URL: http://e2e-test.os.oxui.de:8337/
+    LAUNCH_URL: http://e2e-test.os2.oxui.de:8337/appsuite/
+    PROVISIONING_URL: http://e2e-test.os2.oxui.de:8337/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
@@ -91,7 +91,7 @@ merge filter report and rerun:
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
     # services configuration
-    SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
+    SERVER: https://appsuite.k3s.os2.oxui.de/appsuite/
     # gitlab config
     GIT_DEPTH: "10"
   script:
@@ -203,7 +203,7 @@ run single test:
   needs: []
   services:
     - name: $CI_REGISTRY_IMAGE:develop
-      alias: e2e-test.os.oxui.de
+      alias: e2e-test.os2.oxui.de
   variables:
     MIN_SUCCESS: 10
     MAX_RERUNS: 10
