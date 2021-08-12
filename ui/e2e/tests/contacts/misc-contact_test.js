@@ -59,17 +59,17 @@ Scenario('[C8817] - Send E-Mail to contact', function ({ I, mail, users, search,
     I.see(testrailID);
 });
 
-Scenario('Subscribe and unsubscribe shared address book', async function ({ I, users, contacts }) {
-
+Scenario('Subscribe and unsubscribe shared address book', async function ({ I, users, contacts, portal }) {
+    const capability = 'carddav';
     const coreSettings = { autoOpenNotification: false, showDesktopNotifications: false };
+    await users[0].hasConfig('com.openexchange.' + capability + '.enabled', true);
     await I.haveSetting({ 'io.ox/core': coreSettings });
     await I.haveSetting({ 'io.ox/core': coreSettings }, { user: users[1] });
-
-    //await users[1].hasConfig('com.openexchange.carddav.enabled', true);
 
     const defaultFolder = await I.grabDefaultFolder('contacts');
     const sharedAddressBookName = `${users[0].userdata.sur_name}, ${users[0].userdata.given_name}: New address book`;
     const busystate = locate('.modal modal-body.invisible');
+
 
     await I.haveFolder({
         title: 'New address book',
@@ -77,7 +77,10 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
         parent: defaultFolder
     });
 
+    I.say('user #1');
     I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+    //await hasCapability(I, capability);
     I.waitForText('My address books');
     I.retry(5).doubleClick('My address books');
 
@@ -97,7 +100,14 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     I.waitToHide('.share-permissions-dialog');
     I.logout();
 
-    I.say('After share');
+    I.say('user #2');
+    await users[1].hasConfig('com.openexchange.' + capability + '.enabled', true);
+    // workaround: set capability "properly" by start a different app first
+    I.login('app=io.ox/portal', { user: users[1] });
+    portal.waitForApp();
+    I.openApp('io.ox/contacts');
+    contacts.waitForApp();
+
     I.login('app=io.ox/contacts', { user: users[1] });
     contacts.waitForApp();
 
@@ -107,18 +117,15 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     I.click('Subscribe to shared address book');
     I.waitForText('Shared address books');
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
-    // TODO: enabled again once user can be provisioned with activated carddav capability
-    //I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
+    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find('.checkbox'));
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
-    // TODO: enabled again once user can be provisioned with activated carddav capability
-    // I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');
 
-    I.say('After save');
     I.waitForInvisible(locate('*').withText(sharedAddressBookName));
 
     I.click('Add new address book');
@@ -126,14 +133,12 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     I.waitForText('Shared address books');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
-    // TODO: enabled again once user can be provisioned with activated carddav capability
-    //I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find('.checkbox'));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="subscribed"]' }));
-    // TODO: enabled again once user can be provisioned with activated carddav capability
-    //I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
-    //I.click(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'label' }).withText('Sync via DAV'));
+    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'input[name="used_for_sync"]' }));
+    I.click(locate('li').withChild(locate('*').withText(sharedAddressBookName)).find({ css: 'label' }).withText('Sync via DAV'));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');
