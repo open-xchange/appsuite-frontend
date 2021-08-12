@@ -301,7 +301,8 @@ define('io.ox/onboarding/main', [
                             id: 'platform',
                             back: false,
                             next: false,
-                            disableMobileSupport: true
+                            disableMobileSupport: true,
+                            focusWatcher: false
                         })
                         .on('before:show', function () {
                             // draw list of available platforms
@@ -323,7 +324,8 @@ define('io.ox/onboarding/main', [
                         id: 'apps',
                         back: false,
                         next: false,
-                        disableMobileSupport: true
+                        disableMobileSupport: true,
+                        focusWatcher: false
                     })
                     .on('before:show', function () {
                         // draw list of apps for chosen platform
@@ -348,7 +350,8 @@ define('io.ox/onboarding/main', [
                         id: 'setup',
                         back: false,
                         next: false,
-                        disableMobileSupport: true
+                        disableMobileSupport: true,
+                        focusWatcher: false
                     })
                     .on('before:show', function () {
                         var self = this;

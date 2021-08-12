@@ -116,10 +116,6 @@ define('io.ox/core/tk/wizard', [
             hotspot.removeAll();
         });
 
-        // focus trap
-        $(document).on('click.wizard', '.wizard-overlay, .wizard-backdrop', function () {
-            $('.wizard-step:visible').find('button.btn-primary:first').focus();
-        });
         this.containerScaffold = _.device('smartphone') && !this.options.disableMobileSupport ?
         // special node for fullscreen wizards on smartphone
             $(
@@ -216,8 +212,6 @@ define('io.ox/core/tk/wizard', [
                 step.dispose();
             });
             this.container.remove().empty();
-            // unregister / clean up
-            $(document).off('click.wizard');
             this.steps = [];
             this.container = null;
             // done

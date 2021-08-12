@@ -25,6 +25,7 @@ define('io.ox/core/locale/meta', function () {
     'use strict';
 
     var locales = {
+        bg_BG: 'български (България)',
         ca_ES: 'Català (Espanya)',
         cs_CZ: 'Čeština (Česko)',
         da_DK: 'Dansk (Danmark)',
@@ -58,6 +59,7 @@ define('io.ox/core/locale/meta', function () {
         es_PE: 'Español (Perú)',
         es_PR: 'Español (Puerto Rico)',
         es_US: 'Español (United States)',
+        et_EE: 'eesti (Eesti)',
         fi_FI: 'Suomi (Suomi)',
         fr_FR: 'Français (France)',
         fr_CA: 'Français (Canada)',
@@ -84,6 +86,7 @@ define('io.ox/core/locale/meta', function () {
 
     // map locales to moment's locale
     var mapToMoment = {
+        bg_BG: 'bg',
         ca_ES: 'ca',
         cs_CZ: 'cs',
         da_DK: 'da',
@@ -117,6 +120,7 @@ define('io.ox/core/locale/meta', function () {
         es_PE: 'es-do',
         es_PR: 'es-do',
         es_US: 'es-us',
+        et_EE: 'et',
         fi_FI: 'fi',
         fr_FR: 'fr',
         fr_CA: 'fr-ca',
@@ -143,6 +147,7 @@ define('io.ox/core/locale/meta', function () {
 
     // used to locate correct date format files
     var mapToCLDRFiles = {
+        bg_BG: 'bg',
         ca_ES: 'ca',
         cs_CZ: 'cs',
         da_DK: 'da',
@@ -176,6 +181,7 @@ define('io.ox/core/locale/meta', function () {
         es_PE: 'es-PE',
         es_PR: 'es-PR',
         es_US: 'es-US',
+        et_EE: 'et',
         fi_FI: 'fi',
         fr_FR: 'fr',
         fr_CA: 'fr-CA',
@@ -320,7 +326,7 @@ define('io.ox/core/locale/meta', function () {
 
     // for "irregular" ids
     var defaultLocaleMappings = {
-        ca: 'ca_ES', cs: 'cs_CZ', da: 'da_DK', en: 'en_US', ja: 'ja_JP', no: 'nb_NO', nb: 'nb_NO', sv: 'sv_SE'
+        ca: 'ca_ES', cs: 'cs_CZ', da: 'da_DK', en: 'en_US', et: 'et_EE', ja: 'ja_JP', no: 'nb_NO', nb: 'nb_NO', sv: 'sv_SE'
     };
 
     function getDefaultLocale() {
@@ -373,6 +379,7 @@ define('io.ox/core/locale/meta', function () {
         AT: 'EUR',
         AU: 'AUD',
         BE: 'EUR',
+        BG: 'BGN',
         BO: 'BOB',
         BR: 'BRL',
         CA: 'CAD',
@@ -387,6 +394,7 @@ define('io.ox/core/locale/meta', function () {
         DO: 'DOP',
         EC: 'USD',
         ES: 'EUR',
+        ET: 'EUR',
         FI: 'EUR',
         FR: 'EUR',
         GB: 'GBP',
