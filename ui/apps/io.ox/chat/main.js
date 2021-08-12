@@ -506,6 +506,9 @@ define('io.ox/chat/main', [
         hideApp: function () {
             if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
             this.model.set('minimized', true);
+            // reset page title to current app
+            var app = ox.ui.App.getCurrentApp();
+            if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             return this;
         },
 
