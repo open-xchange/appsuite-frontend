@@ -100,7 +100,7 @@ define('io.ox/core/locale/meta', function () {
         en_DE: 'en-gb',
         en_IE: 'en-ie',
         en_NZ: 'en-nz',
-        en_SG: 'en-SG',
+        en_SG: 'en-sg',
         en_ZA: 'en-gb',
         es_ES: 'es',
         es_MX: 'es-do',
