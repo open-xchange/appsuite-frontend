@@ -29,19 +29,19 @@ define('io.ox/onboarding/clients/config', [
             return {
                 // stores
                 'macappstore': {
-                    name: gt('Mac App Store'),
+                    name: 'Mac App Store',
                     //#. %1$s: app store name
                     description: gt('Get the App from %1$s.', gt('Mac App Store')),
                     image: 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg'
                 },
                 'appstore': {
-                    name: gt('App Store'),
+                    name: 'App Store',
                     //#. %1$s: app store name
                     description: gt('Get the App from %1$s.', gt('App Store')),
                     image: 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg'
                 },
                 'playstore': {
-                    name: gt('Google Play'),
+                    name: 'Google Play',
                     //#. %1$s: app store name
                     description: gt('Get the App from %1$s', gt('Google Play')),
                     image: 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
