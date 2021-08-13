@@ -62,9 +62,7 @@ Scenario('[C45032] Edit Permissions at "My shares"', async function ({ I, users,
         I.dontSee('Guest', '.permissions-view');
         I.waitForElement({ xpath: '//div[contains(@class, "permission row")][1]' });
         I.waitForElement({ xpath: '//div[contains(@class, "permission row")][2]' });
-        I.waitForText('Author');
-        I.click('Author', '.share-pane');
-        I.clickDropdown('Viewer');
+        I.waitForText('Viewer');
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
 
@@ -152,8 +150,6 @@ Scenario('[C107063] Revoke Permissions at "My shares"', async function ({ I, use
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.dontSee('Guest', '.permissions-view');
         I.seeNumberOfElements('.permissions-view .permission.row', 2);
-        I.click('Author', '.share-pane');
-        I.clickDropdown('Viewer');
         dialogs.waitForVisible();
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');

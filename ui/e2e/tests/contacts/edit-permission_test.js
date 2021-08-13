@@ -48,6 +48,10 @@ Scenario('[C7365] Edit permission ', async ({ I, contacts, users, dialogs }) => 
     // #2 Open permission / sharing dialog for contacts folder and add internal user
     I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
+    I.waitForVisible('.permission-pre-selection .btn');
+    I.click('.permission-pre-selection .btn');
+    I.clickDropdown('Author');
+    I.waitForDetached('.dropdown.open');
     I.click('~Select contacts');
     I.waitForElement('.list-view.address-picker li.list-item');
     I.fillField('Search', users[1].userdata.name);

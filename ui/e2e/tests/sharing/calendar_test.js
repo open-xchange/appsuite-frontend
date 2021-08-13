@@ -59,9 +59,7 @@ Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sha
         I.openFolderMenu(`${users[0].get('sur_name')}, ${users[0].get('given_name')}`);
         I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
-        I.waitForText('Author', 5, '.permission-pre-selection');
-        I.click('.permission-pre-selection .btn');
-        I.clickDropdown('Viewer');
+        I.waitForText('Viewer', 5, '.permission-pre-selection');
         I.click('~Select contacts');
         I.waitForElement('.modal .list-view.address-picker li.list-item');
         I.fillField('Search', users[1].get('name'));

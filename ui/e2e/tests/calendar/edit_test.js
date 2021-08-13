@@ -235,7 +235,7 @@ Scenario('[C7464] Change appointment in shared folder as guest', async ({ I, use
     I.dontSeeElement('.io-ox-calendar-edit-window');
 });
 
-Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, users, calendar }) => {
+Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, users, calendar, dialogs }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -249,21 +249,23 @@ Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, user
     // TODO should be part of the haveFolder helper
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    const busystate = locate('.modal modal-body.invisible');
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Share / Permissions');
+    I.clickDropdown('Share / Permissions');
+    dialogs.waitForVisible();
     I.waitForText('Permissions for calendar "New calendar"');
-    I.waitForDetached(busystate);
-    I.wait(0.5);
+    I.waitForVisible('.permission-pre-selection .btn');
+    I.click('.permission-pre-selection .btn');
+    I.clickDropdown('Author');
+    I.waitForDetached('.dropdown.open');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.share-permissions-dialog');
 
     I.logout();
@@ -425,10 +427,9 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author', async ({ I, users, calendar }) => {
+Scenario('[C7467] Delete recurring appointment in shared folder as author', async ({ I, users, calendar, dialogs }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
-    const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
-    const busystate = locate('.modal modal-body.invisible');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     await I.haveAppointment({
         folder,
         summary: 'Testappointment',
@@ -445,15 +446,18 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Share / Permissions');
+    I.clickDropdown('Share / Permissions');
+    dialogs.waitForVisible();
     I.waitForText('Permissions for calendar "New calendar"');
-    I.waitForDetached(busystate);
-    I.wait(0.5);
+    I.waitForVisible('.permission-pre-selection .btn');
+    I.click('.permission-pre-selection .btn');
+    I.clickDropdown('Author');
+    I.waitForDetached('.dropdown.open');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.share-permissions-dialog');
 
     I.logout();
