@@ -526,7 +526,7 @@ define('io.ox/onboarding/views', [
                         $('<div class="list-description">').text(this.model.get('title')),
                         showUpsell
                             ? $('<div class="premium-container icon-next">').text(gt('Premium'))
-                            : $.icon('fa-chevron-right', '', 'icon-next')
+                            : $('<i class="icon-next fa fa-chevron-right">')
                     ));
             return this;
         }
