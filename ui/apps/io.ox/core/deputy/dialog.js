@@ -23,9 +23,10 @@
 define('io.ox/core/deputy/dialog', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/views/disposable',
+    'io.ox/participants/add',
     'gettext!io.ox/core',
     'less!io.ox/core/deputy/style'
-], function (ModalDialog, DisposableView, gt) {
+], function (ModalDialog, DisposableView, AddParticipantView, gt) {
 
     'use strict';
 
@@ -36,8 +37,10 @@ define('io.ox/core/deputy/dialog', [
         initialize: function (options) {
             options = options || {};
             this.collection = new Backbone.Collection(options.deputies);
+            this.collection.on('add reset remove', this.render.bind(this));
         },
         render: function () {
+            console.log('render', this);
             this.$el.empty();
 
             if (this.collection.length === 0) this.$el.append($('<div class="empty-message">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
@@ -52,7 +55,15 @@ define('io.ox/core/deputy/dialog', [
         })
         .build(function () {
             this.deputyListView = new deputyListView();
-            this.$body.append(this.deputyListView.render().$el);
+            this.$body.append(new AddParticipantView({
+                apiOptions: {
+                    users: true
+                },
+                placeholder: gt('Add people'),
+                collection: this.deputyListView.collection,
+                scrollIntoView: true
+            }).render().$el,
+            this.deputyListView.render().$el);
         })
         .addButton({ className: 'btn-primary', label: gt('close'), action: 'cancel' })
         .open();
