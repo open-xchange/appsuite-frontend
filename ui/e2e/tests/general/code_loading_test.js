@@ -61,3 +61,29 @@ Scenario('[OXUIB-645] XSS using script code as module at app loader', async func
     I.refreshPage();
     drive.waitForApp();
 });
+
+Scenario('[OXUIB-872] XSS using script code as module at app loader', async function ({ I, drive }) {
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+    I.clickToolbar('New');
+    I.clickDropdown('Note');
+    I.waitForElement('.io-ox-editor .title');
+    I.fillField('.io-ox-editor .title', 'OXUIB-872.js');
+    I.fillField('.io-ox-editor .content', 'document.write("XSS");');
+    I.click('Save');
+    I.wait(1);
+    I.click('Close');
+    I.click(locate('.list-item').withText('OXUIB-872.js'));
+    drive.shareItem(true);
+    I.selectOption('Who can access this file?', 'Anyone with the link and invited people');
+    I.waitForNetworkTraffic();
+    I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
+    let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
+    url = new URL(url);
+    I.click('Share', '.modal');
+    I.waitToHide('.modal');
+    const module = `${new Array(60).join('/%252e.')}${url.pathname}?dl=1&cut=`;
+    I.amOnPage('#!!&app=io.ox/files:foo,' + module);
+    I.refreshPage();
+    drive.waitForApp();
+});

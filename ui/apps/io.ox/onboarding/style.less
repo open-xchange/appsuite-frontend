@@ -159,7 +159,7 @@
             .content-container {
                 display: flex;
                 flex-direction: column;
-                flex: 1 1 auto;
+                flex: 1 0 auto;
                 //justify-content: center;
 
                 .description {
@@ -189,6 +189,18 @@
                         border-bottom: 2px solid @border-color;
 
                         .list-btn {
+                            &.disabled {
+                                color: #ccc;
+                                cursor: default;
+
+                                .premium-container {
+                                    background-color: fade(@brand-primary, 80%);
+                                    color: @white;
+                                    border-radius: 12px;
+                                    line-height: 32px;
+                                    padding: 0 16px;
+                                }
+                            }
                             &:focus {
                                 outline: 2px solid #000;
                             }
@@ -257,6 +269,7 @@
                 //DownloadView
                 .download {
                     align-self: center;
+                    flex: 0 0 auto;
                     font-size: 18px;
                     margin: 10% 0 10% 0;
                     padding: 16px;
@@ -285,7 +298,7 @@
                             background-image: url(@onboarding-mailapp-googleplay);
                         }
                         &.driveapp.playstore {
-                            background-image: url(@onboarding-mailapp-appstore);
+                            background-image: url(@onboarding-driveapp-googleplay);
                         }
                         &.mailapp.appstore {
                             background-image: url(@onboarding-mailapp-appstore);

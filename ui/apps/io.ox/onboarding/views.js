@@ -25,8 +25,9 @@ define('io.ox/onboarding/views', [
     'io.ox/core/http',
     'io.ox/core/capabilities',
     'io.ox/onboarding/util',
+    'io.ox/core/upsell',
     'gettext!io.ox/core/onboarding'
-], function (DisposableView, http, capabilities, util, gt) {
+], function (DisposableView, http, capabilities, util, upsell, gt) {
 
     function createQr(url) {
         return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
@@ -459,12 +460,24 @@ define('io.ox/onboarding/views', [
         initialize: function () {
             this.listenTo(this.model, 'change', this.render);
         },
+
         events: {
             'click .list-btn': 'selectItem'
         },
+
         selectItem: function (e) {
-            var target = $(e.currentTarget);
-            this.model.set('app', target.attr('data-app'));
+            var target = $(e.currentTarget),
+                appName = target.attr('data-app'),
+                appModel = util.appList.find(function (m) {
+                    return m.get('platform') === this.model.get('platform') && m.get('app') === appName;
+                }.bind(this));
+
+            if (appModel && !upsell.has(appModel.get('cap'))) {
+                this.model.trigger('scenario:upsell', target);
+                return;
+            }
+
+            this.model.set('app', appName);
             this.model.set('platform', target.attr('data-platform'));
         },
 
@@ -483,7 +496,7 @@ define('io.ox/onboarding/views', [
                 // create List items from selection
                 list
                 .filter(function (model) {
-                    return self.model.get('platform') === undefined || self.model.get('platform') === model.get('platform') && capabilities.has(model.get('cap'));
+                    return self.model.get('platform') === undefined || self.model.get('platform') === model.get('platform') && (capabilities.has(model.get('cap')) || upsell.enabled(model.get('cap')));
                 })
                 .map(function (model) {
                     var view = new ListItemView({ model: model });
@@ -498,16 +511,22 @@ define('io.ox/onboarding/views', [
         className: 'list-item',
 
         render: function () {
+            var cap = this.model.get('cap'),
+                showUpsell = cap && upsell.enabled(cap) && !upsell.has(cap);
+
             this.$el
                 .append(
                     $('<button type="button" class="list-btn">')
                     .addClass(this.model.get('data'))
+                    .addClass(showUpsell ? 'disabled ' : '')
                     .attr('data-platform', this.model.get('platform'))
                     .attr('data-app', this.model.get('app'))
                     .append(
                         $('<i class="icon-btn fa">').addClass(this.model.get('icon')),
                         $('<div class="list-description">').text(this.model.get('title')),
-                        $('<i class="icon-next fa fa-chevron-right">')
+                        showUpsell
+                            ? $('<div class="premium-container icon-next">').text(gt('Premium'))
+                            : $('<i class="icon-next fa fa-chevron-right">')
                     ));
             return this;
         }

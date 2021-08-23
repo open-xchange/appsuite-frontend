@@ -131,7 +131,7 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
     I.click('.item', '.widget[aria-label="My latest files"]');
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
-    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name span');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 
@@ -357,7 +357,7 @@ Scenario('[C7480] Add recently changed files widget', async function ({ I, users
     I.click('.item', '.widget[aria-label="My latest files"]');
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
-    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name span');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 });

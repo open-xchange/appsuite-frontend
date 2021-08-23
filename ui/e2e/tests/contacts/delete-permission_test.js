@@ -71,7 +71,7 @@ Scenario('[C7368] Delete permission ', async ({ I, contacts, users, dialogs }) =
     I.openFolderMenu(`${sharedUserName}: Contacts`);
     I.clickDropdown('Share / Permissions');
     dialogs.waitForVisible();
-    I.waitForText('Author', locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, Internal user.` }));
+    I.waitForText('Viewer', 10, locate('.permission.row').withAttr({ 'aria-label': `${users[1].get('sur_name')}, ${users[1].get('given_name')}, Internal user.` }));
     dialogs.clickButton('Close');
     I.waitForDetached('.modal-dialog');
     I.logout();

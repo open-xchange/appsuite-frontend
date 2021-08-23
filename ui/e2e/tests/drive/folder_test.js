@@ -112,9 +112,7 @@ Scenario('[C8377] Invite a person', async ({ I, users, drive, dialogs }) => {
         I.clickToolbar('Share');
         dialogs.waitForVisible();
         I.waitForText('Share folder');
-        I.waitForText('Author', 5, '.permission-pre-selection');
-        I.click('.permission-pre-selection .btn');
-        I.clickDropdown('Viewer');
+        I.waitForText('Viewer', 5, '.permission-pre-selection');
         I.click('~Select contacts');
         dialogs.waitForVisible();
         I.waitForElement('.modal-body .list-view.address-picker li.list-item'); // check if list items are loaded
@@ -236,7 +234,7 @@ Scenario('[C8378] Invite a group', async ({ I, users, drive, dialogs }) => {
         I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.see('Author', '.permissions-view .row .role');
+        I.see('Viewer', '.permissions-view .row .role');
         dialogs.clickButton('Close');
         I.waitForDetached('.modal-dialog');
     }
@@ -395,7 +393,7 @@ Scenario('[C8386] Uninvite a group', async ({ I, users, drive, dialogs }) => {
         I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
-        I.see('Author', '.permissions-view .row .role');
+        I.see('Viewer', '.permissions-view .row .role');
         dialogs.clickButton('Close');
         I.waitForDetached('.modal-dialog');
     });

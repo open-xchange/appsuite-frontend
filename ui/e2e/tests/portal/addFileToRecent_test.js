@@ -50,7 +50,7 @@ Scenario('[C7481] Add a file', async ({ I, users, portal }) => {
     //Open file in viewer
     I.waitForElement('.io-ox-viewer');
     I.waitForText('testdocument.odt', 5, '.io-ox-viewer .filename-label');
-    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name span');
+    I.waitForText('testdocument.odt', 5, '.io-ox-viewer .viewer-sidebar-pane .file-name');
     I.click('.io-ox-viewer [data-action="io.ox/core/viewer/actions/toolbar/close"]');
     I.waitForDetached('.io-ox-viewer');
 });
