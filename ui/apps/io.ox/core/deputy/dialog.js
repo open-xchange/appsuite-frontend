@@ -24,16 +24,22 @@ define('io.ox/core/deputy/dialog', [
     'io.ox/backbone/views/modal',
     'io.ox/backbone/views/disposable',
     'io.ox/participants/add',
+    'io.ox/contacts/util',
     'gettext!io.ox/core',
     'less!io.ox/core/deputy/style'
-], function (ModalDialog, DisposableView, AddParticipantView, gt) {
+], function (ModalDialog, DisposableView, AddParticipantView, util, gt) {
 
     'use strict';
 
     var deputyListView = DisposableView.extend({
 
+        events: {
+            'click .remove': 'removeDeputy'
+        },
+
         tagName: 'ul',
         className: 'deputy-list-view list-unstyled',
+
         initialize: function (options) {
             options = options || {};
             this.collection = new Backbone.Collection(options.deputies);
@@ -44,7 +50,38 @@ define('io.ox/core/deputy/dialog', [
             this.$el.empty();
 
             if (this.collection.length === 0) this.$el.append($('<div class="empty-message">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
+
+            this.collection.each(this.renderDeputy.bind(this));
             return this;
+        },
+        renderDeputy: function (deputy) {
+            var contact = deputy,
+                name = util.getFullName(contact.attributes, false),
+                initials = util.getInitials(contact.attributes),
+                initialsColor = util.getInitialsColor(initials),
+                contactPicture = contact.get('image1_url') ? $('<i class="contact-picture" aria-hidden="true">').css('background-image', 'url(' + util.getImage(contact.attributes) + ')')
+                    : $('<div class="contact-picture initials" aria-hidden="true">').text(initials).addClass(initialsColor);
+
+
+            this.$el.append(
+                $('<li>').attr('data-id', contact.get('id')).append(
+                    $('<div class="flex-item">').append(
+                        contactPicture,
+                        $('<div class="data-container">').append(
+                            $('<div class="name">').text(name),
+                            $('<div class="permissions">').text('darf alles')
+                        )
+                    ),
+                    $('<div class="flex-item">').append(
+                        $('<button class="btn btn-link edit">').text(gt('Edit')),
+                        $('<button class="btn btn-link remove">').attr('data-id', deputy.get('id')).append($.icon('fa-times', gt('Remove')))
+                    )
+                )
+            );
+        },
+        removeDeputy: function (e) {
+            e.stopPropagation();
+            this.collection.remove(e.currentTarget.getAttribute('data-id'));
         }
     });
 
