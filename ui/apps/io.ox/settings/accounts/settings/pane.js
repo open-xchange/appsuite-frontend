@@ -174,39 +174,6 @@ define('io.ox/settings/accounts/settings/pane', [
                     )
                 );
             }
-        },
-        //
-        // Password Recovery
-        //
-        {
-            id: 'recovery',
-            index: INDEX += 100,
-            render: function () {
-
-                if (this.collection.length <= 1) return;
-
-                this.$el.append(
-                    $('<h2 class="sr-only">').text(gt('Password recovery')),
-                    $('<a href="#" role="button" class="hint">')
-                        //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-                        //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-                        .text(gt('Show information about account recovery'))
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).hide().next().show();
-                        }),
-                    $('<div class="hint">').hide().append(
-                        $('<p>').text(
-                            gt('For security reasons, all credentials are encrypted with your primary account password. ' +
-                                'If you change your primary password, your external accounts might stop working. In this case, ' +
-                                'you can use your old password to recover all account passwords.')
-                        ),
-                        $('<button type="button" class="btn btn-primary" data-action="recover">')
-                            .text(gt('Recover passwords'))
-                            .on('click', this.openRecoveryDialog)
-                    )
-                );
-            }
         }
     );
 });
