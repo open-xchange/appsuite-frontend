@@ -25,28 +25,36 @@ define('io.ox/core/deputy/dialog', [
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views',
     'io.ox/participants/add',
+    'io.ox/core/folder/api',
     'io.ox/contacts/util',
     'io.ox/core/api/user',
     'gettext!io.ox/core',
     'less!io.ox/core/deputy/style'
-], function (ModalDialog, DisposableView, mini, AddParticipantView, util, userApi, gt) {
+], function (ModalDialog, DisposableView, mini, AddParticipantView, folderApi, util, userApi, gt) {
 
     'use strict';
 
+    var permissions = {
+        none: 0,
+        viewer: 257,
+        editor: 33025,
+        author: 4227332
+    };
+
     // permissions given to newly added deputies
     var defaultPermissions = {
-            'sendOnBehalf': true,
+            'sendOnBehalf': false,
             'modulePermissions': {
                 'mail': {
-                    'permission': 7564567657,
+                    'permission': permissions.viewer,
                     'folderIds': [
-                        'default0/INBOX'
+                        folderApi.getDefaultFolder('mail')
                     ]
                 },
                 'calendar': {
-                    'permission': 3452345345,
+                    'permission': permissions.viewer,
                     'folderIds': [
-                        '32'
+                        folderApi.getDefaultFolder('calendar')
                     ]
                 }
             }
@@ -57,19 +65,44 @@ define('io.ox/core/deputy/dialog', [
             'sendOnBehalf': true,
             'modulePermissions': {
                 'mail': {
-                    'permission': 7564567657,
+                    'permission': permissions.author,
                     'folderIds': [
-                        'default0/INBOX'
+                        folderApi.getDefaultFolder('mail')
                     ]
                 },
                 'calendar': {
-                    'permission': 3452345345,
+                    'permission': permissions.viewer,
                     'folderIds': [
-                        '32'
+                        folderApi.getDefaultFolder('calendar')
                     ]
                 }
             }
         }];
+
+    // some translation helpers
+    var moduleMap = {
+            mail: gt('Inbox'),
+            calendar: gt('Calendar')
+        },
+        permissionMap = {
+            0: gt('None'),
+            257: gt('Viewer'),
+            33025: gt('Editor'),
+            4227332: gt('Author')
+        };
+
+
+    function getPermissionText(model) {
+        var parts = _(model.get('modulePermissions')).map(function (module, key) {
+            //#. String that is used to describe permissions
+            //#. %1$s name of module (mail, calendar etc)
+            //#. %2$s the granted role (author, editor, viewer, none)
+            return gt('%1$s (%2$s)', moduleMap[key], permissionMap[module.permission]);
+        });
+
+        if (model.get('sendOnBehalf')) parts.push(gt('Allowed to send mails on your behalf'));
+        return parts.join(', ');
+    }
 
     function openEditDialog(model) {
         var prevValues = {
@@ -85,13 +118,24 @@ define('io.ox/core/deputy/dialog', [
             this.$body.append(
                 $('<div>').text(gt('The deputy has the following permissions')),
                 $('<div class="select-container">').append(
-                    $('<label for="inbox-deputy-selector">').text(gt('Inbox')),
-                    new mini.SelectView({ id: 'inbox-deputy-selector', name: 'inbox-role', model: model, list: [] }).render().$el
+                    $('<label for="inbox-deputy-selector">').text(moduleMap.mail),
+                    new mini.SelectView({ id: 'inbox-deputy-selector', name: 'inbox-role', model: model, list: [
+                        { value: permissions.none, label: gt('None') },
+                        { value: permissions.viewer, label: gt('Viewer (read emails)') },
+                        // do these roles make any sense? Is this only for drafts?
+                        { value: permissions.editor, label: gt('Editor (create/edit emails)') },
+                        { value: permissions.author, label: gt('Author (create/edit/delete emails)') }
+                    ] }).render().$el
                 ),
                 new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalf', label: gt('Deputy can send Emails on your behalf'), model: model }).render().$el,
                 $('<div class="select-container">').append(
-                    $('<label for="inbox-deputy-selector">').text(gt('Calendar')),
-                    new mini.SelectView({ id: 'calendar-deputy-selector', name: 'calendar-role', model: model, list: [] }).render().$el
+                    $('<label for="inbox-deputy-selector">').text(moduleMap.calendar),
+                    new mini.SelectView({ id: 'calendar-deputy-selector', name: 'calendar-role', model: model, list: [
+                        { value: permissions.none, label: gt('None') },
+                        { value: permissions.viewer, label: gt('Viewer (view appointments)') },
+                        { value: permissions.editor, label: gt('Editor (create/edit appointments)') },
+                        { value: permissions.author, label: gt('Author (create/edit/delete appointments)') }
+                    ] }).render().$el
                 )
             ).addClass('deputy-permissions-dialog');
         })
@@ -150,7 +194,7 @@ define('io.ox/core/deputy/dialog', [
                         userPicture,
                         $('<div class="data-container">').append(
                             $('<div class="name">').text(name),
-                            $('<div class="permissions">').text('darf alles')
+                            $('<div class="permissions">').text(getPermissionText(deputy))
                         )
                     ),
                     $('<div class="flex-item">').append(
@@ -175,7 +219,8 @@ define('io.ox/core/deputy/dialog', [
     function openDialog() {
         new ModalDialog({
             point: 'io.ox/core/deputy/dialog',
-            title: gt('Manage deputies')
+            title: gt('Manage deputies'),
+            width: 640
         })
         .build(function () {
             var self = this,
