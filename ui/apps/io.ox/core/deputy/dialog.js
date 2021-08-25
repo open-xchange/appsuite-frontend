@@ -27,22 +27,22 @@ define('io.ox/core/deputy/dialog', [
     'io.ox/participants/add',
     'io.ox/core/folder/api',
     'io.ox/contacts/util',
+    'io.ox/core/deputy/api',
     'io.ox/core/api/user',
     'gettext!io.ox/core',
     'less!io.ox/core/deputy/style'
-], function (ModalDialog, DisposableView, mini, AddParticipantView, folderApi, util, userApi, gt) {
+], function (ModalDialog, DisposableView, mini, AddParticipantView, folderApi, util, api, userApi, gt) {
 
     'use strict';
 
     var permissions = {
-        none: 0,
-        viewer: 257,
-        editor: 33025,
-        author: 4227332
-    };
-
-    // permissions given to newly added deputies
-    var defaultPermissions = {
+            none: 0,
+            viewer: 257,
+            editor: 33025,
+            author: 4227332
+        },
+        // permissions given to newly added deputies
+        defaultPermissions = {
             'sendOnBehalf': false,
             'modulePermissions': {
                 'mail': {
@@ -59,28 +59,8 @@ define('io.ox/core/deputy/dialog', [
                 }
             }
         },
-        mockdata =  [{
-            'deputyId': 'dc5b3fbbee434035a94a7c949721cb77',
-            'user': 395,
-            'sendOnBehalf': true,
-            'modulePermissions': {
-                'mail': {
-                    'permission': permissions.author,
-                    'folderIds': [
-                        folderApi.getDefaultFolder('mail')
-                    ]
-                },
-                'calendar': {
-                    'permission': permissions.viewer,
-                    'folderIds': [
-                        folderApi.getDefaultFolder('calendar')
-                    ]
-                }
-            }
-        }];
-
-    // some translation helpers
-    var moduleMap = {
+        // some translation helpers
+        moduleMap = {
             mail: gt('Inbox'),
             calendar: gt('Calendar')
         },
@@ -100,7 +80,7 @@ define('io.ox/core/deputy/dialog', [
             return gt('%1$s (%2$s)', moduleMap[key], permissionMap[module.permission]);
         });
 
-        if (model.get('sendOnBehalf')) parts.push(gt('Allowed to send mails on your behalf'));
+        if (model.get('sendOnBehalf')) parts.push(gt('Allowed to send emails on your behalf'));
         return parts.join(', ');
     }
 
@@ -115,11 +95,27 @@ define('io.ox/core/deputy/dialog', [
             title: gt('Deputy: %1$s', util.getFullName(model.get('userData').attributes, false))
         })
         .build(function () {
+            // temp models for the selectboxes since the cannot work with the nested attributes directly
+            var calendarModel = new Backbone.Model({ permission: model.get('modulePermissions').calendar.permission }),
+                mailModel = new Backbone.Model({ permission: model.get('modulePermissions').mail.permission });
+
+            // sync to main model
+            mailModel.on('change:permission', function (obj, value) {
+                var permissions = model.get('modulePermissions');
+                permissions.mail.permission = value;
+                model.set('modulePermissions', permissions);
+            });
+            calendarModel.on('change:permission', function (obj, value) {
+                var permissions = model.get('modulePermissions');
+                permissions.calendar.permission = value;
+                model.set('modulePermissions', permissions);
+            });
+
             this.$body.append(
                 $('<div>').text(gt('The deputy has the following permissions')),
                 $('<div class="select-container">').append(
                     $('<label for="inbox-deputy-selector">').text(moduleMap.mail),
-                    new mini.SelectView({ id: 'inbox-deputy-selector', name: 'inbox-role', model: model, list: [
+                    new mini.SelectView({ id: 'inbox-deputy-selector', name: 'permission', model: mailModel, list: [
                         { value: permissions.none, label: gt('None') },
                         { value: permissions.viewer, label: gt('Viewer (read emails)') },
                         // do these roles make any sense? Is this only for drafts?
@@ -127,10 +123,10 @@ define('io.ox/core/deputy/dialog', [
                         { value: permissions.author, label: gt('Author (create/edit/delete emails)') }
                     ] }).render().$el
                 ),
-                new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalf', label: gt('Deputy can send Emails on your behalf'), model: model }).render().$el,
+                new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
                 $('<div class="select-container">').append(
                     $('<label for="inbox-deputy-selector">').text(moduleMap.calendar),
-                    new mini.SelectView({ id: 'calendar-deputy-selector', name: 'calendar-role', model: model, list: [
+                    new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: calendarModel, list: [
                         { value: permissions.none, label: gt('None') },
                         { value: permissions.viewer, label: gt('Viewer (view appointments)') },
                         { value: permissions.editor, label: gt('Editor (create/edit appointments)') },
@@ -150,7 +146,15 @@ define('io.ox/core/deputy/dialog', [
             model.set(prevValues);
         })
         .on('save', function () {
-            console.log('do totaly funky api stuff');
+            // triggers redraw of the list. Listeners on each model change would redraw too often
+            model.collection.trigger('reset');
+            if (model.get('deputyId') === undefined) {
+                api.create(model).then(function (id) {
+                    model.set('deputyId', id);
+                });
+                return;
+            }
+            api.update(model);
         })
         .open();
     }
@@ -171,7 +175,6 @@ define('io.ox/core/deputy/dialog', [
             this.collection.on('add reset remove', this.render.bind(this));
         },
         render: function () {
-            console.log('render', this);
             this.$el.empty();
 
             if (this.collection.length === 0) this.$el.append($('<div class="empty-message">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
@@ -206,7 +209,10 @@ define('io.ox/core/deputy/dialog', [
         },
         removeDeputy: function (e) {
             e.stopPropagation();
-            this.collection.remove(e.currentTarget.getAttribute('data-cid'));
+            var model = this.collection.get(e.currentTarget.getAttribute('data-cid'));
+            if (!model) return;
+            api.remove(model);
+            this.collection.remove(model);
         },
         showPermissions: function (e) {
             var model = this.collection.get(e.currentTarget.getAttribute('data-cid'));
@@ -228,17 +234,15 @@ define('io.ox/core/deputy/dialog', [
                 userCollection = new Backbone.Collection();
 
             this.$body.busy();
-            $.when(mockdata).then(function (deputies) {
+            api.getAll().then(function (deputies) {
                 var defs = _(deputies).map(function (deputy) {
                     return userApi.get({ id: deputy.user }).then(function (data) {
                         userCollection.add(data);
                         deputy.userData = userCollection.get(data);
-                        console.log('userdata added');
                     });
                 });
 
                 $.when.apply($, defs).then(function () {
-                    console.log('draw');
                     self.$body.idle();
                     // since this is async modal dialog may think the body is empty and adds this class
                     self.$el.removeClass('compact');
@@ -250,10 +254,13 @@ define('io.ox/core/deputy/dialog', [
                             },
                             placeholder: gt('Add people'),
                             collection: userCollection,
-                            scrollIntoView: true
+                            scrollIntoView: true,
+                            useGABOnly: true
                         }).render().$el,
                         self.deputyListView.render().$el
                     );
+
+                    self.$body.find('input.add-participant').focus();
 
                     userCollection.on('add', function (user) {
                         var deputy = _.extend({}, defaultPermissions, { user: user.get('id'), userData: user }),
