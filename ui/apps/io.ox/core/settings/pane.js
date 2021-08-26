@@ -298,18 +298,15 @@ define('io.ox/core/settings/pane', [
                     );
                 }
 
-                if ($group.children().length) this.$el.append($group);
-            }
-        },
-
-        {
-            id: 'deputy-function',
-            render: function () {
-                this.$el.append($('<div class="form-group buttons">').append(
-                    $('<button type="button" class="btn btn-default">')
+                if (capabilities.has('deputy')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
                         .text(gt('Manage deputies'))
                         .on('click', deputyDialog.open)
-                ));
+                    );
+                }
+
+                if ($group.children().length) this.$el.append($group);
             }
         }
     );

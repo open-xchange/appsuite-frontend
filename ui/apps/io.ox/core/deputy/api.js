@@ -28,6 +28,24 @@ define('io.ox/core/deputy/api', [
 
     var mockdata = [{
         'deputyId': 'dc5b3fbbee434035a94a7c949721cb77',
+        'user': 22,
+        'sendOnBehalf': true,
+        'modulePermissions': {
+            'mail': {
+                'permission': 4227332,
+                'folderIds': [
+                    123
+                ]
+            },
+            'calendar': {
+                'permission': 257,
+                'folderIds': [
+                    1337
+                ]
+            }
+        }
+    }, {
+        'deputyId': 'dc5b3fbbee434035a94a7c949721cb78',
         'user': 395,
         'sendOnBehalf': true,
         'modulePermissions': {

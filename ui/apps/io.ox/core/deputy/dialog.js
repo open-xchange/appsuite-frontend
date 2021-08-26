@@ -30,8 +30,9 @@ define('io.ox/core/deputy/dialog', [
     'io.ox/core/deputy/api',
     'io.ox/core/api/user',
     'gettext!io.ox/core',
+    'io.ox/core/yell',
     'less!io.ox/core/deputy/style'
-], function (ModalDialog, DisposableView, mini, AddParticipantView, folderApi, util, api, userApi, gt) {
+], function (ModalDialog, DisposableView, mini, AddParticipantView, folderApi, util, api, userApi, gt, yell) {
 
     'use strict';
 
@@ -80,7 +81,7 @@ define('io.ox/core/deputy/dialog', [
             return gt('%1$s (%2$s)', moduleMap[key], permissionMap[module.permission]);
         });
 
-        if (model.get('sendOnBehalf')) parts.push(gt('Allowed to send emails on your behalf'));
+        if (model.get('sendOnBehalf')) parts.unshift(gt('Allowed to send emails on your behalf'));
         return parts.join(', ');
     }
 
@@ -135,6 +136,7 @@ define('io.ox/core/deputy/dialog', [
                 )
             ).addClass('deputy-permissions-dialog');
         })
+        .addButton({ className: 'btn-default pull-left', label: gt('Remove'), action: 'remove' })
         .addCancelButton()
         .addButton({ className: 'btn-primary', label: gt('save'), action: 'save' })
         .on('cancel', function () {
@@ -155,6 +157,31 @@ define('io.ox/core/deputy/dialog', [
                 return;
             }
             api.update(model);
+        })
+        .on('remove', function () {
+            openConfirmRemoveDialog(model);
+        })
+        .open();
+    }
+
+    function openConfirmRemoveDialog(model) {
+
+        new ModalDialog({
+            //#. %1$s name of the deputy
+            title: gt('Remove deputy %1$s', util.getFullName(model.get('userData').attributes, false))
+        })
+        .build(function () {
+
+            this.$body.append(
+                //#. %1$s name of the deputy
+                $('<div>').text(gt('Do you want to remove %1$s from your deputy list', util.getFullName(model.get('userData').attributes, false)))
+            );
+        })
+        .addCancelButton()
+        .addButton({ className: 'btn-primary', label: gt('Remove'), action: 'remove' })
+        .on('remove', function () {
+            api.remove(model);
+            model.collection.remove(model);
         })
         .open();
     }
@@ -184,7 +211,7 @@ define('io.ox/core/deputy/dialog', [
         },
         renderDeputy: function (deputy) {
             var user = deputy.get('userData'),
-                name = util.getFullName(user.attributes, false),
+                name = util.getFullName(user.attributes, true),
                 initials = util.getInitials(user.attributes),
                 initialsColor = util.getInitialsColor(initials),
                 userPicture = user.get('image1_url') ? $('<i class="user-picture" aria-hidden="true">').css('background-image', 'url(' + util.getImage(user.attributes) + ')')
@@ -196,13 +223,13 @@ define('io.ox/core/deputy/dialog', [
                     $('<div class="flex-item">').append(
                         userPicture,
                         $('<div class="data-container">').append(
-                            $('<div class="name">').text(name),
+                            $('<div class="name">').append(name),
                             $('<div class="permissions">').text(getPermissionText(deputy))
                         )
                     ),
                     $('<div class="flex-item">').append(
                         $('<button class="btn btn-link edit">').attr('data-cid', deputy.cid).text(gt('Edit')),
-                        $('<button class="btn btn-link remove">').attr('data-cid', deputy.cid).append($.icon('fa-times', gt('Remove')))
+                        $('<button class="btn btn-link remove">').attr('data-cid', deputy.cid).append($.icon('fa-trash', gt('Remove')))
                     )
                 )
             );
@@ -211,14 +238,21 @@ define('io.ox/core/deputy/dialog', [
             e.stopPropagation();
             var model = this.collection.get(e.currentTarget.getAttribute('data-cid'));
             if (!model) return;
-            api.remove(model);
-            this.collection.remove(model);
+            openConfirmRemoveDialog(model);
         },
         showPermissions: function (e) {
             var model = this.collection.get(e.currentTarget.getAttribute('data-cid'));
             if (!model) return;
 
             openEditDialog(model);
+        }
+    });
+
+    // special collection that can handle contact and user data and find duplicated users
+    var UserContactCollection = Backbone.Collection.extend({
+        modelId: function (attrs) {
+            // return user id if this is a contact model, return id if this is a user model
+            return attrs.user_id || attrs.id;
         }
     });
 
@@ -231,18 +265,22 @@ define('io.ox/core/deputy/dialog', [
         .build(function () {
             var self = this,
                 // collection to store userdata
-                userCollection = new Backbone.Collection();
+                userCollection = new UserContactCollection();
 
-            this.$body.busy();
+            this.$body.addClass('deputy-dialog-body').busy();
             api.getAll().then(function (deputies) {
                 var defs = _(deputies).map(function (deputy) {
                     return userApi.get({ id: deputy.user }).then(function (data) {
                         userCollection.add(data);
                         deputy.userData = userCollection.get(data);
+                    }, function (error) {
+                        console.warn('Error while getting deputy user data!', deputy, error);
+                        // invalid user etc. Remove from the list so we can still show the rest
+                        deputies = _(deputies).reject(function (item) { return item.deputyId === deputy.deputyId; });
                     });
                 });
 
-                $.when.apply($, defs).then(function () {
+                $.when.apply($, defs).always(function () {
                     self.$body.idle();
                     // since this is async modal dialog may think the body is empty and adds this class
                     self.$el.removeClass('compact');
@@ -263,7 +301,15 @@ define('io.ox/core/deputy/dialog', [
                     self.$body.find('input.add-participant').focus();
 
                     userCollection.on('add', function (user) {
-                        var deputy = _.extend({}, defaultPermissions, { user: user.get('id'), userData: user }),
+                        // you cannot be your own deputy
+                        // addresspicker sends contact data, autocomplete sends user data
+                        var id = user.get('user_id') || user.get('id');
+                        if (id === ox.user_id) {
+                            // remove from collection. no need to redraw
+                            userCollection.remove(user, { silent: true });
+                            return;
+                        }
+                        var deputy = _.extend({}, defaultPermissions, { user: id, userData: user }),
                             model = self.deputyListView.collection.add(deputy);
 
                         openEditDialog(model);
@@ -274,9 +320,14 @@ define('io.ox/core/deputy/dialog', [
                         userCollection.remove(deputy.get('user'));
                     });
                 });
+            }, function (error) {
+                console.error(error);
+                //#. Generic error message when something when wrong on the server while fetching data about your deputies
+                yell('error', gt('Could not load deputy data.'));
+                self.close();
             });
         })
-        .addButton({ className: 'btn-primary', label: gt('close'), action: 'cancel' })
+        .addButton({ className: 'btn-primary', label: gt('Close'), action: 'cancel' })
         .open();
     }
 

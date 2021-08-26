@@ -513,7 +513,7 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
-                if (baton.module !== 'mail' && baton.module !== 'calendar') return;
+                if (!capabilities.has('deputy') || (baton.module !== 'mail' && baton.module !== 'calendar')) return;
 
                 contextUtils.addLink(this, {
                     action: 'manageDeputies',
