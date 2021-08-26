@@ -145,6 +145,15 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
                 return $.when();
             }
 
+            // id is en but locale is not in localeDefinitions => we have some unsupported language.
+            // locale/en file does not exist, since this is moments default, so avoid requesting it
+            if (id === 'en') {
+                // create backup on first definition
+                backupLocale(localeId);
+                updateLocale(localeId);
+                return;
+            }
+
             // load the file that contains the define, then load the define itself
             // we need do it this way to avoid the use of anonymous defines
             return require(['static/3rd.party/moment/locale/' + id + '.js'], function () {
