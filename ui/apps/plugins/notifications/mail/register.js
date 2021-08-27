@@ -143,7 +143,8 @@ define('plugins/notifications/mail/register', [
             newItems = _.difference(newIds, oldIds);
 
         // only show these if there is not already the websocket push listening
-        if (newItems.length && !cap.has('websocket')) {
+        // note if external accounts are checked, those don't use websockets, so ignore the capability in this case
+        if (newItems.length && (settings.get('notificationsForExternalInboxes', false) || !cap.has('websocket'))) {
             // if theres multiple items or no specific notification given, use the generic
             if (newItems.length > 1) {
                 desktopNotifications.show({
