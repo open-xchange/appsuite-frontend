@@ -336,7 +336,7 @@ define('io.ox/backbone/views/window', [
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
             if (!this.model.get('quitOnEscape')) return;
-            if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
+            if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input') || $(e.target.offsetParent).hasClass('io-ox-sidepopup')) return;
             this.onQuit();
         },
 
