@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/contacts/api', [
     'io.ox/core/extensions',
@@ -82,11 +82,11 @@ define('io.ox/contacts/api', [
 
     // generate basic API
     var api = apiFactory({
-        module: 'contacts',
+        module: 'addressbooks',
         requests: {
             all: {
                 action: 'all',
-                folder: '6',
+                folder: util.getGabId(),
                 columns:  ox.locale === 'ja_JP' ? '20,1,101,555,556,557,607' : '20,1,101,607',
                 extendColumns: 'io.ox/contacts/api/all',
                 // 607 = magic field
@@ -101,7 +101,7 @@ define('io.ox/contacts/api', [
             get: {
                 action: 'get'
             },
-            search: {
+            /*search: {
                 action: 'search',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
@@ -176,15 +176,21 @@ define('io.ox/contacts/api', [
                     if (defaultBehaviour) {
                         data = _(data).extend(queryField.names);
                     }
+                    if (opt.folder) {
+                        data.folder = opt.folder;
+                        // folder may be an array, delete this so it isn't used in the url. Arrays don't work there anyway
+                        delete opt.folder;
+                    }
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
                 }
-            },
+            },*/
             advancedsearch: {
                 action: 'advancedSearch',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,616,617',
                 extendColumns: 'io.ox/contacts/api/list',
+                omitFolder: true,
                 // magic sort field: ignores asc/desc
                 sort: '607',
                 getData: function (query, opt) {
@@ -198,7 +204,8 @@ define('io.ox/contacts/api', [
                             'telephone_other fax_business telephone_callback telephone_car telephone_company ' +
                             'fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn ' +
                             'telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd ' +
-                            'telephone_ip telephone_assistant').split(' ')
+                            'telephone_ip telephone_assistant').split(' '),
+                            job: ('employee_type department position room_number profession').split(' ')
                         },
                         filter = ['or'],
                         data,
@@ -225,6 +232,14 @@ define('io.ox/contacts/api', [
                         });
                     }
                     data = { 'filter': filter };
+
+                    if (opt.folders) {
+                        // make sure this is an array
+                        data.folders = [].concat(opt.folders);
+                    }
+
+                    if (opt.folderTypes) data.folderTypes = opt.folderTypes;
+
                     ext.point('io.ox/contacts/api/search')
                         .invoke('getData', data, query, opt);
                     return data;
@@ -303,7 +318,7 @@ define('io.ox/contacts/api', [
                 api.trigger('list:ready');
                 return data;
             },
-            search: convertResponseToGregorian,
+            //search: convertResponseToGregorian,
             advancedsearch: convertResponseToGregorian
         }
     });
@@ -379,7 +394,7 @@ define('io.ox/contacts/api', [
 
         var method,
             opt = {
-                module: 'contacts',
+                module: 'addressbooks',
                 data: data,
                 appendColumns: false,
                 fixPost: true
@@ -466,7 +481,7 @@ define('io.ox/contacts/api', [
 
         // go!
         return http.PUT({
-            module: 'contacts',
+            module: 'addressbooks',
             params: {
                 action: 'update',
                 id: o.id,
@@ -540,7 +555,7 @@ define('io.ox/contacts/api', [
             form.append('json', JSON.stringify(changes));
 
             return http.UPLOAD({
-                module: 'contacts',
+                module: 'addressbooks',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: _.then() },
                 data: form,
                 fixPost: true
@@ -548,7 +563,7 @@ define('io.ox/contacts/api', [
             .then(filter);
         }
         return http.FORM({
-            module: 'contacts',
+            module: 'addressbooks',
             action: 'update',
             form: file,
             data: changes,
@@ -571,7 +586,7 @@ define('io.ox/contacts/api', [
         list = _.isArray(list) ? list : [list];
         // remove
         return http.PUT({
-            module: 'contacts',
+            module: 'addressbooks',
             params: { action: 'delete', timestamp: _.then(), timezone: 'UTC' },
             appendColumns: false,
             data: _(list).map(function (data) {
@@ -627,7 +642,6 @@ define('io.ox/contacts/api', [
     * @return {deferred} returns exactyl one contact object
     */
     api.getByEmailaddress = function (address) {
-
         address = address || '';
 
         return fetchCache.get(address).then(function (data) {
@@ -641,20 +655,21 @@ define('io.ox/contacts/api', [
             }
             //http://oxpedia.org/wiki/index.php?title=HTTP_API#SearchContactsAlternative
             return http.PUT({
-                module: 'contacts',
+                module: 'addressbooks',
                 params: {
-                    action: 'search',
+                    action: 'advancedSearch',
                     admin: settings.get('showAdmin', false),
                     columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
                     timezone: 'UTC'
                 },
                 sort: 609,
                 data: {
-                    'email1': address,
-                    'email2': address,
-                    'email3': address,
-                    'orSearch': true,
-                    'exactMatch': true
+                    filter: [
+                        'or',
+                        ['=', { field: 'email1' }, address],
+                        ['=', { field: 'email2' }, address],
+                        ['=', { field: 'email3' }, address]
+                    ]
                 }
             })
             .then(function (data) {
@@ -671,7 +686,7 @@ define('io.ox/contacts/api', [
                     // favor contacts in global address book
                     data.sort(function (a, b) {
                         // work with strings and numbers
-                        return String(b.folder_id) === '6' ? +1 : -1;
+                        return String(b.folder_id) === util.getGabId() ? +1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -959,7 +974,7 @@ define('io.ox/contacts/api', [
         // process all updates
         _(list).map(function (o) {
             return http.PUT({
-                module: 'contacts',
+                module: 'addressbooks',
                 params: {
                     action: action || 'update',
                     id: o.id,
@@ -1039,7 +1054,7 @@ define('io.ox/contacts/api', [
             }, options || {});
 
         return http.GET({
-            module: 'contacts',
+            module: 'addressbooks',
             params: params
         }).then(convertResponseToGregorian);
     };
@@ -1155,7 +1170,7 @@ define('io.ox/contacts/api', [
 
             // add query to cache
             add(query, http.GET({
-                module: 'contacts',
+                module: 'addressbooks',
                 params: {
                     action: 'autocomplete',
                     // we just look for the shortest word

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -225,13 +225,36 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
     // access combination groupware disables active_sync capability
     await users[0].hasAccessCombination('groupware');
-    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
 
-    I.login('app=io.ox/mail');
-    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    I.login();
+    I.refreshPage();
     mail.waitForApp();
+
     topbar.connectDeviceWizard();
 
+    // Scenario 1: Upsell is not enabled && capability is disabled (don't show EAS entry)
+    await within('.wizard-container', () => {
+        I.waitForText('Which device do you want to configure?');
+        I.click('iPhone or iPad');
+
+        I.waitForText('Which application do you want to use?');
+        I.waitForText('OX Drive');
+        I.click('OX Drive');
+        I.waitForVisible('.qrcode');
+        I.click('Back');
+
+        // check if button is disabled
+        I.waitForText('Which application do you want to use?');
+        I.dontSee('Exchange Active Sync');
+    });
+
+    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
+    I.refreshPage();
+    mail.waitForApp();
+    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    topbar.connectDeviceWizard();
+
+    // Scenario 2: Upsell is enabled && capability is disabled (show locked EAS entry)
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
         I.click('iPhone or iPad');
@@ -258,6 +281,7 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
     mail.waitForApp();
     topbar.connectDeviceWizard();
 
+    // Scenario 3: Upsell is enabled && user does not have capability (show unlocked EAS entry)
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
         I.click('iPhone or iPad');

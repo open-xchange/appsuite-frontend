@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/extensions',
@@ -171,39 +171,6 @@ define('io.ox/settings/accounts/settings/pane', [
                 this.$el.append(
                     $('<div class="form-group">').append(
                         util.checkbox('security/acceptUntrustedCertificates', gt('Allow connections with untrusted certificates'), settings)
-                    )
-                );
-            }
-        },
-        //
-        // Password Recovery
-        //
-        {
-            id: 'recovery',
-            index: INDEX += 100,
-            render: function () {
-
-                if (this.collection.length <= 1) return;
-
-                this.$el.append(
-                    $('<h2 class="sr-only">').text(gt('Password recovery')),
-                    $('<a href="#" role="button" class="hint">')
-                        //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-                        //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-                        .text(gt('Show information about account recovery'))
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).hide().next().show();
-                        }),
-                    $('<div class="hint">').hide().append(
-                        $('<p>').text(
-                            gt('For security reasons, all credentials are encrypted with your primary account password. ' +
-                                'If you change your primary password, your external accounts might stop working. In this case, ' +
-                                'you can use your old password to recover all account passwords.')
-                        ),
-                        $('<button type="button" class="btn btn-primary" data-action="recover">')
-                            .text(gt('Recover passwords'))
-                            .on('click', this.openRecoveryDialog)
                     )
                 );
             }

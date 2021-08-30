@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/chat/main', [
     'io.ox/core/extensions',
@@ -47,9 +47,10 @@ define('io.ox/chat/main', [
     'io.ox/core/a11y',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
+    'settings!io.ox/contacts',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, contactSettings) {
 
     'use strict';
 
@@ -159,9 +160,10 @@ define('io.ox/chat/main', [
         },
 
         startPrivateChat: function () {
-            var self = this;
+            var self = this,
+                picker = contactSettings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
-            require(['io.ox/contacts/addressbook/popup'], function (picker) {
+            require([picker], function (picker) {
                 picker.open(
                     function callback(items) {
                         if (items.length === 0) return;
@@ -506,6 +508,9 @@ define('io.ox/chat/main', [
         hideApp: function () {
             if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
             this.model.set('minimized', true);
+            // reset page title to current app
+            var app = ox.ui.App.getCurrentApp();
+            if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             return this;
         },
 

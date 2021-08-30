@@ -1,31 +1,32 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/view', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/contacts/util',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, api, settings, gt) {
+], function (ext, api, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -338,7 +339,7 @@ define('io.ox/core/folder/view', [
                         folder = _(path).where({ 'id': id })[0],
                         // in our apps folders are organized in virtual folders, we need to open the matching section too (private, shared, public)
                         // folder 6 is special, it's the global addressbook and the only system folder under public section. Folderdata alone does not give this info.
-                        section = folder.id === '6' ? 'public' : api.getSection(folder.type, folder.id);
+                        section = folder.id === contactsUtil.getGabId() ? 'public' : api.getSection(folder.type, folder.id);
 
                     if (section && /(mail|contacts|calendar|tasks|infostore)/.test(tree.module) && tree.flat && tree.context === 'app') {
                         var module = tree.module === 'calendar' ? 'event' : tree.module;

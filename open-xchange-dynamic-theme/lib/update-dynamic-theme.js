@@ -94,9 +94,10 @@ function processDynamicTheme(name, files, staticContent) {
             'loginColor', 'headerPrefixColor', 'headerColor', 'headerLogo',
             // main screen: set in settings/open-xchange-dynamic-theme.yml
             'mainColor', 'linkColor', 'logoURL', 'logoWidth', 'logoHeight',
-            'topbarBackground', 'topbarHover', 'listSelected', 'listHover',
-            'listSelectedFocus', 'folderBackground', 'folderSelected',
-            'folderHover', 'folderSelectedFocus'
+            'topbarBackground', 'topbarColor', 'topbarHover',
+            'topbarHoverColor','listSelected', 'listHover', 'listSelectedFocus',
+            'folderBackground', 'folderSelected', 'folderHover',
+            'folderSelectedFocus'
         ].map(function (s) { return '@io-ox-dynamic-theme-' + s; }));
 
     parse(files.map(readFile).join('\n'), name, extract);

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/api', [
     'io.ox/core/http',
@@ -66,7 +66,7 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
+                if (!/^(addressbooks|contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // shared folders that have createdfrom data available
@@ -128,7 +128,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isFlat(id) {
-        return /^(contacts|calendar|tasks|event)$/.test(id);
+        return /^(addressbooks|contacts|calendar|tasks|event)$/.test(id);
     }
 
     function isNested(id) {
@@ -275,7 +275,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (/^flat\/(contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
+            if (/^flat\/(addressbooks|contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(addressbooks|contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
                     return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
@@ -629,7 +629,7 @@ define('io.ox/core/folder/api', [
         if (isVirtual(id)) return $.when({ id: id });
 
         // fetch GAB but GAB is disabled?
-        if (id === '6' && !capabilities.has('gab')) {
+        if (id === contactUtil.getGabId() && !capabilities.has('gab')) {
             return fail(gt('Accessing global address book is not permitted'));
         }
 
@@ -916,7 +916,7 @@ define('io.ox/core/folder/api', [
             params: {
                 action: 'allVisible',
                 altNames: true,
-                content_type: module === 'contacts' ? 'contact' : module,
+                content_type: module === 'contacts' || module === 'addressbooks' ? 'addressdata' : module,
                 timezone: 'UTC',
                 tree: 1,
                 forceRetry: !!options.force,
@@ -1181,12 +1181,16 @@ define('io.ox/core/folder/api', [
                     return !!(item.bits & 268435456);
                 });
             }
+
             var params = {
                 action: 'new',
                 autorename: true,
                 folder_id: id
             };
             if (options.module !== 'event') params.tree = tree(id);
+            // a bit of a missmatch, here although we are in contacts, use addressdata as module to call the new api (parameter is module but it seems mw uses it as content_type)
+            if (options.module === 'contacts') options.module = 'addressdata';
+
             // go!
             return http.PUT({
                 module: 'folders',
@@ -1198,6 +1202,8 @@ define('io.ox/core/folder/api', [
                 return get(newId);
             })
             .then(function reloadSubFolders(data) {
+                // and back again...
+                if (options.module === 'addressdata') options.module = 'contacts';
                 return (
                     isFlat(options.module) ? flat({ module: options.module, cache: false }) : list(id, { cache: false })
                 )

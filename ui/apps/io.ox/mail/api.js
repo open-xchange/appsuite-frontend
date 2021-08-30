@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/api', [
     'io.ox/mail/api-legacy',
@@ -1337,27 +1337,42 @@ define('io.ox/mail/api', [
         // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
         if (ox.openedInBrowserTab) return;
         // look for new unseen mails in INBOX
-        return http.GET({
-            module: 'mail',
-            params: {
-                action: 'all',
-                folder: 'default0/INBOX',
-                //received_date, id, folder_id, flags
-                columns: '610,600,601,611,661',
-                // only unseen mails are interesting here!
-                unseen: 'true',
-                // any reason to see them?
-                deleted: 'false',
-                sort: '661',
-                order: 'desc',
-                // not really sure if limit works as expected
-                // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
-                // I still get the unread mails
-                limit: 100,
-                timezone: 'utc'
-            }
-        })
+        // check all inboxes if setting is set. primary account and external inboxes
+        var inboxes = settings.get('notificationsForExternalInboxes', false) ? accountAPI.getFoldersByType('inbox') : ['default0/INBOX'];
+
+        // if websockets are enabled, the primary inbox is handled by them, so no need to request it here
+        if (capabilities.has('websocket')) inboxes = _(inboxes).without('default0/INBOX');
+
+        // no inboxes to check? we are done here
+        if (!inboxes.length) return;
+
+        var defs = _(inboxes).map(function (inbox) {
+            return http.GET({
+                module: 'mail',
+                params: {
+                    action: 'all',
+                    folder: inbox,
+                    //received_date, id, folder_id, flags
+                    columns: '610,600,601,611,661',
+                    // only unseen mails are interesting here!
+                    unseen: 'true',
+                    // any reason to see them?
+                    deleted: 'false',
+                    sort: '661',
+                    order: 'desc',
+                    // not really sure if limit works as expected
+                    // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
+                    // I still get the unread mails
+                    limit: 100,
+                    timezone: 'utc'
+                }
+            });
+        });
+
+        return $.when.apply($, defs)
         .then(function (unseen) {
+            // put all mails from different accounts in one list
+            unseen = (inboxes.length === 1 ? unseen : _(_(arguments).map(function (result) { return result[0]; })).flatten());
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
                 // ignore mails 'mark as deleted'

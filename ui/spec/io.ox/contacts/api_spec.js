@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
     'use strict';
@@ -26,13 +26,13 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
     describe('Contact API', function () {
 
         beforeEach(function () {
-            this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {
+            this.server.respondWith('GET', /api\/addressbooks\?action=get/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":1337, "birthday":-62122809600000}}');
             });
-            this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
+            this.server.respondWith('PUT', /api\/addressbooks\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":1338}}');
             });
-            this.server.respondWith('PUT', /api\/contacts\?action=update/, function (xhr) {
+            this.server.respondWith('PUT', /api\/addressbooks\?action=update/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, '{"timestamp":1368791630910,"data":{"id":1338}}');
             });
         });

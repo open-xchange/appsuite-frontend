@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/main/appcontrol', [
     'io.ox/core/http',
@@ -28,9 +28,10 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/icons',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, ext, capabilities, icons, Dropdown, settings, gt) {
+], function (http, upsell, ext, capabilities, icons, Dropdown, settings, contactSettings, gt) {
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -202,6 +203,7 @@ define('io.ox/core/main/appcontrol', [
             var count = this.getQuickLauncherCount(),
                 list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
                 str = _.chain(list).filter(function (o) {
+                    if (o.indexOf('customQuickLaunchers') !== -1) return o;
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
                 }).value().join(',');
             // We fill up the list with 'none' in case we have more slots than defaults
@@ -221,6 +223,7 @@ define('io.ox/core/main/appcontrol', [
         },
         fetch: function () {
             var apps = api.getQuickLauncherItems().map(function (o) {
+                if (o.indexOf('customQuickLaunchers') !== -1) return { isCustomLauncher: true, extensionId: o.replace('io.ox/core/appcontrol/customQuickLaunchers/', '') };
                 return ox.ui.apps.get(o.replace(/\/main$/, ''));
             });
             return _(apps).compact();
@@ -255,6 +258,7 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.empty().append(
                 this.collection.map(function (model) {
+                    if (model.get('isCustomLauncher')) return ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId')).draw();
                     return new LauncherView({
                         tagName: 'button',
                         attributes: { tabindex: -1, type: 'button' },
@@ -290,6 +294,8 @@ define('io.ox/core/main/appcontrol', [
                     new LauncherView({ model: model, pos: i + 1 }).render().$el
                 );
             }.bind(this));
+            // draw custom launchers. Some items that appear in the launcher are not full apps, like the enterprise picker dialog
+            ext.point('io.ox/core/appcontrol/customLaunchers').invoke('draw', this);
             if (_.device('smartphone')) {
                 this.collection.where({ closable: true }).forEach(function (model) {
                     this.append(
@@ -443,6 +449,66 @@ define('io.ox/core/main/appcontrol', [
             extensions.launcher.call(this);
         }
     });
+
+    if (contactSettings.get('useEnterprisePicker', false) && !_.device('smartphone')) {
+
+        if (contactSettings.get('enterprisePicker/showTopRightLauncher', false)) {
+            ext.point('io.ox/core/appcontrol/right').extend({
+                id: 'enterprisePicker',
+                index: 130,
+                draw: function () {
+                    var node = $('<li role="presentation" class="launcher">').append(
+                        $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').append($.icon('fa-address-card-o'))
+                            .on('click', _.debounce(function () {
+                                require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                                    popup.open($.noop, { selection: false });
+                                });
+                            }, 300, true))
+                    );
+                    this.append(node);
+                }
+            });
+        }
+
+        if (contactSettings.get('enterprisePicker/showLauncher', true)) {
+            ext.point('io.ox/core/appcontrol/customLaunchers').extend({
+                id: 'enterprisePicker',
+                index: 100,
+                draw: function () {
+                    this.append(
+                        $('<a tabindex="-1" href="#" role="menuitem" class="btn btn-link lcell">').append(
+                            $('<div class="lcell">').append(
+                                $('<div class="icon">').append($.icon('fa-address-card-o')),
+                                $('<div class="title">').text(gt('Address directory'))
+                            ).on('click', _.debounce(function () {
+                                require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                                    popup.open($.noop, { selection: false });
+                                });
+                            }, 300, true))
+                        )
+                    );
+                }
+            });
+
+            ext.point('io.ox/core/appcontrol/customQuickLaunchers').extend({
+                id: 'enterprisePicker',
+                label: gt('Address directory'),
+                index: 100,
+                draw: function () {
+                    return $('<button tabindex="-1" type="button" class="btn btn-link lcell">').append(
+                        $('<div class="lcell">').append(
+                            $('<div class="icon">').append($.icon('fa-address-card-o')),
+                            $('<div class="title">').text(gt('Address directory'))
+                        ).on('click', _.debounce(function () {
+                            require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                                popup.open($.noop, { selection: false });
+                            });
+                        }, 300, true))
+                    );
+                }
+            });
+        }
+    }
 
     // deactivated since 7.10.0
     ext.point('io.ox/core/appcontrol').extend({

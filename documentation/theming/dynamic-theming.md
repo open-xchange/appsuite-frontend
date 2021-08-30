@@ -43,8 +43,10 @@ The package installs the file `/opt/open-xchange/etc/settings/open-xchange-dynam
 | `logoURL`             |                       |            | URL of the logo in the top left corner of the top bar.
 | `logoWidth`           | `60`                  |            | Width of the logo as number of pixels or any CSS length unit. Set to `auto` to use the native width of the image. For best display on high-resolution screens, it is recommended to use a bigger image and specify a smaller size here.
 | `logoHeight`          | `auto`                |            | Optional height of the logo as number of pixels or any CSS length unit. The maximum value is 64. Leave as `auto` to scale according to the specified width while preserving the aspect ratio. For best display on high-resolution screens, it is recommended to use a bigger image and specify either `auto` or a smaller size here.
-| `topbarBackground`    | same as `mainColor`   | dark       | Background color of the top bar.
-| `topbarHover`         | `rgba(0, 0, 0, 0.3)`  | dark       | Background of an item in the top bar when it has the keyboard focus, the mouse hovers it, or it is active.
+| `topbarBackground`    | same as `mainColor`   | any        | Background color of the top bar.
+| `topbarColor`         | `#fff`                | should contrast with `topbarBackground` | Icon color in the top bar.
+| `topbarHover`         | `rgba(0, 0, 0, 0.3)`  | any        | Background of an item in the top bar when it has the keyboard focus, the mouse hovers it, or it is active.
+| `topbarHoverColor`    | same as `topbarColor` | should contrast with `topbarHover` | Icon color in the top bar when it has the keyboard focus, the mouse hover it or it is active.
 | `listSelected`        | `#ddd`                | light      | Background of selected items in the list view when the list view does not have the keyboard focus.
 | `listHover`           | `#f7f7f7`             | light      | Background of a not selected item in the list view when the mouse hovers over it.
 | `listSelectedFocus`   | same as `mainColor`   | dark       | Background color of selected items in the list view when the list view has the keyboard focus.

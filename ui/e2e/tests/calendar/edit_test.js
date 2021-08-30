@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -235,7 +235,7 @@ Scenario('[C7464] Change appointment in shared folder as guest', async ({ I, use
     I.dontSeeElement('.io-ox-calendar-edit-window');
 });
 
-Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, users, calendar }) => {
+Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, users, calendar, dialogs }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('isoWeek').add(7, 'days').add(10, 'hours');
     await I.haveAppointment({
@@ -249,21 +249,23 @@ Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, user
     // TODO should be part of the haveFolder helper
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
-    const busystate = locate('.modal modal-body.invisible');
 
     I.waitForText('New calendar');
     I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Share / Permissions');
+    I.clickDropdown('Share / Permissions');
+    dialogs.waitForVisible();
     I.waitForText('Permissions for calendar "New calendar"');
-    I.waitForDetached(busystate);
-    I.wait(0.5);
+    I.waitForVisible('.permission-pre-selection .btn');
+    I.click('.permission-pre-selection .btn');
+    I.clickDropdown('Author');
+    I.waitForDetached('.dropdown.open');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.share-permissions-dialog');
 
     I.logout();
@@ -425,10 +427,9 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
 });
 
-Scenario('[C7467] Delete recurring appointment in shared folder as author', async ({ I, users, calendar }) => {
+Scenario('[C7467] Delete recurring appointment in shared folder as author', async ({ I, users, calendar, dialogs }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
     const time = moment().startOf('isoWeek').add(10, 'hours');
-    const busystate = locate('.modal modal-body.invisible');
     await I.haveAppointment({
         folder,
         summary: 'Testappointment',
@@ -445,15 +446,18 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
     I.rightClick({ css: '[aria-label^="New calendar"]' });
     I.waitForText('Share / Permissions');
     I.wait(0.2); // Just wait a little extra for all event listeners
-    I.click('Share / Permissions');
+    I.clickDropdown('Share / Permissions');
+    dialogs.waitForVisible();
     I.waitForText('Permissions for calendar "New calendar"');
-    I.waitForDetached(busystate);
-    I.wait(0.5);
+    I.waitForVisible('.permission-pre-selection .btn');
+    I.click('.permission-pre-selection .btn');
+    I.clickDropdown('Author');
+    I.waitForDetached('.dropdown.open');
     I.fillField('.modal-dialog .tt-input', users[1].userdata.primaryEmail);
     I.waitForVisible(locate('*').withText(`${users[1].userdata.sur_name}, ${users[1].userdata.given_name}`).inside('.tt-dropdown-menu'));
     I.pressKey('ArrowDown');
     I.pressKey('Enter');
-    I.click('Save');
+    dialogs.clickButton('Save');
     I.waitForDetached('.share-permissions-dialog');
 
     I.logout();
