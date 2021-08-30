@@ -97,7 +97,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     I.waitToHide('.share-permissions-dialog');
     I.logout();
 
-    I.say('After share')
+    I.say('After share');
     I.login('app=io.ox/contacts', { user: users[1] });
     contacts.waitForApp();
 
@@ -118,7 +118,7 @@ Scenario('Subscribe and unsubscribe shared address book', async function ({ I, u
     I.click('Save');
     I.waitForDetached('.modal-dialog');
 
-    I.say('After save')
+    I.say('After save');
     I.waitForInvisible(locate('*').withText(sharedAddressBookName));
 
     I.click('Add new address book');

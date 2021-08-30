@@ -191,14 +191,6 @@ define('io.ox/core/relogin', [
     var queue = [], pending = false;
     function relogin(request, deferred, error) {
 
-        function abortWithSuccess(loginData) {
-            util.debugSession('relogin abort with success', _.clone(loginData), _.clone(baton.data));
-            // we know that we have a new valid session from the event
-            baton.data.reloginState = 'success';
-            baton.data.receivedSession = loginData ? loginData.session : '';
-            Stage.abortAll('io.ox/core/boot/login');
-        }
-
         if (!ox.online) return;
 
         if (!pending) {
@@ -213,6 +205,13 @@ define('io.ox/core/relogin', [
 
             var Stage = require('io.ox/core/extPatterns/stage');
             var baton = ext.Baton.ensure({ error: error, reloginState: 'pending' });
+            var abortWithSuccess = function (loginData) {
+                util.debugSession('relogin abort with success', _.clone(loginData), _.clone(baton.data));
+                // we know that we have a new valid session from the event
+                baton.data.reloginState = 'success';
+                baton.data.receivedSession = loginData ? loginData.session : '';
+                Stage.abortAll('io.ox/core/boot/login');
+            };
 
             ox.on('login:success', abortWithSuccess);
 
