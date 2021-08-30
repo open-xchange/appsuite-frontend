@@ -70,7 +70,7 @@ Scenario('[C223834] iTIP mail alias handling', async function ({ I, users, mail,
     I.login('app=io.ox/mail', { user: organizer });
     mail.waitForApp();
     // check mail recipient
-    item = locate('.person').withText(attendees_alias_display_name);
+    const item = locate('.person').withText(attendees_alias_display_name);
     I.waitForElement(item, 30);
     // select by index as generated mail body may contain only displayname and not alias-displayname
     mail.selectMailByIndex(0);

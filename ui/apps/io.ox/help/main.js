@@ -33,7 +33,7 @@ define('io.ox/help/main', [
         var href = opt.href,
             base = opt.base,
             // see: https://oxpedia.org/wiki/index.php?title=AppSuite:Available_Translations
-            locale = ox.language === 'fr_CA' ? 'fr_FR' :  ox.language
+            locale = ox.language === 'fr_CA' ? 'fr_FR' : ox.language;
         // if target is dynamic, execute as function
         if (_.isFunction(href)) href = opt.href();
 
