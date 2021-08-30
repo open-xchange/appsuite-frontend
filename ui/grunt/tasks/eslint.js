@@ -21,6 +21,8 @@
 */
 
 module.exports = function (grunt) {
-    grunt.config.set('eslint.all.files', []);
+    var patterns = grunt.config.get('eslint.all.files.0.src');
+    patterns.push('e2e/**/*.{js,json}');
+    grunt.config.set('eslint.all.files.0.src', patterns);
 };
 
