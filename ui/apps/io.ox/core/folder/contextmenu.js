@@ -28,10 +28,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
     'io.ox/backbone/mini-views/contextmenu-utils',
+    'io.ox/core/folder/actions/properties',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, properties, settings, fileSettings, gt) {
 
     'use strict';
 
@@ -538,22 +539,14 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 e.preventDefault();
-                var id = e.data.id;
-                require(['io.ox/core/folder/actions/properties'], function (fn) {
-                    fn(id);
-                });
+                properties.openDialog(e.data.id);
             }
 
             return function (baton) {
 
                 if (_.device('smartphone')) return;
-                if (baton.module !== 'calendar' && baton.module !== 'tasks') return;
-
-                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
-                var provider = baton.data['com.openexchange.calendar.provider'],
-                    usedForSync = baton.data.used_for_sync || {};
-                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
-
+                // check if there is an extension that has something to show in the dialog
+                if (!properties.check(baton.data.id)) return;
                 contextUtils.addLink(this, {
                     action: 'properties',
                     data: { baton: baton, id: String(baton.data.id) },
