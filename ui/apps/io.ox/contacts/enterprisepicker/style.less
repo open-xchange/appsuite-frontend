@@ -62,7 +62,7 @@
     }
 
     .modal-body .contact-list-view li {
-        padding: 8px;
+        padding: 12px;
         display: flex;
         justify-content: space-between;
 
@@ -71,16 +71,16 @@
         }
 
         .contact-picture {
-            height: 60px;
-            min-width: 60px;
+            height: 40px;
+            min-width: 40px;
             margin-right: 16px;
-            padding: 12px;
+            padding: 6px;
             border-radius: 50%;
             background-size: cover;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);
             font-weight: bold;
-            font-size: 24px;
+            font-size: 20px;
             text-align: center;
 
             &.initials {
@@ -109,7 +109,7 @@
             width: 32%;
 
             input {
-                height: 60px;
+                height: 40px;
                 margin: 0 16px 0 0 ;
             }
         }
@@ -119,24 +119,16 @@
             overflow: hidden;
             // empty fields should still take up space, to keep the layout consistent
             div {
-                min-height: 30px;
+                min-height: 20px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
         }
 
-        .btn-link {
-            color: #727272;
-
-            svg {
-                height: 20px;
-            }
-
-            &:hover {
-                background-color: #a0a0a0;
-                color: #fff;
-            }
+        .btn-link svg {
+            margin-top: 5px;
+            height: 20px;
         }
     }
 

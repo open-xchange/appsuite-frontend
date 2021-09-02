@@ -70,7 +70,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             this.model.get('selectedContacts').each(function (contact) {
                 self.$el.append(
                     $('<li>').append(
-                        $('<div class="name">').text(util.getFullName(contact.attributes, false)),
+                        $('<div class="name">').append(util.getFullName(contact.attributes, true)),
                         $('<button class="btn">').attr('data-id', contact.get('id')).append($.icon('fa-times', gt('Remove contact from selection')))
                     )
                 );
@@ -107,7 +107,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         renderContact: function (contact) {
-            var name = util.getFullName(contact.attributes, false),
+            var name = util.getFullName(contact.attributes, true),
                 initials = util.getInitials(contact.attributes),
                 initialsColor = util.getInitialsColor(initials),
                 contactPicture;
@@ -120,7 +120,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             $(this).css('background-image', 'url(' + e.data.url + ')');
                         }) : $('<div class="contact-picture initials" aria-hidden="true">').text(initials).addClass(initialsColor)),
                     $('<div class="data-container">').append(
-                        $('<div class="name" aria-hidden="true">').text(name),
+                        $('<div class="name" aria-hidden="true">').append(name),
                         $('<div class="department" aria-hidden="true">').text(contact.get('department'))
                     )
                 ),
