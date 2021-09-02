@@ -99,20 +99,20 @@
             &.hover:not(.disabled) { background-color: darken(@appointment-unconfirmed, @appointment-hover-pct); }
         }
 
-        &.declined {
+        &.declined, &.cancelled {
             background-color: @appointment-declined;
             border-left-color: rgba(0, 0, 0, 0.1);
 
             &.hover:not(.disabled) { background-color: darken(@appointment-declined, @appointment-hover-pct); }
-        }
 
-        &.declined .appointment-content * {
-            color: @appointment-declined-font;
-            text-decoration: line-through;
-        }
+            .appointment-content * {
+                color: @appointment-declined-font;
+                text-decoration: line-through;
+            }
 
-        &.declined .appointment-content .flags * {
-            text-decoration: none;
+            .appointment-content .flags * {
+                text-decoration: none;
+            }
         }
 
         &:focus {
@@ -278,7 +278,7 @@
             border: 1px solid rgba(0, 0, 0, 0.4);
         }
 
-        &.declined {
+        &.declined, &.cancelled {
 
             .title, .location {
                 text-decoration: line-through;
@@ -446,6 +446,12 @@
 
     .io-ox-inline-links:first-child { margin-top: 0; }
     .io-ox-inline-links:empty { display: none; }
+
+    &.cancelled {
+        h1.subject, .location, .date-time-recurrence {
+            text-decoration: line-through;
+        }
+    }
 
     h1.subject {
         //display: inline-block;

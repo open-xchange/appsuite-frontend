@@ -99,7 +99,7 @@ define('io.ox/calendar/extensions', [
                 } else {
                     var conf = util.getConfirmationStatus(model);
                     if (util.isPrivate(model)) this.addClass('private');
-                    this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf));
+                    this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf) + ' ' + util.getStatusClass(model));
 
                     addModifyClass(this, model);
                     if (incomplete) folderModel.once('change', addModifyClass.bind(undefined, this, model));

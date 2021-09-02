@@ -559,6 +559,12 @@ define('io.ox/calendar/util', [
             return (_(status).isNumber() ? chronosStates[status] : status || 'NEEDS-ACTION').toLowerCase();
         },
 
+        getStatusClass: function (model) {
+            var data = model.attributes || model;
+            // currently only cancelled statushas an extra class
+            return (data.status === 'CANCELLED' || this.hasFlag(data, 'ebent_cancelled')) ? 'cancelled' : '';
+        },
+
         getConfirmationLabel: function (status) {
             return confirmTitles[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
@@ -1057,6 +1063,9 @@ define('io.ox/calendar/util', [
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
+            // appointments which have cancelled status does not receive color classes
+            if (/^(cancelled)$/.test(that.getStatusClass(eventModel))) return '';
+
             // private appointments are colored with gray instead of folder color
             if (that.isPrivate(eventModel)) folderColor = that.PRIVATE_EVENT_COLOR;
 
@@ -1181,6 +1190,8 @@ define('io.ox/calendar/util', [
 
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return false;
+            // appointments which have cancelled status does not receive color classes
+            if (/^(cancelled)$/.test(that.getStatusClass(eventModel))) return false;
 
             if (!eventModel.hasFlag('organizer')) return true;
 

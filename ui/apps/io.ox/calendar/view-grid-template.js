@@ -71,7 +71,7 @@ define('io.ox/calendar/view-grid-template', [
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 if (data.folder_id) {
                     var conf = util.getConfirmationStatus(data);
-                    this.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                    this.addClass(util.getConfirmationClass(conf) + ' ' + util.getStatusClass(data) + (data.hard_conflict ? ' hardconflict' : ''));
                 }
 
                 fields.summary.text(summary);
