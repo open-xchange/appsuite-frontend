@@ -52,7 +52,7 @@ Scenario('[C7492] Birthday', async ({ I }) => {
         last_name: 'Piff',
         birthday: moment().add(2, 'days').valueOf()
     }], async function (contact) {
-        contact['display_name'] = `${contact.last_name}, ${contact.first_name}`;
+        contact.display_name = `${contact.last_name}, ${contact.first_name}`;
         await I.haveContact({
             folder_id: contactFolderID,
             first_name: contact.first_name,

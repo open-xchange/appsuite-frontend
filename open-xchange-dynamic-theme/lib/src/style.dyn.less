@@ -1,17 +1,55 @@
+#io-ox-core .logo-btn {
+    &:focus, &:hover { background-color: @io-ox-dynamic-theme-topbarHover; }
+}
+
 #io-ox-core #io-ox-appcontrol {
     background-color: @io-ox-dynamic-theme-topbarBackground;
+    color: @io-ox-dynamic-theme-topbarColor;
 
     #io-ox-top-logo img {
         height: @io-ox-dynamic-theme-logoHeight;
         width: @io-ox-dynamic-theme-logoWidth;
     }
 
+    #io-ox-launcher, #io-ox-quicklaunch {
+        & > button {
+            color: @io-ox-dynamic-theme-topbarColor;
+
+            svg .fill-c1 { fill: @io-ox-dynamic-theme-topbarColor; }
+        }
+
+        button:hover, button:focus { color: @io-ox-dynamic-theme-topbarHoverColor; }
+    }
+
+    #io-ox-quicklaunch > button {
+        color: fade(@io-ox-dynamic-theme-topbarColor, 80%);
+
+        & > .lcell > .icon { fill: @io-ox-dynamic-theme-topbarColor; }
+    }
+
     &.open #io-ox-launcher > button,
-    #io-ox-launcher > button,
-    #io-ox-quicklaunch > button,
-    #io-ox-topleftbar .launcher > a,
-    #io-ox-toprightbar .launcher > a {
-        &:hover, &:focus { background-color: @io-ox-dynamic-theme-topbarHover; }
+    #io-ox-launcher > button:hover,
+    #io-ox-launcher > button:focus,
+    #io-ox-quicklaunch > button:hover,
+    #io-ox-quicklaunch > button:focus {
+        background-color: @io-ox-dynamic-theme-topbarHover;
+    }
+
+    #io-ox-topleftbar, #io-ox-toprightbar {
+        .launcher {
+            & > a, & > button {
+                color: @io-ox-dynamic-theme-topbarColor;
+
+                &:hover, &:focus {
+                    background-color: @io-ox-dynamic-theme-topbarHover;
+                    color: @io-ox-dynamic-theme-topbarHoverColor;
+
+                    .fasvg text { fill: @io-ox-dynamic-theme-topbarHoverColor; }
+                }
+            }
+
+            .fasvg text { fill: @io-ox-dynamic-theme-topbarColor; }
+        }
     }
 }
 
