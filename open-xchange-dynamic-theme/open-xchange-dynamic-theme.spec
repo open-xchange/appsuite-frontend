@@ -1,6 +1,6 @@
 Name:           open-xchange-dynamic-theme
 Version:        @OXVERSION@
-%define         ox_release 46
+%define         ox_release 47
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -54,6 +54,8 @@ if [ -x %{update} ]; then %{update}; fi
 %config(noreplace) /opt/open-xchange/etc/settings/open-xchange-dynamic-theme.properties
 
 %changelog
+* Wed Sep 08 2021 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2021-09-15 (6032)
 * Wed Jun 02 2021 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2021-06-18 (6001)
 * Thu Mar 18 2021 Viktor Pracht <viktor.pracht@open-xchange.com>
