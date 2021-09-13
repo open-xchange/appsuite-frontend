@@ -213,9 +213,10 @@ define('io.ox/core/folder/picker', [
         if (o.selection) {
 
             tree.on('change virtual', function (id) {
+                var original = id;
                 id = mapIds(id);
                 var model = api.pool.getModel(id), data = model.toJSON();
-                dialog.$footer.find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
+                dialog.$footer.find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data, undefined, id !== original ? original : undefined));
 
                 // check create folder button too
                 // special case: default0 with altnamespace
