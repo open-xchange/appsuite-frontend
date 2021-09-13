@@ -428,15 +428,15 @@ define('io.ox/calendar/invitations/register', [
                 action(self.imip, {
                     api: {
                         checkConflicts: function () {
+                            // no need to check if appointment was declined
+                            if (!doConflictCheck) return $.when([]);
+
                             if (_.isArray(self.options.conflicts)) return $.when(self.options.conflicts);
 
                             var conflicts = [];
-                            // no need to check if appointment was declined
-                            if (doConflictCheck) {
-                                _(self.model.get('changes')).each(function (change) {
-                                    if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
-                                });
-                            }
+                            _(self.model.get('changes')).each(function (change) {
+                                if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
+                            });
                             return $.when(conflicts);
                         }
                     }
