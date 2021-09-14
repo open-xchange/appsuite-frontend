@@ -64,7 +64,6 @@ define('io.ox/contacts/addressbook/popup', [
         useInitialsColor = useInitials && settings.get('picker/useInitialsColor', true),
         useLabels = settings.get('picker/useLabels', false),
         closeOnDoubleClick = settings.get('picker/closeOnDoubleClick', true),
-        useGlobalAddressBook = settings.get('picker/globalAddressBook', true),
         //TODO: unify feature toggles: showDepartment is a newer backend toggle, picker/departments is frontend only
         showDepartment = settings.get('showDepartment'),
         useDepartments = typeof showDepartment === 'undefined' ? settings.get('picker/departments', true) : showDepartment;
@@ -182,22 +181,19 @@ define('io.ox/contacts/addressbook/popup', [
             options = _.extend({
                 // keep this list really small for good performance!
                 columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,616,617',
-                exclude: useGlobalAddressBook ? [] : [util.getGabId(true)],
                 limit: LIMITS.fetch,
                 lists: true
             }, options);
 
-            var data = {
-                exclude_folders: options.exclude
-            };
+            var data = {};
 
             if (options.folder === 'all') delete options.folder;
-            if (options.useGABOnly) data.folder = [util.getGabId(true)];
+            if (options.useGABOnly) data.folders = [util.getGabId(true)];
+
             return http.PUT({
-                module: 'contacts',
+                module: 'addressbooks',
                 params: {
-                    action: 'search',
-                    admin: settings.get('showAdmin', false),
+                    action: 'advancedSearch',
                     columns: options.columns,
                     right_hand_limit: options.limit,
                     sort: 608,
@@ -459,15 +455,14 @@ define('io.ox/contacts/addressbook/popup', [
                 var $dropdown = this.$('.folder-dropdown'),
                     useGABOnly = this.options.useGABOnly,
                     count = 0;
-                // remove global address book?
-                if (!useGlobalAddressBook && folders.public) {
-                    folders.public = _(folders.public).reject({ id: util.getGabId() });
-                }
+
                 if (this.options.useGABOnly) {
                     folders = _.pick(folders, 'public');
                 }
                 $dropdown.append(
                     _(folders).map(function (section, id) {
+                        // remove unsubscribed folders
+                        section = _(section).where({ subscribed: true });
                         // skip empty and (strange) almost empty folders
                         if (!sections[id] || !section.length) return $();
                         if (!section[0].id && !section[0].title) return $();
