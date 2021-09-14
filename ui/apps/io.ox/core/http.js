@@ -345,7 +345,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1045': 'transport_starttls',
                 '1046': 'root_folder',
                 '1047': 'mail_oauth',
-                '1048': 'transport_oauth'
+                '1048': 'transport_oauth',
+                '1049': 'mail_disabled',
+                '1050': 'transport_disabled',
+                '1051': 'secondary',
+                '1052': 'deactivated'
             },
             'attachment': {
                 '1': 'id',
