@@ -56,7 +56,6 @@ define('io.ox/core/boot/login/token', [
         id: 'sessionToken',
         index: 201,
         login: function (baton) {
-            console.log(baton.hash);
             if (!baton.hash.session) return;
 
             ox.session = baton.hash.session;
