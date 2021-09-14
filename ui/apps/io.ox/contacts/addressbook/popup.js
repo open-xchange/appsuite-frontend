@@ -461,6 +461,8 @@ define('io.ox/contacts/addressbook/popup', [
                 }
                 $dropdown.append(
                     _(folders).map(function (section, id) {
+                        // remove unsubscribed folders
+                        section = _(section).where({ subscribed: true });
                         // skip empty and (strange) almost empty folders
                         if (!sections[id] || !section.length) return $();
                         if (!section[0].id && !section[0].title) return $();
