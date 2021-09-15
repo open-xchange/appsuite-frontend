@@ -188,7 +188,7 @@ define('io.ox/contacts/addressbook/popup', [
             var data = {};
 
             if (options.folder === 'all') delete options.folder;
-            if (options.useGABOnly) data.folders = [util.getGabId(true)];
+            if (options.useGABOnly) data.folders = [util.getGabId()];
 
             return http.PUT({
                 module: 'addressbooks',
@@ -443,7 +443,7 @@ define('io.ox/contacts/addressbook/popup', [
             useGABOnly: false
         }, options);
 
-        if (options.useGABOnly) folder = 'folder/6';
+        if (options.useGABOnly) folder = 'folder/' + util.getGabId();
 
         // avoid parallel popups
         if (isOpen) return;
