@@ -145,7 +145,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         mail.selectMail('Appointment canceled: MySubject');
         I.waitForElement('.mail-detail-frame');
         I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
-        I.waitForText(current.itipStatus);
+        // TODO: clarify whether this should show up or not
+        // I.waitForText(current.itipStatus)
         I.waitForText('MyComment');
         // 12.) User#B: Delete
         I.click('Delete');
@@ -227,7 +228,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.click('testdocument.odt', '.io-ox-sidepopup .attachment-list');
     I.waitForText('Download');
     I.handleDownloads();
-    I.click('Download');
+    I.click('Download', '.io-ox-sidepopup .attachment-list');
     I.amInPath('/build/e2e/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
