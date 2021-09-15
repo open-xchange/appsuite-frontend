@@ -30,15 +30,19 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/contacts/view-detail',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
+    'io.ox/core/yell',
+    'io.ox/core/http',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/enterprisepicker/style'
-], function (ModalDialog, dialogs, Mini, DisposableView, api, folderApi, detailView, ext, util, settings, gt) {
+], function (ModalDialog, dialogs, Mini, DisposableView, api, folderApi, detailView, ext, util, yell, http, settings, gt) {
 
     'use strict';
 
     // for convenience, so we only have to change one line
-    var columns = '20,1,101,500,501,502,505,519,520,521,522,524,542,543,547,548,549,551,552,553,555,556,557,569,592,602,606,607,616,617,5,2';
+    var columns = '20,1,101,500,501,502,505,519,520,521,522,524,542,543,547,548,549,551,552,553,555,556,557,569,592,602,606,607,616,617,5,2',
+        // max shown results
+        limit = 1000;
 
     var SelectedContactsView = DisposableView.extend({
 
@@ -167,6 +171,11 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 this.$el.prepend($('<div class="list-label">').text(gt('No contacts found.')));
             }
 
+            // todo we need some backendmagic to see if a list is actually at or above the limit
+            if (contacts.length && contacts.length >= limit) {
+                this.$el.prepend($('<div class="alert alert-info list-label limit-warning">').text(gt('You have reached the limit of contacts to display. Please enter a searchterm to narrow down your results.')));
+            }
+
             return this;
         },
 
@@ -289,23 +298,45 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             })).save();
                         };
 
+                        // show generic error message
+                        var showError = function () {
+                            // show error message
+                            self.$('.modal-content').idle();
+                            model.get('contacts').reset([]);
+                            yell('error', gt('Could not load contacts'));
+                        };
+
                         model.on('change:selectedList', function (model, selectedList) {
                             var isSearch = model.get('searchQuery') && model.get('searchQuery').length > 1;
                             if (selectedList === 'all' && !isSearch) return model.get('contacts').reset([]);
+                            self.$('.modal-content').busy();
 
                             if (isSearch) {
-                                self.$('.modal-content').busy();
-                                var params = { omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                                var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
                                 if (selectedList === 'all') delete params.folders;
                                 api.advancedsearch(model.get('searchQuery'), params)
-                                    .then(updateContactsAfterSearch);
+                                    .then(updateContactsAfterSearch, showError);
                                 return;
                             }
-                            // no cache for now, cache ignores column list and we might get incomplete data
-                            api.getAll({ folder: selectedList, columns: columns }, false)
-                                .then(function (contacts) {
-                                    model.get('contacts').reset(contacts);
-                                });
+                            // put the request together manually, api function has too much utility stuff
+                            // use advanced search without query to get all contacts. (we don't use all request here because that has no limit parameter)
+                            http.PUT({
+                                module: 'addressbooks',
+                                params: {
+                                    action: 'advancedSearch',
+                                    columns: columns,
+                                    right_hand_limit: limit,
+                                    sort: 607,
+                                    order: 'desc'
+                                },
+                                data: {
+                                    folders: [selectedList],
+                                    folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
+                                }
+                            }).then(function (contacts) {
+                                self.$('.modal-content').idle();
+                                model.get('contacts').reset(contacts);
+                            }, showError);
                         });
 
                         model.on('change:searchQuery', function (model, query) {
@@ -315,10 +346,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
                             if (query.length < settings.get('search/minimumQueryLength', 2)) return;
                             self.$('.modal-content').busy();
-                            var params = { omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                            var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
                             if (selectedList === 'all') delete params.folders;
                             api.advancedsearch(model.get('searchQuery'), params)
-                                .then(updateContactsAfterSearch);
+                                .then(updateContactsAfterSearch, showError);
                         });
 
                         self.$('.modal-content').idle();
