@@ -254,6 +254,9 @@ Number of times hint is beeing shown. The protection of this setting needs to be
 
 ## Core: Misc
 
+<config>io.ox/core//autocompleteApiLimit=`<number>`</config>
+Fetch limit of autocomplete widget for modules other than mail compose. Default: `50`
+
 <config>io.ox/core//autoLogout=`<number>`</config>
 Timeout (in ms) until a user is logged out automatically if inactive
 
@@ -542,6 +545,9 @@ Number of signatures listed in options dropdown of mail compose (default 2).
 
 <config>io.ox/mail//attachOriginalMessage=`<bool>`</config>
 Attach original message on touch devices
+
+<config>io.ox/mail//compose/autocompleteApiLimit=`<number>`</config>
+Fetch limit of autocomplete widget of mail compose. Default: `50`
 
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
