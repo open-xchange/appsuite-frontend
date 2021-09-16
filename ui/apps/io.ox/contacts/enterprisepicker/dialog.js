@@ -42,7 +42,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     // for convenience, so we only have to change one line
     var columns = '20,1,101,500,501,502,505,519,520,521,522,524,542,543,547,548,549,551,552,553,555,556,557,569,592,602,606,607,616,617,5,2',
         // max shown results
-        limit = 1000;
+        limit = settings.get('enterprisePicker/limit', 1000);
 
     var SelectedContactsView = DisposableView.extend({
 
@@ -173,7 +173,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             // todo we need some backendmagic to see if a list is actually at or above the limit
             if (contacts.length && contacts.length >= limit) {
-                this.$el.prepend($('<div class="alert alert-info list-label limit-warning">').text(gt('You have reached the limit of contacts to display. Please enter a searchterm to narrow down your results.')));
+                this.$el.prepend($('<div class="alert alert-info list-label limit-warning">').text(gt('You have reached the limit of contacts to display. Please enter a search term to narrow down your results.')));
             }
 
             return this;
