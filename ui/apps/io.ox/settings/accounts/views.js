@@ -59,6 +59,15 @@ define('io.ox/settings/accounts/views', [
                 $('<div class="error-message">').text(model.get('status').message)
             );
         },
+
+        drawSecondaryState = function (model) {
+            if (!model.get('secondary')) return;
+            return $('<div class="info-wrapper">').append(
+                $('<i class="icon fa fa-placeholder" aria-hidden="true">'),
+                $('<div class="message">').text(gt('This is a secondary mail account which can not be edited.'))
+            );
+        },
+
         SettingsAccountListItemView = DisposableView.extend({
 
             tagName: 'li',
@@ -67,7 +76,8 @@ define('io.ox/settings/accounts/views', [
 
             events: {
                 'click [data-action="edit"]': 'onEdit',
-                'click [data-action="delete"]': 'onDelete'
+                'click [data-action="delete"]': 'onDelete',
+                'click [data-action="toggle"]': 'onToggle'
             },
 
             initialize: function () {
@@ -92,11 +102,45 @@ define('io.ox/settings/accounts/views', [
                 return listUtils.makeTitle(title);
             },
 
+            renderAccountControls: function () {
+                var title = this.getTitle(),
+                    canEdit = this.model.get('accountType') === 'fileAccount' ? true : ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
+                    canDelete = this.model.get('id') !== 0;
+                return [
+                    canEdit ? listUtils.appendIconText(
+                        listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
+                        gt('Edit'),
+                        'edit'
+                    ) : '',
+                    canDelete ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
+                ];
+            },
+
+            renderSecondaryAccountControls: function () {
+                var deactivated = this.model.get('deactivated'),
+                    options = deactivated ? {
+                        //#. Used for action label to show secondary mail account in tree view
+                        'aria-label': gt('Show %1$s', this.getTitle()),
+                        'label': gt('Show'),
+                        'icon': 'fa-eye'
+                    } : {
+                        //#. Used for action label to hide secondary mail account in tree view
+                        'aria-label': gt('Hide %1$s', this.getTitle()),
+                        'label': gt('Hide'),
+                        'icon': 'fa-eye-slash'
+                    };
+
+                // set visual disabled-state
+                if (deactivated) this.$el.addClass('disabled');
+
+                return [
+                    $('<a href="#" role="button" class="toggle" data-action="toggle">').attr('aria-label', options['aria-label'])
+                        .append($('<i class="fa" aria-hidden="true">').addClass(options.icon).attr('title', options.label))
+                ];
+            },
+
             render: function () {
-                var self = this,
-                    title = self.getTitle(),
-                    canEdit = self.model.get('accountType') === 'fileAccount' ? true : ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
-                    canDelete = self.model.get('id') !== 0;
+                var self = this;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
@@ -104,18 +148,17 @@ define('io.ox/settings/accounts/views', [
 
                 self.$el.empty().append(
                     drawIcon(self.model),
-                    this.renderTitle(title).append(
+                    this.renderTitle(self.getTitle()).append(
                         this.renderSubTitle()
                     ),
                     listUtils.makeControls().append(
-                        canEdit ? listUtils.appendIconText(
-                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
-                            gt('Edit'),
-                            'edit'
-                        ) : '',
-                        canDelete ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
+                        self.model.get('secondary') ?
+                            self.renderSecondaryAccountControls() :
+                            self.renderAccountControls()
                     ),
-                    drawAccountState(this.model) // show a possible account error
+                    drawSecondaryState(this.model),
+                    // show a possible account error
+                    drawAccountState(this.model)
                 );
 
                 return self;
@@ -217,6 +260,19 @@ define('io.ox/settings/accounts/views', [
                     });
 
                 } else { createExtpointForSelectedAccount(e); }
+            },
+
+            onToggle: function () {
+                var self = this;
+                require(['io.ox/core/api/account', 'io.ox/mail/accounts/model'], function (accountAPI, AccountModel) {
+                    accountAPI.get(self.model.get('id')).done(function (data) {
+                        var aModel = new AccountModel(data);
+                        aModel.set('deactivated', !aModel.get('deactivated')).save();
+                        self.listenTo(aModel, 'sync', function (model) {
+                            self.model.set(model.attributes);
+                        });
+                    });
+                });
             }
         });
 
