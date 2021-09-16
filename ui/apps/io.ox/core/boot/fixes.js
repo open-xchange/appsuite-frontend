@@ -61,6 +61,14 @@ define('io.ox/core/boot/fixes', [], function () {
         blankshield.open($(this).attr('href'));
     });
 
+    // Prevent XSS due to quotes and backslashes in URLs
+    var blankshield_open = blankshield.open;
+    blankshield.open = function (url, name, features) {
+        // url might already contain %-escapes, so can't just encode everything
+        url = url.replace(/["\\]/g, encodeURI);
+        return blankshield_open.call(blankshield, url, name, features);
+    };
+
     //
     // Desktop fixes
     //
