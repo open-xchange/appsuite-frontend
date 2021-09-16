@@ -84,7 +84,7 @@ define('io.ox/core/tk/typeahead', [
 
             if (o.apiOptions) {
                 // limit per autocomplete/search api
-                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : coreSettings.get('autocompleteApiLimit', 10);
+                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : coreSettings.get('autocompleteApiLimit', 50);
                 o.apiOptions.limit = limit;
 
                 // overall limit
