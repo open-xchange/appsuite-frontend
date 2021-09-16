@@ -47,12 +47,6 @@ define('io.ox/settings/accounts/settings/pane', [
                     hasNoOAuthCredentials: function (account) {
                         return !(account.has('mail_oauth') && account.get('mail_oauth') >= 0);
                     },
-                    openRecoveryDialog: function (e) {
-                        e.preventDefault();
-                        ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (dialog) {
-                            dialog.show();
-                        });
-                    },
                     updateListAndStatuses: function () {
                         var collection = this.collection;
 
