@@ -30,6 +30,7 @@ define('io.ox/core/api/account', [
 
     // quick hash for sync checks
     var idHash = {},
+        hiddenHash = {},
         typeHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
@@ -143,6 +144,15 @@ define('io.ox/core/api/account', [
      */
     api.isExternal = function (id) {
         return api.isAccount(id) && !api.isPrimary(id);
+    };
+
+    /**
+     * is hidden secondary account
+     * @param  {string}  id (account_id)
+     * @return {boolean}
+     */
+    api.isHidden = function (id) {
+        return api.isAccount(id) && !!hiddenHash[id];
     };
 
     /**
@@ -519,9 +529,12 @@ define('io.ox/core/api/account', [
 
         return load().done(function (list) {
             idHash = {};
+            hiddenHash = {};
             typeHash = {};
             // add check here
             _(list).each(function (account) {
+                // hidden secondary account
+                hiddenHash['default' + account.id] = account.secondary && account.deactivated;
                 // remember account id
                 idHash[account.id] = true;
                 // add inbox first
