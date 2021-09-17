@@ -87,7 +87,7 @@ module.exports = function (grunt) {
                             'clipboard/dist/clipboard.min.js',
                             'croppie/croppie.min.js',
                             'resize-polyfill/lib/polyfill-resize.js',
-                            'swiper/dist/js/swiper.js',
+                            'swiper/swiper-bundle.min.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'dompurify/dist/purify.min.js',
                             'jwt-decode/build/jwt-decode.js',
@@ -108,8 +108,8 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['*.css'],
-                        cwd: 'node_modules/swiper/dist/css/',
+                        src: ['swiper-bundle.css'],
+                        cwd: 'node_modules/swiper/',
                         dest: 'build/apps/3rd.party/swiper'
                     },
                     {
