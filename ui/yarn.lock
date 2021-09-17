@@ -1877,7 +1877,7 @@ dom-serialize@^2.2.1:
     extend "^3.0.0"
     void-elements "^2.0.0"
 
-dom7@^2.0.6:
+dom7@^2.0.7:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/dom7/-/dom7-2.1.5.tgz#a79411017800b31d8400070cdaebbfc92c1f6377"
   integrity sha512-xnhwVgyOh3eD++/XGtH+5qBwYTgCm0aW91GFgPJ3XG+jlsRLyJivnbP0QmUBFhI+Oaz9FV0s7cxgXHezwOEBYA==
@@ -6335,7 +6335,7 @@ sshpk@^1.7.0:
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
 
-ssr-window@^1.0.0:
+ssr-window@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-1.0.1.tgz#30752a6a4666e7767f0b7e6aa6fc2fdbd0d9b369"
   integrity sha512-dgFqB+f00LJTEgb6UXhx0h+SrG50LJvti2yMKMqAgzfUmUXZrLSv2fjULF7AWGwK25EXu8+smLR3jYsJQChPsg==
@@ -6551,13 +6551,13 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-swiper@4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-4.3.3.tgz#92e39c806ead23a18e5c3251dfba1ae9ce76270e"
-  integrity sha512-hLjeei+E2EioFUBI4XzqUDkvZu9d6TAOWVFbrCXSrOhY9bzgXYC28dfMRHOs8IgU5WAZ7bbMR8lF706TzKf9nw==
+swiper@4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-4.3.5.tgz#40369d4870e66cd10eb9862329af63b8a582aca1"
+  integrity sha512-zFRvMZNFFrXGJWRSJLeD8wkHcIr5uStqk+Cv1fvPDtZxB687PurfjYgK1Ga7j7XQGm5xfCqGMSELNRSaBn36gA==
   dependencies:
-    dom7 "^2.0.6"
-    ssr-window "^1.0.0"
+    dom7 "^2.0.7"
+    ssr-window "^1.0.1"
 
 table@^5.2.3:
   version "5.4.6"
