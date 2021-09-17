@@ -34,6 +34,7 @@ define('io.ox/mail/actions/attachmentQuota', [
             if (m.get('contentDisposition') !== type) return 0;
             if (m.get('size') >= 0) return m.get('size');
             if (m.get('origin')) return (m.get('origin').file || {}).size || 0;
+            return 0;
         })
         .reduce(function (m, n) { return m + n; }, 0);
     }
