@@ -101,7 +101,8 @@
   },
   "resolutions": {
     "@pollyjs/adapter-puppeteer": "^5.1.0",
-    "@pollyjs/core": "^5.1.0"
+    "@pollyjs/core": "^5.1.0",
+    "xmlhttprequest-ssl": "^1.6.3"
   },
   "husky": {
     "hooks": {
