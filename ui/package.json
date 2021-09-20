@@ -85,7 +85,7 @@
     "mark.js": "^8.11.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
-    "patch-package": "^6.2.2",
+    "patch-package": "^6.4.7",
     "pdfjs-dist": "2.5.207",
     "qrcode": "^1.4.4",
     "requirejs": "2.3.6",
