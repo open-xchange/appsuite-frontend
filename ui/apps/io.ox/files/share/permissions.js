@@ -43,13 +43,14 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/folder/util',
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
+    'settings!io.ox/mail',
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/core/util',
     'io.ox/core/api/group',
     'io.ox/files/permission-util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi, pUtil) {
+], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, mailSettings, AddressPickerView, coreUtil, groupApi, pUtil) {
 
     'use strict';
 
@@ -950,8 +951,8 @@ define('io.ox/files/share/permissions', [
 
         show: function (objModel, linkModel, options) {
 
-            // folder tree: nested (whitelist) vs. flat
-            var nested = folderAPI.isNested(objModel.get('module')),
+            // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
+            var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
                 notificationDefault = false,
                 title,
                 guid;
