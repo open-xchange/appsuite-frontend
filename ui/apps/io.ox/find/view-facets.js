@@ -190,7 +190,8 @@ define('io.ox/find/view-facets', [
                                 dialog.close();
                             });
                     },
-                    disable: function (data) {
+                    disable: function (data, options, originalID) {
+                        if (originalID && is('virtual', { id: originalID })) return true;
                         return !is('readable', data) || api.is('virtual', data) || isIncompatible(data);
                     }
                 });
