@@ -513,7 +513,8 @@ define('io.ox/core/folder/contextmenu', [
             }
 
             return function (baton) {
-                if (!capabilities.has('deputy') || (baton.module !== 'mail' && baton.module !== 'calendar')) return;
+                // needs deputy capability and needs to be inbox or default calendar
+                if (!capabilities.has('deputy') || (baton.data.id !== api.getDefaultFolder('mail') && baton.data.id !== api.getDefaultFolder('calendar'))) return;
 
                 contextUtils.addLink(this, {
                     action: 'manageDeputies',

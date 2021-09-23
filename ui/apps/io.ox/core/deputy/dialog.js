@@ -44,7 +44,7 @@ define('io.ox/core/deputy/dialog', [
         },
         // permissions given to newly added deputies
         defaultPermissions = {
-            'sendOnBehalf': false,
+            'sendOnBehalfOf': false,
             'modulePermissions': {
                 'mail': {
                     'permission': permissions.viewer,
@@ -81,13 +81,13 @@ define('io.ox/core/deputy/dialog', [
             return gt('%1$s (%2$s)', moduleMap[key], permissionMap[module.permission]);
         });
 
-        if (model.get('sendOnBehalf')) parts.unshift(gt('Allowed to send emails on your behalf'));
+        if (model.get('sendOnBehalfOf')) parts.unshift(gt('Allowed to send emails on your behalf'));
         return parts.join(', ');
     }
 
     function openEditDialog(model) {
         var prevValues = {
-            sendOnBehalf: model.get('sendOnBehalf'),
+            sendOnBehalfOf: model.get('sendOnBehalfOf'),
             modulePermissions: model.get('modulePermissions')
         };
 
@@ -124,7 +124,7 @@ define('io.ox/core/deputy/dialog', [
                         { value: permissions.author, label: gt('Author (create/edit/delete emails)') }
                     ] }).render().$el
                 ),
-                new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
+                new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalfOf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
                 $('<div class="select-container">').append(
                     $('<label for="inbox-deputy-selector">').text(moduleMap.calendar),
                     new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: calendarModel, list: [
@@ -151,12 +151,19 @@ define('io.ox/core/deputy/dialog', [
             // triggers redraw of the list. Listeners on each model change would redraw too often
             model.collection.trigger('reset');
             if (model.get('deputyId') === undefined) {
-                api.create(model).then(function (id) {
-                    model.set('deputyId', id);
+                api.create(model).then(function (data) {
+                    // MW generated a deputyId. Add it here
+                    model.set('deputyId', data.deputyId);
+                }, function () {
+                    yell('error', gt('Could not create deputy.'));
+                    model.collection.remove(model);
                 });
                 return;
             }
-            api.update(model);
+            api.update(model).fail(function () {
+                yell('error', gt('Could not update deputy permissions.'));
+                model.set(prevValues);
+            });
         })
         .on('remove', function () {
             openConfirmRemoveDialog(model);
@@ -180,8 +187,11 @@ define('io.ox/core/deputy/dialog', [
         .addCancelButton()
         .addButton({ className: 'btn-primary', label: gt('Remove'), action: 'remove' })
         .on('remove', function () {
-            api.remove(model);
-            model.collection.remove(model);
+            api.remove(model).then(function () {
+                model.collection.remove(model);
+            }, function () {
+                yell('error', gt('Could not remove deputy.'));
+            });
         })
         .open();
     }
@@ -270,7 +280,12 @@ define('io.ox/core/deputy/dialog', [
             this.$body.addClass('deputy-dialog-body').busy();
             api.getAll().then(function (deputies) {
                 var defs = _(deputies).map(function (deputy) {
-                    return userApi.get({ id: deputy.user }).then(function (data) {
+                    // fill in incomplete data
+                    if (!deputy.modulePermissions) deputy.modulePermissions = {};
+                    if (!deputy.modulePermissions.mail) deputy.modulePermissions.mail = { 'permission': permissions.none, 'folderIds': [folderApi.getDefaultFolder('mail')] };
+                    if (!deputy.modulePermissions.calendar) deputy.modulePermissions.calendar = { 'permission': permissions.none, 'folderIds': [folderApi.getDefaultFolder('calendar')] };
+
+                    return userApi.get({ id: deputy.userId }).then(function (data) {
                         userCollection.add(data);
                         deputy.userData = userCollection.get(data);
                     }, function (error) {
@@ -309,7 +324,7 @@ define('io.ox/core/deputy/dialog', [
                             userCollection.remove(user, { silent: true });
                             return;
                         }
-                        var deputy = _.extend({}, defaultPermissions, { user: id, userData: user }),
+                        var deputy = _.extend({}, defaultPermissions, { userId: id, userData: user }),
                             model = self.deputyListView.collection.add(deputy);
 
                         openEditDialog(model);
@@ -317,7 +332,7 @@ define('io.ox/core/deputy/dialog', [
 
                     // deputy removed? remove from user collection as well
                     self.deputyListView.collection.on('remove', function (deputy) {
-                        userCollection.remove(deputy.get('user'));
+                        userCollection.remove(deputy.get('userId'));
                     });
                 });
             }, function (error) {

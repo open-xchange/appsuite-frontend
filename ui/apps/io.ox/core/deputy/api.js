@@ -21,70 +21,51 @@
  */
 
 define('io.ox/core/deputy/api', [
-], function () {
+    'io.ox/core/http'
+], function (http) {
 
     'use strict';
 
-
-    var mockdata = [{
-        'deputyId': 'dc5b3fbbee434035a94a7c949721cb77',
-        'user': 22,
-        'sendOnBehalf': true,
-        'modulePermissions': {
-            'mail': {
-                'permission': 4227332,
-                'folderIds': [
-                    123
-                ]
-            },
-            'calendar': {
-                'permission': 257,
-                'folderIds': [
-                    1337
-                ]
-            }
-        }
-    }, {
-        'deputyId': 'dc5b3fbbee434035a94a7c949721cb78',
-        'user': 395,
-        'sendOnBehalf': true,
-        'modulePermissions': {
-            'mail': {
-                'permission': 4227332,
-                'folderIds': [
-                    123
-                ]
-            },
-            'calendar': {
-                'permission': 257,
-                'folderIds': [
-                    1337
-                ]
-            }
-        }
-    }];
-
     var api = {
         getAll: function () {
-            return $.when(mockdata);
+            return http.GET({
+                module: 'deputy',
+                params: {
+                    action: 'all'
+                }
+            });
         },
         create: function (model) {
             var params =  _.clone(model.attributes);
             delete params.userData;
-            console.log('create', params);
-            // return random deputyid
-            return $.when(Math.floor(Math.random() * (10000)));
+            return http.PUT({
+                module: 'deputy',
+                params: {
+                    action: 'new'
+                },
+                data: params
+            });
         },
         remove: function (model) {
-            var id = model.get('deputyId');
-            console.log('remove', id);
-            return $.when();
+            return http.PUT({
+                module: 'deputy',
+                params: {
+                    action: 'delete',
+                    deputyId: model.get('deputyId')
+                }
+            });
         },
         update: function (model) {
             var params =  _.clone(model.attributes);
             delete params.userData;
-            console.log('update', params);
-            return $.when();
+            return http.PUT({
+                module: 'deputy',
+                params: {
+                    action: 'update',
+                    deputyId: model.get('deputyId')
+                },
+                data: params
+            });
         }
     };
     return api;
