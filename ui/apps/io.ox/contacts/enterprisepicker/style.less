@@ -29,6 +29,10 @@
             justify-content: space-around;
             align-items: center;
         }
+
+        .limit-warning {
+            margin: 4px 12px 0px 12px;
+        }
     }
 
     .modal-header {
@@ -74,13 +78,13 @@
             height: 40px;
             min-width: 40px;
             margin-right: 16px;
-            padding: 6px;
             border-radius: 50%;
             background-size: cover;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);
             font-weight: bold;
-            font-size: 20px;
+            font-size: 16px;
+            padding-top: 8px;
             text-align: center;
 
             &.initials {
@@ -126,6 +130,13 @@
             }
         }
 
+        .show-details {
+            color: #767676;
+
+            &:hover {
+                color:#000
+            }
+        }
         .btn-link svg {
             margin-top: 5px;
             height: 20px;
