@@ -258,7 +258,11 @@ define('io.ox/core/main/appcontrol', [
         render: function () {
             this.$el.empty().append(
                 this.collection.map(function (model) {
-                    if (model.get('isCustomLauncher')) return ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId')).draw();
+                    if (model.get('isCustomLauncher')) {
+                        // something broken? just leave this one out
+                        if (!ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId'))) return '';
+                        return ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId')).draw();
+                    }
                     return new LauncherView({
                         tagName: 'button',
                         attributes: { tabindex: -1, type: 'button' },
