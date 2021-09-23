@@ -44,6 +44,28 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         // max shown results
         limit = settings.get('enterprisePicker/limit', 100);
 
+    // function to filter empty contacts
+    var contactsFilter = function (contact) {
+        // consider only spaces as empty
+        var check = function (attr) { return contact[attr] && contact[attr].trim(); };
+
+        // needs a name and some kind of contact information
+        return (check('first_name') || check('last_name') || check('display_name')) && (
+            check('email1') ||
+            check('email2') ||
+            check('email3') ||
+            check('mail') ||
+            check('room_number') ||
+            check('telephone_business1') ||
+            check('telephone_company') ||
+            check('cellular_telephone1') ||
+            check('telephone_business2') ||
+            check('cellular_telephone2') ||
+            check('telephone_home1') ||
+            check('telephone_home2') ||
+            check('telephone_other'));
+    };
+
     var SelectedContactsView = DisposableView.extend({
 
         tagName: 'ul',
@@ -288,6 +310,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                         var updateContactsAfterSearch = function (contacts) {
                             self.$('.modal-content').idle();
+                            contacts = (contacts || []).filter(contactsFilter);
                             model.get('contacts').reset(contacts);
                             // update the last searched contacts
                             var lastContacts = model.get('lastContacts');
@@ -337,6 +360,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                                 }
                             }).then(function (contacts) {
                                 self.$('.modal-content').idle();
+                                contacts = (contacts || []).filter(contactsFilter);
                                 model.get('contacts').reset(contacts);
                             }, showError);
                         });
