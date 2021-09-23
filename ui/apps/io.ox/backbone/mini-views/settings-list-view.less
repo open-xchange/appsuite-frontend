@@ -137,7 +137,7 @@
         }
     }
 
-    .error-wrapper, .info-wrapper {
+    .error-wrapper {
         color: #333;
         flex: 100%;
         display: flex;
@@ -156,9 +156,6 @@
             margin-left: 6px;
         }
     }
-    .info-wrapper .icon {
-        min-width: 40px;
-    }
 
     .warning-message {
         color: #888;
@@ -167,7 +164,7 @@
 
     @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .list-item-controls {
-            .remove {
+            .remove, .toggle {
                 margin-left: 0;
             }
         }
