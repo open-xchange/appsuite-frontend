@@ -261,13 +261,17 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
 
                     defs.push(folderApi.flat({ module: 'contacts', all: true }));
+
+                    http.pause();
                     _(lastSearchedContacts).each(function (contact) {
                         if (!contact || !contact.folder_id || !contact.id) return;
                         var def = $.Deferred();
                         // use get request so we can sort out broken or missing contacts better, always resolve. we don't want a missing contact to break the picker
-                        api.get({ folder_id: contact.folder_id, id: contact.id }).always(def.resolve);
+                        // we have to avoid the cache or the multiple request doesn't work correctly (strange api factory async stuff)
+                        api.get({ folder_id: contact.folder_id, id: contact.id }, false).always(def.resolve);
                         defs.push(def);
                     });
+                    http.resume();
 
                     $.when.apply($, defs).then(function (folders) {
 
