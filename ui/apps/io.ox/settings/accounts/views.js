@@ -26,10 +26,20 @@ define('io.ox/settings/accounts/views', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/views/disposable',
     'io.ox/oauth/keychain',
-    'gettext!io.ox/settings/accounts'
-], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt) {
+    'gettext!io.ox/settings/accounts',
+    'gettext!io.ox/core'
+], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt, gtcore) {
 
     'use strict';
+
+    var labels = {
+        'mail': gtcore.pgettext('app', 'Mail'),
+        'tasks': gtcore.pgettext('app', 'Tasks'),
+        'calendar': gtcore.pgettext('app', 'Calendar'),
+        'contacts': gtcore.pgettext('app', 'Address Book'),
+        'infostore': gtcore.pgettext('app', 'Drive')
+    };
+
 
     var createExtpointForSelectedAccount = function (args) {
             if (args.data.id !== undefined && args.data.accountType !== undefined) {
@@ -114,14 +124,18 @@ define('io.ox/settings/accounts/views', [
                         if (!this.model.get('secondary')) return $();
                         var deactivated = this.model.get('deactivated'),
                             options = deactivated ? {
-                                //#. Used for action label to show secondary mail account in tree view
-                                'aria-label': gt('Show %1$s', this.getTitle()),
-                                'label': gt('Show'),
+                                //#. link title for related accounts into the corresponding folder
+                                //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+                                //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+                                'aria-label': gt('Show %1$s in %2$s', this.getTitle(), labels.mail),
+                                'label': gt('Show in %1$s', labels.mail),
                                 'icon': 'fa-eye'
                             } : {
-                                //#. Used for action label to hide secondary mail account in tree view
-                                'aria-label': gt('Hide %1$s', this.getTitle()),
-                                'label': gt('Hide'),
+                                //#. link title for related accounts into the corresponding folder
+                                //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+                                //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+                                'aria-label': gt('Hide %1$s in %2$s', this.getTitle(), labels.mail),
+                                'label': gt('Hide in %1$s', labels.mail),
                                 'icon': 'fa-eye-slash'
                             };
                         // set visual disabled-state
