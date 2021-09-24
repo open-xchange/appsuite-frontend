@@ -66,6 +66,15 @@ define('io.ox/core/deputy/api', [
                 },
                 data: params
             });
+        },
+        // returns deputy data where the current user is deputy
+        reverse: function () {
+            return http.GET({
+                module: 'deputy',
+                params: {
+                    action: 'reverse'
+                }
+            });
         }
     };
     return api;
