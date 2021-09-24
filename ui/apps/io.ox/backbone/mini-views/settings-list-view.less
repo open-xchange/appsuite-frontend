@@ -51,7 +51,12 @@
         label {
             margin-right: 10px;
         }
+    }
 
+    // support ellipsis for sub nodes
+    .list-item-subtitle {
+        display: flex;
+        .deeplink > { .ellipsis(); }
     }
 
     .drag-handle {

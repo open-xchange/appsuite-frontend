@@ -30,8 +30,9 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/a11y',
     'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
+    'gettext!io.ox/core',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, ModalDialog, notifications, a11y, mailSettings, gt) {
+], function (ext, api, AccountModel, AccountDetailView, ModalDialog, notifications, a11y, mailSettings, gt, gtcore) {
 
     'use strict';
 
@@ -141,6 +142,35 @@ define('io.ox/mail/accounts/settings', [
             } else {
                 renderDetailView(evt, evt.data, evt.data.model);
             }
+        }
+    }, {
+        index: 100,
+        id: 'mail-address',
+        renderSubtitle: function (model) {
+            // already covered by oauth view
+            if (model.has('serviceId')) return;
+            if (model.get('id') !== 0 && !model.get('secondary')) return;
+
+            // more than one emailaddres (alias)
+            var title = model.get('addresses') || model.get('primary_address') || '';
+            this.append(
+                $('<button type="button" class="btn btn-link no-padding deeplink">').attr({
+                    //#. link title for related accounts into the corresponding folder
+                    //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+                    //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+                    title: gt('Open %1$s in %2$s', title, gtcore.pgettext('app', 'Mail'))
+                })
+                .append(title)
+                .prop('disabled', !!model.get('deactivated'))
+                .addClass(model.get('deactivated') ? 'disabled' : '')
+                .on('click', function () {
+                    var folder = 'default' + model.get('id') + '/INBOX';
+                    ox.launch('io.ox/mail/main', { folder: folder }).done(function () {
+                        this.folder.set(folder);
+                    });
+                })
+            );
+
         }
     });
 
