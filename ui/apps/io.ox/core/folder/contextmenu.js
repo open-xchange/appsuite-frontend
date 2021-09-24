@@ -502,6 +502,31 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
+        // Manage Deputies (only inbox and calendar for now)
+        //
+        deputies: (function () {
+            function handler(e) {
+                e.preventDefault();
+                require(['io.ox/core/deputy/dialog'], function (deputyDialog) {
+                    deputyDialog.open();
+                });
+            }
+
+            return function (baton) {
+                // needs deputy capability and needs to be inbox or default calendar
+                if (!capabilities.has('deputy') || (baton.data.id !== api.getDefaultFolder('mail') && baton.data.id !== api.getDefaultFolder('calendar'))) return;
+
+                contextUtils.addLink(this, {
+                    action: 'manageDeputies',
+                    data: { folder: baton.data.id, app: baton.app },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Manage deputies')
+                });
+            };
+        }()),
+
+        //
         // Favorite "show in Drive" is only for files
         //
         showInDrive: (function () {
@@ -738,6 +763,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'shares',
             index: 2000,
             draw: extensions.shares
+        },
+        {
+            id: 'deputies',
+            index: 2050,
+            draw: extensions.deputies
         },
         {
             id: 'divider-3',
