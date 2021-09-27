@@ -118,7 +118,7 @@ Default: `1` if io.ox/core//feedback/timeLimit is set else `undefined` (i.e. unl
 
 <config>io.ox/core//feedback/timeLimit=`<string>`</config>
 Can be relative or absolute ISO strings to define a time, e.g. “2020-01-21” or “3M” (meaning within 3 months).
-See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details.
+See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details. Please ensure you wrap the value in quotes to avoid missinterprations as non-string data type.
 
 Default: `false`
 
