@@ -66,6 +66,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             check('telephone_other'));
     };
 
+    var detailViewDialog,
+        pickerDialog;
+
     var SelectedContactsView = DisposableView.extend({
 
         tagName: 'ul',
@@ -224,7 +227,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             var target = e.currentTarget,
                 id = target.getAttribute('data-id'),
                 model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id);
-            new dialogs.SidePopup({ tabTrap: true, container: $('body'), arrow: false }).show(e, function (popup) {
+
+            detailViewDialog = new dialogs.SidePopup({ tabTrap: true, container: $('body'), arrow: false }).show(e, function (popup) {
                 // picker has a z index of 1050
                 popup.busy().closest('.io-ox-sidepopup').css('z-index', 2000);
                 api.get({ id: model.get('id'), folder: model.get('folder_id') }).then(function (data) {
@@ -504,9 +508,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         } else {
             dialog.addButton({ label: gt('Close'), action: 'close' });
         }
-
+        pickerDialog = dialog;
         return dialog.open();
     };
+
+    // close picker and possible detailviewDialog on
+    ox.ui.apps.on('launch resume', function () {
+        if (detailViewDialog && detailViewDialog.close) detailViewDialog.close();
+        if (pickerDialog && pickerDialog.close) pickerDialog.close();
+        pickerDialog = detailViewDialog = null;
+    });
 
     // use same names as default addressbook picker, to make it easier to switch between the two
     return {
