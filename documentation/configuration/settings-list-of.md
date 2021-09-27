@@ -99,10 +99,10 @@ Maximum target image width when croping contact/user images in pixels (default: 
 <config>io.ox/core//feedback/show=`<string>`</config>
 Show one or more feedback buttons. Default value is `both` which shows a dropdown entry in the settings menu and a button in the main content window (topbar/side/both).
 
-<config>io.ox/core//feedback/supportlink`<string>`</config>
+<config>io.ox/core//feedback/supportlink=`<string>`</config>
 Hyperlink to a support site referenced in the feedback dialog. Default is unset.
 
-<config>io.ox/core//feedback/position`<string>`</config>
+<config>io.ox/core//feedback/position=`<string>`</config>
 Set position of the feedback button. Default value is `right`. (`left|right`).
 
 <config>io.ox/core//feedback/showHover=`<bool>`</config>
