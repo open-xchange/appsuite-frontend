@@ -274,24 +274,32 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     http.resume();
 
                     $.when.apply($, defs).then(function (folders) {
+                        var folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
 
                         // flat request returns folders in sections, add them to a single array, leave out the hidden section
-                        folders = _([].concat(folders.private, folders.shared, folders.public))
-                            .compact()
-                            // filter folders according to settings
-                            .filter(function (folder) {
+                        _(folders).each(function (sectionFolders, section) {
+                            if (section === 'hidden') return;
+
+                            var list = _(_(sectionFolders).filter(function (folder) {
                                 // only use folders that have the "used in picker" flag if not configured otherwise
                                 if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
 
                                 return folder['com.openexchange.contacts.extendedProperties'] &&
                                     folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
                                     folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
+
+                            })).map(function (folder) {
+                                // this are non breakable spaces that are not trimmed
+                                // we use this to create our hierarchy and still be able to use a default select input
+                                return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
                             });
 
-                        var lists = _(folders).map(function (folder) {
-                            return { label: folder.title, value: folder.id };
+                            if (list.length === 0) return;
+                            folderlist.push({ label: section, value: 'sectionHeader' });
+                            folderlist = folderlist.concat(list);
                         });
-                        lists.unshift({ label: gt('Search all address lists'), value: 'all' });
+
+                        folderlist = _(folderlist).compact();
 
                         var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
 
@@ -309,7 +317,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             selectedContacts: new Backbone.Collection(),
                             contacts: new Backbone.Collection(),
                             lastContacts: new Backbone.Collection(lastSearchedContacts),
-                            addressLists: lists
+                            addressLists: folderlist
                         });
 
                         var updateContactsAfterSearch = function (contacts) {
@@ -386,15 +394,30 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                         var listSelectBox = new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
 
+                        // disable section headers
+                        listSelectBox.find('option[value="sectionHeader"]').attr('disabled', 'disabled');
                         model.on('change:filterQuery', function () {
                             var query = model.get('filterQuery').trim().toLowerCase(),
                                 options = listSelectBox.find('option');
-                            if (!query) return options.show();
+                            if (!query) return options.removeClass('hidden');
 
-                            _(listSelectBox.find('option')).each(function (option) {
-                            // never hide the placeholder option
-                                if ($(option).val() === 'all') return;
-                                $(option).toggle(option.text.toLowerCase().indexOf(query) !== -1);
+                            _(options).each(function (option) {
+                                $(option).removeClass('hidden');
+                                // never hide the placeholder
+                                // show section headers, we check for emtpy sections later
+                                if ($(option).val() === 'all' || $(option).val() === 'sectionHeader') return;
+                                $(option).toggleClass('hidden', option.text.toLowerCase().indexOf(query) === -1);
+                            });
+                            // find empty sections
+                            var prev;
+                            _(options.not('.hidden')).each(function (option, index, array) {
+                                if ($(option).val() === 'sectionHeader') {
+                                    // two headers after another -> hide the first
+                                    if (prev && $(prev).val() === 'sectionHeader') $(prev).addClass('hidden');
+                                    // two header ist the last item in the list -> hide it
+                                    if (index === array.length - 1) $(option).addClass('hidden');
+                                }
+                                prev = option;
                             });
                         });
 
