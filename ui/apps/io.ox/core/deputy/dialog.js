@@ -308,7 +308,8 @@ define('io.ox/core/deputy/dialog', [
                             placeholder: gt('Add people'),
                             collection: userCollection,
                             scrollIntoView: true,
-                            useGABOnly: true
+                            useGABOnly: true,
+                            selection: { behavior: 'single' }
                         }).render().$el,
                         self.deputyListView.render().$el
                     );

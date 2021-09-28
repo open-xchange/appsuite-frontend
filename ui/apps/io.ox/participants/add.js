@@ -273,7 +273,8 @@ define('io.ox/participants/add', [
                         self.options.collection.add(member);
                     },
                     processRaw: self.options.processRaw,
-                    useGABOnly: self.options.useGABOnly
+                    useGABOnly: self.options.useGABOnly,
+                    selection: self.options.selection
                 });
                 this.$el.append(
                     this.addresspicker.render().$el

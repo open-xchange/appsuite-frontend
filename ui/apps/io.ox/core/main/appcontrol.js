@@ -465,7 +465,7 @@ define('io.ox/core/main/appcontrol', [
                         $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').append($.icon('fa-address-card-o'))
                             .on('click', _.debounce(function () {
                                 require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                                    popup.open($.noop, { selection: false });
+                                    popup.open($.noop, { selection: { behavior: 'none' } });
                                 });
                             }, 300, true))
                     );

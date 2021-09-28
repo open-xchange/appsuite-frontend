@@ -143,7 +143,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             var node = $('<li>').attr('data-id', contact.get('id')).append(
                 $('<div class="flex-container multi-item-container">').append(
-                    this.options.selection ? $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }) : '',
+                    this.options.selection.behavior === 'multiple' ? $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }) : '',
                     (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
                         .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
                             $(this).css('background-image', 'url(' + e.data.url + ')');
@@ -207,7 +207,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         updateSelection: function (e) {
-            if (!this.options.selection) return;
+            if (this.options.selection.behavior === 'none') return;
 
             e.stopPropagation();
             var target = e.currentTarget,
@@ -218,6 +218,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             if (isSelected) {
                 this.model.get('selectedContacts').remove(model);
             } else {
+                // single selection or multi selection?
+                if (this.options.selection.behavior === 'single') return this.model.get('selectedContacts').reset([model]);
                 this.model.get('selectedContacts').add(model);
             }
         },
@@ -248,7 +250,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     });
 
     var open = function (callback, options) {
-        options = _.extend({ selection: true }, options);
+        options = _.extend({ selection: { behavior: 'multiple' } }, options);
 
         var model,
             dialog =  new ModalDialog({
@@ -501,7 +503,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         model = null;
                     }
                 });
-        if (options.selection) {
+        if (options.selection.behavior !== 'none') {
             dialog.addCancelButton()
             //#. Context: Add selected contacts; German "Auswählen", for example
             .addButton({ label: gt('Select'), action: 'select' });

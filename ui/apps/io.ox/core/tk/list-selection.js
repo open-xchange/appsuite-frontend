@@ -62,6 +62,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             case 'simple':
                 _.extend(this, simpleBehavior);
                 break;
+            case 'single':
+                _.extend(this, simpleBehavior, singleBehavior);
+                break;
             default:
                 console.error('Unknown selection behavior', this.behavior);
                 break;
@@ -1143,6 +1146,18 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.triggerChange(items, current.attr('data-cid'));
             this.setPosition(e, index);
             this.focus(index, items);
+        }
+    };
+
+    var singleBehavior = {
+
+        isMultiple: function () {
+            return false;
+        },
+
+        onClick: function (e) {
+            var currentTarget = $(e.currentTarget);
+            this.set([currentTarget.attr('data-cid')]);
         }
     };
 

@@ -550,7 +550,7 @@ define('io.ox/contacts/addressbook/popup', [
                     collection: new Backbone.Collection(),
                     pagination: false,
                     ref: 'io.ox/contacts/addressbook-popup/list',
-                    selection: { behavior: 'simple' }
+                    selection: this.options.selection || { behavior: 'simple' }
                 });
                 this.$body.append(this.listView.render().$el.addClass('address-picker'));
             },
