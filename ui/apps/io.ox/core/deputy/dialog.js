@@ -91,7 +91,7 @@ define('io.ox/core/deputy/dialog', [
             modulePermissions: model.get('modulePermissions')
         };
 
-        new ModalDialog({
+        var editDialog = new ModalDialog({
             //#. %1$s name of the deputy
             title: gt('Deputy: %1$s', util.getFullName(model.get('userData').attributes, false))
         })
@@ -135,40 +135,43 @@ define('io.ox/core/deputy/dialog', [
                     ] }).render().$el
                 )
             ).addClass('deputy-permissions-dialog');
-        })
-        .addButton({ className: 'btn-default pull-left', label: gt('Remove'), action: 'remove' })
-        .addCancelButton()
-        .addButton({ className: 'btn-primary', label: gt('save'), action: 'save' })
-        .on('cancel', function () {
-            // cancel on a model that was not saved means we should remove it from the list
-            if (model.get('deputyId') === undefined) {
-                model.collection.remove(model);
-                return;
-            }
-            model.set(prevValues);
-        })
-        .on('save', function () {
-            // triggers redraw of the list. Listeners on each model change would redraw too often
-            model.collection.trigger('reset');
-            if (model.get('deputyId') === undefined) {
-                api.create(model).then(function (data) {
-                    // MW generated a deputyId. Add it here
-                    model.set('deputyId', data.deputyId);
-                }, function () {
-                    yell('error', gt('Could not create deputy.'));
+        });
+
+        // cannot remove models without deputy id (they are not saved on the server yet)
+        if (model.get('deputyId')) editDialog.addButton({ className: 'btn-default pull-left', label: gt('Remove'), action: 'remove' });
+
+        editDialog.addCancelButton()
+            .addButton({ className: 'btn-primary', label: gt('save'), action: 'save' })
+            .on('cancel', function () {
+                // cancel on a model that was not saved means we should remove it from the list
+                if (model.get('deputyId') === undefined) {
                     model.collection.remove(model);
-                });
-                return;
-            }
-            api.update(model).fail(function () {
-                yell('error', gt('Could not update deputy permissions.'));
+                    return;
+                }
                 model.set(prevValues);
-            });
-        })
-        .on('remove', function () {
-            openConfirmRemoveDialog(model);
-        })
-        .open();
+            })
+            .on('save', function () {
+                // triggers redraw of the list. Listeners on each model change would redraw too often
+                model.collection.trigger('reset');
+                if (model.get('deputyId') === undefined) {
+                    api.create(model).then(function (data) {
+                        // MW generated a deputyId. Add it here
+                        model.set('deputyId', data.deputyId);
+                    }, function () {
+                        yell('error', gt('Could not create deputy.'));
+                        model.collection.remove(model);
+                    });
+                    return;
+                }
+                api.update(model).fail(function () {
+                    yell('error', gt('Could not update deputy permissions.'));
+                    model.set(prevValues);
+                });
+            })
+            .on('remove', function () {
+                openConfirmRemoveDialog(model);
+            })
+            .open();
     }
 
     function openConfirmRemoveDialog(model) {
