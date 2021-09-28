@@ -454,7 +454,7 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Permissions / Sharing
+        // Share / Permissions
         //
         shares: (function () {
 

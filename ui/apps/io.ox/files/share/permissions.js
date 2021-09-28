@@ -215,11 +215,11 @@ define('io.ox/files/share/permissions', [
         // Permission Collection
         Permissions = Backbone.Collection.extend({
 
+            model: Permission,
+
             modelId: function (attrs) {
                 return attrs.entity ? String(attrs.entity) : attrs.identifier;
             },
-
-            model: Permission,
 
             initialize: function () {
                 this.on('revert', this.revert);
@@ -275,15 +275,6 @@ define('io.ox/files/share/permissions', [
         PermissionEntityView = DisposableView.extend({
 
             className: 'permission row',
-
-            /* doesn't work on mobile phones
-            events: {
-                'click a.bit': 'updateDropdown',
-                'click a[data-name="edit"]': 'onEdit',
-                'click a[data-name="resend"]': 'onResend',
-                'click a[data-name="revoke"]': 'onRemove'
-            },
-            */
 
             initialize: function (options) {
                 if (this.model.get('type') === 'anonymous') {
@@ -1025,7 +1016,7 @@ define('io.ox/files/share/permissions', [
                 permissionPreSelection = new PermissionPreSelection({ model: objModel });
 
             permissionsView.setPermissionPreSelectionView(permissionPreSelection);
-            if (options.hasLinkSupport !== false) {
+            if (options.hasLinkSupport) {
                 ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
             }
 
@@ -1191,7 +1182,7 @@ define('io.ox/files/share/permissions', [
                             // guests don't have a proper entity id yet, so we have to check by email
                             if (permissionsView.collection.isAlreadyGuest(obj)) return;
                         }
-                        permissionsView.collection.add(new Permission(obj));
+                        permissionsView.collection.add(obj);
                     };
 
                 var typeaheadView = new Typeahead({
@@ -1229,7 +1220,7 @@ define('io.ox/files/share/permissions', [
                 dialog.$header.append(settingsButton);
 
                 dialog.$body.append(
-                    (options.hasLinkSupport === false ? '' : publicLink.render().$el),
+                    (options.hasLinkSupport ? publicLink.render().$el : ''),
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
                         // Invite people header
@@ -1275,7 +1266,7 @@ define('io.ox/files/share/permissions', [
                                     };
                                     if (permissionsView.collection.isAlreadyGuest(obj)) return;
                                     // add to collection
-                                    permissionsView.collection.add(new Permission(obj));
+                                    permissionsView.collection.add(obj);
                                 });
 
                                 // clear input field
