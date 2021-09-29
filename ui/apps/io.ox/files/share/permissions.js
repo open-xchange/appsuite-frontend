@@ -919,7 +919,11 @@ define('io.ox/files/share/permissions', [
 
         // async / id is folder id
         showFolderPermissions: function (id, linkModel, options) {
-            that.showByModel(new Backbone.Model({ id: id }), linkModel, options);
+            var model = folderAPI.pool.getModel(id),
+                opt = _.extend({
+                    hasLinkSupport: capabilities.has('share_links') && !model.is('mail') && model.isShareable(id)
+                }, options);
+            that.showByModel(new Backbone.Model({ id: id }), [].concat(linkModel), opt);
         },
 
         // async / obj must provide folder_id and id
