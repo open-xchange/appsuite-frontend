@@ -25,8 +25,9 @@ define('io.ox/mail/sender', [
     'io.ox/core/api/account',
     'io.ox/core/deputy/api',
     'io.ox/core/api/user',
+    'io.ox/core/capabilities',
     'settings!io.ox/mail'
-], function (util, api, deputyAPI, userAPI, settings) {
+], function (util, api, deputyAPI, userAPI, capabilities, settings) {
 
     'use strict';
 
@@ -125,7 +126,7 @@ define('io.ox/mail/sender', [
         getAddresses: function (options) {
             return $.when(
                 that.getAccounts(options),
-                deputyAPI.getGranteeAddresses(),
+                capabilities.has('deputy') ? deputyAPI.getGranteeAddresses() : [],
                 that.getPrimaryAddress()
             );
         },
