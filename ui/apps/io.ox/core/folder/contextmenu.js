@@ -488,15 +488,13 @@ define('io.ox/core/folder/contextmenu', [
                 // stop if neither invites or links are supported
                 if (!supportsInternal && !showInvitePeople && !hasLinkSupport) return;
 
-                if (supportsInternal || showInvitePeople) {
-                    contextUtils.addLink(this, {
-                        action: 'invite',
-                        data: { app: baton.app, id: id },
-                        enabled: true,
-                        handler: invite,
-                        text: showInvitePeople ? gt('Share / Permissions') : gt('Permissions')
-                    });
-                }
+                contextUtils.addLink(this, {
+                    action: 'invite',
+                    data: { app: baton.app, id: id },
+                    enabled: true,
+                    handler: invite,
+                    text: (showInvitePeople || hasLinkSupport) ? gt('Share / Permissions') : gt('Permissions')
+                });
             };
         }()),
 

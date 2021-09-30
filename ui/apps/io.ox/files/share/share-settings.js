@@ -314,6 +314,7 @@ define('io.ox/files/share/share-settings', [
 
         className: 'share-wizard',
         hasLinkSupport: true,
+        supportsPersonalShares: true,
         applyToSubFolder: false,
         isFolder: false,
 
@@ -322,6 +323,7 @@ define('io.ox/files/share/share-settings', [
             this.model = options.model.model;
             this.hasPublicLink = options.model.hasPublicLink();
             this.hasLinkSupport = options.hasLinkSupport;
+            this.supportsPersonalShares = options.supportsPersonalShares;
             this.applyToSubFolder = options.applyToSubFolder;
             this.baton = ext.Baton({ model: this.model, view: this, dialogConfig: options.dialogConfig });
 
@@ -335,7 +337,9 @@ define('io.ox/files/share/share-settings', [
             if (this.hasLinkSupport) {
                 ext.point(POINT_SETTINGS + '/settings-public-link').invoke('draw', this.$el, this.baton);
             }
-            ext.point(POINT_SETTINGS + '/settings-invite-people').invoke('draw', this.$el, this.baton);
+            if (this.supportsPersonalShares) {
+                ext.point(POINT_SETTINGS + '/settings-invite-people').invoke('draw', this.$el, this.baton);
+            }
             return this;
         }
     });

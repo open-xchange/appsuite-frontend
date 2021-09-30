@@ -570,6 +570,12 @@ define('io.ox/files/share/permissions', [
             }
         });
 
+    function supportsPersonalShares(objModel) {
+        var folderModel = objModel.getFolderModel();
+        if (objModel.isAdmin() && folderModel.supportsInternalSharing()) return true;
+        if (folderModel.supportsInviteGuests()) return true;
+    }
+
     ext.point(POINT + '/entity').extend(
         //
         // Image
@@ -855,14 +861,25 @@ define('io.ox/files/share/permissions', [
     ext.point(POINT_DIALOG + '/share-settings').extend({
         id: 'who-can-share',
         index: 100,
-        draw: function (linkModel) {
-            var guid;
+        draw: function (linkModel, baton) {
+            var guid,
+                dialog = baton.view,
+                objModel = dialog.views.permissions.model,
+                supportsPersonal = supportsPersonalShares(objModel);
             linkModel.set('access', linkModel.hasUrl() ? 1 : 0);
 
             var typeTranslations = {
                 0: gt('Invited people only'),
                 1: gt('Anyone with the link and invited people')
             };
+
+            // link-only case
+            if (!supportsPersonal) {
+                typeTranslations = {
+                    0: gt('Listed people only'),
+                    1: gt('Anyone with the link and listed people')
+                };
+            }
 
             var select = $('<select>');
             _(typeTranslations).each(function (val, key) {
@@ -959,6 +976,7 @@ define('io.ox/files/share/permissions', [
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.share.html',
                 title: title,
                 smartphoneInputFocus: true,
+                hasLinkSupport: false,
                 nested: nested,
                 width: '35.25rem',
                 share: false }, options);
@@ -1015,9 +1033,19 @@ define('io.ox/files/share/permissions', [
                 publicLink = new PublicLink({ files: linkModel }),
                 permissionPreSelection = new PermissionPreSelection({ model: objModel });
 
+            dialog.model = dialogConfig;
+            dialog.views = {
+                permissions: permissionsView,
+                preselection: permissionPreSelection,
+                link: publicLink
+            };
+
+            dialog.$('.modal-content').addClass(supportsPersonalShares(objModel) ? 'supports-personal-shares' : '');
+
             permissionsView.setPermissionPreSelectionView(permissionPreSelection);
             if (options.hasLinkSupport) {
-                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model);
+                var baton = new ext.Baton({ view: dialog, model: dialogConfig });
+                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model, baton);
             }
 
             publicLink.model.on('change:access', function (model) {
@@ -1139,6 +1167,17 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
+            var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                openSettings();
+            });
+            dialog.$header.append(settingsButton);
+
+            if (options.hasLinkSupport) {
+                dialog.$body.append(
+                    publicLink.render().$el
+                );
+            }
+
             if (supportsInvites) {
 
                 /*
@@ -1214,13 +1253,7 @@ define('io.ox/files/share/permissions', [
                     dialogConfig.set('cascadePermissions', true);
                 }
 
-                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
-                    openSettings();
-                });
-                dialog.$header.append(settingsButton);
-
                 dialog.$body.append(
-                    (options.hasLinkSupport ? publicLink.render().$el : ''),
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
                         // Invite people header
@@ -1318,7 +1351,7 @@ define('io.ox/files/share/permissions', [
             }
 
             function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
                 shareSettings.showSettingsDialog(settingsView);
             }
 
