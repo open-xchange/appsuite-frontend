@@ -84,12 +84,17 @@ define('io.ox/mail/compose/actions/extensions', [
 
         return function (baton) {
             var model = baton.model,
-                sharedAttachments = model.get('sharedAttachments') || {};
+                sharedAttachments = model.get('sharedAttachments') || {},
+                needsAction;
 
-            if (!model.exceedsThreshold() || sharedAttachments.enabled) return;
+            needsAction = model.exceedsMailQuota() || model.exceedsThreshold();
+
+            if (!needsAction || sharedAttachments.enabled) return;
 
             //#. %1$s is usually "Drive Mail" (product name; might be customized)
-            if (opt.yell) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+            if (opt.yell && model.exceedsThreshold()) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+
+            if (opt.yell && model.exceedsMailQuota()) yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name')));
 
             model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
 
