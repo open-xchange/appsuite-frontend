@@ -266,7 +266,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         defs = [],
                         lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
 
-                    defs.push(folderApi.flat({ module: 'contacts', all: true }));
+                    defs.push(options.useGABOnly ? folderApi.get(util.getGabId()) : folderApi.flat({ module: 'contacts', all: true }));
 
                     http.pause();
                     _(lastSearchedContacts).each(function (contact) {
@@ -280,38 +280,44 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     http.resume();
 
                     $.when.apply($, defs).then(function (folders) {
-                        var folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
 
-                        // flat request returns folders in sections, add them to a single array, leave out the hidden section
-                        _(folders).each(function (sectionFolders, section) {
-                            if (section === 'hidden') return;
+                        var folderlist;
+                        if (options.useGABOnly) {
+                            folderlist = [{ label: folders.title, value: folders.id }];
+                        } else {
+                            folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
 
-                            var list = _(_(sectionFolders).filter(function (folder) {
+                            // flat request returns folders in sections, add them to a single array, leave out the hidden section
+                            _(folders).each(function (sectionFolders, section) {
+                                if (section === 'hidden') return;
+
+                                var list = _(_(sectionFolders).filter(function (folder) {
                                 // only use folders that have the "used in picker" flag if not configured otherwise
-                                if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
+                                    if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
 
-                                return folder['com.openexchange.contacts.extendedProperties'] &&
+                                    return folder['com.openexchange.contacts.extendedProperties'] &&
                                     folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
                                     folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
 
-                            })).map(function (folder) {
+                                })).map(function (folder) {
                                 // this are non breakable spaces that are not trimmed
                                 // we use this to create our hierarchy and still be able to use a default select input
-                                return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
+                                    return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
+                                });
+
+                                if (list.length === 0) return;
+                                folderlist.push({ label: section, value: 'sectionHeader' });
+                                folderlist = folderlist.concat(list);
                             });
 
-                            if (list.length === 0) return;
-                            folderlist.push({ label: section, value: 'sectionHeader' });
-                            folderlist = folderlist.concat(list);
-                        });
-
-                        folderlist = _(folderlist).compact();
+                            folderlist = _(folderlist).compact();
+                        }
 
                         var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
 
                         // filter broken stuff and save to settings
                         lastSearchedContacts = lastSearchedContacts.filter(function (contact) {
-                            return !contact.error;
+                            return !contact.error && (!options.useGABOnly || contact.folder_id === util.getGabId());
                         });
                         settings.set('enterprisePicker/lastSearchedContacts', _(lastSearchedContacts).map(function (contact) {
                             return { folder_id: contact.folder_id, id: contact.id };
@@ -319,7 +325,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         model = new Backbone.Model({
                             searchQuery: '',
                             filterQuery: '',
-                            selectedList: 'all',
+                            selectedList: options.useGABOnly ? folders.id : 'all',
                             selectedContacts: new Backbone.Collection(),
                             contacts: new Backbone.Collection(),
                             lastContacts: new Backbone.Collection(lastSearchedContacts),
@@ -459,6 +465,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                         // triggers focus and fixes "compact" class
                         self.idle();
+                        if (options.useGABOnly) model.trigger('change:selectedList', model, util.getGabId());
+
                     }, function (error) {
                         self.idle();
                         console.log(error);
