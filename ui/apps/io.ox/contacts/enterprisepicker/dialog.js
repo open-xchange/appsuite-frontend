@@ -250,7 +250,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     });
 
     var open = function (callback, options) {
-        options = _.extend({ selection: { behavior: 'multiple' } }, options);
+        if (!options.selection) options.selection = { behavior: 'multiple' };
 
         var model,
             dialog =  new ModalDialog({
