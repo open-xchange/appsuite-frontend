@@ -105,6 +105,33 @@ define('io.ox/core/deputy/api', [
             });
 
             return def;
+        },
+
+        // utility function that returns the mail address from a folder you are allowed to send mails from as a deputy
+        getGranteeAddressFromFolder: function (id) {
+            if (!id) return $.when([]);
+
+            var def = $.Deferred();
+            // ignore errors, just send an empty array then
+            api.reverse().then(function (grantedPermissions) {
+                var deputyData = _(grantedPermissions).find(function (data) {
+                    return data.sendOnBehalfOf && data.modulePermissions && data.modulePermissions.mail && _(data.modulePermissions.mail.folderIds).contains(id);
+                });
+
+                // no fitting mail address for this folder
+                if (!deputyData) return def.resolve([]);
+
+                userAPI.get({ id: deputyData.granteeId }).then(function (user) {
+                    def.resolve([util.getDisplayName(user), deputyData.granteeAddresses[0]]);
+                }, function () {
+                    def.resolve([]);
+                });
+                return def;
+            }, function () {
+                def.resolve([]);
+            });
+
+            return def;
         }
     };
     return api;
