@@ -223,7 +223,12 @@ define('io.ox/mail/compose/sharing', [
         updateVisibility: function () {
             if (!this.optionsButton) return;
             var overThreshold = this.model.exceedsThreshold();
-            if (!this.model.saving && overThreshold && !this.sharingModel.get('enabled')) {
+            var overMailQuota = this.model.exceedsMailQuota();
+            if (!this.model.saving && overMailQuota && !this.sharingModel.get('enabled')) {
+                //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', mailSettings.get('compose/shareAttachments/name')));
+                this.sharingModel.set('enabled', true);
+            } else if (!this.model.saving && overThreshold && !this.sharingModel.get('enabled')) {
                 //#. %1$s is usually "Drive Mail" (product name; might be customized)
                 yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
                 this.sharingModel.set('enabled', true);
@@ -232,8 +237,8 @@ define('io.ox/mail/compose/sharing', [
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
             this.optionsButton.toggleClass('hidden', !this.sharingModel.get('enabled'));
-            // if we are over the threshold users should not be able to untoggle drive mail
-            this.enabledCheckbox.toggleClass('disabled', overThreshold).find('input').attr('disabled', overThreshold);
+            // if we are over the threshold or Mail Quota users should not be able to untoggle drive mail
+            this.enabledCheckbox.toggleClass('disabled', overThreshold).find('input').attr('disabled', overThreshold || overMailQuota);
         },
 
         syncToSharingModel: function () {
