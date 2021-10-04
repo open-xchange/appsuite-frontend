@@ -54,7 +54,11 @@ define('io.ox/files/share/permissions', [
 
     'use strict';
 
+    window.test = true;
+
     var POINT = 'io.ox/files/share/permissions',
+
+        POINT_DIALOG = 'io.ox/files/share/dialog',
 
         roles = {
             //#. Role: view folder + read all
@@ -338,6 +342,7 @@ define('io.ox/files/share/permissions', [
                 if (this.model.get('type') === 'anonymous') return false;
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
+                // io.ox/files/share/permissions/entity
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
 
                 // The menu node is moved outside the PermissionEntityView root node. That's why Backbone event delegate seems to have problems on mobile phones.
@@ -464,7 +469,7 @@ define('io.ox/files/share/permissions', [
                 if (String(folderAPI.getDefaultFolder(module)) === this.parentModel.get('id')) return false;
                 // not for system folders
                 if (type === 5) return false;
-                // public folder and permission enity 0, i.e. "All users"
+                // public folder and permission entity 0, i.e. "All users"
                 if (type === 2 && this.model.id === 0) return false;
                 // private contacts and calendar folders can't have other users with admin permissions
                 if (type === 1 && (module === 'contacts' || module === 'calendar')) return false;
@@ -571,13 +576,38 @@ define('io.ox/files/share/permissions', [
             revokeAll: function () {
                 this.$el.find('a[data-name="revoke"]').trigger('click');
             }
-        });
+        }),
 
-    function supportsPersonalShares(objModel) {
-        var folderModel = objModel.getFolderModel();
-        if (objModel.isAdmin() && folderModel.supportsInternalSharing()) return true;
-        if (folderModel.supportsInviteGuests()) return true;
-    }
+        DialogConfig = Backbone.Model.extend({
+            defaults: {
+                message: '',
+                sendNotifications: false,
+                disabled: false
+            },
+            initialize: function (data, options) {
+                // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
+                // default is true for nested and false for flat folder tree, #53439
+                var objModel = options.objModel;
+                var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox');
+                this.set('cascadePermissions', nested);
+            },
+            toJSON: function () {
+                var data = {
+                    cascadePermissions: this.get('cascadePermissions'),
+                    notification: { transport: 'mail' }
+                };
+                if (this.get('sendNotifications')) {
+                    // add personal message only if not empty
+                    // but always send notification!
+                    if (this.get('message') && $.trim(this.get('message')) !== '') {
+                        data.notification.message = this.get('message');
+                    }
+                } else {
+                    delete data.notification;
+                }
+                return data;
+            }
+        });
 
     ext.point(POINT + '/entity').extend(
         //
@@ -861,62 +891,61 @@ define('io.ox/files/share/permissions', [
         }
     );
 
-    // Extension point who can access share
-    var POINT_DIALOG = 'io.ox/files/share/dialog';
     ext.point(POINT_DIALOG + '/share-settings').extend({
         id: 'who-can-share',
         index: 100,
         draw: function (linkModel, baton) {
-            var guid,
-                dialog = baton.view,
+            var dialog = baton.view,
                 objModel = dialog.views.permissions.model,
+                guid = _.uniqueId('form-control-label-'),
                 supportsPersonal = supportsPersonalShares(objModel);
+
+            // initial value
             linkModel.set('access', linkModel.hasUrl() ? 1 : 0);
 
-            var typeTranslations = {
-                0: gt('Invited people only'),
-                1: gt('Anyone with the link and invited people')
-            };
-
-            // link-only case
-            if (!supportsPersonal) {
-                typeTranslations = {
-                    0: gt('Listed people only'),
-                    1: gt('Anyone with the link and listed people')
-                };
-            }
-
-            var select = $('<select>');
-            _(typeTranslations).each(function (val, key) {
-                key = parseInt(key, 10);
-                var option = $('<option>').val(key).text(val);
-                if (key === linkModel.get('access')) {
-                    option.attr('selected', 'selected');
-                }
-                select.append(option);
-            });
-            // File linkModel.get('files')[0].get('filename')
-            // Calendar linkModel.get('files')[0].get('module') === calendar
-            var accessLabel;
-            var model = linkModel.get('files')[0];
-            if (model.isFile()) {
-                accessLabel = gt('Who can access this file?');
-            } else if (model.get('module') === 'calendar') {
-                accessLabel = gt('Who can access this calendar?');
-            } else {
-                accessLabel = gt('Who can access this folder?');
-            }
+            // disable min-height
+            if (supportsPersonal) dialog.$('.modal-content').addClass('supports-personal-shares');
 
             this.append(
-                $('<div class="access-select"></div>').append(
-                    $('<label></label>').attr({ for: guid = _.uniqueId('form-control-label-') }).text(accessLabel),
-                    $('<div>').addClass('row vertical-align-center').append($('<div>').addClass('form-group col-sm-6').append(select.attr('id', guid)))
+                $('<div class="access-select">').append(
+                    $('<label>').attr({ for: guid }).text(getHeadingText()),
+                    $('<div>').addClass('row vertical-align-center').append(
+                        $('<div>').addClass('form-group col-sm-6').append(
+                            new miniViews.SelectView({
+                                name: 'access',
+                                integer: true,
+                                id: guid,
+                                model: linkModel,
+                                list: [{
+                                    value: 0, label: supportsPersonal ?
+                                        gt('Invited people only') :
+                                        gt('Listed people only')
+                                }, {
+                                    value: 1, label: supportsPersonal ?
+                                        gt('Anyone with the link and invited people') :
+                                        gt('Anyone with the link and listed people')
+                                }]
+                            }).render().$el
+                        )
+                    )
                 )
             );
 
-            select.on('change', function (e) {
-                linkModel.set('access', parseInt(e.target.value, 10));
-            });
+            function getHeadingText() {
+                // File linkModel.get('files')[0].get('filename')
+                // Calendar linkModel.get('files')[0].get('module') === calendar
+                var text = gt('Who can access this folder?'),
+                    model = linkModel.get('files')[0];
+                if (model.isFile()) text = gt('Who can access this file?');
+                if (model.get('module') === 'calendar') text = gt('Who can access this calendar?');
+                return text;
+            }
+
+            function supportsPersonalShares(objModel) {
+                var folderModel = objModel.getFolderModel();
+                if (objModel.isAdmin() && folderModel.supportsInternalSharing()) return true;
+                if (folderModel.supportsInviteGuests()) return true;
+            }
         }
     });
 
@@ -924,6 +953,161 @@ define('io.ox/files/share/permissions', [
     function getBitsExternal(model) {
         return model.isFolder() ? 257 : 1;
     }
+    ext.point('io.ox/files/share/permissions/dialog').extend({
+        id: 'default',
+        index: 100,
+        render: function () {
+            this.$el.addClass('share-permissions-dialog');
+        }
+    }, {
+        id: 'dialog-title',
+        index: 200,
+        render: function () {
+            if (this.options.title) return;
+            var permissionsModel = this.views.permissions.model,
+                objectType = gt('folder'), title;
+            if (permissionsModel.get('module') === 'calendar') {
+                objectType = gt('calendar');
+            } else if (permissionsModel.isFile()) {
+                objectType = gt('file');
+            }
+            title = this.options.share ?
+                //#. %1$s determines whether setting permissions for a file or folder
+                //#. %2$s is the file or folder name
+                gt('Share %1$s "%2$s"', (permissionsModel.isFile() ? gt('file') : gt('folder')), permissionsModel.getDisplayName()) :
+                gt('Permissions for %1$s "%2$s"', objectType, permissionsModel.getDisplayName());
+            this.$('.modal-title').text(title);
+        }
+    }, {
+        id: 'link',
+        index: 300,
+        render: function () {
+            if (this.options.hasLinkSupport === false) return;
+            var dialog = this,
+                baton = new ext.Baton({ view: this, model: this.model }),
+                linkView = this.views.link;
+            ext.point(POINT_DIALOG + '/share-settings').invoke('draw', this.$body, this.views.link.model, baton);
+
+            // toggle linkview nodes
+            linkView.model.on('change:access', function (model) {
+                debugger;
+                if (model.get('access') === 0) {
+                    linkView.hide();
+                    linkView.removeLink();
+                    dialog.waiting = linkView.removeLink();
+                } else {
+                    linkView.show();
+                    debugger;
+                    linkView.fetchLink();
+                }
+            });
+        }
+    }, {
+        id: 'handlers',
+        index: 400,
+        render: function () {
+            var dialog = this,
+                pView = this.views.permissions;
+            pView
+            .listenTo(pView.collection, 'reset', function () {
+                dialog.model.set('oldGuests', _.copy(pView.collection.where({ type: 'guest' })));
+            })
+            .listenTo(pView.collection, 'add', function () {
+                dialog.showFooter();
+            })
+            .listenTo(pView.collection, 'add remove', function () {
+                dialog.updateSendNotificationSettings();
+                dialog.$body.find('.file-share-options').toggle(pView.collection.length > 0);
+            });
+        }
+    }, {
+        id: 'buttons',
+        index: 500,
+        render: function () {
+            var dialog = this,
+                model = dialog.views.permissions.model;
+            if (!model.isAdmin()) return dialog.addButton({ action: 'cancel', label: gt('Close') });
+            dialog
+                .addButton({ action: 'abort', label: dialog.options.share ? gt('Cancel') : gt('Cancel'), className: 'btn-default' })
+                .addButton({ action: 'save', label: dialog.options.share ? gt('Share') : gt('Save') });
+        }
+    }, {
+        id: 'share-settings',
+        index: 600,
+        render: function () {
+            var dialog = this,
+                pModel = dialog.views.permissions.model;
+            this.$header.append(
+                $('<button type="button" class="btn settings-button" aria-label="Settings">')
+                    .append($('<span class="fa fa-cog" aria-hidden="true">'))
+                    .on('click', function () {
+                        console.log('%c' + 'dialog.options.hasLinkSupport', 'color: white; background-color: grey');
+                        console.log(dialog.options.hasLinkSupport);
+                        shareSettings.showSettingsDialog(new shareSettings.ShareSettingsView({
+                            // TODO: yep, option named model but has to be a view
+                            model: dialog.views.link,
+                            hasLinkSupport: dialog.options.hasLinkSupport,
+                            applyToSubFolder: pModel.isFolder() && dialog.model.get('cascadePermissions'),
+                            dialogConfig: dialog.model
+                        }));
+                    })
+            );
+        }
+    }, {
+        id: 'unshare',
+        index: 700,
+        render: function () {
+            var dialog = this,
+                pModel = dialog.views.permissions.model;
+            debugger;
+            if (!pModel.isAdmin()) return;
+
+            dialog.$footer.prepend(
+                $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
+                    $('<button class="btn btn-default" aria-label="Unshare">')
+                    .text(gt('Unshare'))
+                    .prop('disabled', !isShared())
+                    .on('click', unshareRequested)
+                )
+            );
+
+            function unshareRequested() {
+                new ModalDialog({
+                    async: true,
+                    title: gt('Remove shares'),
+                    description: gt('Do you really want to remove all shares?')
+                })
+                .on('ok', function () {
+                    debugger;
+                    var self = this;
+                    self.busy();
+                    var def = dialog.views.link.hasPublicLink() ? dialog.views.link.removeLink() : $.when();
+                    def.then(function () {
+                        dialog.views.permissions.revokeAll();
+                        dialog.trigger('save');
+                        self.close();
+                        dialog.pause();
+                    }).fail(function (err) {
+                        self.idle();
+                        yell(err);
+                    });
+                })
+                // .on('cancel', function () {
+                //     dialog.idle();
+                // })
+                .addCancelButton()
+                .addButton({ label: gt('OK'), action: 'ok' })
+                .open();
+            }
+
+            function isShared() {
+                debugger;
+                var containsPermissions = (pModel.get('com.openexchange.share.extendedPermissions') || []).length > 0,
+                    containsObjectPermissions = (pModel.get('com.openexchange.share.extendedObjectPermissions') || []).length > 0;
+                return containsPermissions || containsObjectPermissions || pModel.hasPublicLink();
+            }
+        }
+    });
 
     var that = {
 
@@ -967,11 +1151,7 @@ define('io.ox/files/share/permissions', [
         },
 
         show: function (objModel, options) {
-
-            // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
-            var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
-                notificationDefault = false,
-                title,
+            var title,
                 guid;
 
             // options must be given to modal dialog. Custom dev uses them.
@@ -982,199 +1162,75 @@ define('io.ox/files/share/permissions', [
                 title: title,
                 smartphoneInputFocus: true,
                 hasLinkSupport: false,
-                nested: nested,
+                nested: false,
                 width: '35.25rem',
-                share: false }, options);
+                share: false,
+                point: 'io.ox/files/share/permissions/dialog'
+            }, options);
 
-            var objectType;
-            if (objModel.get('module') === 'calendar') {
-                objectType = gt('calendar');
-            } else if (objModel.isFile()) {
-                objectType = gt('file');
-            } else {
-                objectType = gt('folder');
-            }
-
-            options.title = options.title || (options.share ?
-                //#. %1$s determines whether setting permissions for a file or folder
-                //#. %2$s is the file or folder name
-                gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                gt('Permissions for %1$s "%2$s"', objectType, objModel.getDisplayName()));
-
-            options.point = 'io.ox/files/share/permissions/dialog';
-
-            var dialog = new ModalDialog(options);
-            dialog.waiting = $.when();
-
-            var DialogConfigModel = Backbone.Model.extend({
-                defaults: {
-                    // default is true for nested and false for flat folder tree, #53439
-                    // do not share inbox subfolders, users will accidentally share all mail folders, see OXUIB-1001 and OXUIB-1093
-                    cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
-                    message: '',
-                    sendNotifications: notificationDefault,
-                    disabled: false
-                },
-                toJSON: function () {
-                    var data = {
-                        cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
-                        notification: { transport: 'mail' }
-                    };
-
-                    if (dialogConfig.get('sendNotifications')) {
-                        // add personal message only if not empty
-                        // but always send notification!
-                        if (this.get('message') && $.trim(this.get('message')) !== '') {
-                            data.notification.message = this.get('message');
-                        }
-                    } else {
-                        delete data.notification;
-                    }
-                    return data;
-                }
-            });
-
-            var dialogConfig = new DialogConfigModel(),
-                permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: [objModel] }),
-                permissionPreSelection = new PermissionPreSelection({ model: objModel });
-
-            dialog.model = dialogConfig;
-            dialog.views = {
-                permissions: permissionsView,
-                preselection: permissionPreSelection,
-                link: publicLink
+            var views = {
+                permissions: new PermissionsView({ model: objModel }),
+                preselection: new PermissionPreSelection({ model: objModel }),
+                link: new PublicLink({ files: [objModel] })
             };
 
-            dialog.$('.modal-content').addClass(supportsPersonalShares(objModel) ? 'supports-personal-shares' : '');
+            var dialog = new ModalDialog(options)
+            .inject({
+                updateSendNotificationSettings: function () {
+                    var model = this.model,
+                        collection = this.views.permissions.collection;
 
-            permissionsView.setPermissionPreSelectionView(permissionPreSelection);
-            if (options.hasLinkSupport) {
-                var baton = new ext.Baton({ view: dialog, model: dialogConfig });
-                ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model, baton);
-            }
-
-            publicLink.model.on('change:access', function (model) {
-                var accessMode = model.get('access');
-                if (accessMode === 0) {
-                    publicLink.hide();
-                    publicLink.removeLink();
-                    dialog.waiting = publicLink.removeLink();
-                } else {
-                    publicLink.show();
-                    publicLink.fetchLink();
-                }
-            });
-
-            function hasNewGuests() {
-                var knownGuests = [];
-                _.each(dialogConfig.get('oldGuests'), function (model) {
-                    if (permissionsView.collection.get(model)) {
-                        knownGuests.push(model);
-                    }
-                });
-                return permissionsView.collection.where({ type: 'guest' }).length > knownGuests.length;
-            }
-
-            permissionsView.listenTo(permissionsView.collection, 'reset', function () {
-                dialogConfig.set('oldGuests', _.copy(permissionsView.collection.where({ type: 'guest' })));
-            });
-
-            permissionsView.listenTo(permissionsView.collection, 'add', function () {
-                dialog.showFooter();
-            });
-
-            permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
-                updateSendNotificationSettings();
-                dialog.$body.find('.file-share-options').toggle(!!permissionsView.collection.findWhere({ new: true }));
-            });
-
-            dialogConfig.on('change:message', function () {
-                updateSendNotificationSettings();
-            });
-
-            function updateSendNotificationSettings() {
-                // Allways send a notification message if a guest is added or some text is in the message box
-                if (hasNewGuests() || (!_.isEmpty(dialogConfig.get('message')) && permissionsView.collection.length > 0)) {
-                    dialogConfig.set('sendNotifications', true);
-                    dialogConfig.set('disabled', true);
-                } else if (dialogConfig.get('byHand') !== undefined) {
-                    dialogConfig.set('sendNotifications', dialogConfig.get('byHand'));
-                    dialogConfig.set('disabled', false);
-                } else {
-                    dialogConfig.set('sendNotifications', notificationDefault);
-                    dialogConfig.set('disabled', false);
-                }
-            }
-
-            function unshareRequested() {
-                var confirmDialog = new ModalDialog({
-                    async: true,
-                    title: gt('Remove shares')
-                });
-                confirmDialog
-                .addCancelButton()
-                .addButton({ label: gt('OK'), action: 'ok' });
-                confirmDialog.on('ok', function () {
-                    if (publicLink.hasPublicLink()) {
-                        // Remove all permissions and public link then trigger save.
-                        publicLink.removeLink().then(function () {
-                            revokeAllPermissions();
-                        }).fail(function (err) {
-                            console.log(err);
-                        });
+                    // Allways send a notification message if a guest is added or some text is in the message box
+                    if (hasNewGuests() || (!_.isEmpty(model.get('message')) && !collection.isEmpty())) {
+                        model.set('sendNotifications', true);
+                        model.set('disabled', true);
+                    } else if (model.get('byHand') !== undefined) {
+                        model.set('sendNotifications', model.get('byHand'));
+                        model.set('disabled', false);
                     } else {
-                        revokeAllPermissions();
+                        model.set('sendNotifications', false);
+                        model.set('disabled', false);
                     }
-                    confirmDialog.close();
-                    dialog.pause();
-                });
-                confirmDialog.on('cancel', function () {
-                    dialog.idle();
-                });
-                confirmDialog.$body.append($('<h5>')).text(gt('Do you really want to remove all shares?'));
-                confirmDialog.open();
-            }
 
-            function revokeAllPermissions() {
-                permissionsView.revokeAll();
-                dialog.trigger('save');
-            }
+                    function hasNewGuests() {
+                        var knownGuests = [];
+                        _.each(model.get('oldGuests'), function (model) {
+                            if (collection.get(model)) {
+                                knownGuests.push(model);
+                            }
+                        });
+                        var knownGuests2 = _.filter(model.get('oldGuests'), function (model) {
+                            return !!collection.get(model);
+                        });
+                        console.log(knownGuests2);
+                        debugger;
+                        // TODO: a little bit weak as this only compares lenght
+                        return collection.where({ type: 'guest' }).length > knownGuests.length;
+                    }
+                }
+            });
+            _.extend(dialog, {
+                model: new DialogConfig(undefined, { objModel: objModel }),
+                views: views,
+                waiting: $.when()
+            });
 
-            function isShared() {
-                return (objModel.has('com.openexchange.share.extendedObjectPermissions')
-                    && objModel.get('com.openexchange.share.extendedObjectPermissions').length > 0)
-                    || (objModel.has('com.openexchange.share.extendedPermissions')
-                    && objModel.get('com.openexchange.share.extendedPermissions').length > 0)
-                    || publicLink.hasPublicLink();
-            }
+            var permissionsView = dialog.views.permissions,
+                publicLink = dialog.views.link,
+                permissionPreSelection = dialog.views.preselection;
 
-            // check if only deputy permissions are set (beside owner)
-            function deputyShareOnly() {
-                if (publicLink.hasPublicLink()) return false;
+            permissionsView.setPermissionPreSelectionView(dialog.views.preselection);
 
-                var shares = objModel.get('com.openexchange.share.extendedObjectPermissions') || objModel.get('com.openexchange.share.extendedPermissions') || [];
-                // filter shares that are deputy shares or myself
-                shares = shares.filter(function (share) {
-                    var myself = share.entity === undefined ? pUtil.isOwnIdentity(share.identifier) : share.entity === ox.user_id;
-                    return !myself && !share.deputyPermission;
-                });
-                // no shares left? -> all shares are either deputy shares or myself
-                return shares.length === 0;
 
-            }
-
-            if (objModel.isAdmin()) {
-                dialog.$footer.prepend(
-                    $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared() || deputyShareOnly()).on('click', function () {
-                            unshareRequested();
-                        })
-                    )
-                );
-            }
-
-            dialog.$el.addClass('share-permissions-dialog');
+            // if (objModel.isAdmin()) {
+            //     dialog.$footer.prepend(
+            //         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
+            //             $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared()).on('click', function () {
+            //                 unshareRequested();
+            //             })
+            //         )
+            //     );
+            // }
 
             // to change privileges you have to be a folder admin
             var supportsChanges = objModel.isAdmin(),
@@ -1188,15 +1244,7 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
-            if (options.hasLinkSupport || supportsInvites) {
-                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
-                    var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
-                    shareSettings.showSettingsDialog(settingsView);
-                });
-                dialog.$header.append(settingsButton);
-            }
-
-            if (options.hasLinkSupport) {
+            if (options.hasLinkSupport !== false) {
                 dialog.$body.append(
                     publicLink.render().$el
                 );
@@ -1207,6 +1255,7 @@ define('io.ox/files/share/permissions', [
                 /*
                  * extension point for autocomplete item
                  */
+                // io.ox/files/share/permissions/autoCompleteItem
                 ext.point(POINT + '/autoCompleteItem').extend({
                     id: 'view',
                     index: 100,
@@ -1264,7 +1313,7 @@ define('io.ox/files/share/permissions', [
                         data = _(data).filter(function (model) {
                             // don't offer secondary addresses as guest accounts
                             if (!supportsGuests && model.get('field') !== 'email1') return false;
-                            // mail does not support sharing folders to guets
+                            // mail does not support sharing folders to guests
                             if (module === 'mail' && model.get('field') !== 'email1') return false;
                             return !permissionsView.collection.get(model.id);
                         });
@@ -1343,7 +1392,7 @@ define('io.ox/files/share/permissions', [
                         // message text
                         new miniViews.TextView({
                             name: 'message',
-                            model: dialogConfig
+                            model: dialog.model
                         })
                         .render().$el.addClass('message-text')
                         .attr({
@@ -1354,6 +1403,10 @@ define('io.ox/files/share/permissions', [
                         })
                     )
                 );
+                dialog.model.on('change:message', function () {
+                    debugger;
+                    dialog.updateSendNotificationSettings();
+                });
 
                 // apply polyfill for CSS resize which IE doesn't support natively
                 if (_.browser.IE) {
@@ -1361,16 +1414,13 @@ define('io.ox/files/share/permissions', [
                 }
 
                 typeaheadView.render();
-            }
-
-            if (supportsChanges) {
-                // add action buttons
-                dialog
-                    .addButton({ action: 'abort', label: options.share ? gt('Cancel') : gt('Cancel'), className: 'btn-default' })
-                    .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
-                dialog
-                    .addButton({ action: 'cancel', label: gt('Close') });
+                dialog.$body.append(
+                    $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
+                        // Invite people header
+                        $('<h5></h5>').text(gt('People'))
+                    )
+                );
             }
 
             function mergePermissionsAndPublicLink(permissions, entity, bits) {
@@ -1382,10 +1432,12 @@ define('io.ox/files/share/permissions', [
             }
 
             dialog.on('save', function () {
+                debugger;
                 // Order matters. In case there is a unresolved 'removeLink' request this has to be finished first.
                 // Share must be called before the update call is invoked. Otherwise a file conflict is created.
                 $.when(dialog.waiting).always(function () {
-                    var changes, options = dialogConfig.toJSON(), def;
+                    debugger;
+                    var changes, options = dialog.model.toJSON(), def;
                     var entity = publicLink.model.get('entity');
                     var permissions = permissionsView.collection.toJSON();
 
@@ -1470,6 +1522,12 @@ define('io.ox/files/share/permissions', [
                 );
             }
 
+            dialog.on('dispose', function () {
+                this.views = null;
+            });
+
+            dialog.$body.append($('<hr>'));
+            console.log('%c' + 'perm:before-open', 'color: white; background-color: grey');
             dialog.on('open', function () {
                 // wait for dialog to render and busy spinner to appear
                 _.delay(function () {

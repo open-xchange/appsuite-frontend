@@ -220,6 +220,7 @@ define('io.ox/core/folder/api', [
         },
 
         supportsInternalSharing: function () {
+            if (window.test) return false;
             // drive: always enabled
             if (this.is('drive')) return true;
             // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
@@ -232,6 +233,7 @@ define('io.ox/core/folder/api', [
         },
 
         supportsInviteGuests: function () {
+            if (window.test) return false;
             return !this.is('mail') && capabilities.has('invite_guests') && this.supportsInternalSharing();
         },
 
