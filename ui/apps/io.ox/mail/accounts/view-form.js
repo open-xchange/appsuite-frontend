@@ -589,7 +589,9 @@ define.async('io.ox/mail/accounts/view-form', [
                         if (folder === 'archive' && !capabilities.has('archive_emails')) return;
 
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
-                        var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
+                        var text = folderLabels[folder],
+                            id = model.get('id'),
+                            enabled = id !== undefined && !is('secondary');
                         folder = folder + '_fullname';
                         return group(
                             label(folder, text),
