@@ -151,8 +151,11 @@ define('io.ox/core/api/account', [
      * @param  {string}  id (account_id)
      * @return {boolean}
      */
-    api.isHidden = function (id) {
-        return api.isAccount(id) && !!hiddenHash[id];
+    api.isHidden = function (data) {
+        if (data.id) return api.isAccount(data.id) && !!hiddenHash[data.id];
+        if (data.primary_address) return _.values(hiddenHash).indexOf(data.primary_address) >= 0;
+        if (data.folder_id) return !!hiddenHash[data.folder_id.split(separator)[0]];
+        return false;
     };
 
     /**
@@ -534,7 +537,7 @@ define('io.ox/core/api/account', [
             // add check here
             _(list).each(function (account) {
                 // hidden secondary account
-                hiddenHash['default' + account.id] = account.secondary && account.deactivated;
+                if (account.secondary) hiddenHash['default' + account.id] = account.deactivated ? account.primary_address : false;
                 // remember account id
                 idHash[account.id] = true;
                 // add inbox first
@@ -699,6 +702,7 @@ define('io.ox/core/api/account', [
                 api.cache[id] = result;
             })
             .done(function (result) {
+                if ('deactivated' in data) ox.trigger('account:visibility');
                 api.trigger('refresh.all');
                 api.trigger('update', result);
             });

@@ -147,7 +147,7 @@ define('io.ox/mail/compose/extensions', [
 
             this.addresses = sender.getAddressesCollection();
             this.addresses.update();
-            this.listenTo(ox, 'account:create account:delete', this.updateSenderList);
+            this.listenTo(ox, 'account:create account:delete account:visibility', this.updateSenderList);
             this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
             this.listenTo(this.model, 'change:from', this.updateSenderList);

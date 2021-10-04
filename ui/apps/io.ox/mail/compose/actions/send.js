@@ -25,10 +25,11 @@ define('io.ox/mail/compose/actions/send', [
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, composeAPI, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, composeAPI, mailAPI, accountAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -94,6 +95,18 @@ define('io.ox/mail/compose/actions/send', [
             id: 'check:attachment-missing',
             index: 400,
             perform: extensions.attachmentMissingCheck
+        },
+        {
+            id: 'check:valid-sender',
+            index: 450,
+            perform: function (baton) {
+                var from = baton.model.get('from') || [];
+                if (!accountAPI.isHidden({ primary_address: from[1] })) return;
+                notifications.yell('error', gt('The sender address is related to a hidden mail account. Please choose another sender address.'));
+                baton.view.$el.find('.sender a[data-toggle="dropdown"]').trigger('click');
+                baton.stopPropagation();
+                return $.Deferred().reject();
+            }
         },
         {
             id: 'busy:start',
