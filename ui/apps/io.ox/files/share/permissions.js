@@ -557,6 +557,10 @@ define('io.ox/files/share/permissions', [
                     bits = fileRoles[this.permissionPreSelection.getSelectedPermission()];
                 } else if (model.get('type') === 'guest' && /^(contacts|tasks)$/.test(this.model.get('module'))) {
                     bits = roles.viewer.bit;
+                    // only viewer role allowed, give a message if user preselected another role
+                    if (roles[this.permissionPreSelection.getSelectedPermission()].bit !== roles.viewer.bit) {
+                        yell('info', gt('Guests are only allowed to have viewer rights.'));
+                    }
                 } else {
                     bits = roles[this.permissionPreSelection.getSelectedPermission()].bit;
                 }

@@ -99,10 +99,10 @@ Maximum target image width when croping contact/user images in pixels (default: 
 <config>io.ox/core//feedback/show=`<string>`</config>
 Show one or more feedback buttons. Default value is `both` which shows a dropdown entry in the settings menu and a button in the main content window (topbar/side/both).
 
-<config>io.ox/core//feedback/supportlink`<string>`</config>
+<config>io.ox/core//feedback/supportlink=`<string>`</config>
 Hyperlink to a support site referenced in the feedback dialog. Default is unset.
 
-<config>io.ox/core//feedback/position`<string>`</config>
+<config>io.ox/core//feedback/position=`<string>`</config>
 Set position of the feedback button. Default value is `right`. (`left|right`).
 
 <config>io.ox/core//feedback/showHover=`<bool>`</config>
@@ -118,7 +118,7 @@ Default: `1` if io.ox/core//feedback/timeLimit is set else `undefined` (i.e. unl
 
 <config>io.ox/core//feedback/timeLimit=`<string>`</config>
 Can be relative or absolute ISO strings to define a time, e.g. “2020-01-21” or “3M” (meaning within 3 months).
-See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details.
+See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details. Please ensure you wrap the value in quotes to avoid missinterprations as non-string data type.
 
 Default: `false`
 
