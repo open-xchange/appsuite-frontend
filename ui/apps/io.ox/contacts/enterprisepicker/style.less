@@ -11,11 +11,25 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+ .io-ox-contacts-enterprisepicker-window .enterprise-picker-body, .io-ox-contacts-enterprisepicker-window .enterprise-picker-header {
+    padding: 16px;
+ }
+
+ .io-ox-contacts-enterprisepicker-window .enterprise-picker-body {
+    min-height: 60px;
+    overflow-y: auto;
+    height: 614px;
+ }
+
+ .enterprise-picker-header .top-bar {
+    margin-top: 8px;
+ }
+
  // a bit specific but we want to overrule the default style without !important
- .modal.flex.enterprise-picker .modal-dialog {
+ .modal.flex.enterprise-picker .modal-dialog, .io-ox-contacts-enterprisepicker-window {
     width: 60rem;
 
-    .modal-content {
+    .modal-content, .enterprise-picker-body {
         height: 660px;
 
         &.io-ox-busy .contact-list-view {
@@ -35,7 +49,7 @@
         }
     }
 
-    .modal-header {
+    .modal-header, .enterprise-picker-header {
         border-bottom: 1px solid #e5e5e5;
 
         .top-bar {
@@ -72,7 +86,7 @@
         }
     }
 
-    .modal-body .contact-list-view li {
+    .modal-body .contact-list-view li, .enterprise-picker-body .contact-list-view li {
         padding: 12px;
         display: flex;
         justify-content: space-between;

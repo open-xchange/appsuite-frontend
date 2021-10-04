@@ -25,6 +25,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     'io.ox/core/tk/dialogs',
     'io.ox/backbone/mini-views/common',
     'io.ox/backbone/views/disposable',
+    'io.ox/backbone/views/window',
     'io.ox/contacts/api',
     'io.ox/core/folder/api',
     'io.ox/contacts/view-detail',
@@ -35,7 +36,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts',
     'less!io.ox/contacts/enterprisepicker/style'
-], function (ModalDialog, dialogs, Mini, DisposableView, api, folderApi, detailView, ext, util, yell, http, settings, gt) {
+], function (ModalDialog, dialogs, Mini, DisposableView, FloatingWindow, api, folderApi, detailView, ext, util, yell, http, settings, gt) {
 
     'use strict';
 
@@ -249,231 +250,277 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         }
     });
 
+    function createInstance(options, model) {
+        var app = ox.ui.createApp({
+            name: 'io.ox/contacts/enterprisepicker',
+            title: gt('Global address list'),
+            closable: true,
+            floating: true,
+            size: 'width-sm'
+        });
+
+        app.setLauncher(function () {
+
+            var win = ox.ui.createWindow({
+                name: 'io.ox/contacts/enterprisepicker',
+                chromeless: true,
+                floating: true,
+                closable: true
+            });
+
+            app.setWindow(win);
+
+            win.show(function () {
+                console.log(win.nodes.main);
+                win.nodes.outer.addClass('enterprise-picker');
+                var headerNode = $('<div class="enterprise-picker-header">'),
+                    bodyNode = $('<div class="enterprise-picker-body">');
+                win.nodes.main.append(headerNode, bodyNode);
+                buildDialog(options, model, headerNode, win.nodes.main, bodyNode);
+            });
+        });
+        return app;
+    }
+
+    function buildDialog(options, model, headerNode, contentNode, bodyNode) {
+        contentNode.busy();
+
+        var defs = [],
+            lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
+
+        defs.push(options.useGABOnly ? folderApi.get(util.getGabId()) : folderApi.flat({ module: 'contacts', all: true }));
+
+        http.pause();
+        _(lastSearchedContacts).each(function (contact) {
+            if (!contact || !contact.folder_id || !contact.id) return;
+            var def = $.Deferred();
+            // use get request so we can sort out broken or missing contacts better, always resolve. we don't want a missing contact to break the picker
+            // we have to avoid the cache or the multiple request doesn't work correctly (strange api factory async stuff)
+            api.get({ folder_id: contact.folder_id, id: contact.id }, false).always(def.resolve);
+            defs.push(def);
+        });
+        http.resume();
+
+        return $.when.apply($, defs).then(function (folders) {
+
+            var folderlist;
+            if (options.useGABOnly) {
+                folderlist = [{ label: folders.title, value: folders.id }];
+            } else {
+                folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
+
+                // flat request returns folders in sections, add them to a single array, leave out the hidden section
+                _(folders).each(function (sectionFolders, section) {
+                    if (section === 'hidden') return;
+
+                    var list = _(_(sectionFolders).filter(function (folder) {
+                    // only use folders that have the "used in picker" flag if not configured otherwise
+                        if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
+
+                        return folder['com.openexchange.contacts.extendedProperties'] &&
+                        folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
+                        folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
+
+                    })).map(function (folder) {
+                    // this are non breakable spaces that are not trimmed
+                    // we use this to create our hierarchy and still be able to use a default select input
+                        return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
+                    });
+
+                    if (list.length === 0) return;
+                    folderlist.push({ label: section, value: 'sectionHeader' });
+                    folderlist = folderlist.concat(list);
+                });
+
+                folderlist = _(folderlist).compact();
+            }
+
+            var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
+
+            // filter broken stuff and save to settings
+            lastSearchedContacts = lastSearchedContacts.filter(function (contact) {
+                return !contact.error && (!options.useGABOnly || contact.folder_id === util.getGabId());
+            });
+            settings.set('enterprisePicker/lastSearchedContacts', _(lastSearchedContacts).map(function (contact) {
+                return { folder_id: contact.folder_id, id: contact.id };
+            })).save();
+
+            model.set('addressLists', folderlist);
+            model.get('lastContacts').reset(lastSearchedContacts);
+
+            var updateContactsAfterSearch = function (contacts) {
+                contentNode.idle();
+                contacts = (contacts || []).filter(contactsFilter);
+                model.get('contacts').reset(contacts);
+                // update the last searched contacts
+                var lastContacts = model.get('lastContacts');
+                // put at start of collection, since this search is newer
+                lastContacts.unshift(contacts);
+                // limit to 10 by default
+                lastContacts.reset(lastContacts.slice(0, settings.get('enterprisePicker/lastSearchedContactsLimit', 10)));
+                settings.set('enterprisePicker/lastSearchedContacts', _(lastContacts.models).map(function (contact) {
+                    return { folder_id: contact.get('folder_id'), id: contact.get('id') };
+                })).save();
+            };
+
+            // show generic error message
+            var showError = function () {
+                // show error message
+                contentNode.idle();
+                model.get('contacts').reset([]);
+                yell('error', gt('Could not load contacts'));
+            };
+
+            model.on('change:selectedList', function (model, selectedList) {
+                var isSearch = model.get('searchQuery') && model.get('searchQuery').length > 1;
+                if (selectedList === 'all' && !isSearch) return model.get('contacts').reset([]);
+                contentNode.busy();
+
+                if (isSearch) {
+                    var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                    if (selectedList === 'all') delete params.folders;
+                    api.advancedsearch(model.get('searchQuery'), params)
+                        .then(updateContactsAfterSearch, showError);
+                    return;
+                }
+                // put the request together manually, api function has too much utility stuff
+                // use advanced search without query to get all contacts. (we don't use all request here because that has no limit parameter)
+                http.PUT({
+                    module: 'addressbooks',
+                    params: {
+                        action: 'advancedSearch',
+                        columns: columns,
+                        right_hand_limit: limit,
+                        sort: 607,
+                        order: 'desc'
+                    },
+                    data: {
+                        folders: [selectedList],
+                        folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
+                    }
+                }).then(function (contacts) {
+                    contentNode.idle();
+                    contacts = (contacts || []).filter(contactsFilter);
+                    model.get('contacts').reset(contacts);
+                }, showError);
+            });
+
+            model.on('change:searchQuery', function (model, query) {
+                var selectedList = model.get('selectedList');
+                // no search query? show full selected list
+                if (query.length === 0) return model.trigger('change:selectedList', model, selectedList);
+                // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
+                if (query.length < settings.get('search/minimumQueryLength', 2)) return;
+                contentNode.busy();
+                var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                if (selectedList === 'all') delete params.folders;
+                api.advancedsearch(model.get('searchQuery'), params)
+                    .then(updateContactsAfterSearch, showError);
+            });
+
+            contentNode.idle();
+
+            var listSelectBox = new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
+
+            // disable section headers
+            listSelectBox.find('option[value="sectionHeader"]').attr('disabled', 'disabled');
+            model.on('change:filterQuery', function () {
+                var query = model.get('filterQuery').trim().toLowerCase(),
+                    options = listSelectBox.find('option');
+                if (!query) return options.removeClass('hidden');
+
+                _(options).each(function (option) {
+                    $(option).removeClass('hidden');
+                    // never hide the placeholder
+                    // show section headers, we check for emtpy sections later
+                    if ($(option).val() === 'all' || $(option).val() === 'sectionHeader') return;
+                    $(option).toggleClass('hidden', option.text.toLowerCase().indexOf(query) === -1);
+                });
+                // find empty sections
+                var prev;
+                _(options.not('.hidden')).each(function (option, index, array) {
+                    if ($(option).val() === 'sectionHeader') {
+                        // two headers after another -> hide the first
+                        if (prev && $(prev).val() === 'sectionHeader') $(prev).addClass('hidden');
+                        // two header ist the last item in the list -> hide it
+                        if (index === array.length - 1) $(option).addClass('hidden');
+                    }
+                    prev = option;
+                });
+            });
+
+            headerNode.append(
+                $('<div class="top-bar">').append(
+                    $('<label>').text(gt('Search')).append(
+                        $('<div class="input-group">').append(
+                            new Mini.InputView({ name: 'searchQuery', model: model, autocomplete: false }).render().$el
+                                .attr('placeholder', gt('Search for name, department, position'))
+                                .on('keyup', _.debounce(function () {
+                                    model.set('searchQuery', this.value);
+                                }, 300)),
+                            $('<span class="input-group-addon">').append($.icon('fa-search', gt('Search for name, department, position')))
+                        )
+                    ),
+                    $('<label>').text(gt('Filter')).append(
+                        $('<div class="input-group">').append(
+                            new Mini.InputView({ name: 'filterQuery', model: model, autocomplete: false }).render().$el
+                                .attr('placeholder', gt('Filter address lists'))
+                                .on('keyup', _.debounce(function () {
+                                    model.set('filterQuery', this.value);
+                                }, 300)),
+                            $('<span class="input-group-addon">').append($.icon('fa-filter', gt('Filter address lists')))
+                        )
+                    ),
+                    $('<label>').text(gt('Address list')).append(
+                        listSelectBox
+                    )
+                )
+            );
+            bodyNode.append(new ContactListView(_.extend({ model: model, modalBody: bodyNode }, options)).render().$el)
+            .after(new SelectedContactsView({ model: model }).render().$el);
+
+            if (options.useGABOnly) model.trigger('change:selectedList', model, util.getGabId());
+
+        }, function (error) {
+            contentNode.idle();
+            console.error(error);
+            bodyNode.append($('<div class="error">').text(gt('Could not load address book.')));
+        });
+    }
+
     var open = function (callback, options) {
+        options = options || {};
         if (!options.selection) options.selection = { behavior: 'multiple' };
 
-        var model,
-            dialog =  new ModalDialog({
+        var model = new Backbone.Model({
+            searchQuery: '',
+            filterQuery: '',
+            selectedList: options.useGABOnly ? util.getGabId() : 'all',
+            selectedContacts: new Backbone.Collection(),
+            contacts: new Backbone.Collection(),
+            lastContacts: new Backbone.Collection(),
+            addressLists: []
+        });
+        if (options.selection.behavior !== 'none') {
+            var dialog =  new ModalDialog({
                 point: 'io.ox/contacts/enterprisepicker-dialog',
                 help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
                 title: gt('Global address list')
             })
                 .build(function () {
+                    var self = this;
                     this.$el.addClass('enterprise-picker');
-                    this.$('.modal-content').busy();
 
-                    var self = this,
-                        defs = [],
-                        lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
-
-                    defs.push(options.useGABOnly ? folderApi.get(util.getGabId()) : folderApi.flat({ module: 'contacts', all: true }));
-
-                    http.pause();
-                    _(lastSearchedContacts).each(function (contact) {
-                        if (!contact || !contact.folder_id || !contact.id) return;
-                        var def = $.Deferred();
-                        // use get request so we can sort out broken or missing contacts better, always resolve. we don't want a missing contact to break the picker
-                        // we have to avoid the cache or the multiple request doesn't work correctly (strange api factory async stuff)
-                        api.get({ folder_id: contact.folder_id, id: contact.id }, false).always(def.resolve);
-                        defs.push(def);
-                    });
-                    http.resume();
-
-                    $.when.apply($, defs).then(function (folders) {
-
-                        var folderlist;
-                        if (options.useGABOnly) {
-                            folderlist = [{ label: folders.title, value: folders.id }];
-                        } else {
-                            folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
-
-                            // flat request returns folders in sections, add them to a single array, leave out the hidden section
-                            _(folders).each(function (sectionFolders, section) {
-                                if (section === 'hidden') return;
-
-                                var list = _(_(sectionFolders).filter(function (folder) {
-                                // only use folders that have the "used in picker" flag if not configured otherwise
-                                    if (!settings.get('enterprisePicker/useUsedInPickerFlag', true)) return true;
-
-                                    return folder['com.openexchange.contacts.extendedProperties'] &&
-                                    folder['com.openexchange.contacts.extendedProperties'].usedInPicker &&
-                                    folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
-
-                                })).map(function (folder) {
-                                // this are non breakable spaces that are not trimmed
-                                // we use this to create our hierarchy and still be able to use a default select input
-                                    return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
-                                });
-
-                                if (list.length === 0) return;
-                                folderlist.push({ label: section, value: 'sectionHeader' });
-                                folderlist = folderlist.concat(list);
-                            });
-
-                            folderlist = _(folderlist).compact();
-                        }
-
-                        var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
-
-                        // filter broken stuff and save to settings
-                        lastSearchedContacts = lastSearchedContacts.filter(function (contact) {
-                            return !contact.error && (!options.useGABOnly || contact.folder_id === util.getGabId());
-                        });
-                        settings.set('enterprisePicker/lastSearchedContacts', _(lastSearchedContacts).map(function (contact) {
-                            return { folder_id: contact.folder_id, id: contact.id };
-                        })).save();
-                        model = new Backbone.Model({
-                            searchQuery: '',
-                            filterQuery: '',
-                            selectedList: options.useGABOnly ? folders.id : 'all',
-                            selectedContacts: new Backbone.Collection(),
-                            contacts: new Backbone.Collection(),
-                            lastContacts: new Backbone.Collection(lastSearchedContacts),
-                            addressLists: folderlist
-                        });
-
-                        var updateContactsAfterSearch = function (contacts) {
-                            self.$('.modal-content').idle();
-                            contacts = (contacts || []).filter(contactsFilter);
-                            model.get('contacts').reset(contacts);
-                            // update the last searched contacts
-                            var lastContacts = model.get('lastContacts');
-                            // put at start of collection, since this search is newer
-                            lastContacts.unshift(contacts);
-                            // limit to 10 by default
-                            lastContacts.reset(lastContacts.slice(0, settings.get('enterprisePicker/lastSearchedContactsLimit', 10)));
-                            settings.set('enterprisePicker/lastSearchedContacts', _(lastContacts.models).map(function (contact) {
-                                return { folder_id: contact.get('folder_id'), id: contact.get('id') };
-                            })).save();
-                        };
-
-                        // show generic error message
-                        var showError = function () {
-                            // show error message
-                            self.$('.modal-content').idle();
-                            model.get('contacts').reset([]);
-                            yell('error', gt('Could not load contacts'));
-                        };
-
-                        model.on('change:selectedList', function (model, selectedList) {
-                            var isSearch = model.get('searchQuery') && model.get('searchQuery').length > 1;
-                            if (selectedList === 'all' && !isSearch) return model.get('contacts').reset([]);
-                            self.$('.modal-content').busy();
-
-                            if (isSearch) {
-                                var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
-                                if (selectedList === 'all') delete params.folders;
-                                api.advancedsearch(model.get('searchQuery'), params)
-                                    .then(updateContactsAfterSearch, showError);
-                                return;
-                            }
-                            // put the request together manually, api function has too much utility stuff
-                            // use advanced search without query to get all contacts. (we don't use all request here because that has no limit parameter)
-                            http.PUT({
-                                module: 'addressbooks',
-                                params: {
-                                    action: 'advancedSearch',
-                                    columns: columns,
-                                    right_hand_limit: limit,
-                                    sort: 607,
-                                    order: 'desc'
-                                },
-                                data: {
-                                    folders: [selectedList],
-                                    folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
-                                }
-                            }).then(function (contacts) {
-                                self.$('.modal-content').idle();
-                                contacts = (contacts || []).filter(contactsFilter);
-                                model.get('contacts').reset(contacts);
-                            }, showError);
-                        });
-
-                        model.on('change:searchQuery', function (model, query) {
-                            var selectedList = model.get('selectedList');
-                            // no search query? show full selected list
-                            if (query.length === 0) return model.trigger('change:selectedList', model, selectedList);
-                            // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
-                            if (query.length < settings.get('search/minimumQueryLength', 2)) return;
-                            self.$('.modal-content').busy();
-                            var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
-                            if (selectedList === 'all') delete params.folders;
-                            api.advancedsearch(model.get('searchQuery'), params)
-                                .then(updateContactsAfterSearch, showError);
-                        });
-
-                        self.$('.modal-content').idle();
-
-                        var listSelectBox = new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
-
-                        // disable section headers
-                        listSelectBox.find('option[value="sectionHeader"]').attr('disabled', 'disabled');
-                        model.on('change:filterQuery', function () {
-                            var query = model.get('filterQuery').trim().toLowerCase(),
-                                options = listSelectBox.find('option');
-                            if (!query) return options.removeClass('hidden');
-
-                            _(options).each(function (option) {
-                                $(option).removeClass('hidden');
-                                // never hide the placeholder
-                                // show section headers, we check for emtpy sections later
-                                if ($(option).val() === 'all' || $(option).val() === 'sectionHeader') return;
-                                $(option).toggleClass('hidden', option.text.toLowerCase().indexOf(query) === -1);
-                            });
-                            // find empty sections
-                            var prev;
-                            _(options.not('.hidden')).each(function (option, index, array) {
-                                if ($(option).val() === 'sectionHeader') {
-                                    // two headers after another -> hide the first
-                                    if (prev && $(prev).val() === 'sectionHeader') $(prev).addClass('hidden');
-                                    // two header ist the last item in the list -> hide it
-                                    if (index === array.length - 1) $(option).addClass('hidden');
-                                }
-                                prev = option;
-                            });
-                        });
-
-                        self.$('.modal-header').append(
-                            $('<div class="top-bar">').append(
-                                $('<label>').text(gt('Search')).append(
-                                    $('<div class="input-group">').append(
-                                        new Mini.InputView({ name: 'searchQuery', model: model, autocomplete: false }).render().$el
-                                            .attr('placeholder', gt('Search for name, department, position'))
-                                            .on('keyup', _.debounce(function () {
-                                                model.set('searchQuery', this.value);
-                                            }, 300)),
-                                        $('<span class="input-group-addon">').append($.icon('fa-search', gt('Search for name, department, position')))
-                                    )
-                                ),
-                                $('<label>').text(gt('Filter')).append(
-                                    $('<div class="input-group">').append(
-                                        new Mini.InputView({ name: 'filterQuery', model: model, autocomplete: false }).render().$el
-                                            .attr('placeholder', gt('Filter address lists'))
-                                            .on('keyup', _.debounce(function () {
-                                                model.set('filterQuery', this.value);
-                                            }, 300)),
-                                        $('<span class="input-group-addon">').append($.icon('fa-filter', gt('Filter address lists')))
-                                    )
-                                ),
-                                $('<label>').text(gt('Address list')).append(
-                                    listSelectBox
-                                )
-                            )
-                        );
-                        self.$('.modal-body').append(new ContactListView(_.extend({ model: model, modalBody: self.$('.modal-body') }, options)).render().$el)
-                        .after(new SelectedContactsView({ model: model }).render().$el);
-
+                    buildDialog(options, model, this.$('.modal-header'), this.$('.modal-content'), this.$('.modal-body')).then(function () {
                         // triggers focus and fixes "compact" class
                         self.idle();
-                        if (options.useGABOnly) model.trigger('change:selectedList', model, util.getGabId());
-
-                    }, function (error) {
-                        self.idle();
-                        console.log(error);
-                        self.$('.modal-body').append($('<div class="error">').text(gt('Could not load address book.')));
+                    }, function () {
                         self.$('.modal-footer [data-action="select"]').attr('disabled', 'disabled');
                     });
                 })
+                .addCancelButton()
+                //#. Context: Add selected contacts; German "Auswählen", for example
+                .addButton({ label: gt('Select'), action: 'select' })
                 .on({
                     // this function is called recursively if a distribution list is processed
                     'select':  function processContacts(distributionListMembers) {
@@ -511,15 +558,11 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         model = null;
                     }
                 });
-        if (options.selection.behavior !== 'none') {
-            dialog.addCancelButton()
-            //#. Context: Add selected contacts; German "Auswählen", for example
-            .addButton({ label: gt('Select'), action: 'select' });
-        } else {
-            dialog.addButton({ label: gt('Close'), action: 'close' });
+            pickerDialog = dialog;
+            return dialog.open();
         }
-        pickerDialog = dialog;
-        return dialog.open();
+
+        return createInstance(options, model).launch();
     };
 
     // close picker and possible detailviewDialog on
