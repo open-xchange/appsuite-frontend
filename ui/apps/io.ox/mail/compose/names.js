@@ -142,7 +142,7 @@ define('io.ox/mail/compose/names', [
 
         open: function () {
 
-            sender.getAddresses().done(function (addresses, primay) {
+            sender.getAddresses().done(function (addresses, deputyAddresses, primay) {
 
                 var list = _([].concat([primay], addresses))
                     .chain()

@@ -26,11 +26,13 @@ define('io.ox/mail/compose/main', [
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'io.ox/mail/sender',
+    'io.ox/core/capabilities',
+    'io.ox/core/deputy/api',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, capabilities, deputyAPI, settings, gt) {
 
     'use strict';
 
@@ -97,17 +99,29 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model;
             if (model.get('from')) return;
-            return accountAPI.getPrimaryAddressFromFolder(this.config.get('folderId')).catch(function () {
-                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
-            }).then(function (address) {
-                // custom display names
-                if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
-                    address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+            var self = this,
+                def = capabilities.has('deputy') ? deputyAPI.getGranteeAddressFromFolder(this.config.get('folderId')) : $.when([]);
+
+            return def.then(function (granteeAddress) {
+                if (!_.isEmpty(granteeAddress)) {
+                    return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
+                        // use default address as sender amd grantee address as from
+                        model.set({ from: granteeAddress, sender: address });
+                    });
                 }
-                if (!settings.get('sendDisplayName', true)) {
-                    address[0] = null;
-                }
-                model.set('from', address);
+
+                return accountAPI.getPrimaryAddressFromFolder(self.config.get('folderId')).catch(function () {
+                    return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
+                }).then(function (address) {
+                    // custom display names
+                    if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                    }
+                    if (!settings.get('sendDisplayName', true)) {
+                        address[0] = null;
+                    }
+                    model.set('from', address);
+                });
             });
         }
     }, {

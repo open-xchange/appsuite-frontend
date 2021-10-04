@@ -21,8 +21,10 @@
  */
 
 define('io.ox/core/deputy/api', [
-    'io.ox/core/http'
-], function (http) {
+    'io.ox/core/http',
+    'io.ox/core/api/user',
+    'io.ox/contacts/util'
+], function (http, userAPI, util) {
 
     'use strict';
 
@@ -75,6 +77,61 @@ define('io.ox/core/deputy/api', [
                     action: 'reverse'
                 }
             });
+        },
+
+        // utility function that returns a list of senders, that granted deputy rights to the current user, with "allowed to send mails" permissions
+        getGranteeAddresses: function () {
+            var def = $.Deferred();
+            // ignore errors, just send an empty array then
+            api.reverse().then(function (grantedPermissions) {
+                var addresses = _(grantedPermissions).chain().map(function (deputyData) {
+                    // can there be more than one address?
+                    return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : [];
+                }).compact().valueOf();
+
+                var userIds = _(addresses).chain().map(function (address) { return address[0]; }).uniq().compact().valueOf();
+
+                userAPI.getList(userIds).then(function (users) {
+                    _(addresses).each(function (address) {
+                        address[0] = util.getDisplayName(_(users).findWhere({ id: address[0] }));
+                    });
+                    def.resolve(addresses);
+                }, function () {
+                    def.resolve([]);
+                });
+                return def;
+            }, function () {
+                def.resolve([]);
+            });
+
+            return def;
+        },
+
+        // utility function that returns the mail address from a folder you are allowed to send mails from as a deputy
+        getGranteeAddressFromFolder: function (id) {
+            if (!id) return $.when([]);
+
+            var def = $.Deferred();
+            // ignore errors, just send an empty array then
+            api.reverse().then(function (grantedPermissions) {
+                var deputyData = _(grantedPermissions).find(function (data) {
+                    return data.sendOnBehalfOf && data.modulePermissions && data.modulePermissions.mail && _(data.modulePermissions.mail.folderIds).contains(id);
+                });
+
+                // no fitting mail address for this folder
+                if (!deputyData) return def.resolve([]);
+
+                userAPI.get({ id: deputyData.granteeId }).then(function (user) {
+                    def.resolve([util.getDisplayName(user), deputyData.granteeAddresses[0]]);
+                }, function () {
+                    def.resolve([]);
+                });
+                return def;
+            }, function () {
+                def.resolve([]);
+            });
+
+            return def;
         }
     };
     return api;
