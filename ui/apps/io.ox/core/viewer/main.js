@@ -61,7 +61,7 @@ define('io.ox/core/viewer/main', [
             Util.startPerformanceTimer();
 
             if (!data) return console.error('Core.Viewer.main.launch(): no data supplied');
-            if (!hasFiles() && !hasFolder()) return console.error('Core.Viewer.main.launch(): no files to preview.');
+            if (!hasFiles() && !loadFolderContent()) return console.error('Core.Viewer.main.launch(): no files to preview.');
 
             var self = this,
                 el = $('<div class="io-ox-viewer abs">'),
@@ -82,7 +82,7 @@ define('io.ox/core/viewer/main', [
                 $this.data('ox-restore-aria-hidden', el.attr('aria-hidden'));
             }).attr('aria-hidden', true);
 
-            function hasFolder() {
+            function loadFolderContent() {
                 // Bug 50839 - Viewer opens arbitrary document -> don't expand folder for sharing
                 return (!_.isEmpty(data.folder) && (data.folder !== '10'));
             }
@@ -114,7 +114,7 @@ define('io.ox/core/viewer/main', [
                     // set the index of the selected file (Drive only)
                     if (data.selection) {
                         self.fileCollection.setStartIndex(data.selection);
-                    } else if (hasFolder() && hasFiles()) {
+                    } else if (loadFolderContent() && hasFiles()) {
                         // workaround to set correct start file for deep linking, #58378
                         self.fileCollection.setStartIndex(data.files[0]);
                     }
@@ -171,21 +171,27 @@ define('io.ox/core/viewer/main', [
                 return $.when([].concat(data.files));
             }
 
-            function getFileListFromFolder() {
+            function getFileListFromDriveFolder() {
                 return require(['io.ox/files/api']).then(function (FilesAPI) {
-                    return FilesAPI.getAll(data.folder).then(function success(files) {
-                        function getter(item) {
-                            return this.get(_.cid(item));
-                        }
-                        // the viewer has listeners that work directly on the model
-                        // so we need to get the pool models instead of creating own models
-                        return _.map(files, getter, FilesAPI.pool.get('detail'));
-                    });
+
+                    function waitForPoolReady(_pool) {
+                        var def = $.Deferred();
+                        if (_pool.complete === true) { return def.resolve(_pool); }
+
+                        FilesAPI.collectionLoader.collection.once('reset', function () {
+                            def.resolve(_pool);
+                        });
+
+                        return def;
+                    }
+                    // wait that loading the drive list has been finished to reuse that data, the viewer has listeners that work directly on the model
+                    // note: the file to view first is already requested before when the viewer is launched by url hash
+                    return waitForPoolReady(FilesAPI.pool.get('detail')).then(function (pool) { return pool.models; });
                 });
             }
 
             // fix for #58378
-            (hasFolder() ? getFileListFromFolder() : getFileListFromFiles()).then(function (fileList) {
+            (loadFolderContent() ? getFileListFromDriveFolder() : getFileListFromFiles()).then(function (fileList) {
                 // add file list to baton data
                 data.fileList = fileList;
                 // Call extension point for any required performs, e.g. Guard authentication
