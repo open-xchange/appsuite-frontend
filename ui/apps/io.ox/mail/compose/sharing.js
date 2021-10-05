@@ -221,7 +221,7 @@ define('io.ox/mail/compose/sharing', [
         },
 
         updateVisibility: function () {
-            if (!this.optionsButton) return;
+            if (!this.optionsButton || this.enabledCheckbox.find('input').is(':checked')) return;
             var overThreshold = this.model.exceedsThreshold();
             var overMailQuota = this.model.exceedsMailQuota();
             if (!this.model.saving && overMailQuota && !this.sharingModel.get('enabled')) {
