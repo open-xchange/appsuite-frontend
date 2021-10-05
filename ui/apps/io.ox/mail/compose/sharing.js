@@ -221,18 +221,24 @@ define('io.ox/mail/compose/sharing', [
         },
 
         updateVisibility: function () {
-            if (!this.optionsButton || this.enabledCheckbox.find('input').is(':checked')) return;
-            var overThreshold = this.model.exceedsThreshold();
-            var overMailQuota = this.model.exceedsMailQuota();
-            if (!this.model.saving && overMailQuota && !this.sharingModel.get('enabled')) {
+            if (!this.optionsButton) return;
+
+            var alreadyActive = this.enabledCheckbox.find('input').is(':checked'),
+                overThreshold = this.model.exceedsThreshold(),
+                overMailQuota = this.model.exceedsMailQuota();
+
+            if (!alreadyActive && !this.model.saving && overMailQuota && !this.sharingModel.get('enabled')) {
                 //#. %1$s is usually "Drive Mail" (product name; might be customized)
                 yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', mailSettings.get('compose/shareAttachments/name')));
                 this.sharingModel.set('enabled', true);
-            } else if (!this.model.saving && overThreshold && !this.sharingModel.get('enabled')) {
+            } else if (!alreadyActive && !this.model.saving && overThreshold && !this.sharingModel.get('enabled')) {
                 //#. %1$s is usually "Drive Mail" (product name; might be customized)
                 yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', mailSettings.get('compose/shareAttachments/name')));
                 this.sharingModel.set('enabled', true);
             }
+
+            if (alreadyActive && !this.sharingModel.get('enabled')) this.sharingModel.set('enabled', true);
+
             // offer option to activate when attachments are present
             this.$el.toggle(!!this.model.get('attachments').getValidModels().length);
             // is active
