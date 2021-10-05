@@ -256,7 +256,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             title: gt('Global address list'),
             closable: true,
             floating: true,
-            size: 'width-sm'
+            size: 'width-lg'
         });
 
         app.setLauncher(function () {

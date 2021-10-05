@@ -11,18 +11,26 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
- .io-ox-contacts-enterprisepicker-window .enterprise-picker-body, .io-ox-contacts-enterprisepicker-window .enterprise-picker-header {
-    padding: 16px;
- }
 
- .io-ox-contacts-enterprisepicker-window .enterprise-picker-body {
-    min-height: 60px;
-    overflow-y: auto;
-    height: 614px;
- }
-
- .enterprise-picker-header .top-bar {
-    margin-top: 8px;
+ .io-ox-contacts-enterprisepicker-window {
+    height: 660px;
+    width: 60rem;
+    .window-content {
+        display: flex;
+        flex-direction: column;
+        .enterprise-picker-body {
+            padding: 16px;
+            min-height: 60px;
+            overflow-y: auto;
+            height: auto;
+         }
+         .enterprise-picker-header {
+            padding: 16px;
+             .top-bar {
+                margin-top: 8px;
+            }
+         }
+    }
  }
 
  // a bit specific but we want to overrule the default style without !important
