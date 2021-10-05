@@ -248,7 +248,7 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
         I.dontSee('Exchange Active Sync');
     });
 
-    await I.haveSetting('io.ox/core//upsell/enabled/active_sync', true);
+    await I.haveSetting('io.ox/core//upsell/enabled', { active_sync: true, caldav: true, carddav: true });
     I.refreshPage();
     mail.waitForApp();
     await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
@@ -267,6 +267,8 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
 
         // check if button is disabled
         I.waitForText('Which application do you want to use?');
+        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Calendar'));
+        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Address Book'));
         I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
         I.click('Exchange Active Sync');
     });
@@ -277,7 +279,9 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
 
     // enable active_sync again, check if upsell is not offered
     await users[0].hasAccessCombination('all');
-    I.refreshPage();
+    I.wait(1);
+    I.logout();
+    I.login('app=io.ox/mail&cap=caldav,carddav');
     mail.waitForApp();
     topbar.connectDeviceWizard();
 
@@ -288,6 +292,9 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
 
         I.waitForText('Which application do you want to use?');
         I.waitForText('Exchange Active Sync');
+        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Calendar'));
+        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Address Book'));
+        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
         I.click('Exchange Active Sync');
         I.waitForVisible('.qrcode');
     });
