@@ -421,6 +421,9 @@ define('io.ox/files/share/permissions', [
                     // no default
                 }
 
+                //#. description in the permission dialog to indicate that this user can act on your behalf (send mails, check calendar for you, etc)
+                if (this.model.get('deputyPermission')) this.description = gt('Deputy');
+
                 // a11y: just say "Public link"; other types use their description
                 this.ariaLabel = this.ariaLabel || (this.display_name + ', ' + this.description);
             },
@@ -666,7 +669,7 @@ define('io.ox/files/share/permissions', [
 
                 $el = $('<div class="col-sm-3 col-sm-offset-0 col-xs-4 col-xs-offset-2 role">');
 
-                if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous()) {
+                if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous() || baton.model.get('deputyPermission')) {
                     $el.text(description);
                 } else {
                     dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true, buttonToggle: true })
@@ -717,8 +720,8 @@ define('io.ox/files/share/permissions', [
                     module = baton.parentModel.get('module'),
                     supportsWritePrivileges = model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
-                // not available for anonymous links (read-only)
-                if (isAnonymous) {
+                // not available for anonymous links or deputies(read-only)
+                if (isAnonymous || baton.model.get('deputyPermission')) {
                     this.append('<div class="col-sm-2 col-xs-4">');
                     return;
                 }
@@ -820,6 +823,8 @@ define('io.ox/files/share/permissions', [
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.isOwner(baton.parentModel)) return;
+
+                if (baton.model.get('deputyPermission')) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions'), buttonToggle: true }),
                     type = baton.model.get('type'),
