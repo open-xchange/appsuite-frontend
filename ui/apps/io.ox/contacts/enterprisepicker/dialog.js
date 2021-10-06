@@ -122,6 +122,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
         events: {
             'click li': 'updateSelection',
+            'dblclick li': 'quickSelection',
             'click .show-details': 'openDetailView'
         },
 
@@ -222,6 +223,25 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 if (this.options.selection.behavior === 'single') return this.model.get('selectedContacts').reset([model]);
                 this.model.get('selectedContacts').add(model);
             }
+        },
+
+        // used on double click. Selects the contact and closes the dialog
+        quickSelection: function (e) {
+            if (this.options.selection.behavior === 'none') return;
+
+            e.stopPropagation();
+            var target = e.currentTarget,
+                id = target.getAttribute('data-id'),
+                model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id);
+
+            // single selection or multi selection?
+            if (this.options.selection.behavior === 'single') {
+                this.model.get('selectedContacts').reset([model]);
+            } else {
+                this.model.get('selectedContacts').add(model);
+            }
+
+            if (this.options.dialog) this.options.dialog.invokeAction('select');
         },
 
         openDetailView: function (e) {
@@ -509,7 +529,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 .build(function () {
                     var self = this;
                     this.$el.addClass('enterprise-picker');
-
+                    options.dialog = this;
                     buildDialog(options, model, this.$('.modal-header'), this.$('.modal-content'), this.$('.modal-body')).then(function () {
                         // triggers focus and fixes "compact" class
                         self.idle();
