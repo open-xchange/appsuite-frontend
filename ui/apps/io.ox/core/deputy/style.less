@@ -25,11 +25,12 @@
         display: flex;
         justify-content: space-between;
         padding: 8px 0;
-        height: 76px;
+        min-height: 76px;
         width: 100%;
 
         .flex-item {
             display: flex;
+            align-items: center;
         }
 
         .data-container>* {
@@ -80,6 +81,7 @@
 
     .select-container {
         display: flex;
+        flex-wrap: wrap;
         margin-top: 32px;
 
         label {
@@ -98,5 +100,22 @@
     .checkbox {
         margin-top: 16px;
         margin-left: 150px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
+
+    .deputy-permissions-dialog {
+
+        height: auto;
+
+        .select-container select {
+            width: 100%;
+            margin-top: 8px
+        }
+
+        .checkbox {
+            margin-left: 0;
+        }
     }
 }
