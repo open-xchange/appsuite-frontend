@@ -226,9 +226,8 @@ define('io.ox/core/deputy/dialog', [
             var user = deputy.get('userData'),
                 name = util.getFullName(user.attributes, true),
                 initials = util.getInitials(user.attributes),
-                initialsColor = util.getInitialsColor(initials),
                 userPicture = user.get('image1_url') ? $('<i class="user-picture" aria-hidden="true">').css('background-image', 'url(' + util.getImage(user.attributes) + ')')
-                    : $('<div class="user-picture initials" aria-hidden="true">').text(initials).addClass(initialsColor);
+                    : $('<div class="user-picture initials" aria-hidden="true">').text(initials);
 
 
             this.$el.append(

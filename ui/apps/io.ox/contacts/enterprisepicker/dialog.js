@@ -139,7 +139,6 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         renderContact: function (contact) {
             var name = util.getFullName(contact.attributes, true),
                 initials = util.getInitials(contact.attributes),
-                initialsColor = util.getInitialsColor(initials),
                 contactPicture;
 
             var node = $('<li>').attr('data-id', contact.get('id')).append(
@@ -148,7 +147,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
                         .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
                             $(this).css('background-image', 'url(' + e.data.url + ')');
-                        }) : $('<div class="contact-picture initials" aria-hidden="true">').text(initials).addClass(initialsColor)),
+                        }) : $('<div class="contact-picture initials" aria-hidden="true">').text(initials)),
                     $('<div class="data-container">').append(
                         $('<div class="name" aria-hidden="true">').append(name),
                         $('<div class="department" aria-hidden="true">').text(contact.get('department'))
