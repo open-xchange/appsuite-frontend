@@ -990,17 +990,18 @@ define('io.ox/mail/compose/view', [
         toggleEditorMode: function () {
 
             var self = this, content,
-                signature = this.config.get('signature');
+                signature = this.config.get('signature'),
+                hint = this.config.get('hint');
 
-            if (signature) {
-                this.config.set('signatureId', '');
-            }
+            if (signature) this.config.set('signatureId', '');
+            if (hint) this.config.set('hint', false);
+
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
             } else if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') {
-                // intial set, transfrom html to text
+                // initial set, transfrom html to text
                 content = require(['io.ox/core/tk/textproc']).then(function (textproc) {
                     return textproc.htmltotext(self.model.get('content'));
                 });
@@ -1015,13 +1016,15 @@ define('io.ox/mail/compose/view', [
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {
-                // TOOO-784: streamline
+                // TODO-784: streamline
                 if (this.app.get('window') && this.app.get('window').floating) {
                     this.app.get('window').floating.$el.toggleClass('text-editor', this.config.get('editorMode') === 'text');
                     this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
                     this.app.getWindowNode().trigger('scroll');
                 }
                 if (signature) this.config.set('signatureId', signature.id);
+                if (hint) this.config.set('hint', true);
+
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;

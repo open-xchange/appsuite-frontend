@@ -237,6 +237,41 @@ define('io.ox/mail/compose/main', [
             }.bind(this));
         }
     }, {
+        id: 'deputy-hint',
+        index: INDEX += 100,
+        perform: function () {
+            if (!capabilities.has('deputy')) return;
+            if (!settings.get('compose/deputy/hint', true)) return;
+
+            var text = gt('This mail was send on behalf of another person.');
+
+            // use 'hint' to allow manipulation without affecting 'sender' (see toggleEditorMode)
+            this.listenTo(this.model, 'change:sender', function (model, value) { this.config.set('hint', !!value); });
+
+            // add hint to mail body
+            this.listenTo(this.config, 'change:hint', function onChangeSender(model, value) {
+                var isHTML = !!this.view.editor.find, isRemove = !value,
+                    type = (isHTML ? 'html' : 'text') + ':' + (isRemove ? 'remove' : 'append');
+
+                switch (type) {
+                    case 'html:append':
+                    case 'text:append':
+                        var node = $('<div>').append($('<div class="io-ox-hint">').text(text));
+                        return this.view.editor.insertPostCite(isHTML ? node.html() : text);
+                    case 'html:remove':
+                        return this.view.editor.find('div[class$="io-ox-hint"]').each(function () {
+                            var node = $(this);
+                            if (text === node.text().trim()) return node.remove();
+                            node.removeAttr('class');
+                        });
+                    case 'text:remove':
+                        return this.view.editor.replaceParagraph('\n\n' + text, '');
+                    default:
+                        return;
+                }
+            });
+        }
+    }, {
         id: 'finally',
         index: INDEX += 100,
         perform: function (baton) {
@@ -244,7 +279,7 @@ define('io.ox/mail/compose/main', [
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
 
-            // clear max width for tokenfields to accomodate new max width
+            // clear max width for tokenfields to accommodate new max width
             this.view.$el.find('.mail-input>.tokenfield>input.tokenfield').each(function () {
                 var tokenfield = $(this).data('bs.tokenfield'),
                     attr = $(this).closest('[data-extension-id]').data('extension-id');

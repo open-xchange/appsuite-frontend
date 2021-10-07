@@ -128,7 +128,7 @@ define('io.ox/mail/compose/actions/extensions', [
 
         var mailContent = (baton.model.get('subject') || '') + '|';
         if (baton.view.editor.getMode() === 'html') {
-            mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature').text();
+            mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature,.io-ox-hint').text();
         } else {
             mailContent += baton.view.editor.getContent().replace(/^>.*\n/gm, '');
         }

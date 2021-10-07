@@ -72,7 +72,7 @@ define('io.ox/core/tk/text-editor', [
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 str = str.replace(
-                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
+                    /(\s|&nbsp;|\0x20|<br\/?>|<p( class="io-ox-signature" | class="io-ox-hint")>(&nbsp;|\s|<br\/?>)*<\/p>)*$/g, ''
                 );
 
                 return str;
