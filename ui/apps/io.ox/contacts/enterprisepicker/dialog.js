@@ -142,7 +142,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 initials = util.getInitials(contact.attributes),
                 contactPicture;
 
-            var node = $('<li>').attr('data-id', contact.get('id')).append(
+            var node = $('<li role="option" tabindex="-1">').attr({
+                'data-id': contact.get('id'),
+                'aria-selected': !!this.model.get('selectedContacts').get(contact.get('id'))
+            }).append(
                 $('<div class="flex-container multi-item-container">').append(
                     this.options.selection.behavior === 'multiple' ? $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }) : '',
                     (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
@@ -181,7 +184,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         render: function () {
-            this.$el.empty();
+            this.$el.empty().attr({
+                role: 'listbox',
+                'aria-multiselectable': this.options.selection.behavior === 'multiple',
+                tabindex: 0
+            });
+
             var query = this.model.get('searchQuery').trim(),
                 isLastSearched = this.model.get('selectedList') === 'all' && query === '',
                 contacts = isLastSearched ? this.model.get('lastContacts') : this.model.get('contacts');
@@ -218,10 +226,17 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             if (isSelected) {
                 this.model.get('selectedContacts').remove(model);
+                $(target).attr('aria-selected', false);
             } else {
                 // single selection or multi selection?
-                if (this.options.selection.behavior === 'single') return this.model.get('selectedContacts').reset([model]);
+                if (this.options.selection.behavior === 'single') {
+                    this.model.get('selectedContacts').reset([model]);
+                    this.$el.find('li').attr('aria-selected', false);
+                    $(target).attr('aria-selected', true);
+                    return;
+                }
                 this.model.get('selectedContacts').add(model);
+                $(target).attr('aria-selected', true);
             }
         },
 
