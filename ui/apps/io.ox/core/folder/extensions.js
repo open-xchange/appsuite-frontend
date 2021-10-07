@@ -1199,8 +1199,10 @@ define('io.ox/core/folder/extensions', [
     //
 
     function openPermissions(e) {
-        require(['io.ox/files/share/permissions'], function (controller) {
-            controller.showFolderPermissions(e.data.id);
+        var id = e.data.id;
+        require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
+            var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+            permissions.showFolderPermissions(id, model);
         });
     }
 

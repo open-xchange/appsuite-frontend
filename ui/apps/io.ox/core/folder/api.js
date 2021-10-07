@@ -572,7 +572,7 @@ define('io.ox/core/folder/api', [
 
         list: function (id) {
             var folder = this.hash[id];
-            return folder !== undefined ? folder.list() : $.Deferred().reject();
+            return folder !== undefined ? folder.list() : $.Deferred().reject({ error: 'virtual folder ' + id + ' not hashed.' });
         },
 
         add: function (id, getter) {
@@ -779,6 +779,8 @@ define('io.ox/core/folder/api', [
                     return list(id).then(
                         null,
                         function fail(error) {
+                            error = error || {};
+                            options = options || {};
                             error.id = id;
                             return $.when(options.errors ? error : undefined);
                         }
@@ -1172,7 +1174,8 @@ define('io.ox/core/folder/api', [
             options = _.extend({
                 module: parent.module,
                 subscribed: 1,
-                title: gt('New Folder')
+                title: gt('New Folder'),
+                updateParentFolder: true
             }, options);
             // inherit permissions for private flat non-calendar folders
             if (isFlat(options.module) && options.module !== 'calendar' && options.module !== 'event' && !(parent.id === '2' || util.is('public', parent))) {
@@ -1217,10 +1220,12 @@ define('io.ox/core/folder/api', [
                 if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
             })
             .done(function updateParentFolder(data) {
-                pool.getModel(id).set('subscr_subflds', true);
-                virtual.refresh();
-                api.trigger('create', data);
-                api.trigger('create:' + id.replace(/\s/g, '_'), data);
+                if (options.updateParentFolder) {
+                    pool.getModel(id).set('subscr_subflds', true);
+                    virtual.refresh();
+                    api.trigger('create', data);
+                    api.trigger('create:' + id.replace(/\s/g, '_'), data);
+                }
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);

@@ -11,11 +11,33 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+
+ .io-ox-contacts-enterprisepicker-window {
+    height: 660px;
+    width: 60rem;
+    .window-content {
+        display: flex;
+        flex-direction: column;
+        .enterprise-picker-body {
+            padding: 16px;
+            min-height: 60px;
+            overflow-y: auto;
+            height: auto;
+         }
+         .enterprise-picker-header {
+            padding: 16px;
+             .top-bar {
+                margin-top: 8px;
+            }
+         }
+    }
+ }
+
  // a bit specific but we want to overrule the default style without !important
- .modal.flex.enterprise-picker .modal-dialog {
+ .modal.flex.enterprise-picker .modal-dialog, .io-ox-contacts-enterprisepicker-window {
     width: 60rem;
 
-    .modal-content {
+    .modal-content, .enterprise-picker-body {
         height: 660px;
 
         &.io-ox-busy .contact-list-view {
@@ -29,9 +51,13 @@
             justify-content: space-around;
             align-items: center;
         }
+
+        .limit-warning {
+            margin: 4px 12px 0px 12px;
+        }
     }
 
-    .modal-header {
+    .modal-header, .enterprise-picker-header {
         border-bottom: 1px solid #e5e5e5;
 
         .top-bar {
@@ -58,11 +84,18 @@
                     }
                 }
             }
+
+            option.hidden {
+                display: none;
+            }
+            select option[value="sectionHeader"] {
+                font-weight: bold;
+            }
         }
     }
 
-    .modal-body .contact-list-view li {
-        padding: 8px;
+    .modal-body .contact-list-view li, .enterprise-picker-body .contact-list-view li {
+        padding: 12px;
         display: flex;
         justify-content: space-between;
 
@@ -71,29 +104,17 @@
         }
 
         .contact-picture {
-            height: 60px;
-            min-width: 60px;
+            height: 40px;
+            min-width: 40px;
             margin-right: 16px;
-            padding: 12px;
             border-radius: 50%;
             background-size: cover;
             background-color: #eee;
-            color: rgba(0, 0, 0, 0.60);
+            color: rgba(0, 0, 0, 0.7);
             font-weight: bold;
-            font-size: 24px;
+            font-size: 14px;
+            padding-top: 10px;
             text-align: center;
-
-            &.initials {
-                &.gray { color: #000; }
-                &.red { background-color: #FFA0A5; }
-                &.orange { background-color: #FFA77B; }
-                &.yellow { background-color: #FFD23A; }
-                &.green { background-color: #BFDE45; }
-                &.cyan { background-color: #99E4FB; }
-                &.blue { background-color: #95CEFF; }
-                &.purple { background-color: #E5B0FF; }
-                &.pink { background-color: #FFC2DE; }
-            }
         }
 
         .multi-item-container {
@@ -109,7 +130,7 @@
             width: 32%;
 
             input {
-                height: 60px;
+                height: 40px;
                 margin: 0 16px 0 0 ;
             }
         }
@@ -119,24 +140,23 @@
             overflow: hidden;
             // empty fields should still take up space, to keep the layout consistent
             div {
-                min-height: 30px;
+                min-height: 20px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
         }
 
-        .btn-link {
-            color: #727272;
-
-            svg {
-                height: 20px;
-            }
+        .show-details {
+            color: #767676;
 
             &:hover {
-                background-color: #a0a0a0;
-                color: #fff;
+                color:#000
             }
+        }
+        .btn-link svg {
+            margin-top: 5px;
+            height: 20px;
         }
     }
 

@@ -1086,7 +1086,7 @@ define('io.ox/contacts/api', [
         return !!obj.mark_as_distributionlist;
     };
 
-    // shared api variable as workaround for detail view (progrss bar in detail View)
+    // shared api variable as workaround for detail view (progress bar in detail View)
     api.pendingAttachments = {};
 
     //
@@ -1097,6 +1097,8 @@ define('io.ox/contacts/api', [
 
         // should be >= 1!
         var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
+            // used to increase the limit stepwise for incomplete responses (limit === length)
+            factor = Math.max(2, settings.get('search/limitIncreaseFactor', 4)),
             // use these fields for local lookups
             fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 
@@ -1113,12 +1115,17 @@ define('io.ox/contacts/api', [
         }
 
         // get from local cache
-        function get(query) {
-
+        function get(query, options) {
             var key = getHashKey(query), def = search.cache[key], words = query.split(' ');
 
             // cache miss
             if (!def) return;
+
+            if (def._incomplete) {
+                // raise limit by factor x when cached data is incomplete and request again
+                options.limit = def._limit + (options.limit * factor);
+                return;
+            }
 
             // local lookup:
             return def.then(function (data) {
@@ -1135,9 +1142,12 @@ define('io.ox/contacts/api', [
         }
 
         // add to cache
-        function add(query, def) {
+        function add(query, def, options) {
             var key = getHashKey(query);
             search.cache[key] = def.then(function (data) {
+                // add some custom props to adjust limits for incomplete data
+                _.extend(search.cache[key], { _limit: options.limit, _incomplete: data.length === options.limit });
+
                 return _(data).map(function (item) {
                     // prepare simple array for fast lookups
                     item.fulltext = _(fields).map(function (id) {
@@ -1165,7 +1175,7 @@ define('io.ox/contacts/api', [
             options = _.extend({ admin: false, email: true, sort: '609', columns: columns, cache: true, limit: 0 }, options);
 
             // try local cache
-            var cache = options.cache && get(query);
+            var cache = options.cache && get(query, options);
             if (cache) return cache;
 
             // add query to cache
@@ -1181,10 +1191,10 @@ define('io.ox/contacts/api', [
                     columns: options.columns,
                     right_hand_limit: options.limit
                 }
-            }));
+            }), options);
 
             // use local lookup! first query might exceed minimum length
-            return get(query);
+            return get(query, options);
         }
 
         // export cache for debugging/clearing

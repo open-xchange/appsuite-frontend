@@ -1,0 +1,109 @@
+// makes sure busy animation is visible and dialog does not jump (yeah we need this very specific selectors when we don't want to use important)
+.modal.flex.compact .modal-body.deputy-dialog-body, .modal.flex .modal-body.deputy-dialog-body {
+    min-height: 374px;
+}
+
+.deputy-list-view {
+
+    height: 300px;
+    width: 100%;
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+
+    .empty-message {
+        text-align: center;
+        font-size: 1rem;
+        height: 100%;
+        display: flex;
+        padding: auto;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        min-height: 76px;
+        width: 100%;
+
+        .flex-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .data-container>* {
+            min-height: 20px;
+        }
+
+        .remove {
+            color: #767676;
+            &:focus,&:hover {
+                color: #333;
+            }
+            svg.fasvg {
+                height: 20px;
+            }
+        }
+
+        .user-picture {
+            height: 60px;
+            min-width: 60px;
+            margin-right: 16px;
+            padding: 17px;
+            border-radius: 50%;
+            background-size: cover;
+            background-color: #eee;
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+        }
+    }
+}
+
+.deputy-permissions-dialog {
+
+    height: 250px;
+
+    .select-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 32px;
+
+        label {
+            margin: 0;
+            line-height: initial;
+            color: #333;
+            font-size: 1rem;
+            width: 150px;
+        }
+
+        select {
+            width: 300px;
+        }
+    }
+
+    .checkbox {
+        margin-top: 16px;
+        margin-left: 150px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
+
+    .deputy-permissions-dialog {
+
+        height: auto;
+
+        .select-container select {
+            width: 100%;
+            margin-top: 8px
+        }
+
+        .checkbox {
+            margin-left: 0;
+        }
+    }
+}

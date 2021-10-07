@@ -1335,7 +1335,7 @@ define('io.ox/mail/api', [
      */
     api.checkInbox = function () {
         // ox.openedInBrowserTab is only true, when ox.tabHandlingEnabled is true and the window is no a core tab
-        if (ox.openedInBrowserTab) return;
+        if (ox.openedInBrowserTab) return $.Deferred().reject();
         // look for new unseen mails in INBOX
         // check all inboxes if setting is set. primary account and external inboxes
         var inboxes = settings.get('notificationsForExternalInboxes', false) ? accountAPI.getFoldersByType('inbox') : ['default0/INBOX'];
@@ -1344,7 +1344,7 @@ define('io.ox/mail/api', [
         if (capabilities.has('websocket')) inboxes = _(inboxes).without('default0/INBOX');
 
         // no inboxes to check? we are done here
-        if (!inboxes.length) return;
+        if (!inboxes.length) return $.Deferred().reject();
 
         var defs = _(inboxes).map(function (inbox) {
             return http.GET({

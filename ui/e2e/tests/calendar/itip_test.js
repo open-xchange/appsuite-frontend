@@ -101,16 +101,11 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         // 6.) User#A: Accept changes
         mail.selectMail(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`);
         I.waitForElement('.mail-detail-frame');
-        I.waitForText('Accept changes');
+        I.waitForText('MySubject');
         I.dontSeeElement({ xpath: './/button[text() = "Accept"]' });
         I.dontSee('Decline');
         I.dontSee('Tentative');
-        I.click('Accept changes');
-        I.waitForText('The appointment has been updated');
-        I.waitForInvisible(
-            locate('.list-view li.list-item')
-                .withText(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`)
-        );
+        I.dontSee('Accept changes');
         // 7.) User#A: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
@@ -136,7 +131,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
     });
     // 10.) User#A: Delete the appointment
     await session('Alice', () => {
-        I.click('Delete');
+        I.click('Delete', '.io-ox-sidepopup');
         I.waitForText('Add a message to the notification email for the other participants');
         I.fillField('comment', 'MyComment');
         I.click('Delete appointment');
@@ -150,7 +145,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         mail.selectMail('Appointment canceled: MySubject');
         I.waitForElement('.mail-detail-frame');
         I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
-        I.waitForText(current.itipStatus);
+        // TODO: clarify whether this should show up or not
+        // I.waitForText(current.itipStatus)
         I.waitForText('MyComment');
         // 12.) User#B: Delete
         I.click('Delete');
@@ -218,12 +214,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.login('app=io.ox/mail', { user: users[0] });
     mail.waitForApp();
     I.waitForText(`${users[1].userdata.display_name} accepted the invitation: MySubject`, 30);
-    // 6.) User#A: Accept changes
+    // 6.) User#A: check mail
     mail.selectMail(`${users[1].userdata.display_name} accepted the invitation: MySubject`);
     I.waitForElement('.mail-detail-frame');
-    I.waitForText('Accept changes');
-    I.click('Accept changes');
-    I.waitForInvisible('.mail-detail-frame');
+    I.waitForText('MySubject');
     // 7.) User#A: Download and verify the appointment
     I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
@@ -234,7 +228,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.click('testdocument.odt', '.io-ox-sidepopup .attachment-list');
     I.waitForText('Download');
     I.handleDownloads();
-    I.click('Download');
+    I.click('Download', '.io-ox-sidepopup .attachment-list');
     I.amInPath('/build/e2e/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');

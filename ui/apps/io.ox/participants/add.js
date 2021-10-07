@@ -172,14 +172,17 @@ define('io.ox/participants/add', [
                     field: 'email1', type: 5
                 });
             });
-            return this.addParticipant(e, participants, val);
+            return this.addParticipant(e, participants);
         },
 
         setFocus: function () {
             if (this.typeahead) this.typeahead.$el.focus();
         },
 
-        addParticipant: function (e, data, value) {
+        addParticipant: function (e, data) {
+            // clean typeahead input (important to clean before adding to collection or we might trigger addParticipant a second time (focusout event in event handlers etc))
+            this.typeahead.$el.typeahead('val', '');
+
             var list = [].concat(data),
                 distlists = [],
                 // validate is just used to check against blacklist
@@ -216,8 +219,6 @@ define('io.ox/participants/add', [
                 });
             }
 
-            // clean typeahad input
-            if (value) this.typeahead.$el.typeahead('val', '');
             // return possible errors, so views can react
             return error;
         },
@@ -271,7 +272,9 @@ define('io.ox/participants/add', [
                         }
                         self.options.collection.add(member);
                     },
-                    processRaw: self.options.processRaw
+                    processRaw: self.options.processRaw,
+                    useGABOnly: self.options.useGABOnly,
+                    selection: self.options.selection
                 });
                 this.$el.append(
                     this.addresspicker.render().$el

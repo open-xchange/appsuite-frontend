@@ -30,11 +30,12 @@ define('io.ox/mail/actions/attachmentQuota', [
     'use strict';
 
     function accumulate(attachmentCollection, type) {
-        return attachmentCollection.filter(function (m) {
-            var size = m.get('size') || m.get('origin').file.size;
-            return typeof size !== 'undefined' && m.get('contentDisposition') === type;
+        return attachmentCollection.map(function (m) {
+            if (m.get('contentDisposition') !== type) return 0;
+            if (m.get('size') >= 0) return m.get('size');
+            if (m.get('origin')) return (m.get('origin').file || {}).size || 0;
+            return 0;
         })
-        .map(function (m) { return m.get('size') || m.get('origin').file.size; })
         .reduce(function (m, n) { return m + n; }, 0);
     }
 

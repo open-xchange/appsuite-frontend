@@ -147,7 +147,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
         },
 
+        checkExtensions: function () {
+            var self = this;
+            // check extension requirements
+            this.point.each(function (extension) {
+                // support functions and booleans
+                if (_.isFunction(extension.requires)) self.point.toggle(extension.id, !!extension.requires(self.model));
+                if (_.isBoolean(extension.requires)) self.point.toggle(extension.id, extension.requires);
+            });
+        },
+
         render: function () {
+            this.checkExtensions();
             return this.invoke('render', this.$body);
         },
 

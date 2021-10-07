@@ -202,7 +202,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
         button {
             outline:0;
-            &:hover, &:focus { color: @appcontrol-launcher-color-highlight; }
+            &:hover, &:focus {
+                // needed or svg icons are underlined on safari
+                text-decoration: none;
+                color: @appcontrol-launcher-color-highlight;
+            }
         }
     }
     #io-ox-quicklaunch > button {

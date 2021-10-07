@@ -23,9 +23,11 @@
 define('io.ox/mail/sender', [
     'io.ox/mail/util',
     'io.ox/core/api/account',
+    'io.ox/core/deputy/api',
     'io.ox/core/api/user',
+    'io.ox/core/capabilities',
     'settings!io.ox/mail'
-], function (util, api, userAPI, settings) {
+], function (util, api, deputyAPI, userAPI, capabilities, settings) {
 
     'use strict';
 
@@ -54,11 +56,18 @@ define('io.ox/mail/sender', [
             },
             update: function (options) {
                 var self = this;
-                that.getAddresses(options).then(function (addresses, primary) {
+                that.getAddresses(options).then(function (addresses, deputyAddresses, primary) {
+                    // save deputy addresses in an array, to look them up later
+                    self.deputyAddresses = _(deputyAddresses).map(function (address) { return address[1]; });
+                    // put addresses from accounts (own or external) and addresses from deputy permissions in one list
+                    addresses = addresses.concat(deputyAddresses);
                     self.defaultAddress = that.getDefaultSendAddress() || primary[1];
                     self.reset(addresses);
                 });
                 return this;
+            },
+            getDeputyAddresses: function () {
+                return this.deputyAddresses || [];
             }
         }),
         senders;
@@ -117,6 +126,7 @@ define('io.ox/mail/sender', [
         getAddresses: function (options) {
             return $.when(
                 that.getAccounts(options),
+                capabilities.has('deputy') ? deputyAPI.getGranteeAddresses() : [],
                 that.getPrimaryAddress()
             );
         },

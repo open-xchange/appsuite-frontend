@@ -286,7 +286,17 @@ define('io.ox/calendar/settings/pane', [
                             util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when an appointment in which you participate is created, modified or deleted'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notification as appointment creator when participants accept or decline'), settings),
                             util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notification as appointment participant when other participants accept or decline'), settings),
-                            util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
+                            util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings),
+                            $('<div class="row">').append(
+                                $('<div class="col-md-8">').append(
+                                    $('<label for="settings-autoProcessIMip">').text(gt('Automatically apply appointment changes received via email to your calendar')),
+                                    new mini.SelectView({ id: 'settings-autoProcessIMip', name: 'chronos/autoProcessIMip', model: settings, list: [
+                                        { label: gt('Never'), value: 'NEVER' },
+                                        { label: gt('Only from known senders'), value: 'KNOWN' },
+                                        { label: gt('Always'), value: 'ALWAYS' }
+                                    ] }).render().$el
+                                )
+                            )
                         )
                     )
                 );

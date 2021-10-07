@@ -75,7 +75,10 @@ define('io.ox/calendar/week/print', [
                 // make sure appointment lasts at least 30 minutes
                 endDate = moment.max(startDate.clone().add(30, 'minutes'), util.getMomentInLocalTimezone(event.get('endDate'))),
                 startRange = Math.max(startDate.hour(), minHour),
-                endRange = Math.max(startDate.hour() + 1, startDate.hour() + endDate.diff(startDate, 'hours') + 1);
+                // appointment ends at a full hour => no need for an additional slot.
+                // appointment ends somewhere inside an hour => make sure this slot is included
+                // see OXUIB-973
+                endRange = Math.max(startDate.hour() + 1, endDate.hour() + (endDate.minutes() === 0 ? 0 : 1));
 
             if (isAllday) endRange = startDate.hour() + 1;
             if (endRange > maxHour) endRange = maxHour;

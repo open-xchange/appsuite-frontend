@@ -28,10 +28,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
     'io.ox/backbone/mini-views/contextmenu-utils',
+    'io.ox/core/folder/actions/properties',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, properties, settings, fileSettings, gt) {
 
     'use strict';
 
@@ -453,16 +454,16 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Permissions / Sharing
+        // Share / Permissions
         //
         shares: (function () {
 
             function invite(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, controller) {
-                    var linkModel = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    controller.showFolderPermissions(id, [linkModel], { hasLinkSupport: e.data.hasLinkSupport });
+                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+                    permissions.showFolderPermissions(id, model);
                 });
             }
 
@@ -481,22 +482,44 @@ define('io.ox/core/folder/contextmenu', [
 
                 var supportsInternal = model.supportsInternalSharing(),
                     supportsInvite = model.supportsInviteGuests(),
-                    supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
-                    showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
+                    hasLinkSupport = capabilities.has('share_links') && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsInternal && !showInvitePeople && !showGetLink) return;
+                if (!supportsInternal && !showInvitePeople && !hasLinkSupport) return;
 
-                if (supportsInternal || showInvitePeople) {
-                    contextUtils.addLink(this, {
-                        action: 'invite',
-                        data: { app: baton.app, id: id, hasLinkSupport: showGetLink },
-                        enabled: true,
-                        handler: invite,
-                        text: showInvitePeople ? gt('Share / Permissions') : gt('Permissions')
-                    });
-                }
+                contextUtils.addLink(this, {
+                    action: 'invite',
+                    data: { app: baton.app, id: id },
+                    enabled: true,
+                    handler: invite,
+                    text: (showInvitePeople || hasLinkSupport) ? gt('Share / Permissions') : gt('Permissions')
+                });
+            };
+        }()),
+
+        //
+        // Manage Deputies (only inbox and calendar for now)
+        //
+        deputies: (function () {
+            function handler(e) {
+                e.preventDefault();
+                require(['io.ox/core/deputy/dialog'], function (deputyDialog) {
+                    deputyDialog.open();
+                });
+            }
+
+            return function (baton) {
+                // needs deputy capability and needs to be inbox or default calendar
+                if (!capabilities.has('deputy') || (baton.data.id !== api.getDefaultFolder('mail') && baton.data.id !== api.getDefaultFolder('calendar'))) return;
+
+                contextUtils.addLink(this, {
+                    action: 'manageDeputies',
+                    data: { folder: baton.data.id, app: baton.app },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Manage deputies')
+                });
             };
         }()),
 
@@ -538,22 +561,14 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 e.preventDefault();
-                var id = e.data.id;
-                require(['io.ox/core/folder/actions/properties'], function (fn) {
-                    fn(id);
-                });
+                properties.openDialog(e.data.id);
             }
 
             return function (baton) {
 
                 if (_.device('smartphone')) return;
-                if (baton.module !== 'calendar' && baton.module !== 'tasks') return;
-
-                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
-                var provider = baton.data['com.openexchange.calendar.provider'],
-                    usedForSync = baton.data.used_for_sync || {};
-                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
-
+                // check if there is an extension that has something to show in the dialog
+                if (!properties.check(baton.data.id)) return;
                 contextUtils.addLink(this, {
                     action: 'properties',
                     data: { baton: baton, id: String(baton.data.id) },
@@ -745,6 +760,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'shares',
             index: 2000,
             draw: extensions.shares
+        },
+        {
+            id: 'deputies',
+            index: 2050,
+            draw: extensions.deputies
         },
         {
             id: 'divider-3',

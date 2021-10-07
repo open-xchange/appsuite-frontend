@@ -549,6 +549,7 @@ define('io.ox/core/api/factory', [
                 // remove omitFolder & getData functions
                 delete opt.omitFolder;
                 delete opt.getData;
+                delete opt.folderTypes;
 
                 // go!
                 return http.PUT({

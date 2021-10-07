@@ -161,7 +161,8 @@ define('io.ox/files/upload/file-folder', [
                     }
                 } else {
                 // FOLDER
-                    folderApi.create(getParentFolderId(item, updatedTreeArr), { title: $.trim(item.name), module: module })
+                    var parentFolderId = getParentFolderId(item, updatedTreeArr);
+                    folderApi.create(parentFolderId, { title: $.trim(item.name), module: module, updateParentFolder: parentFolderId === folder })
                         .then(
                             function (data) {
                                 item.id = data.id; // update with real folder id

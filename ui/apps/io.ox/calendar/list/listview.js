@@ -58,7 +58,7 @@ define('io.ox/calendar/list/listview', [
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 folderAPI.get(model.get('folder')).done(function (folder) {
                     var conf = util.getConfirmationStatus(model);
-                    self.addClass(util.getConfirmationClass(conf) + (model.get('hard_conflict') ? ' hardconflict' : ''));
+                    self.addClass(util.getConfirmationClass(conf) + ' ' + util.getStatusClass(model) + (model.get('hard_conflict') ? ' hardconflict' : ''));
 
                     var color = util.getAppointmentColor(folder, model);
                     colorLabel.css({

@@ -28,8 +28,9 @@ define('io.ox/mail/compose/model', [
     'gettext!io.ox/mail',
     'io.ox/mail/sanitizer',
     'io.ox/mail/util',
-    'io.ox/core/extensions'
-], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/api/quota'
+], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext, quotaAPI) {
 
     'use strict';
 
@@ -208,6 +209,20 @@ define('io.ox/mail/compose/model', [
                     return def;
                 });
             }
+        },
+
+        exceedsMailQuota: function () {
+            var actualAttachmentSize = this.get('attachments').reduce(function (memo, model) {
+                // count only attachments relvant for attachments
+                if (model.get('origin') === 'VCARD') return memo;
+                if (model.get('contentDisposition') === 'INLINE') return memo;
+                return memo + model.getSize();
+            }, 0);
+            actualAttachmentSize = actualAttachmentSize * 2; // the backend needs twice the size of the email to manage the draft
+            quotaAPI.reload();
+            var mailQuota = quotaAPI.mailQuota.get('quota');
+            var use = quotaAPI.mailQuota.get('use');
+            return mailQuota === -1024 ? false : actualAttachmentSize > mailQuota - use;
         },
 
         exceedsThreshold: function () {

@@ -151,9 +151,18 @@ define('io.ox/mail/compose/extensions', [
             this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
             this.listenTo(this.model, 'change:from', this.updateSenderList);
+            this.listenTo(this.model, 'change:from', this.updateDeputyData);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
+        },
+
+        updateDeputyData: function () {
+            if (_(this.addresses.getDeputyAddresses()).contains(this.model.get('from')[1])) {
+                this.model.set('sender', this.addresses.findWhere({ email: sender.getDefaultSendAddress() }).toArray());
+            } else {
+                this.model.unset('sender');
+            }
         },
 
         updateSenderList: function (options) {
@@ -358,7 +367,7 @@ define('io.ox/mail/compose/extensions', [
                         isMail: true,
                         apiOptions: {
                             users: true,
-                            limit: settings.get('compose/autocompleteApiLimit', 20),
+                            limit: settings.get('compose/autocompleteApiLimit', 50),
                             contacts: true,
                             distributionlists: true,
                             emailAutoComplete: true

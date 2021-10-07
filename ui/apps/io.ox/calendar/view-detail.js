@@ -52,6 +52,15 @@ define('io.ox/calendar/view-detail', [
         }
     });
 
+    ext.point('io.ox/calendar/detail').extend({
+        index: 120,
+        id: 'cancel notification',
+        draw: function (baton) {
+            if (util.getStatusClass(baton.model) !== 'cancelled') return;
+            this.append($('<p class="alert alert-info cancel-warning" role="alert">').text(gt('This appointment was cancelled.')));
+        }
+    });
+
     // draw private flag
     ext.point('io.ox/calendar/detail').extend({
         index: 150,
@@ -271,7 +280,7 @@ define('io.ox/calendar/view-detail', [
             }
             try {
                 var node = $.createViewContainer(baton, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
+                node.addClass('calendar-detail view user-select-text ' + util.getStatusClass(baton.data)).attr('data-cid', String(util.cid(baton.data)));
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
                 return node;
 

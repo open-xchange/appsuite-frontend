@@ -31,6 +31,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/locale',
+    'io.ox/core/deputy/dialog',
     'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
@@ -39,7 +40,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
     'io.ox/core/settings/dialogs/quickLauncherDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, deputyDialog, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -294,6 +295,14 @@ define('io.ox/core/settings/pane', [
                         $('<button type="button" class="btn btn-default">')
                             .text(gt('Change password') + ' ...')
                             .on('click', userSettings.changePassword)
+                    );
+                }
+
+                if (capabilities.has('deputy')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                        .text(gt('Manage deputies'))
+                        .on('click', deputyDialog.open)
                     );
                 }
 
