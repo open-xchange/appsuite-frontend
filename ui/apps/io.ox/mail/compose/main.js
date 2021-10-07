@@ -105,6 +105,14 @@ define('io.ox/mail/compose/main', [
             return def.then(function (granteeAddress) {
                 if (!_.isEmpty(granteeAddress)) {
                     return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
+                        // custom display names
+                        if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
+                            address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
+                        }
+                        if (!settings.get('sendDisplayName', true)) {
+                            address[0] = null;
+                            granteeAddress[0] = null;
+                        }
                         // use default address as sender amd grantee address as from
                         model.set({ from: granteeAddress, sender: address });
                     });

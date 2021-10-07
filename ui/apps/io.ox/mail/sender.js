@@ -68,6 +68,9 @@ define('io.ox/mail/sender', [
             },
             getDeputyAddresses: function () {
                 return this.deputyAddresses || [];
+            },
+            isDeputyAddress: function (address) {
+                return _(this.getDeputyAddresses()).contains(address);
             }
         }),
         senders;
