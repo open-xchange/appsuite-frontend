@@ -126,7 +126,7 @@ define('io.ox/core/deputy/dialog', [
                 ),
                 new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalfOf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
                 $('<div class="select-container">').append(
-                    $('<label for="inbox-deputy-selector">').text(moduleMap.calendar),
+                    $('<label for="calendar-deputy-selector">').text(moduleMap.calendar),
                     new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: calendarModel, list: [
                         { value: permissions.none, label: gt('None') },
                         { value: permissions.viewer, label: gt('Viewer (view appointments)') },
@@ -215,9 +215,9 @@ define('io.ox/core/deputy/dialog', [
             this.collection.on('add reset remove', this.render.bind(this));
         },
         render: function () {
-            this.$el.empty();
+            this.$el.attr('role', 'list').empty();
 
-            if (this.collection.length === 0) this.$el.append($('<div class="empty-message">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
+            if (this.collection.length === 0) this.$el.append($('<li class="empty-message" role="listitem">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
 
             this.collection.each(this.renderDeputy.bind(this));
             return this;
@@ -231,7 +231,7 @@ define('io.ox/core/deputy/dialog', [
 
 
             this.$el.append(
-                $('<li>').attr('data-id', user.get('id')).append(
+                $('<li role="listitem">').attr('data-id', user.get('id')).append(
                     $('<div class="flex-item">').append(
                         userPicture,
                         $('<div class="data-container">').append(
@@ -241,7 +241,7 @@ define('io.ox/core/deputy/dialog', [
                     ),
                     $('<div class="flex-item">').append(
                         $('<button class="btn btn-link edit">').attr('data-cid', deputy.cid).text(gt('Edit')),
-                        $('<button class="btn btn-link remove">').attr('data-cid', deputy.cid).append($.icon('fa-trash', gt('Remove')))
+                        $('<button class="btn btn-link remove">').attr({ 'aria-label': gt('Remobe'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
                     )
                 )
             );
