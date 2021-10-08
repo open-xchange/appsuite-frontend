@@ -72,8 +72,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
     var SelectedContactsView = DisposableView.extend({
 
-        tagName: 'ul',
-        className: 'selected-contacts-view list-unstyled',
+        tagName: 'div',
+        className: 'selected-contacts-view',
 
         events: {
             'click button': 'removeContact'
@@ -88,20 +88,23 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         render: function () {
-            this.$el.empty();
-            var self = this,
-                length = this.model.get('selectedContacts').length;
+            var length = this.model.get('selectedContacts').length;
 
-            this.$el.toggleClass('empty', length === 0);
+            this.$el.empty().toggleClass('empty', length === 0);
             if (length === 0) return this;
+            var guid = _.uniqueId('selected-contacts-list-label-'),
+                node = $('<ul class="list-unstyled" role="list">').attr('aria-describedby', guid);
 
             //#. %1$d is number of selected contacts
-            this.$el.append($('<div>').text(gt.ngettext('%1$d contact selected', '%1$d contacts selected', length, length)));
+            this.$el.append($('<div>').attr('id', guid).text(gt.ngettext('%1$d contact selected', '%1$d contacts selected', length, length)), node);
             this.model.get('selectedContacts').each(function (contact) {
-                self.$el.append(
-                    $('<li>').append(
+                node.append(
+                    $('<li role="listitem">').append(
                         $('<div class="name">').append(util.getFullName(contact.attributes, true)),
-                        $('<button class="btn">').attr('data-id', contact.get('id')).append($.icon('fa-times', gt('Remove contact from selection')))
+                        $('<button class="btn">').attr({
+                            'data-id': contact.get('id'),
+                            'aria-label': gt('Remove contact from selection')
+                        }).append($.icon('fa-times', gt('Remove contact from selection')))
                     )
                 );
             });
@@ -118,7 +121,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     var ContactListView = DisposableView.extend({
 
         tagName: 'ul',
-        className: 'contact-list-view list-unstyled',
+        className: 'contact-list-view list-unstyled f6-target',
 
         events: {
             'click li': 'updateSelection',
@@ -140,14 +143,19 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         renderContact: function (contact) {
             var name = util.getFullName(contact.attributes, true),
                 initials = util.getInitials(contact.attributes),
+                canSelect = this.options.selection.behavior !== 'none',
                 contactPicture;
 
             var node = $('<li role="option" tabindex="-1">').attr({
                 'data-id': contact.get('id'),
-                'aria-selected': !!this.model.get('selectedContacts').get(contact.get('id'))
+                role: canSelect ? 'option' : 'listitem'
             }).append(
                 $('<div class="flex-container multi-item-container">').append(
-                    this.options.selection.behavior === 'multiple' ? $('<input type="checkbox">').attr({ 'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')) }) : '',
+                    this.options.selection.behavior === 'multiple' ? $('<input type="checkbox">').attr({
+                        'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')),
+                        //#. %1$s is the contact's name
+                        'aria-label': gt('Select/Deselect contact %1$s', name)
+                    }) : '',
                     (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
                         .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
                             $(this).css('background-image', 'url(' + e.data.url + ')');
@@ -175,9 +183,15 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         $('<div class="mail" aria-hidden="true">').text(util.getMail(contact.attributes)),
                         $('<div class="room" aria-hidden="true">').text(contact.get('room_number'))
                     ),
-                    $('<button type="button" class="show-details btn btn-link">').attr('data-id', contact.get('id')).append($.icon('fa-info-circle', gt('Show contact details')))
+                    $('<button type="button" class="show-details btn btn-link">').attr({
+                        'data-id': contact.get('id'),
+                        'aria-label': gt('Show contact details')
+                    }).append($.icon('fa-info-circle', gt('Show contact details')))
                 )
             );
+
+            if (canSelect) node.attr('aria-selected', !!this.model.get('selectedContacts').get(contact.get('id')));
+
             this.$el.append(node);
             if (!contactPicture) return;
             contactPicture.lazyload({ container: this.options.modalBody });
@@ -185,10 +199,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
         render: function () {
             this.$el.empty().attr({
-                role: 'listbox',
-                'aria-multiselectable': this.options.selection.behavior === 'multiple',
-                tabindex: 0
+                role: this.options.selection.behavior === 'none' ? 'list' : 'listbox',
+                'aria-label': gt('Contact list'),
+                tabindex: -1
             });
+
+            if (this.options.selection.behavior === 'multiple') this.$el.attr('aria-multiselectable', true);
 
             var query = this.model.get('searchQuery').trim(),
                 isLastSearched = this.model.get('selectedList') === 'all' && query === '',
