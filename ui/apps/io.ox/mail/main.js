@@ -1839,6 +1839,13 @@ define('io.ox/mail/main', [
                 notifications.yell(error);
             });
             app.folder.handleErrors();
+
+            // deactivated secondary mail account
+            ox.on('account:status', function (data) {
+                if (!data.deactivated) return;
+                if (app.folder.get().indexOf(data.root_folder) < 0) return;
+                app.folder.setDefault();
+            });
         },
 
         // drafts deleted outside of this client

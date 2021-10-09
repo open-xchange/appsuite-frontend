@@ -26,20 +26,10 @@ define('io.ox/settings/accounts/views', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/views/disposable',
     'io.ox/oauth/keychain',
-    'gettext!io.ox/settings/accounts',
-    'gettext!io.ox/core'
-], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt, gtcore) {
+    'gettext!io.ox/settings/accounts'
+], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt) {
 
     'use strict';
-
-    var labels = {
-        'mail': gtcore.pgettext('app', 'Mail'),
-        'tasks': gtcore.pgettext('app', 'Tasks'),
-        'calendar': gtcore.pgettext('app', 'Calendar'),
-        'contacts': gtcore.pgettext('app', 'Address Book'),
-        'infostore': gtcore.pgettext('app', 'Drive')
-    };
-
 
     var createExtpointForSelectedAccount = function (args) {
             if (args.data.id !== undefined && args.data.accountType !== undefined) {
@@ -82,7 +72,7 @@ define('io.ox/settings/accounts/views', [
             events: {
                 'click [data-action="edit"]': 'onEdit',
                 'click [data-action="delete"]': 'onDelete',
-                'click [data-action="toggle"]': 'onToggle'
+                'click [data-action="enable"]': 'onEnable'
             },
 
             initialize: function () {
@@ -109,39 +99,22 @@ define('io.ox/settings/accounts/views', [
 
             renderAction: function (action) {
                 var POINT = 'io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail';
-
                 switch (action) {
                     case 'edit':
+                        if (this.model.get('deactivated') && !_.device('smartphone')) return $();
                         if (this.model.get('accountType') !== 'fileAccount' && ext.point(POINT).pluck('draw').length <= 0) return;
                         return listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', this.getTitle()) }), gt('Edit'), 'edit'
                         );
                     case 'delete':
-                        if (this.model.get('secondary')) return $();
-                        if (this.model.get('id') === 0) return $('<div class="remove-placeholder">');
+                        if (this.model.get('id') === 0 || this.model.get('secondary')) return $('<div class="remove-placeholder">');
                         return listUtils.controlsDelete({ title: gt('Delete %1$s', this.getTitle()) });
-                    case 'toggle':
+                    case 'enable':
                         if (!this.model.get('secondary')) return $();
-                        var deactivated = this.model.get('deactivated'),
-                            options = deactivated ? {
-                                //#. link title for related accounts into the corresponding folder
-                                //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
-                                //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-                                'aria-label': gt('Show %1$s in %2$s', this.getTitle(), labels.mail),
-                                'label': gt('Show in %1$s', labels.mail),
-                                'icon': 'fa-eye'
-                            } : {
-                                //#. link title for related accounts into the corresponding folder
-                                //#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
-                                //#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-                                'aria-label': gt('Hide %1$s in %2$s', this.getTitle(), labels.mail),
-                                'label': gt('Hide in %1$s', labels.mail),
-                                'icon': 'fa-eye-slash'
-                            };
-                        // set visual disabled-state
-                        if (deactivated) this.$el.addClass('disabled');
-                        return $('<a href="#" role="button" class="toggle" data-action="toggle">').attr('aria-label', options['aria-label'])
-                                .append($('<i class="fa" aria-hidden="true">').addClass(options.icon).attr('title', options.label));
+                        if (!this.model.get('deactivated')) return $();
+                        this.$el.addClass('disabled');
+                        if (_.device('smartphone')) return $();
+                        return $('<a href="#" class="action" role="button" class="toggle" data-action="enable">').attr('aria-label', gt('Enable %1$s', this.getTitle())).text(gt('Enable'));
                     default:
                         return $();
                 }
@@ -161,8 +134,8 @@ define('io.ox/settings/accounts/views', [
                     ),
                     listUtils.makeControls().append(
                         self.renderAction('edit'),
-                        self.renderAction('delete'),
-                        self.renderAction('toggle')
+                        self.renderAction('enable'),
+                        self.renderAction('delete')
                     ),
                     // show a possible account error
                     drawAccountState(this.model)
@@ -269,12 +242,12 @@ define('io.ox/settings/accounts/views', [
                 } else { createExtpointForSelectedAccount(e); }
             },
 
-            onToggle: function () {
+            onEnable: function () {
                 var self = this;
                 require(['io.ox/core/api/account', 'io.ox/mail/accounts/model'], function (accountAPI, AccountModel) {
                     accountAPI.get(self.model.get('id')).done(function (data) {
                         var aModel = new AccountModel(data);
-                        aModel.set('deactivated', !aModel.get('deactivated')).save();
+                        aModel.set('deactivated', false).save();
                         self.listenTo(aModel, 'sync', function (model) {
                             self.model.set(model.attributes);
                         });

@@ -102,8 +102,7 @@ define('io.ox/mail/compose/actions/send', [
             perform: function (baton) {
                 var from = baton.model.get('from') || [];
                 if (!accountAPI.isHidden({ primary_address: from[1] })) return;
-                notifications.yell('error', gt('The sender address is related to a hidden mail account. Please choose another sender address.'));
-                baton.view.$el.find('.sender a[data-toggle="dropdown"]').trigger('click');
+                notifications.yell('error', gt('This sender address is related to a disabled mail account. Please choose another sender address or visit settings to enable again.'));
                 baton.stopPropagation();
                 return $.Deferred().reject();
             }

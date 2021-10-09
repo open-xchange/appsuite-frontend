@@ -702,9 +702,10 @@ define('io.ox/core/api/account', [
                 api.cache[id] = result;
             })
             .done(function (result) {
-                if ('deactivated' in data) ox.trigger('account:visibility');
                 api.trigger('refresh.all');
                 api.trigger('update', result);
+                if (!('deactivated' in data)) return;
+                ox.trigger('account:status', { deactivated: data.deactivated, root_folder: result.root_folder });
             });
         });
     };

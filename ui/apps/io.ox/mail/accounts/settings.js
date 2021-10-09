@@ -53,13 +53,34 @@ define('io.ox/mail/accounts/settings', [
             point: 'io.ox/settings/accounts/mail/settings/detail/dialog',
             title: myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'),
             view: myView
-        });
-
-        myView.dialog.extend({
+        }).extend({
             text: function () {
                 this.$body.append(
                     this.options.view.render().el
                 );
+            },
+            secondary: function () {
+                var model = this.options.view.model;
+                if (!model.get('secondary')) return;
+                // show both actions on smartphone - 'disable' on other devices only
+                if (!_.device('smartphone') && model.get('deactivated')) return;
+                this.addButton({
+                    placement: 'left',
+                    className: 'btn-default',
+                    action: 'toggle',
+                    label: model.get('deactivated') ? gt('Enable') : gt('Disable')
+                }).on('toggle', function () {
+                    var self = this;
+                    require(['io.ox/core/api/account'], function (accountAPI) {
+                        // get untouched model
+                        accountAPI.get(model.get('id')).done(function (data) {
+                            var aModel = new AccountModel(data);
+                            aModel.set('deactivated', !aModel.get('deactivated')).save();
+                            self.close();
+                        });
+                    });
+                });
+
             }
         })
         .addCancelButton()
