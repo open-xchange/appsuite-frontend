@@ -46,9 +46,9 @@ Scenario('Open, close and toggle chat', ({ I, chat }) => {
     I.see('New Chat', '.io-ox-windowmanager-sticky-panel .ox-chat');
 
     I.click('~Detach window');
-    I.see('OX Chat', '.floating-window');
+    I.see('Chat', '.floating-window');
 
     I.click('~Chat', '#io-ox-toprightbar');
-    I.waitForDetached('OX Chat', 3, '.floating-window');
+    I.waitForDetached('Chat', 3, '.floating-window');
 
 });

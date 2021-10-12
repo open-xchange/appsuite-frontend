@@ -766,7 +766,7 @@ define('io.ox/chat/main', [
         var mode = settings.get('mode', 'sticky');
 
         win = new Window({
-            title: 'OX Chat',
+            title: 'Chat',
             sticky: mode === 'sticky',
             showInTaskbar: false,
             stickable: true,
