@@ -126,13 +126,17 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         events: {
             'click li': 'updateSelection',
             'dblclick li': 'quickSelection',
-            'click .show-details': 'openDetailView'
+            'click .show-details': 'openDetailView',
+            'keydown .show-details-descendant': 'openDetailView'
         },
 
         initialize: function (options) {
             this.options = options;
             this.model.get('contacts').on('add reset remove', this.render.bind(this));
             this.model.get('selectedContacts').on('add reset remove', this.updateCheckboxes.bind(this));
+            this.$el.on('keydown', this.onKeydown.bind(this));
+            // super special button used for active descendant magic
+            this.showDetailsButton = $('<button class="sr-only show-details-descendant" role="button">');
         },
 
         dispose: function () {
@@ -144,18 +148,38 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             var name = util.getFullName(contact.attributes, true),
                 initials = util.getInitials(contact.attributes),
                 canSelect = this.options.selection.behavior !== 'none',
-                contactPicture;
+                mail = util.getMail(contact.attributes),
+                // try to find a phone number, there are still more phone number fields. Not sure if we need all
+                phone = contact.get('telephone_business1') ||
+                        contact.get('telephone_business2') ||
+                        contact.get('telephone_company') ||
+                        contact.get('cellular_telephone1') ||
+                        contact.get('cellular_telephone2') ||
+                        contact.get('telephone_home1') ||
+                        contact.get('telephone_home2') ||
+                        contact.get('telephone_other'),
+                contactPicture,
+                label = _([util.getFullName(contact.attributes, false),
+                    //#. %1$s name of the department a contact is working in
+                    contact.get('department') ? gt('department %1$s', contact.get('department')) : '',
+                    //#. %1$s job position of a contact, CEO, working student etc
+                    contact.get('position') ? gt('position %1$s', contact.get('position')) : '',
+                    //#. %1$s mail address of a contact
+                    mail ? gt('email address %1$s', mail) : '',
+                    //#. %1$s phone number of a contact
+                    phone ? gt('phone number %1$s', phone) : '',
+                    //#. %1$s room number of a contact
+                    contact.get('room_number') ? gt('room %1$s', contact.get('room_number')) : '']).compact().join(', ');
 
-            var node = $('<li role="option" tabindex="-1">').attr({
+            var node = $('<li role="option">').attr({
                 'data-id': contact.get('id'),
-                role: canSelect ? 'option' : 'listitem'
+                // used for activedescendant
+                'id': this.cid + '-contact-' + contact.get('id'),
+                role: canSelect ? 'option' : 'listitem',
+                'aria-label': label
             }).append(
                 $('<div class="flex-container multi-item-container">').append(
-                    this.options.selection.behavior === 'multiple' ? $('<input type="checkbox">').attr({
-                        'data-id': contact.get('id'), checked: !!this.model.get('selectedContacts').get(contact.get('id')),
-                        //#. %1$s is the contact's name
-                        'aria-label': gt('Select/Deselect contact %1$s', name)
-                    }) : '',
+                    this.options.selection.behavior === 'multiple' ? $.checkbox() : '',
                     (contact.get('image1_url') ? contactPicture = $('<i class="contact-picture" aria-hidden="true">')
                         .one('appear', { url: contact.get('image1_url') ? util.getImage(contact.attributes) : api.getFallbackImage() }, function (e) {
                             $(this).css('background-image', 'url(' + e.data.url + ')');
@@ -166,27 +190,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     )
                 ),
                 $('<div class="flex-container data-container">').append(
-                    $('<div class="telephone" aria-hidden="true">').text(
-                        // try to find a phone number, there are still more phone number fields. Not sure if we need all
-                        contact.get('telephone_business1') ||
-                        contact.get('telephone_business2') ||
-                        contact.get('telephone_company') ||
-                        contact.get('cellular_telephone1') ||
-                        contact.get('cellular_telephone2') ||
-                        contact.get('telephone_home1') ||
-                        contact.get('telephone_home2') ||
-                        contact.get('telephone_other')),
+                    $('<div class="telephone" aria-hidden="true">').text(phone),
                     $('<div class="position" aria-hidden="true">').text(contact.get('position'))
                 ),
                 $('<div class="flex-container multi-item-container details-container">').append(
                     $('<div class="data-container">').append(
-                        $('<div class="mail" aria-hidden="true">').text(util.getMail(contact.attributes)),
+                        $('<div class="mail" aria-hidden="true">').text(mail),
                         $('<div class="room" aria-hidden="true">').text(contact.get('room_number'))
                     ),
-                    $('<button type="button" class="show-details btn btn-link">').attr({
-                        'data-id': contact.get('id'),
-                        'aria-label': gt('Show contact details')
-                    }).append($.icon('fa-info-circle', gt('Show contact details')))
+                    // hidden from a11y. a button for the activedescendant is used instead
+                    $('<span class="show-details btn btn-link" aria-hidden="true">').append($.icon('fa-info-circle', gt('Show contact details')))
                 )
             );
 
@@ -201,7 +214,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             this.$el.empty().attr({
                 role: this.options.selection.behavior === 'none' ? 'list' : 'listbox',
                 'aria-label': gt('Contact list'),
-                tabindex: -1
+                tabindex: 0
             });
 
             if (this.options.selection.behavior === 'multiple') this.$el.attr('aria-multiselectable', true);
@@ -221,20 +234,57 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 this.$el.prepend($('<div class="list-label">').text(gt('No contacts found.')));
             }
 
-            // todo we need some backend magic to see if a list is actually at or above the limit
             if (contacts.length && contacts.length >= limit) {
                 this.$el.append($('<div class="alert alert-info list-label limit-warning">')
                     //#. %1$d is the limit of displayable contacts
                     .text(gt('You have reached the limit of %1$d contacts to display. Please enter a search term to narrow down your results.', limit)));
             }
 
+            this.moveSelection(this.$el.find('li').first().attr('id'));
+
             return this;
         },
 
+        onKeydown: function (e) {
+            var $list = this.$el,
+                active = $('#' + $list.attr('aria-activedescendant'));
+
+            // ENTER/SPACE
+            if (/^(13|32)$/.test(e.which)) {
+                e.preventDefault();
+                e.stopPropagation();
+                return this.updateSelection({ currentTarget: active[0] });
+            }
+
+            // ARROW KEYS
+            if (/^(37|38|39|40)$/.test(e.which)) {
+                e.preventDefault();
+                e.stopPropagation();
+                var li = $list.children('li'),
+                    next = (/39|40/.test(e.which)) ? active.next('li') : active.prev('li'),
+                    wrap = (/39|40/.test(e.which)) ? li.first() : li.last();
+
+                if (!next.length) next = wrap;
+                return this.moveSelection(next.attr('id'));
+            }
+        },
+
+        // moves active descendant
+        moveSelection: function (id) {
+            var li = this.$el.children('li'),
+                next = this.$el.find('#' + id);
+            if (next.length === 0) return;
+
+            li.removeClass('active-descendant');
+            next.addClass('active-descendant')[0].scrollIntoView();
+            this.$el.attr('aria-activedescendant', next.attr('id'));
+            next.find('.show-details').append(this.showDetailsButton);
+        },
+
+        // updates selected contacts
         updateSelection: function (e) {
             if (this.options.selection.behavior === 'none') return;
 
-            e.stopPropagation();
             var target = e.currentTarget,
                 id = target.getAttribute('data-id'),
                 model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id),
@@ -260,7 +310,6 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         quickSelection: function (e) {
             if (this.options.selection.behavior === 'none') return;
 
-            e.stopPropagation();
             var target = e.currentTarget,
                 id = target.getAttribute('data-id'),
                 model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id);
@@ -276,12 +325,23 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         openDetailView: function (e) {
+            // not tab or enter? use normal onKeydown
+            if (e.type === 'keydown' && !/^(13|32)$/.test(e.which)) {
+                this.$el.focus();
+                return this.onKeydown(e);
+            }
+
             e.stopPropagation();
-            var target = e.currentTarget,
-                id = target.getAttribute('data-id'),
+            e.preventDefault();
+            var target = $(e.currentTarget).closest('li'),
+                id = target.attr('data-id'),
                 model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id);
 
-            detailViewDialog = new dialogs.SidePopup({ tabTrap: true, container: $('body'), arrow: false }).show(e, function (popup) {
+            this.moveSelection(target.get('id'));
+
+            if ($(e.currentTarget).hasClass('sr-only')) e.pageX = target.find('.show-details')[0].getBoundingClientRect().x;
+
+            detailViewDialog = new dialogs.SidePopup({ tabTrap: true, arrow: false }).setTarget($('body')).show(e, function (popup) {
                 // picker has a z index of 1050
                 popup.busy().closest('.io-ox-sidepopup').css('z-index', 2000);
                 api.get({ id: model.get('id'), folder: model.get('folder_id') }).then(function (data) {
@@ -355,9 +415,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             var folderlist;
             if (options.useGABOnly) {
-                folderlist = [{ label: folders.title, value: folders.id }];
+                folderlist = [{ label: false, options: [{ label: folders.title, value: folders.id }] }];
             } else {
-                folderlist = [{ label: gt('Search all address lists'), value: 'all' }];
+                folderlist = [{ label: false, options: [{ label: gt('Search all address lists'), value: 'all' }] }];
 
                 // flat request returns folders in sections, add them to a single array, leave out the hidden section
                 _(folders).each(function (sectionFolders, section) {
@@ -372,17 +432,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         folder['com.openexchange.contacts.extendedProperties'].usedInPicker.value === 'true';
 
                     })).map(function (folder) {
-                    // this are non breakable spaces that are not trimmed
-                    // we use this to create our hierarchy and still be able to use a default select input
-                        return { label: '\u00A0\u00A0\u00A0\u00A0' + folder.title, value: folder.id };
+                        return { label: folder.title, value: folder.id };
                     });
 
                     if (list.length === 0) return;
-                    folderlist.push({ label: section, value: 'sectionHeader' });
-                    folderlist = folderlist.concat(list);
+                    folderlist.push({ label: section, options: list });
                 });
-
-                folderlist = _(folderlist).compact();
             }
 
             var lastSearchedContacts = Array.prototype.slice.call(arguments, 1);
@@ -470,32 +525,28 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             contentNode.idle();
 
-            var listSelectBox = new Mini.SelectView({ name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
+            var listSelectBox = new Mini.SelectView({ groups: true, name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
 
-            // disable section headers
-            listSelectBox.find('option[value="sectionHeader"]').attr('disabled', 'disabled');
             model.on('change:filterQuery', function () {
                 var query = model.get('filterQuery').trim().toLowerCase(),
-                    options = listSelectBox.find('option');
-                if (!query) return options.removeClass('hidden');
+                    options = listSelectBox.find('option'),
+                    optionGroups = listSelectBox.find('optgroup');
+                if (!query) {
+                    optionGroups.removeClass('hidden');
+                    options.removeClass('hidden');
+                    return;
+                }
 
                 _(options).each(function (option) {
                     $(option).removeClass('hidden');
                     // never hide the placeholder
-                    // show section headers, we check for emtpy sections later
-                    if ($(option).val() === 'all' || $(option).val() === 'sectionHeader') return;
+                    if ($(option).val() === 'all') return;
                     $(option).toggleClass('hidden', option.text.toLowerCase().indexOf(query) === -1);
                 });
-                // find empty sections
-                var prev;
-                _(options.not('.hidden')).each(function (option, index, array) {
-                    if ($(option).val() === 'sectionHeader') {
-                        // two headers after another -> hide the first
-                        if (prev && $(prev).val() === 'sectionHeader') $(prev).addClass('hidden');
-                        // two header ist the last item in the list -> hide it
-                        if (index === array.length - 1) $(option).addClass('hidden');
-                    }
-                    prev = option;
+
+                // hide empty optgroups
+                _(optionGroups).each(function (optgroup) {
+                    $(optgroup).toggleClass('hidden', $(optgroup).find('option:not(.hidden)').length === 0);
                 });
             });
 

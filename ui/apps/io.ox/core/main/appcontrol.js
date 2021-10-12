@@ -462,7 +462,7 @@ define('io.ox/core/main/appcontrol', [
                 index: 130,
                 draw: function () {
                     var node = $('<li role="presentation" class="launcher">').append(
-                        $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').append($.icon('fa-address-card-o'))
+                        $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').attr('aria-label', gt('Address directory')).append($.icon('fa-address-card-o'))
                             .on('click', _.debounce(function () {
                                 require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
                                     popup.open($.noop, { selection: { behavior: 'none' } });
