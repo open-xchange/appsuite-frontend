@@ -5477,7 +5477,7 @@ msgid "Imprint"
 msgstr "Imprint"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Bekræft ny adgangskode"
 
 #. While or after requesting a new password you can go back to the initial login page

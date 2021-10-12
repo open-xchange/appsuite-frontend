@@ -5473,7 +5473,7 @@ msgid "Imprint"
 msgstr "Künye"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Yeni parolayı onayla"
 
 #. While or after requesting a new password you can go back to the initial login page

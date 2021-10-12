@@ -5461,7 +5461,7 @@ msgid "Imprint"
 msgstr "OX Drive について"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "新規パスワードを確認"
 
 #. While or after requesting a new password you can go back to the initial login page
