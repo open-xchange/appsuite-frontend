@@ -66,7 +66,8 @@ define('io.ox/files/share/model', [
                     }
                     if (matchedPermission) {
                         _.each(file.get(matchedPermission), function (permission) {
-                            if (permission.type === 'anonymous' && permission.share_url) {
+                            var isSharingLinkForItem = permission.type === 'anonymous' && permission.share_url && !permission.isInherited;
+                            if (isSharingLinkForItem) {
                                 this.attributes.url = permission.share_url;
                                 if (permission.password) {
                                     this.attributes.password = permission.password;
