@@ -226,14 +226,18 @@ define('io.ox/mail/detail/view', [
             var sender = util.parseRecipients(data.headers.Sender);
             if (from[0] && from[0][1] === sender[0][1]) return;
 
+            // for deputies we display we switch order of from and header
+            var isDeputy = !!util.getDeputy(data);
             this.append(
                 $('<div class="sender">').append(
                     $('<span class="io-ox-label">').append(
                         //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
-                        $.txt(gt('Via')),
+                        $.txt(isDeputy ? gt('on behalf of') : gt('via')),
                         $.txt('\u00A0\u00A0')
                     ),
-                    $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
+                    isDeputy ?
+                        $('<span class="address">').text((from[0][0] || '') + ' <' + from[0][1] + '>') :
+                        $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
                 )
             );
         }

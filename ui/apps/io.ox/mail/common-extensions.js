@@ -204,7 +204,7 @@ define('io.ox/mail/common-extensions', [
 
             var $el = $('<div class="from">'),
                 data = baton.data,
-                from = data.from || [],
+                from = util.getDeputy(data) || data.from || [],
                 status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
