@@ -932,12 +932,12 @@ define('io.ox/files/share/permissions', [
         Permissions: Permissions,
 
         // async / id is folder id
-        showFolderPermissions: function (id, linkModel, options) {
+        showFolderPermissions: function (id, options) {
             var model = folderAPI.pool.getModel(id),
                 opt = _.extend({
                     hasLinkSupport: capabilities.has('share_links') && !model.is('mail') && model.isShareable(id)
                 }, options);
-            that.showByModel(new Backbone.Model({ id: id }), [].concat(linkModel), opt);
+            that.showByModel(new Backbone.Model({ id: id }), opt);
         },
 
         // async / obj must provide folder_id and id
@@ -945,13 +945,13 @@ define('io.ox/files/share/permissions', [
             that.showByModel(new Backbone.Model(obj), options);
         },
 
-        showByModel: function (model, linkModel, options) {
+        showByModel: function (model, options) {
             //var oldModel = model;
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions({ cache: false })
             .done(function () {
-                that.show(model, linkModel, options);
+                that.show(model, options);
             })
             // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
             // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
@@ -966,7 +966,7 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
-        show: function (objModel, linkModel, options) {
+        show: function (objModel, options) {
 
             // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
             var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
@@ -1035,7 +1035,7 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: linkModel }),
+                publicLink = new PublicLink({ files: [objModel] }),
                 permissionPreSelection = new PermissionPreSelection({ model: objModel });
 
             dialog.model = dialogConfig;
