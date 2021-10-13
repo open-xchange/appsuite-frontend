@@ -505,7 +505,7 @@ define('io.ox/core/main/appcontrol', [
                             $('<div class="title">').text(gt('Address directory'))
                         ).on('click', _.debounce(function () {
                             require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                                popup.open($.noop, { selection: false });
+                                popup.open($.noop, { selection: { behavior: 'none' } });
                             });
                         }, 300, true))
                     );

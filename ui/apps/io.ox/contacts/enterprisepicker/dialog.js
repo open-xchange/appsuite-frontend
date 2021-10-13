@@ -67,6 +67,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             check('telephone_other'));
     };
 
+    var sectionLabels = {
+        'private': gt('My address lists'),
+        'public':  gt('Public address lists'),
+        'shared':  gt('Shared address lists')
+    };
+
     var detailViewDialog,
         pickerDialog;
 
@@ -436,7 +442,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     });
 
                     if (list.length === 0) return;
-                    folderlist.push({ label: section, options: list });
+                    folderlist.push({ label: sectionLabels[section] || section, options: list });
                 });
             }
 
