@@ -57,10 +57,6 @@ define('io.ox/mail/sender', [
             update: function (options) {
                 var self = this;
                 that.getAddresses(options).then(function (addresses, deputyAddresses, primary) {
-                    // filter deactivatedsecondary accounts
-                    addresses = _.reject(addresses, function name(address) {
-                        return api.isHidden({ primary_address: address[1] });
-                    });
                     // save deputy addresses in an array, to look them up later
                     self.deputyAddresses = _(deputyAddresses).map(function (address) { return address[1]; });
                     // put addresses from accounts (own or external) and addresses from deputy permissions in one list

@@ -484,11 +484,11 @@ define('io.ox/core/api/account', [
             .then(function () {
                 return _(arguments).flatten(true);
             })
-            .then(function (addresses) {
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
-                return addresses;
+            .then(function (list) {
+                // filter deactivated secondary accounts
+                return [].concat(list).filter(function (address) {
+                    return !api.isHidden({ primary_address: address[1] });
+                });
             });
     };
 
