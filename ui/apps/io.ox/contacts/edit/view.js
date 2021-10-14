@@ -256,7 +256,8 @@ define('io.ox/contacts/edit/view', [
 
         isReadonly: function (name) {
             if (this.readonly[name]) return true;
-            if (name === 'email1' && (String(this.model.get('folder_id')) === util.getGabId(true) || String(this.model.get('folder_id')) === util.getGabId())) return true;
+            // folder id 16 is guest mode
+            if (name === 'email1' && (String(this.model.get('folder_id')) === util.getGabId(true) || String(this.model.get('folder_id')) === util.getGabId() || (String(this.model.get('folder_id')) === '16'))) return true;
             return false;
         },
 
