@@ -218,7 +218,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
         render: function () {
             this.$el.empty().attr({
-                role: this.options.selection.behavior === 'none' ? 'list' : 'listbox',
+                role: 'listbox',
                 'aria-label': gt('Contact list'),
                 tabindex: 0
             });
@@ -293,23 +293,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             var target = e.currentTarget,
                 id = target.getAttribute('data-id'),
-                model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id),
-                isSelected = !!this.model.get('selectedContacts').get(id);
+                model = (this.model.get('contacts').length === 0 ? this.model.get('lastContacts') : this.model.get('contacts')).get(id);
 
-            if (isSelected) {
-                this.model.get('selectedContacts').remove(model);
-                $(target).attr('aria-selected', false);
-            } else {
-                // single selection or multi selection?
-                if (this.options.selection.behavior === 'single') {
-                    this.model.get('selectedContacts').reset([model]);
-                    this.$el.find('li').attr('aria-selected', false);
-                    $(target).attr('aria-selected', true);
-                    return;
-                }
-                this.model.get('selectedContacts').add(model);
-                $(target).attr('aria-selected', true);
+            if (!!this.model.get('selectedContacts').get(id)) {
+                return this.model.get('selectedContacts').remove(model);
+            // single selection
+            } else if (this.options.selection.behavior === 'single') {
+                return this.model.get('selectedContacts').reset([model]);
             }
+            // multi selection?
+            this.model.get('selectedContacts').add(model);
         },
 
         // used on double click. Selects the contact and closes the dialog
@@ -357,11 +350,11 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         },
 
         updateCheckboxes: function () {
-            var checkboxes = this.$el.find('input'),
+            // checkboxes are only dummies because of a11y (no nested inputs in a selection)
+            var listEntries = this.$el.children('li'),
                 ids = this.model.get('selectedContacts').pluck('id');
-
-            checkboxes.each(function (index, checkbox) {
-                checkbox.checked = ids.indexOf(checkbox.getAttribute('data-id')) > -1;
+            listEntries.each(function (index, listEntry) {
+                listEntry.ariaSelected = ids.indexOf(listEntry.getAttribute('data-id')) > -1;
             });
         }
     });
@@ -387,7 +380,6 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             app.setWindow(win);
 
             win.show(function () {
-                console.log(win.nodes.main);
                 win.nodes.outer.addClass('enterprise-picker');
                 var headerNode = $('<div class="enterprise-picker-header">'),
                     bodyNode = $('<div class="enterprise-picker-body">');
