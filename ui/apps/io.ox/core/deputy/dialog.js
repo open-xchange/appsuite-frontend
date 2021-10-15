@@ -184,7 +184,7 @@ define('io.ox/core/deputy/dialog', [
 
             this.$body.append(
                 //#. %1$s name of the deputy
-                $('<div>').text(gt('Do you want to remove %1$s from your deputy list', util.getFullName(model.get('userData').attributes, false)))
+                $('<div>').text(gt('Do you want to remove %1$s from your deputy list?', util.getFullName(model.get('userData').attributes, false)))
             );
         })
         .addCancelButton()
@@ -241,7 +241,7 @@ define('io.ox/core/deputy/dialog', [
                     ),
                     $('<div class="flex-item">').append(
                         $('<button class="btn btn-link edit">').attr('data-cid', deputy.cid).text(gt('Edit')),
-                        $('<button class="btn btn-link remove">').attr({ 'aria-label': gt('Remobe'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
+                        $('<button class="btn btn-link remove">').attr({ 'aria-label': gt('Remove'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
                     )
                 )
             );
