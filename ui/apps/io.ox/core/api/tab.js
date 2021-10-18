@@ -133,23 +133,25 @@ define('io.ox/core/api/tab', [
             return tabHandling.openTab(url, windowNameObject);
         },
 
-        // Open a blank new tab window
         /**
          * Open a blank new tab window
          *
-         * @param url
+         * @param {string} url
          *  The url which should be opened in the new blank tab
          *
-         * @returns {Window}
+         * @returns {Window | null}
          *  The new browser tab window
          */
         openBlank: function (url) {
             var newWindow;
 
-            if (_.device('noopener') || _.browser.edgechromium >= 77) {
+            if (_.device('noopener')) {
                 newWindow = window.open('', '_blank');
-                newWindow.opener = null;
-                newWindow.location = url;
+                // DOCS-3349: may be `null` (popup blocker)
+                if (newWindow) {
+                    newWindow.opener = null;
+                    newWindow.location = url;
+                }
             } else {
                 newWindow = blankshield.open(url, '_blank');
             }
