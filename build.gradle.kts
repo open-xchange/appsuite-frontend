@@ -24,7 +24,7 @@ licensing {
     }
 }
 
-val backendBranch = "develop"
+val backendBranch = "release-7.10.6"
 
 buildservice {
     url = "https://buildapi.open-xchange.com"
