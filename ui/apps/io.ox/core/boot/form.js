@@ -108,7 +108,7 @@ define('io.ox/core/boot/form', [
             $('#io-ox-login-form div.row.password-retype').show();
             // i18n
             $('#io-ox-login-button')
-                .attr('data-i18n', gt('Set password'))
+                .attr('data-i18n', 'Set password')
                 .text(gt('Set password'));
             bindLogin = false;
         }
@@ -163,7 +163,7 @@ define('io.ox/core/boot/form', [
 
             // apply login screen specific classes
             if (_.device('smartphone')) {
-                $('#io-ox-login-username,#io-ox-login-password,#io-ox-retype-password').each(function () {
+                $('#io-ox-login-username,#io-ox-login-password,#io-ox-retype-password,#io-ox-login-restoremail').each(function () {
                     var text = $('label[for="' + this.id + '"]').attr('data-i18n');
                     $(this).attr({
                         'data-i18n-attr': 'placeholder',
