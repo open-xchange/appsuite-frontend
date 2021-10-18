@@ -31,6 +31,9 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
     function list() {
         gt('User name');
         gt('Password');
+        gt('Reset password');
+        gt('Set password');
+        gt('Email address');
         gt('Sign in');
         //#. the noun not the verb
         gt.pgettext('word', 'Sign in');
