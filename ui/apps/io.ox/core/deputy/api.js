@@ -86,7 +86,7 @@ define('io.ox/core/deputy/api', [
             api.reverse().then(function (grantedPermissions) {
                 var addresses = _(grantedPermissions).chain().map(function (deputyData) {
                     // can there be more than one address?
-                    return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : [];
+                    return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : undefined;
                 }).compact().valueOf();
 
                 var userIds = _(addresses).chain().map(function (address) { return address[0]; }).uniq().compact().valueOf();
