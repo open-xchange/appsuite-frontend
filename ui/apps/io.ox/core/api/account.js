@@ -704,6 +704,7 @@ define('io.ox/core/api/account', [
             .done(function (result) {
                 api.trigger('refresh.all');
                 api.trigger('update', result);
+                ox.trigger('account:update', id);
                 if (!('deactivated' in data)) return;
                 ox.trigger('account:status', { deactivated: data.deactivated, root_folder: result.root_folder });
             });

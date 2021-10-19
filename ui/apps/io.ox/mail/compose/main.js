@@ -32,7 +32,7 @@ define('io.ox/mail/compose/main', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, capabilities, deputyAPI, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, sender, capabilities, deputyAPI, settings, gt) {
 
     'use strict';
 
@@ -85,7 +85,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             // make sure these settings are correct, defaultNames can change when someone edits the account data
-            return senderUtil.getAccounts().done(function (addresses) {
+            return sender.getAccounts().done(function (addresses) {
                 _(addresses).each(function (address) {
                     // ensure defaultName is set (bug 56342 and 63891)
                     settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
