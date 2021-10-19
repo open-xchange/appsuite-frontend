@@ -84,53 +84,36 @@ define('io.ox/mail/compose/main', [
         id: 'fix-custom-displayname',
         index: INDEX += 100,
         perform: function () {
-            // make sure these settings are correct, defaultNames can change when someone edits the account data
-            return sender.getAccounts().done(function (addresses) {
-                _(addresses).each(function (address) {
-                    // ensure defaultName is set (bug 56342 and 63891)
-                    settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
-                });
-                settings.save();
-            });
+            // sender collections stores latest sender data and updates defaultNames
+            return sender.collection.fetched;
         }
     }, {
         id: 'fix-from',
         index: INDEX += 100,
         perform: function () {
-            var model = this.model;
+            var model = this.model,
+                config = this.config;
             if (model.get('from')) return;
-            var self = this,
-                def = capabilities.has('deputy') ? deputyAPI.getGranteeAddressFromFolder(this.config.get('folderId')) : $.when([]);
 
-            return def.then(function (granteeAddress) {
-                if (!_.isEmpty(granteeAddress)) {
+            return getGranteeAddress().then(function (granteeAddress) {
+                var isGranteeAddress = !_.isEmpty(granteeAddress),
+                    folder = isGranteeAddress ? mailAPI.getDefaultFolder() : config.get('folderId');
+                return accountAPI.getPrimaryAddressFromFolder(folder).then(function (address) {
+                    return isGranteeAddress ?
+                        model.set({ from: granteeAddress, sender: address }) :
+                        model.set({ from: address });
+                }).catch(function () {
                     return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
-                        // custom display names
-                        if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
-                            address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
-                        }
-                        if (!settings.get('sendDisplayName', true)) {
-                            address[0] = null;
-                            granteeAddress[0] = null;
-                        }
-                        // use default address as sender amd grantee address as from
-                        model.set({ from: granteeAddress, sender: address });
+                        model.set('from', address);
                     });
-                }
-
-                return accountAPI.getPrimaryAddressFromFolder(self.config.get('folderId')).catch(function () {
-                    return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
-                }).then(function (address) {
-                    // custom display names
-                    if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
-                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
-                    }
-                    if (!settings.get('sendDisplayName', true)) {
-                        address[0] = null;
-                    }
-                    model.set('from', address);
                 });
             });
+
+            function getGranteeAddress() {
+                return capabilities.has('deputy') ?
+                    deputyAPI.getGranteeAddressFromFolder(config.get('folderId')) :
+                    $.when([]);
+            }
         }
     }, {
         id: 'fix-displayname',
@@ -145,9 +128,11 @@ define('io.ox/mail/compose/main', [
 
             // fix current value
             function updateDisplayName() {
-                var from = model.get('from');
-                if (!from) return;
-                model.set('from', mailUtil.getSender(from, config.get('sendDisplayName')));
+                ['from', 'sender'].forEach(function (key) {
+                    var address = model.get(key);
+                    if (!address) return;
+                    model.set(key, mailUtil.getSender(address, config.get('sendDisplayName')));
+                });
             }
         }
     }, {

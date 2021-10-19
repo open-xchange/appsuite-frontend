@@ -43,6 +43,15 @@ define('io.ox/mail/sender', [
         );
     }
 
+    function updateDefaultNames(list) {
+        // collect first to trigger a valid 'change:customDisplayNames' settings event
+        var names = settings.get('customDisplayNames', {});
+        list.forEach(function (sender) {
+            names[sender.email] = _.extend({}, names[sender.email], { defaultName: sender.name });
+        });
+        settings.set('customDisplayNames', names).save();
+    }
+
     var that,
         SenderModel = Backbone.Model.extend({
             idAttribute: 'email',
@@ -65,6 +74,7 @@ define('io.ox/mail/sender', [
                 // initial ready deferred
                 this.fetched = $.Deferred();
                 this.update({ useCache: false }).done(this.fetched.resolve);
+                this.listenTo(ox, 'account:create account:delete account:update', this.update.bind(this, { useCache: false }));
             },
             ready: function (callback) {
                 return this.fetched.done(callback.bind(this, this));
@@ -92,8 +102,11 @@ define('io.ox/mail/sender', [
                     // set default
                     var address = hash[getDefaultSendAddress()] || hash[primary[1]] || {};
                     address.type = 'default';
+                    // updateDefaultNames
+                    var list = Object.values(hash);
+                    updateDefaultNames(list);
                     // collection
-                    this.reset(Object.values(hash));
+                    this.reset(list);
                 }.bind(this));
             },
             toArray: function () {

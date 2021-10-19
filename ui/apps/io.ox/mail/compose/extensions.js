@@ -146,7 +146,6 @@ define('io.ox/mail/compose/extensions', [
             });
 
             this.addresses = sender.collection;
-            this.listenTo(ox, 'account:create account:delete account:update', this.updateSenderList);
             this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
             this.listenTo(this.model, 'change:from', this.updateSenderList);
@@ -195,9 +194,6 @@ define('io.ox/mail/compose/extensions', [
         setDropdownOptions: function () {
             var self = this;
             this.addresses.forEach(function (address, index) {
-                var defaultname = settings.get(['customDisplayNames', address.get('email'), 'defaultName']);
-                if (!defaultname) settings.set(['customDisplayNames', address.get('email'), 'defaultName'], address.get('name'));
-
                 if (index === 1) self.dropdown.divider();
 
                 var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
