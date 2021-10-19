@@ -145,8 +145,7 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.addresses = sender.getAddressesCollection();
-            this.addresses.update();
+            this.addresses = sender.collection;
             this.listenTo(ox, 'account:create account:delete account:update', this.updateSenderList);
             this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
@@ -157,17 +156,14 @@ define('io.ox/mail/compose/extensions', [
         },
 
         updateDeputyData: function () {
-            if (this.addresses.isDeputyAddress(this.model.get('from')[1])) {
-                this.model.set('sender', mailUtil.getSender(this.addresses.findWhere({ email: sender.getDefaultSendAddress() }).toArray(), this.config.get('sendDisplayName')));
-            } else {
-                this.model.unset('sender');
-            }
+            var isDeputy = !!this.addresses.findWhere({ email: this.model.get('from')[1], type: 'deputy' });
+            if (!isDeputy) return this.model.unset('sender');
+            return this.model.set('sender', mailUtil.getSender(this.addresses.findWhere({ email: sender.getDefaultSendAddress() }).toArray(), this.config.get('sendDisplayName')));
         },
 
-        updateSenderList: function (options) {
+        updateSenderList: function () {
             this.updateDeputyData();
-            var opt = _.extend({ useCache: false }, options);
-            this.addresses.update(opt);
+            this.addresses.update({ useCache: false });
         },
 
         render: function (/*options*/) {

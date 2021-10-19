@@ -31,51 +31,79 @@ define('io.ox/mail/sender', [
 
     'use strict';
 
+    function getDefaultSendAddress() {
+        return $.trim(settings.get('defaultSendAddress', ''));
+    }
+
+    function getAddresses(options) {
+        return $.when(
+            api.getAllSenderAddresses(options),
+            capabilities.has('deputy') ? deputyAPI.getGranteeAddresses() : [],
+            api.getPrimaryAddress()
+        );
+    }
+
     var that,
         SenderModel = Backbone.Model.extend({
-            initialize: function (data) {
-                this.set('name', data[0]);
-                this.set('email', data[1]);
-            },
+            idAttribute: 'email',
             quoted: function () {
-                return util.formatSender(this.get(name), this.get('email'));
+                return util.formatSender(this.get('name'), this.get('email'));
             },
             unquoted: function () {
-                return util.formatSender(this.get(name), this.get('email'), false);
+                return util.formatSender(this.get('name'), this.get('email'), false);
+            },
+            is: function (type) {
+                return this.get('type') === type;
             },
             toArray: function () {
-                return [this.get(0), this.get(1)];
+                return [this.get('name'), this.get('email')];
             }
         }),
         SenderList = Backbone.Collection.extend({
             model: SenderModel,
+            initialize: function () {
+                // initial ready deferred
+                this.fetched = $.Deferred();
+                this.update({ useCache: false }).done(this.fetched.resolve);
+            },
+            ready: function (callback) {
+                return this.fetched.done(callback.bind(this, this));
+            },
             comparator: function (a1, a2) {
-                if (a1.get('email') === this.defaultAddress) return -1;
-                if (a2.get('email') === this.defaultAddress) return 1;
+                if (a1.is('default')) return -1;
+                if (a2.is('default')) return 1;
                 return a1.toString().toLowerCase() < a2.toString().toLowerCase() ? -1 : 1;
             },
             update: function (options) {
-                var self = this;
-                that.getAddresses(options).then(function (addresses, deputyAddresses, primary) {
-                    // save deputy addresses in an array, to look them up later
-                    self.deputyAddresses = _(deputyAddresses).map(function (address) { return address[1]; });
-                    // put addresses from accounts (own or external) and addresses from deputy permissions in one list
-                    addresses = addresses.concat(deputyAddresses);
-                    self.defaultAddress = that.getDefaultSendAddress() || primary[1];
-                    self.reset(addresses);
-                });
-                return this;
+                return getAddresses(options).then(function (addresses, deputyAddresses, primary) {
+                    var hash = {};
+                    // set "type" at index 2
+                    [].concat(
+                        _.map(addresses, function (address) {
+                            return address.concat(address[1] === primary[1] ? 'primary' : 'common');
+                        }),
+                        _.map(deputyAddresses, function (address) {
+                            return address.concat('deputy');
+                        })
+                    ).forEach(function (address) {
+                        // build temporary hash
+                        hash[address[1]] = { name: address[0], email: address[1], type: address[2] };
+                    });
+                    // set default
+                    var address = hash[getDefaultSendAddress()] || hash[primary[1]] || {};
+                    address.type = 'default';
+                    // collection
+                    this.reset(Object.values(hash));
+                }.bind(this));
             },
-            getDeputyAddresses: function () {
-                return this.deputyAddresses || [];
-            },
-            isDeputyAddress: function (address) {
-                return _(this.getDeputyAddresses()).contains(address);
+            toArray: function () {
+                this.map(function (model) { return model.toArray(); });
             }
-        }),
-        senders;
+        });
 
     that = {
+
+        collection: new SenderList(),
 
         /**
          * user data
@@ -90,9 +118,8 @@ define('io.ox/mail/sender', [
          * default send address from settings
          * @return {string}
          */
-        getDefaultSendAddress: function () {
-            return $.trim(settings.get('defaultSendAddress', ''));
-        },
+        getDefaultSendAddress: getDefaultSendAddress,
+
 
         /**
          * internal and external accounts
@@ -115,6 +142,7 @@ define('io.ox/mail/sender', [
         /**
          * primary address
          * accessible for testing purposes
+         * @deprecated
          * @return { deferred} resolves as array
          */
         getPrimaryAddress: function () {
@@ -124,19 +152,18 @@ define('io.ox/mail/sender', [
         /**
          * list of normalised arrays (display_name, value)
          * accessible for testing purposes
+         * @deprecated
          * @return { deferred} resolves as array
          */
-        getAddresses: function (options) {
-            return $.when(
-                that.getAccounts(options),
-                capabilities.has('deputy') ? deputyAPI.getGranteeAddresses() : [],
-                that.getPrimaryAddress()
-            );
-        },
+        getAddresses: getAddresses,
 
+        /**
+         * returns collection
+         * @deprecated
+         * @return { deferred} resolves as array
+         */
         getAddressesCollection: function () {
-            if (!senders) senders = new SenderList();
-            return senders;
+            return that.collection;
         }
     };
 
