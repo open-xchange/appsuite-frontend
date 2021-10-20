@@ -457,10 +457,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 model.get('contacts').reset(contacts);
                 // update the last searched contacts
                 var lastContacts = model.get('lastContacts');
+                // remove models that are already in the list, otherwise they would be ignored by the unshift function and are not put at the start of the collection
+                lastContacts.remove(contacts, { silent: true });
                 // put at start of collection, since this search is newer
                 lastContacts.unshift(contacts);
                 // limit to 10 by default
-                lastContacts.reset(lastContacts.slice(0, settings.get('enterprisePicker/lastSearchedContactsLimit', 10)));
+                lastContacts.reset(lastContacts.slice(0, settings.get('enterprisePicker/lastSearchedContactsLimit', 30)));
                 settings.set('enterprisePicker/lastSearchedContacts', _(lastContacts.models).map(function (contact) {
                     return { folder_id: contact.get('folder_id'), id: contact.get('id') };
                 })).save();
