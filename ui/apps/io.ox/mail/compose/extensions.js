@@ -157,7 +157,8 @@ define('io.ox/mail/compose/extensions', [
         updateDeputyData: function () {
             var isDeputy = !!this.addresses.findWhere({ email: this.model.get('from')[1], type: 'deputy' });
             if (!isDeputy) return this.model.unset('sender');
-            return this.model.set('sender', mailUtil.getSender(this.addresses.findWhere({ email: sender.getDefaultSendAddress() }).toArray(), this.config.get('sendDisplayName')));
+            var defaultSender = this.addresses.findWhere({ type: 'default' });
+            this.model.set('sender', defaultSender.toArray({ name: this.config.get('sendDisplayName') }));
         },
 
         updateSenderList: function () {
@@ -195,8 +196,7 @@ define('io.ox/mail/compose/extensions', [
             var self = this;
             this.addresses.forEach(function (address, index) {
                 if (index === 1) self.dropdown.divider();
-
-                var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
+                var item = address.toArray({ name: self.config.get('sendDisplayName') });
                 self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });

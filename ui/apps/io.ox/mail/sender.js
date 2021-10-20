@@ -64,8 +64,15 @@ define('io.ox/mail/sender', [
             is: function (type) {
                 return this.get('type') === type;
             },
-            toArray: function () {
-                return [this.get('name'), this.get('email')];
+            toArray: function (options) {
+                var opt = _.extend({ name: true }, options),
+                    address = this.get('email');
+                // disabled
+                if (!opt.name) return [null, address];
+                // default or custom
+                var custom = settings.get(['customDisplayNames', address], {}),
+                    name = (custom.overwrite ? custom.name : this.get('name')) || '';
+                return [name, address];
             }
         }),
         SenderList = Backbone.Collection.extend({

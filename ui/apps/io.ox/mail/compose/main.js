@@ -131,7 +131,9 @@ define('io.ox/mail/compose/main', [
                 ['from', 'sender'].forEach(function (key) {
                     var address = model.get(key);
                     if (!address) return;
-                    model.set(key, mailUtil.getSender(address, config.get('sendDisplayName')));
+                    var senderModel = sender.collection.get(address[1]);
+                    if (!senderModel) return;
+                    model.set(key, senderModel.toArray({ name: config.get('sendDisplayName') }));
                 });
             }
         }

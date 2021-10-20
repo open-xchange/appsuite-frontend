@@ -281,6 +281,9 @@ define('io.ox/mail/util', [
             return display_name || email;
         },
 
+        /**
+         * @deprecated: use sender models to array instead (sender.js)
+         */
         getSender: function (item, enabled) {
             var address = item[1];
             // disabled
