@@ -146,9 +146,10 @@ define('io.ox/mail/compose/extensions', [
             });
 
             this.addresses = sender.collection;
-            this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
-            this.listenTo(this.model, 'change:from', this.updateSenderList);
+            this.listenTo(this.model, 'change:from', this.renderDropdown);
+            this.listenTo(ox, 'change:customDisplayNames', this.renderDropdown);
+            if (capabilities.has('deputy')) this.listenTo(this.model, 'change:from', this.updateDeputyData);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
@@ -161,8 +162,10 @@ define('io.ox/mail/compose/extensions', [
             this.model.set('sender', defaultSender.toArray({ name: this.config.get('sendDisplayName') }));
         },
 
+        /**
+         * @deprecated
+         */
         updateSenderList: function () {
-            this.updateDeputyData();
             this.addresses.update({ useCache: false });
         },
 
@@ -196,7 +199,7 @@ define('io.ox/mail/compose/extensions', [
             var self = this;
             this.addresses.forEach(function (address, index) {
                 if (index === 1) self.dropdown.divider();
-                var item = address.toArray({ name: self.config.get('sendDisplayName') });
+                var item = [address.get('name'), address.get('email')];
                 self.dropdown.option('from', item, function () {
                     return self.getItemNode(item);
                 });
@@ -212,8 +215,14 @@ define('io.ox/mail/compose/extensions', [
                 .link('edit-real-names', gt('Edit names'), this.onEditNames);
         },
 
+        getItem: function (item) {
+            // use latest display name
+            if (!item) return;
+            return this.addresses.getAsArray(item[1], { name: this.config.get('sendDisplayName') }) || item;
+        },
+
         getItemNode: function (item) {
-            item = item || this.model.get('from');
+            item = this.getItem(item || this.model.get('from'));
             if (!item) return;
             var name = item[0], address = item[1];
             return [

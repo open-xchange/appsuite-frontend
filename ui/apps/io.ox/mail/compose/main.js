@@ -120,20 +120,21 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function () {
             var model = this.model,
-                config = this.config;
+                config = this.config,
+                keys = capabilities.has('deputy') ? ['from', 'sender'] : ['from'];
 
             updateDisplayName();
             this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
             this.view.listenTo(ox, 'change:customDisplayNames', updateDisplayName);
+            this.view.listenTo(sender.collection, 'reset', updateDisplayName);
 
             // fix current value
             function updateDisplayName() {
-                ['from', 'sender'].forEach(function (key) {
+                keys.forEach(function (key) {
                     var address = model.get(key);
                     if (!address) return;
-                    var senderModel = sender.collection.get(address[1]);
-                    if (!senderModel) return;
-                    model.set(key, senderModel.toArray({ name: config.get('sendDisplayName') }));
+                    address = sender.collection.getAsArray(address[1], { name: config.get('sendDisplayName') }) || address;
+                    model.set(key, address);
                 });
             }
         }

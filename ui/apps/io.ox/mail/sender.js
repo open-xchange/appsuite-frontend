@@ -45,10 +45,11 @@ define('io.ox/mail/sender', [
 
     function updateDefaultNames(list) {
         // collect first to trigger a valid 'change:customDisplayNames' settings event
-        var names = settings.get('customDisplayNames', {});
+        var original = settings.get('customDisplayNames', {}), names = _.extend({}, original);
         list.forEach(function (sender) {
             names[sender.email] = _.extend({}, names[sender.email], { defaultName: sender.name });
         });
+        if (_.isEqual(original, names)) return;
         settings.set('customDisplayNames', names).save();
     }
 
@@ -115,6 +116,11 @@ define('io.ox/mail/sender', [
                     // collection
                     this.reset(list);
                 }.bind(this));
+            },
+            getAsArray: function (email, options) {
+                var model = this.get(email);
+                if (!model) return;
+                return model.toArray(options);
             },
             toArray: function () {
                 this.map(function (model) { return model.toArray(); });
