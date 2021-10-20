@@ -609,7 +609,10 @@ define('io.ox/calendar/freetime/timeView', [
                 from = moment(this.model.get('startDate')).startOf('day').utc();
                 until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth()), 'days').utc();
             }
-            return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) }).done(function (items) {
+
+            var options = { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) };
+            if (this.parentView.parentModel && this.parentView.parentModel.get('uid')) options.maskUid = this.parentView.parentModel.get('uid');
+            return api.freebusy(attendees, options).done(function (items) {
 
                 if (items.length === 0 && attendees.length !== 0) {
                     // remove busy animation again
