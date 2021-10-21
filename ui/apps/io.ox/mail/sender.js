@@ -83,6 +83,7 @@ define('io.ox/mail/sender', [
                 this.fetched = $.Deferred();
                 this.update({ useCache: false }).done(this.fetched.resolve);
                 this.listenTo(ox, 'account:create account:delete account:update', this.update.bind(this, { useCache: false }));
+                this.listenTo(settings, 'change:defaultSendAddress', this.update);
             },
             ready: function (callback) {
                 return this.fetched.done(callback.bind(this, this));
