@@ -123,6 +123,16 @@ define('io.ox/mail/sender', [
                 if (!model) return;
                 return model.toArray(options);
             },
+            getCommon: function () {
+                return this.filter(function (model) {
+                    return !model.is('deputy');
+                });
+            },
+            getDeputies: function () {
+                return this.filter(function (model) {
+                    return model.is('deputy');
+                });
+            },
             toArray: function () {
                 this.map(function (model) { return model.toArray(); });
             }

@@ -197,15 +197,18 @@ define('io.ox/mail/compose/extensions', [
 
         setDropdownOptions: function () {
             var self = this;
-            this.addresses.forEach(function (address, index) {
-                if (index === 1) self.dropdown.divider();
-                var item = [address.get('name'), address.get('email')];
-                self.dropdown.option('from', item, function () {
-                    return self.getItemNode(item);
-                });
-            });
 
             if (_.device('smartphone') || this.addresses.length === 0) return;
+
+            this.addresses.getCommon().forEach(function (model, index, list) {
+                if (index === 1 && list.length > 2) self.dropdown.divider();
+                addOption(model);
+            });
+
+            this.addresses.getDeputies().forEach(function (model, index) {
+                if (index === 0) self.dropdown.divider().group(gt('On behalf of'));
+                addOption(model, { group: true });
+            });
 
             // append options to toggle and edit names
             this.dropdown
@@ -213,6 +216,11 @@ define('io.ox/mail/compose/extensions', [
                 .option('sendDisplayName', true, gt('Show names'), { keepOpen: true })
                 .divider()
                 .link('edit-real-names', gt('Edit names'), this.onEditNames);
+
+            function addOption(model, options) {
+                var item = mailUtil.getSender(model.toArray(), self.config.get('sendDisplayName'));
+                self.dropdown.option('from', item, _.bind(self.getItemNode, self, item), options);
+            }
         },
 
         getItem: function (item) {
