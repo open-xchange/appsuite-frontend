@@ -116,6 +116,11 @@ define('io.ox/mail/compose/view', [
             draw: extensions.sender
         },
         {
+            id: 'sender-onbehalfof',
+            index: INDEX += 100,
+            draw: extensions.senderOnBehalfOf
+        },
+        {
             id: 'sender-realname',
             index: INDEX += 100,
             draw: extensions.senderRealName

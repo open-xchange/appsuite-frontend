@@ -208,12 +208,15 @@
             .address { color: @link-color; }
         }
 
-        // toggle sender-realname hint
-        .sender-realname {
+        // toggle sender-realname/sender-onbehalfof hint
+        .sender-realname, .sender-onbehalfof {
             display: none;
             color: #767676;
         }
-        &.no-realname .sender-realname { display: flex; }
+        &.no-realname .sender-realname,
+        &.onbehalfof .sender-onbehalfof {
+            display: flex;
+        }
 
         .info-line {
             i.fa {

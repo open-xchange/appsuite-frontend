@@ -285,6 +285,38 @@ define('io.ox/mail/compose/extensions', [
             ext.point(POINT + '/recipientActions').invoke('draw', view.$el);
         },
 
+        senderOnBehalfOf: function (baton) {
+
+            if (!capabilities.has('deputy')) return;
+
+            var fields = this,
+                model = baton.model;
+
+            function toggleVisibility() {
+                var sender = baton.model.get('sender'),
+                    from = baton.model.get('from'),
+                    displayname = baton.config.get('sendDisplayName');
+                if (!!sender) {
+                    fields.find('.sender-onbehalfof .mail-input').text(
+                        //#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+                        //#. %1$s: name of mail address of current user (technical: sender)
+                        //#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+                        gt('This email will be send by %1$s on behalf of %2$s.', sender[displayname ? 0 : 1], from[displayname ? 0 : 1])
+                    );
+                }
+                fields.toggleClass('onbehalfof', !!sender);
+            }
+
+            this.append(
+                $('<div class="sender-onbehalfof" data-extension-id="sender-onbehalfof">').append(
+                    $('<div class="mail-input">')
+                )
+            );
+
+            model.on('change:sender', toggleVisibility);
+            toggleVisibility();
+        },
+
         senderRealName: function (baton) {
             var fields = this,
                 config = baton.config;
