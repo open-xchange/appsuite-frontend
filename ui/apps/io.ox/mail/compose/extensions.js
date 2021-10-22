@@ -309,7 +309,7 @@ define('io.ox/mail/compose/extensions', [
                         //#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
                         //#. %1$s: name of mail address of current user (technical: sender)
                         //#. %2$s: name of mail address of "on behalf of"-user (technical: from)
-                        gt('This email will be send by %1$s on behalf of %2$s.', sender[displayname ? 0 : 1], from[displayname ? 0 : 1])
+                        gt('This email will be sent by %1$s on behalf of %2$s.', sender[displayname ? 0 : 1], from[displayname ? 0 : 1])
                     );
                 }
                 fields.toggleClass('onbehalfof', !!sender);

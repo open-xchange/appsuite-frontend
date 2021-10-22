@@ -709,42 +709,6 @@ Scenario('[C101620] Very long TO field', async ({ I, users, mail }) => {
     });
 });
 
-Scenario('[C163026] Change from display name when sending a mail', async ({ I, users, mail, dialogs }) => {
-    let [user] = users;
-    var timestamp = Math.round(+new Date() / 1000);
-    await I.haveSetting('io.ox/mail//messageFormat', 'text');
-
-    I.login('app=io.ox/mail', { user });
-    mail.waitForApp();
-
-    mail.newMail();
-
-    I.see(users[0].userdata.given_name + ' ' + users[0].userdata.sur_name, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.see('<' + users[0].userdata.primaryEmail + '>', '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-
-    I.click('.io-ox-mail-compose [data-dropdown="from"]>a');
-    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
-    I.clickDropdown('Edit names');
-
-    dialogs.waitForVisible();
-    I.waitForVisible('.name-overwrite-view .checkbox input[type="checkbox"]', 5); // check for checkbox to be visible
-    I.click('.name-overwrite-view .checkbox input[type="checkbox"]', dialogs.locators.body);
-    I.fillField('.modal-body input[title="Custom name"]', timestamp);
-    dialogs.clickButton('Edit');
-    I.waitForDetached('.modal-dialog');
-
-    I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-    I.click('.io-ox-mail-compose [data-dropdown="from"]>a');
-    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
-    I.click('.dropdown [data-name="sendDisplayName"]');
-    I.waitForElement('.dropdown.open [data-value^="[null,"]');
-    I.click('.dropdown [data-name="from"]');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-    I.dontSee(timestamp.toString(), '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
-});
-
 Scenario('[C207507] Forgot mail attachment hint', async ({ I, users, mail, dialogs }) => {
     let [user] = users;
     var testrailID = 'C207507';

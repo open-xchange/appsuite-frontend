@@ -27,6 +27,7 @@ module.exports = {
     locators: {
         compose: {
             close: locate({ css: '.io-ox-mail-compose-window button[aria-label="Save and close"]' }).as('Save and Close'),
+            minimize: locate({ css: '.io-ox-mail-compose-window.active button[aria-label="Minimize"]' }).as('Minimize'),
             options: locate({ css: '[data-extension-id="composetoolbar-menu"] a[aria-label="Options"]' }).as('Options dropdown'),
             localfile: locate({ css: '.composetoolbar a[aria-label="Add local file"]' }).as('Add local file'),
             drivefile: locate({ css: '.composetoolbar a[aria-label="Add from Drive"]' }).as('Add from Drive')
