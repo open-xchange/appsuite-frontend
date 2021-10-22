@@ -48,14 +48,6 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
     }
 
     /**
-     * Disable the complete TabHandling after initialization
-     * e.g. guest account is realized too late
-     */
-    function disable() {
-        require('io.ox/core/api/tab').disable();
-    }
-
-    /**
      * Initialize listener for storage events and listener for propagation
      */
     function initListener() {
@@ -157,9 +149,10 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
         login: function () {
             var def     = $.Deferred(),
                 timeout,
-                isTokenLogin = _.url.hash('serverToken') && _.url.hash('clientToken');
+                isTokenLogin = _.url.hash('serverToken') && _.url.hash('clientToken'),
+                isSessionUrlLogin = _.url.hash('session'); // e.g. login via link as guest or anon user
 
-            if (isTokenLogin) { return def.reject(); }
+            if (isTokenLogin || isSessionUrlLogin) { return def.reject(); }
 
             if (ox.session && ox.secretCookie && ox.language && ox.theme && ox.user && ox.user_id) {
                 return def.resolve({
@@ -179,12 +172,7 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
             this.propagateGetSession();
 
             this.events.listenTo(TabSession.events, 'responseGetSession', function (loginData) {
-                if (_.url.hash('session') && loginData.session !== _.url.hash('session')) {
-                    disable();
-                    def.reject();
-                } else {
-                    def.resolve(loginData);
-                }
+                def.resolve(loginData);
             });
 
             return def.done(function () {
@@ -206,8 +194,10 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
             if (!ox.session || !ox.user || !ox.user_id) {
                 return;
             }
-            // the requested session is differently to ox.session. e.g. guest user vs normal login
-            if (parameters.session && parameters.session !== ox.session) {
+
+            // - tabAPI will be enabled or disabled late during login, do not reply before that
+            // - checking capabilities for guests would work too, but it's slower and timing is critical here to stay below 50ms
+            if (!tabAPI.getInitializedState() || tabAPI.getGuestMode()) {
                 return;
             }
 
@@ -241,8 +231,9 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                     this.propagateSession(data.parameters);
                     break;
                 case 'responseGetSession':
-                    util.debugSession('TabSession: received responseGetSession');
                     this.events.trigger(data.propagate, data.parameters);
+                    // the trigger is time critical, thus log late
+                    util.debugSession('TabSession: received responseGetSession', _.clone(data.parameters));
                     break;
                 case 'propagateLogout':
                     util.debugSession('TabSession: received propagateLogout');

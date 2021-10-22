@@ -36,8 +36,8 @@ define('io.ox/core/api/tab', [
     var initialized = false,
         api,
         _api = {},
-        _checkTabHandlingSupport;
-
+        _checkTabHandlingSupport,
+        guestMode = false;
     /**
      * Initialization of the TabAPI.
      */
@@ -61,6 +61,7 @@ define('io.ox/core/api/tab', [
      * Disable the whole TabAPI
      */
     function disable() {
+        util.debugSession('TabSession: disable TabAPI');
         for (var key in api) {
             if (Object.prototype.hasOwnProperty.call(api, key)) {
                 api[key] = $.noop;
@@ -69,6 +70,7 @@ define('io.ox/core/api/tab', [
 
         ox.tabHandlingEnabled = false;
         util.checkTabHandlingSupport = function () {
+            console.warn('checkTabHandlingSupport FALSE');
             return false;
         };
     }
@@ -77,12 +79,22 @@ define('io.ox/core/api/tab', [
      * Enable the whole TabAPI
      */
     function enable() {
+        util.debugSession('TabSession: enable TabAPI');
         if (!initialized) initialize();
 
         _.extend(api, _api);
 
         ox.tabHandlingEnabled = true;
         util.checkTabHandlingSupport = _checkTabHandlingSupport;
+    }
+
+    /**
+    * Enable the whole TabAPI in guest mode.
+    */
+    function enableGuestMode() {
+        util.debugSession('TabSession: enable GuestMode');
+        guestMode = true;
+        enable();
     }
 
     /**
@@ -161,6 +173,33 @@ define('io.ox/core/api/tab', [
 
         // Enable the TabAPI
         enable: enable,
+
+        // Enable the TabAPI in guest mode
+        enableGuestMode: enableGuestMode,
+
+        /**
+        * Returns whether the TabAPI enabled guest mode.
+        *
+        * The general idea is this:
+        *
+        *  - guestMode 'true' should updates itself with new login information by the
+        *    same user to keep all existing tabs sync, but not answer 'responseGetSession'
+        *    requests when a new browser tab is logging in, to prevent that non-guests
+        *    receive the guest session
+        *
+        *   - guestMode 'false' should update itself with new login information, but
+        *     also reply to new logging requests
+        *
+        * @returns {Boolean}
+        */
+        getGuestMode: function () {
+            return guestMode;
+        },
+
+        // Returns whether the TabAPI is fully initialized.
+        getInitializedState: function () {
+            return initialized;
+        },
 
         // Creates the URL for a new browser tab. Adds the anchor parameters of the
         // current URL (except for specific parameters) to the new URL.
