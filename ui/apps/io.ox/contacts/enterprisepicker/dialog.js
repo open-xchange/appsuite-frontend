@@ -461,7 +461,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 lastContacts.remove(contacts, { silent: true });
                 // put at start of collection, since this search is newer
                 lastContacts.unshift(contacts);
-                // limit to 10 by default
+                // limit to 30 by default
                 lastContacts.reset(lastContacts.slice(0, settings.get('enterprisePicker/lastSearchedContactsLimit', 30)));
                 settings.set('enterprisePicker/lastSearchedContacts', _(lastContacts.models).map(function (contact) {
                     return { folder_id: contact.get('folder_id'), id: contact.get('id') };
