@@ -450,7 +450,7 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
-                if (availableApps <= 2) return;
+                if (availableApps.length <= 2) return;
 
                 baton.$el.append(
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)
