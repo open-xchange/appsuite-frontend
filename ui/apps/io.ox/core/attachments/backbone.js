@@ -151,7 +151,8 @@ define('io.ox/core/attachments/backbone', [
         },
 
         getSize: function () {
-            return this.get('file_size') || this.get('size') || 0;
+            var originalFileSize = this.get('originalFile') ? this.get('originalFile').size : undefined;
+            return this.get('file_size') || this.get('size') || originalFileSize || 0;
         },
 
         getExtension: function () {

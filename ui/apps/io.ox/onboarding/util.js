@@ -113,28 +113,28 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'android',
-            'cap': 'webmail mobile_mail_app'
+            'cap': 'mobile_mail_app'
         },
         {
             'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'android',
-            'cap': 'contacts carddav'
+            'cap': 'carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'android',
-            'cap': 'calendar caldav'
+            'cap': 'caldav'
         },
         {
             'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'android',
-            'cap': 'infostore drive'
+            'cap': 'drive'
         },
         {
             'title': gt('Exchange Active Sync'),
@@ -155,21 +155,21 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'macos',
-            'cap': 'contacts carddav'
+            'cap': 'carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'macos',
-            'cap': 'calendar caldav'
+            'cap': 'caldav'
         },
         {
             'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'drive',
             'platform': 'macos',
-            'cap': 'infostore drive'
+            'cap': 'drive'
         },
         {
             'title': gt('Email with iOS Mail'),
@@ -184,28 +184,28 @@ define('io.ox/onboarding/util', [
             'icon': 'fa-envelope-o',
             'app': 'mailapp',
             'platform': 'ios',
-            'cap': 'webmail mobile_mail_app'
+            'cap': 'mobile_mail_app'
         },
         {
             'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
             'platform': 'ios',
-            'cap': 'contacts carddav'
+            'cap': 'carddav'
         },
         {
             'title': gt('Calendar'),
             'icon': 'fa-calendar',
             'app': 'calendar',
             'platform': 'ios',
-            'cap': 'calendar caldav'
+            'cap': 'caldav'
         },
         {
             'title': productNames.drive,
             'icon': 'fa-cloud',
             'app': 'driveapp',
             'platform': 'ios',
-            'cap': 'infostore drive'
+            'cap': 'drive'
         },
         {
             'title': gt('Exchange Active Sync'),

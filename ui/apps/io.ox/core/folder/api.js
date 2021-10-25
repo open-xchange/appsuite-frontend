@@ -572,7 +572,7 @@ define('io.ox/core/folder/api', [
 
         list: function (id) {
             var folder = this.hash[id];
-            return folder !== undefined ? folder.list() : $.Deferred().reject();
+            return folder !== undefined ? folder.list() : $.Deferred().reject({ error: 'virtual folder ' + id + ' not hashed.' });
         },
 
         add: function (id, getter) {
@@ -779,6 +779,8 @@ define('io.ox/core/folder/api', [
                     return list(id).then(
                         null,
                         function fail(error) {
+                            error = error || {};
+                            options = options || {};
                             error.id = id;
                             return $.when(options.errors ? error : undefined);
                         }

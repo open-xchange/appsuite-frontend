@@ -460,9 +460,9 @@ define('io.ox/core/folder/contextmenu', [
             function invite(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, controller) {
-                    var linkModel = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    controller.showFolderPermissions(id, [linkModel], { hasLinkSupport: e.data.hasLinkSupport });
+                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
+                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
+                    permissions.showFolderPermissions(id, model);
                 });
             }
 
@@ -481,22 +481,19 @@ define('io.ox/core/folder/contextmenu', [
 
                 var supportsInternal = model.supportsInternalSharing(),
                     supportsInvite = model.supportsInviteGuests(),
-                    supportsLinks = capabilities.has('share_links'),
                     showInvitePeople = supportsInvite && model.supportsShares(),
-                    showGetLink = supportsLinks && !model.is('mail') && model.isShareable(id);
+                    hasLinkSupport = capabilities.has('share_links') && !model.is('mail') && model.isShareable(id);
 
                 // stop if neither invites or links are supported
-                if (!supportsInternal && !showInvitePeople && !showGetLink) return;
+                if (!supportsInternal && !showInvitePeople && !hasLinkSupport) return;
 
-                if (supportsInternal || showInvitePeople) {
-                    contextUtils.addLink(this, {
-                        action: 'invite',
-                        data: { app: baton.app, id: id, hasLinkSupport: showGetLink },
-                        enabled: true,
-                        handler: invite,
-                        text: showInvitePeople ? gt('Share / Permissions') : gt('Permissions')
-                    });
-                }
+                contextUtils.addLink(this, {
+                    action: 'invite',
+                    data: { app: baton.app, id: id },
+                    enabled: true,
+                    handler: invite,
+                    text: (showInvitePeople || hasLinkSupport) ? gt('Share / Permissions') : gt('Permissions')
+                });
             };
         }()),
 

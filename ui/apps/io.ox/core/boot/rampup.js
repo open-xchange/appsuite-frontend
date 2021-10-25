@@ -22,8 +22,9 @@
 
 define('io.ox/core/boot/rampup', [
     'io.ox/core/http',
-    'io.ox/core/extensions'
-], function (http, ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/boot/util'
+], function (http, ext, util) {
     'use strict';
 
     function storeIn(origData, path) {
@@ -41,12 +42,16 @@ define('io.ox/core/boot/rampup', [
     ext.point('io.ox/core/boot/rampup').extend([{
         id: 'exit_early',
         fetch: function (baton) {
-            if (_.isEmpty(ox.rampup)) return;
-            var debug = require('io.ox/core/boot/util').debug;
-            debug('skipping rampup extensions, already got data', ox.rampup);
-            baton.stopPropagation();
-            baton.preventDefault();
-            baton.data = ox.rampup;
+            if (!_.isEmpty(ox.rampup)) {
+                util.debug('skipping rampup extensions, already got data', ox.rampup);
+                baton.stopPropagation();
+                baton.preventDefault();
+                baton.data = ox.rampup;
+            } else if (baton.sessionData && baton.sessionData.requires_multifactor) {
+                util.debug('multifactor required, skipping rampup extensions');
+                baton.stopPropagation();
+                baton.preventDefault();
+            }
         }
     }, {
         id: 'http_pause',
