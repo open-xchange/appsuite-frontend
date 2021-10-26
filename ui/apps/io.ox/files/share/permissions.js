@@ -1085,7 +1085,7 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 updateSendNotificationSettings();
-                dialog.$body.find('.file-share-options').toggle(permissionsView.collection.length > 0);
+                dialog.$body.find('.file-share-options').toggle(!!permissionsView.collection.findWhere({ new: true }));
             });
 
             dialogConfig.on('change:message', function () {
