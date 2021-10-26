@@ -224,6 +224,8 @@ define('io.ox/core/folder/node', [
                 e.preventDefault();
                 return;
             }
+            // mobile fix (OXUIB-1046): prevents opening folder instead of only toggling
+            e.stopPropagation();
             this.onToggle(e);
         },
 
