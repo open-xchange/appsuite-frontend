@@ -69,7 +69,6 @@
 
     .select-container {
         display: flex;
-        flex-wrap: wrap;
         margin-top: 32px;
 
         label {
@@ -97,9 +96,13 @@
 
         height: auto;
 
-        .select-container select {
-            width: 100%;
-            margin-top: 8px
+        .select-container {
+            flex-wrap: wrap;
+
+            select {
+                width: 100%;
+                margin-top: 8px
+            }
         }
 
         .checkbox {
