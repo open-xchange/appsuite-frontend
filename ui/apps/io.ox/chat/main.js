@@ -776,12 +776,11 @@ define('io.ox/chat/main', [
             quitOnEscape: false
         })
         .render().open();
-
+        win.floating = win;
         // don't use setWindow method. Has to much overhead for the rather special chat window
         this.set('window', win);
         // strange circular dependency we need for getCurrentFloatingApp()
         win.app = app;
-
         app.settings = settings;
 
         // add some scaffold css now to avoid invisible busy spinner (width 0px etc)
