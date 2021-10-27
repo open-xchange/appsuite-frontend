@@ -136,7 +136,7 @@ generate e2e report:
     # fail if there are no test results, prevents history from getting lost in some cases
     - ls ui/build/e2e/*.xml > /dev/null
     # fetch current version of history
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -q -O - | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
+    - curl http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -s | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
     - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
     # preserve well-known location to bookmark/link to at latest
     - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
