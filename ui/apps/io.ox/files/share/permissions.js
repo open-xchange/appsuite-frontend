@@ -1009,14 +1009,14 @@ define('io.ox/files/share/permissions', [
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
                     // default is true for nested and false for flat folder tree, #53439
-                    cascadePermissions: nested,
+                    cascadePermissions: true,
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
                 },
                 toJSON: function () {
                     var data = {
-                        cascadePermissions: this.get('cascadePermissions'),
+                        cascadePermissions: true,
                         notification: { transport: 'mail' }
                     };
 
@@ -1257,10 +1257,6 @@ define('io.ox/files/share/permissions', [
                     extPoint: POINT
                 });
 
-                if (objModel.isFolder() && options.nested) {
-                    dialogConfig.set('cascadePermissions', true);
-                }
-
                 dialog.$body.append(
                     // Invite people pane
                     $('<div id="invite-people-pane" class="share-pane invite-people"></div>').append(
@@ -1359,7 +1355,7 @@ define('io.ox/files/share/permissions', [
             }
 
             function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
+                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
                 shareSettings.showSettingsDialog(settingsView);
             }
 
