@@ -210,6 +210,9 @@ define(['io.ox/core/util'], function (util) {
             it('removes data attributes', function () {
                 expect(util.urlify('<a href="#z" data-toggle="dropdown" data-target="<img src=x onerror=alert(1337)>">XSS?</a>')).to.equal('<a href="#z" rel="noopener">XSS?</a>');
             });
+            it('includes brackets when they are part of the url', function () {
+                expect(util.urlify('http://www.foo.com/path?objects=(12345,6789)')).to.equal('<a href="http://www.foo.com/path?objects=(12345,6789)" rel="noopener" target="_blank">http:<wbr>//www.<wbr>foo.<wbr>com/path?objects=<wbr>(<wbr>12345,<wbr>6789)<wbr></a>');
+            });
         });
 
         describe('getAddresses', function () {
