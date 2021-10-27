@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Kapitel 7. Kalender">
 <link rel="prev" href="ox.appsuite.user.sect.calendar.manage.delete.html" title="7.9.10. Termine löschen">
-<link rel="next" href="ox.appsuite.user.sect.calendar.groups.html" title="7.11. Gruppen verwalten">
+<link rel="next" href="ox.appsuite.user.sect.calendar.deputy.html" title="7.11. Termine als Stellvertreter anlegen, bearbeiten, verwalten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.manage.delete.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.groups.html">Weiter</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.deputy.html">Weiter</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,12 +34,13 @@
   </h1>
 <div class="sect1" id="ox.appsuite.user.sect.calendar.search">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">7.10. Termine suchen</h2></div></div></div>
-<a class="indexterm" name="id-1.8.15.2"></a><a class="indexterm" name="id-1.8.15.3"></a><p id="ox.appsuite.user.concept.calendar.search">Um nach Terminen zu suchen, können Sie 
-      die folgenden Suchkriterien verwenden:</p>
+<a class="indexterm" name="id-1.8.16.2"></a><a class="indexterm" name="id-1.8.16.3"></a><p id="ox.appsuite.user.orientation.calendar.search">Erfahren Sie, wie Sie nach Terminen suchen können, indem Sie 
+      die folgenden Suchkriterien verwenden:
+      </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Suchbegriffe für Betreff, Beschreibung, Ort, Anhangnamen, Teilnehmer</p></li>
 <li class="listitem"><p role="presentation">Kalender, die durchsucht werden sollen</p></li>
-<li class="listitem"><p role="presentation">Status der Terminbestätigung</p></li>
+<li class="listitem"><p role="presentation">Ihr Bestätigungsstatus</p></li>
 <li class="listitem"><p role="presentation">Zeitraum der Terminerstellung, bezogen auf das aktuelle Datum: Ein Monat, drei Monate, ein Jahr</p></li>
 <li class="listitem"><p role="presentation">Typ: Alle, Serie, Einzeltermin</p></li>
 </ul>
@@ -66,26 +67,26 @@
           </p>
 <p role="presentation">Die gefundenen Objekte werden in der Liste im Anzeigebereich angezeigt.</p>
 </li>
-<li class="step">
-<p role="presentation">Um einen Kalender für die Suche auszuwählen, klicken Sie neben dem Eingabefeld auf den Kalendernamen.</p>
-<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle privaten, öffentlichen und freigegebenen
-            Kalender durchsucht.
-          </p>
-</li>
-<li class="step"><p role="presentation">Um die Suche auf bestimmte Termine zu beschränken, klicken Sie neben dem Eingabefeld auf <span class="guibutton"><strong>Optionen</strong></span>
-            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. Verwenden Sie diese Methoden:
+<li class="step"><p role="presentation">Um die Suche auf bestimmte Termine zu beschränken, klicken Sie im Suchfeld auf das Symbol <span class="guibutton"><strong>Optionen</strong></span>
+            <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span>. 
+            Verwenden Sie diese Methoden:
             <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Um die Suche auf Termine mit einem bestimmten Bestätigungsstatus zu beschränken, wählen Sie einen Status.</p></li>
-<li class="listitem"><p role="presentation">Um die Suche auf ein bestimmtes Zeitintervall zu beschränken, wählen Sie einen Bereich.</p></li>
-<li class="listitem"><p role="presentation">Um die Suche auf einzelne Termine oder auf Serientermine zu beschränken, wählen Sie einen Typ.</p></li>
-<li class="listitem"><p role="presentation">Um die Suche auf private, öffentliche oder freigegebene Termine zu beschränken, wählen Sie einen Ordnertyp.</p></li>
+<li class="listitem">
+<p role="presentation">Mit <span class="guibutton"><strong>Ordner</strong></span> bestimmen Sie, welche Kalender durchsucht werden sollen.</p>
+<p role="presentation">Wenn Sie <span class="guibutton"><strong>Alle Ordner</strong></span> wählen, werden alle privaten, öffentlichen und freigegebenen
+                  Kalender durchsucht.</p>
+</li>
+<li class="listitem"><p role="presentation">Mit <span class="guibutton"><strong>Status</strong></span> suchen Sie nach Terminen mit einem bestimmten Bestätigungsstatus.</p></li>
+<li class="listitem"><p role="presentation">Mit <span class="guibutton"><strong>Bereich</strong></span> suchen Sie nach Terminen in einem bestimmten Zeitintervall.</p></li>
+<li class="listitem"><p role="presentation">Mit <span class="guibutton"><strong>Typ</strong></span> beschränken Sie die Suche entweder auf Termine oder auf Serientermine.</p></li>
+<li class="listitem"><p role="presentation">Mit <span class="guibutton"><strong>Ordnertyp</strong></span> beschränken Sie die Suche auf entweder auf private, auf öffentliche oder auf freigegebene Termine.</p></li>
 </ul>
           </p></li>
 <li class="step"><p role="presentation">Um das Suchergebnis zu verfeinern, geben Sie weitere Suchbegriffe ein. Um einen Suchbegriff zu 
             entfernen, klicken Sie neben dem Suchbegriff auf das Symbol <span class="guibutton"><strong>Entfernen</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>. 
           </p></li>
-<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie im Eingabefeld auf das Symbol <span class="guibutton"><strong>Suche abbrechen</strong></span>
+<li class="step"><p role="presentation">Um die Suche zu beenden, klicken Sie im Suchfeld auf das Symbol <span class="guibutton"><strong>Suche abbrechen</strong></span>
             <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.calendar.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>.</p></li>
 </ol></div>
 </div>
@@ -96,7 +97,7 @@
 <p>
       </p>
 <p class="title">Verwandte Themen:</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.view.list.html">Termine in der Listenansicht anzeigen</a></p></li></ul>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.calendar.view.views.html">Termine in verschiedenen Ansichten anzeigen</a></p></li></ul>
 <p>
     </p>
 <p id="ox.appsuite.user.parent.calendar.search">Übergeordnetes Thema:
