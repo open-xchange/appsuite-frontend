@@ -33,8 +33,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'io.ox/files/util',
+    'io.ox/core/api/tab',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, TabAPI, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -511,54 +512,51 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
+                if (TabAPI.openInTabEnabled() && (_.url.hash('office:disable-openInTabs') !== 'true')) {
+                    // the url attributes to launch the popout viewer
+                    var urlAttrs = { app: 'io.ox/files/detail' };
 
-                if (ox.tabHandlingEnabled && (_.url.hash('office:disable-openInTabs') !== 'true')) {
-                    require(['io.ox/core/api/tab']).then(function (TabAPI) {
-                        // the url attributes to launch the popout viewer
-                        var urlAttrs = { app: 'io.ox/files/detail' };
+                    if (baton.model.isFile()) {
+                        _.extend(urlAttrs, {
+                            id: baton.model.get('id'),
+                            folder: baton.model.get('folder_id')
+                        });
 
-                        if (baton.model.isFile()) {
+                        if (baton.model.get('current_version') === false) {
+                            urlAttrs.version = baton.model.get('version');
+                        }
+
+                    } else if (baton.model.isMailAttachment()) {
+                        _.extend(urlAttrs, {
+                            id: baton.data.mail.id,
+                            folder: baton.data.mail.folder_id,
+                            attachment: baton.data.id
+                        });
+                        // Handle decrypted attachments
+                        if (baton.data.security && baton.data.security.decrypted) {
                             _.extend(urlAttrs, {
-                                id: baton.model.get('id'),
-                                folder: baton.model.get('folder_id')
-                            });
-
-                            if (baton.model.get('current_version') === false) {
-                                urlAttrs.version = baton.model.get('version');
-                            }
-
-                        } else if (baton.model.isMailAttachment()) {
-                            _.extend(urlAttrs, {
-                                id: baton.data.mail.id,
-                                folder: baton.data.mail.folder_id,
-                                attachment: baton.data.id
-                            });
-                            // Handle decrypted attachments
-                            if (baton.data.security && baton.data.security.decrypted) {
-                                _.extend(urlAttrs, {
-                                    decrypt: true,
-                                    cryptoAuth: baton.data.security.authentication || baton.data.auth
-                                });
-                            }
-
-                        } else if (baton.model.isPIMAttachment()) {
-                            _.extend(urlAttrs, {
-                                module: baton.data.module,
-                                id: baton.data.attached,
-                                folder: baton.data.folder,
-                                attachment: baton.data.id || baton.data.managedId
-                            });
-
-                        } else if (baton.model.isComposeAttachment()) {
-                            _.extend(urlAttrs, {
-                                space: baton.data.space,
-                                attachment: baton.data.id
+                                decrypt: true,
+                                cryptoAuth: baton.data.security.authentication || baton.data.auth
                             });
                         }
 
-                        var tabUrl = TabAPI.createUrl(urlAttrs);
-                        TabAPI.openChildTab(tabUrl);
-                    });
+                    } else if (baton.model.isPIMAttachment()) {
+                        _.extend(urlAttrs, {
+                            module: baton.data.module,
+                            id: baton.data.attached,
+                            folder: baton.data.folder,
+                            attachment: baton.data.id || baton.data.managedId
+                        });
+
+                    } else if (baton.model.isComposeAttachment()) {
+                        _.extend(urlAttrs, {
+                            space: baton.data.space,
+                            attachment: baton.data.id
+                        });
+                    }
+
+                    var tabUrl = TabAPI.createUrl(urlAttrs);
+                    TabAPI.openChildTab(tabUrl);
 
                 } else {
                     ox.launch('io.ox/files/detail/main', baton.model.isFile() ? baton.model : { file: baton.data });
@@ -579,7 +577,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
         matches: function (baton) {
-            return !baton.standalone || !ox.tabHandlingEnabled || (_.url.hash('office:disable-openInTabs') === 'true');
+            return !baton.standalone || !TabAPI.openInTabEnabled() || (_.url.hash('office:disable-openInTabs') === 'true');
         },
         action: function (baton) {
             return baton.context.onClose(baton.e);

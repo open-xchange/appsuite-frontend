@@ -29,9 +29,10 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
+    'io.ox/core/api/tab',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, ext, capabilities, icons, Dropdown, settings, contactSettings, gt) {
+], function (http, upsell, ext, capabilities, icons, Dropdown, settings, contactSettings, tabAPI, gt) {
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -95,10 +96,7 @@ define('io.ox/core/main/appcontrol', [
                     this.model.launch();
                     return;
                 }
-                if (ox.tabHandlingEnabled && this.model.get('openInTab')) {
-                    // we must stay synchronous to prevent popup-blocker
-                    // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
-                    var tabAPI = require('io.ox/core/api/tab');
+                if (tabAPI.openInTabEnabled() && this.model.get('openInTab')) {
                     tabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
@@ -385,9 +383,8 @@ define('io.ox/core/main/appcontrol', [
                                 target: '_blank'
                             })
                         );
-                    } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
-                        var tabAPI = require('io.ox/core/api/tab'),
-                            appType = action.substring(0, 'io.ox/office/portal/'.length),
+                    } else if (tabAPI.openInTabEnabled() && (/^io\.ox\/office\/portal/).test(action)) {
+                        var appType = action.substring(0, 'io.ox/office/portal/'.length),
                             tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
                         logo.wrap(
                             $('<a class="btn btn-link logo-btn">').attr({
@@ -419,7 +416,7 @@ define('io.ox/core/main/appcontrol', [
                 )
             );
 
-            if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
+            if (ox.openedInBrowserTab || (tabAPI.openInTabEnabled() && _.url.hash('app') === 'io.ox/files/detail')) return;
 
             updateLogo();
 

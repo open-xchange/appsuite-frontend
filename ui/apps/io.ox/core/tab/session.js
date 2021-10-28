@@ -195,9 +195,9 @@ define('io.ox/core/tab/session', ['io.ox/core/boot/util'], function (util) {
                 return;
             }
 
-            // - tabAPI will be enabled or disabled late during login, do not reply before that
+            // - tabAPI will be enabled or disabled late during login, do not reply before initialization is done (ox.tabHandlingEnabled === true)
             // - checking capabilities for guests would work too, but it's slower and timing is critical here to stay below 50ms
-            if (!tabAPI.getInitializedState() || tabAPI.getGuestMode()) {
+            if (!ox.tabHandlingEnabled || tabAPI.getGuestMode()) {
                 return;
             }
 

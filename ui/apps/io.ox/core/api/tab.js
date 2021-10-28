@@ -70,7 +70,6 @@ define('io.ox/core/api/tab', [
 
         ox.tabHandlingEnabled = false;
         util.checkTabHandlingSupport = function () {
-            console.warn('checkTabHandlingSupport FALSE');
             return false;
         };
     }
@@ -178,14 +177,15 @@ define('io.ox/core/api/tab', [
         enableGuestMode: enableGuestMode,
 
         /**
-        * Returns whether the TabAPI enabled guest mode.
+        * Returns whether the TabAPI enabled the guestMode.
         *
-        * The general idea is this:
+        * The general for guest behavior and in tab enviroments is this:
         *
-        *  - guestMode 'true' should updates itself with new login information by the
-        *    same user to keep all existing tabs sync, but not answer 'responseGetSession'
-        *    requests when a new browser tab is logging in, to prevent that non-guests
-        *    receive the guest session
+        *  - guestMode 'true' should update itself with new login information by the
+        *    same user to keep all existing tabs for this user sync (use-case: paste two
+        *    guest links in the browser without outdated session error). But do not answer
+        *    'responseGetSession' requests when a new browser tab is logging in, to prevent
+        *    that non-guests receive the guest session
         *
         *   - guestMode 'false' should update itself with new login information, but
         *     also reply to new logging requests
@@ -196,9 +196,13 @@ define('io.ox/core/api/tab', [
             return guestMode;
         },
 
-        // Returns whether the TabAPI is fully initialized.
-        getInitializedState: function () {
-            return initialized;
+        /**
+        * Returns whether it's allowed to open an additional, new tab for the current user.
+        *
+        * @returns {Boolean}
+        */
+        openInTabEnabled: function () {
+            return ox.tabHandlingEnabled && !guestMode;
         },
 
         // Creates the URL for a new browser tab. Adds the anchor parameters of the

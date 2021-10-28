@@ -27,10 +27,11 @@ define('io.ox/core/main/stages', [
     'io.ox/core/api/apps',
     'io.ox/core/folder/api',
     'io.ox/core/main/debug',
+    'io.ox/core/api/tab',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/core'
-], function (ext, notifications, capabilities, apps, folderAPI, debug, settings, contactsSettings, gt) {
+], function (ext, notifications, capabilities, apps, folderAPI, debug, tabAPI, settings, contactsSettings, gt) {
 
     var topbar = $('#io-ox-appcontrol');
 
@@ -269,7 +270,7 @@ define('io.ox/core/main/stages', [
         index: 605,
         run: function () {
             // tab handling enabled in general
-            if (!ox.tabHandlingEnabled) return;
+            if (!tabAPI.openInTabEnabled()) return;
             // tab handling disabled in URL for Selenium tests
             if (_.url.hash('office:disable-openInTabs') === 'true') return;
             // the Popout Viewer app
@@ -327,10 +328,8 @@ define('io.ox/core/main/stages', [
             debug('Stage "load" > autoLaunch ...');
 
             // restore apps
-            if (!ox.tabHandlingEnabled) return ox.ui.App.restore();
-            require(['io.ox/core/api/tab'], function (tabAPI) {
-                return tabAPI.isParentTab() ? ox.ui.App.restore() : true;
-            });
+            if (!tabAPI.openInTabEnabled()) return ox.ui.App.restore();
+            return tabAPI.isParentTab() ? ox.ui.App.restore() : true;
         }
     }, {
         id: 'restoreLaunch',
