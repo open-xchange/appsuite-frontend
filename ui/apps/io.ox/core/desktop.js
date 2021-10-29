@@ -992,7 +992,7 @@ define('io.ox/core/desktop', [
         getCurrentFloatingApp: function () {
             return _.chain(ox.ui.apps.pluck('window')).compact()
                 .map(function (win) {
-                    //if (win.app.get('name') === 'io.ox/help') return undefined;
+                    if (win.app.get('name') === 'io.ox/help') return undefined;
                     return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
                 }).compact().first().value();
         },
