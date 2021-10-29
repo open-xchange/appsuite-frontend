@@ -42,14 +42,17 @@ define('io.ox/core/main/topbar_right', [
 ], function (session, http, ext, Stage, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, contactsUtil, userAPI, svg, settings, gt) {
 
     function getHelp() {
-        var currentApp = ox.ui.App.getCurrentFloatingApp() || ox.ui.App.getCurrentApp();
+        // get active app (ignoring 'help')
+        var app = [].concat(ox.ui.App.getCurrentFloatingApp(), ox.ui.App.getCurrentApp())
+            .filter(function (app) { return app && app.get('name') !== 'io.ox/help'; })
+            .shift();
 
-        if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
+        if (app && app.getContextualHelp) return app.getContextualHelp();
 
         return _.extend({
             base: 'help',
             target: 'index.html'
-        }, currentApp && currentApp.get('help'));
+        }, app && app.get('help'));
     }
 
     var extensions = {
