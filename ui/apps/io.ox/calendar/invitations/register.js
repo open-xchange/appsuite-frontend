@@ -35,10 +35,10 @@ define('io.ox/calendar/invitations/register', [
     'use strict';
 
     var i18n = {
+        'accept': gt('Accept'),
         'accept_and_ignore_conflicts': gt('Accept'),
         'accept_and_replace': gt('Accept changes'),
         'accept_party_crasher': gt('Add new participant'),
-        'accept': gt('Accept'),
         'create': gt('Accept'),
         'decline': gt('Decline'),
         'declinecounter': gt('Reject changes'),
@@ -49,10 +49,10 @@ define('io.ox/calendar/invitations/register', [
     };
 
     var buttonClasses = {
+        'accept': 'btn-success accept',
         'accept_and_ignore_conflicts': 'btn-success ignore',
         'accept_and_replace': 'btn-success',
         'accept_party_crasher': '',
-        'accept': 'btn-success accept',
         'create': '',
         'decline': 'btn-danger',
         'declinecounter': 'btn-danger',
@@ -63,10 +63,10 @@ define('io.ox/calendar/invitations/register', [
     };
 
     var success = {
+        'accept': gt('You have accepted the appointment'),
         'accept_and_ignore_conflicts': gt('You have accepted the appointment'),
         'accept_and_replace': gt('Changes have been saved'),
         'accept_party_crasher': gt('Added the new participant'),
-        'accept': gt('You have accepted the appointment'),
         'create': gt('You have accepted the appointment'),
         'decline': gt('You have declined the appointment'),
         'declinecounter': gt('The changes have been rejected'),
@@ -372,9 +372,7 @@ define('io.ox/calendar/invitations/register', [
             function performConfirm() {
 
                 var params = {
-                    action: action,
-                    dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html'
+                    action: action
                 };
 
                 if (!_.isEmpty(self.getUserComment())) {
@@ -788,8 +786,6 @@ define('io.ox/calendar/invitations/register', [
                 module: 'chronos/itip',
                 params: {
                     action: 'analyze',
-                    dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html',
                     timezone: 'UTC'
                 },
                 data: {
