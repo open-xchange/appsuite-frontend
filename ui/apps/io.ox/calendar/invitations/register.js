@@ -35,44 +35,44 @@ define('io.ox/calendar/invitations/register', [
     'use strict';
 
     var i18n = {
-        'accept': gt('Accept'),
-        'accept_and_replace': gt('Accept changes'),
         'accept_and_ignore_conflicts': gt('Accept'),
+        'accept_and_replace': gt('Accept changes'),
         'accept_party_crasher': gt('Add new participant'),
+        'accept': gt('Accept'),
         'create': gt('Accept'),
-        'update': gt('Accept changes'),
-        'delete': gt('Delete'),
-        'declinecounter': gt('Reject changes'),
-        'tentative': gt('Tentative'),
         'decline': gt('Decline'),
-        'ignore': gt('Ignore')
+        'declinecounter': gt('Reject changes'),
+        'delete': gt('Delete'),
+        'ignore': gt('Ignore'),
+        'tentative': gt('Tentative'),
+        'update': gt('Accept changes')
     };
 
     var buttonClasses = {
-        'accept': 'btn-success accept',
-        'accept_and_replace': 'btn-success',
         'accept_and_ignore_conflicts': 'btn-success ignore',
+        'accept_and_replace': 'btn-success',
         'accept_party_crasher': '',
+        'accept': 'btn-success accept',
         'create': '',
-        'update': 'btn-success',
-        'delete': '',
-        'declinecounter': 'btn-danger',
-        'tentative': 'btn-warning',
         'decline': 'btn-danger',
-        'ignore': ''
+        'declinecounter': 'btn-danger',
+        'delete': '',
+        'ignore': '',
+        'tentative': 'btn-warning',
+        'update': 'btn-success'
     };
 
     var success = {
-        'accept': gt('You have accepted the appointment'),
-        'accept_and_replace': gt('Changes have been saved'),
         'accept_and_ignore_conflicts': gt('You have accepted the appointment'),
+        'accept_and_replace': gt('Changes have been saved'),
         'accept_party_crasher': gt('Added the new participant'),
+        'accept': gt('You have accepted the appointment'),
         'create': gt('You have accepted the appointment'),
-        'update': gt('The appointment has been updated'),
-        'delete': gt('The appointment has been deleted'),
+        'decline': gt('You have declined the appointment'),
         'declinecounter': gt('The changes have been rejected'),
+        'delete': gt('The appointment has been deleted'),
         'tentative': gt('You have tentatively accepted the appointment'),
-        'decline': gt('You have declined the appointment')
+        'update': gt('The appointment has been updated')
     };
 
     var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
@@ -409,7 +409,7 @@ define('io.ox/calendar/invitations/register', [
                         } else {
                             // repaint only if there is something left to repaint
                             refresh.then(function () {
-                                // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                                // if the delete action was successful we don't need the button anymore, see Bug 40852
                                 if (action === 'delete') {
                                     self.model.set('actions', _(self.model.get('actions')).without('delete'));
                                 }
