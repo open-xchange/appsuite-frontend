@@ -28,6 +28,10 @@ define('io.ox/core/deputy/api', [
 
     'use strict';
 
+    // simple caches for requests used in mail compose.
+    var granteeAddressCache = [],
+        granteeAddressFolderCache = {};
+
     var api = {
         getAll: function () {
             return http.GET({
@@ -80,10 +84,19 @@ define('io.ox/core/deputy/api', [
         },
 
         // utility function that returns a list of senders, that granted deputy rights to the current user, with "allowed to send mails" permissions
-        getGranteeAddresses: function () {
+        getGranteeAddresses: function (useCache) {
+            useCache = useCache || true;
             var def = $.Deferred();
+
+            if (useCache && granteeAddressCache.length) return def.resolve(granteeAddressCache);
+
+            def.then(function (result) {
+                granteeAddressCache = result;
+                return result;
+            });
+
             // ignore errors, just send an empty array then
-            api.reverse().then(function (grantedPermissions) {
+            api.reverse(useCache).then(function (grantedPermissions) {
                 var addresses = _(grantedPermissions).chain().map(function (deputyData) {
                     // can there be more than one address?
                     return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : undefined;
@@ -108,10 +121,18 @@ define('io.ox/core/deputy/api', [
         },
 
         // utility function that returns the mail address from a folder you are allowed to send mails from as a deputy
-        getGranteeAddressFromFolder: function (id) {
+        getGranteeAddressFromFolder: function (id, useCache) {
+            useCache = useCache || true;
             if (!id) return $.when([]);
-
             var def = $.Deferred();
+
+            if (useCache && granteeAddressFolderCache[id]) return def.resolve(granteeAddressFolderCache[id]);
+
+            def.then(function (result) {
+                granteeAddressFolderCache[id] = result;
+                return result;
+            });
+
             // ignore errors, just send an empty array then
             api.reverse().then(function (grantedPermissions) {
                 var deputyData = _(grantedPermissions).find(function (data) {
@@ -134,6 +155,13 @@ define('io.ox/core/deputy/api', [
             return def;
         }
     };
-    return api;
 
+    // clear caches on refresh
+    ox.on('refresh^', function () {
+        granteeAddressCache = [];
+        granteeAddressFolderCache = {};
+    });
+
+
+    return api;
 });
