@@ -387,6 +387,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 buildDialog(options, model, headerNode, win.nodes.main, bodyNode);
             });
         });
+
+        app.getContextualHelp = _.constant('ox.appsuite.user.sect.contacts.use.addressdirectory.html');
+
         return app;
     }
 
@@ -605,7 +608,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         if (options.selection.behavior !== 'none') {
             var dialog =  new ModalDialog({
                 point: 'io.ox/contacts/enterprisepicker-dialog',
-                help: 'ox.appsuite.user.sect.email.send.enterpriserpicker.html',
+                help: 'ox.appsuite.user.sect.contacts.use.addressdirectory.html',
                 title: gt('Global address list')
             })
                 .build(function () {

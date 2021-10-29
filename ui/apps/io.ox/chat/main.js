@@ -782,6 +782,7 @@ define('io.ox/chat/main', [
         // strange circular dependency we need for getCurrentFloatingApp()
         win.app = app;
         app.settings = settings;
+        app.getContextualHelp = _.constant('ox.appsuite.user.sect.chat.gui.html');
 
         // add some scaffold css now to avoid invisible busy spinner (width 0px etc)
         win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).parent().busy();
