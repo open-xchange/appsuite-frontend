@@ -30,20 +30,30 @@ After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Open the help app in a floating window', async function ({ I, topbar }) {
+Scenario('Open the help app in a floating window', async function ({ I, mail, topbar }) {
     I.login('app=io.ox/mail');
     I.waitForVisible({ css: '.io-ox-mail-window' }, 5);
 
+    I.say('case: same app');
+    // mail app
     topbar.help();
     I.waitForVisible('.io-ox-help-window', 5);
     I.see('OX App Suite Help');
-
-    // ensure that if you click help for the same active app only one window will open for that
+    // mail app
     topbar.help();
     I.seeNumberOfElements('.io-ox-help-window', 1);
-
     I.click('~Close', '.io-ox-help-window');
     I.waitForDetached('.io-io-help-window', 5);
+
+    I.say('case: different apps');
+    // mail app
+    topbar.help();
+    I.waitForVisible('.io-ox-help-window', 5);
+    I.see('OX App Suite Help');
+    // mail compose app
+    mail.newMail();
+    topbar.help();
+    I.seeNumberOfElements('.io-ox-help-window', 2);
 });
 
 Scenario('Open the help app in a modal', async function ({ I, mail, dialogs }) {
