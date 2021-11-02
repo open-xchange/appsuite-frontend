@@ -85,9 +85,10 @@ define('io.ox/mail/compose/actions/extensions', [
         return function (baton) {
             var model = baton.model,
                 sharedAttachments = model.get('sharedAttachments') || {},
+                exceedsMailQuota = _.device('smartphone') ? false : model.exceedsMailQuota(),
                 needsAction;
 
-            needsAction = model.exceedsMailQuota() || model.exceedsThreshold();
+            needsAction = exceedsMailQuota || model.exceedsThreshold();
 
             if (!needsAction || sharedAttachments.enabled) return;
 
