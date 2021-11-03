@@ -224,8 +224,7 @@ Scenario('Compose with inline image, which is removed again', async function ({ 
     I.dontSeeElement('.attachments');
 });
 
-//TODO: enable once MWB-1289 is fixed
-Scenario.skip('Compose with drivemail attachment and edit draft', async function ({ I, users, mail, drive, dialogs }) {
+Scenario('Compose with drivemail attachment and edit draft', async function ({ I, users, mail, drive, dialogs }) {
     const [user] = users;
     const user2 = await users.create();
 
