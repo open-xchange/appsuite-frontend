@@ -155,7 +155,7 @@ define('io.ox/core/util', [
                 var node = $('<a target="_blank" rel="noopener">').attr('href', fix.url).append(that.breakableHTML(fix.url));
                 return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
-            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
+            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'] });
             text = that.injectAttribute(text, 'a', 'rel', 'noopener');
             return text;
 

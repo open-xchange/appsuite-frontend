@@ -590,7 +590,7 @@ define('io.ox/contacts/view-detail', [
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
                             var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
-                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], RETURN_DOM_FRAGMENT: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
