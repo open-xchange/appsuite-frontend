@@ -1238,7 +1238,7 @@ cockatiel@^2.0.1:
   resolved "https://registry.yarnpkg.com/cockatiel/-/cockatiel-2.0.1.tgz#2b59587d54d53d33ed49b601cfaab97cad9cc6e7"
   integrity sha512-fAw5ToPGZSnoYl5NpW2zKnY/d4gAUeP4GuGnxm7W23ayTtZipwPrIv7h3z8pq0NMDISuCEkKGsXCk3bKkzb13A==
 
-codeceptjs@^3.0.0:
+codeceptjs@3.0.5, codeceptjs@^3.0.0:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-3.0.5.tgz#9522298a53e47c716210d705027f3ad2c8ec2939"
   integrity sha512-NQxE2bBBpM8pR/p46PR13T21vBLsSIQVP8FaMgzUorAA6ueFL4pTup00OQQa6fUH6MK+i8lXYzBDWr5e8elYhg==
