@@ -181,6 +181,7 @@ define('io.ox/core/boot/util', [], function () {
             //$('#io-ox-login-feedback').busy().empty();
         },
 
+        // note: this function can be overwritten at runtime when the tab api is disabled
         checkTabHandlingSupport: function () {
             return !ox.serverConfig.openInSingleTab
                 && !_.device('ie && ie <= 11')  // no old internet explorer

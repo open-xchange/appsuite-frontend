@@ -29,10 +29,11 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'io.ox/core/a11y',
+    'io.ox/core/api/tab',
     'less!io.ox/core/viewer/style',
     // prefetch file actions
     'io.ox/files/actions'
-], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y) {
+], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y, TabAPI) {
 
     'use strict';
 
@@ -203,7 +204,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
-                    if (!isDropdownMenuItem && !isDropdownToggler && !(ox.tabHandlingEnabled && this.standalone)) {
+                    if (!isDropdownMenuItem && !isDropdownToggler && !(TabAPI.openInTabEnabled() && this.standalone)) {
                         this.viewerCloseHandler();
                     }
                     break;

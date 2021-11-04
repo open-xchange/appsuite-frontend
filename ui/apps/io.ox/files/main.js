@@ -44,6 +44,7 @@ define('io.ox/files/main', [
     'io.ox/core/notifications',
     'io.ox/backbone/views/toolbar',
     'io.ox/core/api/filestorage',
+    'io.ox/core/api/tab',
     // prefetch
     'io.ox/files/mobile-navbar-extensions',
     'io.ox/files/mobile-toolbar-actions',
@@ -54,7 +55,7 @@ define('io.ox/files/main', [
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb',
     'io.ox/files/contextmenu'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actionsUtil, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications, ToolbarView, filestorageAPI) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actionsUtil, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView, notifications, ToolbarView, filestorageAPI, tabAPI) {
 
     'use strict';
 
@@ -1103,7 +1104,7 @@ define('io.ox/files/main', [
 
             if (_.device('smartphone')) return;
 
-            var ev = ox.tabHandlingEnabled ? 'keypress' : 'keydown';
+            var ev = tabAPI.openInTabEnabled() ? 'keypress' : 'keydown';
 
             // folders
             app.listView.$el.on(ev, '.file-type-folder', function (e) {

@@ -89,11 +89,8 @@ define('io.ox/core/boot/load', [
             util.debug('Load "tabHandling"');
 
             require(['io.ox/core/api/tab']).then(function (tabAPI) {
-
-                if (!util.checkTabHandlingSupport()) {
-                    return tabAPI.disable();
-                }
-
+                if (!util.checkTabHandlingSupport()) { return tabAPI.disable(); }
+                if (capabilities.has('guest')) { return tabAPI.enableGuestMode(); }
                 return tabAPI.enable();
             });
         }

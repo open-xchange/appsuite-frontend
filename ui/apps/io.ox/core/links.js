@@ -22,8 +22,9 @@
 
 define('io.ox/core/links', [
     'io.ox/core/yell',
-    'io.ox/core/capabilities'
-], function (yell, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/api/tab'
+], function (yell, capabilities, tabApi) {
 
     'use strict';
 
@@ -57,10 +58,9 @@ define('io.ox/core/links', [
                 { action: 'load', file: { folder_id: data.folder, id: data.id }, params: params } :
                 _(data).pick('folder', 'folder_id', 'id', 'cid');
 
-        if (isOffice && ox.tabHandlingEnabled) {
-            return require(['io.ox/core/api/tab'], function (tabApi) {
-                tabApi.openChildTab(data.all);
-            });
+        if (isOffice && tabApi.openInTabEnabled()) {
+            tabApi.openChildTab(data.all);
+            return;
         }
 
         ox.launch(data.app + '/main', options).done(function () {
