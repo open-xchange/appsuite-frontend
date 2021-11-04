@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@open-xchange/bootstrap-datepicker": "1.3.1",
-    "@open-xchange/bootstrap-tokenfield": "0.13.2",
+    "@open-xchange/bootstrap-tokenfield": "0.13.3",
     "@open-xchange/hopscotch": "0.0.2",
     "@open-xchange/jquery-touch-events": "1.0.8-1f5ad59",
     "@open-xchange/tinymce": "6.0.7",
