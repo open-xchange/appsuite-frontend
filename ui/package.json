@@ -100,8 +100,8 @@
     "velocity-animate": "1.5.2"
   },
   "resolutions": {
-    "@pollyjs/adapter-puppeteer": "^5.1.0",
-    "@pollyjs/core": "^5.1.0",
+    "@pollyjs/adapter-puppeteer": "^5.1.1",
+    "@pollyjs/core": "^5.1.1",
     "xmlhttprequest-ssl": "^1.6.3",
     "y18n": "^4.0.1",
     "socket.io-parser": "^3.3.2",
