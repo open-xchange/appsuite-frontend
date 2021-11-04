@@ -95,7 +95,7 @@
     "tinymce": "4.9.10",
     "typeahead.js": "0.10.5",
     "u2f-api": "1.0.11",
-    "underscore": "1.12.1",
+    "underscore": "^1.12.1",
     "unorm": "1.4.1",
     "velocity-animate": "1.5.2"
   },
@@ -104,7 +104,8 @@
     "@pollyjs/core": "^5.1.0",
     "xmlhttprequest-ssl": "^1.6.3",
     "y18n": "^4.0.1",
-    "socket.io-parser": "^3.3.2"
+    "socket.io-parser": "^3.3.2",
+    "underscore": "^1.12.1"
   },
   "husky": {
     "hooks": {
