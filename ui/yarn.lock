@@ -2209,10 +2209,10 @@ eslint-plugin-json@^1.2.0:
   dependencies:
     vscode-json-languageservice "^3.2.1"
 
-eslint-plugin-license-header@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-license-header/-/eslint-plugin-license-header-0.2.0.tgz#97bfb3da7ae9605d998ee0602c252ff14cf1de7d"
-  integrity sha512-HAyRJa8veCE4LnJM62hxc6FGZCBIXikv2DevDz45i6AvRFlVSsCJZdNTB4CZ/9KSxKkt+EmjImjkmGW85G69tQ==
+eslint-plugin-license-header@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-license-header/-/eslint-plugin-license-header-0.2.1.tgz#01941e3074e0bc4f110220ba20244436a5f84e45"
+  integrity sha512-l+fiPajCJztDzIHJ8BA6AFy/0oDhI8ZovytzRp1dY49tiW7BP+1yKp2cv7SPlTAkTtUH1MFEYspPS4zxVhQ3QA==
   dependencies:
     requireindex "^1.2.0"
 
