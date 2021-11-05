@@ -45,9 +45,7 @@ module.exports = {
     connectDeviceWizard: function () {
         I.waitForVisible('#io-ox-topbar-settings-dropdown-icon');
         I.click('~Settings');
-        I.waitForVisible(locate('a')
-            .withText('Connect your device')
-            .inside('#topbar-settings-dropdown'));
+        I.waitForText('Connect your device');
         I.click('Connect your device', '#topbar-settings-dropdown');
         I.waitForVisible('.wizard-step');
     },
