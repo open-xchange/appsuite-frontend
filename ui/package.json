@@ -102,10 +102,11 @@
   "resolutions": {
     "@pollyjs/adapter-puppeteer": "^5.1.1",
     "@pollyjs/core": "^5.1.1",
-    "xmlhttprequest-ssl": "^1.6.3",
-    "y18n": "^4.0.1",
+    "ansi-regex": "^5.0.1",
     "socket.io-parser": "^3.3.2",
-    "underscore": "^1.12.1"
+    "underscore": "^1.12.1",
+    "xmlhttprequest-ssl": "^1.6.3",
+    "y18n": "^4.0.1"
   },
   "husky": {
     "hooks": {
