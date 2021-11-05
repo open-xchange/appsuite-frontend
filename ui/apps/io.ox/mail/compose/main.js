@@ -233,7 +233,7 @@ define('io.ox/mail/compose/main', [
             if (!capabilities.has('deputy')) return;
             if (!settings.get('compose/deputy/hint', true)) return;
 
-            var text = gt('This mail was send on behalf of another person.');
+            var text = gt('This mail has been sent on behalf of another person.');
 
             // use 'hint' to allow manipulation without affecting 'sender' (see toggleEditorMode)
             this.listenTo(this.model, 'change:sender', function (model, value) { this.config.set('hint', !!value); });
