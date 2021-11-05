@@ -44,7 +44,7 @@ module.exports = {
     // new connect your device wizard, see OXUI-793
     connectDeviceWizard: function () {
         I.waitForVisible('#io-ox-topbar-settings-dropdown-icon');
-        I.click('#io-ox-topbar-settings-dropdown-icon');
+        I.click('~Settings');
         I.waitForVisible(locate('a')
             .withText('Connect your device')
             .inside('#topbar-settings-dropdown'));
