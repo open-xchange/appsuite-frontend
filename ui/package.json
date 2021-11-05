@@ -28,7 +28,7 @@
     "eslint-config-open-xchange-appsuite": "^0.4.0",
     "eslint-plugin-codeceptjs": "^1.0.0",
     "eslint-plugin-license-header": "^0.2.1",
-    "grunt": "^1.0.4",
+    "grunt": "^1.4.1",
     "grunt-bump": "0.8.0",
     "grunt-check-dependencies": "1.0.0",
     "grunt-contrib-clean": "2.0.0",
