@@ -103,6 +103,7 @@
     "@pollyjs/adapter-puppeteer": "^5.1.1",
     "@pollyjs/core": "^5.1.1",
     "ansi-regex": "^5.0.1",
+    "getobject": "^1.0.2",
     "lodash": "^4.17.12",
     "socket.io-parser": "^3.3.2",
     "underscore": "^1.12.1",
