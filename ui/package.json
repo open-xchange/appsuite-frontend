@@ -45,7 +45,7 @@
     "husky": ">=4",
     "karma": "^5.2.3",
     "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^3.0.0",
+    "karma-chrome-launcher": "^3.1.0",
     "karma-junit-reporter": "^2.0.1",
     "karma-mocha": "^2.0.1",
     "karma-ox-ui": "^0.3.0",
