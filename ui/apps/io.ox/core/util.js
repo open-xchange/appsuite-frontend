@@ -54,7 +54,8 @@ define('io.ox/core/util', [
     //     }
     // });
 
-    var regUrl = /(((https?|ftps?):\/\/)[^\s"]+)/gim;
+    // basically regex from mail/detail/links.js tweaked to our needs
+    var regUrl = /(((http|https|ftp|ftps):\/\/|www\.)[^\s"]+)/gim;
 
     var that = {
 
