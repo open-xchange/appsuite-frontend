@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-04-23 13:14+0200\n"
+"PO-Revision-Date: 2021-11-08 13:57+0100\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5317,6 +5317,21 @@ msgid "User name"
 msgstr "Username"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Reset password"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Set password"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-mail address"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Sign in"
@@ -5496,13 +5511,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Next"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-mail address"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6563,7 +6571,6 @@ msgstr "About"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Connect your Device"
 
@@ -9054,6 +9061,12 @@ msgstr "External users"
 msgid "Internal users"
 msgstr "Internal users"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Reviewer"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9064,12 +9077,6 @@ msgstr "Viewer"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Read only"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Reviewer"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9093,6 +9100,10 @@ msgstr "Internal user"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Group"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Guests are only allowed to have viewer rights."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9187,14 +9198,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Anyone with the link and invited people"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Listed people only"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Anyone with the link and listed people"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Who can access this file?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Who can access this calendar?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Who can access this folder?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Share %1$s \"%2$s\""
+msgid "calendar"
+msgstr "calendar"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9207,6 +9232,12 @@ msgstr "file"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "folder"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Share %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9256,6 +9287,14 @@ msgstr "Copy link"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Anyone on the internet with the link can view the file."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Anyone on the Internet with the link can view the calendar."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Anyone on the Internet with the link can view the folder."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -10209,6 +10248,16 @@ msgid ""
 msgstr ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Email quota limit reached. You have to use %1$s or reduce the email size in "
+"some other way."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -12667,7 +12716,7 @@ msgid "Install"
 msgstr "Install"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12737,6 +12786,7 @@ msgstr "Incomplete configuration."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Connect your device"
 
@@ -12757,10 +12807,6 @@ msgstr ""
 "in your CalDav client:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Please scan this code with your phone's camera:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12768,12 +12814,26 @@ msgstr ""
 "To synchronise Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Please scan this code with your phone's camera:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Scan this code with your phone's camera to synchronise your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12830,17 +12890,17 @@ msgid "Email with %1$s"
 msgstr "E-mail with %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "E-mail with Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "E-mail with iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13168,32 +13228,6 @@ msgstr "More than the currently displayed %1$s items were found"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Allow connections with untrusted certificates"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Password recovery"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Show information about account recovery"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Recover passwords"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15843,6 +15877,26 @@ msgstr "Invite to %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Add on %s"
+
+#~ msgid "Password recovery"
+#~ msgstr "Password recovery"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Show information about account recovery"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Recover passwords"
 
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-09-24 11:08+0200\n"
+"PO-Revision-Date: 2021-11-08 13:49+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5365,6 +5365,21 @@ msgid "User name"
 msgstr "Benutzername"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Passwort festlegen"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Anmelden"
@@ -5552,13 +5567,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Weiter"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-Mail-Adresse"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9310,6 +9318,14 @@ msgid "Anyone with the link and invited people"
 msgstr "Jeder mit dem Link und eingeladene Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Nur aufgeführte Personen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Jeder mit dem Link und aufgeführte Personen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
 msgstr "Wer kann auf diese Datei zugreifen?"
 
@@ -10367,6 +10383,16 @@ msgid ""
 msgstr ""
 "Der Anhang ist zu groß. Sie müssen %1$s verwenden oder die Dateigröße des "
 "Anhangs reduzieren."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Der maximale E-Mail-Speicherplatz wurde erreicht. Sie müssen %1$s verwenden "
+"oder die E-Mailgröße auf andere Weise reduzieren."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -17552,13 +17578,6 @@ msgstr "Zu %s hinzufügen"
 #~ msgid_plural "Attachments"
 #~ msgstr[0] "Anlage "
 #~ msgstr[1] "Anlagen"
-
-#~ msgid ""
-#~ "Attachment file size to large. You have to use %1$s or reduce the "
-#~ "attachment file size."
-#~ msgstr ""
-#~ "Der Anhang ist zu groß. Sie müssen%1$s verwenden oder die Dateigröße des "
-#~ "Anhangs reduzieren."
 
 #~ msgid ""
 #~ "Attachment size to large. Please remove attachments or reduce the file "

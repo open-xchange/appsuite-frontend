@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:41+0100\n"
+"PO-Revision-Date: 2021-11-08 14:03+0100\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4128,7 +4128,7 @@ msgstr "%1$s, %2$s, és %3$s gépel ..."
 #. %1$s and %2$s are member names, %3$d is the number of further members
 #: apps/io.ox/chat/views/typing.js module:io.ox/chat
 msgid "%1$s, %2$s and %3$d others are typing ..."
-msgstr "%1$s, %2$s és %3$d másik gépel ..."
+msgstr "%1$s, %2$s, és még %3$s személy gépel ..."
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -5335,6 +5335,23 @@ msgid "User name"
 msgstr "Felhasználónév"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Jelszó használata"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Jelszó beállítása"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-mail cím"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Bejelentkezés"
@@ -5493,6 +5510,8 @@ msgid "Imprint"
 msgstr "Imprint"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "Új jelszó megerősítése"
 
@@ -5519,13 +5538,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Következő"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-mail cím"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6599,7 +6611,6 @@ msgstr "Névjegy"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Eszköz csatlakoztatása"
 
@@ -8366,7 +8377,8 @@ msgstr "Megjegyzés"
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr "Változtatásait gyorsan elmentheti a Ctrl+Enter megnyomásával."
+msgstr ""
+"A módosításokat gyorsan elmentheti a Ctrl+Enter billentyűkombinációval."
 
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "This file will be written in your default folder to allow editing"
@@ -9100,6 +9112,12 @@ msgstr "Külső felhasználók"
 msgid "Internal users"
 msgstr "Belső felhasználók"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Felülvizsgáló"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9110,12 +9128,6 @@ msgstr "Olvasó"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Csak olvasás"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Felülvizsgáló"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9139,6 +9151,10 @@ msgstr "Belső felhasználó"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Csoport"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "A vendégek csak megtekintő jogokkal rendelkezhetnek."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9233,14 +9249,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Bárki, aki rendelkezik a hivatkozással és a meghívott személyek"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Csak a felsorolt személyek"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Bárki, aki rendelkezik a hivatkozással és a felsorolt személyek"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Ki férhet hozzá ehhez a fájlhoz?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Ki férhet hozzá ehhez a naptárhoz?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Ki férhet hozzá ehhez a mappához?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "%1$s \"%2$s\" megosztása"
+msgid "calendar"
+msgstr "naptár"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9253,6 +9283,12 @@ msgstr "fájl"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "mappa"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "%1$s \"%2$s\" megosztása"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9302,6 +9338,14 @@ msgstr "Hivatkozás másolása"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "A hivatkozás birtokában bárki megtekintheti a fájlt."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "A hivatkozás birtokában bárki megtekintheti a naptárt."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "A hivatkozás birtokában bárki megtekintheti a mappát."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9935,6 +9979,10 @@ msgstr ""
 "maximális %2$s fájlméretet"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
@@ -10257,6 +10305,16 @@ msgid ""
 msgstr ""
 "A melléklet mérete túl nagy. Vagy a(z) %1$s szolgáltatást használja vagy "
 "csökkentenie kell a melléklet méretét."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Elérte a levélkvóta korlátját. A(z) %1$s szolgáltatást kell használnia, vagy "
+"más módon csökkentenie kell a levélméretet."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10969,8 +11027,10 @@ msgid "Edit rule"
 msgstr "Szabály szerkesztése"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Mentés és alkalmazás"
+msgstr "Szabály azonnali mentése és engedélyezése"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -10998,6 +11058,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Húzza a szűrőszabályok átrendezéséhez"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Válassza ki a mappát, amelyre a szabályt alkalmazza"
 
@@ -12722,7 +12784,7 @@ msgid "Install"
 msgstr "Telepítés"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Prémium"
 
@@ -12794,6 +12856,7 @@ msgstr "Befejezetlen beállítás."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Eszköz csatlakoztatása"
 
@@ -12814,10 +12877,6 @@ msgstr ""
 "a CalDav kliensben:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Olvassa be ezt a kódot a telefon kamerájával:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12825,12 +12884,26 @@ msgstr ""
 "A Mail, a Naptár és a Címjegyzék szinkronizálásához az Exchange Active Sync "
 "segítségével adja meg a következő beállításokat:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Olvassa be ezt a kódot a telefon kamerájával:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Olvassa be ezt a kódot a telefon kamerájával, hogy szinkronizálja leveleit, "
+"naptárát és címjegyzékét az Exchange Active Sync segítségével:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12887,17 +12960,17 @@ msgid "Email with %1$s"
 msgstr "Email %1$s alkalmazással"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "Email Apple Maillel"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "Email iOS Maillel"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13226,33 +13299,6 @@ msgstr "A megjelenített %1$s elemnél több is található"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Nem megbízható tanúsítvánnyal rendelkező kapcsolatok elfogadása"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Jelszó visszaállítása"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Információ megjelenítése a felhasználói fiók visszaállításáról"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Biztonsági okokból az összes hitelesítési adat titkosítva van az elsődleges "
-"felhasználói fiók jelszavával. Amennyiben megváltoztatja az elsődleges "
-"jelszót, akkor előfordulhat, hogy a külső felhasználói fiókok nem fognak "
-"működni. Ebben az esetben a régi jelszót használhatja a felhasználói fiókok "
-"jelszavainak visszaállítására."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Jelszavak visszaállítása"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -14243,11 +14289,11 @@ msgstr "A feladat törölve"
 
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "Tasks have been deleted"
-msgstr "A feladatok törölve"
+msgstr "A feladatok törölve lettek"
 
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "Task has been deleted already"
-msgstr "A feladat törölve lettek"
+msgstr "A feladatot már törölték"
 
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 msgid "The task could not be deleted."
@@ -15903,6 +15949,254 @@ msgstr "Meghívás ide: %s"
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
 
+#~| msgid "Rotate image"
+#~ msgid "Rotate left"
+#~ msgstr "Forgatás balra"
+
+#~| msgid "Rotate image"
+#~ msgid "Rotate right"
+#~ msgstr "Forgatás jobbra"
+
+#~| msgid "The appointment has been added to your calendar"
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Automatikusan alkalmazza az e mailben kapott találkozó módosításait a "
+#~ "naptárában"
+
+#~| msgid "unknown sender"
+#~ msgid "Only from known senders"
+#~ msgstr "Csak az ismert feladóktól"
+
+#~ msgid "Always"
+#~ msgstr "Mindig"
+
+#~| msgid "The appointment has been deleted"
+#~ msgid "This appointment was cancelled."
+#~ msgstr "A találkozót törölték"
+
+#~| msgid "Connection error"
+#~ msgid "Connection problems"
+#~ msgstr "Kapcsolódási hiba"
+
+#~| msgid "%1$d item selected"
+#~| msgid_plural "%1$d items selected"
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d névjegy kijelölve"
+#~ msgstr[1] "%1$d névjegy kijelölve"
+
+#~| msgid "Remove contact"
+#~ msgid "Remove contact from selection"
+#~ msgstr "Névjegy eltávolítása a kiválasztásból"
+
+#~| msgid "Select contacts"
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "%1$s kiválasztása/törlése"
+
+#~| msgid "Show task details"
+#~ msgid "Show contact details"
+#~ msgstr "Névjegy részleteinek megjelenítése"
+
+#~| msgid "Contacts"
+#~ msgid "Contact list"
+#~ msgstr "Névjegyzék"
+
+#~| msgid "Start search"
+#~ msgid "Last searched for"
+#~ msgstr "Utolsó keresés:"
+
+#~| msgid "No items found"
+#~ msgid "No contacts found."
+#~ msgstr "Nem találhatók névjegyek."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Elérte a megjelenítendő névjegyek korlátját: %1$d. Kérjük, adjon meg egy "
+#~ "keresési kifejezést az eredmények szűkítéséhez."
+
+#~| msgid "Email addresses"
+#~ msgid "Global address list"
+#~ msgstr "Globális címjegyzék"
+
+#~| msgid "Search results"
+#~ msgid "Search all address lists"
+#~ msgstr "Keresés az összes címjegyzékekben"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load contacts"
+#~ msgstr "A kapcsolatok nem tölthetők be"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Név, osztály, pozíció keresése"
+
+#~| msgctxt "verb"
+#~| msgid "Filter"
+#~ msgid "Filter"
+#~ msgstr "Szűrő"
+
+#~| msgid "Other address"
+#~ msgid "Filter address lists"
+#~ msgstr "Címjegyzékek szűrése"
+
+#~| msgid "Address"
+#~ msgid "Address list"
+#~ msgstr "Címjegyzék"
+
+#~| msgid "Add to address book"
+#~ msgid "Could not load address book."
+#~ msgstr "Nem sikerült betölteni az címjegyzéket."
+
+#~| msgid "%1$s %2$s"
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Engedélyezett e-mailek küldése az Ön nevében"
+
+#~| msgid "Date: %1$s"
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Helyettes: %1$s"
+
+#~| msgid "Twitter reported the following errors:"
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "A helyettes a következő jogosultságokkal rendelkezik"
+
+#~| msgid "View details"
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Megtekintő (e-mailek olvasása)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Szerkesztő (e-mailek írása és szerkesztése)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Szerző (e-mailek írása, szerkesztése és törlése)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "A helyettes e-maileket küldhet az Ön nevében"
+
+#~| msgid "New appointment"
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Megtekintő (találkozók megtekintése)"
+
+#~| msgid "Edit this appointment"
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Szerkesztő (találkozók írása és szerkesztése)"
+
+#~| msgid "Show declined appointments"
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Szerző (találkozók írása, szerkesztése és törlése)"
+
+#~ msgid "save"
+#~ msgstr "mentés"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not create deputy."
+#~ msgstr "Nem sikerült létrehozni a helyettest."
+
+#~| msgid "no delete permissions"
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Nem sikerült frissíteni a helyettesi jogosultságokat."
+
+#~| msgid "Removed %1$s."
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "%1$s helyettes eltávolítása"
+
+#~| msgid ""
+#~| "Do you really want to remove the extension \".%1$s\" from your filename?"
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Szeretné eltávolítani %1$s helyettest a listájáról"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not remove deputy."
+#~ msgstr "Nem sikerült eltávolítani a helyettest."
+
+#~| msgid "There are currently no participants."
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Jelenleg nincs kijelölt helyettese."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "A helyettesek hozzáférhetnek a beérkező levelekhez és a naptárhoz."
+
+#~| msgid "Remove"
+#~ msgid "Remobe"
+#~ msgstr "Eltávolítás"
+
+#~| msgid "Manage applications"
+#~ msgid "Manage deputies"
+#~ msgstr "Helyettesek kezelése"
+
+#~ msgid "Add people"
+#~ msgstr "Személy hozzáadása"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load deputy data."
+#~ msgstr "Nem sikerült betölteni a helyettes adatait."
+
+#~| msgid "Address Other"
+#~ msgid "Address directory"
+#~ msgstr "Címlista"
+
+#~| msgid "You can quick-save your changes via Ctrl+Enter."
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr ""
+#~ "A módosításokat gyorsan elmentheti a Cmd+Enter billentyűkombinációval."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "A fájl leírása csak %1$d karakter hosszú lehet."
+
+#~ msgid "Deputy"
+#~ msgstr "Helyettes"
+
+#~| msgid ""
+#~| "The files cannot be uploaded because each file exceeds the maximum file "
+#~| "size of %1$s"
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "A feltöltött melléklet meghaladja a maximális e-mail méretet (%1$s)"
+
+#~| msgid ""
+#~| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+#~| "size of %2$s"
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr "A feltöltött melléklet meghaladja a maximális e-mail méretet (%1$s)"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "A feladó címe egy letiltott e-mail fiókhoz kapcsolódik. Kérjük, válasszon "
+#~ "másik feladói címet, vagy a beállításokban engedélyezze újra."
+
+#~| msgid "Apply filter"
+#~ msgid "Apply filter rule"
+#~ msgstr "Szűrési szabály alkalmazása"
+
+#~ msgid "Password recovery"
+#~ msgstr "Jelszó visszaállítása"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Információ megjelenítése a felhasználói fiók visszaállításáról"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Biztonsági okokból az összes hitelesítési adat titkosítva van az "
+#~ "elsődleges felhasználói fiók jelszavával. Amennyiben megváltoztatja az "
+#~ "elsődleges jelszót, akkor előfordulhat, hogy a külső felhasználói fiókok "
+#~ "nem fognak működni. Ebben az esetben a régi jelszót használhatja a "
+#~ "felhasználói fiókok jelszavainak visszaállítására."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Jelszavak visszaállítása"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -16020,9 +16314,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgid "Private chats only"
 #~ msgstr "Csak privát csevegés"
 
-#~ msgid "Always"
-#~ msgstr "Mindig"
-
 #~ msgid "Join chat"
 #~ msgstr "Csatlakozás a csevegéshez"
 
@@ -16107,9 +16398,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Olvasás, írás és törlés)"
 
-#~ msgid "Add people"
-#~ msgstr "Személyek hozzáadása"
-
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Adjon meg egy üzenetet a felhasználók értesítéséhez"
 
@@ -16165,9 +16453,6 @@ msgstr "Hozzáadás itt: %s"
 #~ "A jelenleg szerkesztett melléklettel rendelkező piszkozatokat nem lehet "
 #~ "törölni mindaddig, amíg be nem zárja a kapcsolódó levélszerkesztési "
 #~ "ablakot."
-
-#~ msgid "Address"
-#~ msgstr "Cím"
 
 #~ msgid "Manual Configuration"
 #~ msgstr "Kézi beállítás"
@@ -17133,9 +17418,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgid "Email 1 / Phone number"
 #~ msgstr "1. e-mail / telefonszám"
 
-#~ msgid "Email addresses"
-#~ msgstr "E-mail címek"
-
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-mail értesítés elfogadásról és visszautasításról"
 
@@ -17568,9 +17850,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgid "Mails have been moved"
 #~ msgstr "A levelek áthelyezésre kerültek"
 
-#~ msgid "Manage applications"
-#~ msgstr "Alkalmazások kezelése"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Jogosultság kezelése"
 
@@ -17946,9 +18225,6 @@ msgstr "Hozzáadás itt: %s"
 
 #~ msgid "Restore applications"
 #~ msgstr "Alkalmazások visszaállítása"
-
-#~ msgid "Rotate image"
-#~ msgstr "Kép forogatása"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Szabály alkalmazása ettől:"
@@ -18367,12 +18643,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgstr[1] ""
 #~ "A fájlok nem tölthető fel, mert meghaladják a kvótakorlátot (%1$s)"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "A fájlok nem tölthetők fel, mert meghaladják a maximális %1$s fájlméretet"
-
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
 #~ "A következő műveletek jutnak érvényre a mappában található összes üzentre "
@@ -18461,9 +18731,6 @@ msgstr "Hozzáadás itt: %s"
 #~ "timezone (%2$s)."
 #~ msgstr ""
 #~ "A találkozó időzónája (%1$s) eltár az alapértelmezett időzónától (%2$s)."
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Jelenleg nincsenek résztvevők."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

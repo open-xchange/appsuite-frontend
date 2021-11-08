@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-25 14:19+0100\n"
+"PO-Revision-Date: 2021-11-08 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -5265,6 +5265,23 @@ msgid "User name"
 msgstr "用戶名"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "使用密碼"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "設定密碼"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "電子郵件地址"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "登入"
@@ -5415,6 +5432,8 @@ msgid "Imprint"
 msgstr "版權聲明"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "確認新密碼"
 
@@ -5441,13 +5460,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "下一個"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "電子郵件地址"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6492,7 +6504,6 @@ msgstr "關於"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "連線至裝置"
 
@@ -8928,6 +8939,12 @@ msgstr "外部使用者"
 msgid "Internal users"
 msgstr "內部使用者"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "評論者"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -8938,12 +8955,6 @@ msgstr "檢視者"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "唯讀"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "評論者"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -8967,6 +8978,10 @@ msgstr "內部使用者"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "組"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "訪客僅能取得檢視者權限。"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9061,14 +9076,28 @@ msgid "Anyone with the link and invited people"
 msgstr "任何收到連結的人和受邀請的人"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "僅列出的成員"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "任何收到連結或受邀的成員"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "誰能存取此檔案？"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "誰能存取此行事曆？"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "誰能存取此資料夾？"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "分享「%2$s」%1$s"
+msgid "calendar"
+msgstr "行事曆"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9081,6 +9110,12 @@ msgstr "檔案"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "資料夾"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "分享「%2$s」%1$s"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9130,6 +9165,14 @@ msgstr "複製連結"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "網路上任何擁有此連結的人都可以檢視檔案。"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "網路上任何擁有此連結的人都可以檢視行事曆。"
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "網路上任何擁有此連結的人都可以檢視資料夾。"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9232,7 +9275,7 @@ msgstr "請注意，更改或移除副檔名將會導致檢視或編輯發生問
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
-msgstr "確定要從你的檔案名稱移除副檔名「.%1$s」嗎？"
+msgstr "確定要從檔案名稱移除副檔名「.%1$s」嗎？"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -9745,10 +9788,14 @@ msgid ""
 msgstr "因為超過了公開附件檔案大小限制 %2$s，無法上傳檔案「%1$s」"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
-msgstr "因為超過了資訊儲存空間配額大小限制 %2$s，無法上傳檔案「%1$s」"
+msgstr "因為超過了資訊儲存空間配額大小限制 %2$s，無法上傳附件"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10050,6 +10097,14 @@ msgid ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
 msgstr "附件檔案太大，您需要使用 %1$s 或縮小附件檔案。"
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr "郵件服務空間配額已滿，您需要使用 %1$s 或縮小附件檔案。"
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10748,8 +10803,10 @@ msgid "Edit rule"
 msgstr "編輯規則"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "儲存與套用"
+msgstr "儲存並套用規則"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -10777,6 +10834,8 @@ msgid "Drag to reorder filter rules"
 msgstr "拖曳以重排過濾規則"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "選擇要將規則套用到的資料夾"
 
@@ -12462,7 +12521,7 @@ msgid "Install"
 msgstr "安裝"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "收費"
 
@@ -12532,6 +12591,7 @@ msgstr "設定不完整。"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "連結您的裝置"
 
@@ -12548,10 +12608,6 @@ msgid ""
 msgstr "若要與您手機上的行事曆同步，請在您的 CardDav 客戶端輸入下列設定："
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "請使用手機的相機掃描此代碼："
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12559,12 +12615,26 @@ msgstr ""
 "若要透過 Exchange Active Sync 同步您的郵件、行事曆、通訊錄，請在輸入下列設"
 "定："
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "請使用手機的相機掃描此代碼："
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"請使用您的手機相機掃描下列代碼，以透過 Exchange Active Sync 同步您的郵件、行"
+"事曆與通訊錄："
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12621,17 +12691,17 @@ msgid "Email with %1$s"
 msgstr "使用 %1$s 郵寄"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "使用 Apple Mail 郵寄"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "使用 iOS Mail 郵寄"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -12949,31 +13019,6 @@ msgstr "找到超過目前顯示的 %1$s 個項目"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "允許連線至使用未受信任憑證的伺服器"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "密碼救援"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "顯示帳號救援資訊"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"由於安全性因素，所有帳號密碼皆使用您主要帳號的密碼加密。若您變更您的主要密"
-"碼，您的外部帳號可能會無法再使用。這種情況下，您可以使用您的舊密碼來恢復所有"
-"帳號的密碼。"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "找回密碼"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15563,6 +15608,198 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid "Rotate left"
+#~ msgstr "逆時針旋轉"
+
+#~ msgid "Rotate right"
+#~ msgstr "順時針旋轉"
+
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr "自動將收到的約會變更郵件加入行事曆"
+
+#~ msgid "Only from known senders"
+#~ msgstr "僅來自已知寄件者"
+
+#~ msgid "Always"
+#~ msgstr "總是"
+
+#~ msgid "This appointment was cancelled."
+#~ msgstr "約會已取消。"
+
+#~ msgid "Connection problems"
+#~ msgstr "連線問題"
+
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "已選擇 %1$d 位聯絡人"
+#~ msgstr[1] "已選擇 %1$d 個項目"
+
+#~ msgid "Remove contact from selection"
+#~ msgstr "從選擇項目中移除聯絡人"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "選擇/取消選擇聯絡人「%1$s」"
+
+#~ msgid "Show contact details"
+#~ msgstr "顯示聯絡人詳情"
+
+#~ msgid "Contact list"
+#~ msgstr "聯絡人清單"
+
+#~ msgid "Last searched for"
+#~ msgstr "上次搜尋"
+
+#~ msgid "No contacts found."
+#~ msgstr "找不到聯絡人"
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr "有超過 %1$d 位連絡人可顯示，請輸入搜尋詞彙來減少結果。"
+
+#~ msgid "Global address list"
+#~ msgstr "全域聯絡人清單"
+
+#~ msgid "Search all address lists"
+#~ msgstr "搜尋所有通訊錄"
+
+#~ msgid "Could not load contacts"
+#~ msgstr "無法載入聯絡人"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "搜尋姓名、單位、職稱"
+
+#~ msgid "Filter"
+#~ msgstr "過濾"
+
+#~ msgid "Filter address lists"
+#~ msgstr "過濾通訊錄"
+
+#~ msgid "Address list"
+#~ msgstr "通訊錄"
+
+#~ msgid "Could not load address book."
+#~ msgstr "無法載入通訊錄。"
+
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s（%2$s）"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "允許用您的身分寄發郵件"
+
+#~ msgid "Deputy: %1$s"
+#~ msgstr "代理人：%1$s"
+
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "代理人有下列權限"
+
+#~ msgid "Viewer (read emails)"
+#~ msgstr "檢視者（閱讀郵件）"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "編輯者（建立、編輯郵件）"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "作者（建立、編輯、刪除郵件）"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "代理人能用您的身分寄發郵件"
+
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "檢視者（檢視約會）"
+
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "編輯（建立、編輯約會）"
+
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "作者（建立、編輯、刪除約會）"
+
+#~ msgid "save"
+#~ msgstr "儲存"
+
+#~ msgid "Could not create deputy."
+#~ msgstr "無法建立代理人。"
+
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "無法更新代理人權限。"
+
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "刪除代理人「%1$s」"
+
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "確定要從您的代理人清單刪除「%1$s」嗎？"
+
+#~ msgid "Could not remove deputy."
+#~ msgstr "無法刪除代理人。"
+
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "目前未指派代理人。"
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "代理人能存取您的收件匣與行事曆。"
+
+#~ msgid "Remobe"
+#~ msgstr "刪除"
+
+#~ msgid "Manage deputies"
+#~ msgstr "管理代理人"
+
+#~ msgid "Add people"
+#~ msgstr "新增人員"
+
+#~ msgid "Could not load deputy data."
+#~ msgstr "無法載入代理人資料。"
+
+#~ msgid "Address directory"
+#~ msgstr "通訊錄"
+
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "您可以按下 Cmd+Enter 快速儲存修改。"
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "檔案描述僅能有 %1$d 字元長。"
+
+#~ msgid "Deputy"
+#~ msgstr "代理人"
+
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "因為附件超過了郵件大小限制 %1$s，無法上傳"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr "因為超過了檔案大小限制 %1$s，無法上傳檔案"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "此寄件地址與停用的郵件帳號相關，請選擇另一組地址，或到設定中啟用帳號。"
+
+#~ msgid "Apply filter rule"
+#~ msgstr "套用過濾規則"
+
+#~ msgid "Password recovery"
+#~ msgstr "密碼救援"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "顯示帳號救援資訊"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "由於安全性因素，所有帳號密碼皆使用您主要帳號的密碼加密。若您變更您的主要密"
+#~ "碼，您的外部帳號可能會無法再使用。這種情況下，您可以使用您的舊密碼來恢復所"
+#~ "有帳號的密碼。"
+
+#~ msgid "Recover passwords"
+#~ msgstr "找回密碼"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -15670,9 +15907,6 @@ msgstr "新增至 %s"
 #~ msgid "Private chats only"
 #~ msgstr "僅私人聊天"
 
-#~ msgid "Always"
-#~ msgstr "總是"
-
 #~ msgid "Join chat"
 #~ msgstr "加入聊天"
 
@@ -15750,9 +15984,6 @@ msgstr "新增至 %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "（讀、寫、刪除）"
-
-#~ msgid "Add people"
-#~ msgstr "新增人員"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "請輸入訊息通知使用者"
@@ -16051,9 +16282,6 @@ msgstr "新增至 %s"
 #~ "on your hard drive. Send it anyway?"
 #~ msgstr ""
 #~ "您附加了一個空白檔案，可能是這個檔案已從您的硬碟中刪除。還是要傳送嗎？"
-
-#~ msgid " %1$s (%2$s) "
-#~ msgstr " %1$s (%2$s)"
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
@@ -16566,9 +16794,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Address (private)"
 #~ msgstr "地址（私人）"
-
-#~ msgid "Addresses"
-#~ msgstr "地址"
 
 #~ msgid "Admin"
 #~ msgstr "管理"
@@ -18150,9 +18375,6 @@ msgstr "新增至 %s"
 #~ msgid "Email Address:"
 #~ msgstr "電子郵件位址:"
 
-#~ msgid "Email addresses"
-#~ msgstr "電子郵件位址"
-
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "接受/拒絕的電子郵件通知"
 
@@ -19130,9 +19352,6 @@ msgstr "新增至 %s"
 #~ msgid "Mails have been moved"
 #~ msgstr "郵件已移動"
 
-#~ msgid "Manage applications"
-#~ msgstr "管理應用程式"
-
 #~ msgid "Manage permission now"
 #~ msgstr "立刻管理權限"
 
@@ -19833,9 +20052,6 @@ msgstr "新增至 %s"
 #~| msgid "Romanian"
 #~ msgid "Romania"
 #~ msgstr "羅馬尼亞文"
-
-#~ msgid "Rotate image"
-#~ msgstr "旋轉圖片"
 
 #~ msgid "Rule applies from"
 #~ msgstr "規則套用自"
@@ -20563,11 +20779,6 @@ msgstr "新增至 %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "此檔案於 %1$s 可用"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr "因為超過了檔案大小限制 %1$s，無法上傳"
-
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "資料夾於 %1$s 可用"
 
@@ -20710,9 +20921,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Theme colors"
 #~ msgstr "佈景主題色彩"
-
-#~ msgid "There are currently no participants."
-#~ msgstr "目前沒有參與者"
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

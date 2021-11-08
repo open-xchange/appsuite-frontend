@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:41+0100\n"
+"PO-Revision-Date: 2021-11-08 14:04+0100\n"
 "Last-Translator: Vincenzo Reale <vincenzo@workshop-chapina.com>\n"
-"Language-Team: Italian <it@workshop-chapina.it>\n"
+"Language-Team: Italian <it@workshop-chapina.com>\n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5346,6 +5346,23 @@ msgid "User name"
 msgstr "Nome utente"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Utilizza password"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Imposta password"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Indirizzo di posta elettronica"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Accedi"
@@ -5503,7 +5520,7 @@ msgstr "Note legali"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Confirm new password"
-msgstr "Conferma nuova password"
+msgstr "Conferma la nuova password"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5528,13 +5545,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Avanti"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Indirizzo di posta elettronica"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6608,7 +6618,6 @@ msgstr "Informazioni"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Connetti il tuo dispositivo"
 
@@ -9136,6 +9145,12 @@ msgstr "Utenti esterni"
 msgid "Internal users"
 msgstr "Utenti interni"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Revisore"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9146,12 +9161,6 @@ msgstr "Visualizzatore"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Sola lettura"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Revisore"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9175,6 +9184,10 @@ msgstr "Utente interno"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Gruppo"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Gli ospiti possono avere solo i permessi di visualizzazione."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9269,14 +9282,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Chiunque abbia il collegamento e le persone invitate"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Solo le persone elencate"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Chiunque abbia il collegamento e le persone elencate"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Chi può accedere a questo file?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Chi può accedere a questo calendario?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Chi può accedere a questa cartella?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Condividi %1$s \"%2$s\""
+msgid "calendar"
+msgstr "calendario"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9289,6 +9316,12 @@ msgstr "file"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "cartella"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Condividi %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9338,6 +9371,15 @@ msgstr "Copia collegamento"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Chiunque su Internet con il collegamento può visualizzare il file."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr ""
+"Chiunque su Internet con il collegamento può visualizzare il calendario."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Chiunque su Internet con il collegamento può visualizzare la cartella."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9973,12 +10015,16 @@ msgstr ""
 "dei file per la pubblicazione di allegati di %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Il file \"%1$s\" non può essere caricato poiché supera il limite di quota "
-"del deposito informazioni di %2$s"
+"L'allegato non può essere caricato poiché supera il limite di quota del "
+"deposito informazioni di %2$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10303,6 +10349,16 @@ msgid ""
 msgstr ""
 "Dimensione degli allegati troppo grande. Devi utilizzare %1$s o ridurre la "
 "dimensione dei file allegati."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Limite di quota per la posta raggiunto. Devi utilizzare %1$s o ridurre la "
+"dimensione in altro modo."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -11026,8 +11082,10 @@ msgid "Edit rule"
 msgstr "Modifica regola"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Salva e applica"
+msgstr "Salva e applica subito la regola"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -11055,6 +11113,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Trascina per riordinare le regole di filtro"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Seleziona la cartella alla quale applicare la regola"
 
@@ -12783,7 +12843,7 @@ msgid "Install"
 msgstr "Installa"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12853,6 +12913,7 @@ msgstr "Configurazione incompleta."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Connetti il tuo dispositivo"
 
@@ -12873,10 +12934,6 @@ msgstr ""
 "impostazioni nel client CalDav:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Scansiona questo codice con la fotocamera del tuo telefono:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12884,12 +12941,26 @@ msgstr ""
 "Per sincronizzare posta, calendario e rubrica tramite Exchange Active Sync, "
 "inserire le seguenti impostazioni:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Scansiona questo codice con la fotocamera del tuo telefono:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Scansiona questo codice con la fotocamera del tuo telefono per sincronizzare "
+"la posta, il calendario e la rubrica tramite Exchange Active Sync:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12946,17 +13017,17 @@ msgid "Email with %1$s"
 msgstr "Messaggio di posta con %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "Messaggio di posta con Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "Messaggio di posta con iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13291,32 +13362,6 @@ msgstr "Sono stati trovati più elementi dei %1$s attualmente visualizzati"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Tutte le connessioni con certificati non affidabili"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Recupero della password"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Mostra le informazioni sul recupero dell'account"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Per ragioni di sicurezza, tutte le credenziali sono cifrate con la password "
-"principale del tuo account. Se cambi la password principale, gli account "
-"esterni potrebbero smettere di funzionare. In questo caso, puoi utilizzare "
-"la vecchia password per ripristinare tutte le password degli account."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Ripristina le password"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15995,6 +16040,260 @@ msgstr "Invita a %s"
 msgid "Add on %s"
 msgstr "Aggiungi su %s"
 
+#~| msgid "Rotate image"
+#~ msgid "Rotate left"
+#~ msgstr "Ruota a sinistra"
+
+#~| msgid "Rotate image"
+#~ msgid "Rotate right"
+#~ msgstr "Ruota a destra"
+
+#~| msgid "The appointment has been added to your calendar"
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Applica automaticamente le modifiche agli appuntamenti ricevute tramite "
+#~ "posta al tuo calendario"
+
+#~| msgid "unknown sender"
+#~ msgid "Only from known senders"
+#~ msgstr "Solo da mittenti conosciuti"
+
+#~ msgid "Always"
+#~ msgstr "Sempre"
+
+#~| msgid "The appointment has been deleted"
+#~ msgid "This appointment was cancelled."
+#~ msgstr "L'appuntamento è stato annullato."
+
+#~| msgid "Connection error"
+#~ msgid "Connection problems"
+#~ msgstr "Problemi di connessione"
+
+#~| msgid "%1$d item selected"
+#~| msgid_plural "%1$d items selected"
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d contatto selezionato"
+#~ msgstr[1] "%1$d contatti selezionati"
+
+#~| msgid "Remove contact"
+#~ msgid "Remove contact from selection"
+#~ msgstr "Rimuovi contatto dalla selezione"
+
+#~| msgid "Select contacts"
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Seleziona/Deseleziona il contatto %1$s"
+
+#~| msgid "Show task details"
+#~ msgid "Show contact details"
+#~ msgstr "Mostra i dettagli del contatto"
+
+#~| msgid "Contacts"
+#~ msgid "Contact list"
+#~ msgstr "Elenco dei contatti"
+
+#~| msgid "Start search"
+#~ msgid "Last searched for"
+#~ msgstr "Ultima ricerca"
+
+#~| msgid "No items found"
+#~ msgid "No contacts found."
+#~ msgstr "Nessun contatto trovato."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Hai raggiunto il limite di %1$d contatti da visualizzare. Inserisci un "
+#~ "termine di ricerca per restringere i risultati."
+
+#~| msgid "Email addresses"
+#~ msgid "Global address list"
+#~ msgstr "Elenco di indirizzi globale"
+
+#~| msgid "Search results"
+#~ msgid "Search all address lists"
+#~ msgstr "Cerca tutti gli elenchi di indirizzi"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load contacts"
+#~ msgstr "Impossibile caricare i contatti"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Cerca per nome, reparto, posizione"
+
+#~| msgctxt "verb"
+#~| msgid "Filter"
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#~| msgid "Other address"
+#~ msgid "Filter address lists"
+#~ msgstr "Filtra gli elenchi di indirizzi"
+
+#~| msgid "Addresses"
+#~ msgid "Address list"
+#~ msgstr "Elenco di indirizzi"
+
+#~| msgid "Add to address book"
+#~ msgid "Could not load address book."
+#~ msgstr "Impossibile caricare la rubrica."
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Conferma nuova password"
+
+#~| msgid " %1$s (%2$s) "
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Autorizzato a inviare messaggi di posta per tuo conto"
+
+#~| msgid "Date: %1$s"
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Delegato: %1$s"
+
+#~| msgid "Twitter reported the following errors:"
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Il vice ha i seguenti permessi"
+
+#~| msgid "View details"
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Visualizzatore (lettura dei messaggi)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Editor (creazione/modifica messaggi di posta)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Autore (creazione/modifica/eliminazione degli messaggi)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Il delegato può inviare messaggi di posta per tuo conto"
+
+#~| msgid "New appointment"
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Visualizzatore (visualizzazione appuntamenti)"
+
+#~| msgid "Edit this appointment"
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Editor (creazione/modifica degli appuntamenti)"
+
+#~| msgid "Show declined appointments"
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Autore (creazione/modifica/eliminazione degli appuntamenti)"
+
+#~ msgid "save"
+#~ msgstr "salva"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not create deputy."
+#~ msgstr "Impossibile creare il delegato."
+
+#~| msgid "no delete permissions"
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Impossibile aggiornare i permessi del delegato."
+
+#~| msgid "Removed %1$s."
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "Rimuovi il delegato %1$s"
+
+#~| msgid ""
+#~| "Do you really want to remove the extension \".%1$s\" from your filename?"
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Vuoi rimuovere %1$s dall'elenco dei delegati?"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not remove deputy."
+#~ msgstr "Impossibile rimuovere il delegato."
+
+#~| msgid "There are currently no participants."
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Attualmente non ci sono delegati assegnati."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr ""
+#~ "I delegati possono accedere alla tua posta in arrivo e al calendario"
+
+#~| msgid "Remove"
+#~ msgid "Remobe"
+#~ msgstr "Rimuovi"
+
+#~| msgid "Manage applications"
+#~ msgid "Manage deputies"
+#~ msgstr "Gestisci i delegati"
+
+#~ msgid "Add people"
+#~ msgstr "Aggiungi persone"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load deputy data."
+#~ msgstr "Impossibile caricare i dati del delegato."
+
+#~| msgid "Address Other"
+#~ msgid "Address directory"
+#~ msgstr "Elenco degli indirizzi"
+
+#~| msgid "You can quick-save your changes via Ctrl+Enter."
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "Puoi salvare rapidamente le tue modifiche con Cmd+Invio."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "La descrizione del file può essere lunga solo %1$d caratteri."
+
+#~ msgid "Deputy"
+#~ msgstr "Delegato"
+
+#~| msgid ""
+#~| "The files cannot be uploaded because each file exceeds the maximum file "
+#~| "size of %1$s"
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "L'allegato caricato supera la dimensione massima di %1$s"
+
+#~| msgid ""
+#~| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+#~| "size of %2$s"
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr ""
+#~ "Il file non può essere caricato poiché supera la dimensione massima di "
+#~ "%1$s"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Questo indirizzo mittente è correlato a un account di posta disabilitato. "
+#~ "Scegli un altro indirizzo mittente o visita le impostazioni per "
+#~ "riattivarlo."
+
+#~| msgid "Apply filter"
+#~ msgid "Apply filter rule"
+#~ msgstr "Applica regola di filtro"
+
+#~ msgid "Password recovery"
+#~ msgstr "Recupero della password"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Mostra le informazioni sul recupero dell'account"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Per ragioni di sicurezza, tutte le credenziali sono cifrate con la "
+#~ "password principale del tuo account. Se cambi la password principale, gli "
+#~ "account esterni potrebbero smettere di funzionare. In questo caso, puoi "
+#~ "utilizzare la vecchia password per ripristinare tutte le password degli "
+#~ "account."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Ripristina le password"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -16116,9 +16415,6 @@ msgstr "Aggiungi su %s"
 #~ msgid "Private chats only"
 #~ msgstr "Solo chat private"
 
-#~ msgid "Always"
-#~ msgstr "Sempre"
-
 #~ msgid "Join chat"
 #~ msgstr "Partecipa alla chat"
 
@@ -16204,9 +16500,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Lettura, scrittura e eliminazione)"
-
-#~ msgid "Add people"
-#~ msgstr "Aggiungi persone"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Digita un messaggio per informare gli utenti"
@@ -16542,9 +16835,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "How likely is it that you would recommend %1$s to a friend?"
 #~ msgstr "Quanto è probabile che tu raccomandi %1$s a un amico?"
-
-#~ msgid " %1$s (%2$s) "
-#~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
@@ -17067,9 +17357,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "Address (private)"
 #~ msgstr "Indirizzo (privato)"
-
-#~ msgid "Addresses"
-#~ msgstr "Indirizzi"
 
 #~ msgid "Admin"
 #~ msgstr "Amministratore"
@@ -17979,9 +18266,6 @@ msgstr "Aggiungi su %s"
 #~ msgid "Confirm"
 #~ msgstr "Conferma"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Conferma la nuova password"
-
 #~ msgid "Confirmation message"
 #~ msgstr "Messaggio di conferma"
 
@@ -18768,9 +19052,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "Email Address:"
 #~ msgstr "Indirizzo di posta elettronica:"
-
-#~ msgid "Email addresses"
-#~ msgstr "Indirizzi di posta elettronica"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Messaggio di notifica per Accettato/Rifiutato"
@@ -19805,9 +20086,6 @@ msgstr "Aggiungi su %s"
 #~ msgid "Mails have been moved"
 #~ msgstr "I messaggi di posta sono stati spostati"
 
-#~ msgid "Manage applications"
-#~ msgstr "Gestisci le applicazioni"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Gestisci i permessi ora"
 
@@ -20527,9 +20805,6 @@ msgstr "Aggiungi su %s"
 #~| msgid "Romanian"
 #~ msgid "Romania"
 #~ msgstr "Rumeno"
-
-#~ msgid "Rotate image"
-#~ msgstr "Ruota immagine"
 
 #~ msgid "Rule applies from"
 #~ msgstr "La regola si applica da"
@@ -21303,13 +21578,6 @@ msgstr "Aggiungi su %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Il file è disponibile in %1$s"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "I file non possono essere caricati perché ogni file supera la dimensione "
-#~ "massima di %1$s"
-
 #~ msgid "The folder has been emptied."
 #~ msgstr "La cartella è stata svuotata."
 
@@ -21487,9 +21755,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "Theme colors"
 #~ msgstr "Colori del tema"
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Attualmente non ci sono partecipanti."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

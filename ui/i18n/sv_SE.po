@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:42+0100\n"
+"PO-Revision-Date: 2021-11-08 14:07+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -5321,6 +5321,23 @@ msgid "User name"
 msgstr "Användarnamn"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Använd lösenord"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Ange lösenord"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-postadress"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Logga in"
@@ -5475,6 +5492,8 @@ msgid "Imprint"
 msgstr "Impressum"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "Bekräfta nytt lösenord"
 
@@ -5501,13 +5520,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nästa"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-postadress"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6572,7 +6584,6 @@ msgstr "Om"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Anslut din enhet"
 
@@ -9081,6 +9092,12 @@ msgstr "Externa användare"
 msgid "Internal users"
 msgstr "Interna användare"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Granskare"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9091,12 +9108,6 @@ msgstr "Visare"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Skrivskydd"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Granskare"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9120,6 +9131,10 @@ msgstr "Intern användare"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Grupp"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Gäster tillåts bara att ha visningsrättigheter."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9214,14 +9229,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Alla med länken och inbjudna"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Endast listade personer"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Alla med länken och listade personer"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Vem kan komma åt den här filen?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Vem kan komma åt den här kalendern?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Vem kan komma åt den här mappen?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Dela ut %1$s \"%2$s\""
+msgid "calendar"
+msgstr "calender"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9234,6 +9263,12 @@ msgstr "fil"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "mapp"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Dela ut %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9283,6 +9318,14 @@ msgstr "Kopiera länk"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Alla på internet med länken kan läsa filen."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Alla på internet som har länken kan visa kalendern."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Alla på internet som har länken kan visa mappen."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9914,12 +9957,15 @@ msgstr ""
 "maximala storleken för publicerade filer på %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Filen \"%1$s\" kan inte laddas upp eftersom den överskrider infostore-kvoten "
-"på %2$s"
+"Bilagan kan inte laddas upp eftersom den överskrider infostore-kvoten på %2$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10235,6 +10281,16 @@ msgid ""
 msgstr ""
 "Bilagans filstorlek är för stor. Du måste använda %1$s eller reducera "
 "filstorleken för bilagan."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"E-postkvotens gräns har nåtts. Du måste använda %1$s eller reducera "
+"meddelandestorleken på annat sätt."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10951,8 +11007,10 @@ msgid "Edit rule"
 msgstr "Redigera regel"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Spara och verkställ"
+msgstr "Spara och tillämpa regel nu"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -10980,6 +11038,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Dra för att sortera filterregler"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Välj mappen att verkställa regeln på"
 
@@ -12696,7 +12756,7 @@ msgid "Install"
 msgstr "Installera"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12767,6 +12827,7 @@ msgstr "Ofullständig konfiguration."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Anslut din enhet"
 
@@ -12787,10 +12848,6 @@ msgstr ""
 "i din CalDav-klient:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Skanna den här koden med din telefonkamera:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12798,12 +12855,26 @@ msgstr ""
 "För att synkronisera Mail, Kalender och Adressbok via Exchange Active Sync, "
 "använd följande inställningar:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Skanna den här koden med din telefonkamera:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Skanna den här koden med din telefonkamera för att synkronisera din e-post, "
+"kalender och adressbok via Exchange Active Sync:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12860,17 +12931,17 @@ msgid "Email with %1$s"
 msgstr "E-post med %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "E-post med Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "E-post med iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13197,32 +13268,6 @@ msgstr "Fler än de nu visade %1$s objekten hittades"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Tillåt anslutningar med opålitliga certifikat"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Återställ lösenord"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Visa information om återställning av konto"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Av säkerhetsskäl krypteras alla uppgifter med ditt primära kontos lösenord. "
-"Om du ändrar ditt primära lösenord kan dina externa konton sluta fungera. I "
-"så fall kan du använda ditt gamla lösenord för att hämta ut alla kontons "
-"lösenord."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Rädda lösenord"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15860,6 +15905,206 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
+#~ msgid "Rotate left"
+#~ msgstr "Rotera vänster"
+
+#~ msgid "Rotate right"
+#~ msgstr "Rotera höger"
+
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Tillämpa automatiskt mötesändringar mottagna via e-post till din kalender"
+
+#~ msgid "Only from known senders"
+#~ msgstr "Endast från kända avsändare"
+
+#~ msgid "Always"
+#~ msgstr "Alltid"
+
+#~ msgid "This appointment was cancelled."
+#~ msgstr "Mötet ställdes in."
+
+#~ msgid "Connection problems"
+#~ msgstr "Anslutningsproblem"
+
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d kontakt markerad"
+#~ msgstr[1] "%1$d kontakter markerade"
+
+#~ msgid "Remove contact from selection"
+#~ msgstr "Ta bort kontakt från markering"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Markera/Avmarkera kontakt %1$s"
+
+#~ msgid "Show contact details"
+#~ msgstr "Visa detaljer om kontakt"
+
+#~ msgid "Contact list"
+#~ msgstr "Kontaktlista"
+
+#~ msgid "Last searched for"
+#~ msgstr "Sökte senast efter"
+
+#~ msgid "No contacts found."
+#~ msgstr "Inga kontakter hittades."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Du har nått gränsen på %1$d kontakter att visa. Ange en sökterm för att "
+#~ "begränsa dina resultat."
+
+#~ msgid "Global address list"
+#~ msgstr "Global adresslista"
+
+#~ msgid "Search all address lists"
+#~ msgstr "Sök i alla adresslistor"
+
+#~ msgid "Could not load contacts"
+#~ msgstr "Kunde inte läsa in kontakter"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Sök efter namn, avdelning, position"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrera"
+
+#~ msgid "Filter address lists"
+#~ msgstr "Filtrera adresslistor"
+
+#~ msgid "Address list"
+#~ msgstr "Adresslista"
+
+#~ msgid "Could not load address book."
+#~ msgstr "Kunde inte läsa in adressbok."
+
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Tillåts att skicka e-post i ditt ställe"
+
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Ställföreträdare: %1$s"
+
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Ställföreträdaren har följande rättigheter"
+
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Visare (läs meddelanden)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Redaktör (skapa/redigera meddelanden)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Författare (skapa/redigera/radera meddelanden)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Ställföreträdare kan skicka meddelanden i ditt ställe"
+
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Visare (visa möten)"
+
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Redaktör (skapa/redigera möten)"
+
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Författare (skapa/redigera/radera möten)"
+
+#~ msgid "save"
+#~ msgstr "spara"
+
+#~ msgid "Could not create deputy."
+#~ msgstr "Kunde inte skapa ställföreträdare."
+
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Kunde inte uppdatera ställföreträdarens rättigheter."
+
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "Ta bort ställföreträdare %1$s"
+
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Vill du ta bort %1$s från din lista över ställföreträdare"
+
+#~ msgid "Could not remove deputy."
+#~ msgstr "Kunde inte ta bort ställföreträdare."
+
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Du har inte tilldelade ställföreträdare."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "Ställföreträdare kan komma åt din Inkorg och Kalender."
+
+#~ msgid "Remobe"
+#~ msgstr "Ta bort"
+
+#~ msgid "Manage deputies"
+#~ msgstr "Hantera ställföreträdare"
+
+#~ msgid "Add people"
+#~ msgstr "Lägg till folk"
+
+#~ msgid "Could not load deputy data."
+#~ msgstr "Kunde inte läsa in ställföreträdardata."
+
+#~ msgid "Address directory"
+#~ msgstr "Adresskatalog"
+
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "Du kan snabbspara dina ändringar med Cmd+Enter."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "Filbeskrivning får bara vara %1$d tecken lång."
+
+#~ msgid "Deputy"
+#~ msgstr "Ställföreträdare"
+
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr ""
+#~ "Den uppladdade bilagan överskrider den maximala meddelandestorleken %1$s"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr ""
+#~ "Filen kan inte laddas upp eftersom den överskrider den maximala "
+#~ "meddelandestorleken %2$s"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Avsändaradressen tillhör ett avaktiverat e-postkonto. Välj en annan "
+#~ "avsändaradress eller ändra inställningarna för att aktivera den igen."
+
+#~ msgid "Apply filter rule"
+#~ msgstr "Verkställ filterregel"
+
+#~ msgid "Password recovery"
+#~ msgstr "Återställ lösenord"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Visa information om återställning av konto"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Av säkerhetsskäl krypteras alla uppgifter med ditt primära kontos "
+#~ "lösenord. Om du ändrar ditt primära lösenord kan dina externa konton "
+#~ "sluta fungera. I så fall kan du använda ditt gamla lösenord för att hämta "
+#~ "ut alla kontons lösenord."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Rädda lösenord"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -15977,9 +16222,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Private chats only"
 #~ msgstr "Endast privata chattar"
 
-#~ msgid "Always"
-#~ msgstr "Alltid"
-
 #~ msgid "Join chat"
 #~ msgstr "Anslut till chat"
 
@@ -16057,9 +16299,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Läs, skriv och radera)"
-
-#~ msgid "Add people"
-#~ msgstr "Lägg till folk"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Skriv ett meddelande för att informera användare"
@@ -17078,9 +17317,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
 
-#~ msgid "Addresses"
-#~ msgstr "Adresser"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Avancerade facettblock stängdes."
 
@@ -18051,9 +18287,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Could not import into the folder %s."
 #~ msgstr "Kunde inte importera till mappen %s."
 
-#~ msgid "Could not iterate result"
-#~ msgstr "Kunde inte upprepa resultat"
-
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Kunde inte ladda alla deltagare för den här uppgiften."
 
@@ -18068,9 +18301,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Could not remove file from file store."
 #~ msgstr "Kunde inte ta bort filen från fillagringen."
-
-#~ msgid "Could not remove file. %s"
-#~ msgstr "Kunde inte ta bort filen. %s"
 
 #~ msgid "Could not retrieve file: %s"
 #~ msgstr "Kunde inte hämta filen: %s"
@@ -18528,9 +18758,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-postadress:"
-
-#~ msgid "Email addresses"
-#~ msgstr "E-postadresser"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-postavisering för Acceptera/Nekad"
@@ -19859,9 +20086,6 @@ msgstr "Lägg till på %s"
 #~ "Missbildad token eller token stöds ej. Har %s men förväntas %s i .po file "
 #~ "%s:%s."
 
-#~ msgid "Manage applications"
-#~ msgstr "Hantera program"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Hantera rättighet nu"
 
@@ -21037,9 +21261,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Root folder must not be modified or deleted"
 #~ msgstr "Rotmappen får inte ändras eller tas bort"
 
-#~ msgid "Rotate image"
-#~ msgstr "Rotera bild"
-
 #~ msgid "Rule applies from"
 #~ msgstr "Regel gäller från"
 
@@ -21945,13 +22166,6 @@ msgstr "Lägg till på %s"
 #~ msgid "The file you selected does not exist."
 #~ msgstr "Dokumentet du sökte finns inte."
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "Filerna kan inte laddas upp eftersom deras storlek överskrider den "
-#~ "maximala filstorleken %1$s"
-
 #~ msgid "The folder %d is not an Infostore folder"
 #~ msgstr "Mappen %d är inte en Infolagrings-mapp"
 
@@ -22186,9 +22400,6 @@ msgstr "Lägg till på %s"
 #~ msgid "The table is sorted after the Microsoft Outlook task fields."
 #~ msgstr "Tabellen är sorterade efter Microsoft Outlook uppgiftsfält."
 
-#~ msgid "The table shows the following information:"
-#~ msgstr "Tabellerna visar följande information:"
-
 #~ msgid "The task %1$d is not stored in folder %2$s (%3$d)."
 #~ msgstr "Uppgiften %1$d är inte lagrad i mapp %2$s (%3$d)."
 
@@ -22287,9 +22498,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "The types of specified data source are not supported"
 #~ msgstr "Typerna för specificerad informationsursprung stöds inte"
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Det finns för närvarande inga deltagare."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "
@@ -23910,9 +24118,6 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Du använder för närvarande %1$s av ditt tillgängliga diskutrymme (%2$s). "
 #~ "Du har %3$s kvar. "
-
-#~ msgid "You are not allowed to change groups."
-#~ msgstr "Du har inte behörighet att ändra grupper."
 
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
