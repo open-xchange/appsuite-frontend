@@ -47,6 +47,11 @@ define('io.ox/core/folder/selection', [], function () {
         this.unselectableFolders = {};
     }
 
+    function triggerEvent(event) {
+        if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
+        else this.view.trigger.apply(this.view, arguments);
+    }
+
     _.extend(Selection.prototype, {
 
         /**
@@ -164,6 +169,7 @@ define('io.ox/core/folder/selection', [], function () {
             var target = $(e.target),
                 node = target.closest('.folder'),
                 folder = node.attr('data-id');
+            if (this.view.options.instantTrigger) return this.triggerEventInstant('dblclick', e, folder);
             this.triggerEvent('dblclick', e, folder);
         },
 
@@ -224,6 +230,7 @@ define('io.ox/core/folder/selection', [], function () {
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.view.$container.attr('aria-activedescendant', node.attr('id'));
+            if (this.view.options.instantTrigger) return this.triggerEventInstant('change', items);
             this.triggerEvent('change', items);
         },
 
@@ -277,10 +284,10 @@ define('io.ox/core/folder/selection', [], function () {
             this.unselectableFolders[id] = true;
         },
 
-        triggerEvent: _.debounce(function (event) {
-            if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
-            else this.view.trigger.apply(this.view, arguments);
-        }, 300),
+        // when synchronous event handling is needed
+        triggerEventInstant: triggerEvent,
+        // default use: debounce and asynchronous handling, reduces load when folder is changed fast
+        triggerEvent: _.debounce(triggerEvent, 300),
 
         triggerChange: function (items) {
             var self = this,
