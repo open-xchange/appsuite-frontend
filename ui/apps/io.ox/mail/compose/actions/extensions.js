@@ -89,9 +89,9 @@ define('io.ox/mail/compose/actions/extensions', [
                 isSharingEnabled = !_.device('smartphone') || contactsSettings.get('compose/shareAttachments/enabled', false),
                 needsAction = isSharingEnabled && (model.exceedsMailQuota() || model.exceedsThreshold());
             //#. %1$s is usually "Drive Mail" (product name; might be customized)
-            if (opt.yell && model.exceedsThreshold()) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+            if (opt.yell && model.exceedsThreshold() && !sharedAttachments.enabled) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
 
-            if (opt.yell && model.exceedsMailQuota()) yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name')));
+            if (opt.yell && model.exceedsMailQuota() && !sharedAttachments.enabled) yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name')));
 
             if (!needsAction || sharedAttachments.enabled) return;
 
