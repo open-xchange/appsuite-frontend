@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:40+0100\n"
+"PO-Revision-Date: 2021-11-08 13:56+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -5333,6 +5333,23 @@ msgid "User name"
 msgstr "Uživatelské jméno"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Použijte heslo"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Nastavit heslo"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-mailová adresa"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Přihlásit"
@@ -5489,7 +5506,7 @@ msgid "Imprint"
 msgstr "Vodotisk"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Potvrdit nové heslo"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5515,13 +5532,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Další"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-mailová adresa"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6583,7 +6593,6 @@ msgstr "O programu"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Připojte své zařízení"
 
@@ -9091,6 +9100,12 @@ msgstr "Externí uživatelé"
 msgid "Internal users"
 msgstr "Interní uživatelé"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Kontrolor"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9101,12 +9116,6 @@ msgstr "Pozorovatel"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Jen pro čtení"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Kontrolor"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9130,6 +9139,10 @@ msgstr "Interní uživatel"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Skupina"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Hosté mohou mít pouze práva k prohlížení."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9224,14 +9237,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Kdokoliv s odkazem nebo pozvaní lidé"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Jen uvedení lidé"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Kdokoliv s odkazem nebo uvedení lidé"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Kdo má k tomuto souboru přístup?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Kdo má k tomuto kalendáři přístup?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Kdo má k této složce přístup?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Sdílet %1$s „%2$s“"
+msgid "calendar"
+msgstr "kalendář"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9244,6 +9271,12 @@ msgstr "soubor"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "složka"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Sdílet %1$s „%2$s“"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9293,6 +9326,14 @@ msgstr "Kopírovat odkaz"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Soubor může zobrazit kdokoliv na internetu, kdo má odkaz."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Kalendář může zobrazit kdokoliv na internetu, kdo má odkaz."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Složku může zobrazit kdokoliv na internetu, kdo má odkaz."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -10244,6 +10285,16 @@ msgid ""
 "attachment file size."
 msgstr ""
 "Příloha je příliš velká. Musíte použít %1$s, nebo zmenšit velikost přílohy."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Dosaženo limitu pro zprávy. Použijte %1$s, nebo zmenšete velikost zprávy "
+"jinak."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -12708,7 +12759,7 @@ msgid "Install"
 msgstr "Instalovat"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Prémiové funkce"
 
@@ -12779,6 +12830,7 @@ msgstr "Nedokončené nastavení."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Připojte své zařízení"
 
@@ -12799,10 +12851,6 @@ msgstr ""
 "následující nastavení:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Naskenujte tento kód fotoaparátem svého telefonu:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12810,12 +12858,26 @@ msgstr ""
 "Pro synchronizaci zpráv, kalendáře a adresáře přes Exchange Active Sync "
 "proveďte následující nastavení:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Naskenujte tento kód fotoaparátem svého telefonu:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Pro synchronizaci aplikací Pošta, Kalendář a Adresář pomocí Exchange Active "
+"Sync, naskenujte tento kód fotoaparátem svého telefonu:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12872,17 +12934,17 @@ msgid "Email with %1$s"
 msgstr "Zprávy v %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "Zprávy v Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "Zprávy v iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13212,32 +13274,6 @@ msgstr "Bylo nalezeno více než právě zobrazených %1$s položek"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Povolit spojení s nedůvěryhodnými certifikáty"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Obnovení hesla"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Zobrazit informace o obnovení účtu"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Z bezpečnostních důvodů jsou všechny přístupové údaje šifrovány pomocí hesla "
-"vašeho primárního účtu. Změníte-li své primární heslo, vaše externí účty "
-"mohou přestat fungovat. V takovém případě použijte své staré heslo k "
-"obnovení všech hesel účtů:"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Obnovit hesla"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15874,6 +15910,257 @@ msgstr "Pozvat na %s"
 msgid "Add on %s"
 msgstr "Přidat do %s"
 
+#~| msgid "Rotate image"
+#~ msgid "Rotate left"
+#~ msgstr "Otočit doleva"
+
+#~| msgid "Rotate image"
+#~ msgid "Rotate right"
+#~ msgstr "Otočit doprava"
+
+#~| msgid "The appointment has been added to your calendar"
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Automaticky zohlednit změny schůzek přijaté e-mailem ve vašem kalendáři"
+
+#~| msgid "unknown sender"
+#~ msgid "Only from known senders"
+#~ msgstr "Pouze od známých odesílatelů"
+
+#~ msgid "Always"
+#~ msgstr "Vždy"
+
+#~| msgid "The appointment has been deleted"
+#~ msgid "This appointment was cancelled."
+#~ msgstr "Schůzka byla zrušena."
+
+#~| msgid "Connection error"
+#~ msgid "Connection problems"
+#~ msgstr "Problémy spojení"
+
+#~| msgid "%1$d item selected"
+#~| msgid_plural "%1$d items selected"
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d kontakt vybrána"
+#~ msgstr[1] "%1$d kontakty vybrány"
+#~ msgstr[2] "%1$d kontaktů vybráno"
+
+#~| msgid "Remove contact"
+#~ msgid "Remove contact from selection"
+#~ msgstr "Odstranit kontakt z výběru"
+
+#~| msgid "Select contacts"
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Vybrat/zrušit vybrání kontaktu %1$s"
+
+#~| msgid "Show task details"
+#~ msgid "Show contact details"
+#~ msgstr "Zobrazit detaily kontaktu"
+
+#~| msgid "Contacts"
+#~ msgid "Contact list"
+#~ msgstr "Seznam kontaktů"
+
+#~| msgid "Start search"
+#~ msgid "Last searched for"
+#~ msgstr "Poslední vyhledávání"
+
+#~| msgid "No items found"
+#~ msgid "No contacts found."
+#~ msgstr "Nepodařilo se nalézt žádné kontakty."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Zobrazeno maximum (%1$d) kontaktů. Zpřesněte vyhledávání pro zúžení "
+#~ "výsledků."
+
+#~| msgid "Email addresses"
+#~ msgid "Global address list"
+#~ msgstr "Globální seznam adres"
+
+#~| msgid "Search results"
+#~ msgid "Search all address lists"
+#~ msgstr "Vyhledávat ze všech adres"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load contacts"
+#~ msgstr "Nepodařilo se načíst kontakty"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Vyhledávat jméno, oddělení, pozici."
+
+#~| msgctxt "verb"
+#~| msgid "Filter"
+#~ msgid "Filter"
+#~ msgstr "Filtr"
+
+#~| msgid "Other address"
+#~ msgid "Filter address lists"
+#~ msgstr "Filtrovat seznam adres"
+
+#~| msgid "Addresses"
+#~ msgid "Address list"
+#~ msgstr "Seznam adres"
+
+#~| msgid "Add to address book"
+#~ msgid "Could not load address book."
+#~ msgstr "Adresář se nepodařilo načíst."
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Potvrdit nové heslo"
+
+#~| msgid " %1$s (%2$s) "
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Může posílat zprávy vaším jménem"
+
+#~| msgid "Date: %1$s"
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Zástupce: %1$s"
+
+#~| msgid "Twitter reported the following errors:"
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Zástupce má následující práva"
+
+#~| msgid "View details"
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Prohlížení (číst zprávy)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Úpravy (vytváření a úpravy zpráv)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Autor (vytváření, úpravy, mazání zpráv)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Zástupce může vaším jménem posílat zprávy"
+
+#~| msgid "Series appointment"
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Prohlížení (zobrazení schůzek)"
+
+#~| msgid "Edit this appointment"
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Úpravy (vytváření a úpravy schůzek)"
+
+#~| msgid "Show declined appointments"
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Autor (vytváření, úpravy, mazání schůzek)"
+
+#~ msgid "save"
+#~ msgstr "uložit"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not create deputy."
+#~ msgstr "Nepodařilo se vytvořit zástupce."
+
+#~| msgid "no delete permissions"
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Oprávnění zástupce se nepodařilo aktualizovat."
+
+#~| msgid "Removed %1$s."
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "Zástupce %1$s odebrán"
+
+#~| msgid ""
+#~| "Do you really want to remove the extension \".%1$s\" from your filename?"
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Chcete odstranit %1$s ze svého seznamu zástupců?"
+
+#~| msgid "Could not save settings."
+#~ msgid "Could not remove deputy."
+#~ msgstr "Zástupce se nepodařilo odstranit."
+
+#~| msgid "There are currently no participants."
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Nemáte přiřazené žádné zástupce."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "Zástupci mohou mít přístup k vašim doručeným zprávám a kalendáři."
+
+#~| msgid "Remove"
+#~ msgid "Remobe"
+#~ msgstr "Odstranit"
+
+#~| msgid "Manage applications"
+#~ msgid "Manage deputies"
+#~ msgstr "Spravovat zástupce"
+
+#~ msgid "Add people"
+#~ msgstr "Přidat lidi"
+
+#~| msgid "Could not load data"
+#~ msgid "Could not load deputy data."
+#~ msgstr "Údaje o zástupcích se nepodařilo načíst."
+
+#~| msgid "Address Other"
+#~ msgid "Address directory"
+#~ msgstr "Adresář"
+
+#~| msgid "You can quick-save your changes via Ctrl+Enter."
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "Změny lze rychle uložit pomocí Ctrl+Enter."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "Popis souboru může mít maximálně %1$d znaků."
+
+#~ msgid "Deputy"
+#~ msgstr "Zástupce"
+
+#~| msgid ""
+#~| "The files cannot be uploaded because each file exceeds the maximum file "
+#~| "size of %1$s"
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "Nahraná příloha přesahuje maximální velikost zprávy (%1$s)"
+
+#~| msgid ""
+#~| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+#~| "size of %2$s"
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr ""
+#~ "Soubor nelze nahrát, protože je větší než maximální povolená velikost "
+#~ "zprávy (%2$s)"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Adresa odesílatele je spojena s neaktivním poštovním účtem. Zvolte jinou "
+#~ "adresu odesílatele, nebo účet aktivujte v nastavení."
+
+#~| msgid "Apply filter"
+#~ msgid "Apply filter rule"
+#~ msgstr "Aplikovat filtr"
+
+#~ msgid "Password recovery"
+#~ msgstr "Obnovení hesla"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Zobrazit informace o obnovení účtu"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Z bezpečnostních důvodů jsou všechny přístupové údaje šifrovány pomocí "
+#~ "hesla vašeho primárního účtu. Změníte-li své primární heslo, vaše externí "
+#~ "účty mohou přestat fungovat. V takovém případě použijte své staré heslo k "
+#~ "obnovení všech hesel účtů:"
+
+#~ msgid "Recover passwords"
+#~ msgstr "Obnovit hesla"
+
 #~ msgid "Please set password"
 #~ msgstr "Prosím, nastavte heslo"
 
@@ -15969,9 +16256,6 @@ msgstr "Přidat do %s"
 #~ msgid "Private chats only"
 #~ msgstr "Pouze soukromé rozhovory"
 
-#~ msgid "Always"
-#~ msgstr "Vždy"
-
 #~ msgid "Join chat"
 #~ msgstr "Připojit se k rozhovoru"
 
@@ -16055,9 +16339,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Pro čtení, zápis a vymazání)"
-
-#~ msgid "Add people"
-#~ msgstr "Přidat lidi"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Zadejte zprávu k informování uživatelů"
@@ -16406,9 +16687,6 @@ msgstr "Přidat do %s"
 #~ msgstr ""
 #~ "Připojil(a) jste prázdný soubor. Je možné, že byl tento soubor smazán z "
 #~ "vašeho disku. Přesto poslat?"
-
-#~ msgid " %1$s (%2$s) "
-#~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
@@ -17365,9 +17643,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Address (private)"
 #~ msgstr "Adresa (soukr.)"
-
-#~ msgid "Addresses"
-#~ msgstr "Adresy"
 
 #~ msgid "Admin"
 #~ msgstr "Admin"
@@ -19416,9 +19691,6 @@ msgstr "Přidat do %s"
 #~ msgid "Confirm"
 #~ msgstr "Potvrdit"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Potvrdit nové heslo"
-
 #~ msgid "Confirmation message"
 #~ msgstr "Potvrzovací zpráva"
 
@@ -20254,9 +20526,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-mailová adresa:"
-
-#~ msgid "Email addresses"
-#~ msgstr "E-mailové adresy"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-mailové oznámení stavu Přijato/Odmítnuto"
@@ -22009,9 +22278,6 @@ msgstr "Přidat do %s"
 #~ msgid "Malta"
 #~ msgstr "Malta"
 
-#~ msgid "Manage applications"
-#~ msgstr "Spravovat aplikace"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Spravovat oprávnění"
 
@@ -23610,9 +23876,6 @@ msgstr "Přidat do %s"
 #~ msgid "Room number:"
 #~ msgstr "Číslo místnosti:"
 
-#~ msgid "Rotate image"
-#~ msgstr "Otočit obrázek"
-
 #~ msgid "Route Planning"
 #~ msgstr "Plánování cesty"
 
@@ -23943,9 +24206,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Series Duration"
 #~ msgstr "Trvání série"
-
-#~ msgid "Series appointment"
-#~ msgstr "Opakovaná schůzka"
 
 #~ msgctxt "calendar"
 #~ msgid "Series..."
@@ -24951,13 +25211,6 @@ msgstr "Přidat do %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Soubor je k dispozici na %1$s"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "Soubory nelze nahrát, protože je každý z nich větší než maximální "
-#~ "povolená velikost souboru %1$s"
-
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Složka je dispozici na %1$s"
 
@@ -25225,9 +25478,6 @@ msgstr "Přidat do %s"
 
 #~ msgid "Theme will be applied after a new login."
 #~ msgstr "Motiv bude použit při příštím přihlášení."
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Žádní účastníci."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

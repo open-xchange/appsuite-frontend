@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-27 13:42+0100\n"
+"PO-Revision-Date: 2021-11-08 14:04+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5340,6 +5340,23 @@ msgid "User name"
 msgstr "Lietotāja vārds"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Lietot paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Iestatīt paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-pasta adrese"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Pieslēgšanās"
@@ -5499,8 +5516,8 @@ msgid "Imprint"
 msgstr "Nospiedums"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Apstiprināt jauno paroli"
+msgid "Confirm new password"
+msgstr "Apstiprināt paroli"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5525,13 +5542,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nākošais"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-pasta adrese"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6599,7 +6609,6 @@ msgstr "Par"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Pieslēgt ierīci"
 
@@ -9113,6 +9122,12 @@ msgstr "Ārējie lietotāji"
 msgid "Internal users"
 msgstr "Iekšējie lietotāji"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Recenzents"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9123,12 +9138,6 @@ msgstr "Skatītājs"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Tikai lasīt"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Recenzents"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9152,6 +9161,10 @@ msgstr "Iekšējs lietotājs"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Grupa"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Ciemiņiem ir pieejama tikai skatīšanas piekļuve."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9246,14 +9259,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Jebkurš, kuram ir saite un uzaicinātās personas"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Tikai norādītās personas"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Jebkurš, kuram ir saite un norādītās personas"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Kurš var piekļūt šim failam?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Kurš var piekļūt šim kalendāram?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Kurš var piekļūt šai mapei?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Koplietojums %1$s \"%2$s\""
+msgid "calendar"
+msgstr "kalendārs"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9266,6 +9293,12 @@ msgstr "fails"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "mape"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Koplietojums %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9315,6 +9348,14 @@ msgstr "Kopēt saiti"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Failu var skatīt ikviens internetā, kuram ir saite."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Kalendāru var skatīt ikviens internetā, kuram ir saite."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Mapi var skatīt ikviens internetā, kuram ir saite."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9950,12 +9991,16 @@ msgstr ""
 "pieļaujamo %2$s publikācijas izmēra limitu"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Fails \"%1$s\" nevar tikt augšupielādēts, jo tas pārsniedz %2$s glabātuves "
-"kvotas limitu"
+"Pielikums nevar tikt augšupielādēts, jo tas pārsniedz %2$s glabātuves kvotas "
+"limitu"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10276,6 +10321,16 @@ msgid ""
 msgstr ""
 "Pievienojuma faila izmērs ir pārāk liels. Jums ir jāizmanto %1$s vai "
 "jāsamazina pievienojuma izmērs."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Pasta kvota ir sasniegta. Jums ir jāizmanto %1$s vai kādā citā veidā "
+"jāsamazina e-pasta apjoms."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10990,8 +11045,10 @@ msgid "Edit rule"
 msgstr "Rediģēt noteikumu"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Saglabāt un piemērot"
+msgstr "Saglabāt un piemērot tūlīt"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -11019,6 +11076,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Pārvelciet lai pārkārtotu filtra noteikumus"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Izvēlieties mapi, kurai piemērot noteikumu"
 
@@ -12741,7 +12800,7 @@ msgid "Install"
 msgstr "Uzstādīt"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium funkcijas"
 
@@ -12811,6 +12870,7 @@ msgstr "Nepabeigta konfigurēšana."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Pieslēgt ierīci"
 
@@ -12831,10 +12891,6 @@ msgstr ""
 "aplikācijā ievadiet sekojošus iestatījumus:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Lūdzu ieskenējiet šo kodu ar sava telefona kameru:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12842,12 +12898,26 @@ msgstr ""
 "Lai sinhronizētu pastu, kalendāru un adrešu grāmatu, izmantojot Exchange "
 "Active Sync, lūdzu ievadiet sekojošus iestatījumus:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Lūdzu ieskenējiet šo kodu ar sava telefona kameru:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Lai sinhronizētu savu e-pastu, kalendāru un adrešu grāmatu izmantojot "
+"Exchange active Sync, ieskenējiet šo kodu ar sava telefona kameru:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12904,17 +12974,17 @@ msgid "Email with %1$s"
 msgstr "E-pasts ar %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "E-pasts ar Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "E-pasts ar iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13243,32 +13313,6 @@ msgstr "Atrastas vairāk par pašreiz uzrādītajām %1$s vienībām"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Atļaut pieslēgumus ar nedrošiem sertifikātiem"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Paroles atgūšana"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Rādīt informāciju par kontu atgūšanu"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Drošības apsvērumu dēļ visu kontu piekļuves dati ir šifrēti ar jūsu primārā "
-"konta paroli. Ja jūs izmainīsiet savu primāro paroli jūsu ārējie konti var "
-"pārstāt strādāt. Šādā gadījumā jūs varat izmantot savu veco paroli visu "
-"kontu paroļu atgūšanai."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Paroļu atgūšana"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15913,6 +15957,212 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
+#~ msgid "Rotate left"
+#~ msgstr "Rotēt pa kreisi"
+
+#~ msgid "Rotate right"
+#~ msgstr "Rotēt pa labi"
+
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Automātiski piemērot kalendārā mītiņu izmaiņas, kuras ir saņemtas ar e-"
+#~ "pastu"
+
+#~ msgid "Only from known senders"
+#~ msgstr "Tikai no zināmiem sūtītājiem"
+
+#~ msgid "Always"
+#~ msgstr "Vienmēr"
+
+#~ msgid "This appointment was cancelled."
+#~ msgstr "Šis mītiņš ir atcelts."
+
+#~ msgid "Connection problems"
+#~ msgstr "Pieslēguma problēmas"
+
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "Izvelētas %1$s kontaktpersonas"
+#~ msgstr[1] "Izvelētas %1$s kontaktpersonas"
+#~ msgstr[2] "Izvelētas %1$s kontaktpersonas"
+
+#~ msgid "Remove contact from selection"
+#~ msgstr "Noņemt kontaktu no izvēlnes"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Izvēlieties/atcelt kontaktu %1$s"
+
+#~ msgid "Show contact details"
+#~ msgstr "Rādīt kontaktu detaļas"
+
+#~ msgid "Contact list"
+#~ msgstr "Kontaktu saraksts"
+
+#~ msgid "Last searched for"
+#~ msgstr "Pēdīgi meklēts"
+
+#~ msgid "No contacts found."
+#~ msgstr "Nav atrasta neviens kontakts."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Ir sasniegts parādāmo kontaktpersonu %1$d ierobežojums. Lūdzu, ievadiet "
+#~ "meklējamo terminu, lai sašaurinātu rezultātus."
+
+#~ msgid "Global address list"
+#~ msgstr "Globālais adrešu saraksts"
+
+#~ msgid "Search all address lists"
+#~ msgstr "Meklēt visos adrešu sarakstos"
+
+#~ msgid "Could not load contacts"
+#~ msgstr "Nevar ielādēt kontaktus"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Meklēt vārdu, nodaļu, amatu"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrēt"
+
+#~ msgid "Filter address lists"
+#~ msgstr "Adrešu saraksta filtrēšana"
+
+#~ msgid "Address list"
+#~ msgstr "Adrešu saraksts"
+
+#~ msgid "Could not load address book."
+#~ msgstr "Nevar ielādēt adrešu grāmatu."
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Apstiprināt jauno paroli"
+
+#~| msgid " %1$s (%2$s) "
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Atļauts nosūtīt e-pasta ziņojumus jūsu vārdā"
+
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Vietnieks: %1$s"
+
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Vietniekam ir sekojošas tiesības"
+
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Skatītājs (lasīt e-pastu)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Redaktors (e-pasta izveide/rediģēšana)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Autors (e-pasta izveide/rediģēšana/dzēšana)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Vietnieks var nosūtīt e-pastu jūsu vārdā"
+
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Skatītājs (skatīt mītiņus)"
+
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Redaktors (mītiņu izveide/rediģēšana)"
+
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Autors (mītiņu izveide/rediģēšana/dzēšana)"
+
+#~ msgid "save"
+#~ msgstr "saglabāt"
+
+#~ msgid "Could not create deputy."
+#~ msgstr "Nevar izveidot vietnieku."
+
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Nevar jaunināt vietnieka tiesības."
+
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "Noņemt vietnieku %1$s"
+
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Vai tiešām vēlaties noņemt %1$s no vietnieku saraksta?"
+
+#~ msgid "Could not remove deputy."
+#~ msgstr "Nevar noņemt vietnieku."
+
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Pašlaik vietnieki jums nav piešķirti."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "Deputāti var saņemt piekļuvi jūsu iesūtnei un kalendāram."
+
+#~ msgid "Remobe"
+#~ msgstr "Noņemt"
+
+#~ msgid "Manage deputies"
+#~ msgstr "Vietnieku pārvaldība"
+
+#~ msgid "Add people"
+#~ msgstr "Pievienot cilvēkus"
+
+#~ msgid "Could not load deputy data."
+#~ msgstr "Nevar ielādēt vietnieka datus."
+
+#~ msgid "Address directory"
+#~ msgstr "Adrešu direktorija"
+
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "Jūs varat ātri saglabāt izmaiņas izmantojot Ctrl+Enter."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "Faila apraksts var būt tikai %1$d simbolu garumā."
+
+#~ msgid "Deputy"
+#~ msgstr "Vietnieks"
+
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "Augšupielādes pielikums pārsniedz maksimāli pieļaujamo %1$s limitu"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr ""
+#~ "Fails nevar tikt augšupielādēts, jo tas pārsniedz maksimālie pieļaujamo "
+#~ "%1$s izmēra limitu"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Šī nosūtītāja adrese ir saistīta ar atspējotu e-pasta kontu. Lūdzu "
+#~ "izvēlieties citu nosūtītāja adresi, vai iespējojiet šo adresi "
+#~ "iestatījumos."
+
+#~ msgid "Apply filter rule"
+#~ msgstr "Piemērot filtru"
+
+#~ msgid "Password recovery"
+#~ msgstr "Paroles atgūšana"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Rādīt informāciju par kontu atgūšanu"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Drošības apsvērumu dēļ visu kontu piekļuves dati ir šifrēti ar jūsu "
+#~ "primārā konta paroli. Ja jūs izmainīsiet savu primāro paroli jūsu ārējie "
+#~ "konti var pārstāt strādāt. Šādā gadījumā jūs varat izmantot savu veco "
+#~ "paroli visu kontu paroļu atgūšanai."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Paroļu atgūšana"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -16030,9 +16280,6 @@ msgstr "Pievienot %s"
 #~ msgid "Private chats only"
 #~ msgstr "Tikai privātās tērzēšanas"
 
-#~ msgid "Always"
-#~ msgstr "Vienmēr"
-
 #~ msgid "Join chat"
 #~ msgstr "Pievienoties tērzēšanai"
 
@@ -16115,9 +16362,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Lasīt, rakstīt un dzēst)"
-
-#~ msgid "Add people"
-#~ msgstr "Pievienot cilvēkus"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Ievadīt ziņojumu lietotāju informēšanai"
@@ -16473,9 +16717,6 @@ msgstr "Pievienot %s"
 #~ msgstr ""
 #~ "Ir pievienots tukšs fails. Iespējams, ka šis fails ir no jūsu diska "
 #~ "izdzēsts. Vai vienalga veikt nosūtīšanu?"
-
-#~ msgid " %1$s (%2$s) "
-#~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
@@ -17024,9 +17265,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Address (private)"
 #~ msgstr "Adrese (privāta)"
-
-#~ msgid "Addresses"
-#~ msgstr "Adreses"
 
 #~ msgid "Admin"
 #~ msgstr "Admin"
@@ -17929,9 +18167,6 @@ msgstr "Pievienot %s"
 #~ msgid "Confirm"
 #~ msgstr "Apstiprināt"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Apstiprināt paroli"
-
 #~ msgid "Confirmation status"
 #~ msgstr "Apstiprinājumu statuss"
 
@@ -18717,9 +18952,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-pasta adrese:"
-
-#~ msgid "Email addresses"
-#~ msgstr "E-pasta adreses"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-pasta paziņojums apstiprināšanai/atteikšanai"
@@ -20225,9 +20457,6 @@ msgstr "Pievienot %s"
 #~ msgid "Malta"
 #~ msgstr "Malta"
 
-#~ msgid "Manage applications"
-#~ msgstr "Aplikāciju pārvaldība"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Pārvaldīt ziņojumu darbības"
 
@@ -21505,9 +21734,6 @@ msgstr "Pievienot %s"
 #~ msgid "Room number:"
 #~ msgstr "Istabas numurs:"
 
-#~ msgid "Rotate image"
-#~ msgstr "Rotēt attēlu"
-
 #~ msgid "Route Planning"
 #~ msgstr "Maršruta plānošana"
 
@@ -22741,13 +22967,6 @@ msgstr "Pievienot %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fails ir pieejams iekš %1$s"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "Faili nevar tikt augšupielādēti, jo katrs no tiem pārsniedz maksimāli "
-#~ "pieļaujamo %1$s limitu"
-
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Mape ir pieejama iekš %1$s"
 
@@ -22972,9 +23191,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Theme will be applied after a new login."
 #~ msgstr "Tēma tiks piemērota pie jaunas pieslēgšanās."
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Pašlaik nav neviena dalībnieka."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

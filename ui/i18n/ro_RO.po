@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-29 10:42+0100\n"
+"PO-Revision-Date: 2021-11-08 14:06+0100\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5356,6 +5356,23 @@ msgid "User name"
 msgstr "Nume utilizator"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Utilizează parola"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Setează parola"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Adresă de e-mail"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Autentificare"
@@ -5517,8 +5534,8 @@ msgid "Imprint"
 msgstr "Imprint"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Confirmați parola nouă"
+msgid "Confirm new password"
+msgstr "Confirmați noua parolă"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5543,13 +5560,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Următorul"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Adresă de e-mail"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6623,7 +6633,6 @@ msgstr "Despre"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Conectare dispozitiv"
 
@@ -9149,6 +9158,12 @@ msgstr "Utilizatori externi"
 msgid "Internal users"
 msgstr "Utilizatori interni"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Analiză"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9159,12 +9174,6 @@ msgstr "Vizualizare"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Doar citire"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Analiză"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9188,6 +9197,10 @@ msgstr "Utilizator intern"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Grup"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Invitații pot avea doar drepturi de vizualizare."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9282,14 +9295,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Oricine cu legătura și persoane invitate"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Numai persoanele listate"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Oricine cu legătura și persoanele listate"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Cine are acces la acest fișier?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Cine are acces la acest calendar?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Cine are acces la acest dosar?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Partajează %1$s \"%2$s\""
+msgid "calendar"
+msgstr "calendar"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9302,6 +9329,12 @@ msgstr "fișier"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "dosar"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Partajează %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9351,6 +9384,14 @@ msgstr "Copiază legătura"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Orice se află în posesia legăturii poate vizualiza fișierul."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Orice se află în posesia legăturii poate vizualiza calendarul."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Orice se află în posesia legăturii poate vizualiza dosarul."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9983,12 +10024,16 @@ msgstr ""
 "pentru publicarea de fișiere atașate de %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"Fișierul \"%1$s\" nu poate fi încărcat deoarece depășește limita depozitului "
-"de informații de %2$s"
+"Atașamentul nu poate fi încărcat deoarece depășește limita cotei infostore "
+"de %2$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10311,6 +10356,16 @@ msgid ""
 msgstr ""
 "Dimensiunea fișierelor atașate este prea mare. Utilizați %1$s sau reduceți "
 "dimensiunea fișierelor."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Limita cotei de e-mail a fost atinsă. Trebuie să folosiți %1$s sau să "
+"reduceți dimensiunea mesajului în alt mod."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10960,7 +11015,7 @@ msgstr "Dosarul a fost eliminat cu succes."
 
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
 msgid "Please enter password."
-msgstr "Introduceți parola"
+msgstr "Introduceți parola."
 
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/mail/invitations/register.js module:io.ox/mail
@@ -11031,8 +11086,10 @@ msgid "Edit rule"
 msgstr "Editează regula"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Salvează și aplică"
+msgstr "Salvează și aplică regula acum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -11060,6 +11117,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Glisați pentru a reordona regulile de filtrare"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Selectați dosarul la care se va aplica această regula"
 
@@ -12795,7 +12854,7 @@ msgid "Install"
 msgstr "Instalare"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12867,6 +12926,7 @@ msgstr "Configurație incompletă."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Conectare dispozitiv"
 
@@ -12887,10 +12947,6 @@ msgstr ""
 "setări în clientul CalDav:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Scanați acest cod cu aparatul foto al telefonului:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12898,12 +12954,26 @@ msgstr ""
 "Pentru a sincroniza Corespondența, Calendarul și Agenda prin Exchange Active "
 "Sync, introduceți următoarele setări:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Scanați acest cod cu aparatul foto al telefonului:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Scanați acest cod cu aparatul foto al telefonului pentru a vă sincroniza "
+"corespondența, calendarul și agenda prin Exchange Active Sync:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12960,17 +13030,17 @@ msgid "Email with %1$s"
 msgstr "E-mail cu %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "E-mail cu Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "E-mail cu iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13299,33 +13369,6 @@ msgstr "S-au găsit mai multe elemente decât cele %1$s afișate momentan"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Permite conexiuni cu certificate ce nu sunt de încredere"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Recuperare parolă"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Afișerază informații despre recuperarea contului"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Din motive de securitate, toate datele de autentificare sunt criptate "
-"utilizând parola principală a contului dumneavoastră. Dacă modificați parola "
-"principală, conturile dumneavoastră externe pot să nu mai funcționeze. În "
-"acest caz puteți utiliza parola veche pentru a recupera toate parolele "
-"conturilor."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Recuperează parolele"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -13913,13 +13956,12 @@ msgstr "În prezent sunteți conectat cu următoarele dispozitive"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from all clients"
-msgstr "Desconectare de la toți clienții"
+msgstr "Deconectare de la toți clienții"
 
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
-"Sigur doriți să vă desconectați de la toți clienții, cu excepția celui "
-"curent?"
+"Sigur doriți să vă deconectați de la toți clienții, cu excepția celui curent?"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
@@ -15994,6 +16036,212 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
+#~ msgid "Rotate left"
+#~ msgstr "Rotește la stânga"
+
+#~ msgid "Rotate right"
+#~ msgstr "Rotește la dreapta"
+
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "Aplicați automat în calendar modificările de întâlniri primite prin e-mail"
+
+#~ msgid "Only from known senders"
+#~ msgstr "Numai de la expeditori cunoscuți"
+
+#~ msgid "Always"
+#~ msgstr "Întotdeauna"
+
+#~ msgid "This appointment was cancelled."
+#~ msgstr "Întâlnirea a fost anulată."
+
+#~ msgid "Connection problems"
+#~ msgstr "Probleme de conexiune"
+
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d contact selectat"
+#~ msgstr[1] "%1$d contacte selectate"
+#~ msgstr[2] "%1$d de contacte selectate"
+
+#~ msgid "Remove contact from selection"
+#~ msgstr "Eliminați contactul din selecție"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Selectează/deselectează contactul %1$s"
+
+#~ msgid "Show contact details"
+#~ msgstr "Afișează detaliile de contact"
+
+#~ msgid "Contact list"
+#~ msgstr "Lista de contacte"
+
+#~ msgid "Last searched for"
+#~ msgstr "Ultimii căutați"
+
+#~ msgid "No contacts found."
+#~ msgstr "Niciun contact găsit."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "Ați atins limita de %1$d de contacte de afișat. Vă rugăm să introduceți "
+#~ "un termen de căutare pentru a restrânge rezultatele."
+
+#~ msgid "Global address list"
+#~ msgstr "Lista globală de adrese"
+
+#~ msgid "Search all address lists"
+#~ msgstr "Căutați în toate listele de adrese"
+
+#~ msgid "Could not load contacts"
+#~ msgstr "Nu s-a putut încărca contactele"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Căutare după nume, departament, poziție"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrează"
+
+#~ msgid "Filter address lists"
+#~ msgstr "Filtrează listele de adrese"
+
+#~ msgid "Address list"
+#~ msgstr "Listă de adrese"
+
+#~ msgid "Could not load address book."
+#~ msgstr "Nu s-a putut încărca agenda."
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Confirmați parola nouă"
+
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Autorizat să trimită e-mailuri în numele dvs."
+
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Adjunct: %1$s"
+
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Adjunctul are următoarele permisiuni"
+
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Vizualizare (doar citire)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Editare (creează/editează e-mailuri)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Autor (creează/editează/șterge e-mailuri)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Adjunctul poate trimite e-mailuri în numele dvs."
+
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Vizualizare (vizualizare întâlniri)"
+
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Editare (creează/modifică întâlniri)"
+
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Autor (crează/modifică/șterge întâlniri)"
+
+#~ msgid "save"
+#~ msgstr "salvează"
+
+#~ msgid "Could not create deputy."
+#~ msgstr "Adjunctul nu a putut fi creat."
+
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Permisiunile adjunctului nu au putut fi actualizate."
+
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "Elimină adjunctul %1$s"
+
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "Doriți să eliminați %1$s din lista dumneavoastră de adjuncți?"
+
+#~ msgid "Could not remove deputy."
+#~ msgstr "Adjunctul nu a putut fi eliminat."
+
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "În prezent nu aveți niciun adjunct desemnat."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "Adjuncții pot avea acces la inboxul și la calendarul dvs"
+
+#~ msgid "Remobe"
+#~ msgstr "Elimină"
+
+#~ msgid "Manage deputies"
+#~ msgstr "Gestionează adjuncți"
+
+#~ msgid "Add people"
+#~ msgstr "Adaugă persoane"
+
+#~ msgid "Could not load deputy data."
+#~ msgstr "Nu s-au putut încărca datele despre adjuncți."
+
+#~ msgid "Address directory"
+#~ msgstr "Director de adrese"
+
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr "Puteți să salvați modificările rapid apăsând pe Cmd+Enter."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "Descrierea fișierului poate avea doar %1$d caractere."
+
+#~ msgid "Deputy"
+#~ msgstr "Adjunct"
+
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr ""
+#~ "Atașamentul încărcat depășește dimensiunea maximă a e-mailului de %1$s"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr ""
+#~ "Fișierul nu poate fi încărcat deoarece depășește dimensiunea maximă a e-"
+#~ "mailului de %1$s"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Această adresă de expeditor este legată de un cont de e-mail dezactivat. "
+#~ "Vă rugăm să alegeți o altă adresă de expeditor sau să vizitați setările "
+#~ "pentru a o activa din nou."
+
+#~ msgid "Apply filter rule"
+#~ msgstr "Aplicați regula de filtrare"
+
+#~ msgid "Password recovery"
+#~ msgstr "Recuperare parolă"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Afișerază informații despre recuperarea contului"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Din motive de securitate, toate datele de autentificare sunt criptate "
+#~ "utilizând parola principală a contului dumneavoastră. Dacă modificați "
+#~ "parola principală, conturile dumneavoastră externe pot să nu mai "
+#~ "funcționeze. În acest caz puteți utiliza parola veche pentru a recupera "
+#~ "toate parolele conturilor."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Recuperează parolele"
+
 #~ msgid "Please set password"
 #~ msgstr "Setați parola"
 
@@ -16093,9 +16341,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Private chats only"
 #~ msgstr "Doar chaturi private"
 
-#~ msgid "Always"
-#~ msgstr "Întotdeauna"
-
 #~ msgid "Join chat"
 #~ msgstr "Alătură-te chatului"
 
@@ -16175,9 +16420,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Citire, scriere și ștergere)"
-
-#~ msgid "Add people"
-#~ msgstr "Adaugă persoane"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Introduceți un mesaj informativ pentru utilizatori"
@@ -16531,9 +16773,6 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Ați atașat un fișier gol. Este posibil ca acest fișier să fi fost șters "
 #~ "de pe disc. Doriți să îl trimiteți?"
-
-#~ msgid " %1$s (%2$s) "
-#~ msgstr " %1$s (%2$s) "
 
 #~ msgid " %1$s (%2$s); "
 #~ msgstr " %1$s (%2$s); "
@@ -17092,9 +17331,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Address (private)"
 #~ msgstr "Adresă (personală)"
-
-#~ msgid "Addresses"
-#~ msgstr "Adrese"
 
 #~ msgid "Admin"
 #~ msgstr "Admin"
@@ -17997,9 +18233,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Confirm"
 #~ msgstr "Confirmă"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Confirmați noua parolă"
-
 #~ msgid "Confirmation status"
 #~ msgstr "Starea confirmării"
 
@@ -18792,9 +19025,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Email Address:"
 #~ msgstr "Adresă de e-mail:"
-
-#~ msgid "Email addresses"
-#~ msgstr "Adrese de e-mail"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Notificare pe e-mail pentru Acceptat/Respins"
@@ -20306,9 +20536,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Malta"
 #~ msgstr "Malta"
 
-#~ msgid "Manage applications"
-#~ msgstr "Gestionează aplicațiile"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Gestionați permisiunile acum"
 
@@ -21612,9 +21839,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Room number:"
 #~ msgstr "Număr cameră:"
 
-#~ msgid "Rotate image"
-#~ msgstr "Rotește imaginea"
-
 #~ msgid "Route Planning"
 #~ msgstr "Planificarea traseului"
 
@@ -22860,13 +23084,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Fișierul este disponibil la %1$s"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "Fișierele nu pot fi încărcate deoarece toate depășesc dimensiunea maximă "
-#~ "pentru fișiere de %1$s"
-
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "Dosarul este disponibil la %1$s"
 
@@ -23097,9 +23314,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Theme will be applied after a new login."
 #~ msgstr "Tema va fi aplicată după o autentificare nouă."
-
-#~ msgid "There are currently no participants."
-#~ msgstr "Momentan nu există participanți"
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

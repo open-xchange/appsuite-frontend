@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-25 14:18+0100\n"
+"PO-Revision-Date: 2021-11-08 14:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5312,6 +5312,23 @@ msgid "User name"
 msgstr "Kullanıcı adı"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Parola kullan"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Parola belirle"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-posta adresi"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Giriş yap"
@@ -5473,7 +5490,9 @@ msgid "Imprint"
 msgstr "Künye"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+#, fuzzy
+#| msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Yeni parolayı onayla"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5499,13 +5518,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Sonraki"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-posta adresi"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6569,7 +6581,6 @@ msgstr "Hakkında"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Cihazınızı bağlayın"
 
@@ -9065,6 +9076,12 @@ msgstr "Dış kullanıcılar"
 msgid "Internal users"
 msgstr "İç kullanıcılar"
 
+#. Role: view folder + read/write all
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Reviewer"
+msgstr "Düzenleyici"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9075,12 +9092,6 @@ msgstr "Görüntüleyici"
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
 msgstr "Yalnızca okuma"
-
-#. Role: view folder + read/write all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Reviewer"
-msgstr "Düzenleyici"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9104,6 +9115,10 @@ msgstr "Dahili kullanıcı"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Grup"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Konuklar yalnızca görüntüleyici haklarına sahip olabilir."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9198,14 +9213,28 @@ msgid "Anyone with the link and invited people"
 msgstr "Bağlantıya sahip herkes ve davet edilenler"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Listed people only"
+msgstr "Yalnızca listedeki kişiler"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Anyone with the link and listed people"
+msgstr "Bağlantıya sahip herkes ve listedeki kişiler"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this file?"
+msgstr "Bu dosyaya kimler erişebilir?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Who can access this calendar?"
+msgstr "Bu takvime kimler erişebilir?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Bu klasöre kimler erişebilir?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "\"%2$s\" %1$s paylaş"
+msgid "calendar"
+msgstr "takvimini"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9218,6 +9247,12 @@ msgstr "dosyasını"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "klasörünü"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "\"%2$s\" %1$s paylaş"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9267,6 +9302,14 @@ msgstr "Bağlantıyı kopyala"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Bu bağlantıya sahip olan herkes dosyayı görüntüleyebilir."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Bu bağlantıya sahip olan herkes takvimi görüntüleyebilir."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Bu bağlantıya sahip olan herkes klasörü görüntüleyebilir."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9897,12 +9940,14 @@ msgstr ""
 "yüklenemiyor"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "The attachment cannot be uploaded because it exceeds the infostore quota "
+#| "limit of %2$s"
 msgid ""
 "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
-msgstr ""
-"\"%1$s\" dosyası, %2$s maksimum infostore kota sınırını aştığı için "
-"yüklenemiyor"
+msgstr "Dosya %1$s maksimum infostore kota sınırını aştığı için yüklenemiyor"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10216,6 +10261,16 @@ msgid ""
 "attachment file size."
 msgstr ""
 "Ek dosya boyutu çok büyük. Ya %1$s kullanmalı ya da ek dosya boyutunu "
+"azaltmalısınız."
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"E-posta kotasını aştınız. Ya %1$s kullanmalı ya da e-posta boyutunu "
 "azaltmalısınız."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
@@ -10930,8 +10985,10 @@ msgid "Edit rule"
 msgstr "Kuralı düzenle"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Save and apply rule now"
 msgid "Save and apply"
-msgstr "Kaydet ve uygula"
+msgstr "Kaydet ve kuralı uygula"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -10959,6 +11016,8 @@ msgid "Drag to reorder filter rules"
 msgstr "Filtre kurallarını yeniden sıralamak için sürükleyin"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please select the folder to apply the rule to"
 msgid "Select the folder to apply the rule to"
 msgstr "Kuralın uygulanacağı klasörü seçin"
 
@@ -12673,7 +12732,7 @@ msgid "Install"
 msgstr "Kur"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12744,6 +12803,7 @@ msgstr "Eksik yapılandırma."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Cihazınızı bağlayın"
 
@@ -12764,10 +12824,6 @@ msgstr ""
 "aşağıdaki ayarları girin:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Bu lütfen kodu telefonunuzun kamerasına okutun:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12775,12 +12831,26 @@ msgstr ""
 "E-posta, takvim ve adres defterini Exchange Active Sync ile senkronize etmek "
 "için lütfen aşağıdaki ayarları girin:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Bu lütfen kodu telefonunuzun kamerasına okutun:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"E-posta, takvim ve adres defterinizi Exchange Active Sync ile senkronize "
+"etmek için bu kodu telefonunuzun kamerasına okutun:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12837,17 +12907,17 @@ msgid "Email with %1$s"
 msgstr "%1$s ile e-posta"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "Apple Mail ile e-posta"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "iOS Mail ile e-posta"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13180,32 +13250,6 @@ msgstr "Şu anda gösterilen %1$s öğeden fazlası bulundu"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Sertifikasına güvenilmeyen bağlantılara izin ver"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Parola kurtarma"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Hesap kurtarmayla ilgili bilgileri göster"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"Güvenlik nedeniyle tüm kimlik bilgileri birincil hesap parolanızla "
-"şifrelenir. Birincil parolanızı değiştirirseniz dış hesaplarınız artık "
-"çalışmayabilir. Bu durumda tüm hesap parolalarını kurtarmak için eski "
-"parolanızı kullanabilirsiniz."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Parolaları kurtar"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -15850,6 +15894,207 @@ msgstr "%s etkinliğine davet et"
 msgid "Add on %s"
 msgstr "%s üzerine ekle"
 
+#~ msgid "Rotate left"
+#~ msgstr "Sola döndür"
+
+#~ msgid "Rotate right"
+#~ msgstr "Sağa döndür"
+
+#~ msgid ""
+#~ "Automatically apply appointment changes received via email to your "
+#~ "calendar"
+#~ msgstr ""
+#~ "E-posta ile gelen randevu değişikliklerini otomatik olarak takvimime "
+#~ "uygula"
+
+#~ msgid "Only from known senders"
+#~ msgstr "Yalnızca bilinen gönderenlerden"
+
+#~ msgid "Always"
+#~ msgstr "Her zaman"
+
+#~ msgid "This appointment was cancelled."
+#~ msgstr "Bu randevu iptal edildi."
+
+#~ msgid "Connection problems"
+#~ msgstr "Bağlantı sorunu"
+
+#~ msgid "%1$d contact selected"
+#~ msgid_plural "%1$d contacts selected"
+#~ msgstr[0] "%1$d kişi seçildi"
+#~ msgstr[1] "%1$d kişi seçildi"
+
+#~ msgid "Remove contact from selection"
+#~ msgstr "Kişiyi seçimden kaldır"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "%1$s adlı kişiyi seç/seçimi kaldır"
+
+#~ msgid "Show contact details"
+#~ msgstr "Kişi ayrıntılarını göster"
+
+#~ msgid "Contact list"
+#~ msgstr "Kişi listesi"
+
+#~ msgid "Last searched for"
+#~ msgstr "Son arama:"
+
+#~ msgid "No contacts found."
+#~ msgstr "Hiç kişi bulunamadı."
+
+#~ msgid ""
+#~ "You have reached the limit of %1$d contacts to display. Please enter a "
+#~ "search term to narrow down your results."
+#~ msgstr ""
+#~ "%1$d kişi görüntüleme sınırına ulaştınız. Sonuçları azaltmak için lütfen "
+#~ "bir arama terimi girin."
+
+#~ msgid "Global address list"
+#~ msgstr "Genel adresi listesi"
+
+#~ msgid "Search all address lists"
+#~ msgstr "Tüm adres listelerinde ara"
+
+#~ msgid "Could not load contacts"
+#~ msgstr "Kişiler yüklenemedi"
+
+#~ msgid "Search for name, department, position"
+#~ msgstr "Ad, departman, pozisyon ara"
+
+#~ msgid "Filter"
+#~ msgstr "Filtrele"
+
+#~ msgid "Filter address lists"
+#~ msgstr "Adres listelerini filtrele"
+
+#~ msgid "Address list"
+#~ msgstr "Adres listesi"
+
+#~ msgid "Could not load address book."
+#~ msgstr "Adres defteri yüklenemedi."
+
+#~| msgid "%1$s %2$s"
+#~ msgid "%1$s (%2$s)"
+#~ msgstr "%1$s (%2$s)"
+
+#~ msgid "Allowed to send emails on your behalf"
+#~ msgstr "Sizin adınıza e-posta gönderebilir"
+
+#~ msgid "Deputy: %1$s"
+#~ msgstr "Vekil: %1$s"
+
+#~ msgid "The deputy has the following permissions"
+#~ msgstr "Vekil aşağıdaki izinlere sahiptir:"
+
+#~ msgid "Viewer (read emails)"
+#~ msgstr "Görüntüleyici (e-posta okuma)"
+
+#~ msgid "Editor (create/edit emails)"
+#~ msgstr "Editör (e-posta oluşturma/düzenleme)"
+
+#~ msgid "Author (create/edit/delete emails)"
+#~ msgstr "Yazar (e-posta oluşturma/düzenleme/silme)"
+
+#~ msgid "Deputy can send emails on your behalf"
+#~ msgstr "Vekil sizin adınıza e-posta gönderebilir"
+
+#~ msgid "Viewer (view appointments)"
+#~ msgstr "Görüntüleyici (randevuları görüntüleme)"
+
+#~ msgid "Editor (create/edit appointments)"
+#~ msgstr "Editör (randevu oluşturma/düzenleme)"
+
+#~ msgid "Author (create/edit/delete appointments)"
+#~ msgstr "Yazar (randevu oluşturma/düzenleme/silme)"
+
+#~ msgid "save"
+#~ msgstr "kaydet"
+
+#~ msgid "Could not create deputy."
+#~ msgstr "Vekil oluşturulamadı."
+
+#~ msgid "Could not update deputy permissions."
+#~ msgstr "Vekil izinleri güncellenemedi."
+
+#~ msgid "Remove deputy %1$s"
+#~ msgstr "%1$s adlı vekili kaldır"
+
+#~ msgid "Do you want to remove %1$s from your deputy list"
+#~ msgstr "%1$s adlı vekili vekil listenizden çıkarmak istiyor musunuz?"
+
+#~ msgid "Could not remove deputy."
+#~ msgstr "Vekil kaldırılamadı."
+
+#~ msgid "You have currently no deputies assigned."
+#~ msgstr "Henüz hiç vekil atamadınız."
+
+#~ msgid "Deputies can get acces to your Inbox and Calendar."
+#~ msgstr "Vekiller gelen kutunuza ve takviminize erişebilir."
+
+#~ msgid "Remobe"
+#~ msgstr "Kaldır"
+
+#~ msgid "Manage deputies"
+#~ msgstr "Vekilleri yönet"
+
+#~ msgid "Add people"
+#~ msgstr "Kişi ekle"
+
+#~ msgid "Could not load deputy data."
+#~ msgstr "Vekil verileri yüklenemedi."
+
+#~ msgid "Address directory"
+#~ msgstr "Adres dizini"
+
+#~ msgid "You can quick-save your changes via Cmd+Enter."
+#~ msgstr ""
+#~ "Cmd+Enter tuşlarına bakarak değişiklikleri hızlıca kaydedebilirsiniz."
+
+#~ msgid "File description can only be %1$d characters long."
+#~ msgstr "Dosya açıklaması en fazla %1$d karakter olabilir."
+
+#~ msgid "Deputy"
+#~ msgstr "Vekil"
+
+#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+#~ msgstr "Yüklenen dosya, %1$s olan maksimum dosya boyutunu geçiyor"
+
+#~ msgid ""
+#~ "The file cannot be uploaded because it exceeds the maximum email size of "
+#~ "%1$s"
+#~ msgstr "Dosya, %2$s olan maksimum dosya boyutunu geçtiği için yüklenemiyor"
+
+#~ msgid ""
+#~ "This sender address is related to a disabled mail account. Please choose "
+#~ "another sender address or visit settings to enable again."
+#~ msgstr ""
+#~ "Bu gönderen adresi devre dışı bırakılmış bir e-posta hesabına ait. Lütfen "
+#~ "başka bir gönderen adresi seçin veya adresi yeniden etkinleştirmek için "
+#~ "ayarlara gidin."
+
+#~ msgid "Apply filter rule"
+#~ msgstr "Filtre kuralını uygula"
+
+#~ msgid "Password recovery"
+#~ msgstr "Parola kurtarma"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Hesap kurtarmayla ilgili bilgileri göster"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Güvenlik nedeniyle tüm kimlik bilgileri birincil hesap parolanızla "
+#~ "şifrelenir. Birincil parolanızı değiştirirseniz dış hesaplarınız artık "
+#~ "çalışmayabilir. Bu durumda tüm hesap parolalarını kurtarmak için eski "
+#~ "parolanızı kullanabilirsiniz."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Parolaları kurtar"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -15966,9 +16211,6 @@ msgstr "%s üzerine ekle"
 #~ msgid "Private chats only"
 #~ msgstr "Yalnızca özel sohbetler"
 
-#~ msgid "Always"
-#~ msgstr "Her zaman"
-
 #~ msgid "Join chat"
 #~ msgstr "Sohbete katıl"
 
@@ -16051,9 +16293,6 @@ msgstr "%s üzerine ekle"
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Okuma, yazma ve silme)"
 
-#~ msgid "Add people"
-#~ msgstr "Kişi ekle"
-
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Kullanıcıları bilgilendirecek bir mesaj yazın"
 
@@ -16108,9 +16347,6 @@ msgstr "%s üzerine ekle"
 #~ msgstr ""
 #~ "Eki olan ve düzenlenmekte olan taslaklar, siz ilgili e-posta oluşturma "
 #~ "penceresini kapatana kadar silinemez."
-
-#~ msgid "Address"
-#~ msgstr "Adres"
 
 #~ msgid "Manual Configuration"
 #~ msgstr "Elle yapılandırma"
@@ -16710,9 +16946,6 @@ msgstr "%s üzerine ekle"
 #~ msgid "Reply to all"
 #~ msgstr "Tümünü yanıtla"
 
-#~ msgid "Rotate image"
-#~ msgstr "Resmi döndür"
-
 #~ msgid "Run auto-play "
 #~ msgstr "Otomatik oynatmayı çalıştır "
 
@@ -16822,13 +17055,6 @@ msgstr "%s üzerine ekle"
 
 #~ msgid "The appointment is visible for all users in shared calendars."
 #~ msgstr "Randevu, paylaşılan takvimlerdeki tüm kullanıcılara görünür."
-
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "Tüm dosyalar %1$s olan maksimum dosya boyutunu geçtiği için "
-#~ "yüklenemiyorlar"
 
 #~ msgid "The setting requires a relogin to take effect."
 #~ msgstr "Ayarların etkili olması için yeniden giriş yapmalısınız."
