@@ -688,7 +688,8 @@ define('io.ox/calendar/freetime/timeView', [
                 notOnScale = false;
 
             if (this.model.get('onlyWorkingHours')) {
-                start = moment(this.model.get('startDate')).add(this.model.get('startHour'), 'hours');
+                var startDateOffset = (start._offset - moment(start).add(this.model.get('startHour'), 'hours')._offset) / 60;
+                start = moment(this.model.get('startDate')).add(this.model.get('startHour') + startDateOffset, 'hours');
                 end = moment(start).add(this.model.get('endHour') - this.model.get('startHour') + 1, 'hours');
             } else {
                 start = moment(this.model.get('startDate')).startOf('day');
