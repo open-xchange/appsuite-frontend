@@ -978,7 +978,7 @@ define('io.ox/files/share/permissions', [
             options = _.extend({
                 async: true,
                 focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.share.html',
+                help: objModel.isAdmin() ? 'ox.appsuite.user.sect.dataorganisation.sharing.share.html' : undefined,
                 title: title,
                 smartphoneInputFocus: true,
                 hasLinkSupport: false,
@@ -1160,7 +1160,7 @@ define('io.ox/files/share/permissions', [
 
             dialog.$el.addClass('share-permissions-dialog');
 
-            // to change privileges you have to a folder admin
+            // to change privileges you have to be a folder admin
             var supportsChanges = objModel.isAdmin(),
                 folderModel = objModel.getFolderModel();
 
@@ -1172,10 +1172,13 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
-            var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
-                openSettings();
-            });
-            dialog.$header.append(settingsButton);
+            if (options.hasLinkSupport || supportsInvites) {
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                    var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
+                    shareSettings.showSettingsDialog(settingsView);
+                });
+                dialog.$header.append(settingsButton);
+            }
 
             if (options.hasLinkSupport) {
                 dialog.$body.append(
@@ -1231,7 +1234,7 @@ define('io.ox/files/share/permissions', [
 
                 var typeaheadView = new Typeahead({
                     apiOptions: {
-                        // mail does not support sharing folders to guets
+                        // mail does not support sharing folders to guests
                         contacts: supportsGuests,
                         users: true,
                         groups: true
@@ -1352,11 +1355,6 @@ define('io.ox/files/share/permissions', [
             } else {
                 dialog
                     .addButton({ action: 'cancel', label: gt('Close') });
-            }
-
-            function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
-                shareSettings.showSettingsDialog(settingsView);
             }
 
             function mergePermissionsAndPublicLink(permissions, entity, bits) {
