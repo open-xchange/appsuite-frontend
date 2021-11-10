@@ -791,6 +791,14 @@ define('io.ox/contacts/view-detail', [
 
                     function success(list) {
                         if (!list.length) return section.remove();
+
+                        _(list).each(function (attachment) {
+                            // cut off prefix con://0/ because document converter can only handle old folder ids atm
+                            attachment.folder = attachment.folder.split('/');
+                            // just take the last part
+                            attachment.folder = attachment.folder[attachment.folder.length - 1];
+                        });
+
                         section.replaceWith(
                             block(
                                 attachmentlist(gt('Attachments'), list)
