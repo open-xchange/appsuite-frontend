@@ -668,12 +668,12 @@ define('io.ox/contacts/view-detail', [
                         phone(data, 'telephone_business2'),
                         phone(data, 'telephone_home1'),
                         phone(data, 'telephone_home2'),
+                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_other'),
                         simple(data, 'fax_business'),
                         simple(data, 'fax_home'),
                         simple(data, 'fax_other'),
                         // --- rare ---
-                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_car'),
                         phone(data, 'telephone_isdn'),
                         phone(data, 'telephone_pager'),
