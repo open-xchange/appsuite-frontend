@@ -28,7 +28,7 @@ define('io.ox/chat/views/addMember', [
     'io.ox/chat/api',
     'io.ox/chat/util',
     'gettext!io.ox/chat',
-    'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'io.ox/participants/add'
 ], function (Disposable, Typeahead, pModel, data, api, util, gt, settings) {
 
@@ -89,7 +89,7 @@ define('io.ox/chat/views/addMember', [
 
         openAddressBookPicker: function (e) {
             var self = this,
-                picker = settings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = settings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
             e.preventDefault();
 
             require([picker], function (popup) {
