@@ -26,8 +26,9 @@ define('io.ox/mail/compose/actions/extensions', [
     'io.ox/mail/compose/api',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
-    'io.ox/core/yell'
-], function (attachmentEmpty, mailAPI, composeAPI, gt, settings, yell) {
+    'io.ox/core/yell',
+    'io.ox/core/capabilities'
+], function (attachmentEmpty, mailAPI, composeAPI, gt, settings, yell, capabilities) {
     'use strict';
 
     var api = {};
@@ -85,17 +86,15 @@ define('io.ox/mail/compose/actions/extensions', [
         return function (baton) {
             var model = baton.model,
                 sharedAttachments = model.get('sharedAttachments') || {},
-                exceedsMailQuota = _.device('smartphone') ? false : model.exceedsMailQuota(),
-                needsAction;
-
-            needsAction = exceedsMailQuota || model.exceedsThreshold();
-
-            if (!needsAction || sharedAttachments.enabled) return;
+                isSharingEnabled = !_.device('smartphone') && settings.get('compose/shareAttachments/enabled', false) && capabilities.has('infostore'),
+                needsAction = isSharingEnabled && (model.exceedsMailQuota() || model.exceedsThreshold());
 
             //#. %1$s is usually "Drive Mail" (product name; might be customized)
-            if (opt.yell && model.exceedsThreshold()) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+            if (opt.yell && model.exceedsThreshold() && !sharedAttachments.enabled) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
 
-            if (opt.yell && model.exceedsMailQuota()) yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name')));
+            if (opt.yell && model.exceedsMailQuota() && !sharedAttachments.enabled) yell('info', gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name')));
+
+            if (!needsAction || sharedAttachments.enabled) return;
 
             model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
 

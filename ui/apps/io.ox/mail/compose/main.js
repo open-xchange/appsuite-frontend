@@ -26,11 +26,12 @@ define('io.ox/mail/compose/main', [
     'io.ox/core/api/account',
     'io.ox/mail/util',
     'io.ox/mail/sender',
+    'io.ox/core/api/quota',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, quotaAPI, settings, gt) {
 
     'use strict';
 
@@ -54,6 +55,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var self = this;
+            if (!_.device('smartphone')) quotaAPI.reload();
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
                 baton.model.restored = !!(baton.data && baton.data.id);
