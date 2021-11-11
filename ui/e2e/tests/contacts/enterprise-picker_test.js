@@ -29,9 +29,12 @@ const expect = require('chai').expect;
 Before(async ({ I, users }) => {
     await users.create();
     await I.haveSetting({
-        'io.ox/contacts': { useEnterprisePicker: true,
-            enterprisePicker: {
-                showTopRightLauncher: true
+        'io.ox/core': {
+            features: {
+                enterprisePicker: {
+                    enabled: true,
+                    showTopRightLauncher: true
+                }
             }
         }
     });

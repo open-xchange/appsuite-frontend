@@ -37,13 +37,14 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
+    'settings!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -384,7 +385,7 @@ define('io.ox/mail/compose/extensions', [
                 e.preventDefault();
                 var attr = e.data.attr,
                     model = e.data.model,
-                    picker = settingsContacts.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                    picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
                 require([picker], function (popup) {
                     popup.open(function (result) {
@@ -426,7 +427,7 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/recipientActionsMobile').invoke('draw', actions);
                 }
 
-                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && contactSettings.get('picker/enabled', true);
 
                 var title = gt('Select contacts');
 

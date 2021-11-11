@@ -47,10 +47,10 @@ define('io.ox/chat/main', [
     'io.ox/core/a11y',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
-    'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, contactSettings) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, coreSettings) {
 
     'use strict';
 
@@ -161,7 +161,7 @@ define('io.ox/chat/main', [
 
         startPrivateChat: function () {
             var self = this,
-                picker = contactSettings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
             require([picker], function (picker) {
                 picker.open(
