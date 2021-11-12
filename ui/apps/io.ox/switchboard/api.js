@@ -23,7 +23,7 @@
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
     'io.ox/core/http',
-    'io.ox/switchboard/standalone',
+    'io.ox/switchboard/standalone/api',
     'settings!io.ox/switchboard'
 ], function (io, http, standalone, settings) {
 
