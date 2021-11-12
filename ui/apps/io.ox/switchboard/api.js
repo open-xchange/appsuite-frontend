@@ -22,48 +22,25 @@
 
 define.async('io.ox/switchboard/api', [
     'static/3rd.party/socket.io.slim.js',
-    'io.ox/core/api/user',
-    'io.ox/contacts/util',
     'io.ox/core/http',
-    'io.ox/core/uuids',
+    'io.ox/switchboard/standalone',
     'settings!io.ox/switchboard'
-], function (io, userAPI, contactsUtil, http, uuids, settings) {
+], function (io, http, standalone, settings) {
 
     'use strict';
 
-    var api = {
+    var api = _.extend(standalone, {
 
         online: false,
         host: settings.get('host'),
 
         // will both be set below
         socket: undefined,
-        userId: undefined,
-        domain: '',
         token: undefined,
-
-        // just to make sure we always use the same string
-        trim: function (userId) {
-            return String(userId || '').toLowerCase().trim();
-        },
 
         isOnline: function () {
             return this.online;
         },
-
-        isMyself: function (id) {
-            return this.trim(id) === this.userId;
-        },
-
-        isGAB: function (baton) {
-            // call/chat only works for users, so
-            // make sure we are in global address book
-            return baton.array().every(function (data) {
-                return String(data.folder_id) === contactsUtil.getGabId() && data.email1;
-            });
-        },
-
-        isInternal: _.constant(false),
 
         propagate: function (type, to, payload) {
             var def = $.Deferred();
@@ -71,46 +48,18 @@ define.async('io.ox/switchboard/api', [
                 def.resolve(result);
             });
             return def;
-        },
-
-        supports: function (type) {
-            var host = api.host;
-            switch (type) {
-                case 'zoom':
-                    if (!host) return false;
-                    return host && !!settings.get('zoom/enabled');
-                case 'jitsi':
-                    if (!host) return false;
-                    if (!settings.get('jitsi/enabled')) return false;
-                    return !!settings.get('jitsi/host');
-                case 'history':
-                    return settings.get('callHistory/enabled', !!host);
-                default:
-                    return false;
-            }
-        },
-
-        // no better place so far
-        createJitsiMeeting: function () {
-            var id = ['ox'].concat(uuids.asArray(5)).join('-');
-            return { id: id, joinURL: settings.get('jitsi/host') + '/' + id };
-        },
-
-        getConference: function (conferences) {
-            if (!_.isArray(conferences) || !conferences.length) return;
-            // we just consider the first one
-            var conference = conferences[0];
-            var params = conference.extendedParameters;
-            if (!params || !params['X-OX-TYPE']) return;
-            return {
-                id: params['X-OX-ID'],
-                joinURL: conference.uri,
-                owner: params['X-OX-OWNER'],
-                params: params,
-                type: params['X-OX-TYPE']
-            };
         }
-    };
+    });
+
+    if (api.host && settings.get('zoom/enabled')) api.addSolution('zoom');
+
+    // Allow querying for 'history' support, which is not a conference solution
+    if (settings.get('callHistory/enabled', !!api.host)) {
+        var standaloneSupports = api.supports;
+        api.supports = function (type) {
+            return type === 'history' || standaloneSupports(type);
+        };
+    }
 
     function reconnect() {
 
@@ -199,18 +148,6 @@ define.async('io.ox/switchboard/api', [
         retryDelay = 4;
     }
 
-    return userAPI.get().then(function (data) {
-        api.userId = api.trim(data.email1 || data.email2 || data.email3);
-        // create a simple heuristic based on domain
-        // to check whether people are internal users
-        var domain = api.userId.replace(/^.*?@/, ''),
-            regexp = new RegExp('@' + _.escapeRegExp(domain) + '$', 'i');
-        api.isInternal = function (id) {
-            return regexp.test(id);
-        };
-        return reconnect().then(function () {
-            return api;
-        });
-    });
+    return reconnect().then(_.constant(api));
 
 });

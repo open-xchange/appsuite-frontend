@@ -17,5 +17,10 @@
         "path": "io.ox/switchboard/call/api",
         "requires": "switchboard",
         "device": "!smartphone"
+    },
+    {
+        "namespace": "core",
+        "path": "io.ox/switchboard/jitsi",
+        "requires": "jitsi || switchboard"
     }
 ]

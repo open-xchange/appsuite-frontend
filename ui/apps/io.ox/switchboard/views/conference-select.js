@@ -22,7 +22,7 @@
 
 define('io.ox/switchboard/views/conference-select', [
     'io.ox/backbone/views/disposable',
-    'io.ox/switchboard/api',
+    'io.ox/switchboard/standalone/api',
     'gettext!io.ox/switchboard'
 ], function (DisposableView, api, gt) {
 

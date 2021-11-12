@@ -22,7 +22,7 @@
 
 define('io.ox/switchboard/views/jitsi-meeting', [
     'io.ox/backbone/views/disposable',
-    'io.ox/switchboard/api',
+    'io.ox/switchboard/standalone/api',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
 ], function (DisposableView, api, settings, gt) {
