@@ -161,8 +161,8 @@ define('io.ox/mail/compose/actions/send', [
                         // reenable the close button(s) in toolbar
                         if (baton.close) baton.close.show();
                         if (baton.launcherClose) baton.launcherClose.show();
-
-                        win.idle().show();
+                        // param 'resume' needed on mobile
+                        win.idle().show(undefined, _.device('smartphone'));
                     }
 
                     // special errors. Those are handled in 'io.ox/mail/compose/main'
