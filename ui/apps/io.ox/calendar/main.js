@@ -41,7 +41,8 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/toolbar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
-    'io.ox/calendar/week/view'
+    'io.ox/calendar/week/view',
+    'io.ox/conference/extensions'
 ], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, DatePicker, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api, addFolderSelectSupport) {
 
     'use strict';
