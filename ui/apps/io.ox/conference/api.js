@@ -40,6 +40,10 @@ define('io.ox/conference/api', [
             services[service] = options;
         },
 
+        get: function (service) {
+            return services[service];
+        },
+
         supports: function (service) {
             return !!services[service];
         },
