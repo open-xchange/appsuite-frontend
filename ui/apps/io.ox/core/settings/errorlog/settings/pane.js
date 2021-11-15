@@ -254,13 +254,17 @@ define('io.ox/core/settings/errorlog/settings/pane', [
                 type: 'line',
                 data: chart,
                 options: {
-                    legend: { display: false },
-                    tooltips: { enabled: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltips: { enabled: false }
+                    },
                     elements: {
                         line: {
                             backgroundColor: 'rgba(0, 136, 204, 0.15)',
                             borderColor: 'rgba(0, 136, 204, 0.80)',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.5
                         },
                         point: {
                             backgroundColor: 'rgba(0, 136, 204, 1)',
