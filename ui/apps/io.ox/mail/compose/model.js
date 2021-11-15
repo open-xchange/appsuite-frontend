@@ -220,9 +220,9 @@ define('io.ox/mail/compose/model', [
                 return memo + model.getSize();
             }, 0);
             actualAttachmentSize = actualAttachmentSize * 2; // the backend needs twice the size of the email to manage the draft
-            quotaAPI.reload();
             var mailQuota = quotaAPI.mailQuota.get('quota');
             var use = quotaAPI.mailQuota.get('use');
+            if (mailQuota === -1) return false;
             return mailQuota === -1024 ? false : actualAttachmentSize > mailQuota - use;
         },
 
