@@ -177,7 +177,14 @@
     .selected-contacts-view {
         border-top: 1px solid #e5e5e5;
         text-align: left;
-        padding: 16px;
+        max-height: 150px;
+        padding: 16px 0 16px 16px;
+
+        ul {
+            overflow-y: auto;
+            max-height: 97px;
+            margin-bottom: 0px;
+        }
 
         &.empty {
             display: none;

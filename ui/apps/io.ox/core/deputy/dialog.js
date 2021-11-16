@@ -141,7 +141,7 @@ define('io.ox/core/deputy/dialog', [
         if (model.get('deputyId')) editDialog.addButton({ className: 'btn-default pull-left', label: gt('Remove'), action: 'remove' });
 
         editDialog.addCancelButton()
-            .addButton({ className: 'btn-primary', label: gt('save'), action: 'save' })
+            .addButton({ className: 'btn-primary', label: gt('Save'), action: 'save' })
             .on('cancel', function () {
                 // cancel on a model that was not saved means we should remove it from the list
                 if (model.get('deputyId') === undefined) {
