@@ -552,6 +552,9 @@ Attach original message on touch devices
 <config>io.ox/mail//compose/autocompleteApiLimit=`<number>`</config>
 Fetch limit of autocomplete widget of mail compose. Default: `50`
 
+<config>io.ox/mail//compose/deputy/hint=`<bool>`</config>
+Pre-configured "disclaimer text" when sending "on behalf of". (default: true)
+
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
