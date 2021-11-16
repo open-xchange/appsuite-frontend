@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                             '@open-xchange/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'socket.io-client/dist/socket.io.slim.js',
                             'bigscreen/bigscreen.min.js',
-                            'chart.js/dist/Chart.min.js',
+                            'chart.js/dist/chart.min.js',
                             'clipboard/dist/clipboard.min.js',
                             'croppie/croppie.min.js',
                             'resize-polyfill/lib/polyfill-resize.js',

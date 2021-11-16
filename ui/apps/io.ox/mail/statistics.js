@@ -26,7 +26,7 @@ define('io.ox/mail/statistics', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/mail',
-    'static/3rd.party/Chart.min.js'
+    'static/3rd.party/chart.min.js'
 ], function (api, accountAPI, ext, ModalDialog, gt, Chart) {
 
     'use strict';

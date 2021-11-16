@@ -28,7 +28,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
-    'static/3rd.party/Chart.min.js'
+    'static/3rd.party/chart.min.js'
 ], function (ext, ExtensibleView, util, http, capabilities, settings, gt, Chart) {
 
     'use strict';
