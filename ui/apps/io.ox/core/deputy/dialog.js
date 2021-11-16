@@ -320,9 +320,10 @@ define('io.ox/core/deputy/dialog', [
 
                     userCollection.on('add', function (user) {
                         // you cannot be your own deputy
+                        // external contacts are not allowed (no id)
                         // addresspicker sends contact data, autocomplete sends user data
                         var id = user.get('user_id') || user.get('id');
-                        if (id === ox.user_id) {
+                        if (!id || id === ox.user_id) {
                             // remove from collection. no need to redraw
                             userCollection.remove(user, { silent: true });
                             return;
