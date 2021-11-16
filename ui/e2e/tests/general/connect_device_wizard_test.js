@@ -36,11 +36,10 @@ After(async ({ users }) => {
 
 // new connect your device wizard, see OXUI-793
 
-Scenario('Show available setup scenarios based on capabilites', async ({ I, topbar, users }) => {
+Scenario('Show available setup scenarios based on capabilites', async ({ I, topbar, users, mail }) => {
 
     I.login();
-    //I.refreshPage();
-
+    mail.waitForApp();
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
@@ -61,6 +60,7 @@ Scenario('Show available setup scenarios based on capabilites', async ({ I, topb
 
     await users[0].hasModuleAccess({ infostore: false });
     I.refreshPage();
+    mail.waitForApp();
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
@@ -77,7 +77,7 @@ Scenario('Show available setup scenarios based on capabilites', async ({ I, topb
 
     I.logout();
     I.login('app=io.ox/mail&cap=caldav');
-    I.refreshPage();
+    mail.waitForApp();
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
@@ -90,10 +90,10 @@ Scenario('Show available setup scenarios based on capabilites', async ({ I, topb
 
 });
 
-Scenario('Progressbar updates on selection and navigation', async ({ I, topbar }) => {
+Scenario('Progressbar updates on selection and navigation', async ({ I, topbar, mail }) => {
 
     I.login();
-    I.refreshPage();
+    mail.waitForApp();
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
@@ -122,10 +122,10 @@ Scenario('Progressbar updates on selection and navigation', async ({ I, topbar }
     });
 });
 
-Scenario('Generate QR codes for app downloads', async ({ I, topbar }) => {
+Scenario('Generate QR codes for app downloads', async ({ I, topbar, mail }) => {
 
     I.login('app=io.ox/mail&cap=mobile_mail_app');
-    I.refreshPage();
+    mail.waitForApp();
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
         I.waitForText('Which device do you want to configure?');
@@ -152,7 +152,7 @@ Scenario('Generate QR codes for app downloads', async ({ I, topbar }) => {
     });
 });
 
-Scenario('Change product names and check for different platforms', async ({ I, topbar, users }) => {
+Scenario('Change product names and check for different platforms', async ({ I, topbar, users, mail }) => {
     await Promise.all([
         users.create(),
         users.create()
@@ -189,8 +189,9 @@ Scenario('Change product names and check for different platforms', async ({ I, t
                 'productNames/mail': customMailApp
             }
         }, { user: user1 });
+
         I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user1 });
-        I.refreshPage();
+        mail.waitForApp();
         topbar.connectDeviceWizard();
         await checkAppNames(customMailApp, 'OX Drive');
     });
@@ -201,8 +202,9 @@ Scenario('Change product names and check for different platforms', async ({ I, t
                 'productNames/drive': customDriveApp
             }
         }, { user: user2 });
+
         I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user2 });
-        I.refreshPage();
+        mail.waitForApp();
         topbar.connectDeviceWizard();
         await checkAppNames('OX Mail', customDriveApp);
     });
@@ -214,13 +216,12 @@ Scenario('Change product names and check for different platforms', async ({ I, t
                 'productNames/drive': customDriveApp
             }
         }, { user: user3 });
+
         I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user3 });
-        I.refreshPage();
+        mail.waitForApp();
         topbar.connectDeviceWizard();
         await checkAppNames(customMailApp, customDriveApp);
-
     });
-
 });
 
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
@@ -228,7 +229,6 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
     await users[0].hasAccessCombination('groupware');
 
     I.login();
-    I.refreshPage();
     mail.waitForApp();
 
     topbar.connectDeviceWizard();
