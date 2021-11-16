@@ -148,6 +148,17 @@ define('io.ox/onboarding/main', [
                     description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
                     config: getEasConfig()
                 });
+            },
+            'syncapp': function () {
+                if (_.device('smartphone')) {
+                    return new views.MobileDownloadView({
+                        app: settings.get('android/syncapp'),
+                        title: util.titles.android.syncapp,
+                        storeIcon: getStoreIcon('android'),
+                        iconClass: 'syncapp playstore'
+                    });
+                }
+                return new views.DownloadQrView({ title: util.titles.android.syncapp, url: settings.get('android/syncapp/url') });
             }
         },
         'macos': {
