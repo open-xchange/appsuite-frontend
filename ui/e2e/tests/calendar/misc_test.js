@@ -157,7 +157,7 @@ Scenario('[C236795] Visibility Flags', ({ I, calendar }) => {
         // PUBLIC => Standard
         // CONFIDENTIAL => Private
         // PRIVATE => Secret
-        I.selectOption('.io-ox-calendar-edit select', visibility);
+        I.selectOption('Visibility', visibility);
 
         // save
         I.click('Create', '.io-ox-calendar-edit-window');

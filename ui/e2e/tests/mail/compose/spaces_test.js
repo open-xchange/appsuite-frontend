@@ -89,7 +89,7 @@ Scenario('Spaces', async ({ I, mail, dialogs }) => {
     // maximize
     I.click(`.taskbar-button[aria-label="Mail: ${subject}"]`);
     I.waitForVisible('.io-ox-mail-compose-window.active');
-    if (subject === 'restored-maximized') pause();
+
     I.click('[data-action="io.ox/mail/actions/delete"]');
     I.waitForText('This would also delete a currently edited draft.');
     dialogs.clickButton('Delete');
