@@ -407,7 +407,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         var defs = [],
             lastSearchedContacts = settings.get('enterprisePicker/lastSearchedContacts', []);
 
-        defs.push(options.useGABOnly ? folderApi.get(util.getGabId()) : folderApi.flat({ module: 'contacts', all: true }));
+        defs.push(folderApi.flat({ module: 'contacts', all: true }));
 
         http.pause();
         _(lastSearchedContacts).each(function (contact) {
@@ -423,8 +423,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         return $.when.apply($, defs).then(function (folders) {
 
             var folderlist;
+
+            // gab only option means users only. Those may be in the gab but also in ldap folders
             if (options.useGABOnly) {
-                folderlist = [{ label: false, options: [{ label: folders.title, value: folders.id }] }];
+                folders = folders.public.length === 1 ? folders.public : {
+                    public: folders.public
+                };
+            }
+
+            if (folders.length === 1) {
+                folderlist = [{ label: false, options: [{ label: folders[0].title, value: folders[0].id }] }];
             } else {
                 folderlist = [{ label: false, options: [{ label: gt('Search all address lists'), value: 'all' }] }];
 
@@ -459,7 +467,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 return { folder_id: contact.folder_id, id: contact.id };
             })).save();
 
-            model.set('addressLists', folderlist);
+            model.set({
+                addressLists: folderlist,
+                addressListIds: _(folderlist).chain().map(function (section) { return _(section.options).pluck('value'); }).flatten().without('all').valueOf()
+            });
             model.get('lastContacts').reset(lastSearchedContacts);
 
             var updateContactsAfterSearch = function (contacts) {
@@ -501,7 +512,13 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                 if (isSearch) {
                     var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
-                    if (selectedList === 'all') delete params.folders;
+                    if (selectedList === 'all') {
+                        if (options.useGABOnly) {
+                            params.folders = model.get('addressListIds');
+                        } else {
+                            delete params.folders;
+                        }
+                    }
                     api.advancedsearch(query, params)
                         .then(function (result) {
                             // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
@@ -514,6 +531,15 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         });
                     return;
                 }
+                var data = {
+                    folders: [selectedList],
+                    folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
+                };
+
+                if (options.useGABOnly) {
+                    data.filter = ['and', ['>', { field: 'user_id' }, 0]];
+                }
+
                 // put the request together manually, api function has too much utility stuff
                 // use advanced search without query to get all contacts. (we don't use all request here because that has no limit parameter)
                 http.PUT({
@@ -525,10 +551,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         sort: 607,
                         order: 'desc'
                     },
-                    data: {
-                        folders: [selectedList],
-                        folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
-                    }
+                    data: data
                 }).then(function (contacts) {
                     // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
                     if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
@@ -556,7 +579,14 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 contentNode.busy();
 
                 var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
-                if (selectedList === 'all') delete params.folders;
+                if (selectedList === 'all') {
+                    if (options.useGABOnly) {
+                        params.folders = model.get('addressListIds');
+                    } else {
+                        delete params.folders;
+                    }
+                }
+                if (options.useGABOnly) params.onlyUsers = true;
                 api.advancedsearch(model.get('searchQuery'), params)
                     .then(function (result) {
                         // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
@@ -627,7 +657,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             bodyNode.append(new ContactListView(_.extend({ model: model, modalBody: bodyNode }, options)).render().$el)
             .after(new SelectedContactsView({ model: model }).render().$el);
 
-            if (options.useGABOnly) model.trigger('change:selectedList', model, util.getGabId());
+            if (folders.length === 1) model.trigger('change:selectedList', model, folders[0].id);
 
         }, function (error) {
             contentNode.idle();
@@ -643,7 +673,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         var model = new Backbone.Model({
             searchQuery: '',
             filterQuery: '',
-            selectedList: options.useGABOnly ? util.getGabId() : 'all',
+            selectedList: 'all',
             selectedContacts: new Backbone.Collection(),
             contacts: new Backbone.Collection(),
             lastContacts: new Backbone.Collection(),
