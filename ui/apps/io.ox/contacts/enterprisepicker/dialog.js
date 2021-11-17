@@ -152,7 +152,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
         renderContact: function (contact) {
             // don'render contacts that are not allowed (can happen with last searched contacts since those may not be users)
-            if (this.options.useGABOnly && !contact.get('user_id')) return;
+            if (this.options.useGABOnly && !contact.get('internal_userid')) return;
 
             var name = util.getFullName(contact.attributes, true),
                 initials = util.getInitials(contact.attributes),
