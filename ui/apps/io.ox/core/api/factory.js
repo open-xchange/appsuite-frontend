@@ -550,7 +550,6 @@ define('io.ox/core/api/factory', [
                 delete opt.omitFolder;
                 delete opt.getData;
                 delete opt.folderTypes;
-                delete opt.onlyUsers;
 
                 // go!
                 return http.PUT({

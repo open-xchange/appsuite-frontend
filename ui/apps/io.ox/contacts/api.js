@@ -231,14 +231,6 @@ define('io.ox/contacts/api', [
                             filter.push(['=', { 'field': name }, query]);
                         });
                     }
-
-                    if (opt.onlyUsers) {
-                        filter = ['and',
-                            ['>', { 'field': 'user_id' }, 0],
-                            filter
-                        ];
-                    }
-
                     data = { 'filter': filter };
 
                     if (opt.folders) {
