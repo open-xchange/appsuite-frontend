@@ -77,7 +77,7 @@ Scenario('Can add edit and remove deputies', async ({ I, users }) => {
 
     I.waitForText('The deputy has the following permissions');
     I.click('Deputy can send emails on your behalf');
-    I.click('save');
+    I.click('Save');
 
     I.waitForText('Allowed to send emails on your behalf, Inbox (Viewer), Calendar (Viewer)');
     I.seeElement('.deputy-list-view li .flex-item');
@@ -87,7 +87,7 @@ Scenario('Can add edit and remove deputies', async ({ I, users }) => {
     I.click('Deputy can send emails on your behalf');
     I.selectOption('Inbox', 'Author (create/edit/delete emails)');
     I.selectOption('Calendar', 'None');
-    I.click('save');
+    I.click('Save');
 
     I.waitForText('Inbox (Author), Calendar (None)');
     I.click('.btn.remove');
