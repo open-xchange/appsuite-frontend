@@ -110,7 +110,7 @@ define('io.ox/onboarding/main', [
         'android': {
             'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); },
             'mailapp': function () {
-                if (_.device('smartphone')) {
+                if (_.device('android')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/mailapp'),
                         title: settings.get('productNames/mail'),
@@ -121,7 +121,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ title: util.titles.android.mailapp, url: settings.get('android/mailapp/url') });
             },
             'driveapp': function () {
-                if (_.device('smartphone')) {
+                if (_.device('android')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/driveapp'),
                         title: settings.get('productNames/drive'),
@@ -148,6 +148,17 @@ define('io.ox/onboarding/main', [
                     description: gt('To synchronize Mail, Calendar and Address Book via Exchange Active Sync, please enter the following settings:'),
                     config: getEasConfig()
                 });
+            },
+            'syncapp': function () {
+                if (_.device('android')) {
+                    return new views.MobileDownloadView({
+                        app: settings.get('android/syncapp'),
+                        title: util.titles.android.syncapp,
+                        storeIcon: getStoreIcon('android'),
+                        iconClass: 'syncapp playstore'
+                    });
+                }
+                return new views.DownloadQrView({ title: util.titles.android.syncapp, url: settings.get('android/syncapp/url') });
             }
         },
         'macos': {
@@ -165,7 +176,7 @@ define('io.ox/onboarding/main', [
         },
         'ios': {
             'mailsync': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.DownloadConfigView({
                         type: 'mail',
                         userData: config.userData,
@@ -180,7 +191,7 @@ define('io.ox/onboarding/main', [
                 });
             },
             'mailapp': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/mailapp'),
                         title: settings.get('productNames/mail'),
@@ -191,7 +202,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ title: util.titles.ios.mailapp, url: settings.get('ios/mailapp/url') });
             },
             'driveapp': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/driveapp'),
                         title: settings.get('productNames/drive'),
@@ -202,7 +213,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ title: util.titles.ios.driveapp, url: settings.get('ios/driveapp/url') });
             },
             'eassync': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.DownloadConfigView({
                         type: 'eas',
                         config: getEasConfig()
@@ -215,7 +226,7 @@ define('io.ox/onboarding/main', [
                 });
             },
             'addressbook': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.DownloadConfigView({
                         type: 'carddav',
                         config: getContactsConfig()
@@ -224,7 +235,7 @@ define('io.ox/onboarding/main', [
                 return new views.DownloadQrView({ title: util.titles.ios.addressbook, type: 'carddav', config: getContactsConfig() });
             },
             'calendar': function () {
-                if (_.device('smartphone')) {
+                if (_.device('ios')) {
                     return new views.DownloadConfigView({
                         type: 'caldav',
                         config: getCalendarConfig()
