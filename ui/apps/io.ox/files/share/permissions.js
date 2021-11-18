@@ -1017,7 +1017,7 @@ define('io.ox/files/share/permissions', [
                 },
                 toJSON: function () {
                     var data = {
-                        cascadePermissions: true,
+                        cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                         notification: { transport: 'mail' }
                     };
 
