@@ -39,7 +39,6 @@ After(async ({ users }) => {
 Scenario('Show available setup scenarios based on capabilites', async ({ I, topbar, users }) => {
 
     I.login();
-    //I.refreshPage();
 
     topbar.connectDeviceWizard();
     await within('.wizard-container', () => {
