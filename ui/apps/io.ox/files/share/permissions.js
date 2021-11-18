@@ -1009,7 +1009,8 @@ define('io.ox/files/share/permissions', [
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
                     // default is true for nested and false for flat folder tree, #53439
-                    cascadePermissions: true,
+                    // do not share inbox subfolders, users will accidentally share all mail folders, see OXUIB-1001 and OXUIB-1093
+                    cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
