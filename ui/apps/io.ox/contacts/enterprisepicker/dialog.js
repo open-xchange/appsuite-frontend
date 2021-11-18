@@ -364,9 +364,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     });
 
     function createInstance(options, model) {
+        options = options || {};
         var app = ox.ui.createApp({
             name: 'io.ox/contacts/enterprisepicker',
-            title: gt('Global address list'),
+            title: options.useGABOnly ? gt('User list') : gt('Global address list'),
             closable: true,
             floating: true,
             size: 'width-lg'
@@ -612,7 +613,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                             $('<span class="input-group-addon">').append($.icon('fa-search', gt('Search for name, department, position')))
                         )
                     ),
-                    options.useGABOnly ? '' : (
+                    options.useGABOnly ? '' : [
                         $('<label>').text(gt('Filter')).append(
                             $('<div class="input-group">').append(
                                 new Mini.InputView({ name: 'filterQuery', model: model, autocomplete: false }).render().$el
@@ -626,7 +627,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         $('<label>').text(gt('Address list')).append(
                             listSelectBox
                         )
-                    )
+                    ]
                 )
             );
             bodyNode.append(new ContactListView(_.extend({ model: model, modalBody: bodyNode }, options)).render().$el)
@@ -655,7 +656,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             var dialog =  new ModalDialog({
                 point: 'io.ox/contacts/enterprisepicker-dialog',
                 help: 'ox.appsuite.user.sect.contacts.use.addressdirectory.html',
-                title: gt('Global address list')
+                title: options.useGABOnly ? gt('User list') : gt('Global address list')
             })
                 .build(function () {
                     var self = this;
