@@ -155,10 +155,10 @@ define('io.ox/core/api/autocomplete', [
                     //process each field
                     _.each(self.fields, function (field) {
                         if (obj[field]) {
-                            // magic for users beyond global adress book
-                            if (String(obj.folder_id) !== contactsUtil.getGabId() && obj.type === 'user') return;
+                            // remove users with internal_userid = 0 (those are from another context)
+                            if (obj.internal_userid === 0 && obj.type === 'user') return;
                             // remove users from contact api results
-                            if (self.options.users && String(obj.folder_id) === contactsUtil.getGabId() && obj.type === 'contact') return;
+                            if (self.options.users && obj.contact_id && obj.type === 'contact') return;
                             // convert user from contact api to real user
                             if (obj.type === 'user' && obj.internal_userid) {
                                 obj.contact_id = obj.id;
