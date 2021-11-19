@@ -38,7 +38,7 @@ define('io.ox/participants/views', [
             2: gt('Group'),
             3: gt('Resource'),
             4: gt('Resource group'),
-            5: capabilities.has('gab') ? gt('External contact') : '',
+            5: gt('External contact'),
             6: gt('Distribution list')
         },
         TYPE_IMAGES = {
