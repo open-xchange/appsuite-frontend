@@ -1149,10 +1149,25 @@ define('io.ox/files/share/permissions', [
                     || publicLink.hasPublicLink();
             }
 
+            // check if only deputy permissions are set (beside owner)
+            function deputyShareOnly() {
+                if (publicLink.hasPublicLink()) return false;
+
+                var shares = objModel.get('com.openexchange.share.extendedObjectPermissions') || objModel.get('com.openexchange.share.extendedPermissions') || [];
+                // filter shares that are deputy shares or myself
+                shares = shares.filter(function (share) {
+                    var myself = share.entity === undefined ? pUtil.isOwnIdentity(share.identifier) : share.entity === ox.user_id;
+                    return !myself && !share.deputyPermission;
+                });
+                // no shares left? -> all shares are either deputy shares or myself
+                return shares.length === 0;
+
+            }
+
             if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared()).on('click', function () {
+                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared() || deputyShareOnly()).on('click', function () {
                             unshareRequested();
                         })
                     )
