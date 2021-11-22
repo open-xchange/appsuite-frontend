@@ -423,9 +423,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             } else {
                 folderlist = [{ label: false, options: [{ label: gt('Search all address lists'), value: 'all' }] }];
 
-                // flat request returns folders in sections, add them to a single array, leave out the hidden section
+                // flat request returns folders in sections, add them to a single array, leave out the hidden section and sharing (shared by me) section
                 _(folders).each(function (sectionFolders, section) {
-                    if (section === 'hidden') return;
+                    if (section === 'hidden' || section === 'sharing') return;
 
                     var list = _(_(sectionFolders).filter(function (folder) {
                     // only use folders that have the "used in picker" flag if not configured otherwise
