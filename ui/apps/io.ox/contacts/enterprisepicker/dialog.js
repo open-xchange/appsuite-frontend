@@ -64,7 +64,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             check('cellular_telephone2') ||
             check('telephone_home1') ||
             check('telephone_home2') ||
-            check('telephone_other'));
+            check('telephone_other') ||
+            //allow distribution lists if not empty
+            (contact.mark_as_distributionlist && contact.distribution_list && contact.distribution_list.length));
     };
 
     var sectionLabels = {
@@ -106,7 +108,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             this.model.get('selectedContacts').each(function (contact) {
                 node.append(
                     $('<li role="listitem">').append(
-                        $('<div class="name">').append(util.getFullName(contact.attributes, true)),
+                        $('<div class="name">').append(util.getFullName(contact.attributes, true) + (contact.get('mark_as_distributionlist') ? ' - ' + gt('Distribution list') : '')),
                         $('<button class="btn">').attr({
                             'data-id': contact.get('id'),
                             'aria-label': gt('Remove contact from selection')
@@ -169,6 +171,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         contact.get('telephone_other'),
                 contactPicture,
                 label = _([util.getFullName(contact.attributes, false),
+                    contact.get('mark_as_distributionlist') ? gt('Distribution list') : '',
                     //#. %1$s name of the department a contact is working in
                     contact.get('department') ? gt('department %1$s', contact.get('department')) : '',
                     //#. %1$s job position of a contact, CEO, working student etc
@@ -195,7 +198,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         }) : $('<div class="contact-picture initials" aria-hidden="true">').text(initials)),
                     $('<div class="data-container">').append(
                         $('<div class="name" aria-hidden="true">').append(name),
-                        $('<div class="department" aria-hidden="true">').text(contact.get('department'))
+                        $('<div class="department" aria-hidden="true">').text(contact.get('mark_as_distributionlist') ? gt('Distribution list') : contact.get('department'))
                     )
                 ),
                 $('<div class="flex-container data-container">').append(
@@ -649,7 +652,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                                         id: item.id,
                                         folder_id: item.folder_id,
                                         email: mail,
-                                        field: item.mail_field || 'email1',
+                                        // mail_field is used in distribution lists
+                                        field: (item.mail_field ? 'email' + item.mail_field : item.field) || 'email1',
                                         user_id: item.user_id || item.internal_userid
                                     };
                                 return result;
