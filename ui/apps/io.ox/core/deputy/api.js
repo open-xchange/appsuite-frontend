@@ -50,6 +50,8 @@ define('io.ox/core/deputy/api', [
                     action: 'new'
                 },
                 data: params
+            }).done(function () {
+                ox.trigger('please:refresh');
             });
         },
         remove: function (model) {
@@ -59,6 +61,8 @@ define('io.ox/core/deputy/api', [
                     action: 'delete',
                     deputyId: model.get('deputyId')
                 }
+            }).done(function () {
+                ox.trigger('please:refresh');
             });
         },
         update: function (model) {
@@ -71,6 +75,8 @@ define('io.ox/core/deputy/api', [
                     deputyId: model.get('deputyId')
                 },
                 data: params
+            }).done(function () {
+                ox.trigger('please:refresh');
             });
         },
         // returns deputy data where the current user is deputy
