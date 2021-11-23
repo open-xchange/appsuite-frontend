@@ -55,12 +55,15 @@ define('io.ox/chat/views/addMember', [
                         result = _(result).map(function (m) {
                             return new pModel.Participant(m);
                         });
-                        return _(result).filter(function (model) {
+                        result = _(result).filter(function (model) {
                             var email = model.get(model.get('field') || 'email1');
                             if (api.isMyself(email)) return false;
                             if (self.collection.get(email)) return false;
                             return true;
                         });
+
+                        // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                        return $.when.apply($, _(result).pluck('loading')).then(function () { return result; });
                     },
                     click: function (e, model) {
                         self.addParticipant(model);

@@ -1243,13 +1243,16 @@ define('io.ox/files/share/permissions', [
                             return new pModel.Participant(m);
                         });
                         // remove duplicate entries from typeahead dropdown
-                        return _(data).filter(function (model) {
+                        data = _(data).filter(function (model) {
                             // don't offer secondary addresses as guest accounts
                             if (!supportsGuests && model.get('field') !== 'email1') return false;
                             // mail does not support sharing folders to guets
                             if (module === 'mail' && model.get('field') !== 'email1') return false;
                             return !permissionsView.collection.get(model.id);
                         });
+
+                        // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                        return $.when.apply($, _(data).pluck('loading')).then(function () { return data; });
                     },
                     click: click,
                     extPoint: POINT

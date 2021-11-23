@@ -139,9 +139,12 @@ define('io.ox/participants/add', [
                 });
                 // remove duplicate entries from typeahead dropdown
                 var col = this.collection;
-                return _(data).filter(function (model) {
+                data = _(data).filter(function (model) {
                     return !col.get(model);
                 });
+
+                // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                return $.when.apply($, _(data).pluck('loading')).then(function () { return data; });
             }, this);
 
             // ensure a fixed scroll position when adding participants/members after the initial rendering

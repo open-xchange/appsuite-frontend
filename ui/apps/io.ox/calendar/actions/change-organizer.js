@@ -79,10 +79,12 @@ define('io.ox/calendar/actions/change-organizer', [
                                     return new pModel.Participant(m);
                                 });
 
-                                return _(data).filter(function (model) {
+                                data = _(data).filter(function (model) {
                                     // only internal users allowed, so no secondary mail addresses
                                     return model.get('field') === 'email1';
                                 });
+                                // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                                return $.when.apply($, _(data).pluck('loading')).then(function () { return data; });
                             },
                             click: function (e, data, value) {
                                 self.model.set('newOrganizer', new Backbone.Model(util.createAttendee(data)));
