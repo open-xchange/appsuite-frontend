@@ -288,7 +288,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             if (next.length === 0) return;
 
             li.removeClass('active-descendant');
-            next.addClass('active-descendant')[0].scrollIntoView();
+            // useing false here makes sure labels like "last searched for" are not scrolled out of view
+            next.addClass('active-descendant')[0].scrollIntoView(false);
             this.$el.attr('aria-activedescendant', next.attr('id'));
             next.find('.show-details').append(this.showDetailsButton);
         },
@@ -400,6 +401,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
     }
 
     function buildDialog(options, model, headerNode, contentNode, bodyNode) {
+        bodyNode.hide();
         contentNode.busy();
 
         var defs = [],
@@ -462,6 +464,8 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
             var updateContactsAfterSearch = function (contacts) {
                 contentNode.idle();
+                bodyNode.show();
+
                 contacts = (contacts || []).filter(contactsFilter);
                 model.get('contacts').reset(contacts);
                 // update the last searched contacts
@@ -481,20 +485,33 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             var showError = function () {
                 // show error message
                 contentNode.idle();
+                bodyNode.show();
+
                 model.get('contacts').reset([]);
                 yell('error', gt('Could not load contacts'));
             };
 
             model.on('change:selectedList', function (model, selectedList) {
-                var isSearch = model.get('searchQuery') && model.get('searchQuery').length > 1;
+                var query =  model.get('searchQuery'),
+                    isSearch = query && query.length > 1;
                 if (selectedList === 'all' && !isSearch) return model.get('contacts').reset([]);
+
+                bodyNode.hide();
                 contentNode.busy();
 
                 if (isSearch) {
                     var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
                     if (selectedList === 'all') delete params.folders;
-                    api.advancedsearch(model.get('searchQuery'), params)
-                        .then(updateContactsAfterSearch, showError);
+                    api.advancedsearch(query, params)
+                        .then(function (result) {
+                            // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                            if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+                            updateContactsAfterSearch(result);
+                        }, function (result) {
+                            // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                            if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+                            showError(result);
+                        });
                     return;
                 }
                 // put the request together manually, api function has too much utility stuff
@@ -513,26 +530,47 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }
                     }
                 }).then(function (contacts) {
+                    // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                    if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+
                     contentNode.idle();
+                    bodyNode.show();
+
                     contacts = (contacts || []).filter(contactsFilter);
                     model.get('contacts').reset(contacts);
-                }, showError);
+                }, function (result) {
+                    // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                    if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+                    showError(result);
+                });
             });
 
             model.on('change:searchQuery', function (model, query) {
                 var selectedList = model.get('selectedList');
                 // no search query? show full selected list
-                if (query.length === 0) return model.trigger('change:selectedList', model, selectedList);
-                // less than minimal lentgh of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
+                if (!query || query.length === 0) return model.trigger('change:selectedList', model, selectedList);
+                // less than minimal length of characters? -> no change (MW request requires a minimum of io.ox/contacts//search/minimumQueryLength characters)
                 if (query.length < settings.get('search/minimumQueryLength', 2)) return;
+
+                bodyNode.hide();
                 contentNode.busy();
+
                 var params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
                 if (selectedList === 'all') delete params.folders;
                 api.advancedsearch(model.get('searchQuery'), params)
-                    .then(updateContactsAfterSearch, showError);
+                    .then(function (result) {
+                        // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                        if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+                        updateContactsAfterSearch(result);
+                    }, function (result) {
+                        // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+                        if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
+                        showError(result);
+                    });
             });
 
             contentNode.idle();
+            bodyNode.show();
 
             var listSelectBox = new Mini.SelectView({ groups: true, name: 'selectedList', model: model, list: model.get('addressLists') }).render().$el;
 
@@ -594,7 +632,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         }, function (error) {
             contentNode.idle();
             console.error(error);
-            bodyNode.append($('<div class="error">').text(gt('Could not load address book.')));
+            bodyNode.show().append($('<div class="error">').text(gt('Could not load address book.')));
         });
     }
 
