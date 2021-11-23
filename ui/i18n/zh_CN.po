@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-18 09:29+1000\n"
+"PO-Revision-Date: 2021-11-15 14:49+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -577,7 +577,6 @@ msgstr "在线帮助：%1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -2050,12 +2049,36 @@ msgid "Add new participant"
 msgstr "添加新参与者"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "更新约会"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "添加到日历"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "接受提案"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "移除约会"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "驳回更改"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "忽视"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "请求约会"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "发送约会"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2074,8 +2097,20 @@ msgid "The appointment has been updated"
 msgstr "约会已更新"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "已添加约会"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "更改已被接受"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "约会已删除"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "您已经拒绝了约会"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2084,10 +2119,6 @@ msgstr "更改被驳回"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "您已经暂时的接受约会"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "您已经拒绝了约会"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -4945,6 +4976,18 @@ msgstr "此值太长。允许的长度为 %1$d 字符。"
 msgid "This is an invalid email address."
 msgstr "这是一个无效的电子邮件地址。"
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "我的地址列表"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "公共地址列表"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "已共享地址列表"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -4955,10 +4998,30 @@ msgstr[0] "已选定 %1$d 个联系人"
 msgid "Remove contact from selection"
 msgstr "从选定移除联系人"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "选择/取消选择联系人%1$s"
+msgid "department %1$s"
+msgstr "部门 %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "位置 %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "电子邮件地址 %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "电话号码 %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "房间 %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5014,7 +5077,7 @@ msgstr "地址列表"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Could not load address book."
-msgstr "不能加载地址列表"
+msgstr "不能加载地址簿。"
 
 #. Context: Add selected contacts; German "Auswählen", for example
 #. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
@@ -5364,6 +5427,21 @@ msgid "User name"
 msgstr "用户名"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "重设密码"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "设置密码"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "电子邮件地址"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "登录"
@@ -5514,7 +5592,7 @@ msgid "Imprint"
 msgstr "印记"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "确认新密码"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5538,13 +5616,6 @@ msgstr "请输入与%1$s关联的邮件。您将收到一封电子邮件，其�
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "下一个"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "电子邮件地址"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5696,8 +5767,8 @@ msgstr "移除代表 %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "确定从您的代表列表移除%1$s延伸吗"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "确定从您的代表列表移除%1$s吗？"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5710,10 +5781,6 @@ msgstr "您当前没有分派代表，。"
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "代表能够访问您的收件夹和日历。"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "移除"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -6983,7 +7050,6 @@ msgid "The user has administrative rights"
 msgstr "此用户有管理权"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "套用到所有子文件夹"
 
@@ -10005,7 +10071,7 @@ msgstr "因为文件 \"%1$s\" 超出 infostore 限额 %2$s，所以未能上载"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid "The uploaded attachment exceeds the maximum email size of %1$s"
-msgstr "因为附件超出最大电子邮件体积 %1$s，所以未能上载。"
+msgstr "已上载的附件超出最大电子邮件体积 %1$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
 msgid ""
@@ -10448,6 +10514,10 @@ msgid "Added %s to attachments."
 msgstr "添加了 %s 到附件。"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "以其之名："
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "显示名称"
 
@@ -10459,6 +10529,13 @@ msgstr "编辑名称"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "撰写新邮件"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "此邮件已由 %1$s 以 %2$s 之名发送。"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10523,6 +10600,10 @@ msgstr "请选择一个有效图像文件作插入"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "从 %s 经过移动网路发送"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail was send on behalf of another person."
+msgstr "此邮件已以别人之名发送。"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -10891,6 +10972,16 @@ msgstr "来自 %1$s 的电子邮件：%2$d"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "通过"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "以其之名："
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "经由"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -12824,8 +12915,8 @@ msgid ""
 "Scan this code with your phone's camera to synchronize your Mail, Calendar "
 "and Address Book via Exchange Active Sync:"
 msgstr ""
-"经由 Exchange Active Sync，用您手机的照相机扫描此代码同步您的 Mail、"
-"Calendar、Address Book。"
+"经由 Exchange Active Sync，用您手机的照相机扫描此代码以同步您的邮件、日历、与"
+"地址簿。"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/util.js
@@ -15799,6 +15890,12 @@ msgstr "邀请到 %s"
 msgid "Add on %s"
 msgstr "在 %s 上添加"
 
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "选择/取消选择联系人%1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "移除"
+
 #~ msgid "Password recovery"
 #~ msgstr "密码恢复"
 
@@ -17733,9 +17830,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Country:"
 #~ msgstr "国家/地区："
-
-#~ msgid "Create Appointment"
-#~ msgstr "创建约会"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "使用储存在这里的数据创建一个 %s 户口"
@@ -19863,9 +19957,6 @@ msgstr "在 %s 上添加"
 #~ msgid "Phone alt"
 #~ msgstr "电话（替代）"
 
-#~ msgid "Phone numbers"
-#~ msgstr "电话号码"
-
 #~ msgid "Pick a time here"
 #~ msgstr "在此选择一个时间"
 
@@ -21155,12 +21246,6 @@ msgstr "在 %s 上添加"
 #~ msgstr ""
 #~ "由于我们不能鉴定此电子邮件是否来自%1$s，因此此为一封可疑的电子邮件。"
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "此邮件已添加到门户"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "此邮件已从 %1$s 发送。"
-
 #~ msgid "This may take some seconds"
 #~ msgstr "可能稍时片刻"
 
@@ -22115,9 +22200,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "vacation"
 #~ msgstr "假期"
-
-#~ msgid "via"
-#~ msgstr "经由"
 
 #~ msgid "weekly"
 #~ msgstr "每周"

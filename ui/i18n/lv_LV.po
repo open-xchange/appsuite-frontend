@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-31 16:48+0200\n"
+"PO-Revision-Date: 2021-11-22 18:47+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -578,7 +578,6 @@ msgstr "Tiešsaistes palīgs: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -2068,12 +2067,36 @@ msgid "Add new participant"
 msgstr "Pievienot dalībnieku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Atjaunināt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Pievienot kalendāram"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Apstiprināt piedāvājumu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Noņemt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Atteikt izmaiņas"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorēt"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Pieprasīt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Nosūtīt mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2092,8 +2115,20 @@ msgid "The appointment has been updated"
 msgstr "Mītiņš ir jaunināts"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Mītiņš ir pievienots"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Izmaiņas ir akceptētas"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Mītiņš ir izdzēsts"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Jūs esat atteicis mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2102,10 +2137,6 @@ msgstr "Izmaiņas ir atteiktas"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Jūs esat pagaidu apstiprinājis mītiņu"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Jūs esat atteicis mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -5030,6 +5061,18 @@ msgstr "Norādītā vērtība ir pārāk gara. Atļautais garums ir %1$d simboli
 msgid "This is an invalid email address."
 msgstr "Šī nav derīga e-pasta adrese."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Mani adrešu saraksti"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Publiskie adrešu saraksti"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Koplietojuma adrešu saraksti"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5042,10 +5085,31 @@ msgstr[2] "Izvelētas %1$s kontaktpersonas"
 msgid "Remove contact from selection"
 msgstr "Noņemt kontaktu no izvēlnes"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Izvēlieties/atcelt kontaktu %1$s"
+msgid "department %1$s"
+msgstr "struktūrvienība %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "pozīcija %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "e-pasta adrese %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Phone numbers"
+msgid "phone number %1$s"
+msgstr "telefona numurs %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "telpa %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5462,6 +5526,21 @@ msgid "User name"
 msgstr "Lietotāja vārds"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Atiestatīt paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Iestatīt paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-pasta adrese"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Pieslēgšanās"
@@ -5621,8 +5700,8 @@ msgid "Imprint"
 msgstr "Nospiedums"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Apstiprināt jauno paroli"
+msgid "Confirm new password"
+msgstr "Apstiprināt paroli"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5647,13 +5726,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nākošais"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-pasta adrese"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5745,7 +5817,6 @@ msgstr "Autors"
 #. %1$s name of module (mail, calendar etc)
 #. %2$s the granted role (author, editor, viewer, none)
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid " %1$s (%2$s) "
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
@@ -5809,8 +5880,8 @@ msgstr "Noņemt vietnieku %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Vai tiešām vēlaties noņemt %1$s no vietnieku saraksta?"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Vai tiešām vēlaties noņemt %1$s no sava vietnieku saraksta?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5823,10 +5894,6 @@ msgstr "Pašlaik vietnieki jums nav piešķirti."
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "Deputāti var saņemt piekļuvi jūsu iesūtnei un kalendāram."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Noņemt"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -7127,7 +7194,6 @@ msgid "The user has administrative rights"
 msgstr "Lietotājam ir administratīvās tiesības"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Piemērot visam apakšmapēm"
 
@@ -10717,6 +10783,10 @@ msgid "Added %s to attachments."
 msgstr "%s pievienots pielikumiem."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "Kā vārdā"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Rādīt vārdus"
 
@@ -10728,6 +10798,13 @@ msgstr "Rediģēt vārdus"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Sastādīt jaunu e-pastu"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Šīs e-pasts tiks nosūtīts no %1$s %2$s vārdā."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10794,6 +10871,10 @@ msgstr "Lūdzu izvēlieties derīgu attēla failu"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Nosūtīts no %s ar mobilo ierīci"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail was send on behalf of another person."
+msgstr "Šī vēstule ir nosūtīta citas personas vārdā."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11174,6 +11255,16 @@ msgstr "E-pasts no %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "Sūtītājs"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "kā vārdā"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "caur"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -16202,6 +16293,15 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Izvēlieties/atcelt kontaktu %1$s"
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Apstiprināt jauno paroli"
+
+#~ msgid "Remobe"
+#~ msgstr "Noņemt"
+
 #~ msgid "Password recovery"
 #~ msgstr "Paroles atgūšana"
 
@@ -18229,9 +18329,6 @@ msgstr "Pievienot %s"
 #~ msgid "Confirm"
 #~ msgstr "Apstiprināt"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Apstiprināt paroli"
-
 #~ msgid "Confirmation status"
 #~ msgstr "Apstiprinājumu statuss"
 
@@ -18329,9 +18426,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Country:"
 #~ msgstr "Valsts:"
-
-#~ msgid "Create Appointment"
-#~ msgstr "Izveidot tikšanos"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
@@ -20761,9 +20855,6 @@ msgstr "Pievienot %s"
 #~ msgid "Never."
 #~ msgstr "Nekad"
 
-#~ msgid "New Appointment"
-#~ msgstr "Jauna tikšanās"
-
 #~ msgid "New Caledonia"
 #~ msgstr "Jaunkaledonija"
 
@@ -21310,9 +21401,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Phone alt"
 #~ msgstr "Telefons (alt.)"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonu numuri"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefons:"
@@ -23404,12 +23492,6 @@ msgstr "Pievienot %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Šī vēstule ir pievienota portālam"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Šī e-pasta sūtītājs ir %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Process var aizņemt dažas sekundes"
 
@@ -25001,9 +25083,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "vacation"
 #~ msgstr "prombūtne"
-
-#~ msgid "via"
-#~ msgstr "caur"
 
 #~ msgid "waiting"
 #~ msgstr "gaida"

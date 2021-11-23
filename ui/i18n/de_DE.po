@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-02 14:33+0100\n"
+"PO-Revision-Date: 2021-11-23 15:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2565,11 +2565,10 @@ msgstr ""
 "automatisch löschen"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, fuzzy
 msgid ""
 "Automatically apply appointment changes received via email to your calendar"
 msgstr ""
-"Automatische Übernahme von per E-Mail empfangenen Terminänderungen in Ihrem "
+"Automatische Übernahme von per E-Mail empfangenen Terminänderungen in Ihren "
 "Kalender"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
@@ -5153,7 +5152,6 @@ msgstr "Keine Kontakte gefunden."
 
 #. %1$d is the limit of displayable contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#, fuzzy
 msgid ""
 "You have reached the limit of %1$d contacts to display. Please enter a "
 "search term to narrow down your results."
@@ -5178,9 +5176,6 @@ msgid "Search for name, department, position"
 msgstr "Nach Name, Abteilung, Position suchen"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#, fuzzy
-#| msgctxt "verb"
-#| msgid "Filter"
 msgid "Filter"
 msgstr "Filtern"
 
@@ -7241,7 +7236,6 @@ msgid "The user has administrative rights"
 msgstr "Der Benutzer hat administrative Rechte"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Auf alle Unterordner anwenden"
 
@@ -8744,7 +8738,6 @@ msgstr "Notiz"
 
 #. This is a placeholder for macOS. Keep in line with local mac keyboard layout
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#, fuzzy
 msgid "You can quick-save your changes via Cmd+Enter."
 msgstr "Mit Cmd+Enter können Sie Ihre Änderungen schnell speichern."
 
@@ -10722,13 +10715,12 @@ msgstr ""
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js
-#, fuzzy
 msgid ""
 "Mail quota limit reached. You have to use %1$s or reduce the mail size in "
 "some other way."
 msgstr ""
-"Mail-Kontingentgrenze erreicht. Sie müssen %1$s verwenden oder die Mailgröße "
-"auf andere Weise reduzieren."
+"Der maximale E-Mail-Speicherplatz wurde erreicht. Sie müssen %1$s verwenden "
+"oder die E-Mailgröße auf andere Weise reduzieren."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10959,7 +10951,6 @@ msgid "Sent from %s via mobile"
 msgstr "Gesendet von %s mit Mobilgerät"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-#, fuzzy
 msgid "This mail was send on behalf of another person."
 msgstr "Diese E-Mail wurde im Auftrag einer anderen Person gesendet."
 
@@ -13357,13 +13348,12 @@ msgid "Please scan this code with your phone's camera:"
 msgstr "Scannen Sie diesen Code bitte mit Ihrer Telefonkamera:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-#, fuzzy
 msgid ""
 "Scan this code with your phone's camera to synchronize your Mail, Calendar "
 "and Address Book via Exchange Active Sync:"
 msgstr ""
-"Zum Synchronisieren Ihrer E-Mails, Kalender und Adressbücher via Exchange "
-"Active Sync scannen Sie diesen Code mit Ihrer Telefonkamera:"
+"Zum Synchronisieren Ihrer E-Mails, Ihres Kalenders und Adressbuchs via "
+"Exchange Active Sync scannen Sie diesen Code mit Ihrer Telefonkamera:"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/util.js

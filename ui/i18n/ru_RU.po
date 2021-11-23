@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-15 13:29+0300\n"
+"PO-Revision-Date: 2021-11-09 05:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -578,7 +578,6 @@ msgstr "Онлайн помощь: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -2066,12 +2065,36 @@ msgid "Add new participant"
 msgstr "Добавить нового участника"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Обновить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Добавить в календарь"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Принять предложение"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Удалить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Отклонить изменения"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Игнорировать"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Запросить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Отправить встречу"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2090,8 +2113,20 @@ msgid "The appointment has been updated"
 msgstr "Встреча обновлена"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Встреча была добавлена"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Изменения были приняты"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Встреча удалена"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Вы отказались от встречи"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2100,10 +2135,6 @@ msgstr "Изменения отклонены"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Приглашение принято под вопросом"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Вы отказались от встречи"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -5027,6 +5058,18 @@ msgstr ""
 msgid "This is an invalid email address."
 msgstr "Это не корректный адрес электронной почты."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Мой список адресов"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Общие списки адресов"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Общие списки адресов"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5039,10 +5082,30 @@ msgstr[2] "%1$d контактов выбрано"
 msgid "Remove contact from selection"
 msgstr "Удалить контакт из выбора"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Выбрать/Убрать контакт %1$s"
+msgid "department %1$s"
+msgstr "отдел %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "должность %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "электронная почта %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "номер телефона %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "комната %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5465,6 +5528,21 @@ msgid "User name"
 msgstr "Имя пользователя"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Сбросить пароль"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Установить пароль"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Электронный адрес"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Вход"
@@ -5620,8 +5698,8 @@ msgid "Imprint"
 msgstr "Отпечаток"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Подтвердите новый Пароль"
+msgid "Confirm new password"
+msgstr "Подтвердите новый пароль"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5646,13 +5724,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Вперед"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Электронный адрес"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5807,8 +5878,8 @@ msgstr "Удалить заместителя %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Вы хотите удалить %1$s из вашего списка заместителей"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Вы хотите удалить %1$s из своего списка заместителей?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5822,10 +5893,6 @@ msgstr "В настоящее время у вас нет назначенных
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr ""
 "Заместители могут получить доступ к вашей папке «Входящие» и календарю."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Удалить"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -7125,7 +7192,6 @@ msgid "The user has administrative rights"
 msgstr "Пользователь обладает правами администратора"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Применить к вложенным папкам"
 
@@ -10714,6 +10780,10 @@ msgid "Added %s to attachments."
 msgstr "Вложено в сообщение: %s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "От имени"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Показать имена"
 
@@ -10725,6 +10795,13 @@ msgstr "Изменить имена"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Создать новое сообщение"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Это письмо было отправлено %1$s от имени %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10791,6 +10868,10 @@ msgstr "Выберите файл изображения для вставки"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail was send on behalf of another person."
+msgstr "Это письмо было отправлено от имени другого человека."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11173,6 +11254,16 @@ msgstr "Сообщение от %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "От"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "от имени"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "через"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -16205,6 +16296,12 @@ msgstr "Пригласить на %s"
 msgid "Add on %s"
 msgstr "Добавить в %s"
 
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Выбрать/Убрать контакт %1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "Удалить"
+
 #~ msgid "Password recovery"
 #~ msgstr "Восстановление пароля"
 
@@ -18968,9 +19065,6 @@ msgstr "Добавить в %s"
 #~ msgid "Phone alt"
 #~ msgstr "Телефон (доп.)"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Телефоны"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Выберите время"
 
@@ -20191,12 +20285,6 @@ msgstr "Добавить в %s"
 #~ msgstr ""
 #~ "Мы не смогли убедиться, что это письмо действительно получено от %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Это сообщение добавлено в портал"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Это письмо было отправлено %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Это может занять несколько секунд"
 
@@ -21153,9 +21241,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "unselect all"
 #~ msgstr "Снять выделение"
-
-#~ msgid "via"
-#~ msgstr "через"
 
 #~ msgid "weekly"
 #~ msgstr "каждую неделю"
