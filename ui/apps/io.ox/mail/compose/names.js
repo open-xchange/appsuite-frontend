@@ -141,17 +141,12 @@ define('io.ox/mail/compose/names', [
         NameView: NameView,
 
         open: function () {
+            sender.collection.ready(function (senders) {
 
-            sender.getAddresses().done(function (addresses, deputyAddresses, primay) {
-
-                var list = _([].concat([primay], addresses))
-                    .chain()
-                    .map(function (item) {
-                        defaults[item[1]] = item[0];
-                        return item[1];
-                    })
-                    .uniq()
-                    .value();
+                var list = senders.map(function (model) {
+                    defaults[model.get('email')] = model.get('name');
+                    return model.get('email');
+                });
 
                 new ModalDialog({ title: gt('Edit real names') }).build(function () {
                     this.view = new EditRealNamesView({ collection: new Collection(list), el: this.$body.get(0) });

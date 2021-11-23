@@ -590,7 +590,7 @@ define('io.ox/contacts/view-detail', [
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
                             var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
-                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], RETURN_DOM_FRAGMENT: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
@@ -668,12 +668,12 @@ define('io.ox/contacts/view-detail', [
                         phone(data, 'telephone_business2'),
                         phone(data, 'telephone_home1'),
                         phone(data, 'telephone_home2'),
+                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_other'),
                         simple(data, 'fax_business'),
                         simple(data, 'fax_home'),
                         simple(data, 'fax_other'),
                         // --- rare ---
-                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_car'),
                         phone(data, 'telephone_isdn'),
                         phone(data, 'telephone_pager'),
@@ -791,6 +791,14 @@ define('io.ox/contacts/view-detail', [
 
                     function success(list) {
                         if (!list.length) return section.remove();
+
+                        _(list).each(function (attachment) {
+                            // cut off prefix con://0/ because document converter can only handle old folder ids atm
+                            attachment.folder = attachment.folder.split('/');
+                            // just take the last part
+                            attachment.folder = attachment.folder[attachment.folder.length - 1];
+                        });
+
                         section.replaceWith(
                             block(
                                 attachmentlist(gt('Attachments'), list)

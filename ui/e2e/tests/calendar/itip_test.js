@@ -244,15 +244,16 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.waitForText('Appointment canceled: #1');
     mail.selectMail('Appointment canceled: #1');
     I.waitForText('This email contains an appointment');
-    I.waitForText('The organizer would like to cancel an appointment that could not be found.');
+    I.waitForText('The appointment "#1" has been canceled by');
+    I.waitForText('The appointment could not be found in your calendar.');
     // 3.) Import the attached mail 'mail2.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_2.eml' });
     // 4.) Read the mail2
     I.waitForText('tthamm accepted the invitation: #1');
     mail.selectMail('tthamm accepted the invitation: #1');
     I.waitForText('This email contains an appointment');
-    I.waitForText('An attendee wanted to change his/her participant state in an appointment that could not be found.');
-    I.waitForText('Probably the appointment was already canceled.');
+    I.waitForText('has accepted the invitation to the appointment "#1"');
+    I.waitForText('The appointment could not be found in your calendar.');
     // 5.) Import the attached mail 'mail1.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_1.eml' });
     // 6.) Read the mail1
@@ -274,7 +275,7 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.openApp('Mail');
     // 8.) Read the mail2
     mail.selectMail('tthamm accepted the invitation: #1');
-    I.waitForText("You have received an E-Mail containing a reply to an appointment that you didn't organize. Best ignore it.");
+    I.waitForText('The response needs to be applied manually to your calendar.');
     // 9.) Read the mail3
     mail.selectMail('Appointment canceled: #1');
     I.waitForText('Delete');

@@ -932,12 +932,12 @@ define('io.ox/files/share/permissions', [
         Permissions: Permissions,
 
         // async / id is folder id
-        showFolderPermissions: function (id, linkModel, options) {
+        showFolderPermissions: function (id, options) {
             var model = folderAPI.pool.getModel(id),
                 opt = _.extend({
                     hasLinkSupport: capabilities.has('share_links') && !model.is('mail') && model.isShareable(id)
                 }, options);
-            that.showByModel(new Backbone.Model({ id: id }), [].concat(linkModel), opt);
+            that.showByModel(new Backbone.Model({ id: id }), opt);
         },
 
         // async / obj must provide folder_id and id
@@ -945,13 +945,13 @@ define('io.ox/files/share/permissions', [
             that.showByModel(new Backbone.Model(obj), options);
         },
 
-        showByModel: function (model, linkModel, options) {
+        showByModel: function (model, options) {
             //var oldModel = model;
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions({ cache: false })
             .done(function () {
-                that.show(model, linkModel, options);
+                that.show(model, options);
             })
             // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
             // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
@@ -966,7 +966,7 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
-        show: function (objModel, linkModel, options) {
+        show: function (objModel, options) {
 
             // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
             var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
@@ -978,7 +978,7 @@ define('io.ox/files/share/permissions', [
             options = _.extend({
                 async: true,
                 focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.share.html',
+                help: objModel.isAdmin() ? 'ox.appsuite.user.sect.dataorganisation.sharing.share.html' : undefined,
                 title: title,
                 smartphoneInputFocus: true,
                 hasLinkSupport: false,
@@ -1009,14 +1009,15 @@ define('io.ox/files/share/permissions', [
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
                     // default is true for nested and false for flat folder tree, #53439
-                    cascadePermissions: nested,
+                    // do not share inbox subfolders, users will accidentally share all mail folders, see OXUIB-1001 and OXUIB-1093
+                    cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
                 },
                 toJSON: function () {
                     var data = {
-                        cascadePermissions: this.get('cascadePermissions'),
+                        cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                         notification: { transport: 'mail' }
                     };
 
@@ -1035,7 +1036,7 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: linkModel }),
+                publicLink = new PublicLink({ files: [objModel] }),
                 permissionPreSelection = new PermissionPreSelection({ model: objModel });
 
             dialog.model = dialogConfig;
@@ -1085,7 +1086,7 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 updateSendNotificationSettings();
-                dialog.$body.find('.file-share-options').toggle(permissionsView.collection.length > 0);
+                dialog.$body.find('.file-share-options').toggle(!!permissionsView.collection.findWhere({ new: true }));
             });
 
             dialogConfig.on('change:message', function () {
@@ -1148,10 +1149,25 @@ define('io.ox/files/share/permissions', [
                     || publicLink.hasPublicLink();
             }
 
+            // check if only deputy permissions are set (beside owner)
+            function deputyShareOnly() {
+                if (publicLink.hasPublicLink()) return false;
+
+                var shares = objModel.get('com.openexchange.share.extendedObjectPermissions') || objModel.get('com.openexchange.share.extendedPermissions') || [];
+                // filter shares that are deputy shares or myself
+                shares = shares.filter(function (share) {
+                    var myself = share.entity === undefined ? pUtil.isOwnIdentity(share.identifier) : share.entity === ox.user_id;
+                    return !myself && !share.deputyPermission;
+                });
+                // no shares left? -> all shares are either deputy shares or myself
+                return shares.length === 0;
+
+            }
+
             if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared()).on('click', function () {
+                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared() || deputyShareOnly()).on('click', function () {
                             unshareRequested();
                         })
                     )
@@ -1160,7 +1176,7 @@ define('io.ox/files/share/permissions', [
 
             dialog.$el.addClass('share-permissions-dialog');
 
-            // to change privileges you have to a folder admin
+            // to change privileges you have to be a folder admin
             var supportsChanges = objModel.isAdmin(),
                 folderModel = objModel.getFolderModel();
 
@@ -1172,10 +1188,13 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
-            var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
-                openSettings();
-            });
-            dialog.$header.append(settingsButton);
+            if (options.hasLinkSupport || supportsInvites) {
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                    var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
+                    shareSettings.showSettingsDialog(settingsView);
+                });
+                dialog.$header.append(settingsButton);
+            }
 
             if (options.hasLinkSupport) {
                 dialog.$body.append(
@@ -1231,7 +1250,7 @@ define('io.ox/files/share/permissions', [
 
                 var typeaheadView = new Typeahead({
                     apiOptions: {
-                        // mail does not support sharing folders to guets
+                        // mail does not support sharing folders to guests
                         contacts: supportsGuests,
                         users: true,
                         groups: true
@@ -1242,21 +1261,20 @@ define('io.ox/files/share/permissions', [
                             return new pModel.Participant(m);
                         });
                         // remove duplicate entries from typeahead dropdown
-                        return _(data).filter(function (model) {
+                        data = _(data).filter(function (model) {
                             // don't offer secondary addresses as guest accounts
                             if (!supportsGuests && model.get('field') !== 'email1') return false;
                             // mail does not support sharing folders to guets
                             if (module === 'mail' && model.get('field') !== 'email1') return false;
                             return !permissionsView.collection.get(model.id);
                         });
+
+                        // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                        return $.when.apply($, _(data).pluck('loading')).then(function () { return data; });
                     },
                     click: click,
                     extPoint: POINT
                 });
-
-                if (objModel.isFolder() && options.nested) {
-                    dialogConfig.set('cascadePermissions', true);
-                }
 
                 dialog.$body.append(
                     // Invite people pane
@@ -1353,11 +1371,6 @@ define('io.ox/files/share/permissions', [
             } else {
                 dialog
                     .addButton({ action: 'cancel', label: gt('Close') });
-            }
-
-            function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
-                shareSettings.showSettingsDialog(settingsView);
             }
 
             function mergePermissionsAndPublicLink(permissions, entity, bits) {

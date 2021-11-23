@@ -236,6 +236,17 @@ define('io.ox/mail/util', [
             return obj;
         },
 
+        getDeputy: function (data) {
+            if (!data || !data.headers || !data.headers.Sender) return;
+            var sender = that.parseRecipients(data.headers.Sender);
+            if (data.from[0] && data.from[0][1] === sender[0][1]) return;
+            // isMailinglist?
+            for (var id in data.headers) {
+                if (/^list-(id|archive|owner)$/i.test(id)) return;
+            }
+            return sender;
+        },
+
         // pair: Array of display name and email address
         // options:
         // - showDisplayName: Show display name if available
@@ -270,6 +281,9 @@ define('io.ox/mail/util', [
             return display_name || email;
         },
 
+        /**
+         * @deprecated: use sender models to array instead (sender.js)
+         */
         getSender: function (item, enabled) {
             var address = item[1];
             // disabled

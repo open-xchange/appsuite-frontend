@@ -653,15 +653,17 @@ define('io.ox/calendar/api', [
 
                 // only use uri. entity only works for internal users/resources, which can also appear as external in some cases, causing ugly issues
                 var order = _(list).map(function (attendee) { return attendee.uri; }),
-                    def = $.Deferred();
-
-                http.PUT({
-                    module: 'chronos',
-                    params: {
+                    def = $.Deferred(),
+                    params = {
                         action: 'freeBusy',
                         from: options.from,
                         until: options.until
-                    },
+                    };
+                if (options.maskUid) params.maskUid = options.maskUid;
+
+                http.PUT({
+                    module: 'chronos',
+                    params: params,
                     data: { attendees: list }
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.

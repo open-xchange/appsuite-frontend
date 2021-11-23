@@ -461,9 +461,8 @@ define('io.ox/core/folder/contextmenu', [
             function invite(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
-                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    permissions.showFolderPermissions(id, model);
+                require(['io.ox/files/share/permissions'], function (permissions) {
+                    permissions.showFolderPermissions(id);
                 });
             }
 

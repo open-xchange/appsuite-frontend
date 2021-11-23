@@ -22,10 +22,11 @@
 
 define('io.ox/help/main', [
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/help',
+    'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'gettext!io.ox/help',
     'less!io.ox/help/style'
-], function (ModalDialogView, gt, capabilities) {
+], function (ModalDialogView, ext, capabilities, gt) {
 
     'use strict';
 
@@ -119,7 +120,7 @@ define('io.ox/help/main', [
             }
 
             var activate = function () {
-                if (opt.modal) return;
+                if (opt.modal || !this.getWindow().floating) return;
                 this.getWindow().floating.activate();
             }.bind(this);
 
@@ -184,13 +185,21 @@ define('io.ox/help/main', [
             app.showFloatingWindow(iframe);
         });
         app.launch().then(function () {
-            if (opt.modal) return;
+            if (opt.modal || !this.getWindow().floating) return;
             // activate this app after launch to prevent it staying in background
             // when opened from a modal inside another floating app
             this.getWindow().floating.activate();
         });
         return app;
     }
+
+    ext.point('io.ox/help/main').extend({
+        id: 'ensure-active-state',
+        resume: function () {
+            if (this.options.modal || !this.getWindow().floating) return;
+            this.getWindow().floating.activate();
+        }
+    });
 
     return {
         getApp: createInstance,

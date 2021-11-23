@@ -376,12 +376,13 @@ define('io.ox/mail/main', [
                 accountAPI.all().done(function (data) {
                     _.each(data, function (accountData) {
                         accountAPI.getStatus(accountData.id).done(function (obj) {
-                            if (obj[accountData.id].status !== 'ok') {
-                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
-                            } else if (obj[accountData.id].status === 'ok') {
+                            var status = obj[accountData.id].status;
+                            if (['ok', 'deactivated'].indexOf(status) >= 0) {
                                 var node = app.treeView.getNodeView(accountData.root_folder);
                                 if (!node) return;
                                 node.hideStatusIcon();
+                            } else if (status !== 'ok') {
+                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
                             }
                         });
                     });
@@ -1838,6 +1839,13 @@ define('io.ox/mail/main', [
                 notifications.yell(error);
             });
             app.folder.handleErrors();
+
+            // deactivated secondary mail account
+            ox.on('account:status', function (data) {
+                if (!data.deactivated) return;
+                if (app.folder.get().indexOf(data.root_folder) < 0) return;
+                app.folder.setDefault();
+            });
         },
 
         // drafts deleted outside of this client

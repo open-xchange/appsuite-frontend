@@ -25,9 +25,10 @@ define('io.ox/core/folder/picker', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
     'io.ox/backbone/views/modal',
+    'io.ox/core/yell',
     'gettext!io.ox/core',
     'io.ox/core/capabilities'
-], function (TreeView, mailAPI, api, ModalDialog, gt, capabilities) {
+], function (TreeView, mailAPI, api, ModalDialog, yell, gt, capabilities) {
 
     'use strict';
 
@@ -178,6 +179,8 @@ define('io.ox/core/folder/picker', [
             flat: !!o.flat,
             // no links like my contact data or subscibre calendar in picker
             noLinks: true,
+            // select events usually are debounced by 300ms. This creates issues with the disabled function being called to late (users can select disabled folders this way)
+            instantTrigger: true,
             indent: o.indent,
             module: o.module,
             abs: o.abs,
@@ -254,7 +257,14 @@ define('io.ox/core/folder/picker', [
             })
             .on('ok', function () {
                 var id = tree.selection.get();
-                if (id) o.done(id, dialog, tree);
+                if (id) {
+                    var mappedId = mapIds(id), data = api.pool.getModel(id).toJSON();
+                    if (!!o.disable(data, undefined, mappedId !== id ? id : undefined)) {
+                        yell('error', gt('You cannot select this folder.'));
+                        return dialog.idle();
+                    }
+                    o.done(id, dialog, tree);
+                }
                 o.always(dialog, tree);
                 o.close(dialog, tree);
             })

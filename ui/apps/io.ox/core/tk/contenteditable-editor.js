@@ -625,7 +625,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
                 // remove trailing white-space, line-breaks, and empty paragraphs
                 content = content.replace(
-                    /(\s|&nbsp;|\0x20|<br\/?>|<div( class="io-ox-signature")>(&nbsp;|\s|<br\/?>)*<\/div>)*$/g, ''
+                    /(\s|&nbsp;|\0x20|<br\/?>|<div( class="io-ox-signature" | class="io-ox-hint")>(&nbsp;|\s|<br\/?>)*<\/div>)*$/g, ''
                 );
 
                 // remove trailing white-space

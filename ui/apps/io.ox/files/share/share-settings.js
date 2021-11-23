@@ -226,35 +226,6 @@ define('io.ox/files/share/share-settings', [
         }
     });
 
-    // /* Begin of permission options */
-    // var DialogConfigModel = Backbone.Model.extend({
-    //     defaults: {
-    //         // default is true for nested and false for flat folder tree, #53439
-    //         cascadePermissions: true,
-    //         message: '',
-    //         sendNotifications: false,
-    //         disabled: false
-    //     },
-    //     toJSON: function () {
-    //         var data = {
-    //             cascadePermissions: this.get('cascadePermissions'),
-    //             notification: { transport: 'mail' }
-    //         };
-
-    //         if (dialogConfig.get('sendNotifications')) {
-    //             // add personal message only if not empty
-    //             // but always send notification!
-    //             if (this.get('message') && $.trim(this.get('message')) !== '') {
-    //                 data.notification.message = this.get('message');
-    //             }
-    //         } else {
-    //             delete data.notification;
-    //         }
-    //         return data;
-    //     }
-    // });
-    // var dialogConfig = new DialogConfigModel();
-
     /*
      * Extension point for invite people options title text
      */
@@ -288,26 +259,6 @@ define('io.ox/files/share/share-settings', [
     });
 
     /*
-     * extension point for invite people options include subfolder
-     */
-    ext.point(POINT_SETTINGS + '/settings-invite-people').extend({
-        id: 'inviteptions-cascade-permissions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            if (baton.view.applyToSubFolder) {
-                this.append(
-                    $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        settingsUtil.checkbox('cascadePermissions', gt('Apply to all subfolders'), baton.dialogConfig).on('change', function (e) {
-                            var input = e.originalEvent.srcElement;
-                            baton.dialogConfig.set('cascadePermissions', input.checked);
-                        })
-                    )
-                );
-            }
-        }
-    });
-
-    /*
      * main view
      */
     var ShareSettingsView = DisposableView.extend({
@@ -315,16 +266,13 @@ define('io.ox/files/share/share-settings', [
         className: 'share-wizard',
         hasLinkSupport: true,
         supportsPersonalShares: true,
-        applyToSubFolder: false,
         isFolder: false,
 
         initialize: function (options) {
-
             this.model = options.model.model;
             this.hasPublicLink = options.model.hasPublicLink();
             this.hasLinkSupport = options.hasLinkSupport;
             this.supportsPersonalShares = options.supportsPersonalShares;
-            this.applyToSubFolder = options.applyToSubFolder;
             this.baton = ext.Baton({ model: this.model, view: this, dialogConfig: options.dialogConfig });
 
             this.listenTo(this.model, 'invalid', function (model, error) {

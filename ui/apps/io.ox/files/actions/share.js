@@ -37,7 +37,7 @@ define('io.ox/files/actions/share', [
 
             return require(['io.ox/files/share/permissions'], function (permissions) {
                 var model = _.first(array);
-                permissions.showByModel(model, array, options);
+                permissions.showByModel(model, options);
             });
         }
     };

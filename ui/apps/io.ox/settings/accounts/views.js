@@ -28,6 +28,7 @@ define('io.ox/settings/accounts/views', [
     'io.ox/oauth/keychain',
     'gettext!io.ox/settings/accounts'
 ], function (ext, settingsUtil, listUtils, DisposableView, oauthAPI, gt) {
+
     'use strict';
 
     var createExtpointForSelectedAccount = function (args) {
@@ -53,12 +54,15 @@ define('io.ox/settings/accounts/views', [
          */
         drawAccountState = function (model) {
             if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
+            // ignore secondary account errors when deactivated (props 'deactivated' and 'status' does not change at the same time)
+            if (model.get('deactivated') || (model.get('status') || {}).status === 'deactivated') return;
 
             return $('<div class="error-wrapper">').append(
                 $('<i class="error-icon fa fa-exclamation-triangle" aria-hidden="true">'),
                 $('<div class="error-message">').text(model.get('status').message)
             );
         },
+
         SettingsAccountListItemView = DisposableView.extend({
 
             tagName: 'li',
@@ -67,7 +71,8 @@ define('io.ox/settings/accounts/views', [
 
             events: {
                 'click [data-action="edit"]': 'onEdit',
-                'click [data-action="delete"]': 'onDelete'
+                'click [data-action="delete"]': 'onDelete',
+                'click [data-action="enable"]': 'onEnable'
             },
 
             initialize: function () {
@@ -82,7 +87,7 @@ define('io.ox/settings/accounts/views', [
                 return this.model.get(titleAttribute);
             },
 
-            renderSubTitle: function () {
+            renderSubtitle: function () {
                 var el = $('<div class="list-item-subtitle">');
                 ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').invoke('renderSubtitle', el, this.model);
                 return el;
@@ -92,11 +97,31 @@ define('io.ox/settings/accounts/views', [
                 return listUtils.makeTitle(title);
             },
 
+            renderAction: function (action) {
+                var POINT = 'io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail';
+                switch (action) {
+                    case 'edit':
+                        if (this.model.get('deactivated') && !_.device('smartphone')) return $();
+                        if (this.model.get('accountType') !== 'fileAccount' && ext.point(POINT).pluck('draw').length <= 0) return;
+                        return listUtils.appendIconText(
+                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', this.getTitle()) }), gt('Edit'), 'edit'
+                        );
+                    case 'delete':
+                        if (this.model.get('id') === 0 || this.model.get('secondary')) return $('<div class="remove-placeholder">');
+                        return listUtils.controlsDelete({ title: gt('Delete %1$s', this.getTitle()) });
+                    case 'enable':
+                        if (!this.model.get('secondary')) return $();
+                        if (!this.model.get('deactivated')) return $();
+                        this.$el.addClass('disabled');
+                        if (_.device('smartphone')) return $();
+                        return $('<a href="#" class="action" role="button" class="toggle" data-action="enable">').attr('aria-label', gt('Enable %1$s', this.getTitle())).text(gt('Enable'));
+                    default:
+                        return $();
+                }
+            },
+
             render: function () {
-                var self = this,
-                    title = self.getTitle(),
-                    canEdit = self.model.get('accountType') === 'fileAccount' ? true : ext.point('io.ox/settings/accounts/' + self.model.get('accountType') + '/settings/detail').pluck('draw').length > 0,
-                    canDelete = self.model.get('id') !== 0;
+                var self = this;
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
@@ -104,18 +129,16 @@ define('io.ox/settings/accounts/views', [
 
                 self.$el.empty().append(
                     drawIcon(self.model),
-                    this.renderTitle(title).append(
-                        this.renderSubTitle()
+                    this.renderTitle(self.getTitle()).append(
+                        this.renderSubtitle()
                     ),
                     listUtils.makeControls().append(
-                        canEdit ? listUtils.appendIconText(
-                            listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
-                            gt('Edit'),
-                            'edit'
-                        ) : '',
-                        canDelete ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
+                        self.renderAction('edit'),
+                        self.renderAction('enable'),
+                        self.renderAction('delete')
                     ),
-                    drawAccountState(this.model) // show a possible account error
+                    // show a possible account error
+                    drawAccountState(this.model)
                 );
 
                 return self;
@@ -217,6 +240,19 @@ define('io.ox/settings/accounts/views', [
                     });
 
                 } else { createExtpointForSelectedAccount(e); }
+            },
+
+            onEnable: function () {
+                var self = this;
+                require(['io.ox/core/api/account', 'io.ox/mail/accounts/model'], function (accountAPI, AccountModel) {
+                    accountAPI.get(self.model.get('id')).done(function (data) {
+                        var aModel = new AccountModel(data);
+                        aModel.set('deactivated', false).save();
+                        self.listenTo(aModel, 'sync', function (model) {
+                            self.model.set(model.attributes);
+                        });
+                    });
+                });
             }
         });
 

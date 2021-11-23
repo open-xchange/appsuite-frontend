@@ -107,18 +107,9 @@ define('io.ox/core/boot/form', [
             // show retype
             $('#io-ox-login-form div.row.password-retype').show();
             // i18n
-            $('#io-ox-login-password').attr({
-                'data-i18n': gt('New password'),
-                placeholder: gt('New password')
-            });
-            $('#io-ox-retype-password').attr({
-                'data-i18n': gt('Confirm new password'),
-                placeholder: gt('Confirm new password')
-            });
-            $('#io-ox-login-button').attr({
-                'data-i18n': gt('Set password'),
-                placeholder: gt('Set password')
-            });
+            $('#io-ox-login-button')
+                .attr('data-i18n', 'Set password')
+                .text(gt('Set password'));
             bindLogin = false;
         }
 
@@ -172,8 +163,14 @@ define('io.ox/core/boot/form', [
 
             // apply login screen specific classes
             if (_.device('smartphone')) {
-                $('#io-ox-login-username').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Username') });
-                $('#io-ox-login-password').attr({ 'data-i18n-attr': 'placeholder', 'placeholder': gt('Password') });
+                $('#io-ox-login-username,#io-ox-login-password,#io-ox-retype-password,#io-ox-login-restoremail').each(function () {
+                    var text = $('label[for="' + this.id + '"]').attr('data-i18n');
+                    $(this).attr({
+                        'data-i18n-attr': 'placeholder',
+                        'data-i18n': text,
+                        'placeholder': gt(text)
+                    });
+                });
             }
             $('#io-ox-login-screen').addClass(lc.addClass);
 

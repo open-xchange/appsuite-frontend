@@ -31,6 +31,9 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
     function list() {
         gt('User name');
         gt('Password');
+        gt('Reset password');
+        gt('Set password');
+        gt('Email address');
         gt('Sign in');
         //#. the noun not the verb
         gt.pgettext('word', 'Sign in');
@@ -76,7 +79,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Reload');
         gt('Privacy Policy');
         gt('Imprint');
-        gt('Confirm new Password');
+        gt('Confirm new password');
         //#. While or after requesting a new password you can go back to the initial login page
         gt('Back to sign in');
         //#. While requesting a new password on the login page; %1$s will be replaced by the product name e.g. OX App Suite

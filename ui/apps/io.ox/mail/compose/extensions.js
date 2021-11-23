@@ -37,13 +37,14 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
+    'settings!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -145,29 +146,28 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.addresses = sender.getAddressesCollection();
-            this.addresses.update();
-            this.listenTo(ox, 'account:create account:delete', this.updateSenderList);
-            this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
+            this.addresses = sender.collection;
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
-            this.listenTo(this.model, 'change:from', this.updateSenderList);
-            this.listenTo(this.model, 'change:from', this.updateDeputyData);
+            this.listenTo(this.model, 'change:from', this.renderDropdown);
+            this.listenTo(ox, 'change:customDisplayNames', this.renderDropdown);
+            if (capabilities.has('deputy')) this.listenTo(this.model, 'change:from', this.updateDeputyData);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
 
         updateDeputyData: function () {
-            if (_(this.addresses.getDeputyAddresses()).contains(this.model.get('from')[1])) {
-                this.model.set('sender', this.addresses.findWhere({ email: sender.getDefaultSendAddress() }).toArray());
-            } else {
-                this.model.unset('sender');
-            }
+            var isDeputy = !!this.addresses.findWhere({ email: this.model.get('from')[1], type: 'deputy' });
+            if (!isDeputy) return this.model.unset('sender');
+            var defaultSender = this.addresses.findWhere({ type: 'default' });
+            this.model.set('sender', defaultSender.toArray({ name: this.config.get('sendDisplayName') }));
         },
 
-        updateSenderList: function (options) {
-            var opt = _.extend({ useCache: false }, options);
-            this.addresses.update(opt);
+        /**
+         * @deprecated
+         */
+        updateSenderList: function () {
+            this.addresses.update({ useCache: false });
         },
 
         render: function (/*options*/) {
@@ -198,19 +198,18 @@ define('io.ox/mail/compose/extensions', [
 
         setDropdownOptions: function () {
             var self = this;
-            this.addresses.forEach(function (address, index) {
-                var defaultname = settings.get(['customDisplayNames', address.get('email'), 'defaultName']);
-                if (!defaultname) settings.set(['customDisplayNames', address.get('email'), 'defaultName'], address.get('name'));
-
-                if (index === 1) self.dropdown.divider();
-
-                var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
-                self.dropdown.option('from', item, function () {
-                    return self.getItemNode(item);
-                });
-            });
 
             if (_.device('smartphone') || this.addresses.length === 0) return;
+
+            this.addresses.getCommon().forEach(function (model, index, list) {
+                if (index === 1 && list.length > 2) self.dropdown.divider();
+                addOption(model);
+            });
+
+            this.addresses.getDeputies().forEach(function (model, index) {
+                if (index === 0) self.dropdown.divider().group(gt('On behalf of'));
+                addOption(model, { group: true });
+            });
 
             // append options to toggle and edit names
             this.dropdown
@@ -218,10 +217,21 @@ define('io.ox/mail/compose/extensions', [
                 .option('sendDisplayName', true, gt('Show names'), { keepOpen: true })
                 .divider()
                 .link('edit-real-names', gt('Edit names'), this.onEditNames);
+
+            function addOption(model, options) {
+                var item = mailUtil.getSender(model.toArray(), self.config.get('sendDisplayName'));
+                self.dropdown.option('from', item, _.bind(self.getItemNode, self, item), options);
+            }
+        },
+
+        getItem: function (item) {
+            // use latest display name
+            if (!item) return;
+            return this.addresses.getAsArray(item[1], { name: this.config.get('sendDisplayName') }) || item;
         },
 
         getItemNode: function (item) {
-            item = item || this.model.get('from');
+            item = this.getItem(item || this.model.get('from'));
             if (!item) return;
             var name = item[0], address = item[1];
             return [
@@ -284,6 +294,38 @@ define('io.ox/mail/compose/extensions', [
             ext.point(POINT + '/recipientActions').invoke('draw', view.$el);
         },
 
+        senderOnBehalfOf: function (baton) {
+
+            if (!capabilities.has('deputy')) return;
+
+            var fields = this,
+                model = baton.model;
+
+            function toggleVisibility() {
+                var sender = baton.model.get('sender'),
+                    from = baton.model.get('from'),
+                    displayname = baton.config.get('sendDisplayName');
+                if (!!sender) {
+                    fields.find('.sender-onbehalfof .mail-input').text(
+                        //#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+                        //#. %1$s: name of mail address of current user (technical: sender)
+                        //#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+                        gt('This email will be sent by %1$s on behalf of %2$s.', sender[displayname ? 0 : 1], from[displayname ? 0 : 1])
+                    );
+                }
+                fields.toggleClass('onbehalfof', !!sender);
+            }
+
+            this.append(
+                $('<div class="sender-onbehalfof" data-extension-id="sender-onbehalfof">').append(
+                    $('<div class="mail-input">')
+                )
+            );
+
+            model.on('change:sender', toggleVisibility);
+            toggleVisibility();
+        },
+
         senderRealName: function (baton) {
             var fields = this,
                 config = baton.config;
@@ -343,7 +385,7 @@ define('io.ox/mail/compose/extensions', [
                 e.preventDefault();
                 var attr = e.data.attr,
                     model = e.data.model,
-                    picker = settingsContacts.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                    picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
                 require([picker], function (popup) {
                     popup.open(function (result) {
@@ -385,7 +427,7 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/recipientActionsMobile').invoke('draw', actions);
                 }
 
-                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && contactSettings.get('picker/enabled', true);
 
                 var title = gt('Select contacts');
 

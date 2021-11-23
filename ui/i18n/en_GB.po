@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-04-01 16:11+0200\n"
+"PO-Revision-Date: 2021-10-16 11:47-0600\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Lokalize 21.08.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -315,7 +315,6 @@ msgstr "No reminder"
 msgid "Edit reminders"
 msgstr "Edit reminders"
 
-#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -624,8 +623,8 @@ msgstr "Delete"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
@@ -873,6 +872,18 @@ msgstr "Zoom: %1$d%"
 msgid "Zoom"
 msgstr "Zoom"
 
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#| msgid "Rotate image"
+msgid "Rotate left"
+msgstr "Rotate left"
+
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+#| msgid "Rotate image"
+msgid "Rotate right"
+msgstr "Rotate right"
+
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Remove photo"
 msgstr "Remove photo"
@@ -880,6 +891,7 @@ msgstr "Remove photo"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/deputy/dialog.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
 #: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
@@ -990,6 +1002,7 @@ msgstr "Interval"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -1050,9 +1063,9 @@ msgstr "Before"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/contacts/enterprisepicker/dialog.js apps/io.ox/core/desktop.js
+#: apps/io.ox/core/main/apps.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1559,9 +1572,10 @@ msgstr "Shown as"
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-#: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/api.js apps/io.ox/core/import/import.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
@@ -2501,6 +2515,22 @@ msgstr ""
 "accepted or declined"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#| msgid "The appointment has been added to your calendar"
+msgid ""
+"Automatically apply appointment changes received via email to your calendar"
+msgstr ""
+"Automatically apply appointment changes received via email to your calendar"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#| msgid "unknown sender"
+msgid "Only from known senders"
+msgstr "Only from known senders"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Always"
+msgstr "Always"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Reminders"
 msgstr "Reminders"
 
@@ -3145,7 +3175,8 @@ msgstr "The series never ends."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
@@ -3225,6 +3256,11 @@ msgstr "Appointment has participants"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Appointment has attachments"
 msgstr "Appointment has attachments"
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#| msgid "The appointment has been deleted"
+msgid "This appointment was cancelled."
+msgstr "This appointment was canceled."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
@@ -3884,6 +3920,12 @@ msgstr[1] "%1$d members"
 msgid "Join"
 msgstr "Join"
 
+#. shown above a chat window when there are network issues
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+#| msgid "Connection error"
+msgid "Connection problems"
+msgstr "Connection problems"
+
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Chat actions"
@@ -4318,8 +4360,8 @@ msgid "Empty"
 msgstr "Empty"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/tk/tokenfield.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -4976,6 +5018,107 @@ msgstr "This value is too long. The allowed length is %1$d characters."
 msgid "This is an invalid email address."
 msgstr "This is an invalid e-mail address."
 
+#. %1$d is number of selected contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "%1$d item selected"
+#| msgid_plural "%1$d items selected"
+msgid "%1$d contact selected"
+msgid_plural "%1$d contacts selected"
+msgstr[0] "%1$d contact selected"
+msgstr[1] "%1$d contacts selected"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Remove contact"
+msgid "Remove contact from selection"
+msgstr "Remove contact from selection"
+
+#. %1$s is the contact's name
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Select contacts"
+msgid "Select/Deselect contact %1$s"
+msgstr "Select/Deselect contact %1$s"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Show task details"
+msgid "Show contact details"
+msgstr "Show contact details"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Contacts"
+msgid "Contact list"
+msgstr "Contact list"
+
+#. This is followed by a list of contacts from the address book
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Start search"
+msgid "Last searched for"
+msgstr "Last searched for"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "No items found"
+msgid "No contacts found."
+msgstr "No contacts found."
+
+#. %1$d is the limit of displayable contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid ""
+"You have reached the limit of %1$d contacts to display. Please enter a "
+"search term to narrow down your results."
+msgstr ""
+"You have reached the limit of %1$d contacts to display. Please enter a "
+"search term to narrow down your results."
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Email addresses"
+msgid "Global address list"
+msgstr "Global address list"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Search results"
+msgid "Search all address lists"
+msgstr "Search all address lists"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Could not load data"
+msgid "Could not load contacts"
+msgstr "Could not load contacts"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Search for name, department, position"
+msgstr "Search for name, department, position"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgctxt "verb"
+#| msgid "Filter"
+msgid "Filter"
+msgstr "Filter"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Other address"
+msgid "Filter address lists"
+msgstr "Filter address lists"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Addresses"
+msgid "Address list"
+msgstr "Address list"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Add to address book"
+msgid "Could not load address book."
+msgstr "Could not load address book."
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/find/view-facets.js module:io.ox/core
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Select"
+msgstr "Select"
+
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "Empty name and description found."
@@ -5560,6 +5703,151 @@ msgstr "Close premium features"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Try now!"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
+msgid "Inbox"
+msgstr "Inbox"
+
+#. Role: view folder + read all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Viewer"
+msgstr "Viewer"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
+#. Role: create folder + read/write/delete all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Author"
+msgstr "Author"
+
+#. String that is used to describe permissions
+#. %1$s name of module (mail, calendar etc)
+#. %2$s the granted role (author, editor, viewer, none)
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "%1$s %2$s"
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Allowed to send emails on your behalf"
+msgstr "Allowed to send email messages on your behalf"
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Date: %1$s"
+msgid "Deputy: %1$s"
+msgstr "Deputy: %1$s"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Twitter reported the following errors:"
+msgid "The deputy has the following permissions"
+msgstr "The deputy has the following permissions"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "View details"
+msgid "Viewer (read emails)"
+msgstr "Viewer (read email messages)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Editor (create/edit emails)"
+msgstr "Editor (create/edit email messages)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Author (create/edit/delete emails)"
+msgstr "Author (create/edit/delete email messages)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputy can send emails on your behalf"
+msgstr "Deputy can send email messages on your behalf"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "New appointment"
+msgid "Viewer (view appointments)"
+msgstr "Viewer (view appointments)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Edit this appointment"
+msgid "Editor (create/edit appointments)"
+msgstr "Editor (create/edit appointments)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Show declined appointments"
+msgid "Author (create/edit/delete appointments)"
+msgstr "Author (create/edit/delete appointments)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "save"
+msgstr "save"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Could not save settings."
+msgid "Could not create deputy."
+msgstr "Could not create deputy."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "no delete permissions"
+msgid "Could not update deputy permissions."
+msgstr "Could not update deputy permissions."
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Removed %1$s."
+msgid "Remove deputy %1$s"
+msgstr "Remove deputy %1$s"
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid ""
+#| "Do you really want to remove the extension \".%1$s\" from your filename?"
+msgid "Do you want to remove %1$s from your deputy list"
+msgstr "Do you want to remove %1$s from your deputy list?"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Could not save settings."
+msgid "Could not remove deputy."
+msgstr "Could not remove deputy."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "There are currently no participants."
+msgid "You have currently no deputies assigned."
+msgstr "You currently have no deputies assigned."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputies can get acces to your Inbox and Calendar."
+msgstr "Deputies can get access to your Inbox and Calendar."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Remove"
+msgid "Remobe"
+msgstr "Remove"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
+#| msgid "Manage applications"
+msgid "Manage deputies"
+msgstr "Manage deputies"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Add people"
+msgstr "Add people"
+
+#. Generic error message when something when wrong on the server while fetching data about your deputies
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#| msgid "Could not load data"
+msgid "Could not load deputy data."
+msgstr "Could not load deputy data."
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
@@ -6259,7 +6547,6 @@ msgstr "Actions for %1$s"
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
 
@@ -6406,6 +6693,11 @@ msgid "Skip to main content"
 msgstr "Skip to main content"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+#| msgid "Address Other"
+msgid "Address directory"
+msgstr "Address directory"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
@@ -6415,10 +6707,14 @@ msgstr "Refresh"
 msgid "Currently refreshing"
 msgstr "Currently refreshing"
 
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/accounts/settings.js apps/io.ox/mail/invitations/register.js
+#: module:io.ox/mail apps/io.ox/mail/settings/pane.js
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
@@ -6462,11 +6758,6 @@ msgstr "Chat"
 msgctxt "app"
 msgid "Notes"
 msgstr "Notes"
-
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
@@ -6563,7 +6854,6 @@ msgstr "About"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
 msgstr "Connect your Device"
 
@@ -6734,13 +7024,6 @@ msgstr "You have new notifications"
 #: apps/io.ox/files/share/permissions.js
 msgid "Guest"
 msgstr "Guest"
-
-#. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permission-pre-selection.js
-#: apps/io.ox/files/share/permissions.js
-msgid "Author"
-msgstr "Author"
 
 #. Role: all permissions
 #. object permissions - admin role
@@ -7323,14 +7606,17 @@ msgstr ""
 "overwritten"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
 msgstr "Disable"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable"
 msgstr "Enable"
 
@@ -8320,6 +8606,12 @@ msgstr "Enter document title here"
 msgid "Note"
 msgstr "Note"
 
+#. This is a placeholder for macOS. Keep in line with local mac keyboard layout
+#: apps/io.ox/editor/main.js module:io.ox/editor
+#| msgid "You can quick-save your changes via Ctrl+Enter."
+msgid "You can quick-save your changes via Cmd+Enter."
+msgstr "You can quick-save your changes via Cmd+Enter."
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "You can quick-save your changes via Ctrl+Enter."
@@ -8615,6 +8907,11 @@ msgstr "Delete item"
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "Items without a file can not be downloaded."
+
+#. %1$d: max number of characters
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+msgid "File description can only be %1$d characters long."
+msgstr "File description can only be %1$d characters long."
 
 #: apps/io.ox/files/actions/restore.js module:io.ox/files
 msgid ""
@@ -9054,22 +9351,16 @@ msgstr "External users"
 msgid "Internal users"
 msgstr "Internal users"
 
-#. Role: view folder + read all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Viewer"
-msgstr "Viewer"
-
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Read only"
-msgstr "Read only"
-
 #. Role: view folder + read/write all
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Reviewer"
 msgstr "Reviewer"
+
+#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
+msgid "Read only"
+msgstr "Read only"
 
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -9093,6 +9384,15 @@ msgstr "Internal user"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Group"
+
+#. description in the permission dialog to indicate that this user can act on your behalf (send mails, check calendar for you, etc)
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Deputy"
+msgstr "Deputy"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Guests are only allowed to have viewer rights."
+msgstr "Guests are only allowed to have viewer rights."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "ADDED"
@@ -9187,14 +9487,33 @@ msgid "Anyone with the link and invited people"
 msgstr "Anyone with the link and invited people"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#| msgid "Invited people only"
+msgid "Listed people only"
+msgstr "Listed people only"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#| msgid "Anyone with the link and invited people"
+msgid "Anyone with the link and listed people"
+msgstr "Anyone with the link and listed people"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#| msgid "Who can access this folder?"
+msgid "Who can access this file?"
+msgstr "Who can access this file?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#| msgid "Who can access this folder?"
+msgid "Who can access this calendar?"
+msgstr "Who can access this calendar?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this folder?"
 msgstr "Who can access this folder?"
 
-#. %1$s determines whether setting permissions for a file or folder
-#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share %1$s \"%2$s\""
-msgstr "Share %1$s \"%2$s\""
+#| msgid "Calendar"
+msgid "calendar"
+msgstr "calendar"
 
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
@@ -9207,6 +9526,12 @@ msgstr "file"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "folder"
 msgstr "folder"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Share %1$s \"%2$s\""
+msgstr "Share %1$s \"%2$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for %1$s \"%2$s\""
@@ -9256,6 +9581,16 @@ msgstr "Copy link"
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
 msgid "Anyone on the internet with the link can view the file."
 msgstr "Anyone on the internet with the link can view the file."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+#| msgid "Anyone on the internet with the link can view the file."
+msgid "Anyone on the internet with the link can view the calendar."
+msgstr "Anyone on the Internet with the link can view the calendar."
+
+#: apps/io.ox/files/share/public-link.js module:io.ox/files
+#| msgid "Anyone on the internet with the link can view the file."
+msgid "Anyone on the internet with the link can view the folder."
+msgstr "Anyone on the Internet with the link can view the folder."
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Link options"
@@ -9377,15 +9712,6 @@ msgstr "Confirmation"
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Adjust"
-
-#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/find/view-facets.js module:io.ox/core
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Select"
-msgstr "Select"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
@@ -9583,6 +9909,14 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Use unified mail for this account"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Open %1$s in %2$s"
+msgstr "Open %1$s in %2$s"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
@@ -9888,12 +10222,31 @@ msgstr ""
 "publication maximum file size of %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#| msgid ""
+#| "The file \"%1$s\" cannot be uploaded because it exceeds the infostore "
+#| "quota limit of %2$s"
 msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
+"The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
+"The attachment cannot be uploaded because it exceeds the InfoStore quota "
 "limit of %2$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#| msgid ""
+#| "The files cannot be uploaded because each file exceeds the maximum file "
+#| "size of %1$s"
+msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+msgstr "The uploaded attachment exceeds the maximum email size of %1$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+#| msgid ""
+#| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
+#| "size of %2$s"
+msgid ""
+"The file cannot be uploaded because it exceeds the maximum email size of %1$s"
+msgstr ""
+"The file cannot be uploaded because it exceeds the maximum email size of %1$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10210,6 +10563,19 @@ msgstr ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#: apps/io.ox/mail/compose/sharing.js
+#| msgid ""
+#| "Attachment file size too large. You have to use %1$s or reduce the "
+#| "attachment file size."
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Email quota limit reached. You have to use %1$s or reduce the email size in "
+"some other way."
+
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
@@ -10258,6 +10624,14 @@ msgstr "This e-mail has no subject. Do you want to send it anyway?"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "Add subject"
 msgstr "Add subject"
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid ""
+"This sender address is related to a disabled mail account. Please choose "
+"another sender address or visit settings to enable again."
+msgstr ""
+"This sender address is related to a disabled email account. Please choose "
+"another sender address or visit settings to enable again."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
@@ -10922,8 +11296,9 @@ msgid "Edit rule"
 msgstr "Edit rule"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Save and apply"
-msgstr "Save and apply"
+#| msgid "Save and apply"
+msgid "Save and apply rule now"
+msgstr "Save and apply rule now"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
@@ -10951,8 +11326,15 @@ msgid "Drag to reorder filter rules"
 msgstr "Drag to reorder filter rules"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-msgid "Select the folder to apply the rule to"
-msgstr "Select the folder to apply the rule to"
+#| msgid "Select the folder to apply the rule to"
+msgid "Please select the folder to apply the rule to"
+msgstr "Please select the folder to apply the rule to"
+
+#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+#| msgid "Apply filter"
+msgid "Apply filter rule"
+msgstr "Apply filter rule"
 
 #. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -11983,12 +12365,6 @@ msgstr "Vertical"
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
-#: module:io.ox/portal apps/plugins/portal/mail/register.js
-#: module:plugins/portal
-msgid "Inbox"
-msgstr "Inbox"
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Use categories"
@@ -12510,13 +12886,6 @@ msgstr "My %1$s account (%2$d)"
 msgid "Reauthorize"
 msgstr "Reauthorise"
 
-#. link title for related accounts into the corresponding folder
-#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
-#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Open %1$s in %2$s"
-msgstr "Open %1$s in %2$s"
-
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Account Name"
 msgstr "Account Name"
@@ -12667,7 +13036,7 @@ msgid "Install"
 msgstr "Install"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/clients/wizard.js
+#: apps/io.ox/onboarding/clients/wizard.js apps/io.ox/onboarding/views.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -12737,6 +13106,7 @@ msgstr "Incomplete configuration."
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/register.js
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Connect your device"
 
@@ -12757,10 +13127,6 @@ msgstr ""
 "in your CalDav client:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-msgid "Please scan this code with your phone's camera:"
-msgstr "Please scan this code with your phone's camera:"
-
-#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
 "To synchronize Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
@@ -12768,12 +13134,28 @@ msgstr ""
 "To synchronise Mail, Calendar and Address Book via Exchange Active Sync, "
 "please enter the following settings:"
 
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid "Please scan this code with your phone's camera:"
+msgstr "Please scan this code with your phone's camera:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+#| msgid ""
+#| "Scan this code with your phone's camera to synchronize your \"%1$s\":"
+msgid ""
+"Scan this code with your phone's camera to synchronize your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+msgstr ""
+"Scan this code with your phone's camera to synchronise your Mail, Calendar "
+"and Address Book via Exchange Active Sync:"
+
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/util.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -12830,17 +13212,17 @@ msgid "Email with %1$s"
 msgstr "E-mail with %1$s"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr "Exchange Active Sync"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with Apple Mail"
 msgstr "E-mail with Apple Mail"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Email with iOS Mail"
 msgstr "E-mail with iOS Mail"
-
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Exchange Active Sync"
-msgstr "Exchange Active Sync"
 
 #. 1$s type of application to synchronize, which is either Address Book or Calendar
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13122,6 +13504,7 @@ msgid "Disable %1$s"
 msgstr "Disable %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable %1$s"
 msgstr "Enable %1$s"
 
@@ -13168,32 +13551,6 @@ msgstr "More than the currently displayed %1$s items were found"
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Allow connections with untrusted certificates"
 msgstr "Allow connections with untrusted certificates"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Password recovery"
-msgstr "Password recovery"
-
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Show information about account recovery"
-msgstr "Show information about account recovery"
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-msgstr ""
-"For security reasons, all credentials are encrypted with your primary "
-"account password. If you change your primary password, your external "
-"accounts might stop working. In this case, you can use your old password to "
-"recover all account passwords."
-
-#: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
-msgid "Recover passwords"
-msgstr "Recover passwords"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/security/appPasswords/settings/views.js
@@ -13669,11 +14026,6 @@ msgstr "Certificate details"
 msgid "Trust certificate"
 msgstr "Trust certificate"
 
-#. 'Sign out from device' as header of a modal dialog to sign out of a session.
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Sign out from device"
-msgstr "Sign out from device"
-
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Linux"
@@ -13783,6 +14135,10 @@ msgstr "Sign out from all clients"
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Do you really want to sign out from all clients except the current one?"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from device"
+msgstr "Sign out from device"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
@@ -14065,11 +14421,6 @@ msgstr "Jitsi Meeting: %1$s"
 #: apps/io.ox/switchboard/views/zoom-meeting.js
 msgid "Connecting to Zoom ..."
 msgstr "Connecting to Zoom ..."
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Zoom Meeting: %1$s"
-msgstr "Zoom Meeting: %1$s"
 
 #. %1$s contains a password
 #: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
@@ -15844,6 +16195,29 @@ msgstr "Invite to %s"
 msgid "Add on %s"
 msgstr "Add on %s"
 
+#~ msgid "Password recovery"
+#~ msgstr "Password recovery"
+
+#~ msgid "Show information about account recovery"
+#~ msgstr "Show information about account recovery"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+
+#~ msgid "Recover passwords"
+#~ msgstr "Recover passwords"
+
+#~ msgid "Zoom Meeting: %1$s"
+#~ msgstr "Zoom Meeting: %1$s"
+
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
 #~ "prefer a conversiom in a closed group, please create a group chat."
@@ -15959,9 +16333,6 @@ msgstr "Add on %s"
 #~ msgid "Private chats only"
 #~ msgstr "Private chats only"
 
-#~ msgid "Always"
-#~ msgstr "Always"
-
 #~ msgid "Join chat"
 #~ msgstr "Join chat"
 
@@ -16047,9 +16418,6 @@ msgstr "Add on %s"
 
 #~ msgid "(Read, write, and delete)"
 #~ msgstr "(Read, write, and delete)"
-
-#~ msgid "Add people"
-#~ msgstr "Add people"
 
 #~ msgid "Enter a Message to inform users"
 #~ msgstr "Enter a Message to inform users"
@@ -16685,9 +17053,6 @@ msgstr "Add on %s"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Adding subscription. This may take a few seconds …"
-
-#~ msgid "Addresses"
-#~ msgstr "Addresses"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Advanced filters block was closed."
@@ -17464,9 +17829,6 @@ msgstr "Add on %s"
 #~ msgid "Email Address:"
 #~ msgstr "Email Address:"
 
-#~ msgid "Email addresses"
-#~ msgstr "Email addresses"
-
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Email notification for Accept/Declined"
 
@@ -18204,9 +18566,6 @@ msgstr "Add on %s"
 #~ msgid "Mails have been moved"
 #~ msgstr "Email messages have been moved"
 
-#~ msgid "Manage applications"
-#~ msgstr "Manage applications"
-
 #~ msgid "Manage permission now"
 #~ msgstr "Manage permission now"
 
@@ -18804,9 +19163,6 @@ msgstr "Add on %s"
 #, fuzzy
 #~ msgid "Right"
 #~ msgstr "tonight"
-
-#~ msgid "Rotate image"
-#~ msgstr "Rotate image"
 
 #~ msgid "Rule applies from"
 #~ msgstr "Rule applies from"
@@ -19474,13 +19830,6 @@ msgstr "Add on %s"
 #~ msgid "The file is available at %1$s"
 #~ msgstr "The file is available at %1$s"
 
-#~ msgid ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-#~ msgstr ""
-#~ "The files cannot be uploaded because each file exceeds the maximum file "
-#~ "size of %1$s"
-
 #~ msgid "The folder is available at %1$s"
 #~ msgstr "The folder is available at %1$s"
 
@@ -19643,9 +19992,6 @@ msgstr "Add on %s"
 #~ msgstr ""
 #~ "The timezone of this appointment (%1$s) differs from your default "
 #~ "timezone (%2$s)."
-
-#~ msgid "There are currently no participants."
-#~ msgstr "There are currently no participants."
 
 #~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "

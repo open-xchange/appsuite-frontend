@@ -25,10 +25,11 @@ define('io.ox/mail/compose/actions/send', [
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, composeAPI, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, composeAPI, mailAPI, accountAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -96,6 +97,17 @@ define('io.ox/mail/compose/actions/send', [
             perform: extensions.attachmentMissingCheck
         },
         {
+            id: 'check:valid-sender',
+            index: 450,
+            perform: function (baton) {
+                var from = baton.model.get('from') || [];
+                if (!accountAPI.isHidden({ primary_address: from[1] })) return;
+                notifications.yell('error', gt('This sender address is related to a disabled mail account. Please choose another sender address or visit settings to enable again.'));
+                baton.stopPropagation();
+                return $.Deferred().reject();
+            }
+        },
+        {
             id: 'busy:start',
             index: 500,
             perform: function (baton) {
@@ -149,8 +161,8 @@ define('io.ox/mail/compose/actions/send', [
                         // reenable the close button(s) in toolbar
                         if (baton.close) baton.close.show();
                         if (baton.launcherClose) baton.launcherClose.show();
-
-                        win.idle().show();
+                        // param 'resume' needed on mobile
+                        win.idle().show(undefined, _.device('smartphone'));
                     }
 
                     // special errors. Those are handled in 'io.ox/mail/compose/main'

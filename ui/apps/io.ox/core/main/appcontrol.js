@@ -28,10 +28,10 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/main/icons',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/core',
-    'settings!io.ox/contacts',
+    'io.ox/core/api/tab',
     'gettext!io.ox/core',
     'io.ox/core/main/autologout'
-], function (http, upsell, ext, capabilities, icons, Dropdown, settings, contactSettings, gt) {
+], function (http, upsell, ext, capabilities, icons, Dropdown, settings, tabAPI, gt) {
 
     function toggleOverlay(force) {
         $('#io-ox-appcontrol').toggleClass('open', force);
@@ -86,15 +86,16 @@ define('io.ox/core/main/appcontrol', [
         },
         onClick: function () {
             if (!this.checkUpsell()) {
+                if (this.model.options.mobilelazyload) {
+                    // WORKAROUND: OXUIB-932 - lazyload current edited drafts on mobile
+                    return this.model.trigger('mobilelazyload');
+                }
                 // used on mobile
                 if (this.model.get('state') === 'running' && this.model.get('closable')) {
                     this.model.launch();
                     return;
                 }
-                if (ox.tabHandlingEnabled && this.model.get('openInTab')) {
-                    // we must stay synchronous to prevent popup-blocker
-                    // we can be sure that 'io.ox/core/api/tab' is cached when 'ox.tabHandlingEnabled' is true
-                    var tabAPI = require('io.ox/core/api/tab');
+                if (tabAPI.openInTabEnabled() && this.model.get('openInTab')) {
                     tabAPI.openChildTab(this.model.get('tabUrl'));
                     return;
                 }
@@ -381,9 +382,8 @@ define('io.ox/core/main/appcontrol', [
                                 target: '_blank'
                             })
                         );
-                    } else if (ox.tabHandlingEnabled && (/^io\.ox\/office\/portal/).test(action)) {
-                        var tabAPI = require('io.ox/core/api/tab'),
-                            appType = action.substring(0, 'io.ox/office/portal/'.length),
+                    } else if (tabAPI.openInTabEnabled() && (/^io\.ox\/office\/portal/).test(action)) {
+                        var appType = action.substring(0, 'io.ox/office/portal/'.length),
                             tabUrl =  tabAPI.createUrl({ app: action }, { exclude: 'folder', suffix: 'office?app=' + appType });
                         logo.wrap(
                             $('<a class="btn btn-link logo-btn">').attr({
@@ -415,7 +415,7 @@ define('io.ox/core/main/appcontrol', [
                 )
             );
 
-            if (ox.openedInBrowserTab || (ox.tabHandlingEnabled && _.url.hash('app') === 'io.ox/files/detail')) return;
+            if (ox.openedInBrowserTab || (tabAPI.openInTabEnabled() && _.url.hash('app') === 'io.ox/files/detail')) return;
 
             updateLogo();
 
@@ -454,64 +454,66 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    if (contactSettings.get('useEnterprisePicker', false) && !_.device('smartphone')) {
+    if (!_.device('smartphone')) {
 
-        if (contactSettings.get('enterprisePicker/showTopRightLauncher', false)) {
-            ext.point('io.ox/core/appcontrol/right').extend({
-                id: 'enterprisePicker',
-                index: 130,
-                draw: function () {
-                    var node = $('<li role="presentation" class="launcher">').append(
-                        $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').append($.icon('fa-address-card-o'))
+        ext.point('io.ox/core/appcontrol/right').extend({
+            id: 'enterprisePicker',
+            index: 130,
+            draw: function () {
+                if (!settings.get('features/enterprisePicker/showTopRightLauncher', false) || !settings.get('features/enterprisePicker/enabled', false)) return '';
+
+                var node = $('<li role="presentation" class="launcher">').append(
+                    $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').attr('aria-label', gt('Address directory')).append($.icon('fa-address-card-o'))
                             .on('click', _.debounce(function () {
                                 require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
                                     popup.open($.noop, { selection: { behavior: 'none' } });
                                 });
                             }, 300, true))
-                    );
-                    this.append(node);
-                }
-            });
-        }
+                );
+                this.append(node);
+            }
+        });
 
-        if (contactSettings.get('enterprisePicker/showLauncher', true)) {
-            ext.point('io.ox/core/appcontrol/customLaunchers').extend({
-                id: 'enterprisePicker',
-                index: 100,
-                draw: function () {
-                    this.append(
-                        $('<a tabindex="-1" href="#" role="menuitem" class="btn btn-link lcell">').append(
-                            $('<div class="lcell">').append(
-                                $('<div class="icon">').append($.icon('fa-address-card-o')),
-                                $('<div class="title">').text(gt('Address directory'))
-                            ).on('click', _.debounce(function () {
-                                require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                                    popup.open($.noop, { selection: { behavior: 'none' } });
-                                });
-                            }, 300, true))
-                        )
-                    );
-                }
-            });
+        ext.point('io.ox/core/appcontrol/customLaunchers').extend({
+            id: 'enterprisePicker',
+            index: 100,
+            draw: function () {
+                if (!settings.get('features/enterprisePicker/showLauncher', true) || !settings.get('features/enterprisePicker/enabled', false)) return '';
 
-            ext.point('io.ox/core/appcontrol/customQuickLaunchers').extend({
-                id: 'enterprisePicker',
-                label: gt('Address directory'),
-                index: 100,
-                draw: function () {
-                    return $('<button tabindex="-1" type="button" class="btn btn-link lcell">').append(
+                this.append(
+                    $('<a tabindex="-1" href="#" role="menuitem" class="btn btn-link lcell">').append(
                         $('<div class="lcell">').append(
                             $('<div class="icon">').append($.icon('fa-address-card-o')),
                             $('<div class="title">').text(gt('Address directory'))
                         ).on('click', _.debounce(function () {
                             require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                                popup.open($.noop, { selection: false });
+                                popup.open($.noop, { selection: { behavior: 'none' } });
                             });
                         }, 300, true))
-                    );
-                }
-            });
-        }
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/core/appcontrol/customQuickLaunchers').extend({
+            id: 'enterprisePicker',
+            label: gt('Address directory'),
+            index: 100,
+            draw: function () {
+                if (!settings.get('features/enterprisePicker/showLauncher', true) || !settings.get('features/enterprisePicker/enabled', false)) return '';
+
+                return $('<button tabindex="-1" type="button" class="btn btn-link lcell">').append(
+                    $('<div class="lcell">').append(
+                        $('<div class="icon">').append($.icon('fa-address-card-o')),
+                        $('<div class="title">').text(gt('Address directory'))
+                    ).on('click', _.debounce(function () {
+                        require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                            popup.open($.noop, { selection: { behavior: 'none' } });
+                        });
+                    }, 300, true))
+                );
+            }
+        });
     }
 
     // deactivated since 7.10.0

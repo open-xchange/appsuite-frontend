@@ -54,7 +54,8 @@ define('io.ox/core/util', [
     //     }
     // });
 
-    var regUrl = /(((https?|ftps?):\/\/)[^\s"]+)/gim;
+    // basically regex from mail/detail/links.js tweaked to our needs
+    var regUrl = /(((http|https|ftp|ftps):\/\/|www\.)[^\s"]+)/gim;
 
     var that = {
 
@@ -131,6 +132,10 @@ define('io.ox/core/util', [
         fixUrlSuffix: function (url, suffix) {
             suffix = suffix || '';
             url = url.replace(/([.,;!?<>(){}[\]|]+)$/, function (all, marks) {
+                // see OXUIB-1053 , there are some links with brackets at the end, if theres a matching number of brackets inside the link, this is not a suffix, but part of the link
+                if (marks === ')' && (url.match(/\)/g) || []).length === (url.match(/\(/g) || []).length) return marks;
+                if (marks === ']' && (url.match(/\]/g) || []).length === (url.match(/\[/g) || []).length) return marks;
+
                 suffix = marks + suffix;
                 return '';
             });
@@ -151,7 +156,7 @@ define('io.ox/core/util', [
                 var node = $('<a target="_blank" rel="noopener">').attr('href', fix.url).append(that.breakableHTML(fix.url));
                 return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
-            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
+            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'] });
             text = that.injectAttribute(text, 'a', 'rel', 'noopener');
             return text;
 

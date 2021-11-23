@@ -126,7 +126,7 @@ define('io.ox/core/deputy/dialog', [
                 ),
                 new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalfOf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
                 $('<div class="select-container">').append(
-                    $('<label for="inbox-deputy-selector">').text(moduleMap.calendar),
+                    $('<label for="calendar-deputy-selector">').text(moduleMap.calendar),
                     new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: calendarModel, list: [
                         { value: permissions.none, label: gt('None') },
                         { value: permissions.viewer, label: gt('Viewer (view appointments)') },
@@ -141,7 +141,7 @@ define('io.ox/core/deputy/dialog', [
         if (model.get('deputyId')) editDialog.addButton({ className: 'btn-default pull-left', label: gt('Remove'), action: 'remove' });
 
         editDialog.addCancelButton()
-            .addButton({ className: 'btn-primary', label: gt('save'), action: 'save' })
+            .addButton({ className: 'btn-primary', label: gt('Save'), action: 'save' })
             .on('cancel', function () {
                 // cancel on a model that was not saved means we should remove it from the list
                 if (model.get('deputyId') === undefined) {
@@ -184,7 +184,7 @@ define('io.ox/core/deputy/dialog', [
 
             this.$body.append(
                 //#. %1$s name of the deputy
-                $('<div>').text(gt('Do you want to remove %1$s from your deputy list', util.getFullName(model.get('userData').attributes, false)))
+                $('<div>').text(gt('Do you want to remove %1$s from your deputy list?', util.getFullName(model.get('userData').attributes, false)))
             );
         })
         .addCancelButton()
@@ -215,9 +215,9 @@ define('io.ox/core/deputy/dialog', [
             this.collection.on('add reset remove', this.render.bind(this));
         },
         render: function () {
-            this.$el.empty();
+            this.$el.attr('role', 'list').empty();
 
-            if (this.collection.length === 0) this.$el.append($('<div class="empty-message">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
+            if (this.collection.length === 0) this.$el.append($('<li class="empty-message" role="listitem">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
 
             this.collection.each(this.renderDeputy.bind(this));
             return this;
@@ -231,7 +231,7 @@ define('io.ox/core/deputy/dialog', [
 
 
             this.$el.append(
-                $('<li>').attr('data-id', user.get('id')).append(
+                $('<li role="listitem">').attr('data-id', user.get('id')).append(
                     $('<div class="flex-item">').append(
                         userPicture,
                         $('<div class="data-container">').append(
@@ -241,7 +241,7 @@ define('io.ox/core/deputy/dialog', [
                     ),
                     $('<div class="flex-item">').append(
                         $('<button class="btn btn-link edit">').attr('data-cid', deputy.cid).text(gt('Edit')),
-                        $('<button class="btn btn-link remove">').attr('data-cid', deputy.cid).append($.icon('fa-trash', gt('Remove')))
+                        $('<button class="btn btn-link remove">').attr({ 'aria-label': gt('Remove'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
                     )
                 )
             );
@@ -320,9 +320,10 @@ define('io.ox/core/deputy/dialog', [
 
                     userCollection.on('add', function (user) {
                         // you cannot be your own deputy
+                        // external contacts are not allowed (no id)
                         // addresspicker sends contact data, autocomplete sends user data
                         var id = user.get('user_id') || user.get('id');
-                        if (id === ox.user_id) {
+                        if (!id || id === ox.user_id) {
                             // remove from collection. no need to redraw
                             userCollection.remove(user, { silent: true });
                             return;

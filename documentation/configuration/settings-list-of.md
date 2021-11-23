@@ -63,6 +63,9 @@ Enable/disable PDF preconversion of office documents for mail attachments. Defau
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
 Enable/disable range requests support to fetch PDF rendering data in chunks. Default is `true`.
 
+<config>io.ox/core//features/enterprisePicker/enabled=`<bool>`</config>
+ Replaces the default contact picker with the enterprise contact picker. Default is `false`
+
 ## Topbar / Apps
 
 <config>io.ox/core//apps/quickLaunch=`<string>`</config>
@@ -239,10 +242,10 @@ Passwort minimum length
 Password max length
 
 <config>io.ox/core//password/regexp=`<string>`</config>
-Check new password against a regular expression (i.e. "is there at least one upper case letter")
+Check new password against a regular expression (i.e. "is there at least one upper case letter"). This is only used to determine password strength. This does not determine which passwords are allowed. Use com.openexchange.passwordchange.allowedPattern for this. See https://documentation.open-xchange.com/components/middleware/config/7.10.5/#mode=features&feature=Password%20Change for more information.
 
 <config>io.ox/core//password/special=`<string>`</config>
-Required special characters for new passwords
+String of special characters for new passwords that is displayed to the user to increase password strength. This is not a requirement for new passwords.
 
 
 ## Client Onboarding
@@ -549,6 +552,9 @@ Attach original message on touch devices
 <config>io.ox/mail//compose/autocompleteApiLimit=`<number>`</config>
 Fetch limit of autocomplete widget of mail compose. Default: `50`
 
+<config>io.ox/mail//compose/deputy/hint=`<bool>`</config>
+Pre-configured "disclaimer text" when sending "on behalf of". (default: true)
+
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
@@ -627,6 +633,27 @@ Elements for addition loading on each subsequent paginate call. Default `100`
 
 <config>io.ox/contacts//picker/limits/search=`<number>`</config>
 Maximum search results. Default `50`
+
+## Enterprise Addressbook picker
+This settings are used when the addressbook feature toggle (io.ox/core//features/enterprisePicker/enabled) is set to true.
+
+<config>io.ox/core//features/enterprisePicker/showLauncher=`<bool>`</config>
+ Show the picker in the launcher dropdown and add it to quicklauncher selection. Default is `true`
+
+<config>io.ox/contacts//enterprisePicker/lastSearchedContacts=`<array>`</config>
+ Array of last searched contacts. Do *NOT* change this by hand or make it read only. This is filled and maintained by the UI. Default is `[]`
+
+<config>io.ox/contacts//enterprisePicker/lastSearchedContactsLimit=`<number>`</config>
+ How many contacts we want to save in the last searched contacts list. Default is `30`
+
+<config>io.ox/contacts//search/minimumQueryLength=`<number>`</config>
+ This setting is shared by MW and UI for all contact searches and determines the minimum query length. Default is `2`
+
+<config>io.ox/contacts//enterprisePicker/useUsedInPickerFlag=`<bool>`</config>
+ Whether or not the UI filters folders by the used in picker flag. Useful when developing or debugging to make all folders show up. Default is `true`
+
+<config>io.ox/contacts//enterprisePicker/limit=`<number>`</config>
+ Limit of displayed contacts in lists and search results. Default is `100`
 
 # Calendar
 

@@ -55,6 +55,10 @@
         .limit-warning {
             margin: 4px 12px 0px 12px;
         }
+
+        .contact-list-view:focus-within li.active-descendant {
+            background-color: #e6e6e6;
+        }
     }
 
     .modal-header, .enterprise-picker-header {
@@ -119,6 +123,7 @@
 
         .multi-item-container {
             display: flex;
+            align-items: center;
 
             &.details-container {
                 justify-content: space-between;
@@ -129,10 +134,19 @@
         .flex-container {
             width: 32%;
 
-            input {
-                height: 40px;
+            .fa-checkmark {
+                height: 18px;
                 margin: 0 16px 0 0 ;
             }
+        }
+
+        &[aria-selected="true"] .fa-checkmark {
+            color: #284171;
+            .checkbox { display: none; }
+        }
+        &[aria-selected="false"] .fa-checkmark {
+            color: #767676;
+            .checkmark { display: none; }
         }
 
         // so we can have 2 rows
@@ -150,7 +164,7 @@
         .show-details {
             color: #767676;
 
-            &:hover {
+            &:hover, &:focus-within {
                 color:#000
             }
         }
@@ -163,8 +177,14 @@
     .selected-contacts-view {
         border-top: 1px solid #e5e5e5;
         text-align: left;
-        padding: 0;
-        padding: 16px;
+        max-height: 150px;
+        padding: 16px 0 16px 16px;
+
+        ul {
+            overflow-y: auto;
+            max-height: 97px;
+            margin-bottom: 0px;
+        }
 
         &.empty {
             display: none;

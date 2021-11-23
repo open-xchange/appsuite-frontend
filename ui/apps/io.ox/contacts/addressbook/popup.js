@@ -438,7 +438,7 @@ define('io.ox/contacts/addressbook/popup', [
             enter: false,
             focus: '.search-field',
             point: 'io.ox/contacts/addressbook-popup',
-            help: 'ox.appsuite.user.sect.email.send.addressbook.html',
+            help: 'ox.appsuite.user.sect.contacts.use.addressbook.html',
             title: gt('Select contacts'),
             useGABOnly: false
         }, options);

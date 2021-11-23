@@ -345,7 +345,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1045': 'transport_starttls',
                 '1046': 'root_folder',
                 '1047': 'mail_oauth',
-                '1048': 'transport_oauth'
+                '1048': 'transport_oauth',
+                '1049': 'mail_disabled',
+                '1050': 'transport_disabled',
+                '1051': 'secondary',
+                '1052': 'deactivated'
             },
             'attachment': {
                 '1': 'id',
@@ -506,6 +510,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         return join === true ? tmp.join(',') : tmp;
     };
 
+    // serialize and prevent potential needless '?'
+    var getSerializedParams = function (o) {
+        // we us $.param as functions get evaluated (in contrast to _.serialize)
+        var serialized = $.param(_.omit(o.params, _.isUndefined));
+        return serialized ? ('?' + serialized) : '';
+    };
+
     // transform arrays to objects
     var makeObject = function (data, module, columns) {
         // primitive types may be mixed with column arrays
@@ -573,10 +584,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         switch (type) {
             case 'GET':
-                o._url += '?' + $.param(_.omit(o.params, _.isUndefined));
+                o._url += getSerializedParams(o);
                 break;
             case 'POST':
-                o._url += '?' + $.param(_.omit(o.params, _.isUndefined));
+                o._url += getSerializedParams(o);
                 o.original = o.data;
                 break;
             case 'PUT':

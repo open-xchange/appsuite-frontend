@@ -20,7 +20,7 @@
  *
  */
 
-define('io.ox/switchboard/views/zoom-meeting', [
+define('io.ox/conference/views/zoom-meeting', [
     'io.ox/switchboard/zoom',
     'io.ox/switchboard/api',
     'io.ox/core/extensions',

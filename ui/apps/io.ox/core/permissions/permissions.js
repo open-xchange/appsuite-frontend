@@ -445,9 +445,11 @@ define('io.ox/core/permissions/permissions', [
                                         return new pModel.Participant(m);
                                     });
                                     // remove duplicate entries from typeahead dropdown
-                                    return _(data).filter(function (model) {
+                                    data = _(data).filter(function (model) {
                                         return !collection.get(model.id);
                                     });
+                                    // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                                    return $.when.apply($, _(data).pluck('loading')).then(function () { return data; });
                                 },
                                 click: function (e, member) {
                                     var obj = {

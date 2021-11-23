@@ -24,7 +24,7 @@
 let testRunContext;
 
 // please create .env file based on .evn-example
-require('dotenv').config();
+require('dotenv-defaults').config();
 
 const codeceptDriver = process.env.CODECEPT_DRIVER || 'puppeteer';
 const requiredEnvVars = ['LAUNCH_URL', 'PROVISIONING_URL', 'CONTEXT_ID'];

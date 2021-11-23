@@ -26,7 +26,7 @@ define('io.ox/mail/statistics', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
     'gettext!io.ox/mail',
-    'static/3rd.party/Chart.min.js'
+    'static/3rd.party/chart.min.js'
 ], function (api, accountAPI, ext, ModalDialog, gt, Chart) {
 
     'use strict';
@@ -77,13 +77,18 @@ define('io.ox/mail/statistics', [
             type: 'line',
             data: data,
             options: {
-                legend: { display: false },
-                tooltips: { enabled: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltips: { enabled: false }
+                },
                 elements: {
                     line: {
                         backgroundColor: 'rgba(0, 136, 204, 0.15)',
                         borderColor: 'rgba(0, 136, 204, 0.80)',
-                        borderWidth: 2
+
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.5
                     },
                     point: {
                         backgroundColor: 'rgba(0, 136, 204, 1)',

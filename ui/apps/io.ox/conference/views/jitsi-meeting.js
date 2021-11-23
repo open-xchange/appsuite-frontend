@@ -20,9 +20,9 @@
  *
  */
 
-define('io.ox/switchboard/views/jitsi-meeting', [
+define('io.ox/conference/views/jitsi-meeting', [
     'io.ox/backbone/views/disposable',
-    'io.ox/switchboard/api',
+    'io.ox/conference/api',
     'settings!io.ox/switchboard',
     'gettext!io.ox/switchboard'
 ], function (DisposableView, api, settings, gt) {
@@ -99,7 +99,7 @@ define('io.ox/switchboard/views/jitsi-meeting', [
                 extendedParameters: {
                     'X-OX-TYPE': 'jitsi',
                     'X-OX-ID': meeting.id,
-                    'X-OX-OWNER': api.userId
+                    'X-OX-OWNER': ox.user_id
                 }
             }]);
             this.model.set({ joinURL: meeting.joinURL, state: 'done' });

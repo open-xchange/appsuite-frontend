@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="index.html" title="Benutzeranleitung">
-<link rel="prev" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard-Einstellungen">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Öffentliche Schlüssel verwalten">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -21,7 +21,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.html">Zurück</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
 </ul></div>
@@ -120,11 +120,20 @@
 <dt class="cap-contacts">Postanschriften mit Kartendienst verknüpfen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adressbuch-Einstellungen</a>
 </dt>
 </dl></dd>
-<dt class="cap-contacts">Adressen</dt>
+<dt class="cap-webmail">Adressen</dt>
 <dd><dl>
-<dt class="cap-contacts">aus Adressbuch wählen, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Kontakte aus einem Adressbuch wählen</a>
+<dt class="cap-contacts">aus Adressbuch übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">E-Mail-Adressen aus einem Adressbuch übernehmen</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">aus Adressverzeichnis übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">E-Mail-Adressen aus dem Adressverzeichnis übernehmen</a>
 </dt>
 <dt class="cap-webmail">sammeln, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">Adressen sammeln</a>
+</dt>
+</dl></dd>
+<dt class="cap-enterpriseaddressbook">Adressverzeichnis</dt>
+<dd><dl>
+<dt class="cap-enterpriseaddressbook">E-Mail-Adresse übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">E-Mail-Adressen aus dem Adressverzeichnis übernehmen</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">Kontakte anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">Kontakte im Adressverzeichnis anzeigen</a>
 </dt>
 </dl></dd>
 <dt class="">Aktive Clients anzeigen oder abmelden, <a class="indexterm" href="ox.appsuite.user.sect.security.sessions.html">Aktive Clients anzeigen oder abmelden</a>
@@ -165,7 +174,7 @@
 </dt>
 <dt class="cap-infostore">Dateien, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dateien anzeigen</a>
 </dt>
-<dt class="cap-infostore">Dateien im Viewer, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dateien im Viewer anzeigen</a>
+<dt class="cap-infostore">Dateien im Viewer, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Inhalte von Dateien anzeigen</a>
 </dt>
 <dt class="cap-webmail">E-Mail-Anhang, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">E-Mail-Anhang ansehen oder speichern</a>
 </dt>
@@ -175,11 +184,13 @@
 </dt>
 <dt class="cap-contacts">Kontakte, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kontakte anzeigen</a>
 </dt>
+<dt class="cap-contacts">Kontakte eines Adressbuchs, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">Kontakte eines Adressbuchs anzeigen</a>
+</dt>
 <dt class="">Konten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Konten anzeigen, bearbeiten, löschen</a>
 </dt>
 <dt class="cap-calendar">Terminanhang, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Terminanhang ansehen oder speichern</a>
 </dt>
-<dt class="cap-calendar">Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Termine anzeigen</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Termine in einer Kalenderansicht anzeigen</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Termine in der Listenansicht anzeigen</a>
+<dt class="cap-calendar">Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Termine anzeigen</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Termine in verschiedenen Ansichten anzeigen</a>
 </dt>
 </dl></dd>
 <dt class="">App</dt>
@@ -360,9 +371,9 @@
 </dt>
 <dt class="">Benachrichtigungen</dt>
 <dd><dl>
-<dt class="">Benachrichtigungen im Infobereich erhalten, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Benachrichtigungen erhalten</a>
+<dt class="">Benachrichtigungen im Infobereich erhalten, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Mit Benachrichtigungen arbeiten</a>
 </dt>
-<dt class="">Desktop-Benachrichtigungen erhalten, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Benachrichtigungen erhalten</a>
+<dt class="">Desktop-Benachrichtigungen erhalten, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Mit Benachrichtigungen arbeiten</a>
 </dt>
 </dl></dd>
 <dt class="">Benutzeroberfläche</dt>
@@ -486,7 +497,7 @@
 <dd><dl>
 <dt class="cap-infostore">anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dateien anzeigen</a>
 </dt>
-<dt class="cap-infostore">anzeigen im Viewer, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dateien im Viewer anzeigen</a>
+<dt class="cap-infostore">anzeigen im Viewer, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Inhalte von Dateien anzeigen</a>
 </dt>
 <dt class="cap-infostore">Beschreibung bearbeiten, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.editdescription.html">Beschreibung erstellen oder bearbeiten</a>
 </dt>
@@ -545,11 +556,11 @@
 </dl></dd>
 <dt class="cap-share_mail_attachments">Daten freigeben, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.share.html">Daten freigeben</a>
 </dt>
-<dt class="">Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
+<dt class="cap-dataexport">Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
 </dt>
 <dt class="cap-calendar">Datumswähler, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">Der Datumswähler</a>
 </dt>
-<dt class="">Desktop-Benachrichtigungen, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Benachrichtigungen erhalten</a>
+<dt class="">Desktop-Benachrichtigungen, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Mit Benachrichtigungen arbeiten</a>
 </dt>
 <dt class="">Dokumentation, <a class="indexterm" href="ox.appsuite.user.chap.about.html">Über diese Dokumentation</a>
 </dt>
@@ -594,7 +605,7 @@
 </dt>
 <dt class="cap-infostore">E-Mail-Anhänge anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">E-Mail-Anhänge in Drive anzeigen</a>
 </dt>
-<dt class="cap-infostore">Inhalte von Dateien anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dateien im Viewer anzeigen</a>
+<dt class="cap-infostore">Inhalte von Dateien anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Inhalte von Dateien anzeigen</a>
 </dt>
 <dt class="cap-infostore">Mit Versionen arbeiten, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.versions.html">Mit Versionen arbeiten</a>
 </dt>
@@ -682,6 +693,8 @@
 </dt>
 <dt class="cap-webmail">Abwesenheitsbenachrichtigung senden, <a class="indexterm" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Abwesenheitsbenachrichtigung automatisch senden</a>
 </dt>
+<dt class="cap-contacts">Adresse in Eingabefeld übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">E-Mail-Adresse in Eingabefeld übernehmen</a>
+</dt>
 <dt class="cap-webmail">Adressen sammeln, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">Adressen sammeln</a>
 </dt>
 <dt class="cap-webmail">als gelesen markieren, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.mark.html">E-Mails als gelesen oder ungelesen markieren</a>
@@ -702,6 +715,10 @@
 </dt>
 <dt class="cap-webmail">archivieren, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-Mails archivieren</a>
 </dt>
+<dt class="cap-contacts">aus Adressbuch übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">E-Mail-Adressen aus einem Adressbuch übernehmen</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">aus Adressverzeichnis übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">E-Mail-Adressen aus dem Adressverzeichnis übernehmen</a>
+</dt>
 <dt class="">Authentizität anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.security.emailauthentication.html">Authentizität von E-Mails anzeigen</a>
 </dt>
 <dt class="cap-guard">Autocrypt-Schlüssel anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt-Schlüssel verwalten</a>
@@ -717,6 +734,8 @@
 <dt class="cap-webmail">automatisch weiterleiten, <a class="indexterm" href="ox.appsuite.user.sect.email.send.autoforward.html">E-Mail automatisch weiterleiten lassen</a>
 </dt>
 <dt class="cap-webmail">beantworten, <a class="indexterm" href="ox.appsuite.user.sect.email.send.reply.html">E-Mail beantworten</a>
+</dt>
+<dt class="cap-deputy">bearbeiten, verwalten als Stellvertreter, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">E-Mails als Stellvertreter senden, bearbeiten, verwalten</a>
 </dt>
 <dt class="cap-webmail">Benachrichtigungstöne, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">Einstellungen zum Empfangen von E-Mails</a>
 </dt>
@@ -740,13 +759,13 @@
 </dt>
 <dt class="cap-share_links cap-share_mail_attachments">freigeben, siehe Freigaben, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Daten teilen mit Hilfe von Freigaben</a>
 </dt>
+<dt class="cap-webmail">funktionales E-Mail-Konto aktivieren oder deaktivieren, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">Funktionales E-Mail-Konto deaktivieren oder aktivieren</a>
+</dt>
 <dt class="cap-portal">hinzufügen zum Portal, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.addportal.html">E-Mail zum Portal hinzufügen</a>
 </dt>
 <dt class="cap-webmail">importieren aus EML, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">E-Mails importieren</a>
 </dt>
 <dt class="cap-webmail">Kategorien, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.categories.html">Mit Kategorien arbeiten</a>
-</dt>
-<dt class="cap-contacts">Kontakte aus einem Adressbuch wählen, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Kontakte aus einem Adressbuch wählen</a>
 </dt>
 <dt class="cap-webmail">kopieren, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.movecopy.html">E-Mails verschieben oder kopieren</a>
 </dt>
@@ -763,6 +782,8 @@
 <dt class="cap-webmail">Quelltext anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.source.html">Quelltext anzeigen</a>
 </dt>
 <dt class="cap-webmail">senden, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">Neue E-Mail senden</a>
+</dt>
+<dt class="cap-deputy">senden als Stellvertreter, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">E-Mails als Stellvertreter senden, bearbeiten, verwalten</a>
 </dt>
 <dt class="cap-calendar">senden an Terminteilnehmer, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attendees.html">E-Mail an Terminteilnehmer senden</a>
 </dt>
@@ -786,7 +807,7 @@
 </dt>
 <dt class="cap-webmail">weiterleiten, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-Mail weiterleiten</a>
 </dt>
-<dt class="cap-webmail">Whitelist verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Whitelist verwenden</a>
+<dt class="cap-webmail">Zulassungsliste verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Zulassungsliste verwenden</a>
 </dt>
 </dl></dd>
 <dt class="cap-webmail">
@@ -935,13 +956,15 @@
 </dt>
 <dt class="">Passwort ändern, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">Passwort ändern</a>
 </dt>
-<dt class="">Persönliche Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
+<dt class="cap-dataexport">Persönliche Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
 </dt>
 <dt class="">Persönliche Kontaktdaten, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Persönliche Kontaktdaten ändern</a>
 </dt>
 <dt class="cap-portal">Portal, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal-Einstellungen</a>
 </dt>
 <dt class="">Regionale Einstellungen, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">Regionale Einstellungen ändern</a>
+</dt>
+<dt class="cap-deputy">Stellvertreter ernennen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">Stellvertreter ernennen</a>
 </dt>
 <dt class="cap-call">Zoom-Integration einrichten, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom-Integration einrichten und konfigurieren</a>
 </dt>
@@ -1045,9 +1068,6 @@
 <div class="indexdiv">
 <h3>G</h3>
 <dl>
-<dt class="">Gastgruppe</dt>
-<dd><dl><dt class="">siehe Gast, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="cap-calendar">Geburtstagskalender anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Kalender-Einstellungen</a>
 </dt>
 <dt class="">Grundeinstellungen, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Grundeinstellungen anpassen</a>
@@ -1072,6 +1092,8 @@
 <dt class="">Sprache, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Grundeinstellungen anpassen</a>
 </dt>
 <dt class="">Standard-App nach dem Anmelden?, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Grundeinstellungen anpassen</a>
+</dt>
+<dt class="">Stellvertreter verwalten, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Grundeinstellungen anpassen</a>
 </dt>
 <dt class="">Weitere Regionale Einstellungen, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Grundeinstellungen anpassen</a>
 </dt>
@@ -1188,7 +1210,7 @@
 <div class="indexdiv">
 <h3>H</h3>
 <dl>
-<dt class="cap-webmail cap-calendar cap-tasks">Halo View, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">Kontakte in der Halo View anzeigen</a>
+<dt class="cap-webmail cap-calendar cap-tasks">Halo View, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">Kontakte in der Halo View anzeigen</a>
 </dt>
 <dt class="cap-infostore">Hochladen</dt>
 <dd><dl><dt class="cap-infostore">Datei oder Ordner, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dateien oder Ordner hochladen</a>
@@ -1224,11 +1246,11 @@
 <dt class="cap-calendar">Termine, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Termine importieren</a>
 </dt>
 </dl></dd>
-<dt class="">Infobereich, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Benachrichtigungen erhalten</a>
+<dt class="">Infobereich, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Mit Benachrichtigungen arbeiten</a>
 </dt>
 <dt class="cap-infostore">Inhalte anzeigen</dt>
 <dd><dl>
-<dt class="cap-infostore">Dateien, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dateien im Viewer anzeigen</a>
+<dt class="cap-infostore">Dateien, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Inhalte von Dateien anzeigen</a>
 </dt>
 <dt class="cap-infostore">Präsentationen, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.presentation.html">Präsentationen vorführen</a>
 </dt>
@@ -1365,9 +1387,9 @@
 </dt>
 <dt class="cap-contacts cap-call">anrufen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kontakte anrufen</a>
 </dt>
-<dt class="cap-contacts">anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kontakte anzeigen</a>
+<dt class="cap-contacts">anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kontakte anzeigen</a>, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">Kontakte eines Adressbuchs anzeigen</a>
 </dt>
-<dt class="cap-contacts">aus Adressbuch wählen, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Kontakte aus einem Adressbuch wählen</a>
+<dt class="cap-enterpriseaddressbook">anzeigen im Adressverzeichnis, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">Kontakte im Adressverzeichnis anzeigen</a>
 </dt>
 <dt class="cap-contacts">aus vCard hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">Kontakt aus vCard-Anhang hinzufügen</a>
 </dt>
@@ -1376,6 +1398,12 @@
 <dt class="cap-contacts">drucken, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Kontakte drucken</a>
 </dt>
 <dt class="cap-webmail">E-Mail senden an, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">E-Mail aus Adressbuch senden</a>
+</dt>
+<dt class="cap-contacts">E-Mail-Adresse aus Adressbuch übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">E-Mail-Adressen aus einem Adressbuch übernehmen</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">E-Mail-Adresse aus Adressverzeichnis übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">E-Mail-Adressen aus dem Adressverzeichnis übernehmen</a>
+</dt>
+<dt class="cap-contacts">E-Mail-Adresse in Eingabefeld übernehmen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">E-Mail-Adresse in Eingabefeld übernehmen</a>
 </dt>
 <dt class="cap-webmail">E-Mail-Empfänger als Verteilerliste speichern, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.recipients.html">E-Mail-Empfänger als Verteilerliste speichern</a>
 </dt>
@@ -1387,7 +1415,7 @@
 </dt>
 <dt class="cap-share_links cap-share_mail_attachments">freigeben, siehe Freigaben, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Daten teilen mit Hilfe von Freigaben</a>
 </dt>
-<dt class="cap-webmail cap-calendar cap-tasks">Halo View anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">Kontakte in der Halo View anzeigen</a>
+<dt class="cap-webmail cap-calendar cap-tasks">Halo View anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">Kontakte in der Halo View anzeigen</a>
 </dt>
 <dt class="cap-contacts">importieren im CSV-Format, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kontakte importieren</a>
 </dt>
@@ -1441,7 +1469,9 @@
 </dt>
 <dt class="">entfernen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Konten anzeigen, bearbeiten, löschen</a>
 </dt>
-<dt class="">primäres E-Mail-Konto bearbeiten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Das primäre E-Mail-Konto bearbeiten</a>
+<dt class="cap-webmail">funktionales E-Mail-Konto aktivieren oder deaktivieren, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">Funktionales E-Mail-Konto deaktivieren oder aktivieren</a>
+</dt>
+<dt class="">primäres E-Mail-Konto bearbeiten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Das primäre E-Mail-Konto bearbeiten</a>
 </dt>
 <dt class="cap-portal">Soziale Netzwerke hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.addsocial.html">Portal-Widget für Soziale Netzwerke hinzufügen</a>
 </dt>
@@ -1559,6 +1589,8 @@
 </dt>
 <dt class="cap-webmail">aufräumen, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.expungefolder.html">E-Mail-Ordner aufräumen</a>
 </dt>
+<dt class="">ausblenden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner ausblenden</a>
+</dt>
 <dt class="">Berechtigungen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">Wozu dienen Berechtigungen?</a>
 </dt>
 <dt class="cap-infostore">Favoriten hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dateien oder Drive-Ordner zu Favoriten hinzufügen</a>
@@ -1587,8 +1619,6 @@
 </dt>
 <dt class="">verschieben, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Ordner verschieben</a>
 </dt>
-<dt class="">verstecken, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner verstecken</a>
-</dt>
 <dt class="">zu Favoriten hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Ordner zu Favoriten hinzufügen</a>
 </dt>
 </dl></dd>
@@ -1600,7 +1630,7 @@
 </dt>
 <dt class="">öffnen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigieren in der Ordnerstruktur</a>
 </dt>
-<dt class="">Ordner verstecken, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner verstecken</a>
+<dt class="">Ordner ausblenden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner ausblenden</a>
 </dt>
 </dl></dd>
 <dt class="">Ordnerstruktur</dt>
@@ -1609,7 +1639,7 @@
 </dt>
 <dt class="">navigieren, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Navigieren in der Ordnerstruktur</a>
 </dt>
-<dt class="">Ordner verstecken, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner verstecken</a>
+<dt class="">Ordner ausblenden, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Ordner ausblenden</a>
 </dt>
 </dl></dd>
 </dl>
@@ -1636,7 +1666,7 @@
 </dl></dd>
 <dt class="cap-infostore">PDF, Dateien speichern als, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">Datei als PDF speichern</a>
 </dt>
-<dt class="">Persönliche Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
+<dt class="cap-dataexport">Persönliche Daten herunterladen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Persönliche Daten herunterladen</a>
 </dt>
 <dt class="">Persönliche Kontaktdaten, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Persönliche Kontaktdaten ändern</a>
 </dt>
@@ -1701,11 +1731,11 @@
 </dt></dl></dd>
 <dt class="">Primäres E-Mail-Konto</dt>
 <dd><dl>
-<dt class="">Absendernamen ändern, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Das primäre E-Mail-Konto bearbeiten</a>
+<dt class="">Absendernamen ändern, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Das primäre E-Mail-Konto bearbeiten</a>
 </dt>
-<dt class="">Namen ändern, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Das primäre E-Mail-Konto bearbeiten</a>
+<dt class="">Namen ändern, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Das primäre E-Mail-Konto bearbeiten</a>
 </dt>
-<dt class="">Ordner zuweisen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Das primäre E-Mail-Konto bearbeiten</a>
+<dt class="">Ordner zuweisen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Das primäre E-Mail-Konto bearbeiten</a>
 </dt>
 </dl></dd>
 </dl>
@@ -1756,7 +1786,7 @@
 </dt>
 <dt class="cap-guard">Office-Dokumente verschlüsseln, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office-Dokumente verschlüsseln</a>
 </dt>
-<dt class="cap-webmail">Whitelist verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Whitelist verwenden</a>
+<dt class="cap-webmail">Zulassungsliste verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Zulassungsliste verwenden</a>
 </dt>
 <dt class="">zusätzliche Passwörter für Applikationen verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.apppasswords.html">Zusätzliche Passwörter für Applikationen verwenden</a>
 </dt>
@@ -1772,13 +1802,25 @@
 </dl></dd>
 <dt class="cap-infostore">sperren einer Datei, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">Dateien sperren oder entsperren</a>
 </dt>
-<dt class="">Standardgruppe</dt>
+<dt class="cap-deputy">Stellvertreter</dt>
 <dd><dl>
-<dt class="">siehe Benutzer, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+<dt class="cap-deputy">anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Stellvertreter anzeigen, bearbeiten, löschen</a>
 </dt>
-<dt class="">siehe Gruppe, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+<dt class="cap-deputy">bearbeiten, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Stellvertreter anzeigen, bearbeiten, löschen</a>
+</dt>
+<dt class="cap-deputy">E-Mails bearbeiten, verwalten, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">E-Mails als Stellvertreter senden, bearbeiten, verwalten</a>
+</dt>
+<dt class="cap-deputy">E-Mails senden, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">E-Mails als Stellvertreter senden, bearbeiten, verwalten</a>
+</dt>
+<dt class="cap-deputy">hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.add.html">Stellvertreter hinzufügen</a>
+</dt>
+<dt class="cap-deputy">löschen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Stellvertreter anzeigen, bearbeiten, löschen</a>
+</dt>
+<dt class="cap-deputy">Termine anlegen, bearbeiten, verwalten, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">Termine als Stellvertreter anlegen, bearbeiten, verwalten</a>
 </dt>
 </dl></dd>
+<dt class="cap-deputy">Stellvertreter ernennen, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">Stellvertreter ernennen</a>
+</dt>
 <dt class="cap-webmail">Suchen</dt>
 <dd><dl>
 <dt class="cap-tasks">Aufgaben, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Aufgaben suchen</a>
@@ -1807,6 +1849,15 @@
 <dt class="">Tasten und Tastenkombinationen, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html">Tasten und Tastenkombinationen</a>
 </dt>
 </dl></dd>
+<dt class="cap-contacts cap-call">Telefon</dt>
+<dd><dl>
+<dt class="cap-tasks cap-call">Aufgabenteilnehmer anrufen, <a class="indexterm" href="ox.appsuite.user.sect.tasks.call.html">Aufgabenteilnehmer anrufen</a>
+</dt>
+<dt class="cap-contacts cap-call">Kontakte anrufen, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kontakte anrufen</a>
+</dt>
+<dt class="cap-calendar cap-call">Terminteilnehmer anrufen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.call.html">Terminteilnehmer anrufen</a>
+</dt>
+</dl></dd>
 <dt class="cap-calendar">Termine</dt>
 <dd><dl>
 <dt class="cap-calendar">ändern von Uhrzeit oder Dauer, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Termine bearbeiten</a>
@@ -1819,6 +1870,8 @@
 </dt>
 <dt class="cap-calendar">anlegen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.create.html">Neuen Termin anlegen</a>
 </dt>
+<dt class="cap-deputy">anlegen, bearbeiten, verwalten als Stellvertreter, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">Termine als Stellvertreter anlegen, bearbeiten, verwalten</a>
+</dt>
 <dt class="cap-calendar">anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Termine anzeigen</a>
 </dt>
 <dt class="cap-calendar cap-call">Audio/Videokonferenz anlegen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.call.html">Audio/Videokonferenz anlegen</a>
@@ -1827,7 +1880,7 @@
 </dt>
 <dt class="cap-calendar">bearbeiten, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Termine bearbeiten</a>
 </dt>
-<dt class="cap-calendar">Bestätigung ändern, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Terminbestätigung oder Status ändern</a>
+<dt class="cap-calendar">Bestätigungsstatus ändern, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Terminbestätigung ändern</a>
 </dt>
 <dt class="cap-calendar">Darstellung in Kalenderansicht, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">Wie werden Termine in einer Kalenderansicht dargestellt?</a>
 </dt>
@@ -1851,9 +1904,9 @@
 </dt>
 <dt class="cap-calendar">importieren, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Termine importieren</a>
 </dt>
-<dt class="cap-calendar">in Kalenderansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Termine in einer Kalenderansicht anzeigen</a>
+<dt class="cap-calendar">in Kalenderansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Termine in verschiedenen Ansichten anzeigen</a>
 </dt>
-<dt class="cap-calendar">in Listenansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Termine in der Listenansicht anzeigen</a>
+<dt class="cap-calendar">in Listenansicht anzeigen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Termine in verschiedenen Ansichten anzeigen</a>
 </dt>
 <dt class="cap-calendar">Kalenderfarben verwenden, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.colors.html">Kalenderfarben verwenden</a>
 </dt>
@@ -1867,13 +1920,13 @@
 </dt>
 <dt class="cap-calendar">Serientermin anlegen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.serial.html">Serientermin anlegen</a>
 </dt>
-<dt class="cap-calendar">Status ändern, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Terminbestätigung oder Status ändern</a>
-</dt>
 <dt class="cap-calendar">suchen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Termine suchen</a>
 </dt>
 <dt class="cap-calendar">Teilnehmer oder Ressourcen hinzufügen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.participants.html">Teilnehmer oder Ressourcen hinzufügen</a>
 </dt>
 <dt class="cap-calendar">Teilnehmer zu neuem Termin einladen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.attendees.html">Teilnehmer zu neuem Termin einladen</a>
+</dt>
+<dt class="cap-calendar">Terminbestätigung ändern, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Terminbestätigung ändern</a>
 </dt>
 <dt class="cap-calendar">Termindarstellung festlegen, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.display.html">Termindarstellung festlegen</a>
 </dt>
@@ -2027,9 +2080,6 @@
 <div class="indexdiv">
 <h3>W</h3>
 <dl>
-<dt class="">Web-Adresse</dt>
-<dd><dl><dt class="">siehe Domain, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="cap-webdav">WebDAV</dt>
 <dd><dl>
 <dt class="cap-webdav">einrichten in Linux, <a class="indexterm" href="ox.appsuite.user.sect.drive.webdav.linux.html">WebDAV einrichten in Linux</a>
@@ -2043,9 +2093,8 @@
 </dl></dd>
 <dt class="cap-webmail">Weiterleiten von E-Mails, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-Mail weiterleiten</a>
 </dt>
-<dt class="cap-webmail">Whitelist</dt>
-<dd><dl><dt class="cap-webmail">verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Whitelist verwenden</a>
-</dt></dl></dd>
+<dt class="">Whitelist siehe Zulassungsliste, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+</dt>
 </dl>
 </div>
 <div class="indexdiv">
@@ -2106,6 +2155,9 @@
 <dt class="cap-call">Link automatisch in Ort kopieren, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom-Integration einrichten und konfigurieren</a>
 </dt>
 </dl></dd>
+<dt class="cap-webmail">Zulassungsliste</dt>
+<dd><dl><dt class="cap-webmail">verwenden, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Zulassungsliste verwenden</a>
+</dt></dl></dd>
 </dl>
 </div>
 </div>

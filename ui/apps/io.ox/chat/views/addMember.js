@@ -28,7 +28,7 @@ define('io.ox/chat/views/addMember', [
     'io.ox/chat/api',
     'io.ox/chat/util',
     'gettext!io.ox/chat',
-    'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'io.ox/participants/add'
 ], function (Disposable, Typeahead, pModel, data, api, util, gt, settings) {
 
@@ -56,12 +56,15 @@ define('io.ox/chat/views/addMember', [
                         result = _(result).map(function (m) {
                             return new pModel.Participant(m);
                         });
-                        return _(result).filter(function (model) {
+                        result = _(result).filter(function (model) {
                             var email = model.get(model.get('field') || 'email1');
                             if (api.isMyself(email)) return false;
                             if (self.collection.get(email)) return false;
                             return true;
                         });
+
+                        // wait for participant models to be fully loaded (autocomplete suggestions might have missing values otherwise)
+                        return $.when.apply($, _(result).pluck('loading')).then(function () { return result; });
                     },
                     click: function (e, model) {
                         self.addParticipant(model);
@@ -86,7 +89,7 @@ define('io.ox/chat/views/addMember', [
 
         openAddressBookPicker: function (e) {
             var self = this,
-                picker = settings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = settings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
             e.preventDefault();
 
             require([picker], function (popup) {

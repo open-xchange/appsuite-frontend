@@ -30,7 +30,6 @@ define('io.ox/mail/sanitizer', [
         // used to find url("...") patterns in css to block external images when option is given
         urlDetectionRule = /url\(("|')?http.*?\)/gi,
         defaultOptions = {
-            SAFE_FOR_JQUERY: true,
             FORCE_BODY: true,
             // keep HTML and style tags to display mails correctly in iframes
             WHOLE_DOCUMENT: true

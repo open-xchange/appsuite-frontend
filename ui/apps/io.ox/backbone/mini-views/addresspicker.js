@@ -26,7 +26,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
     'io.ox/mail/util',
-    'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'gettext!io.ox/core',
     'less!io.ox/backbone/mini-views/addresspicker'
 ], function (AbstractView, pModel, api, capabilities, util, settings, gt) {
@@ -50,7 +50,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
         onClick: function openAddressBookPicker(e) {
             e.preventDefault();
             var self = this,
-                picker = settings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = settings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
             require([picker], function (popup) {
                 self.opt.useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));

@@ -262,7 +262,8 @@ define('io.ox/core/tk/textproc', [
 
                 switch (item.nodeName) {
                     case 'DIV':
-                        return item.classList.contains('io-ox-signature') ? '\0' + str + '\n' : str;
+                        var isCustomBlock = item.classList.contains('io-ox-signature') || item.classList.contains('io-ox-hint');
+                        return isCustomBlock ? '\0' + str + '\n' : str;
                     case 'A':
                         var href = item.getAttribute('href');
                         if (!/^https?:\/\//i.test(href)) return str;

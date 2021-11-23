@@ -80,7 +80,7 @@ Scenario('Move appointment to different folder', async function ({ I, dialogs, c
     });
     dialogs.clickButton('Move');
     I.waitForDetached('.modal-dialog');
-
+    I.pressKey('Escape');
     I.say('Deselect default folder');
     I.click(defaultFolderNode.find('.color-label.selected').as('Selected checkbox'));
     I.waitForElement(defaultFolderNode.find({ css: '.color-label:not(.selected)' }).as('Deselected checkbox'));

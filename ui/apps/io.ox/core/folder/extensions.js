@@ -75,6 +75,7 @@ define('io.ox/core/folder/extensions', [
             var id = api.altnamespace ? 'default0' : INBOX;
             return api.list(id).then(function (list) {
                 return _(list).filter(function (data) {
+                    if (account.isHidden({ id: data.account_id })) return false;
                     if (data.id.indexOf('default0/External accounts') === 0) return false;
                     if (account.isStandardFolder(data.id)) return false;
                     if (api.is('public|shared', data)) return false;
@@ -1200,9 +1201,8 @@ define('io.ox/core/folder/extensions', [
 
     function openPermissions(e) {
         var id = e.data.id;
-        require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
-            var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-            permissions.showFolderPermissions(id, model);
+        require(['io.ox/files/share/permissions'], function (permissions) {
+            permissions.showFolderPermissions(id);
         });
     }
 

@@ -30,6 +30,7 @@ define('io.ox/core/api/account', [
 
     // quick hash for sync checks
     var idHash = {},
+        hiddenHash = {},
         typeHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
@@ -143,6 +144,18 @@ define('io.ox/core/api/account', [
      */
     api.isExternal = function (id) {
         return api.isAccount(id) && !api.isPrimary(id);
+    };
+
+    /**
+     * is hidden secondary account
+     * @param  {string}  id (account_id)
+     * @return {boolean}
+     */
+    api.isHidden = function (data) {
+        if (data.id) return api.isAccount(data.id) && !!hiddenHash[data.id];
+        if (data.primary_address) return _.values(hiddenHash).indexOf(data.primary_address) >= 0;
+        if (data.folder_id) return !!hiddenHash[data.folder_id.split(separator)[0]];
+        return false;
     };
 
     /**
@@ -471,11 +484,11 @@ define('io.ox/core/api/account', [
             .then(function () {
                 return _(arguments).flatten(true);
             })
-            .then(function (addresses) {
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
-                return addresses;
+            .then(function (list) {
+                // filter deactivated secondary accounts
+                return [].concat(list).filter(function (address) {
+                    return !api.isHidden({ primary_address: address[1] });
+                });
             });
     };
 
@@ -519,9 +532,12 @@ define('io.ox/core/api/account', [
 
         return load().done(function (list) {
             idHash = {};
+            hiddenHash = {};
             typeHash = {};
             // add check here
             _(list).each(function (account) {
+                // hidden secondary account
+                if (account.secondary) hiddenHash['default' + account.id] = account.deactivated ? account.primary_address : false;
                 // remember account id
                 idHash[account.id] = true;
                 // add inbox first
@@ -688,6 +704,9 @@ define('io.ox/core/api/account', [
             .done(function (result) {
                 api.trigger('refresh.all');
                 api.trigger('update', result);
+                ox.trigger('account:update', id);
+                if (!('deactivated' in data)) return;
+                ox.trigger('account:status', { deactivated: data.deactivated, root_folder: result.root_folder });
             });
         });
     };

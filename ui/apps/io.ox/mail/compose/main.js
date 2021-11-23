@@ -28,11 +28,12 @@ define('io.ox/mail/compose/main', [
     'io.ox/mail/sender',
     'io.ox/core/capabilities',
     'io.ox/core/deputy/api',
+    'io.ox/core/api/quota',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/actions',
     'io.ox/mail/compose/actions'
-], function (ext, mailAPI, accountAPI, mailUtil, senderUtil, capabilities, deputyAPI, settings, gt) {
+], function (ext, mailAPI, accountAPI, mailUtil, sender, capabilities, deputyAPI, quotaAPI, settings, gt) {
 
     'use strict';
 
@@ -56,6 +57,7 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var self = this;
+            if (!_.device('smartphone')) quotaAPI.reload();
             return require(['io.ox/mail/compose/model']).then(function (MailComposeModel) {
                 self.model = baton.model = new MailComposeModel(baton.data);
                 baton.model.restored = !!(baton.data && baton.data.id);
@@ -84,62 +86,58 @@ define('io.ox/mail/compose/main', [
         id: 'fix-custom-displayname',
         index: INDEX += 100,
         perform: function () {
-            // make sure these settings are correct, defaultNames can change when someone edits the account data
-            return senderUtil.getAccounts().done(function (addresses) {
-                _(addresses).each(function (address) {
-                    // ensure defaultName is set (bug 56342 and 63891)
-                    settings.set(['customDisplayNames', address[1], 'defaultName'], address[0]);
-                });
-                settings.save();
-            });
+            // sender collections stores latest sender data and updates defaultNames
+            return sender.collection.fetched;
         }
     }, {
         id: 'fix-from',
         index: INDEX += 100,
         perform: function () {
-            var model = this.model;
+            var model = this.model,
+                config = this.config;
             if (model.get('from')) return;
-            var self = this,
-                def = capabilities.has('deputy') ? deputyAPI.getGranteeAddressFromFolder(this.config.get('folderId')) : $.when([]);
 
-            return def.then(function (granteeAddress) {
-                if (!_.isEmpty(granteeAddress)) {
+            return getGranteeAddress().then(function (granteeAddress) {
+                var isGranteeAddress = !_.isEmpty(granteeAddress),
+                    folder = isGranteeAddress ? mailAPI.getDefaultFolder() : config.get('folderId');
+                return accountAPI.getPrimaryAddressFromFolder(folder).then(function (address) {
+                    return isGranteeAddress ?
+                        model.set({ from: granteeAddress, sender: address }) :
+                        model.set({ from: address });
+                }).catch(function () {
                     return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
-                        // use default address as sender amd grantee address as from
-                        model.set({ from: granteeAddress, sender: address });
+                        model.set('from', address);
                     });
-                }
-
-                return accountAPI.getPrimaryAddressFromFolder(self.config.get('folderId')).catch(function () {
-                    return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder());
-                }).then(function (address) {
-                    // custom display names
-                    if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
-                        address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
-                    }
-                    if (!settings.get('sendDisplayName', true)) {
-                        address[0] = null;
-                    }
-                    model.set('from', address);
                 });
             });
+
+            function getGranteeAddress() {
+                return capabilities.has('deputy') ?
+                    deputyAPI.getGranteeAddressFromFolder(config.get('folderId')) :
+                    $.when([]);
+            }
         }
     }, {
         id: 'fix-displayname',
         index: INDEX += 100,
         perform: function () {
             var model = this.model,
-                config = this.config;
+                config = this.config,
+                keys = capabilities.has('deputy') ? ['from', 'sender'] : ['from'];
 
             updateDisplayName();
             this.view.listenTo(config, 'change:sendDisplayName', updateDisplayName);
             this.view.listenTo(ox, 'change:customDisplayNames', updateDisplayName);
+            this.view.listenTo(sender.collection, 'reset', updateDisplayName);
 
             // fix current value
             function updateDisplayName() {
-                var from = model.get('from');
-                if (!from) return;
-                model.set('from', mailUtil.getSender(from, config.get('sendDisplayName')));
+                keys.forEach(function (key) {
+                    var address = model.get(key);
+                    if (!address) return;
+                    address = sender.collection.getAsArray(address[1], { name: config.get('sendDisplayName') }) || address;
+                    model.set(key, address);
+                });
             }
         }
     }, {
@@ -223,10 +221,51 @@ define('io.ox/mail/compose/main', [
         id: 'update-cid',
         index: INDEX += 100,
         perform: function () {
+            var self = this;
             // fallback case: clone of actually deleted space
-            this.listenTo(this.model, 'change:id', function () {
-                this.cid = getAppCID(this.model.toJSON()) || this.cid;
-            }.bind(this));
+            this.listenTo(this.model, 'change:id', updateCID);
+            function updateCID() {
+                self.cid = getAppCID(self.model.toJSON()) || self.cid;
+                var win = self.getWindow();
+                if (!win.floating || !win.floating.model) return;
+                win.floating.model.set('cid', getAppCID(self.model.toJSON()) || self.cid);
+            }
+            updateCID();
+        }
+    }, {
+        id: 'deputy-hint',
+        index: INDEX += 100,
+        perform: function () {
+            if (!capabilities.has('deputy')) return;
+            if (!settings.get('compose/deputy/hint', true)) return;
+
+            var text = gt('This mail has been sent on behalf of another person.');
+
+            // use 'hint' to allow manipulation without affecting 'sender' (see toggleEditorMode)
+            this.listenTo(this.model, 'change:sender', function (model, value) { this.config.set('hint', !!value); });
+
+            // add hint to mail body
+            this.listenTo(this.config, 'change:hint', function onChangeSender(model, value) {
+                var isHTML = !!this.view.editor.find, isRemove = !value,
+                    type = (isHTML ? 'html' : 'text') + ':' + (isRemove ? 'remove' : 'append');
+
+                switch (type) {
+                    case 'html:append':
+                    case 'text:append':
+                        var node = $('<div>').append($('<div class="io-ox-hint">').text(text));
+                        return this.view.editor.insertPostCite(isHTML ? node.html() : text);
+                    case 'html:remove':
+                        return this.view.editor.find('div[class$="io-ox-hint"]').each(function () {
+                            var node = $(this);
+                            if (text === node.text().trim()) return node.remove();
+                            node.removeAttr('class');
+                        });
+                    case 'text:remove':
+                        return this.view.editor.replaceParagraph('\n\n' + text, '');
+                    default:
+                        return;
+                }
+            });
         }
     }, {
         id: 'finally',
@@ -236,7 +275,7 @@ define('io.ox/mail/compose/main', [
             // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
             win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
 
-            // clear max width for tokenfields to accomodate new max width
+            // clear max width for tokenfields to accommodate new max width
             this.view.$el.find('.mail-input>.tokenfield>input.tokenfield').each(function () {
                 var tokenfield = $(this).data('bs.tokenfield'),
                     attr = $(this).closest('[data-extension-id]').data('extension-id');
@@ -334,9 +373,26 @@ define('io.ox/mail/compose/main', [
                 // consider flags set by plugins (guard for example)
                 isCritical = e.critical;
             // critical errors: pause app
-            if (isMissing || isConcurrentEditing || isCritical) return app.pause(e);
+            if (isConcurrentEditing || isCritical) return app.pause(e);
+            // space deleted: pause app or remove taskbar item
+            if (isMissing) return app.onMissing(e);
+            // all other errors
             require(['io.ox/core/yell'], function (yell) {
                 yell(e);
+            });
+        };
+
+        app.onMissing = function (e) {
+            var taskbarmodel = ox.ui.floatingWindows.findWhere({ cid: app.cid }),
+                removable = _.device('smartphone') ?
+                    app.options.mobilelazyload :
+                    taskbarmodel && taskbarmodel.get('minimized');
+            // keep expanded compose windows visible (do not confuse users)
+            if (!removable) return app.pause(e);
+            // when minimized quit app and remove taskbar item
+            if (app.view) app.view.dirty(false);
+            return app.quit().then(function () {
+                taskbarmodel.trigger('close');
             });
         };
 

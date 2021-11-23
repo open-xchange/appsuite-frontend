@@ -47,10 +47,10 @@ define('io.ox/chat/main', [
     'io.ox/core/a11y',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
-    'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, contactSettings) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, coreSettings) {
 
     'use strict';
 
@@ -161,7 +161,7 @@ define('io.ox/chat/main', [
 
         startPrivateChat: function () {
             var self = this,
-                picker = contactSettings.get('useEnterprisePicker', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+                picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
             require([picker], function (picker) {
                 picker.open(
@@ -766,7 +766,7 @@ define('io.ox/chat/main', [
         var mode = settings.get('mode', 'sticky');
 
         win = new Window({
-            title: 'OX Chat',
+            title: 'Chat',
             sticky: mode === 'sticky',
             showInTaskbar: false,
             stickable: true,
@@ -776,13 +776,13 @@ define('io.ox/chat/main', [
             quitOnEscape: false
         })
         .render().open();
-
+        win.floating = win;
         // don't use setWindow method. Has to much overhead for the rather special chat window
         this.set('window', win);
         // strange circular dependency we need for getCurrentFloatingApp()
         win.app = app;
-
         app.settings = settings;
+        app.getContextualHelp = _.constant('ox.appsuite.user.sect.chat.gui.html');
 
         // add some scaffold css now to avoid invisible busy spinner (width 0px etc)
         win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).parent().busy();

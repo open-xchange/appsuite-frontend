@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="User Guide">
 <link rel="up" href="ox.appsuite.user.chap.tasks.html" title="Chapter 8. Tasks">
 <link rel="prev" href="ox.appsuite.user.sect.tasks.manage.delete.html" title="8.9.8. Deleting tasks">
-<link rel="next" href="ox.appsuite.user.sect.tasks.settings.html" title="8.11. Tasks Settings">
+<link rel="next" href="ox.appsuite.user.sect.tasks.settings.html" title="8.11. Task Settings">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,7 +32,15 @@
   <h1 class="sr-only"><span class="phrase">Tasks</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.tasks.search">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">8.10. Searching for Tasks</h2></div></div></div>
-<a class="indexterm" name="id-1.9.15.2"></a><a class="indexterm" name="id-1.9.15.3"></a><div class="task" id="ox.appsuite.user.task.tasks.search">
+<a class="indexterm" name="id-1.9.16.2"></a><a class="indexterm" name="id-1.9.16.3"></a><p id="ox.appsuite.user.orientation.tasks.search">Learn how to search for tasks by using the following search criteria: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">search terms for subject, description, attachments' names, participants</p></li>
+<li class="listitem"><p role="presentation">folders that are to be searched</p></li>
+<li class="listitem"><p role="presentation">the task's status</p></li>
+<li class="listitem"><p role="presentation">task type: single or recurring task</p></li>
+<li class="listitem"><p role="presentation">folder type: all, private, public, shared</p></li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.tasks.search">
 <p class="title">How to search for tasks:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
@@ -40,42 +48,36 @@
 <p role="presentation">The search menu opens.</p>
 </li>
 <li class="step">
-<p role="presentation">Define the data sources to be searched by clicking on an entry in the search menu.<ul class="itemizedlist" style="list-style-type: disc; ">
+<p role="presentation">Define the data sources to be searched by clicking on an entry in the search menu. <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">If clicking on the search term or pressing enter, the following data sources are searched: subject, description</p></li>
 <li class="listitem">
 <p role="presentation">In order to only search in the subject, click on <span class="guibutton"><strong>in subject</strong></span> in the search menu.</p>
 <p role="presentation">Accordingly, you can limit the search to the description or the attachment's name.</p>
 </li>
 <li class="listitem"><p role="presentation">In order to search for appointments with a specific participant, click on a name in the search menu.</p></li>
-</ul>
-          </p>
+</ul></p>
 <p role="presentation">The search results are displayed in the list that is shown in the display area.</p>
 </li>
-<li class="step">
-<p role="presentation">To select a folder for the search, click on the folder name next to the input field.</p>
+<li class="step"><p role="presentation">To limit the search to specific tasks, click the <span class="guibutton"><strong>Options</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span> in the search field. Use the following methods: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Folders</strong></span> allows to define the folders to be searched.</p>
 <p role="presentation">If you select <span class="guibutton"><strong>All folders</strong></span>, all private, public, and shared folders are searched.</p>
 </li>
-<li class="step"><p role="presentation">To limit the search to specific tasks, click on <span class="guibutton"><strong>Options</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.options"><img src="../../images/appsuite_user_icon_dropdown.png"></span> next to the input field. Use the following methods:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">To limit the search to tasks with a specific editing status, select a task status.</p></li>
-<li class="listitem"><p role="presentation">To limit the search to single or recurring tasks, select a task type.</p></li>
-<li class="listitem"><p role="presentation">To limit the search to private, public or shared tasks, select a folder type.</p></li>
-</ul>
-          </p></li>
-<li class="step"><p role="presentation">To refine the search result, enter further search terms: To remove a search term, click the <span class="guibutton"><strong>Remove</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span>next to the search term.</p></li>
-<li class="step"><p role="presentation">In order to finish the search, click the <span class="guibutton"><strong>Cancel search</strong></span> icon<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>in the input field.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Task status</strong></span> allows to search for tasks with a specific editing status.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Task type</strong></span> allows to limit the search to tasks or serial tasks.</p></li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Folder type</strong></span> allows to limit the search to private, public or shared tasks.</p></li>
+</ul></p></li>
+<li class="step"><p role="presentation">To refine the search result, enter further search terms: To remove a search term, click the <span class="guibutton"><strong>Remove</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.remove"><img src="../../images/appsuite_user_icon_close.png"></span> next to the search term.</p></li>
+<li class="step"><p role="presentation">In order to finish the search, click the <span class="guibutton"><strong>Cancel search</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.tasks.search.close"><img src="../../images/appsuite_user_icon_cancelsearch.png"></span> in the search field.</p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.related.tasks.search">
-      </p>
+<p id="ox.appsuite.user.related.tasks.search"></p>
 <p class="title">User interface:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.firststeps.gui.searchbar.html">The search bar</a></p></li></ul>
-<p>
-      </p>
+<p> </p>
 <p class="title">Related topics:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.tasks.view.html">Viewing Tasks</a></p></li></ul>
-<p>
-    </p>
-<p id="ox.appsuite.user.parent.tasks.search">Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.manage.html">Managing tasks</a></p>
+<p id="ox.appsuite.user.parent.tasks.search">Parent topic: <a class="xref" href="ox.appsuite.user.sect.tasks.manage.html">Managing Tasks</a></p>
 </div>
           </div>
         </body>

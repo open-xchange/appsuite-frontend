@@ -102,10 +102,23 @@ define.async('io.ox/mail/accounts/view-form', [
         PasswordView = mini.PasswordView.extend(custom),
 
         returnPortMail = function () {
-
             var secure = model.get('mail_secure'),
                 protocol = model.get('mail_protocol') || 'imap';
             return serverTypePorts[protocol][secure ? 'secure' : 'common'];
+        },
+
+        is = function (aspect) {
+            // multiparam OR conjunction
+            if (arguments.length > 1) return _.reduce(arguments, function (memo, key) { return memo || is(key); }, false);
+
+            switch (aspect) {
+                case 'primary':
+                    return model.get('id') === 0;
+                case 'secondary':
+                    return model.get('secondary');
+                default:
+                    return false;
+            }
         },
 
         returnSecurityValue = function (model, ssl, starttls) {
@@ -123,6 +136,7 @@ define.async('io.ox/mail/accounts/view-form', [
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             initialize: function () {
+                model = this.model;
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
@@ -156,7 +170,6 @@ define.async('io.ox/mail/accounts/view-form', [
             },
             render: function () {
                 var self = this;
-                model = self.model;
                 self.$el.empty().append(
                     $('<div class="settings-detail-pane">').append(
                         $('<div class="io-ox-account-settings">')
@@ -190,7 +203,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 }
 
                 //check for primary account
-                if (self.model.get('id') !== 0) {
+                if (!is('primary', 'secondary')) {
 
                     //refreshrate field needs to be toggled
                     self.model.on('change:mail_protocol', function (model, value) {
@@ -453,7 +466,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'mail_server', mandatory: model.get('id') !== 0 }).render().$el
+                            new InputView({ model: model, id: 'mail_server', mandatory: !is('primary', 'secondary') }).render().$el
                         )
                     ),
                     // secure
@@ -467,14 +480,14 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'mail_port', mandatory: model.get('id') !== 0 }).render().$el
+                            new InputView({ model: model, id: 'mail_port', mandatory: !is('primary', 'secondary') }).render().$el
                         )
                     ),
                     // login
                     group(
                         label('login', gt('Username')),
                         div(
-                            new InputView({ model: model, id: 'login', mandatory: model.get('id') !== 0 }).render().$el
+                            new InputView({ model: model, id: 'login', mandatory: !is('primary', 'secondary') }).render().$el
                         )
                     ),
                     // password
@@ -512,7 +525,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'transport_server', mandatory: model.get('id') !== 0 }).render().$el
+                            new InputView({ model: model, id: 'transport_server', mandatory: !is('primary', 'secondary') }).render().$el
                         )
                     ),
                     // secure
@@ -526,7 +539,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'transport_port', mandatory: model.get('id') !== 0 }).render().$el
+                            new InputView({ model: model, id: 'transport_port', mandatory: !is('primary', 'secondary') }).render().$el
                         )
                     ),
                     // Auth type
@@ -576,7 +589,9 @@ define.async('io.ox/mail/accounts/view-form', [
                         if (folder === 'archive' && !capabilities.has('archive_emails')) return;
 
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
-                        var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
+                        var text = folderLabels[folder],
+                            id = model.get('id'),
+                            enabled = id !== undefined && !is('secondary');
                         folder = folder + '_fullname';
                         return group(
                             label(folder, text),

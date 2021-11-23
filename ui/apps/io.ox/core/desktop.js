@@ -916,6 +916,21 @@ define('io.ox/core/desktop', [
                         return app.launch().then(function () {
                             // update unique id
                             obj.id = this.get('uniqueID');
+                            // WORKAROUND: OXUIB-932 - lazyload current edited drafts on mobile
+                            if (this.failRestore && obj.module === 'io.ox/mail/compose') {
+                                app.set('title', obj.description || app.get('title'));
+                                app.options.mobilelazyload = true;
+                                return app.on('mobilelazyload', function () {
+                                    obj = _.clone(obj);
+                                    // update unique id
+                                    obj.id = this.get('uniqueID');
+                                    return this.failRestore(obj.point).then(function () {
+                                        app.set('restored', true);
+                                        delete app.options.mobilelazyload;
+                                        app.launch();
+                                    });
+                                });
+                            }
                             if (this.failRestore) {
                                 // restore
                                 return this.failRestore(obj.point).then(function () {
@@ -977,7 +992,6 @@ define('io.ox/core/desktop', [
         getCurrentFloatingApp: function () {
             return _.chain(ox.ui.apps.pluck('window')).compact()
                 .map(function (win) {
-                    if (win.app.get('name') === 'io.ox/help') return undefined;
                     return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
                 }).compact().first().value();
         },
@@ -1387,7 +1401,7 @@ define('io.ox/core/desktop', [
                     var appPlugged = this.app && this.app.options.plugged;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
-                    if (!this.floating && !appPlugged && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                    if (!this.floating && !this.app.options.mobilelazyload && !appPlugged && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
                     ox.trigger('change:document:title', this.app.get('title'));

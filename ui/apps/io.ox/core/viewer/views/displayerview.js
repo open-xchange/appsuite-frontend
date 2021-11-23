@@ -25,11 +25,11 @@ define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/views/disposable',
     'io.ox/core/viewer/util',
-    'static/3rd.party/swiper.js',
+    'static/3rd.party/swiper-bundle.min.js',
     'static/3rd.party/bigscreen.min.js',
     'settings!io.ox/files',
     'gettext!io.ox/core',
-    'css!3rd.party/swiper/swiper.css'
+    'css!3rd.party/swiper/swiper-bundle.css'
 ], function (FilesAPI, TypesRegistry, DisposableView, Util, Swiper, BigScreen, filesSettings, gt) {
 
     'use strict';

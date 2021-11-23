@@ -73,12 +73,14 @@
                 flex-wrap: wrap;
 
                 .account-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     margin-left: 6px;
-                    margin-top: 2px;
+                    margin-top: 1px;
                     background-size: 1.625rem;
                     background-repeat: no-repeat;
                     background-position: center;
-                    text-align: center;
                     width: 2.5rem;
                 }
 
@@ -276,6 +278,8 @@
             padding-right: 40px;
         }
     }
+
+    .no-padding { padding: 0 }
 }
 .vgrid-cell.settings {
     height: 3.5em;
@@ -420,6 +424,11 @@
             padding: 13px;
             height: 30px;
             margin-bottom: 13px;
+        }
+
+        .list-item-controls > a.action {
+            min-width: 80px;
+            text-align: center;
         }
 
         .hint {
