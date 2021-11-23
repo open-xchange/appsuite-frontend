@@ -8,21 +8,21 @@
     height: 300px;
     width: 100%;
     padding-top: 8px;
-    display: flex;
     flex-direction: column;
+
+    .flex {
+        display: flex;
+    }
 
     .empty-message {
         text-align: center;
-        font-size: 1rem;
         height: 100%;
-        display: flex;
         padding: auto;
         flex-direction: column;
         justify-content: center;
     }
 
     li {
-        display: flex;
         justify-content: space-between;
         padding: 8px 0;
         min-height: 76px;
@@ -73,20 +73,18 @@
 
         label {
             margin: 0;
-            line-height: initial;
             color: #333;
-            font-size: 1rem;
-            width: 150px;
+            width: 120px;
         }
 
         select {
-            width: 320px;
+            width: 340px;
         }
     }
 
     .checkbox {
         margin-top: 16px;
-        margin-left: 150px;
+        margin-left: 120px;
     }
 }
 
