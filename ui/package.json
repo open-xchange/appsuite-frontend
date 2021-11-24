@@ -96,7 +96,7 @@
     "typeahead.js": "0.10.5",
     "u2f-api": "1.0.11",
     "underscore": "^1.12.1",
-    "unorm": "1.4.1",
+    "unorm": "1.6.0",
     "velocity-animate": "1.5.2"
   },
   "resolutions": {
