@@ -10,6 +10,9 @@ updates:
     pull-request-branch-name:
       separator: "/"
     ignore:
+      - dependency-name: "qrcode"
+      - dependency-name: "swiper"
       - dependency-name: "typeahead.js"
+      - dependency-name: "u2f-api"
     assignees:
       - "frank.paczynski"
