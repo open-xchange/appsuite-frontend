@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-24 09:45+0900\n"
+"PO-Revision-Date: 2021-11-21 00:45+0900\n"
 "Last-Translator: sandrine <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <>\n"
 "Language: fr_CA\n"
@@ -581,7 +581,6 @@ msgstr "Aide en ligne : %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -879,13 +878,11 @@ msgstr "Agrandir"
 
 #. button to rotate a contact image
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#| msgid "Rotate image"
 msgid "Rotate left"
 msgstr "Pivoter à gauche"
 
 #. button to rotate a contact image
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#| msgid "Rotate image"
 msgid "Rotate right"
 msgstr "Pivoter à droite"
 
@@ -2083,12 +2080,42 @@ msgid "Add new participant"
 msgstr "Ajouter un nouveau participant"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Create Appointment"
+msgid "Update Appointment"
+msgstr "Mettre à jour le rendez-vous"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Add to calendar"
+msgid "Add to Calendar"
+msgstr "Ajouter à l'agenda"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Accept series"
+msgid "Accept Proposal"
+msgstr "Accepter la proposition"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Create Appointment"
+msgid "Remove Appointment"
+msgstr "Supprimer le rendez-vous"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Rejeter les modifications"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorer"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Create Appointment"
+msgid "Request Appointment"
+msgstr "Demander un rendez-vous"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "Shared Appointments"
+msgid "Send Appointment"
+msgstr "Envoyer le rendez-vous"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2107,8 +2134,22 @@ msgid "The appointment has been updated"
 msgstr "Le rendez-vous a été mis à jour"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "This appointment was cancelled."
+msgid "The appointment was added"
+msgstr "Le rendez-vous a été ajouté"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+#| msgid "The changes have been rejected"
+msgid "The changes have been accepted"
+msgstr "Les modifications ont été acceptées"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Le rendez-vous a été supprimé"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Vous avez décliné le rendez-vous"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2117,10 +2158,6 @@ msgstr "Les modifications ont été rejetées"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Vous avez accepté le rendez-vous à titre provisoire"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Vous avez décliné le rendez-vous"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -2537,15 +2574,13 @@ msgstr ""
 "vous a été accepté ou décliné"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid "The appointment has been added to your calendar"
 msgid ""
 "Automatically apply appointment changes received via email to your calendar"
 msgstr ""
-"Appliquer automatiquement à votre agenda les modifications "
-"de rendez-vous reçues par courriel"
+"Appliquer automatiquement à votre agenda les modifications de rendez-vous "
+"reçues par courriel"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid "unknown sender"
 msgid "Only from known senders"
 msgstr "Uniquement en provenance d'expéditeurs connus"
 
@@ -3283,7 +3318,6 @@ msgid "Appointment has attachments"
 msgstr "Le rendez-vous comporte des pièces jointes"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#| msgid "The appointment has been deleted"
 msgid "This appointment was cancelled."
 msgstr "Ce rendez-vous a été annulé."
 
@@ -3952,7 +3986,6 @@ msgstr "Rejoindre"
 
 #. shown above a chat window when there are network issues
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-#| msgid "Connection error"
 msgid "Connection problems"
 msgstr "Problèmes de connexion"
 
@@ -4482,8 +4515,8 @@ msgid ""
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 "Pour ajouter des contacts manuellement, indiquez simplement une adresse de "
-"courrier électronique valide (p. ex. jean.dupont@example.com ou "
-"« Jean Dupont » <jd@example.com>)"
+"courrier électronique valide (p. ex. jean.dupont@example.com ou « Jean "
+"Dupont » <jd@example.com>)"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution List"
@@ -5056,44 +5089,76 @@ msgstr ""
 msgid "This is an invalid email address."
 msgstr "Cette adresse électronique n'est pas valide."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Address list"
+msgid "My address lists"
+msgstr "Mes listes d'adresses"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Public address books"
+msgid "Public address lists"
+msgstr "Listes d'adresses publiques"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Shared address books"
+msgid "Shared address lists"
+msgstr "Listes d'adresses partagées"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "%1$d item selected"
-#| msgid_plural "%1$d items selected"
 msgid "%1$d contact selected"
 msgid_plural "%1$d contacts selected"
 msgstr[0] "%1$d contact sélectionné"
 msgstr[1] "%1$d contacts sélectionnés"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Remove contact"
 msgid "Remove contact from selection"
 msgstr "Retirer le contact de la sélection"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Select contacts"
-msgid "Select/Deselect contact %1$s"
-msgstr "Sélectionner/désélectionner le contact %1$s"
+#| msgid "Departments"
+msgid "department %1$s"
+msgstr "département %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Position %s"
+msgid "position %1$s"
+msgstr "position %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Email address"
+msgid "email address %1$s"
+msgstr "adresse électronique %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "Phone numbers"
+msgid "phone number %1$s"
+msgstr "numéro de téléphone %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#| msgid "From: %1$s"
+msgid "room %1$s"
+msgstr "salle %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Show task details"
 msgid "Show contact details"
 msgstr "Afficher les détails du contact"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Contacts"
 msgid "Contact list"
 msgstr "Liste des contacts"
 
 #. This is followed by a list of contacts from the address book
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Start search"
 msgid "Last searched for"
 msgstr "Derniers contacts recherchés"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "No items found"
 msgid "No contacts found."
 msgstr "Aucun contact trouvé."
 
@@ -5103,21 +5168,18 @@ msgid ""
 "You have reached the limit of %1$d contacts to display. Please enter a "
 "search term to narrow down your results."
 msgstr ""
-"Vous avez atteint la limite de %1$d contacts affichables. "
-"Veuillez saisir un terme de recherche pour affiner vos résultats."
+"Vous avez atteint la limite de %1$d contacts affichables. Veuillez saisir un "
+"terme de recherche pour affiner vos résultats."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Email addresses"
 msgid "Global address list"
 msgstr "Liste d'adresses globale"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Search results"
 msgid "Search all address lists"
 msgstr "Rechercher dans toutes les listes d'adresses"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Could not load data"
 msgid "Could not load contacts"
 msgstr "Impossible de charger les contacts"
 
@@ -5126,23 +5188,18 @@ msgid "Search for name, department, position"
 msgstr "Rechercher par nom, département, poste"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgctxt "verb"
-#| msgid "Filter"
 msgid "Filter"
 msgstr "Filtrer"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Other address"
 msgid "Filter address lists"
 msgstr "Filtrer les listes d'adresses"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Addresses"
 msgid "Address list"
-msgstr "Listes d'adresses"
+msgstr "Liste d'adresses"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Add to address book"
 msgid "Could not load address book."
 msgstr "Impossible de charger le carnet d'adresses."
 
@@ -5508,6 +5565,23 @@ msgid "User name"
 msgstr "Nom d'utilisateur"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#| msgid "Use password"
+msgid "Reset password"
+msgstr "Réinitialiser le mot de passe"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#| msgid "Use password"
+msgid "Set password"
+msgstr "Définir mot de passe"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Adresse électronique"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Se connecter"
@@ -5669,7 +5743,8 @@ msgid "Imprint"
 msgstr "Conditions d'utilisation"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+#| msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Confirmer le nouveau mot de passe"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5696,13 +5771,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Suivant"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Adresse électronique"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5794,7 +5862,6 @@ msgstr "Auteur"
 #. %1$s name of module (mail, calendar etc)
 #. %2$s the granted role (author, editor, viewer, none)
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "%1$s %2$s"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
@@ -5804,17 +5871,14 @@ msgstr "Autorisé à envoyer des courriels en votre nom"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Date: %1$s"
 msgid "Deputy: %1$s"
 msgstr "Délégué : %1$s"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Twitter reported the following errors:"
 msgid "The deputy has the following permissions"
 msgstr "Le délégué possède les droits suivants"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "View details"
 msgid "Viewer (read emails)"
 msgstr "Lecteur (lire les courriels)"
 
@@ -5831,17 +5895,14 @@ msgid "Deputy can send emails on your behalf"
 msgstr "Le délégué peut envoyer des courriels en votre nom"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "New appointment"
 msgid "Viewer (view appointments)"
 msgstr "Lecteur (voir les rendez-vous)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Edit this appointment"
 msgid "Editor (create/edit appointments)"
 msgstr "Éditeur (créer/modifier les rendez-vous)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Show declined appointments"
 msgid "Author (create/edit/delete appointments)"
 msgstr "Auteur (créer/modifier/supprimer les rendez-vous)"
 
@@ -5850,35 +5911,29 @@ msgid "save"
 msgstr "enregistrer"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not save settings."
 msgid "Could not create deputy."
 msgstr "Impossible de créer le délégué."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "no delete permissions"
 msgid "Could not update deputy permissions."
 msgstr "Impossible de mettre à jour les droits du délégué."
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Removed %1$s."
 msgid "Remove deputy %1$s"
 msgstr "Supprimer le délégué %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid ""
-#| "Do you really want to remove the extension \".%1$s\" from your filename?"
-msgid "Do you want to remove %1$s from your deputy list"
+#| msgid "Do you want to remove %1$s from your deputy list"
+msgid "Do you want to remove %1$s from your deputy list?"
 msgstr "Voulez-vous vraiment supprimer « %1$s » de votre liste de délégués ?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not save settings."
 msgid "Could not remove deputy."
 msgstr "Impossible de supprimer le délégué."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "There are currently no participants."
 msgid "You have currently no deputies assigned."
 msgstr "Vous n'avez actuellement aucun délégué attribué."
 
@@ -5888,13 +5943,7 @@ msgstr ""
 "Les délégués peuvent accéder à votre boîte de réception et à votre agenda."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Remove"
-msgid "Remobe"
-msgstr "Supprimer"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
-#| msgid "Manage applications"
 msgid "Manage deputies"
 msgstr "Gérer les délégués"
 
@@ -5904,7 +5953,6 @@ msgstr "Ajouter des personnes"
 
 #. Generic error message when something when wrong on the server while fetching data about your deputies
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not load data"
 msgid "Could not load deputy data."
 msgstr "Impossible de charger les données des délégués."
 
@@ -6763,7 +6811,6 @@ msgid "Skip to main content"
 msgstr "Aller directement au contenu principal"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-#| msgid "Address Other"
 msgid "Address directory"
 msgstr "Répertoire des adresses"
 
@@ -7213,7 +7260,6 @@ msgid "The user has administrative rights"
 msgstr "L'utilisateur a des droits administratifs"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Appliquer à tous les sous-dossiers"
 
@@ -8724,7 +8770,6 @@ msgstr "Remarque"
 
 #. This is a placeholder for macOS. Keep in line with local mac keyboard layout
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#| msgid "You can quick-save your changes via Ctrl+Enter."
 msgid "You can quick-save your changes via Cmd+Enter."
 msgstr ""
 "Vous pouvez enregistrer rapidement vos modifications avec [Cmd]+[Entrée]."
@@ -9622,22 +9667,18 @@ msgid "Anyone with the link and invited people"
 msgstr "Toute personne disposant du lien et personnes invitées"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Invited people only"
 msgid "Listed people only"
 msgstr "Personnes répertoriées uniquement"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Anyone with the link and invited people"
 msgid "Anyone with the link and listed people"
 msgstr "Toute personne disposant du lien et personnes répertoriées"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Who can access this folder?"
 msgid "Who can access this file?"
 msgstr "Qui peut accéder à ce fichier ?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Who can access this folder?"
 msgid "Who can access this calendar?"
 msgstr "Qui peut accéder à cet agenda ?"
 
@@ -9646,7 +9687,6 @@ msgid "Who can access this folder?"
 msgstr "Qui peut accéder à ce dossier ?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Calendar"
 msgid "calendar"
 msgstr "agenda"
 
@@ -9720,14 +9760,12 @@ msgstr ""
 "fichier."
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-#| msgid "Anyone on the internet with the link can view the file."
 msgid "Anyone on the internet with the link can view the calendar."
 msgstr ""
 "Toute personne connectée à Internet et disposant du lien peut consulter "
 "l'agenda."
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-#| msgid "Anyone on the internet with the link can view the file."
 msgid "Anyone on the internet with the link can view the folder."
 msgstr ""
 "Toute personne connectée à Internet et disposant du lien peut consulter le "
@@ -10370,34 +10408,25 @@ msgstr ""
 "taille maximale de publication d'une pièce jointe %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The file \"%1$s\" cannot be uploaded because it exceeds the infostore "
-#| "quota limit of %2$s"
 msgid ""
 "The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
-"La pièce jointe ne peut pas être téléversée car elle dépasse la limite "
-"de quota du dépôt de données, %2$s"
+"La pièce jointe ne peut pas être téléversée car elle dépasse la limite de "
+"quota du dépôt de données, %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The files cannot be uploaded because each file exceeds the maximum file "
-#| "size of %1$s"
 msgid "The uploaded attachment exceeds the maximum email size of %1$s"
 msgstr ""
-"Les pièces jointes téléversées dépassent la taille maximale "
-"d'un courriel, %1$s"
+"Les pièces jointes téléversées dépassent la taille maximale d'un courriel, "
+"%1$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-#| "size of %2$s"
 msgid ""
 "The file cannot be uploaded because it exceeds the maximum email size of %1$s"
 msgstr ""
-"Le fichier ne peut pas être téléversé car il dépasse la taille maximale "
-"d'un courriel, %2$s"
+"Le fichier ne peut pas être téléversé car il dépasse la taille maximale d'un "
+"courriel, %2$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10731,16 +10760,12 @@ msgstr ""
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js
-#| msgid ""
-#| "Attachment file size too large. You have to use %1$s or reduce the "
-#| "attachment file size."
 msgid ""
 "Mail quota limit reached. You have to use %1$s or reduce the mail size in "
 "some other way."
 msgstr ""
-"Limite de quota de courriel atteinte. "
-"Vous devez utiliser %1$s ou réduire la taille du courriel par une "
-"autre méthode."
+"Limite de quota de courriel atteinte. Vous devez utiliser %1$s ou réduire la "
+"taille du courriel par une autre méthode."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10799,9 +10824,9 @@ msgid ""
 "This sender address is related to a disabled mail account. Please choose "
 "another sender address or visit settings to enable again."
 msgstr ""
-"Cette adresse d'expéditeur est associée à un compte de courrier "
-"électronique désactivé. Veuillez choisir une autre adresse d'expéditeur "
-"ou consulter les réglages pour réactiver ce compte."
+"Cette adresse d'expéditeur est associée à un compte de courrier électronique "
+"désactivé. Veuillez choisir une autre adresse d'expéditeur ou consulter les "
+"réglages pour réactiver ce compte."
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
@@ -10880,6 +10905,11 @@ msgid "Added %s to attachments."
 msgstr "Ajout de %s aux pièces jointes."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#| msgid "On behalf of the owner"
+msgid "On behalf of"
+msgstr "Pour le compte de"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Afficher les noms"
 
@@ -10891,6 +10921,14 @@ msgstr "Modifier les noms"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Rédiger un nouveau courrier électronique"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#| msgid "This mail has been sent from %1$s."
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Ce courriel sera envoyé par %1$s pour le compte de %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10957,6 +10995,11 @@ msgstr "Choisissez un fichier image valide à importer"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Envoyé depuis %s sur un mobile"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+#| msgid "This mail has been added to the portal"
+msgid "This mail was send on behalf of another person."
+msgstr "Ce courriel a été envoyé pour le compte d'une autre personne."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11342,6 +11385,17 @@ msgstr "Courrier électronique de %1$s : %2$s"
 msgid "Via"
 msgstr "Via"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#| msgid "On behalf of the owner"
+msgid "on behalf of"
+msgstr "pour le compte de"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "réexpédié par"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
 msgstr "Contenu du message"
@@ -11477,7 +11531,6 @@ msgid "Edit rule"
 msgstr "Modifier la règle"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Save and apply"
 msgid "Save and apply rule now"
 msgstr "Enregistrer et appliquer la règle maintenant"
 
@@ -11507,13 +11560,11 @@ msgid "Drag to reorder filter rules"
 msgstr "Faites glisser pour réorganiser les règles de filtrage"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Select the folder to apply the rule to"
 msgid "Please select the folder to apply the rule to"
 msgstr "Veuillez sélectionner le dossier auquel appliquer la règle"
 
 #. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Apply filter"
 msgid "Apply filter rule"
 msgstr "Appliquer la règle de filtrage"
 
@@ -13354,15 +13405,13 @@ msgstr ""
 "Veuillez scanner ce code à l'aide de l'appareil photo de votre téléphone :"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-#| msgid ""
-#| "Scan this code with your phone's camera to synchronize your \"%1$s\":"
 msgid ""
 "Scan this code with your phone's camera to synchronize your Mail, Calendar "
 "and Address Book via Exchange Active Sync:"
 msgstr ""
 "Scannez ce code à l'aide de l'appareil photo de votre téléphone pour "
-"synchroniser votre courrier, votre agenda et votre carnet d'adresses "
-"via Exchange Active Sync :"
+"synchroniser votre courrier, votre agenda et votre carnet d'adresses via "
+"Exchange Active Sync :"
 
 #: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
 #: apps/io.ox/onboarding/util.js
@@ -14419,8 +14468,8 @@ msgstr ""
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
 msgid "Comma-separated list e.g. \"example.org, alice@example.com\""
 msgstr ""
-"Liste séparée par des virgules, par exemple "
-"« exemple.org, alice@exemple.com »"
+"Liste séparée par des virgules, par exemple « exemple.org, alice@exemple."
+"com »"
 
 #: apps/io.ox/switchboard/call/incoming.js module:io.ox/switchboard
 msgid "Incoming call"
@@ -16267,8 +16316,8 @@ msgstr "Mon mot de passe"
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "There was a problem with XING, the error message was: \"%s\""
 msgstr ""
-"Un problème est survenu avec XING, "
-"le message d'erreur est le suivant : « %s »"
+"Un problème est survenu avec XING, le message d'erreur est le suivant : "
+"« %s »"
 
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Comment has been successfully posted on XING"
@@ -16289,8 +16338,8 @@ msgstr "Le commentaire a été supprimé"
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr ""
-"Un problème est survenu avec XING. "
-"Le message d'erreur est le suivant : « %s »"
+"Un problème est survenu avec XING. Le message d'erreur est le suivant : "
+"« %s »"
 
 #. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
@@ -16460,6 +16509,14 @@ msgstr "Inviter à %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Ajouter à %s"
+
+#~| msgid "Select contacts"
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Sélectionner/désélectionner le contact %1$s"
+
+#~| msgid "Remove"
+#~ msgid "Remobe"
+#~ msgstr "Supprimer"
 
 #~ msgid "Password recovery"
 #~ msgstr "Récupération du mot de passe"
@@ -17952,9 +18009,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Couldn't load your contact data."
 #~ msgstr "Impossible de charger vos données de contact."
-
-#~ msgid "Create Appointment"
-#~ msgstr "Créer un rendez-vous"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Créer un compte %s au moyen des données enregistrées ici"
@@ -19525,9 +19579,6 @@ msgstr "Ajouter à %s"
 #~ msgid "Phone alt"
 #~ msgstr "Téléphone 2"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Numéros de téléphone"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Choisissez une heure ici"
 
@@ -20848,12 +20899,6 @@ msgstr "Ajouter à %s"
 #~ "Ce courriel est suspect car nous n'avons pas pu vérifier qu'il provient "
 #~ "réellement de %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Ce message a été ajouté au portail"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Ce courrier a été envoyé depuis %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Cela peut prendre quelques secondes"
 
@@ -21882,9 +21927,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "unselect all"
 #~ msgstr "désélectionner tout"
-
-#~ msgid "via"
-#~ msgstr "réexpédié par"
 
 #~ msgid "weekly"
 #~ msgstr "hebdomadaire"

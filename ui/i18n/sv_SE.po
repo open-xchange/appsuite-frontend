@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-12 19:06+0200\n"
+"PO-Revision-Date: 2021-11-10 19:55+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -581,7 +581,6 @@ msgstr "Online-hjälp: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -2071,12 +2070,36 @@ msgid "Add new participant"
 msgstr "Lägg till ny deltagare"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Uppdatera möte"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Lägg till i kalendern"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Acceptera förslag"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Ta bort möte"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Kasta ändringar"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorera"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Önska möte"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Skicka möte"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2095,8 +2118,20 @@ msgid "The appointment has been updated"
 msgstr "Mötet har uppdaterats"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Mötet lades till"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Ändringarna har accepterats"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Mötet har tagits bort"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Du har avstått mötet"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2105,10 +2140,6 @@ msgstr "Ändringarna har nekats"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Du har preliminärt accepterat mötet"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Du har avstått mötet"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -5012,6 +5043,18 @@ msgstr "Detta värde är för långt. Tillåten längd är %1$d tecken."
 msgid "This is an invalid email address."
 msgstr "Detta är en ogiltig e-postadress."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Mina adresslistor"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Offentliga adresslistor"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Delade adresslistor"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5023,10 +5066,30 @@ msgstr[1] "%1$d kontakter markerade"
 msgid "Remove contact from selection"
 msgstr "Ta bort kontakt från markering"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Markera/Avmarkera kontakt %1$s"
+msgid "department %1$s"
+msgstr "avdelningar %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "position %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "e-postadress %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "telefonnummer %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "rum %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5442,6 +5505,21 @@ msgid "User name"
 msgstr "Användarnamn"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Återställ lösenord"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Ställ in lösenord"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-postadress"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Logga in"
@@ -5596,7 +5674,7 @@ msgid "Imprint"
 msgstr "Impressum"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Bekräfta nytt lösenord"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5622,13 +5700,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nästa"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-postadress"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5782,8 +5853,8 @@ msgstr "Ta bort ställföreträdare %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Vill du ta bort %1$s från din lista över ställföreträdare"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Vill du ta bort %1$s från din lista över ställföreträdare?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5796,10 +5867,6 @@ msgstr "Du har inte tilldelade ställföreträdare."
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "Ställföreträdare kan komma åt din Inkorg och Kalender."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Ta bort"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -7098,7 +7165,6 @@ msgid "The user has administrative rights"
 msgstr "Användaren har administratörsrättigheter"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Verkställ för alla underliggande mappar"
 
@@ -10676,6 +10742,10 @@ msgid "Added %s to attachments."
 msgstr "Lade till %s som bilaga."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "Åt"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Visa namn"
 
@@ -10687,6 +10757,13 @@ msgstr "Redigera namn"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Skriv nytt meddelande"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Detta meddelande kommer att skickas av %1$s åt %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10753,6 +10830,10 @@ msgstr "Välj en giltig bildfil att infoga"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Skickades från %s med mobiltelefon"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail was send on behalf of another person."
+msgstr "Meddelandet skickades åt en annan person."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11132,6 +11213,16 @@ msgstr "Meddelande från %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "Via"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "åt"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "via"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -16147,6 +16238,12 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Markera/Avmarkera kontakt %1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "Ta bort"
+
 #~ msgid "Password recovery"
 #~ msgstr "Återställ lösenord"
 
@@ -20942,9 +21039,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Phone alt"
 #~ msgstr "Alt telefon"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonnummer"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Välj tid här"
 
@@ -22888,12 +22982,6 @@ msgstr "Lägg till på %s"
 #~ "Detta är ett misstänkt meddelande eftersom vi inte kunde verifiera att "
 #~ "det verkligen kommer från %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Meddelandet har lagts till i portalen"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Detta meddelande skickades från %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Det här kan ta en liten stund"
 
@@ -24796,9 +24884,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "unselect all"
 #~ msgstr "avmarkera alla"
-
-#~ msgid "via"
-#~ msgstr "via"
 
 #~ msgid "weekly"
 #~ msgstr "varje vecka"
