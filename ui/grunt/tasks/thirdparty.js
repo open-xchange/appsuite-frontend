@@ -119,24 +119,20 @@ module.exports = function (grunt) {
                         dest: 'build/apps/3rd.party/croppie'
                     },
                     {
+                        // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
                         expand: true,
                         src: [
                             'build/pdf.js',
                             'build/pdf.worker.js'
-                            // as long as we support IE11, we need the ES5 legacy version
-                            // 'build/pdf.min.js',
-                            // 'build/pdf.worker.min.js',
-                            // 'web/images/*',
-                            // 'cmaps/*'
                         ],
-                        cwd: 'node_modules/pdfjs-dist/es5', // as long as we support IE11, we need the ES5 legacy version
+                        cwd: 'node_modules/pdfjs-dist/legacy',
                         dest: 'build/apps/pdfjs-dist/',
                         rename: function (dest, src) {
                             return dest + src.replace(/\.min.js$/, '.js');
                         }
                     },
                     {
-                        // as long as we support IE11, we need the ES5 legacy version
+                        // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
                         // but take the cmaps and the icons from the common version
                         expand: true,
                         src: [
