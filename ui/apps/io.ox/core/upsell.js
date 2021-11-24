@@ -110,7 +110,7 @@ define('io.ox/core/upsell', [
         // this function is used for any inline link, for example, to decide whether or not showing it
         visible: (function () {
             function isEnabled(cap) {
-                if (!_.isString(cap)) return false;
+                if (!_.isString(cap) || capabilities.has('guest')) return false;
 
                 return !!enabled[cap];
             }
