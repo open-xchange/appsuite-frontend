@@ -42,7 +42,7 @@ define('io.ox/backbone/views/edit-picture', [
             return new ModalDialog({
                 title: opt.title || gt('Change photo'),
                 point: 'io.ox/backbone/crop',
-                width: '35rem',
+                width: _.device('smartphone') ? undefined : '35rem',
                 async: true,
                 model: opt.model || new Backbone.Model(),
                 focus: 'button[data-action="upload"]'
