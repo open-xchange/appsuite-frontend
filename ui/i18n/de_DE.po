@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-23 16:18+0100\n"
+"PO-Revision-Date: 2021-11-25 15:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -6793,7 +6793,6 @@ msgid "Create folder"
 msgstr "Ordner anlegen"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
 msgid "You cannot select this folder."
 msgstr "Sie können diesen Ordner nicht auswählen."
 
@@ -13521,7 +13520,6 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-#, fuzzy
 msgid "OX Sync App"
 msgstr "OX Sync App"
 
