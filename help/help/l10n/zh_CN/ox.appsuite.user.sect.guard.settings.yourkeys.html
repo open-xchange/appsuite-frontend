@@ -1,0 +1,143 @@
+<html lang="zh_cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7.2. 管理自己的钥</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="用户向导&gt;">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard设置">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. 密码管理">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. 管理公钥">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律通告">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">上一页</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始页</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目录</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">下一页</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">以<span class="phrase">Guard</span>加密数据</h1>
+<h2 class="sr-only">
+<span class="phrase">Guard</span>设置</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
+<div class="titlepage"><div><div><h3 class="title">13.7.2. 管理自己的钥</h3></div></div></div>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">将会显示<span class="phrase"><span class="guilabel"><strong>Guard 保安设置</strong></span></span>页面。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">显示自己的钥，显示详情</p></li>
+<li class="listitem">
+<p role="presentation">添加新钥</p>
+<p role="presentation">如果您拥有多个钥，您就能定义哪一个钥应为最新的。当前的钥用作加密数据。</p>
+</li>
+<li class="listitem">
+<p role="presentation">添加用户 ID</p>
+<p role="presentation">在添加额外用户 ID 到一个钥时，您能在多个电子邮件户口里使用钥。</p>
+</li>
+<li class="listitem"><p role="presentation">下载钥</p></li>
+<li class="listitem"><p role="presentation">删除钥</p></li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
+<p class="title">如何显示您自己的钥或把一个钥变成当前钥：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">启用<span class="guibutton"><strong>显示进阶设置</strong></span>复选框（在<span class="guibutton"><strong>进阶</strong></span>下面）。</p>
+<p role="presentation">单击<span class="guibutton"><strong>您的钥</strong></span>（在<span class="guilabel"><strong>钥</strong></span>下面）。会打开<span class="guilabel"><strong>您的钥</strong></span>窗口。</p>
+<p role="presentation"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">会显示您当前的钥。每一个钥包含一个主钥和次钥。<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">除了其他事物，主钥是用来为您的电子邮件签名。</p></li>
+<li class="listitem"><p role="presentation">次钥是负责加密和解密电子邮件和文件的。</p></li>
+</ul></p></li>
+<li class="listitem"><p role="presentation">视要求而定，<span class="phrase">Guard</span>自动使用主钥或次钥。</p></li>
+</ul></p>
+</li>
+<li class="step"><p role="presentation">如果您的钥列表包括多于一个钥，您能够定义当前的钥。为此，启用主钥旁边的<span class="guibutton"><strong>当前</strong></span>复选框。从现在起，当前钥将会用作假面。</p></li>
+<li class="step"><p role="presentation">要显示一个钥的详情，单击一个钥旁边的 <span class="guibutton"><strong>详情</strong></span> 图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>。会打开<span class="guilabel"><strong>钥详情</strong></span>窗口。要检视钥的签名，单击<span class="guibutton"><strong>签名</strong></span>。</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
+<p class="title">如何添加一个新钥到<span class="guilabel"><strong>您的钥</strong></span>窗口里：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">单击<span class="guibutton"><strong>添加</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>（在<span class="guilabel"><strong>服务器上的钥</strong></span>旁边）。会打开<span class="guilabel"><strong>添加钥</strong></span>窗口。</p></li>
+<li class="step">
+<p role="presentation">您可以进行以下几种选项：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">要添加一个私键，单击<span class="guibutton"><strong>上载私键</strong></span>。选择一个包含私键的文件。会打开<span class="guilabel"><strong>上载私键</strong></span>窗口。</p>
+<p role="presentation">要上载新钥，输入您的<span class="phrase">Guard</span>安全密码。为新键输入一个新密码。</p>
+</li>
+<li class="listitem"><p role="presentation">要添加一个公共键，单击<span class="guibutton"><strong>只上载公共键</strong></span>。选择一个包含公共键的文件。</p></li>
+<li class="listitem">
+<p role="presentation">要创建一对新键，单击<span class="guibutton"><strong>创建新键</strong></span>。会打开 <span class="phrase"><span class="guilabel"><strong>创建Guard保安钥</strong></span></span> 窗口。</p>
+<p role="presentation">为新键输入一个密码。确认密码。</p>
+<p role="presentation">新钥包含一个主钥和对应次钥。</p>
+</li>
+</ul></p>
+<p role="presentation">新钥将会进入您的钥列表上面。新钥变成当前钥。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
+<p class="title">如何添加一个额外用户 ID 到 <span class="guilabel"><strong>您的钥</strong></span> 窗口里：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">单击一个钥旁边的 <span class="guibutton"><strong>编辑</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>。会打开<span class="guilabel"><strong>添加用户 ID</strong></span>窗口。</p></li>
+<li class="step">
+<p role="presentation">为用户 ID 输入一个名称。输入您要为此钥使用的电子邮件。</p>
+<p role="presentation">为此钥输入您的密码。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
+<p class="title">如何在<span class="guilabel"><strong>您的钥</strong></span>窗口里下载一个钥：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">单击一个钥旁边的 <span class="guibutton"><strong>下载</strong></span> 图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>。</p></li>
+<li class="step">
+<p role="presentation">定义要否只下载您的私钥、公钥、或两者。</p>
+<p role="presentation"><span class="phrase"><strong>警告：</strong></span> 您的私钥将会以已加密形式下载。可是，您不应该下载您的私钥到一个公共可以访问的系统。</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.delete">
+<p class="title">如何在<span class="guilabel"><strong>您的钥</strong></span>窗口里删除一个钥：</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>警告：</strong></span> 如果您删除一个私钥，您就不再能够解码以此钥加密的对象。如果您不确定，那你不应该删除钥而是收回它。一个收回的钥不再能用作加密。但您仍能够解码以此钥加密的对象。</p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">单击一个钥旁边的 <span class="guibutton"><strong>删除</strong></span> 图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>。会打开<span class="guilabel"><strong>删除私钥</strong></span>窗口。</p></li>
+<li class="step"><p role="presentation">您可以进行以下几种选项：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">要收回一个私钥，单击<span class="guibutton"><strong>收回</strong></span>。</p>
+<p role="presentation">如果您收回此钥，它将不会被使用。但您仍能够解码以此钥加密的对象。为此，收回一个钥比删除它好。</p>
+<p role="presentation">为私钥输入一个密码。如有需要，选择一个原因收回钥。</p>
+<p role="presentation">单击 <span class="guibutton"><strong>收回</strong></span>。</p>
+</li>
+<li class="listitem">
+<p role="presentation">为了删除一个私钥，单击<span class="guibutton"><strong>删除</strong></span>。</p>
+<p role="presentation"><span class="phrase"><strong>警告：</strong></span> 如果您删除一个私钥，您就不再能够解码以此钥加密的对象。</p>
+<p role="presentation">为私钥输入一个密码。</p>
+<p role="presentation">单击<span class="guibutton"><strong>删除</strong></span>按钮。</p>
+</li>
+</ul>在删除一个主钥时，也将会删除对应的次钥</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.settings.yourkeys"></p>
+<p class="title">相关主题：</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">管理公钥</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">密码管理</a></p>
+</li></ul>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">母主题：<a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span>设置</a></p>
+</div>
+          </div>
+        </body>
+</html>

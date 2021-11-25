@@ -1,0 +1,82 @@
+<html lang="tr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.3.1. Autocrypt anahtarlarını içe aktarma</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Kullanım Kılavuzu">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. E-posta Yazışmalarını Autocrypt ile Şifreleme">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. E-posta Yazışmalarını Autocrypt ile Şifreleme">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="13.3.2. Autocrypt anahtarlarını yönetme">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Yasal Uyarı">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigasyonu aç/kapat</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">Geri</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Başlangıç</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">İçindekiler</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Sonraki</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+<span class="phrase">Guard</span> ile Veri Şifreleme</h1>
+<h2 class="sr-only">E-posta Yazışmalarını Autocrypt ile Şifreleme</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">13.3.1. Autocrypt anahtarlarını içe aktarma</h3></div></div></div>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">Gelişmiş <span class="phrase">Guard</span> ayarlarından Autocrypt anahtarlarının otomatik olarak içe aktarılıp aktarılmayacağını ayarlayabilirsiniz. Aşağıdakileri ayarlayabilirsiniz:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Alınan tüm Autocrypt anahtarları otomatik olarak içe aktarılır.</p>
+<p role="presentation">Otomatik olarak içe aktarılan anahtarlar şu şekilde kullanılır:</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Bu kişiye gönderilen mesajlar bu anahtarla şifrelenebilir.</p></li>
+<li class="listitem"><p role="presentation">Bu kişiden gelen mesajların imzası bu anahtarla doğrulanamaz. Yani gönderenin gerçekten o kişi olduğu ve mesaj içeriğinin değiştirilmeden taşındığı doğrulanamaz.</p></li>
+</ul>
+</li>
+<li class="listitem">
+<p role="presentation">Alınan her Autocrypt anahtarını içe aktarmak isteyip istemediğiniz sorulur. Geçerliliğini kontrol etmeniz için Autocrypt anahtarının ayrıntıları görüntülenir. Anahtarı içe aktarırsanız doğrulanmış olduğu kabul edilir. Doğrulanmış anahtarlar şu şekilde kullanılır:</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Bu kişiye gönderilen mesajlar bu anahtarla şifrelenebilir.</p></li>
+<li class="listitem"><p role="presentation">Bu kişiden gelen mesajların imzası bu anahtarla doğrulanır. Doğrulama başarılı olursa gönderen gerçekten o kişi ve mesaj içeriği değiştirilmeden taşınmış demektir.</p></li>
+</ul>
+</li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">Autocrypt anahtarlarının nasıl içe aktarılacağını belirleme:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Menü çubuğunun sağ tarafındaki <span class="guibutton"><strong>Ayarlar</strong></span> simgesine <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>tıklayın. <span class="guibutton"><strong>Ayarlar</strong></span>'a tıklayın.</p></li>
+<li class="step"><p role="presentation">Kenar çubuğundan <span class="guibutton"><strong>Güvenlik</strong></span>'e tıklayın. <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>'a tıklayın.</p></li>
+<li class="step"><p role="presentation"><span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span>'i etkinleştirin. Anahtarları yönetme ve Autocrypt ayarlarını düzenleme seçenekleri görünecektir.</p></li>
+<li class="step"><p role="presentation"><span class="guibutton"><strong>Autocrypt</strong></span> altından şunları yapın:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Autocrypt anahtarlarını içe aktarmak için <span class="guibutton"><strong>Gelen e-postaların üstbilgilerinde anahtar ara</strong></span>'yı işaretleyin.</p></li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Autocrypt anahtarlarını sormadan içe aktar</strong></span>'ı işaretlerseniz Autocrypt anahtarları otomatik olarak içe aktarılacaktır.</p>
+<p role="presentation"><span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> kapalıysa varsayılan ayar budur.</p>
+</li>
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Autocrypt anahtarlarını sormadan içe aktar</strong></span>'ı devre dışı bırakırsanız anahtarı içe aktarmak isteyip istemediğiniz sorulacaktır. Anahtarın geçerliliğini kontrol edebilmeniz için anahtar ayrıntıları da görüntülenecektir. Anahtarı kabul ederseniz doğrulanmış olduğu kabul edilir.</p></li>
+</ul></p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey"></p>
+<p class="title">İlgili konular:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Autocrypt anahtarlarını içe aktarma</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt anahtarlarını yönetme</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Autocrypt anahtarlarını başka istemcilere aktarma</a></p></li>
+</ul>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">Ana başlık:<a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">E-posta Yazışmalarını Autocrypt ile Şifreleme</a></p>
+</div>
+          </div>
+        </body>
+</html>

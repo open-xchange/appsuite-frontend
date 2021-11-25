@@ -1,0 +1,107 @@
+<html lang="tr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7. Guard Ayarları</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Kullanım Kılavuzu">
+<link rel="up" href="ox.appsuite.user.chap.guard.html" title="Bölüm 13. Guard ile Veri Şifreleme">
+<link rel="prev" href="ox.appsuite.user.sect.guard.logout.html" title="13.6. Guard'dan Çıkış Yapma">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. Parola yönetimi">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Yasal Uyarı">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigasyonu aç/kapat</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.logout.html">Geri</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Başlangıç</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">İçindekiler</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.password.html">Sonraki</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+<span class="phrase">Guard</span> ile Veri Şifreleme</h1>
+<div class="sect1" id="ox.appsuite.user.sect.guard.settings">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">13.7. <span class="phrase">Guard</span> Ayarları</h2></div></div></div>
+<a class="indexterm" name="id-1.14.12.2"></a><a class="indexterm" name="id-1.14.12.3"></a><a class="indexterm" name="id-1.14.12.4"></a><div class="task" id="ox.appsuite.user.task.guard.settings">
+<p class="title"><span class="phrase">Guard</span> ayarlarını kullanma:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Menü çubuğunun sağ tarafındaki <span class="guibutton"><strong>Ayarlar</strong></span> simgesine <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>tıklayın. <span class="guibutton"><strong>Ayarlar</strong></span>'a tıklayın.</p></li>
+<li class="step"><p role="presentation">Kenar çubuğundan <span class="guibutton"><strong>Güvenlik</strong></span>'e tıklayın. <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>'a tıklayın.</p></li>
+</ol></div>
+<div class="taskrelated">
+        <p><span class="phrase"><span class="guilabel"><strong>Guard güvenlik ayarları</strong></span></span> sayfası açılacaktır.</p>
+      </div>
+</div>
+<p id="ox.appsuite.user.reference.guard.settings">Aşağıdaki ayarlar kullanılabilir:</p>
+<p id="ox.appsuite.user.reference.guard.settings.default"></p>
+<h3 class="title">varsayılan ayarlar</h3>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.encrypt"><b>E-posta yazarken varsayılan olarak şifreleme yap. </b><a class="indexterm" name="id-1.14.12.7.2.1.1.1.2"></a>Yeni e-postaların varsayılan olarak şifrelenip şifrelenmeyeceğini tanımlar.</p></li>
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.sign"><b>giden e-postalara varsayılan olarak imza ekle. </b><a class="indexterm" name="id-1.14.12.7.2.1.2.1.2"></a>Yeni e-postaların varsayılan olarak şifrelenip şifrelenmeyeceğini tanımlar.</p></li>
+<li class="listitem"><p id="ox.appsuite.user.task.guard.settings.default.inline"><b>Yeni e-postalarda varsayılan olarak PGP inline kullan. </b><a class="indexterm" name="id-1.14.12.7.2.1.3.1.2"></a>Varsayılan olarak satıriçi PGP şifrelemesinin uygulanıp uygulanmayacağını tanımlar. Yalnızca alıcının e-posta istemcisi PGP'yi desteklemiyorsa bu ayarları kullanın. PGP inline kullanıldığında alıcı PGP desteği olmasa da mesajın şifresini çözebilir. Bu ayarı kullanırsanız e-postalarınızı HTML biçiminde gönderemezsiniz.</p></li>
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.default.defaultremember"><b>varsayılan olarak parolayı hatırla. </b><a class="indexterm" name="id-1.14.12.7.2.1.4.1.2"></a><span class="phrase">Guard</span>'ın parolayı hatırlayacağı varsayılan süreyi tanımlar. <span class="phrase">Guard</span> parolanız sorulduğunda bu varsayılan değeri değiştirebilirsiniz.</p></li>
+</ul>
+<p id="ox.appsuite.user.reference.guard.settings.password"></p>
+<h3 class="title">Parola yönetimi</h3>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">Parolayı değiştirme ve sıfırlama işlevlerini içerir.</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">Bkz. <a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a></p></li>
+</ul>
+<p id="ox.appsuite.user.reference.guard.settings.extended"></p>
+<h3 class="title">Gelişmiş</h3>
+<ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<p id="ox.appsuite.user.reference.guard.settings.extended.advanced"><b>Gelişmiş ayarlar. </b><a class="indexterm" name="id-1.14.12.9.2.1.1.1.2"></a><span class="guibutton"><strong>Gelişmiş ayarları göster</strong></span> etkinse aşağıdaki ayarları ve işlevleri de kullanabilirsiniz.</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>E-posta önbelleği</strong></span></p>
+<p role="presentation">Şifresi çözülen e-postaların, başka bir e-posta görüntülerken veya başka bir groupware uygulamasına geçerken tarayıcı önbelleğinde okunabilir bir biçimde tutulup tutulmayacağını tanımlar.</p>
+<p role="presentation">Şifresi çözülen e-postayı tarayıcı önbelleğinden kaldırmak için <span class="guibutton"><strong>E-postaları çözülmüş halde tutma</strong></span> seçeneğini etkinleştirin.</p>
+</li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Anahtarlar</strong></span> bölümü</p>
+<p role="presentation">Kendi anahtarlarınızı, ortak anahtarları ve Autocrypt anahtarlarını yönetme.</p>
+<p role="presentation">Bkz. <a class="xref" href="ox.appsuite.user.sect.guard.settings.html#ox.appsuite.user.reference.guard.settings.keys">Anahtarlar</a></p>
+</li>
+<li class="listitem">
+<p role="presentation"><span class="guibutton"><strong>Autocrypt</strong></span> bölümü</p>
+<p role="presentation">Gelen e-postalar için Autocrypt kullanımını yapılandırır. Autocrypt anahtarlarını başka istemcilere aktarmanıza olanak verir.</p>
+<p role="presentation">Bkz. <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">E-posta Yazışmalarını Autocrypt ile Şifreleme</a></p>
+</li>
+<li class="listitem">
+<p role="presentation">Şifrelenmiş e-posta gönderirken başka seçenekler de kullanılabilir.</p>
+<p role="presentation">Bkz. <a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">Şifrelenmiş e-posta gönderme</a></p>
+</li>
+</ul>
+</li></ul>
+<p> </p>
+<p id="ox.appsuite.user.reference.guard.settings.keys"></p>
+<h3 class="title">Anahtarlar</h3>
+<p>Şifrelenmiş mesaj göndermek ve almak için genellikle anahtar yönetim işlevleriyle uğraşmanız gerekmez. Bu işlevler aşağıdaki durumlarda işinize yarayabilir:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation"><span class="phrase">Guard</span> PGP anahtarlarınızı başka e-posta istemcilerinizde (örn. bilgisayarınızdaki yerel istemcide) kullanmak istiyorsanız.</p></li>
+<li class="listitem"><p role="presentation">Başka PGP uygulamalarından edindiğiniz PGP anahtarlarınız varsa. Bu anahtarları <span class="phrase">Guard</span>'da kullanmak istiyorsanız.</p></li>
+<li class="listitem"><p role="presentation">Harici bir ortağın ortak anahtarına sahipseniz. Bu harici ortağa şifrelenmiş mesaj göndermek veya aldığınız imzalı mesajları bir anahtar sunucusuna erişmek zorunda kalmadan doğrulamak için ortağın ortak anahtarını <span class="phrase">Guard</span>'da içe aktarmalısınız.</p></li>
+<li class="listitem"><p role="presentation">Harici ortağın bir anahtar sunucuya erişmesine gerek kalmadan size şifrelenmiş mesaj göndermesine olanak vermek için harici ortağa ortak anahtarınızı sağlamanız gerekir.</p></li>
+</ul>
+<p>Aşağıdaki seçenekler mevcuttur:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.keys.downloadpublickey"><b><span class="guibutton"><strong>Ortak anahtarımı indir</strong></span> düğmesi. </b><a class="indexterm" name="id-1.14.12.10.2.2.1.1.2"></a>Ortak anahtarınızı cihazınıza indirerek kaydeder.</p></li>
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.keys.yourkeys"><b><span class="guibutton"><strong>Anahtarlarınız</strong></span> düğmesi. </b><a class="indexterm" name="id-1.14.12.10.2.2.2.1.2"></a><a class="link" href="ox.appsuite.user.sect.guard.settings.yourkeys.html">Kendi anahtarlarınızı</a>yönetmeniz için <span class="guilabel"><strong>Anahtarlarınız</strong></span> penceresini açar.</p></li>
+<li class="listitem"><p id="ox.appsuite.user.reference.guard.settings.keys.publickeys"><b><span class="guibutton"><strong>Alıcıların ortak anahtarları</strong></span> düğmesi. </b><a class="indexterm" name="id-1.14.12.10.2.2.3.1.2"></a><a class="link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Ortak anahtarları</a> yönetmek için <span class="guilabel"><strong>Anahtarlarınız</strong></span> penceresini açar.</p></li>
+</ul>
+<p id="ox.appsuite.user.parent.guard.settings">Ana başlık:<a class="xref" href="ox.appsuite.user.chap.guard.html"><i><span class="phrase">Guard</span> ile Veri Şifreleme</i></a></p>
+</div>
+          </div>
+        </body>
+</html>

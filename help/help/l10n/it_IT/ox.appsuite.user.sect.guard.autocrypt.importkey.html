@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.3.1. Importare le chiavi di Autocrypt</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Manuale utente">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. Cifrare le conversazioni di posta elettronica con Autocrypt">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. Cifrare le conversazioni di posta elettronica con Autocrypt">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="13.3.2. Gestire le chiavi di Autocrypt">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Nota Legale">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Cifrare dati con <span class="phrase">Guard</span>
+</h1>
+<h2 class="sr-only">Cifrare le conversazioni di posta elettronica con Autocrypt</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">13.3.1. Importare le chiavi di Autocrypt</h3></div></div></div>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">Nelle impostazioni avanzate di <span class="phrase">Guard</span>, è possibile specificare se le chiavi di Autocrypt sono importate automaticamente. È possibile impostare quanto segue: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Tutte le chiavi di Autocrypt ricevute sono importate automaticamente.</p>
+<p role="presentation">Una chiave importata automaticamente viene utilizzata come segue: </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Un messaggio in uscita per questo contatto può essere cifrato con questa chiave.</p></li>
+<li class="listitem"><p role="presentation">La firma di un messaggio in arrivo da questo contatto non sarà verificata con la chiave. Ciò significa: non può essere verificata se il mittente è reale e il contenuto del messaggio è stato trasferito inalterato.</p></li>
+</ul>
+</li>
+<li class="listitem">
+<p role="presentation">Per ogni chiave di Autocrypt ricevuta sarà chiesto se importare questa chiave. Saranno visualizzati i dettagli della chiave di Autocrypt consentendo di verificarne la validità. Se si importa la chiave, sarà considerata verificata. Una chiave verificata sarà utilizzata come segue: </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Un messaggio in uscita per questo contatto può essere cifrato con questa chiave.</p></li>
+<li class="listitem"><p role="presentation">La firma di un messaggio in arrivo da questo contatto sarà verificata usando la chiave. Se la verifica ha esito positivo, il mittente è reale e il contenuto del messaggio è inalterato.</p></li>
+</ul>
+</li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">Come specificare come sono importate le chiavi Autocrypt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Fare clic sull'icona <span class="guibutton"><strong>Impostazioni</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span> a destra della barra dei menu. Fare clic su <span class="guibutton"><strong>Impostazioni</strong></span>.</p></li>
+<li class="step"><p role="presentation">Fare clic su <span class="guibutton"><strong>Sicurezza</strong></span> nella barra laterale. Fare clic su <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>.</p></li>
+<li class="step"><p role="presentation">Abilitare <span class="guibutton"><strong>Mostra impostazioni avanzate</strong></span>. Saranno visualizzati elementi per gestire le chiavi e le impostazioni di Autocrypt.</p></li>
+<li class="step"><p role="presentation">Sotto <span class="guibutton"><strong>Autocrypt</strong></span>, procedere come segue: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Per importare le chiavi di Autocrypt, abilitare <span class="guibutton"><strong>Cerca le chiavi nelle intestazioni dei messaggi in arrivo</strong></span>.</p></li>
+<li class="listitem">
+<p role="presentation">Se si abilita <span class="guibutton"><strong>Importa le chiavi di autocrypt senza chiedere</strong></span>, le chiavi di Autocrypt saranno importate automaticamente.</p>
+<p role="presentation">Questa è l'impostazione predefinita se <span class="guibutton"><strong>Mostra impostazioni avanzate</strong></span> è disabilitata.</p>
+</li>
+<li class="listitem"><p role="presentation">Se si disabilita <span class="guibutton"><strong>Importa le chiavi di autocrypt senza chiedere</strong></span>, sarà richiesto se si desidera importare la chiave. Sono visualizzati i dettagli della chiave in modo da poter verificare la sua validità. Se si accetta la chiave, sarà considerata verificata.</p></li>
+</ul></p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey">
+        </p>
+<p class="title">Argomenti correlati:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Importare le chiavi di Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Gestire le chiavi di Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Trasferire le chiavi di Autocrypt ad altri client</a>
+            </p></li>
+</ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">Argomento principale: <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">Cifrare le conversazioni di posta elettronica con Autocrypt</a></p>
+</div>
+          </div>
+        </body>
+</html>

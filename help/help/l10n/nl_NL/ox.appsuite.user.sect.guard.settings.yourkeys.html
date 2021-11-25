@@ -1,0 +1,153 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.7.2. Eigen elementen beheren</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Gebruikershandleiding">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard Instellingen">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. Wachtwoordbeheer">
+<link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Publieke sleutels beheren">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Juridische kennisgeving">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.password.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Gegevens Coderen met <span class="phrase">Guard</span>
+</h1>
+<h2 class="sr-only">
+<span class="phrase">Guard</span> Instellingen</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
+<div class="titlepage"><div><div><h3 class="title">13.7.2. Eigen elementen beheren</h3></div></div></div>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Op de <span class="phrase"><span class="guilabel"><strong>Guard beveiligingsinstellingen</strong></span></span> pagina, kan u: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">toon eigen sleutels, toon details</p></li>
+<li class="listitem">
+<p role="presentation">nieuwe sleutel toevoegen</p>
+<p role="presentation">Als u meerdere sleutels heeft, kan u opgeven welke sleutel de huidige is. De huidige sleutel wordt gebruikt voor het coderen.</p>
+</li>
+<li class="listitem">
+<p role="presentation">GebruikersID´s toevoegen</p>
+<p role="presentation">Als u meerdere gebruikersID's aan een sleutel koppelt kan u de sleutel voor meerdere e-mailaccounts gebruiken.</p>
+</li>
+<li class="listitem"><p role="presentation">sleutels downloaden</p></li>
+<li class="listitem"><p role="presentation">verwijder sleutels</p></li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
+<p class="title">Uw eigen sleutel tonen of er één als standaard instellen gaat als volgt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step">
+<p role="presentation">Schakel het <span class="guibutton"><strong>Toon Geavanceerde Instellingen</strong></span> selectievakje in onder <span class="guibutton"><strong>Geavanceerd</strong></span>.</p>
+<p role="presentation">Klik op <span class="guibutton"><strong>Uw sleutels</strong></span> onder <span class="guilabel"><strong>Sleutels</strong></span>. Het <span class="guilabel"><strong>Uw Sleutels</strong></span> scherm opent.</p>
+<p role="presentation">
+              <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">De bestaande sleutels worden getoond. Elke sleutel bestaat uit een hoofdsleutel en een subsleutel. <ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">De hoofdsleutel wordt onder andere gebruikt voor het ondertekenen van e-mailberichten.</p></li>
+<li class="listitem"><p role="presentation">De subsleutel wordt gebruikt voor het coderen en decoderen van e-mailberichten en bestanden.</p></li>
+</ul></p></li>
+<li class="listitem"><p role="presentation">Afhankelijk van de eisen gebruikt <span class="phrase">Guard</span> automatisch de hoofd- of de subsleutel.</p></li>
+</ul>
+            </p>
+</li>
+<li class="step"><p role="presentation">As uw sleutellijst meer dan één sleutel bevat kan u de huidige sleutel aanwijzen. Om dit te doen schakelt u het <span class="guibutton"><strong>Huidig</strong></span> aankruisvakje naast de hoofd sleutel aan. Vanaf dit moment zal de huidige sleutel gebruikt worden voor codering.</p></li>
+<li class="step"><p role="presentation">Om de details van een sleutel te tonen klikt u het <span class="guibutton"><strong>Details</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span> naast de sleutel. Het <span class="guilabel"><strong>Sleutel Details</strong></span> scherm opent. Om de handtekening van de sleutel te zien klikt u op <span class="guibutton"><strong>Handtekeningen</strong></span>.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
+<p class="title">Een nieuwe sleutel toevoegen aan het <span class="guilabel"><strong>Uw Sleutels</strong></span>scherm gaat als volgt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klik het <span class="guibutton"><strong>Toevoegen</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span> naast <span class="guilabel"><strong>Sleutels op Server</strong></span>. Het <span class="guilabel"><strong>Sleutels toevoegen</strong></span> scherm opent.</p></li>
+<li class="step">
+<p role="presentation">U heeft de volgende mogelijkheden: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Om een privé sleutel toe te voegen, klikt u op <span class="guibutton"><strong>Privésleutel uploaden</strong></span>. Selecteer het bestand dat de privésleutel bevat. Het <span class="guilabel"><strong>Privésleutel uploaden</strong></span> scherm wordt geopend.</p>
+<p role="presentation">Om een nieuwe sleutel te uploaden geeft u uw <span class="phrase">Guard</span> beveiligingswachtwoord. Geef een nieuwe wachtwoord voor de nieuwe sleutel.</p>
+</li>
+<li class="listitem"><p role="presentation">Om een publieke sleutel toe te voegen klikt u op <span class="guibutton"><strong>Alleen Publieke sleutel uploaden</strong></span>. Selecteer het bestand met een publieke sleutel.</p></li>
+<li class="listitem">
+<p role="presentation">Om een nieuw sleutelpaar te maken klikt u op <span class="guibutton"><strong>Nieuwe Sleutels Aanmaken</strong></span>. Het <span class="phrase"><span class="guilabel"><strong>Guard Beveiligingssleutels aanmaken</strong></span></span> scherm wordt geopend.</p>
+<p role="presentation">Geef een wachtwoord voor de nieuwe sleutel. Bevestig dit wachtwoord.</p>
+<p role="presentation">De nieuwe sleutel bestaat uit een hoofdsleutel en een subsleutel.</p>
+</li>
+</ul></p>
+<p role="presentation">De nieuwe sleutel wordt boven aan de lijst toegevoegd. De nieuwe sleutel wordt de huidige sleutel.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
+<p class="title">Een extra sleutel toevoegen aan het <span class="guilabel"><strong>Uw Sleutels</strong></span>scherm gaat als volgt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klik op het <span class="guibutton"><strong>bewerk</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span> naast een sleutel. Het <span class="guilabel"><strong>Voeg gebruikers-ID toe</strong></span> scherm opent.</p></li>
+<li class="step">
+<p role="presentation">Geef een naam voor de gebruikers ID. Geef het e-mailadres welke u wilt gebruiken voor deze sleutel.</p>
+<p role="presentation">Geef uw wachtwoord voor deze sleutel.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
+<p class="title">Een sleutel downloaden uit het <span class="guilabel"><strong>Uw Sleutels</strong></span> scherm gaat als volgt:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klik het <span class="guibutton"><strong>Verwijderen</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span> naast een publieke sleutel.</p></li>
+<li class="step">
+<p role="presentation">Geef aan of u alleen uw privésleutel, alleen uw publieke sleutel of beide sleutels wilt downloaden.</p>
+<p role="presentation"><span class="phrase"><strong>Opgepast:</strong></span> Uw privésleutel wordt in gecodeerde vorm gedownload. U moet echter niet uw privésleutel downloaden naar een openbare machine.</p>
+</li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.delete">
+<p class="title">Een nieuwe sleutel verwijderen uit het <span class="guilabel"><strong>Uw Sleutels</strong></span>scherm gaat als volgt:</p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Waarschuwing:</strong></span> Als u uw privésleutel verwijderd, kan u met deze sleutel gecodeerde objecten niet meer decoderen. Als u twijfelt moet u de sleutel niet verwijderen maar ongeldig verklaren (intrekken). Een ingetrokken sleutel kan niet meer gebruikt worden om te coderen, maar nog wel voor het decoderen van objecten die eerder gecodeerd zijn met de sleutel.</p>
+        </div>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Klik op het <span class="guibutton"><strong>Verwijderen</strong></span> pictogram <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span> naast een sleutel. Het <span class="guilabel"><strong>Verwijder Privé Sleutel</strong></span> scherm opent.</p></li>
+<li class="step"><p role="presentation">U heeft de volgende mogelijkheden:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Om een privésleutel in te trekken klikt u op <span class="guibutton"><strong>Intrekken</strong></span>.  </p>
+<p role="presentation">als u een sleutel intrekt, kan deze niet meer gebruikt worden. U kan nog wel objecten decoderen die zijn gecodeerd met deze sleutel. Daarom is het intrekken van een sleutel beter dan het verwijderen van een sleutel.</p>
+<p role="presentation">Geef het wachtwoord van de privésleutel. Indien nodig geeft u de reden op waarom u de sleutel intrekt.</p>
+<p role="presentation">Klik op <span class="guibutton"><strong>Intrekken</strong></span>.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Om een privésleutel te verwijderen klikt u op <span class="guibutton"><strong>Verwijderen</strong></span>. </p>
+<p role="presentation"><span class="phrase"><strong>Waarschuwing:</strong></span> Als u een privésleutel verwijderd kan u met deze sleutel gecodeerde objecten niet meer decoderen.</p>
+<p role="presentation">Geef het wachtwoord van de privésleutel.</p>
+<p role="presentation">Klik op de <span class="guibutton"><strong>Verwijderen</strong></span> knop.</p>
+</li>
+</ul>Als u een hoofdsleutel verwijderd worden de overeenkomstige subsleutels ook verwijderd.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.settings.yourkeys">
+        </p>
+<p class="title">Zie ook:</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Publieke sleutels beheren</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Wachtwoordbeheer</a>
+            </p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">Zie ook: <a class="xref" href="ox.appsuite.user.sect.guard.settings.html"><span class="phrase">Guard</span> Instellingen</a></p>
+</div>
+          </div>
+        </body>
+</html>

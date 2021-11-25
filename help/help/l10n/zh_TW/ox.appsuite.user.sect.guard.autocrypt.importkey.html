@@ -1,0 +1,81 @@
+<html lang="zh_tw">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.3.1. 匯入 Autocrypt 金鑰</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="使用者指南&gt;">
+<link rel="up" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. 使用 Autocrypt 加密郵件通訊">
+<link rel="prev" href="ox.appsuite.user.sect.guard.autocrypt.html" title="13.3. 使用 Autocrypt 加密郵件通訊">
+<link rel="next" href="ox.appsuite.user.sect.guard.autocrypt.manage.html" title="13.3.2. 管理 Autocrypt 金鑰">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.autocrypt.html">前一頁</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">下一頁</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">使用 <span class="phrase">Guard</span> 加密資料。</h1>
+<h2 class="sr-only">使用 Autocrypt 加密郵件通訊</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
+<div class="titlepage"><div><div><h3 class="title">13.3.1. 匯入 Autocrypt 金鑰</h3></div></div></div>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">您可以在 <span class="phrase">Guard</span> 進階設定，指定是否要自動匯入 Autocrypt 金鑰。您可以設定下列選項：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">自動匯入所有收到的 Autocrypt 金鑰。</p>
+<p role="presentation">自動匯入的金鑰可用於下列情況：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">寄信給此聯絡人時，可使用此金鑰加密郵件。</p></li>
+<li class="listitem"><p role="presentation">來自此聯絡人的郵件，不會使用此金鑰驗證。這代表：無法驗證真的是由此寄件者寄出，且訊息內容未遭竄改。</p></li>
+</ul>
+</li>
+<li class="listitem">
+<p role="presentation">每次收到 Autocrypt 金鑰時，會詢問您是否要匯入此金鑰。將顯示 Autocrypt 金鑰資訊，讓您可以確認真實性：匯入金鑰後，將視為已驗證。驗證過的金鑰可用於下列情況：</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">寄信給此聯絡人時，可使用此金鑰加密郵件。</p></li>
+<li class="listitem"><p role="presentation">來自此聯絡人的郵件，會使用此金鑰驗證。若驗證成功，就代表真的是由該寄件者寄出，且訊息內容未遭竄改。</p></li>
+</ul>
+</li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
+<p class="title">如何定義 Autocrypt 金鑰的匯入方式：</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">點擊選單列右邊的<span class="guibutton"><strong>設定</strong></span>圖示 <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>。點選<span class="guibutton"><strong>設定</strong></span>。</p></li>
+<li class="step"><p role="presentation">點擊側邊欄的<span class="guibutton"><strong>安全性</strong></span>。點擊 <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>。</p></li>
+<li class="step"><p role="presentation">勾選<span class="guibutton"><strong>顯示進階設定</strong></span>。將顯示用來管理金鑰與 Autocrypt 的設定。</p></li>
+<li class="step"><p role="presentation">在 <span class="guibutton"><strong>Autocrypt</strong></span> 下方，依照下列方式操作：<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">若要匯入 Autocrypt 金鑰，勾選<span class="guibutton"><strong>搜尋來信檔頭中的金鑰</strong></span>。</p></li>
+<li class="listitem">
+<p role="presentation">若您勾選<span class="guibutton"><strong>不詢問就匯入 Autocrypt 金鑰</strong></span>，將自動匯入 Autocrypt 金鑰。</p>
+<p role="presentation">若<span class="guibutton"><strong>顯示進階設定</strong></span>關閉，這是預設設定。</p>
+</li>
+<li class="listitem"><p role="presentation">若您關閉<span class="guibutton"><strong>不詢問就匯入 Autocrypt 金鑰</strong></span>，將會詢問您是否要匯入金鑰。將顯示金鑰資訊，讓您可以確認真實性。若您接受金鑰，就會被視為已驗證。</p></li>
+</ul></p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.related.guard.autocrypt.importkey"></p>
+<p class="title">相關主題：</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">匯入 Autocrypt 金鑰</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">管理 Autocrypt 金鑰</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">轉移 Autocrypt 金鑰到其他客戶端</a></p></li>
+</ul>
+<p id="ox.appsuite.user.parent.guard.autocrypt.importkey">父主題：<a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.html">使用 Autocrypt 加密郵件通訊</a></p>
+</div>
+          </div>
+        </body>
+</html>

@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.2.3. Jak adresaci zewnętrzni mogą odczytać zaszyfrowaną wiadomość e-mail?</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="podręcznik użytkownika">
+<link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="13.2. Szyfrowanie konwersacji e-mail">
+<link rel="prev" href="ox.appsuite.user.sect.guard.email.send.html" title="13.2.2. Wysyłanie zaszyfrowanych wiadomości e-mail">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.incoming.html" title="13.2.4. Szyfrowanie przychodzących wiadomości e-mail przy użyciu reguły filtrów">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.send.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.incoming.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Szyfrowanie danych za pomocą aplikacji <span class="phrase">Strażnik</span>
+</h1>
+<h2 class="sr-only">Szyfrowanie konwersacji e-mail</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.email.external">
+<div class="titlepage"><div><div><h3 class="title">13.2.3. Jak adresaci zewnętrzni mogą odczytać zaszyfrowaną wiadomość e-mail?</h3></div></div></div>
+<p id="ox.appsuite.user.concept.guard.email.external">Zaszyfrowane wiadomości e-mail możesz także wysyłać do adresatów zewnętrznych, którzy nie są użytkownikami oprogramowania do pracy grupowej. Gdy dodasz adresata zewnętrznego, aplikacja Guard sprawdzi, czy jest dostępny klucz publiczny dla danego adresu e-mail. Dalsze postępowanie zależy od wyniku tej kontroli. </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Jeśli adresat oferuje klucz publiczny: </p>
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">Wiadomość zostanie zaszyfrowana za pomocą tego klucza. Adresat może ją odczytać za pomocą klucza prywatnego.</p></li></ul>
+</li>
+<li class="listitem">
+<p role="presentation">Jeśli dla danego adresata nie ma klucza publicznego:</p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Użytkownik zewnętrzny, który już ma konto gościa, razem z wiadomością e-mail otrzyma link do strony logowania na to konto. Użycie tego linku i zalogowanie się pozwoli na odczytanie zaszyfrowanej wiadomości e-mail i ewentualne wysłanie odpowiedzi.</p></li>
+<li class="listitem">
+<p role="presentation">Jeśli dany użytkownik nie ma jeszcze takiego konta, zostanie ono założone. Następnie ten użytkownik otrzyma wiadomość z automatycznie wygenerowanym hasłem i linkiem do strony logowania na konto gościa. Po zalogowaniu się można utworzyć własne hasło.</p>
+<p role="presentation">W przypadku niektórych konfiguracji automatycznie utworzone hasło i link do strony są wysyłane w osobnych wiadomościach e-mail.</p>
+</li>
+<li class="listitem"><p role="presentation">W niektórych konfiguracjach wiadomości e-mail na koncie gościa są usuwane z serwera po określonej liczbie dni.</p></li>
+</ul>
+<p role="presentation">Użytkownik zewnętrzny może wysłać zaszyfrowaną odpowiedź na zaszyfrowaną wiadomość e-mail. Nie może jednak dodać kolejnych adresatów.</p>
+</li>
+</ul>
+<p>
+        </p>
+<p class="title">Powiązane tematy:</p>
+<ul class="itemizedlist" id="ox.appsuite.user.related.guard.email.external" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Odczytywanie zaszyfrowanych konwersacji e-mail</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">Wysyłanie zaszyfrowanych wiadomości e-mail</a>
+            </p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.email.external">Temat nadrzędny: <a class="xref" href="ox.appsuite.user.sect.guard.email.html">Szyfrowanie konwersacji e-mail</a></p>
+</div>
+          </div>
+        </body>
+</html>

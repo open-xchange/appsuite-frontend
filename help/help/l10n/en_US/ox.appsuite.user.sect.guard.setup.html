@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.1. Setting up Guard</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="ox.appsuite.user.chap.guard.html" title="Chapter 13. Encrypting Data with Guard">
+<link rel="prev" href="ox.appsuite.user.chap.guard.html" title="Chapter 13. Encrypting Data with Guard">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.html" title="13.2. Encrypting Email Conversations">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.chap.guard.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Encrypting Data with <span class="phrase">Guard</span>
+</h1>
+<div class="sect1" id="ox.appsuite.user.sect.guard.setup">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">13.1. Setting up <span class="phrase">Guard</span>
+</h2></div></div></div>
+<a class="indexterm" name="id-1.14.6.2"></a><p id="ox.appsuite.user.concept.guard.usage.setup.securitykeys">Prior to be able to use <span class="phrase">Guard</span>, you have to apply some basic settings: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">You have to enter a <span class="phrase">Guard</span> security password that is used to encrypt data and to access encrypted data.</p></li>
+<li class="listitem"><p role="presentation">Enter a secondary email address that is used if you forget your <span class="phrase">Guard</span> security password. In this case, use the function for resetting the <span class="phrase">Guard</span> security password. A new password will then be sent to you. For security reasons, it is highly recommended to enter a secondary email address for this purpose. Otherwise the new password will be sent to your groupware email account.</p></li>
+</ul>
+<p> There are two options for making the basic settings:</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Define the basic settings while initially using an encryption function.</p></li>
+<li class="listitem"><p role="presentation">Define the basic settings in the groupware settings before using the encryption function.</p></li>
+</ul>
+<div class="task" id="ox.appsuite.user.task.guard.setup.implicit">
+<p class="title">How to define the basic settings when initially using an encryption function:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Enable the encryption function when composing an email, encrypting a file or uploading a new file by clicking on the <span class="guibutton"><strong>Encrypt</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.setup.implicit"><img src="../../images/guard_user_icon_encrypt.png"></span>.</p></li>
+<li class="step"><p role="presentation">You consecutively will be asked to enter a <span class="phrase">Guard</span> security password and a secondary E-Mail address. Enter the data.</p></li>
+</ol></div>
+</div>
+<div class="task" id="ox.appsuite.user.task.guard.setup.setting">
+<p class="title">How to define the basic settings before initially using an encryption:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click the <span class="guibutton"><strong>Settings</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.setup.setting"><img src="../../images/appsuite_user_icon_settings.png"></span> on the right side of the menu bar. Click on <span class="guibutton"><strong>Settings</strong></span>.</p></li>
+<li class="step">
+<p role="presentation">In the sidebar, click on <span class="guibutton"><strong>Security</strong></span>. Click on <span class="phrase"><span class="guibutton"><strong>Guard Security</strong></span></span>.</p>
+<p role="presentation">When initially opening the <span class="phrase">Guard</span> security settings, the <span class="phrase"><span class="guilabel"><strong>Guard Create Security Keys</strong></span></span> window opens.</p>
+</li>
+<li class="step">
+<p role="presentation">In the <span class="guibutton"><strong>Password</strong></span> field, enter the password that you want to use for encrypting your data.</p>
+<p role="presentation">Confirm the password in the <span class="guibutton"><strong>Verify</strong></span> field by entering it again.</p>
+</li>
+<li class="step"><p role="presentation">In the <span class="guibutton"><strong>Enter new secondary email</strong></span> field, enter the email address that is used for receiving a temporary password for resetting your <span class="phrase">Guard</span> security password.</p></li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.parent.guard.usage.setup.securitykeys">Parent topic: <a class="xref" href="ox.appsuite.user.chap.guard.html"><i>Encrypting Data with <span class="phrase">Guard</span></i></a></p>
+</div>
+          </div>
+        </body>
+</html>
