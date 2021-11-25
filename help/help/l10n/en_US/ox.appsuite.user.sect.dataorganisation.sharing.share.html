@@ -36,13 +36,13 @@
 <a class="indexterm" name="id-1.12.5.13.2"></a><a class="indexterm" name="id-1.12.5.13.3"></a><p id="ox.appsuite.user.concept.dataorganisation.sharing.share">You can share date with internal users or external partners with read or edit access by inviting those persons to a shared item. The external partners automatically will receive an invitation email. </p>
 <p class="title">The following options exist:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">You can share emails with internal users with read access.</p></li>
+<li class="listitem"><p role="presentation">You can share email folders with internal users with read access. If you share an email folder, its subfolders will not be shared.</p></li>
 <li class="listitem">
-<p role="presentation">You can share address books and tasks with internal users with read or edit access, with external partners only with read access.</p>
+<p role="presentation">You can share address book and task folders with internal users with read or edit access, with external partners only with read access.</p>
 <p role="presentation">Note: The global address book can not be shared.</p>
 </li>
 <li class="listitem"><p role="presentation">You can share calendars with internal users and external partners with read or edit access.</p></li>
-<li class="listitem"><p role="presentation">In the <span class="phrase">Drive</span> app, you can share folders and files with internal users and external partners with read or edit access. If you share a folder, you can define whether subfolders should be shared as well.</p></li>
+<li class="listitem"><p role="presentation">In the <span class="phrase">Drive</span> app, you can share folders and files with internal users and external partners with read or edit access. If you share a <span class="phrase">Drive</span> folder, its subfolders will be shared automatically as well.</p></li>
 <li class="listitem">
 <p role="presentation">In all apps except for the <span class="phrase">Email</span> app, you can also create a public link and pass it on to other persons.</p>
 <p role="presentation">Persons with the link can read the shared data but not edit them.</p>
@@ -51,22 +51,20 @@
 <p> </p>
 <p class="title">Note the following:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">When sharing items, internal users or external partners are granted certain permissions for the shared data, see <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Which permissions can be used?</a> and <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">Use cases for permissions</a>.</p></li>
-<li class="listitem"><p role="presentation">In order to share data, you need to have administrator permissions for the respective folder.</p></li>
-<li class="listitem">
-<p role="presentation">You can not share your personal <span class="guibutton"><strong>Inbox</strong></span> folder. In order to grant an internal user access to your email messages, share an email folder that is located below your <span class="guibutton"><strong>Inbox</strong></span> folder.</p>
-<p role="presentation">The internal user with whom you shared the folder has to subscribe to the email folder, see <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">Subscribing to shared or personal email folders</a>.</p>
-</li>
-<li class="listitem"><p role="presentation">You have the exclusive administrator rights for your personal address book, calendar and task folders. You can not grant administrator rights for these folders to other users.</p></li>
-<li class="listitem"><p role="presentation">In the <span class="phrase">Email</span> and <span class="phrase">Drive</span> app, a shared folder’s subfolder will be automatically shared as well.</p></li>
 <li class="listitem"><p role="presentation">In all apps except for the <span class="phrase">Drive</span> app, shared folders are marked with the <span class="guibutton"><strong>Share</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.dataorganisation.sharing.share"><img src="../../images/appsuite_user_icon_object_shared_user.png"></span>. In the <span class="phrase">Drive</span> app, shared objects will be displayed below the <span class="guibutton"><strong>My shares</strong></span> folder.</p></li>
+<li class="listitem"><p role="presentation">If you share an email folder with an internal user, the internal user has to subscribe to this email folder in order to be able to read the emails in this folder, see <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">Subscribing to shared or personal email folders</a>.</p></li>
+<li class="listitem"><p role="presentation">When sharing items, internal users or external partners are granted certain permissions for the shared data, see <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Which permissions can be used?</a> and <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">Use cases for permissions</a>.</p></li>
+<li class="listitem">
+<p role="presentation">In order to share data, you need to have administrator permissions for the respective folder.</p>
+<p role="presentation">You have the exclusive administrator rights for your personal address book, calendar and task folders. You can not grant administrator rights for these folders to other users.</p>
+</li>
 </ul>
 <p> </p>
 <p class="title">If external partners access a share, the following rules and procedures apply:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">You select the persons and their permissions for accessing a shared item. Depending on the permissions, external partners will be signed in to the groupware with or without entering a password.</p></li>
 <li class="listitem"><p role="presentation">A guest user can only view data and the respective apps that have been shared with the guest user.</p></li>
-<li class="listitem"><p role="presentation">A guest user does not have access to the following elements: the Mail app, the Portal app, the global address book.</p></li>
+<li class="listitem"><p role="presentation">A guest user does not have access to the following elements: the <span class="phrase">Email</span> app, the <span class="phrase">Portal</span> app, the global address book.</p></li>
 <li class="listitem"><p role="presentation">A guest user can not share items.</p></li>
 </ul>
 <div class="task" id="ox.appsuite.user.task.dataorganisation.sharing.share">
@@ -107,7 +105,6 @@
 <p role="presentation">Link options: <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">To set a time limit for the access to the shared data, select a time frame in <span class="guibutton"><strong>Expiration</strong></span>.</p></li>
 <li class="listitem"><p role="presentation">To protect the access with a password, enter a password in <span class="guibutton"><strong>Password (optional)</strong></span>. Make sure the recipient of the public link receives the password.</p></li>
-<li class="listitem"><p role="presentation">If a link should also include all subfolders, enable <span class="guibutton"><strong>Share with subfolders</strong></span>.</p></li>
 </ul></p>
 <p role="presentation">Invitation options <ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p role="presentation">To automatically send a message to persons who are invited by you to a shared item, enable <span class="guibutton"><strong>Send notification by email</strong></span>.</p></li></ul></p>
 </li>
