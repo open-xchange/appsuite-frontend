@@ -480,7 +480,7 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var self = this, view = new detail.View({ supportsTextPreview: this.app ? this.app.supportsTextPreviewConfiguration() : false, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ threadview: this, supportsTextPreview: this.app ? this.app.supportsTextPreviewConfiguration() : false, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });

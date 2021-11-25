@@ -73,10 +73,16 @@ define('io.ox/mail/actions', [
 
     function reply(mode) {
         return function (baton) {
-            var data = baton.first();
+            var data = baton.first(),
+                threadView = baton.threadView || (baton.app ? baton.app.threadView : undefined),
+                // get the current model from threadView to get the current state (don't know, has blocked images, images shown)
+                threadViewModel = threadView ? threadView.collection.get(_.cid(data)) : undefined;
+
             require(['io.ox/mail/compose/checks'], function (checks) {
-                checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
-                    ox.registry.call('mail-compose', 'open', { type: mode, original: { folderId: data.folder_id, id: data.id, security: data.security } });
+                checks.composeWithoutExternalImages(data, threadViewModel).then(function (excludeImages) {
+                    checks.replyToMailingList(_.cid(data), mode, data).then(function (mode) {
+                        ox.registry.call('mail-compose', 'open', { type: mode, original: { folderId: data.folder_id, id: data.id, security: data.security }, excludeImages: excludeImages });
+                    });
                 });
             });
         };
@@ -102,11 +108,20 @@ define('io.ox/mail/actions', [
             var data = !multiple ? [baton.first()] : baton.selection.map(function (o) {
                 return _.cid(_.cid(o).replace(/^thread./, ''));
             });
-            // reduce data for compose
-            data = data.map(function (mail) {
-                return { id: mail.id, folderId: mail.folder_id, security: mail.security };
+
+            // get the current model from threadView to get the current state (don't know, has blocked images, images shown)
+            var threadView = baton.threadView || (baton.app ? baton.app.threadView : undefined),
+                threadViewModel = threadView ? threadView.collection.get(_.cid(data[0])) : undefined;
+
+            require(['io.ox/mail/compose/checks'], function (checks) {
+                checks.composeWithoutExternalImages(data[0], threadViewModel).then(function (excludeImages) {
+                    // reduce data for compose
+                    data = data.map(function (mail) {
+                        return { id: mail.id, folderId: mail.folder_id, security: mail.security };
+                    });
+                    ox.registry.call('mail-compose', 'open', { type: 'forward', original: data, excludeImages: excludeImages });
+                });
             });
-            ox.registry.call('mail-compose', 'open', { type: 'forward', original: data });
         }
     });
 

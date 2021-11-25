@@ -811,7 +811,7 @@ define('io.ox/mail/common-extensions', [
 
         externalImages: (function () {
 
-            function loadImages(e) {
+            function loadImages(e, threadViewModel) {
                 e.preventDefault();
                 var view = e.data.view;
                 view.trigger('load');
@@ -820,6 +820,8 @@ define('io.ox/mail/common-extensions', [
                 api.getUnmodified(view.model.pick('id', 'folder', 'folder_id', 'parent', 'security')).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
+                    // helps toolbars with checking if external images should be sanitized in mail compose or not
+                    if (threadViewModel) threadViewModel.hasBlockedExternalImages = false;
                 });
                 return false;
             }
@@ -839,11 +841,15 @@ define('io.ox/mail/common-extensions', [
             }
 
             return function (baton) {
+                var threadViewModel =  baton.view.options.threadview ? baton.view.options.threadview.collection.get(baton.model.id) : false;
+                // helps toolbars with checking if external images should be sanitized in mail compose or not
+                if (threadViewModel) threadViewModel.hasBlockedExternalImages = baton.model.get('modified') === 1;
+
                 draw.call(this, baton.model);
                 this.on('click', '.external-images > .btn-default', { view: baton.view }, function (e) {
                     ext.point('io.ox/mail/externalImages').cascade(this, baton)
                     .then(function () {
-                        loadImages(e);
+                        loadImages(e, threadViewModel);
                     });
                 });
                 this.on('click', '.external-images > .close', function (e) {
