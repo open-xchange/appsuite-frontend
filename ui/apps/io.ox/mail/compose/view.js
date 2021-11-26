@@ -995,8 +995,6 @@ define('io.ox/mail/compose/view', [
             }
 
             this.editorContainer.busy();
-            // OXUIB-905: fix calculation of the height to prevent double scrollbar
-            if (this.app.get('window').floating) this.app.get('window').floating.$el.find('.scrollable').toggleClass('scrollable-disabled', this.config.get('editorMode') === 'text');
 
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
