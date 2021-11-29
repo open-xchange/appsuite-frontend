@@ -36,13 +36,13 @@
 <a class="indexterm" name="id-1.12.5.13.2"></a><a class="indexterm" name="id-1.12.5.13.3"></a><p id="ox.appsuite.user.concept.dataorganisation.sharing.share">Vous pouvez partager des données avec des utilisateurs internes ou des partenaires externes, avec des droits d'accès en lecture ou en écriture, en invitant ces personnes à utiliser un objet partagé. Les partenaires externes reçoivent automatiquement une invitation par courriel. </p>
 <p class="title">Vous disposez des options suivantes :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Vous pouvez partager des courriels avec des utilisateurs internes avec accès en lecture seule.</p></li>
+<li class="listitem"><p role="presentation">Vous pouvez partager des dossiers de courriel avec des utilisateurs internes avec accès en lecture seule. Si vous partagez un dossier de courriel, ses sous-dossiers ne seront pas partagés.</p></li>
 <li class="listitem">
-<p role="presentation">Vous pouvez partager des carnets d'adresses et des tâches avec des utilisateurs internes avec accès en lecture ou en écriture, et avec des partenaires externes avec accès en lecture seule.</p>
+<p role="presentation">Vous pouvez partager des dossiers de carnets d'adresses et des dossiers de tâches avec des utilisateurs internes avec accès en lecture ou en écriture, et avec des partenaires externes avec accès en lecture seule.</p>
 <p role="presentation">Remarque : Le carnet d'adresses global ne peut pas être partagé.</p>
 </li>
 <li class="listitem"><p role="presentation">Vous pouvez partager des agendas avec des utilisateurs internes ou des partenaires externes avec accès en lecture ou en écriture.</p></li>
-<li class="listitem"><p role="presentation">Dans l'application <span class="phrase">Fichiers</span>, vous pouvez  partager des dossiers et fichiers avec des utilisateurs internes et des partenaires externes, avec accès en lecture ou en écriture. Si vous partagez un dossier, vous pouvez définir si ses sous-dossiers doivent également être partagés.</p></li>
+<li class="listitem"><p role="presentation">Dans l'application <span class="phrase">Fichiers</span>, vous pouvez partager des dossiers et fichiers avec des utilisateurs internes et des partenaires externes, avec accès en lecture ou en écriture. Si vous partagez un dossier <span class="phrase">Fichiers</span>, ses sous-dossiers seront aussi partagés automatiquement.</p></li>
 <li class="listitem">
 <p role="presentation">Dans toutes les applications, à l'exception de <span class="phrase">Courriel</span>, vous pouvez aussi créer un lien public et le transmettre à d'autres personnes.</p>
 <p role="presentation">Les personnes disposant du lien peuvent lire les données partagées, mais non les modifier.</p>
@@ -51,22 +51,20 @@
 <p> </p>
 <p class="title">Quelques remarques :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Lorsque vous partagez des objets, les utilisateurs internes et partenaires externes se voient accorder certains droits sur les données partagées, voir <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Quels droits peuvent être accordés ?</a> et <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">Cas d'utilisations des droits</a>.</p></li>
-<li class="listitem"><p role="presentation">Pour pouvoir partager des données, vous devez disposer des droits d'administration sur le dossier correspondant.</p></li>
-<li class="listitem">
-<p role="presentation">Vous ne pouvez pas partager votre dossier <span class="guibutton"><strong>Boîte de réception</strong></span> personnel. Pour pouvoir autoriser d'autres utilisateurs à accéder à vos courriels, partagez un dossier de courrier électronique situé sous votre dossier <span class="guibutton"><strong>Boîte de réception</strong></span>.</p>
-<p role="presentation">L'utilisateur interne avec qui vous partagez le dossier doit s'abonner au dossier de courriel, voir <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">S'abonner à des dossiers de courrier partagés ou personnels</a>.</p>
-</li>
-<li class="listitem"><p role="presentation">Vous avez les droits d'administration exclusifs sur vos dossiers personnels de carnet d'adresses, d'agenda et de tâches. Vous ne pouvez pas accorder de droits d'administration sur ces dossiers à d'autres utilisateurs.</p></li>
-<li class="listitem"><p role="presentation">Dans l'application <span class="phrase">Courriel</span> and <span class="phrase">Fichiers</span>, les sous-dossiers d'un dossier partagé sont automatiquement partagés eux aussi. </p></li>
 <li class="listitem"><p role="presentation">Dans toutes les applications, à l'exception de <span class="phrase">Fichiers</span>, les dossiers partagés sont identifiés par l'icône <span class="guibutton"><strong>Partage</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.dataorganisation.sharing.share"><img src="../../images/appsuite_user_icon_object_shared_user.png"></span>. Dans l'application <span class="phrase">Fichiers</span>, les objets partagés sont affichés sous le dossier  <span class="guibutton"><strong>Mes partages</strong></span>.</p></li>
+<li class="listitem"><p role="presentation">Si vous partagez un dossier de courriel avec un utilisateur interne, celui-ci doit s'abonner au dossier pour pouvoir lire les messages qu'il contient, voir <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">S'abonner à des dossiers de courrier partagés ou personnels</a>.</p></li>
+<li class="listitem"><p role="presentation">Lorsque vous partagez des objets, les utilisateurs internes et partenaires externes se voient accorder certains droits sur les données partagées, voir <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Quels droits peuvent être accordés ?</a> et <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">Cas d'utilisations des droits</a>.</p></li>
+<li class="listitem">
+<p role="presentation">Pour pouvoir partager des données, vous devez disposer des droits d'administration sur le dossier correspondant.</p>
+<p role="presentation">Vous avez les droits d'administration exclusifs sur vos dossiers personnels de carnet d'adresses, d'agenda et de tâches. Vous ne pouvez pas accorder de droits d'administration sur ces dossiers à d'autres utilisateurs.</p>
+</li>
 </ul>
 <p> </p>
 <p class="title">Si des partenaires externes accèdent à un partage, les règles et procédures suivantes s'appliquent :</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Vous sélectionnez les personnes et les droits que vous leur accordez pour l'accès à un objet partagé. Suivant les droits accordés, les partenaires externes seront connectés au collecticiel avec ou sans saisie d'un mot de passe.</p></li>
 <li class="listitem"><p role="presentation">Un utilisateur invité peut uniquement consulter les données et les applications correspondantes ayant été partagées avec lui.</p></li>
-<li class="listitem"><p role="presentation">Un utilisateur invité n'a pas accès aux éléments suivants : l'application de courriel, l'application Portail, le carnet d'adresse global.</p></li>
+<li class="listitem"><p role="presentation">Un utilisateur invité n'a pas accès aux éléments suivants : l'application <span class="phrase">Courriel</span>, l'application<span class="phrase">Portail</span>, le carnet d'adresses global.</p></li>
 <li class="listitem"><p role="presentation">Un utilisateur invité ne peut pas partager d'objets.</p></li>
 </ul>
 <div class="task" id="ox.appsuite.user.task.dataorganisation.sharing.share">
@@ -107,7 +105,6 @@
 <p role="presentation">Options relatives au lien : <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Pour définir une limite dans le temps pour l'accès aux données partagées, choisissez un intervalle de temps dans <span class="guibutton"><strong>Expiration</strong></span>.</p></li>
 <li class="listitem"><p role="presentation">Pour protéger l'accès à l'aide d'un mot de passe, saisissez un mot de passe dans <span class="guibutton"><strong>Mot de passe (facultatif)</strong></span>. Assurez-vous que le destinataire du lien public reçoit bien le mot de passe.</p></li>
-<li class="listitem"><p role="presentation">Si un lien doit également inclure l'ensemble des sous-dossiers, activez l'option <span class="guibutton"><strong>Partager avec les sous-dossiers</strong></span>.</p></li>
 </ul></p>
 <p role="presentation">Options relatives à l'invitation <ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p role="presentation">Pour envoyer automatiquement un message aux personnes que vous invitez à consulter un objet partagé, activez l'option <span class="guibutton"><strong>Envoyer une notification par courriel</strong></span>.</p></li></ul></p>
 </li>
