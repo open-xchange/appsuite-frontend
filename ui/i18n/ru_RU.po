@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-23 16:16+0100\n"
+"PO-Revision-Date: 2021-11-24 19:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -6758,10 +6758,8 @@ msgid "Create folder"
 msgstr "Создать папку"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
-#| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
-msgstr "Вы не можете перемещать объекты в эту папку"
+msgstr "Вы не можете выбрать эту папку."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -13422,7 +13420,7 @@ msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "OX Sync App"
-msgstr ""
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"

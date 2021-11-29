@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-23 16:16+0100\n"
+"PO-Revision-Date: 2021-11-24 14:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -6767,10 +6767,9 @@ msgid "Create folder"
 msgstr "Vytvoriť priečinok"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
-msgstr "Nemôžete presúvať položky do toho priečinka"
+msgstr "Nemôžete vybrať tento priečinok."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -13446,7 +13445,7 @@ msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "OX Sync App"
-msgstr ""
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"

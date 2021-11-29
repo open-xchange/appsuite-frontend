@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-23 16:17+0100\n"
+"PO-Revision-Date: 2021-11-25 00:11+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -6650,10 +6650,8 @@ msgid "Create folder"
 msgstr "建立資料夾"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
-#| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
-msgstr "您無法將項目移動至此資料夾"
+msgstr "您無法選擇此資料夾。"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -13119,7 +13117,7 @@ msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "OX Sync App"
-msgstr ""
+msgstr "OX Sync 應用程式"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
