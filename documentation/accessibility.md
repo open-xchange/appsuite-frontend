@@ -48,7 +48,7 @@ Mar 17 | 7.8.4   | Accessibility improvements to search and login
 Apr 17 | 7.8.4   | Fixed multiple issues regardings JAWs (labels, verbosity)
 Apr 17 | 7.8.4   | Folder tree improvements for screen readers and keyboard support for home/end
 Apr 17 | 7.8.4   | Added document role to dialogs to force screen readers in correct mode
-Apr 17 | 7.8.4   | Multiple focus improvents throughout apps
+Apr 17 | 7.8.4   | Multiple focus improvements throughout apps
 Jul 17 | 7.8.4   | Added distinguishable focus styles for tabbed inbox
 Jul 17 | 7.10.0  | Added explicit labels for form fields where they were missing
 Aug 17 | 7.10.0  | Improved color contrast in Alerts, Settings
@@ -61,13 +61,13 @@ Sep 17 | 7.8.4   | Signature settings now have proper textual roles and descript
 Sep 17 | 7.8.4   | Replaced combobox component with an accessible implementation
 Sep 17 | 7.8.4   | Implicit calendar and address book headings changed to semantically correct headings
 Oct 17 | 7.8.4   | (Help) Landing pages markup improved for users with screen readers
-Oct 17 | 7.8.4   | Fixed guided tours accessiblity issues (keyboard, focus)
+Oct 17 | 7.8.4   | Fixed guided tours accessibility issues (keyboard, focus)
 Nov 17 | 7.10.0  | Mail threads expandibles were implemented in an accessible manner
 Nov 17 | 7.10.0  | Workshop/Review with accessibility expert [Marco Zehe][MZ] in Dortmund
 Dec 17 | 7.10.0  | Accessibility audit by [the Paciello Group][TPG]
 Dec 17 | 7.10.0  | Fixed missing labels in Mail
 Dec 17 | 7.10.0  | Tabbed inbox accessibility issues resolved
-Jan 18 | 7.10.0  | New application launcher accessiblity support
+Jan 18 | 7.10.0  | New application launcher accessibility support
 Jan 18 | 7.10.0  | Removed obsolete high contrast setting
 Feb 18 | 7.10.0  | Removed obsolete accessibility improvements setting
 Feb 18 | 7.10.0  | Initial keyboard support for new window management

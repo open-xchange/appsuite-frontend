@@ -1,10 +1,10 @@
 ---
 title: Baton
-description: 
+description:
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI
 ---
 
-Part of extension points system is a structure called baton which serves as an context object. 
+Part of extension points system is a structure called baton which serves as an context object.
 The baton passed back through callbacks within programmatic flow allowing data exchange between extension points.
 
 # attributes
@@ -13,7 +13,7 @@ The baton passed back through callbacks within programmatic flow allowing data e
 
 - options: contains data such as the current active application if a baton is used comprehensively
 
-- flow: 
+- flow:
 
   - disabled: stores disabled extensions (managed via baton.disable(pointId, extensionId))
 
@@ -41,7 +41,7 @@ The baton passed back through callbacks within programmatic flow allowing data e
 //returns undefined
 baton.disable(pointid,extensionid);
 
-//invoke extension with baton instance 
+//invoke extension with baton instance
 ext.point(pointid).invoke('draw', node, baton)
 ```
 
@@ -55,7 +55,7 @@ ext.point(pointid).invoke('draw', node, baton)
      id: 'example1',
      index: 100,
      draw: function (baton) {
-         //get the currenty process mail object
+         //get the currently processed mail object
          var mail = baton.data;
          //append subject to current node referenced as this
          this.append(
@@ -72,7 +72,7 @@ ext.point(pointid).invoke('draw', node, baton)
      id: 'example2',
      index: 200,
      draw: function (baton) {
-         //get the currenty process mail object
+         //get the currently processed mail object
          var mail = baton.data;
          //use value set by 'example1'
          if(mail && mail.drawn && mail.drawn.subject) {
@@ -96,7 +96,7 @@ ext.point(pointid).invoke('draw', node, baton)
 - return new baton instance where baton.data is extended by obj or obj.data (if exists)
 
 ```javascript
-var baton = ext.Baton.ensure(obj) 
+var baton = ext.Baton.ensure(obj)
 ```
 
 **example**

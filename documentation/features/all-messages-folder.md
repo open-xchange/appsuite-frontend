@@ -105,7 +105,7 @@ Now we need to create the virtual folders configuration. Create a new file `/etc
 
 The file can be owned by `root` but must be readable by the user running the `dovecot` process.
 
-As a result every mail account will contain a selectable mailbox `Virtual/All` which pretends to contain all messages from all other mailboxes but Trash and Spam (given that these are named like this and located below the `INBOX` anmespace with `/` as separator).
+As a result every mail account will contain a selectable mailbox `Virtual/All` which pretends to contain all messages from all other mailboxes but Trash and Spam (given that these are named like this and located below the `INBOX` namespace with `/` as separator).
 
 For App Suite to be able to display the original folders within the search results Dovecot needs to announce an additional capability which needs to be added via
 

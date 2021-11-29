@@ -46,7 +46,7 @@ Please refer to the middleware feature [config documentation](https://oxpedia.or
 
 # Upsell
 
-Please refer to the [upsell documentaion]({{ site.baseurl }}/ui/features/upsell.html) for more details.
+Please refer to the [upsell documentation]({{ site.baseurl }}/ui/features/upsell.html) for more details.
 
 _middleware: configuration_
 

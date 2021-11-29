@@ -1,12 +1,12 @@
 ---
 title: Points
-description: 
+description:
 source: http://oxpedia.org/wiki/index.php?title=AppSuite:Extending_the_UI
 ---
 
-Abstractly speaking extension points are an architecture for letting plugins contribute functionality to other parts of the program. 
+Abstractly speaking extension points are an architecture for letting plugins contribute functionality to other parts of the program.
 They form the core of the OX App Suite plugin architecture.
-A less detailed hands-on introduction can be found here. 
+A less detailed hands-on introduction can be found here.
 Some basics about the extention point concept and advantages compared to inheritance.
 
 # Introduction
@@ -14,11 +14,11 @@ Some basics about the extention point concept and advantages compared to inherit
 ## Inheritance vs. Extension points
 
 OX App Suite uses the extension point concept to create extension points that allow a simple and flexible way to extending functionality.
-When system reaches a part that can be extended it asks a central registry if extensions are registered. 
+When system reaches a part that can be extended it asks a central registry if extensions are registered.
 In that case these extensions will be executes independent of the providing component (some plugin or OX App Suite itself).
 
-The illustrated example compares inheritance and extension points. 
-The main benefit of using extension points is that the programm is still the active component and it's in controll. 
+The illustrated example compares inheritance and extension points.
+The main benefit of using extension points is that the program is still the active component and it's in controll.
 This leads to the following advantages:
 
 - Reduced coupling
@@ -41,7 +41,7 @@ The extension point system lives in the `io.ox/core/extensions` module and consi
 
 - extension point system: accessing the outer parts
 - registry: manages extension points, extensions and their state
-- extension point: part of the systems that can be extended, referenced by a unique id 
+- extension point: part of the systems that can be extended, referenced by a unique id
 - extension: adding/replacing functionality during runtime, referenced by a unique id
 - baton: object used to store context, passed back through callbacks
 
@@ -218,7 +218,7 @@ ext.point('io.ox/calendar/detail').each(function (e) {
 ## Event Hub
 
 - Event Hub based on jQuery's on, off, one and trigger
-- differences documentated for each function
+- differences documented for each function
 
 ```javascript
 // attach listener
@@ -249,13 +249,13 @@ mypoint.destroy();
 
 # Conclusion
 
-As you can see, unlike adding functionality, customizing and modifying existing extensions is always more of a grey box operation and might incur some risks when updating the software. 
+As you can see, unlike adding functionality, customizing and modifying existing extensions is always more of a grey box operation and might incur some risks when updating the software.
 For example when replacing a certain functionality parts of the original functionality will have to be reimplemented, and all that extra code will have to be maintained in the future.
 
-In essence extension points are better suited to integrating new functionality into the product rather than customizing existing functionality, but, when in a pinch or really wanting to change a certain part of the software, this is certainly a way to consider. 
+In essence extension points are better suited to integrating new functionality into the product rather than customizing existing functionality, but, when in a pinch or really wanting to change a certain part of the software, this is certainly a way to consider.
 At its most extreme use you could even disable all extensions for the mail detail view to register a set of your own extensions to completely change the way mails are displayed, at the cost of having to maintain your own detail view.
 
-This wraps up our little tour of the OX App Suite extension point system. 
-It is used to integrate new functionality into the OX App Suite and provides a system for 3rd party applications to become extensible themselves. 
-It can be used to customize the existing UI at the cost of havint to know a bit more about the internals of our application. 
+This wraps up our little tour of the OX App Suite extension point system.
+It is used to integrate new functionality into the OX App Suite and provides a system for 3rd party applications to become extensible themselves.
+It can be used to customize the existing UI at the cost of having to know a bit more about the internals of our application.
 For now until more comprehensive documentation becomes available, look at the existing OX App Suite code to see concrete extensions and extension points in action.

@@ -22,7 +22,7 @@ To join a meeting which was already scheduled for an upcoming appointment, just 
 ![Join meeting](zoom_join.png)
 
 ## Create an instant meeting
-To quickly jump into an ad-hoc meeting, locate the "Call" button for a perosn in yout Addressbook App. App Suite will create an ad-hoc meeting for you instantly which both particpants can easily join. Just click on the meeting's link or hit the call button.
+To quickly jump into an ad-hoc meeting, locate the "Call" button for a person in your Addressbook App. App Suite will create an ad-hoc meeting for you instantly which both particpants can easily join. Just click on the meeting's link or hit the call button.
 ![Join meeting](zoom_call.png)
 
 # Uninstallation
