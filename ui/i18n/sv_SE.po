@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-24 11:57+0100\n"
+"PO-Revision-Date: 2021-11-25 19:18+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -6728,10 +6728,8 @@ msgid "Create folder"
 msgstr "Skapa mapp"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
-#| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
-msgstr "Du kan inte flytta objekt till den här mappen"
+msgstr "Du kan inte välja den här mappen."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -13370,7 +13368,7 @@ msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "OX Sync App"
-msgstr ""
+msgstr "OX Synk-app"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"

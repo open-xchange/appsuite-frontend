@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-24 11:56+0100\n"
-"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
+"PO-Revision-Date: 2021-11-27 18:41+0100\n"
+"Last-Translator: Tim <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Lokalize 20.04.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5714,7 +5714,7 @@ msgstr "Aangemeld blijven"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Forgot your password?"
-msgstr "Uw wachtwoord vergeten?"
+msgstr "Wachtwoord vergeten?"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Languages"
@@ -6778,10 +6778,9 @@ msgid "Create folder"
 msgstr "Map aanmaken"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#, fuzzy
 #| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
-msgstr "U kan geen items verplaatsen naar deze map"
+msgstr "U kan deze map niet selecteren."
 
 # (Reinout)
 # Elma: links wordt veel vaker gebruikt?
@@ -13475,7 +13474,7 @@ msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "OX Sync App"
-msgstr ""
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
