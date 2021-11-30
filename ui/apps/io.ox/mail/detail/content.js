@@ -195,7 +195,12 @@ define('io.ox/mail/detail/content', [
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
                     // if this is a sharing link add the generic deep link class so event handlers work properly and it doesn't get opened in a new tab
-                    if (shareLinkUrl && link.attr('href') === shareLinkUrl) link.addClass('deep-link-app');
+                    if (shareLinkUrl && link.attr('href') === shareLinkUrl) {
+                        // check if it is a valid app
+                        if (ox.ui.apps.get('io.ox/' + data.app) || ox.ui.apps.get(data.app)) {
+                            link.addClass('deep-link-app');
+                        }
+                    }
                     return;
                 }
 
