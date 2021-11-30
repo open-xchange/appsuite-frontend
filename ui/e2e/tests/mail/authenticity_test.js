@@ -166,10 +166,10 @@ Scenario('[C241140] Availability within folders', async function ({ I, users, ma
     // 5.) Archive the mail
     I.waitForVisible('~Archive', '.classic-toolbar-container');
     I.click('~Archive', '.classic-toolbar-container');
-    I.waitForText('Archive', '.folder-tree');
+    I.waitForText('Archive', 5, '.folder-tree');
     I.waitForElement('.folder-tree [data-id="default0/INBOX/Archive"] .folder-arrow');
     I.click('.folder-tree [data-id="default0/INBOX/Archive"] .folder-arrow');
-    I.waitForText('2018', '.folder-tree');
+    I.waitForText('2018', 5, '.folder-tree');
     I.selectFolder('2018');
     helper.selectAndVerifyAuthenticity(I, mail, true);
     // 6.) Move the mail to "Sent objects"

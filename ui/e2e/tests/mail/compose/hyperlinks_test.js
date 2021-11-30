@@ -93,7 +93,7 @@ Scenario('[C8822] Send Mail with Hyperlink from existing text', function ({ I, m
     I.selectFolder('Sent');
     I.waitForText('test subject', 30, '.list-view li[data-index="0"]');
     I.click('.list-view li[data-index="0"]');
-    I.waitForText('testlink', '.rightside.mail-detail-pane .body.user-select-text');
+    I.waitForText('testlink', 5, '.rightside.mail-detail-pane .body.user-select-text');
 });
 
 Scenario('[C8823] Send Mail with Hyperlink by typing the link', function ({ I, mail }) {

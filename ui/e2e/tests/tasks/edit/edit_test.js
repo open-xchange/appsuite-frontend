@@ -102,14 +102,14 @@ Scenario('[C7738] Edit task with all fields filled', async ({ I, tasks }) => {
         I.waitForInvisible('//dd[text()="Don not know any Bill"]');
         I.waitForInvisible('//dd[text()="Open-Xchange GmbH"]');
     });
-    I.waitForText('1339', '.task-details');
-    I.waitForText('1338', '.task-details');
-    I.waitForText('RUB', '.task-details');
-    I.waitForText('1,339.00', '.task-details');
-    I.waitForText('1,338.00', '.task-details');
-    I.waitForText('1338mm', '.task-details');
-    I.waitForText('Yes, i know any Bill', '.task-details');
-    I.waitForText('Open-Xchange Inc.', '.task-details');
+    I.waitForText('1339', 5, '.task-details');
+    I.waitForText('1338', 5, '.task-details');
+    I.waitForText('RUB', 5, '.task-details');
+    I.waitForText('1,339.00', 5, '.task-details');
+    I.waitForText('1,338.00', 5, '.task-details');
+    I.waitForText('1338mm', 5, '.task-details');
+    I.waitForText('Yes, i know any Bill', 5, '.task-details');
+    I.waitForText('Open-Xchange Inc.', 5, '.task-details');
 });
 
 Scenario('[C7739] Change tasks due date in dropdown', async ({ I, tasks }) => {

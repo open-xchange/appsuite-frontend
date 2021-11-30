@@ -49,7 +49,7 @@ Scenario('Show manage deputies button in foldertrees', async ({ I, users, calend
 
     I.waitForElement('[data-id="virtual/flat/event/private"] li:first-child .contextmenu-control');
     I.click('[data-id="virtual/flat/event/private"] li:first-child .contextmenu-control');
-    I.waitForText('Manage deputies', '.smart-dropdown-container.open.context-dropdown');
+    I.waitForText('Manage deputies', 5, '.smart-dropdown-container.open.context-dropdown');
     I.click('Manage deputies', '.smart-dropdown-container.open.context-dropdown');
     I.waitForElement('.deputy-dialog-body');
     I.click('Close');
@@ -59,7 +59,7 @@ Scenario('Show manage deputies button in foldertrees', async ({ I, users, calend
 
     I.waitForElement('[data-id="virtual/standard"] li:first-child .contextmenu-control');
     I.click('[data-id="virtual/standard"] li:first-child .contextmenu-control');
-    I.waitForText('Manage deputies', '.smart-dropdown-container.open.context-dropdown');
+    I.waitForText('Manage deputies', 5, '.smart-dropdown-container.open.context-dropdown');
     I.click('Manage deputies', '.smart-dropdown-container.open.context-dropdown');
     I.waitForElement('.deputy-dialog-body');
 });

@@ -199,7 +199,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     calendar.waitForApp();
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
-    I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
+    I.waitForText('testdocument.odt', 5, '.io-ox-sidepopup .attachment-list');
     I.wait(1);
     I.click('testdocument.odt', '.io-ox-sidepopup .attachment-list');
     I.waitForText('Download');
@@ -223,7 +223,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     calendar.waitForApp();
     I.waitForVisible('.page.current .week .appointment .title');
     I.click('.page.current .week .appointment .title');
-    I.waitForText('testdocument.odt', '.io-ox-sidepopup .attachment-list');
+    I.waitForText('testdocument.odt', 5, '.io-ox-sidepopup .attachment-list');
     I.wait(1);
     I.click('testdocument.odt', '.io-ox-sidepopup .attachment-list');
     I.waitForText('Download');
@@ -306,7 +306,7 @@ Scenario('[Bug 63767] Error when creating appointment from email', async functio
     mail.selectMail('Blub');
     I.waitForVisible({ css: '.detail-view-header [aria-label="More actions"]' });
     I.click('~More actions', '.detail-view-header');
-    I.waitForText('Invite to appointment', '.dropdown.open .dropdown-menu');
+    I.waitForText('Invite to appointment', 5, '.dropdown.open .dropdown-menu');
     I.click('Invite to appointment', '.dropdown.open .dropdown-menu');
 
     // same as in calendar helper

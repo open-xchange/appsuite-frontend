@@ -97,7 +97,7 @@ Scenario('opens in modal dialog, has selection and can add a mail address to mai
     I.waitForElement('.io-ox-mail-compose-window .open-addressbook-popup');
     I.click('.io-ox-mail-compose-window .open-addressbook-popup');
 
-    I.waitForText('Search', '.modal.enterprise-picker');
+    I.waitForText('Search', 5, '.modal.enterprise-picker');
     I.fillField('Search', 'test');
     I.waitForElement('.contact-list-view li');
     I.click('.contact-list-view li');

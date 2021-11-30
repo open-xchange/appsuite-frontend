@@ -475,7 +475,7 @@ Scenario('[C8388] Delete a folder', async ({ I, drive, dialogs }) => {
         I.selectFolder(f);
         I.waitForEnabled('.folder-tree .contextmenu-control[title*="' + f + '"]');
         I.openFolderMenu(f);
-        I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
+        I.waitForText('Add new folder', 5, '.dropdown.open .dropdown-menu');
         I.dontSee('Delete', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });
