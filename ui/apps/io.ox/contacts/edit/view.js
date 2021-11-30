@@ -256,8 +256,8 @@ define('io.ox/contacts/edit/view', [
 
         isReadonly: function (name) {
             if (this.readonly[name]) return true;
-            // folder id 16 is guest mode
-            if (name === 'email1' && (String(this.model.get('folder_id')) === util.getGabId(true) || String(this.model.get('folder_id')) === util.getGabId() || (String(this.model.get('folder_id')) === '16'))) return true;
+            // readonly email1 if we are working with user data or contact data that belongs to a user
+            if (name === 'email1' && (this.model.isUserMode() || this.model.get('internal_userid'))) return true;
             return false;
         },
 
@@ -870,7 +870,7 @@ define('io.ox/contacts/edit/view', [
 
         isUserMode: function () {
             // 6 is gab 16 is guest user
-            return (String(this.get('folder_id')) === util.getGabId(true) || String(this.get('folder_id')) === '16') && String(this.get('id')) === String(ox.user_id);
+            return (String(this.get('folder_id')) === util.getGabId(true) || String(this.get('folder_id')) === '16' || this.get('user_id') === this.get('id')) && String(this.get('id')) === String(ox.user_id);
         },
 
         getApi: function () {
