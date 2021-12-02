@@ -86,7 +86,7 @@ define('io.ox/mail/sanitizer', [
             // clear url paths from inline css when image loading is disabled
             currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
         }
-        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.hasAttribute && currentNode.hasAttribute('style')) {
+        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.hasAttribute && currentNode.hasAttribute('src')) {
             // clear url paths from inline css when image loading is disabled
             currentNode.setAttribute('src', '');
         }
