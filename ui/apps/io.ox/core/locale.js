@@ -190,20 +190,26 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
             timeLong = meta.translateCLDRToMoment(localeData.timeLong),
             time = timeLong.replace(/.ss/, ''),
             dow = meta.weekday.index(localeData.firstDayOfWeek),
-            doy = localeData.firstDayOfYear;
-        moment.updateLocale(id, {
-            // time and date format
-            longDateFormat: {
-                L: meta.translateCLDRToMoment(localeData.date),
-                // we also need to override LLL; let's see if all locales are happy with a space
-                LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + time,
-                LT: time,
-                LTS: timeLong
-            },
-            // dow = first day of week (0=Sunday, 1=Monday, ...)
-            // doy = 7 + dow - janX (first day of year)
-            week: { dow: dow, doy: 7 + dow - doy }
-        });
+            doy = localeData.firstDayOfYear,
+            formats = {
+                // time and date format
+                longDateFormat: {
+                    L: meta.translateCLDRToMoment(localeData.date),
+                    // we also need to override LLL; let's see if all locales are happy with a space
+                    LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + time,
+                    LT: time,
+                    LTS: timeLong
+                },
+                // dow = first day of week (0=Sunday, 1=Monday, ...)
+                // doy = 7 + dow - janX (first day of year)
+                week: { dow: dow, doy: 7 + dow - doy }
+            };
+
+        // this is kind of wrong. l is the same as L but without leading 0.
+        // this makes the short format the same as the long format, but if that's what the user selected we will use that.
+        if (settings.get('localeData', {}).dateShort) { formats.longDateFormat.l = meta.translateCLDRToMoment(localeData.date); }
+
+        moment.updateLocale(id, formats);
         ox.trigger('change:locale');
         ox.trigger('change:locale:' + localeId);
         ox.trigger('change:locale:data');
