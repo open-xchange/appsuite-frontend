@@ -205,7 +205,7 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
                 // doy = 7 + dow - janX (first day of year)
                 week: { dow: dow, doy: 7 + dow - doy }
             };
-        debugger;
+
         // this is kind of wrong. l is the same as L but without leading 0.
         // this makes the short format the same as the long format, but if that's what the user selected we will use that.
         if (settings.get('localeData', {}).dateShort) { formats.longDateFormat.l = meta.translateCLDRToMoment(localeData.date); }
