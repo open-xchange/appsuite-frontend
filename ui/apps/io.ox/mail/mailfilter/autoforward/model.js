@@ -55,11 +55,17 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             attr.active = !!data.forward.active;
             attr.id = data.forward.id;
 
+            attr.additionalRedirects = [];
+
             _(data.forward.actioncmds).each(function (value) {
                 switch (value.id) {
                     case 'redirect':
-                        attr.to = value.to;
-                        attr.copy = !!value.copy;
+                        if (attr.to !== '') {
+                            attr.additionalRedirects.push(value);
+                        } else {
+                            attr.to = value.to;
+                            attr.copy = !!value.copy;
+                        }
                         break;
                     case 'stop':
                         attr.processSub = false;
@@ -94,6 +100,12 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             // first rule gets 0 so we check for isNumber
             if (_.isNumber(attr.id)) json.id = attr.id;
 
+            if (!_.isEmpty(attr.additionalRedirects)) {
+                _.each(attr.additionalRedirects, function (action) {
+                    json.actioncmds.push(action);
+                });
+
+            }
             return json;
         },
 
