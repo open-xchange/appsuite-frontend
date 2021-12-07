@@ -258,7 +258,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             height: 0;
         }
 
-        .upsell i {
+        .upsell svg {
             color: @upsell-icon-color;
             visibility: visible;
             position: absolute;
@@ -266,6 +266,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             top: 32px;
             left: 30px;
             font-size: 14px;
+            width: 14px;
         }
     }
 
@@ -553,10 +554,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                 white-space: nowrap;
             }
             .flex-center(row);
-            &.upsell i {
+            &.upsell svg {
                 color: @upsell-icon-color;
                 margin-left: 4px;
                 font-size: 14px;
+                width: 14px;
                 top: 0;
             }
         }
