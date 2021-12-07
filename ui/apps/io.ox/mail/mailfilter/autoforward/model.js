@@ -93,6 +93,12 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 test: { id: 'true' }
             };
 
+            if (!_.isEmpty(attr.additionalRedirects)) {
+                _.each(attr.additionalRedirects, function (action) {
+                    json.actioncmds.push(action);
+                });
+            }
+
             if (attr.copy) {
                 if (this.availableActions.copy) { json.actioncmds[0].copy = true; } else { json.actioncmds.push({ id: 'keep' }); }
             }
@@ -100,12 +106,6 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             // first rule gets 0 so we check for isNumber
             if (_.isNumber(attr.id)) json.id = attr.id;
 
-            if (!_.isEmpty(attr.additionalRedirects)) {
-                _.each(attr.additionalRedirects, function (action) {
-                    json.actioncmds.push(action);
-                });
-
-            }
             return json;
         },
 
