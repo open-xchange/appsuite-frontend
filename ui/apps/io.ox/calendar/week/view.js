@@ -1419,7 +1419,7 @@ define('io.ox/calendar/week/view', [
         onDrag: function (e) {
             var target = $(e.target), model, node, offsetSlots, startDate, endDate, days, mousedownOrigin, cellHeight, sameDay, startOffset, numTimeslots;
             if (target.is('.resizable-handle')) return;
-
+            if (target.closest('.appointment').hasClass('io-ox-busy')) return;
             this.mouseDragHelper({
                 event: e,
                 updateContext: '.day',
