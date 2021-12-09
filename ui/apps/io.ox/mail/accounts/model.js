@@ -91,7 +91,7 @@ define('io.ox/mail/accounts/model', [
             ],
             transport_server: {
                 required: function () {
-                    return !this.isHidden();
+                    return !this.isHidden() && !this.get('secondary');
                 },
                 msg: gt('This field is mandatory')
             },
