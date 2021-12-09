@@ -86,6 +86,11 @@ define('io.ox/mail/sanitizer', [
             // clear url paths from inline css when image loading is disabled
             currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
         }
+        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.hasAttribute && currentNode.hasAttribute('src')) {
+            // clear url paths from inline css when image loading is disabled
+            currentNode.setAttribute('src', '');
+        }
+
         return currentNode;
     });
 
@@ -106,8 +111,8 @@ define('io.ox/mail/sanitizer', [
     }
 
     // used for non mail related sanitizing (for example used in rss feeds)
-    function simpleSanitize(str) {
-        return (DOMPurify.sanitize(str, _.extend({}, defaultOptions, { WHOLE_DOCUMENT: false })) + '');
+    function simpleSanitize(str, options) {
+        return (DOMPurify.sanitize(str, _.extend({}, defaultOptions, { WHOLE_DOCUMENT: false }, options)) + '');
     }
 
     return {

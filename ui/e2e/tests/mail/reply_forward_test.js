@@ -171,3 +171,79 @@ Scenario('[C8818] Reply all', async ({ I, users }) => {
     });
 
 });
+
+Scenario('Blocked images are blocked in compose too', async function ({ I, users, mail }) {
+    let [user] = users;
+    // copied from blocked_images_test
+    await Promise.all([
+        I.haveSetting('io.ox/mail//allowHtmlImages', false),
+        I.haveMail({
+            attachments: [{
+                content: '<p style="background-color:#ccc"><img src="/appsuite/apps/themes/default/logo.png" height="200" width="200" alt="C83388"></p>',
+                content_type: 'text/html',
+                disp: 'inline'
+            }],
+            from: [[user.get('displayname'), user.get('primaryEmail')]],
+            sendtype: 0,
+            subject: 'Mail Detail Misc',
+            to: [[user.get('displayname'), user.get('primaryEmail')]]
+        })
+    ]);
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    // click on first email
+    mail.selectMail('Mail Detail Misc');
+
+    I.waitForElement('.mail-detail-frame');
+    I.waitForText('Reply', '.detail-view-header');
+
+    var counter = 0;
+
+    function checkDialog(buttonText, context) {
+        I.click(buttonText, context);
+        I.waitForText('Mail contains hidden external images');
+        I.click('Compose mail without external images');
+        I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+        I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
+        within({ frame: '#mce_' + counter + '_ifr' }, () => {
+            I.seeElement('img[src=""]');
+        });
+        // close again
+        I.click('~Save and close', '.io-ox-mail-compose-window');
+        I.waitForInvisible('.io-ox-mail-compose-window');
+        counter++;
+    }
+
+    // check from detail view
+    checkDialog('Reply', '.detail-view-header');
+    checkDialog('Forward', '.detail-view-header');
+    // check from toolbar
+    checkDialog('~Reply to sender', '.classic-toolbar-container');
+    checkDialog('~Forward', '.classic-toolbar-container');
+
+    // load images
+    I.click('.external-images > button');
+    // wait a bit for images to load
+    I.wait(1);
+
+    function checkNoDialog(buttonText, context) {
+        I.click(buttonText, context);
+        I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
+        I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
+        within({ frame: '#mce_' + counter + '_ifr' }, () => {
+            I.seeElement('img[src="/appsuite/apps/themes/default/logo.png"]');
+        });
+        // close again
+        I.click('~Save and close', '.io-ox-mail-compose-window');
+        I.waitForInvisible('.io-ox-mail-compose-window');
+        counter++;
+    }
+
+    checkNoDialog('Reply', '.detail-view-header');
+    checkNoDialog('Forward', '.detail-view-header');
+    // check from toolbar
+    checkNoDialog('~Reply to sender', '.classic-toolbar-container');
+    checkNoDialog('~Forward', '.classic-toolbar-container');
+
+});
