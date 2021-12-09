@@ -264,6 +264,10 @@ define('io.ox/core/main/appcontrol', [
                         if (!ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId'))) return '';
                         return ext.point('io.ox/core/appcontrol/customQuickLaunchers').get(model.get('extensionId')).draw();
                     }
+
+                    // app has requirements that are not met and are not available for upsell (guests do not have upsell at all)
+                    if (model.get('requires') && !capabilities.has(model.get('requires')) && (capabilities.has('guest') || !upsell.enabled(model.get('requires')))) return '';
+
                     return new LauncherView({
                         tagName: 'button',
                         attributes: { tabindex: -1, type: 'button' },
