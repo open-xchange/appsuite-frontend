@@ -104,6 +104,7 @@ define('io.ox/core/download', [
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
                 this.addDownloadButton(_.extend(opt, { href: baton.model.get('dlFrame').src.replace('&scan=true', '') }));
+                this.addButton({ action: 'cancel', label: gt('Cancel'), className: 'btn-primary' });
                 return;
             }
             this.addButton(opt);
@@ -122,12 +123,13 @@ define('io.ox/core/download', [
                 label: gt('Download unscanned file'),
                 className: 'btn-default'
             };
+
+            this.addButton({ action: 'cancel', label: gt('Cancel'), className: 'btn-default' });
             // special treatment for desktop safari to avoid frame load interrupted error
             if (_.device('!ios && safari')) {
                 this.addDownloadButton(_.extend(opt, { href: baton.model.get('dlFrame').src.replace('&scan=true', '') }));
                 return;
             }
-            this.addButton({ action: 'cancel', label: gt('Cancel'), className: 'btn-default' });
             this.addButton(opt);
         }
     });
