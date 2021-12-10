@@ -1493,7 +1493,7 @@ define('io.ox/calendar/util', [
 
             // organizer is allowed to edit
             if (this.hasFlag(data, 'organizer') || this.hasFlag(data, 'organizer_on_behalf')) return true;
-            // if user is neither organizer nor attendee editing is not allowed
+            // if user is neither organizer nor attendee editing is only based on folder permissions, so just return true and let the collection modify etc check handle this.
             if (!this.hasFlag(data, 'attendee') && !this.hasFlag(data, 'attendee_on_behalf')) return true;
             // if user is attendee, check if modify privileges are granted
             if ((this.hasFlag(data, 'attendee') || this.hasFlag(data, 'attendee_on_behalf')) && data.attendeePrivileges === 'MODIFY') return true;
