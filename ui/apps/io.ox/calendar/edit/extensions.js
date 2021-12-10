@@ -530,15 +530,17 @@ define('io.ox/calendar/edit/extensions', [
                     getPreviousModel = folderAPI.get(self.model.previous('folder'));
 
                 $.when(getNewModel, getPreviousModel).done(function (newModel, previousModel) {
-                    var prevOrg = self.model.previousAttributes().organizer.entity;
+                    var prevOrg = self.model.previousAttributes().organizer;
                     // check if we need to make changes to the appointment
                     // needed when switch from shared to private or private to shared happens
                     if (folderAPI.is('shared', newModel) || folderAPI.is('shared', previousModel)) {
                         self.model.setDefaultAttendees({ create: true, resetStates: !self.model.get('id') }).done(function () {
                             // trigger reset to trigger a redrawing of all participants (avoid 2 organizers)
                             self.model.getAttendees().trigger('reset');
+                            // no organizer? return
+                            if (!prevOrg || self.model.get('organizer')) return;
                             // same organizer? No message needed (switched between shared calendars of the same user)
-                            if (prevOrg === self.model.get('organizer').entity) return;
+                            if (prevOrg.entity === self.model.get('organizer').entity) return;
 
                             require(['io.ox/core/yell'], function (yell) {
                                 if (folderAPI.is('shared', newModel)) {
@@ -607,7 +609,7 @@ define('io.ox/calendar/edit/extensions', [
                     folderSection = _(folderSection).filter(function (folder) {
                         var create = folderAPI.can('create', folder),
                             // we dont allow moving an already existing appointment to a folder from another user (moving from shared user A's folder to shared user A's folder is allowed).
-                            allowed = !self.model.get('id') || folderAPI.is('public', folder) || folder.created_by === self.model.get('organizer').entity;
+                            allowed = !self.model.get('id') || folderAPI.is('public', folder) || (self.model.get('organizer') && folder.created_by === self.model.get('organizer').entity);
 
                         return (create && allowed && !/^virtual/.test(folder.id));
                     });
