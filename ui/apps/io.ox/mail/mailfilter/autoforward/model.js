@@ -55,11 +55,17 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             attr.active = !!data.forward.active;
             attr.id = data.forward.id;
 
+            attr.additionalRedirects = [];
+
             _(data.forward.actioncmds).each(function (value) {
                 switch (value.id) {
                     case 'redirect':
-                        attr.to = value.to;
-                        attr.copy = !!value.copy;
+                        if (attr.to !== '') {
+                            attr.additionalRedirects.push(value);
+                        } else {
+                            attr.to = value.to;
+                            attr.copy = !!value.copy;
+                        }
                         break;
                     case 'stop':
                         attr.processSub = false;
@@ -86,6 +92,12 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 rulename: gt('autoforward'),
                 test: { id: 'true' }
             };
+
+            if (!_.isEmpty(attr.additionalRedirects)) {
+                _.each(attr.additionalRedirects, function (action) {
+                    json.actioncmds.push(action);
+                });
+            }
 
             if (attr.copy) {
                 if (this.availableActions.copy) { json.actioncmds[0].copy = true; } else { json.actioncmds.push({ id: 'keep' }); }
