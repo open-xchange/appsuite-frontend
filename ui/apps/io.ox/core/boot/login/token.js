@@ -83,6 +83,14 @@ define('io.ox/core/boot/login/token', [
         return http.GET({
             module: 'system',
             params: { action: 'whoami' }
+        }).then(function (user) {
+            if (user.requires_multifactor) {
+                return session.rampup().then(function (data) {
+                    data.requires_multifactor = true;
+                    return data;
+                });
+            }
+            return user;
         });
     }
 
