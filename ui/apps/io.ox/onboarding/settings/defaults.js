@@ -36,6 +36,10 @@ define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], 
                 'url': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla',
                 'icon': 'apps/themes/icons/default/apps/Android_Drive_App_Icon.png'
             },
+            'syncapp': {
+                'url': 'https://play.google.com/store/apps/details?id=com.openexchange.mobile.syncapp.enterprise',
+                'icon': 'apps/themes/icons/default/apps/OX_Sync_App_Icon.png'
+            },
             'storeIcon': 'apps/themes/icons/default/googleplay/google-play-badge_$country.svg'
         },
         'ios': {

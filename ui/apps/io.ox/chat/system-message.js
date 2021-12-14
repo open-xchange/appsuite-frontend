@@ -106,7 +106,7 @@ define('io.ox/chat/system-message', ['io.ox/chat/api', 'gettext!io.ox/chat'], fu
                 return gt('Message could not be loaded');
             default:
                 //#. %1$s: messagetext
-                return model.getContent() || gt('Unknown system message: %1$s', _.escape(json.type));
+                return _.escape(model.getContent()) || gt('Unknown system message: %1$s', _.escape(json.type));
         }
     }
 

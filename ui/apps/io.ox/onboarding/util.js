@@ -42,7 +42,8 @@ define('io.ox/onboarding/util', [
             'mailapp': productNames.mail,
             'addressbook': gt('Address Book'),
             'calendar': gt('Calendar'),
-            'driveapp': productNames.drive
+            'driveapp': productNames.drive,
+            'syncapp': gt('OX Sync App')
         },
         'macos': {
             'title': gt('MacOS'),
@@ -142,6 +143,13 @@ define('io.ox/onboarding/util', [
             'app': 'eassync',
             'platform': 'android',
             'cap': 'active_sync'
+        },
+        {
+            'title': gt('OX Sync App'),
+            'icon': 'fa-users',
+            'app': 'syncapp',
+            'platform': 'android',
+            'cap': 'carddav caldav'
         },
         {
             'title': gt('Email with Apple Mail'),
