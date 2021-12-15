@@ -682,7 +682,7 @@ define('io.ox/mail/detail/content', [
                     }
                 });
 
-                baton.source = $.trim(baton.source);
+                baton.source = baton.source.trim();
                 baton.isHTML = regHTML.test(baton.type);
                 baton.isText = !baton.isHTML;
                 // large emails cannot be processed because it takes too much time
