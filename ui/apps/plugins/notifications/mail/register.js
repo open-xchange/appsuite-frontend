@@ -134,36 +134,40 @@ define('plugins/notifications/mail/register', [
         }
     }
     function checkNew(items) {
-        var newIds = _(items).map(function (item) {
-                return item.folder_id + '.' + item.id;
-            }),
-            oldIds = _(ids.models).map(function (model) {
-                return model.get('folder_id') + '.' + model.get('id');
-            }),
-            newItems = _.difference(newIds, oldIds);
+        var newItems = diff(items, ids.models);
 
+        if (!newItems.length) return;
         // only show these if there is not already the websocket push listening
         // note if external accounts are checked, those don't use websockets, so ignore the capability in this case
-        if (newItems.length && (settings.get('notificationsForExternalInboxes', false) || !cap.has('websocket'))) {
-            // if theres multiple items or no specific notification given, use the generic
-            if (newItems.length > 1) {
-                desktopNotifications.show({
-                    title: gt('New mails'),
-                    body: gt('You have new mail'),
-                    icon: iconPath
-                });
-            } else {
-                api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
-                    var from = data.from || [['', '']],
-                        message = {
-                            email: from[0][1],
-                            displayname: util.getDisplayName(from[0]),
-                            subject: data.subject || gt('No subject')
-                        };
-                    newMailDesktopNotification(message);
-                });
-            }
+        if (!settings.get('notificationsForExternalInboxes', false) && cap.has('websocket') && false) return;
 
+        // if theres multiple items or no specific notification given, use the generic
+        if (newItems.length > 1) {
+            return desktopNotifications.show({
+                title: gt('New mails'),
+                body: gt('You have new mail'),
+                icon: iconPath
+            });
+        }
+
+        api.get(_.extend({}, newItems[0], { unseen: true })).then(function (data) {
+            var from = data.from || [['', '']];
+            var message = {
+                email: from[0][1],
+                displayname: util.getDisplayName(from[0]),
+                subject: data.subject || gt('No subject')
+            };
+            newMailDesktopNotification(message);
+        });
+
+        function diff(items, models) {
+            var hash = {};
+            _(models).each(function (model) {
+                hash[_.cid(model.pick('folder_id', 'id'))] = true;
+            });
+            return _(items).filter(function (item) {
+                return !hash[_.cid(item)];
+            });
         }
     }
 
