@@ -47,13 +47,12 @@ Scenario('Send and receive mail @smoketest', async ({ I, users, mail }) => {
     I.login('app=io.ox/mail', { user: recipient });
 
     let element = await I.grabNumberOfVisibleElements({ css: '.list-item.selectable' });
-    const maxRetries = 6;
-    let retries = maxRetries;
+    let retries = 6;
     while (!element && retries) {
         retries--;
         I.triggerRefresh();
         I.waitForNetworkTraffic();
-        I.wait(maxRetries - retries);
+        I.wait(10.5);
         element = await I.grabNumberOfVisibleElements({ css: '.list-item.selectable' });
         if (!retries) assert.fail('Timeout waiting for element');
     }
