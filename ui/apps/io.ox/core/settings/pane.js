@@ -487,9 +487,12 @@ define('io.ox/core/settings/pane', [
             render: function () {
                 var self = this;
                 // add ask now link (by design browsers only allow asking if there was no decision yet)
-                this.$requestLink =
-                    //#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
-                    $('<a href="#" role="button" class="request-desktop-notifications">').text(gt('Manage browser permissions now')).on('click', onClick);
+                // Opens a native browser popup to decide if this applications/website is allowed to show notifications
+                this.$requestLink = $('<br>').add(
+                    $('<a href="#" role="button" class="request-desktop-notifications">')
+                        .text(gt('Manage browser permissions now'))
+                        .on('click', onClick)
+                );
 
                 function onClick(e) {
                     e.preventDefault();
@@ -517,8 +520,6 @@ define('io.ox/core/settings/pane', [
                             view.model.set('showDesktopNotifications', false, { silent: true });
                         });
                     });
-
-                    this.$requestLink = $('<br>').add(this.$requestLink);
                 }
                 if (desktopNotifications.getPermissionStatus().match(/granted|denied/)) this.$requestLink.hide();
             }
