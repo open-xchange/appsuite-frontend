@@ -1,44 +1,40 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/switchboard/extensions', [
     'io.ox/core/extensions',
     'io.ox/switchboard/presence',
     'io.ox/switchboard/api',
     'io.ox/core/api/account',
-    'io.ox/backbone/mini-views',
-    'io.ox/backbone/views/disposable',
     'io.ox/backbone/views/actions/util',
     'io.ox/contacts/api',
-    'io.ox/switchboard/views/conference-select',
-    'io.ox/switchboard/views/zoom-meeting',
-    'io.ox/switchboard/views/jitsi-meeting',
+    'io.ox/contacts/util',
     'io.ox/switchboard/views/call-history',
     'io.ox/core/capabilities',
     'io.ox/contacts/model',
     'settings!io.ox/core',
     'gettext!io.ox/switchboard',
     'less!io.ox/switchboard/style'
-], function (ext, presence, api, account, mini, DisposableView, actionsUtil, contactsAPI, ConferenceSelectView, ZoomMeetingView, JitsiMeetingView, callHistory, capabilities, contactsModel, settings, gt) {
+], function (ext, presence, api, account, actionsUtil, contactsAPI, contactsUtil, callHistory, capabilities, contactsModel, settings, gt) {
 
     'use strict';
 
@@ -104,7 +100,7 @@ define('io.ox/switchboard/extensions', [
                     return { presence: $el };
                 },
                 set: function (data, fields) {
-                    fields.presence.toggle(String(data.folder_id) === '6');
+                    fields.presence.toggle(String(data.folder_id) === contactsUtil.getGabId());
                     var icon = presence.getPresenceIcon(data.email1);
                     fields.presence.replaceWith(icon);
                     fields.presence = icon;
@@ -165,7 +161,7 @@ define('io.ox/switchboard/extensions', [
                         $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
                         .prop('disabled', !hasOptions)
                         .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
+                            $('<div class="icon-container">').append($.icon('fa-phone', false, 'call-icon')),
                             $.txt(gt.pgettext('verb', 'Call')),
                             hasOptions ? $('<i class="fa fa-caret-down" aria-hidden="true">') : $()
                         ),
@@ -197,7 +193,7 @@ define('io.ox/switchboard/extensions', [
                 actionsUtil.invoke(action, e.data.baton);
             })
             .append(
-                $('<i class="fa" aria-hidden="true">').addClass(icon),
+                $('<div class="icon-container">').append($.icon(icon)),
                 $.txt(label)
             );
         actionsUtil.checkAction(action, baton).then(function () {
@@ -298,123 +294,6 @@ define('io.ox/switchboard/extensions', [
         }
     });
 
-    // extend recipients
-    // ext.point('io.ox/core/person').extend({
-    //     id: 'presence',
-    //     draw: function (baton) {
-    //         var id = baton.halo.email;
-    //         if (!api.isInternal(id)) return;
-    //         this.prepend(presence.getPresenceDot(id));
-    //     }
-    // });
-
-    // extend participants
-    // ext.point('io.ox/participants/view').extend({
-    //     id: 'presence',
-    //     render: function (baton) {
-    //         // calendar has email, distribution lists email1, for example
-    //         var id = baton.model.get('email') || baton.model.get('email1');
-    //         if (!api.isInternal(id)) return;
-    //         this.append(presence.getPresenceIcon(id));
-    //     }
-    // });
-
-    // disable calendar details (to get some room)
-    // ext.point('io.ox/calendar/detail').disable('details');
-
-    // add to contact detail view
-    ext.point('io.ox/calendar/detail').extend({
-        after: 'location',
-        id: 'join',
-        draw: function (baton) {
-            // TODO: Split this for compability with pure location and real conference
-            // conference field should also be printed in the view
-            var match = [], conference = api.getConference(baton.data.conferences), title;
-            if (conference) {
-                match.push(conference.joinURL);
-                title = getTitle(conference);
-            } else {
-                match = String(baton.data.location).match(/(https:\/\/.*?\.zoom\.us\S+)/i);
-                title = gt('Join Zoom meeting');
-            }
-            if (!match) return;
-            this.append(
-                $('<div class="action-button-rounded horizontal">').append(
-                    // Call
-                    $('<button type="button" class="btn btn-link" data-action="join">')
-                        .append(
-                            $('<i class="fa fa-phone" aria-hidden="true">'),
-                            $('<div>').text(title)
-                        )
-                        .on('click', function () {
-                            window.open(match[0]);
-                        })
-                )
-            );
-            // avoid actions
-            baton.disable('io.ox/calendar/detail', 'actions');
-
-            function getTitle(conference) {
-                switch (conference.type) {
-                    case 'zoom': return gt('Join Zoom meeting');
-                    case 'jitsi': return gt('Join Jitsi meeting');
-                    default: return gt('Join conference call');
-                }
-            }
-        }
-    });
-
-    // edit appointment
-    ext.point('io.ox/calendar/edit/section').extend({
-        id: 'conference',
-        before: 'location',
-        draw: function (baton) {
-            var point = ext.point('io.ox/calendar/conference-solutions');
-            if (point.list().length <= 1) return;
-            new ConferenceSelectView({ el: this, appointment: baton.model, point: point }).render();
-        }
-    });
-
-    var solutions = ext.point('io.ox/calendar/conference-solutions')
-        .extend({ id: 'none', index: 100, value: 'none', label: gt('None') });
-
-    var supportsZoom = api.supports('zoom'),
-        supportsJitsi = api.supports('jitsi');
-
-    if (supportsZoom || supportsJitsi) {
-
-        if (supportsZoom) {
-            solutions.extend({
-                id: 'zoom',
-                index: 200,
-                value: 'zoom',
-                label: gt('Zoom Meeting'),
-                render: function (view) {
-                    this.append(
-                        new ZoomMeetingView({ appointment: view.appointment }).render().$el
-                    );
-                }
-            });
-        }
-
-        if (supportsJitsi) {
-            solutions.extend({
-                id: 'jitsi',
-                index: 300,
-                value: 'jitsi',
-                label: gt('Jitsi Meeting'),
-                render: function (view) {
-                    this.append(
-                        new JitsiMeetingView({ appointment: view.appointment }).render().$el
-                    );
-                }
-            });
-        }
-
-        // move location to later position
-        ext.point('io.ox/calendar/edit/section').replace({ id: 'location', index: 750 });
-    }
-
     // add call history
     ext.point('io.ox/core/appcontrol/right').extend({
         id: 'call-history',
@@ -426,7 +305,7 @@ define('io.ox/switchboard/extensions', [
         }
     });
 
-    if (supportsZoom) {
+    if (api.supports('zoom')) {
         // Settings
         ext.point('io.ox/settings/pane/tools').extend({
             id: 'zoom',

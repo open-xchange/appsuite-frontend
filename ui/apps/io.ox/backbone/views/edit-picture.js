@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/backbone/views/edit-picture', [
     'io.ox/core/extensions',
@@ -42,7 +42,7 @@ define('io.ox/backbone/views/edit-picture', [
             return new ModalDialog({
                 title: opt.title || gt('Change photo'),
                 point: 'io.ox/backbone/crop',
-                width: 560,
+                width: _.device('smartphone') ? undefined : '35rem',
                 async: true,
                 model: opt.model || new Backbone.Model(),
                 focus: 'button[data-action="upload"]'
@@ -142,11 +142,11 @@ define('io.ox/backbone/views/edit-picture', [
                     // boundary is outer dark area, viewort is the visible part of the image.
                     var boundaryWidth, boundaryHeight, viewport;
                     if (_.device('small')) {
-                        boundaryWidth = 320;
+                        boundaryWidth = '100%';
                         boundaryHeight = 240;
                         viewport = 180;
                     } else {
-                        boundaryWidth = 560;
+                        boundaryWidth = '100%';
                         boundaryHeight = 360;
                         viewport = 320;
                     }
@@ -197,12 +197,14 @@ define('io.ox/backbone/views/edit-picture', [
                             // ROTATE LEFT
                             $('<button type="button" class="btn" data-action="rotate-left">').append(
                                 $('<i class="fa fa-rotate-left fa-lg">'),
-                                $.txt('Rotate left')
+                                //#. button to rotate a contact image
+                                $.txt(gt('Rotate left'))
                             ),
                             // ROTATE RIGHT
                             $('<button type="button" class="btn" data-action="rotate-right">').append(
                                 $('<i class="fa fa-rotate-right fa-lg">'),
-                                $.txt('Rotate right')
+                                //#. button to rotate a contact image
+                                $.txt(gt('Rotate right'))
                             )
                         )
                         .on('click', 'button', function (e) {

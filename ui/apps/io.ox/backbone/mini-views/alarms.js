@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/backbone/mini-views/alarms', [
     'io.ox/calendar/util',
@@ -35,7 +35,7 @@ define('io.ox/backbone/mini-views/alarms', [
             DISPLAY: gt('Notification'),
             AUDIO: gt('Audio'),
             EMAIL: gt('Mail'),
-            SMS: gt('SMS')
+            'X-SMS': gt('SMS')
         },
         relatedLabels = {
             //#. Used in a selectbox when the reminder for an appointment is before the start time
@@ -168,7 +168,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.options = options || {};
             this.attribute = options.attribute || 'alarms';
             this.phoneNumber = options.phoneNumber;
-            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('SMS');
+            this.supportedTypes = options.phoneNumber ? supportedTypes : _(supportedTypes).without('X-SMS');
             this.list = $('<div class="alarm-list">');
 
             if (this.model) {
@@ -305,7 +305,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     case 'DISPLAY':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         break;
-                    case 'SMS':
+                    case 'X-SMS':
                         if (!alarm.description) alarm.description = self.model ? self.model.get('summary') || 'reminder' : 'reminder';
                         if (!alarm.attendees && self.phoneNumber) alarm.attendees = [{ uri: 'tel:' + self.phoneNumber }];
                         break;
@@ -368,8 +368,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     model[self.attribute] = _.deepClone(self.model.get(self.attribute));
                     alarmView = new alarmsView({ model: new Backbone.Model(model), attribute: self.attribute, phoneNumber: phoneNumber });
                     new ModalDialog({
-                        title: gt('Edit reminders'),
-                        width: 600
+                        title: gt('Edit reminders')
                     })
                     .build(function () {
                         this.$body.append(alarmView.render().$el);

@@ -1,13 +1,13 @@
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>12.4. Uso de una lista blanca</title>
+<title>12.4. Uso de listas de permitidos</title>
 <link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Guía del usuario">
 <link rel="up" href="ox.appsuite.user.chap.security.html" title="Capítulo 12. Seguridad de los datos">
 <link rel="prev" href="ox.appsuite.user.sect.security.emailauthentication.html" title="12.3. Visualización de la autenticidad del correo">
-<link rel="next" href="ox.appsuite.user.sect.security.sessions.html" title="12.5. Mostrar o cerrar sesión en clientes activos">
+<link rel="next" href="ox.appsuite.user.sect.security.sessions.html" title="12.5. Visualización o cierre de sesión de clientes activos">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -31,40 +31,49 @@
 <div class="oxhelp-content">
   <h1 class="sr-only">Seguridad de los datos</h1>
 <div class="sect1" id="ox.appsuite.user.sect.security.whitelist">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.4. Uso de una lista blanca</h2></div></div></div>
-<a class="indexterm" name="id-1.13.8.2"></a><a class="indexterm" name="id-1.13.8.3"></a><a class="indexterm" name="id-1.13.8.4"></a><p id="ox.appsuite.user.concept.security.whitelist">Dependiendo de la configuración, puede crear una <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.session">lista blanca</a>. Todos los correos electrónicos de los remitentes registrados en la lista blanca se tratan de la siguiente manera:</p>
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">12.4. Uso de listas de permitidos</h2></div></div></div>
+<a class="indexterm" name="id-1.13.8.2"></a><a class="indexterm" name="id-1.13.8.3"></a><a class="indexterm" name="id-1.13.8.4"></a><p id="ox.appsuite.user.concept.security.whitelist">Dependiendo de la configuración, puede crear una <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.session">lista de permitidos</a>. Todos los correos de los remitentes registrados en la lista de permitidos se tratan de la siguiente manera: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">El correo electrónico no se trata como correo electrónico no deseado.</p></li>
-<li class="listitem"><p role="presentation">La fuente de correo electrónico es etiquetada como confiable.</p></li>
+<li class="listitem"><p role="presentation">El correo no se trata como correo no deseado.</p></li>
+<li class="listitem"><p role="presentation">La fuente de correo es etiquetada como confiable.</p></li>
 <li class="listitem"><p role="presentation">Las imágenes vinculadas externamente se cargan y se muestran inmediatamente.</p></li>
 </ul>
-<p>
-    </p>
-<p id="ox.appsuite.user.caution.security.whitelist"><span class="phrase"><strong>Aviso:</strong></span> Al introducir entradas en la lista blanca, se evitan varias medidas de seguridad. Solo ingrese correos electrónicos o <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.domain">nombres de dominio</a> en la lista blanca si usted confía absolutamente en ellos.</p>
+<p id="ox.appsuite.user.caution.security.whitelist"><span class="phrase"><strong>Aviso:</strong></span> Al introducir entradas en la lista de permitidos se evitan varias medidas de seguridad. Introduzca solo correos o <a class="link" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary.domain">nombres de dominio</a> en la lista de permitidos si confía absolutamente en ellos.</p>
 <div class="task" id="ox.appsuite.user.task.security.whitelist">
-<p class="title">Cómo crear una lista blanca:</p>
+<p class="title">Cómo crear una lista de permitidos:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.whitelist.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>de la parte derecha de la barra de menús. Pulse <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.whitelist.settings"><img src="../../images/appsuite_user_icon_settings.png"></span> de la parte derecha de la barra de menús. Pulse <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
 <li class="step"><p role="presentation">En la barra lateral, pulse en <span class="guibutton"><strong>Seguridad</strong></span>.</p></li>
-<li class="step"><p role="presentation">Introduzca las direcciones de correo electrónico o nombres de dominio correspondientes como una lista separada por comas en el campo de entrada <span class="guibutton"><strong>Confiar siempre en los correos de los siguientes remitentes.</strong></span> en el área de visualización. Por favor, tenga en cuenta también:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Al introducir varias direcciones de correo electrónico o nombres de dominio, separe las entradas con una coma.</p></li>
-<li class="listitem"><p role="presentation">Asegúrese de introducir las direcciones de correo electrónico o nombres de dominio exactos.</p></li>
-</ul>
-          </p></li>
+<li class="step"><p role="presentation">Introduzca las direcciones de correo o nombres de dominio correspondientes como una lista separada por comas en el campo de entrada <span class="guibutton"><strong>Confiar siempre en los correos de los siguientes remitentes.</strong></span> en el área de visualización. Por favor, tenga en cuenta también: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Al introducir varias direcciones de correo o nombres de dominio, separe las entradas con una coma.</p></li>
+<li class="listitem"><p role="presentation">Asegúrese de introducir las direcciones de correo o nombres de dominio exactos.</p></li>
+</ul></p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.related.security.whitelist">      
+<p id="ox.appsuite.user.related.security.whitelist">
       </p>
 <p class="title">Temas relacionados:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Cierre de sesión automático</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Imágenes vinculadas externamente en correos</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emailauthentication.html">Visualización de la autenticidad del correo</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Mostrar o cerrar sesión en clientes activos</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Uso de contraseñas adicionales para aplicaciones</a></p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Cierre de sesión automático</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Imágenes vinculadas externamente en correos</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.emailauthentication.html">Visualización de la autenticidad del correo</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Visualización o cierre de sesión de clientes activos</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Uso de contraseñas adicionales para aplicaciones</a>
+          </p>
 </li>
-<li class="listitem" style="list-style-type: none"><p role="presentation" class="cap-webmail"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Visualización de correos electrónicos</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation" class="cap-webmail">
+            <a class="xref" href="ox.appsuite.user.sect.email.view.html">Visualización de correos</a>
+          </p></li>
 </ul>
 <p>
     </p>

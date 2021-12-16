@@ -5,7 +5,7 @@ title: Settings list
 This page shows a list of useful config option to customize App Suite UI. We recommend to read the [main article](../configuration.html) on how to configure App Suite UI first.
 
 ## Namespaces
-Settings are logically divided via namespaces for each module. The namespace itself is divided by a doube slash `//` from the setting's name when written down to a config file.
+Settings are logically divided via namespaces for each module. The namespace itself is divided by a double slash `//` from the setting's name when written down to a config file.
 Ensure to always use the double slash in your settings string, otherwise this will lead to errors and your setting will
 not work.
 
@@ -43,16 +43,16 @@ Show a modal dialog to enable an inline relogin without showing the login page. 
 Enable/disable restorepoints for edit dialogs. Default is `true`.
 
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
-Enable validiation for email addresses in mail compose dialog. Default is `true`.
+Enable validation for email addresses in mail compose dialog. Default is `true`.
 
 <config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
-Enable validiation for phone numbers. Default is `false`.
+Enable validation for phone numbers. Default is `false`.
 
 <config>io.ox/core//features/windowHeaderPosition=`<string>`</config>
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
-Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar). Default is unset;
+Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in address bar). Default is unset;
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
@@ -62,6 +62,9 @@ Enable/disable PDF preconversion of office documents for mail attachments. Defau
 
 <config>io.ox/core//pdf/enableRangeRequests=`<bool>`</config>
 Enable/disable range requests support to fetch PDF rendering data in chunks. Default is `true`.
+
+<config>io.ox/core//features/enterprisePicker/enabled=`<bool>`</config>
+ Replaces the default contact picker with the enterprise contact picker. Default is `false`
 
 ## Topbar / Apps
 
@@ -125,7 +128,7 @@ Default: `false`
 ## Mail compose: tinyMCE text editor
 
 <config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
-Timeout in miliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
+Timeout in milliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
 
 <config>io.ox/core//tinyMCE/theme_advanced_buttons1=`<string>`</config>
 List of tinyMCE toolbar actions separated by space - targets toolbar1<br>
@@ -254,6 +257,9 @@ Number of times hint is beeing shown. The protection of this setting needs to be
 
 ## Core: Misc
 
+<config>io.ox/core//autocompleteApiLimit=`<number>`</config>
+Fetch limit of autocomplete widget for modules other than mail compose. Default: `50`
+
 <config>io.ox/core//autoLogout=`<number>`</config>
 Timeout (in ms) until a user is logged out automatically if inactive
 
@@ -353,7 +359,7 @@ Target of 'get started' labled link in 'getting started' widget
 ## Widget properties
 
 <config>io.ox/portal//widgets/user/\[widgetid\]/color=`<string>`</config>
-Color of title and highligting within widget preview/content
+Color of title and highlighting within widget preview/content
 
 <config>io.ox/portal//widgets/user/\[widgetid\]/enabled=`<bool>`</config>
 Enabled state
@@ -424,11 +430,11 @@ Automatically collect contacts in the folder "Collected addresses" while reading
 Ask for mailto link registration (`true|false`)
 
 <config>io.ox/mail//features/trusted/user=`<string>`</config>
-User-defined, comma-separated list of mail adresses or specific domains
+User-defined, comma-separated list of mail addresses or specific domains
 which will be whitlisted for loading external images in HTML mails.
 
 <config>io.ox/mail//features/trusted/admin=`<string>`</config>
-Admin-defined, comma-separated list of mail adresses or specific domains
+Admin-defined, comma-separated list of mail addresses or specific domains
 which will be whitlisted for loading external images in HTML mails. I.e. useful for
 customer care email addresses or domains.
 
@@ -543,6 +549,12 @@ Number of signatures listed in options dropdown of mail compose (default 2).
 <config>io.ox/mail//attachOriginalMessage=`<bool>`</config>
 Attach original message on touch devices
 
+<config>io.ox/mail//compose/autocompleteApiLimit=`<number>`</config>
+Fetch limit of autocomplete widget of mail compose. Default: `50`
+
+<config>io.ox/mail//compose/deputy/hint=`<bool>`</config>
+Pre-configured "disclaimer text" when sending "on behalf of". (default: true)
+
 <config>io.ox/mail//features/accounts/configureUnifiedInboxOnCreate=`<bool>`</config>
 Allow enabling unified inbox for an account at the "Add Mail account" dialog
 
@@ -551,8 +563,8 @@ Enables the authenticity feature. Please note that `com.openexchange.mail.authen
 
 <!-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
-If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
-controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
+If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as protected, the user can select a level which
+controls how strict the authenticity results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
 -->
 
 <config>io.ox/mail//features/autoCollapseBlockquotes=`<bool>`</config>
@@ -608,7 +620,7 @@ Fetch limit when selecting multiple contacts. A number of selected contacts beyo
 ## Addressbook picker
 
 <config>io.ox/contacts//picker/limits/departments=`<number>`</config>
-Maxium departments to show. Default `100`
+Maximum departments to show. Default `100`
 
 <config>io.ox/contacts//picker/limits/fetch=`<number>`</config>
 Maximum number of contacts to fetch. Default `10000`
@@ -621,6 +633,27 @@ Elements for addition loading on each subsequent paginate call. Default `100`
 
 <config>io.ox/contacts//picker/limits/search=`<number>`</config>
 Maximum search results. Default `50`
+
+## Enterprise Addressbook picker
+This settings are used when the addressbook feature toggle (io.ox/core//features/enterprisePicker/enabled) is set to true.
+
+<config>io.ox/core//features/enterprisePicker/showLauncher=`<bool>`</config>
+ Show the picker in the launcher dropdown and add it to quicklauncher selection. Default is `true`
+
+<config>io.ox/contacts//enterprisePicker/lastSearchedContacts=`<array>`</config>
+ Array of last searched contacts. Do *NOT* change this by hand or make it read only. This is filled and maintained by the UI. Default is `[]`
+
+<config>io.ox/contacts//enterprisePicker/lastSearchedContactsLimit=`<number>`</config>
+ How many contacts we want to save in the last searched contacts list. Default is `30`
+
+<config>io.ox/contacts//search/minimumQueryLength=`<number>`</config>
+ This setting is shared by MW and UI for all contact searches and determines the minimum query length. Default is `2`
+
+<config>io.ox/contacts//enterprisePicker/useUsedInPickerFlag=`<bool>`</config>
+ Whether or not the UI filters folders by the used in picker flag. Useful when developing or debugging to make all folders show up. Default is `true`
+
+<config>io.ox/contacts//enterprisePicker/limit=`<number>`</config>
+ Limit of displayed contacts in lists and search results. Default is `100`
 
 # Calendar
 
@@ -745,6 +778,13 @@ Receive notifications when a participant accepted or declined a task in which yo
 
 <config>io.ox/tasks//notifyNewModifiedDeleted=`<bool>`</config>
 Receive notifications when a task in which you participate is created, modified or deleted. Default `false`
+
+# Settings: Downloads
+
+Please see section <i>Portal: OX Drive Clients Widget</i> for more related settings.
+
+<config>plugins/portal/oxdriveclients//standaloneWindowsClient=`<boolean>`</config>
+Enables download link of standalone window client on settings download page. Default `false`
 
 # Portal: OX Drive Clients Widget
 

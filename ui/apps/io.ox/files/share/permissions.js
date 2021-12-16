@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/files/share/permissions', [
     'io.ox/core/extensions',
@@ -43,13 +43,14 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/folder/util',
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
+    'settings!io.ox/mail',
     'io.ox/backbone/mini-views/addresspicker',
     'io.ox/core/util',
     'io.ox/core/api/group',
     'io.ox/files/permission-util',
     'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView, coreUtil, groupApi, pUtil) {
+], function (ext, PermissionPreSelection, shareSettings, PublicLink, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, settingsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, mailSettings, AddressPickerView, coreUtil, groupApi, pUtil) {
 
     'use strict';
 
@@ -214,11 +215,11 @@ define('io.ox/files/share/permissions', [
         // Permission Collection
         Permissions = Backbone.Collection.extend({
 
+            model: Permission,
+
             modelId: function (attrs) {
                 return attrs.entity ? String(attrs.entity) : attrs.identifier;
             },
-
-            model: Permission,
 
             initialize: function () {
                 this.on('revert', this.revert);
@@ -274,15 +275,6 @@ define('io.ox/files/share/permissions', [
         PermissionEntityView = DisposableView.extend({
 
             className: 'permission row',
-
-            /* doesn't work on mobile phones
-            events: {
-                'click a.bit': 'updateDropdown',
-                'click a[data-name="edit"]': 'onEdit',
-                'click a[data-name="resend"]': 'onResend',
-                'click a[data-name="revoke"]': 'onRemove'
-            },
-            */
 
             initialize: function (options) {
                 if (this.model.get('type') === 'anonymous') {
@@ -428,6 +420,9 @@ define('io.ox/files/share/permissions', [
                         break;
                     // no default
                 }
+
+                //#. description in the permission dialog to indicate that this user can act on your behalf (send mails, check calendar for you, etc)
+                if (this.model.get('deputyPermission')) this.description = gt('Deputy');
 
                 // a11y: just say "Public link"; other types use their description
                 this.ariaLabel = this.ariaLabel || (this.display_name + ', ' + this.description);
@@ -674,7 +669,7 @@ define('io.ox/files/share/permissions', [
 
                 $el = $('<div class="col-sm-3 col-sm-offset-0 col-xs-4 col-xs-offset-2 role">');
 
-                if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous()) {
+                if (!baton.parentModel.isAdmin() || isOwner || !supportsWritePrivileges || baton.model.isAnonymous() || baton.model.get('deputyPermission')) {
                     $el.text(description);
                 } else {
                     dropdown = new DropdownView({ el: $el.addClass('dropdown')[0], caret: true, label: description, title: gt('Current role'), model: baton.model, smart: true, buttonToggle: true })
@@ -725,8 +720,8 @@ define('io.ox/files/share/permissions', [
                     module = baton.parentModel.get('module'),
                     supportsWritePrivileges = model.isInternal() || !/^(contacts|tasks)$/.test(module);
 
-                // not available for anonymous links (read-only)
-                if (isAnonymous) {
+                // not available for anonymous links or deputies(read-only)
+                if (isAnonymous || baton.model.get('deputyPermission')) {
                     this.append('<div class="col-sm-2 col-xs-4">');
                     return;
                 }
@@ -828,6 +823,8 @@ define('io.ox/files/share/permissions', [
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.isOwner(baton.parentModel)) return;
+
+                if (baton.model.get('deputyPermission')) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions'), buttonToggle: true }),
                     type = baton.model.get('type'),
@@ -935,12 +932,12 @@ define('io.ox/files/share/permissions', [
         Permissions: Permissions,
 
         // async / id is folder id
-        showFolderPermissions: function (id, linkModel, options) {
+        showFolderPermissions: function (id, options) {
             var model = folderAPI.pool.getModel(id),
                 opt = _.extend({
                     hasLinkSupport: capabilities.has('share_links') && !model.is('mail') && model.isShareable(id)
                 }, options);
-            that.showByModel(new Backbone.Model({ id: id }), [].concat(linkModel), opt);
+            that.showByModel(new Backbone.Model({ id: id }), opt);
         },
 
         // async / obj must provide folder_id and id
@@ -948,13 +945,13 @@ define('io.ox/files/share/permissions', [
             that.showByModel(new Backbone.Model(obj), options);
         },
 
-        showByModel: function (model, linkModel, options) {
+        showByModel: function (model, options) {
             //var oldModel = model;
             var isFile = model.isFile ? model.isFile() : model.has('folder_id');
             model = new api.Model(isFile ? model.pick('id', 'folder_id') : model.pick('id'));
             model.loadExtendedPermissions({ cache: false })
             .done(function () {
-                that.show(model, linkModel, options);
+                that.show(model, options);
             })
             // workaround: when we don't have permissions anymore for a folder a 'http:error:FLD-0003' is returned.
             // usually we have a handler in files/main.js for this case, but due to the current following conditions no yell is called
@@ -969,10 +966,10 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
-        show: function (objModel, linkModel, options) {
+        show: function (objModel, options) {
 
-            // folder tree: nested (whitelist) vs. flat
-            var nested = folderAPI.isNested(objModel.get('module')),
+            // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
+            var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
                 notificationDefault = false,
                 title,
                 guid;
@@ -981,12 +978,12 @@ define('io.ox/files/share/permissions', [
             options = _.extend({
                 async: true,
                 focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.share.html',
+                help: objModel.isAdmin() ? 'ox.appsuite.user.sect.dataorganisation.sharing.share.html' : undefined,
                 title: title,
                 smartphoneInputFocus: true,
-                width: 800,
                 hasLinkSupport: false,
                 nested: nested,
+                width: '35.25rem',
                 share: false }, options);
 
             var objectType;
@@ -1007,18 +1004,20 @@ define('io.ox/files/share/permissions', [
             options.point = 'io.ox/files/share/permissions/dialog';
 
             var dialog = new ModalDialog(options);
+            dialog.waiting = $.when();
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
                     // default is true for nested and false for flat folder tree, #53439
-                    cascadePermissions: nested,
+                    // do not share inbox subfolders, users will accidentally share all mail folders, see OXUIB-1001 and OXUIB-1093
+                    cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
                 },
                 toJSON: function () {
                     var data = {
-                        cascadePermissions: this.get('cascadePermissions'),
+                        cascadePermissions: objModel.get('id') !== mailSettings.get('folder/inbox'),
                         notification: { transport: 'mail' }
                     };
 
@@ -1037,7 +1036,7 @@ define('io.ox/files/share/permissions', [
 
             var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel }),
-                publicLink = new PublicLink({ files: linkModel }),
+                publicLink = new PublicLink({ files: [objModel] }),
                 permissionPreSelection = new PermissionPreSelection({ model: objModel });
 
             dialog.model = dialogConfig;
@@ -1060,6 +1059,7 @@ define('io.ox/files/share/permissions', [
                 if (accessMode === 0) {
                     publicLink.hide();
                     publicLink.removeLink();
+                    dialog.waiting = publicLink.removeLink();
                 } else {
                     publicLink.show();
                     publicLink.fetchLink();
@@ -1086,7 +1086,7 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 updateSendNotificationSettings();
-                dialog.$body.find('.file-share-options').toggle(permissionsView.collection.length > 0);
+                dialog.$body.find('.file-share-options').toggle(!!permissionsView.collection.findWhere({ new: true }));
             });
 
             dialogConfig.on('change:message', function () {
@@ -1149,10 +1149,25 @@ define('io.ox/files/share/permissions', [
                     || publicLink.hasPublicLink();
             }
 
+            // check if only deputy permissions are set (beside owner)
+            function deputyShareOnly() {
+                if (publicLink.hasPublicLink()) return false;
+
+                var shares = objModel.get('com.openexchange.share.extendedObjectPermissions') || objModel.get('com.openexchange.share.extendedPermissions') || [];
+                // filter shares that are deputy shares or myself
+                shares = shares.filter(function (share) {
+                    var myself = share.entity === undefined ? pUtil.isOwnIdentity(share.identifier) : share.entity === ox.user_id;
+                    return !myself && !share.deputyPermission;
+                });
+                // no shares left? -> all shares are either deputy shares or myself
+                return shares.length === 0;
+
+            }
+
             if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared()).on('click', function () {
+                        $('<button class="btn btn-default" aria-label="Unshare"></button>').text(gt('Unshare')).prop('disabled', !isShared() || deputyShareOnly()).on('click', function () {
                             unshareRequested();
                         })
                     )
@@ -1161,7 +1176,7 @@ define('io.ox/files/share/permissions', [
 
             dialog.$el.addClass('share-permissions-dialog');
 
-            // to change privileges you have to a folder admin
+            // to change privileges you have to be a folder admin
             var supportsChanges = objModel.isAdmin(),
                 folderModel = objModel.getFolderModel();
 
@@ -1173,10 +1188,13 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
-            var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
-                openSettings();
-            });
-            dialog.$header.append(settingsButton);
+            if (options.hasLinkSupport || supportsInvites) {
+                var settingsButton = $('<button type="button" class="btn settings-button" aria-label="Settings"><span class="fa fa-cog" aria-hidden="true"></span></button>').on('click', function () {
+                    var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), dialogConfig: dialogConfig });
+                    shareSettings.showSettingsDialog(settingsView);
+                });
+                dialog.$header.append(settingsButton);
+            }
 
             if (options.hasLinkSupport) {
                 dialog.$body.append(
@@ -1227,12 +1245,12 @@ define('io.ox/files/share/permissions', [
                             // guests don't have a proper entity id yet, so we have to check by email
                             if (permissionsView.collection.isAlreadyGuest(obj)) return;
                         }
-                        permissionsView.collection.add(new Permission(obj));
+                        permissionsView.collection.add(obj);
                     };
 
                 var typeaheadView = new Typeahead({
                     apiOptions: {
-                        // mail does not support sharing folders to guets
+                        // mail does not support sharing folders to guests
                         contacts: supportsGuests,
                         users: true,
                         groups: true
@@ -1257,10 +1275,6 @@ define('io.ox/files/share/permissions', [
                     click: click,
                     extPoint: POINT
                 });
-
-                if (objModel.isFolder() && options.nested) {
-                    dialogConfig.set('cascadePermissions', true);
-                }
 
                 dialog.$body.append(
                     // Invite people pane
@@ -1308,7 +1322,7 @@ define('io.ox/files/share/permissions', [
                                     };
                                     if (permissionsView.collection.isAlreadyGuest(obj)) return;
                                     // add to collection
-                                    permissionsView.collection.add(new Permission(obj));
+                                    permissionsView.collection.add(obj);
                                 });
 
                                 // clear input field
@@ -1359,59 +1373,56 @@ define('io.ox/files/share/permissions', [
                     .addButton({ action: 'cancel', label: gt('Close') });
             }
 
-            function openSettings() {
-                var settingsView = new shareSettings.ShareSettingsView({ model: publicLink, hasLinkSupport: options.hasLinkSupport, supportsPersonalShares: supportsPersonalShares(objModel), applyToSubFolder: objModel.isFolder() && options.nested, dialogConfig: dialogConfig });
-                shareSettings.showSettingsDialog(settingsView);
-            }
-
             function mergePermissionsAndPublicLink(permissions, entity, bits) {
-                var existingEnity = _.findWhere(permissions, { entity: entity });
-                if (!existingEnity) {
+                var existingEntity = _.findWhere(permissions, { entity: entity });
+                if (!existingEntity) {
                     permissions.push({ bits: bits, entity: entity, group: false });
                 }
                 return permissions;
             }
 
             dialog.on('save', function () {
-                var changes, options = dialogConfig.toJSON(), def;
-                var entity = publicLink.model.get('entity');
-                var permissions = permissionsView.collection.toJSON();
-                // Order matters. Share must be called before the update call is invoked. Otherwise a file conflict is created.
-                // publicLink.share().then(this.close, function () {
-                publicLink.share().then(function () {
-                    if (entity && publicLink.hasChanges()) {
-                        permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
-                    }
+                // Order matters. In case there is a unresolved 'removeLink' request this has to be finished first.
+                // Share must be called before the update call is invoked. Otherwise a file conflict is created.
+                $.when(dialog.waiting).always(function () {
+                    var changes, options = dialogConfig.toJSON(), def;
+                    var entity = publicLink.model.get('entity');
+                    var permissions = permissionsView.collection.toJSON();
 
-                    if (objModel.isFolder()) {
-                        changes = { permissions: permissions };
-                        def = folderAPI.update(objModel.get('id'), changes, options);
-                    } else {
-                        changes = { object_permissions: permissions };
-                        def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
-                    }
-
-                    def.then(
-                        function success() {
-                            // refresh the guest group (id = int max value)
-                            groupApi.refreshGroup(2147483647);
-                            objModel.reload().then(
-                                function () {
-                                    dialog.close();
-                                    // we might have new addresses
-                                    contactsAPI.trigger('maybeNewContact');
-                                },
-                                function (error) {
-                                    dialog.idle();
-                                    yell(error);
-                                }
-                            );
-                        },
-                        function fail(error) {
-                            dialog.idle();
-                            yell(error);
+                    publicLink.share().then(function () {
+                        if (entity && publicLink.hasChanges()) {
+                            permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
                         }
-                    );
+                        if (objModel.isFolder()) {
+                            changes = { permissions: permissions };
+                            def = folderAPI.update(objModel.get('id'), changes, options);
+                        } else {
+                            changes = { object_permissions: permissions };
+                            def = filesAPI.update(objModel.pick('folder_id', 'id'), changes, options);
+                        }
+
+                        def.then(
+                            function success() {
+                                // refresh the guest group (id = int max value)
+                                groupApi.refreshGroup(2147483647);
+                                objModel.reload().then(
+                                    function () {
+                                        dialog.close();
+                                        // we might have new addresses
+                                        contactsAPI.trigger('maybeNewContact');
+                                    },
+                                    function (error) {
+                                        dialog.idle();
+                                        yell(error);
+                                    }
+                                );
+                            },
+                            function fail(error) {
+                                dialog.idle();
+                                yell(error);
+                            }
+                        );
+                    });
                 });
             });
 

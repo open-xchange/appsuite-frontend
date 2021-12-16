@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/a11y', [], function () {
 
@@ -259,7 +259,10 @@ define('io.ox/core/a11y', [], function () {
                 // skip tabbable elements of contenteditables
                 return !$(this).closest('[contenteditable="true"]').length;
             })
-            .filter(':visible');
+            .filter(':visible')
+            // don't use :enabled here as it works slightly different for nodes that don't have the attribute at all
+            .filter(':not(:disabled)');
+
         return $($.map(filteredItems, function (item) {
             // if tabbable element is actually an iframe we need to expand it to its tabbable contents
             return $(item).is('iframe') ? getTabbable($(item).contents().find('html')).toArray() : item;

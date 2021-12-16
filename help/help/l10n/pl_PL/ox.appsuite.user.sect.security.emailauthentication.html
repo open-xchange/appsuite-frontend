@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.security.html" title="Rozdział 12. Zabezpieczenia danych">
 <link rel="prev" href="ox.appsuite.user.sect.security.emaillinkedimages.html" title="12.2. Podlinkowane obrazy zewnętrzne w wiadomościach e-mail">
-<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Korzystanie z białej listy">
+<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Korzystanie z list dozwolonych">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -37,38 +37,48 @@
 <li class="listitem"><p role="presentation"> E-mail jest klasyfikowany jako potencjalnie niebezpieczny. W widoku szczegółów nadawca jest wyświetlany na czerwono.</p></li>
 <li class="listitem"><p role="presentation">Autentyczności nie można całkowicie zweryfikować. W widoku szczegółów nadawca jest wyświetlany na żółto.</p></li>
 <li class="listitem"><p role="presentation">Autentyczność została zweryfikowana. W widoku szczegółów nadawca jest wyświetlany na zielono.</p></li>
-<li class="listitem"><p role="presentation">Weryfikacja przebiegła pomyślnie. E-mail wysłano z zaufanego adresu.</p></li>
+<li class="listitem"><p role="presentation">Weryfikacja przebiegła pomyślnie. E-mail wysłano z adresu godnego zaufania.</p></li>
 </ul>
-<p>Przy pewnych konfiguracjach można zdefiniować wiadomości e-mail, dla których ma być sprawdzana ich autentyczność.</p>
+<p>Przy pewnych konfiguracjach można zdefiniować wiadomości e-mail, w których przypadku ma być sprawdzana ich autentyczność.</p>
 <div class="task" id="ox.appsuite.user.task.security.emailauthentication">
 <p class="title">Jak zdefiniować wiadomości e-mail, których autentyczność ma być pokazywana:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Ustawienia</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span> z prawej strony paska menu. Kliknij <span class="guibutton"><strong>Ustawienia</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Ustawienia</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span> widoczną po prawej stronie paska menu. Kliknij pozycję <span class="guibutton"><strong>Ustawienia</strong></span>.</p></li>
 <li class="step"><p role="presentation">Na pasku bocznym kliknij pozycję Zabezpieczenia aplikacji <span class="guibutton"><strong>.</strong></span></p></li>
-<li class="step"><p role="presentation">W obszarze wyświetlania kliknij listę rozwijaną <span class="guibutton"><strong>Pokaż autentyczność wiadomości</strong></span> i wybierz pozycję.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="step"><p role="presentation">W obszarze wyświetlania kliknij listę rozwijaną <span class="guibutton"><strong>Pokaż autentyczność wiadomości</strong></span> i wybierz pozycję. <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Wyłączone</strong></span>. Status autentyczności nie jest wyświetlany. Jeśli jednak właściciel hosta oznaczył e-mail wysłany ze swojego adresu jako zaufany, ten status autentyczności jest pokazywany.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Tylko podejrzane i niesklasyfikowane wiadomości e-mail</strong></span>. Powoduje wyświetlanie statusu autentyczności następujących wiadomości e-mail:<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Tylko podejrzane i niesklasyfikowane wiadomości e-mail</strong></span>. Powoduje wyświetlanie statusu autentyczności następujących wiadomości e-mail: <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Wiadomości e-mail oznaczone jako potencjalnie niebezpieczne.</p></li>
 <li class="listitem"><p role="presentation">Wiadomości, których autentyczności nie można z całą pewnością zweryfikować</p></li>
-</ul>
-                </p></li>
+</ul></p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Wszystkie e-maile</strong></span>. Powoduje wyświetlanie statusu autentyczności wszystkich wiadomości e-mail.</p></li>
-</ul>
-          </p></li>
+</ul></p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.related.security.emailauthentication">      
+<p id="ox.appsuite.user.related.security.emailauthentication">
       </p>
 <p class="title">Powiązane tematy:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Automatyczne wylogowywanie</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Podlinkowane obrazy zewnętrzne w wiadomościach e-mail</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Korzystanie z białej listy</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Wyświetlanie aktywnych klientów lub wylogowywanie się z nich</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Korzystanie z dodatkowych haseł do aplikacji</a></p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Automatyczne wylogowywanie</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Podlinkowane obrazy zewnętrzne w wiadomościach e-mail</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Korzystanie z list dozwolonych</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Wyświetlanie aktywnych klientów lub wylogowywanie się z nich</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Korzystanie z dodatkowych haseł do aplikacji</a>
+          </p>
 </li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Wyświetlanie wiadomości e-mail</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.email.view.html">Wyświetlanie wiadomości e-mail</a>
+          </p></li>
 </ul>
 <p>
     </p>

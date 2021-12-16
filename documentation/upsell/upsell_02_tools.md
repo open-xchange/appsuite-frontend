@@ -6,7 +6,7 @@ The following features inside OX App Suite can be used to integrate additional c
 
 # Custom app
 
-You are able to add an app to the app launcher which is completly customized. Icon, name as well as URL can be included and link to the upsell wizard as well as to an external page.
+You are able to add an app to the app launcher which is completely customized. Icon, name as well as URL can be included and link to the upsell wizard as well as to an external page.
 For more technical information please see [here]({{ site.baseurl }}/ui/customize/app/simple-application-iframe.html#add-app-to-launcher.)
 
 

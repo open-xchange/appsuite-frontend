@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/invitations/register', [
     'io.ox/backbone/views/disposable',
@@ -36,46 +36,62 @@ define('io.ox/calendar/invitations/register', [
 
     var i18n = {
         'accept': gt('Accept'),
-        'accept_and_replace': gt('Accept changes'),
         'accept_and_ignore_conflicts': gt('Accept'),
+        'accept_and_replace': gt('Accept changes'),
         'accept_party_crasher': gt('Add new participant'),
+        'apply_change': gt('Update Appointment'),
+        'apply_create': gt('Add to Calendar'),
+        'apply_proposal': gt('Accept Proposal'),
+        'apply_remove': gt('Remove Appointment'),
+        'apply_response': gt('Update Appointment'),
         'create': gt('Accept'),
-        'update': gt('Accept changes'),
-        'delete': gt('Delete'),
-        'declinecounter': gt('Reject changes'),
-        'tentative': gt('Tentative'),
         'decline': gt('Decline'),
-        'ignore': gt('Ignore')
+        'declinecounter': gt('Reject changes'),
+        'ignore': gt('Ignore'),
+        'request_refresh': gt('Request Appointment'),
+        'send_refresh': gt('Send Appointment'),
+        'tentative': gt('Tentative')
     };
 
     var buttonClasses = {
         'accept': 'btn-success accept',
-        'accept_and_replace': 'btn-success',
         'accept_and_ignore_conflicts': 'btn-success ignore',
+        'accept_and_replace': 'btn-success',
         'accept_party_crasher': '',
+        'apply_change': 'btn-success',
+        'apply_create': 'btn-success',
+        'apply_proposal': 'btn-success',
+        'apply_remove': 'btn-danger',
+        'apply_response': 'btn-success',
         'create': '',
-        'update': 'btn-success',
-        'delete': '',
-        'declinecounter': 'btn-danger',
-        'tentative': 'btn-warning',
         'decline': 'btn-danger',
-        'ignore': ''
+        'declinecounter': 'btn-danger',
+        'ignore': '',
+        'request_refresh': 'btn-success',
+        'send_refresh': 'btn-success',
+        'tentative': 'btn-warning'
     };
 
     var success = {
         'accept': gt('You have accepted the appointment'),
-        'accept_and_replace': gt('Changes have been saved'),
         'accept_and_ignore_conflicts': gt('You have accepted the appointment'),
+        'accept_and_replace': gt('Changes have been saved'),
         'accept_party_crasher': gt('Added the new participant'),
+        'apply_change': gt('The appointment has been updated'),
+        'apply_create': gt('The appointment was added'),
+        'apply_proposal': gt('The changes have been accepted'),
+        'apply_remove': gt('The appointment has been deleted'),
+        'apply_response': gt('The appointment has been updated'),
         'create': gt('You have accepted the appointment'),
-        'update': gt('The appointment has been updated'),
-        'delete': gt('The appointment has been deleted'),
+        'decline': gt('You have declined the appointment'),
         'declinecounter': gt('The changes have been rejected'),
-        'tentative': gt('You have tentatively accepted the appointment'),
-        'decline': gt('You have declined the appointment')
+        'ignore': '',
+        'request_refresh': '',
+        'send_refresh': '',
+        'tentative': gt('You have tentatively accepted the appointment')
     };
 
-    var priority = ['update', 'ignore', 'create', 'delete', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
+    var priority = ['apply_create', 'apply_change', 'apply_proposal', 'apply_remove', 'apply_response', 'send_refresh', 'request_refresh', 'ignore', 'create', 'decline', 'tentative', 'accept', 'declinecounter', 'accept_and_ignore_conflicts', 'accept_party_crasher'];
 
     //
     // Basic View
@@ -372,9 +388,7 @@ define('io.ox/calendar/invitations/register', [
             function performConfirm() {
 
                 var params = {
-                    action: action,
-                    dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html'
+                    action: action
                 };
 
                 if (!_.isEmpty(self.getUserComment())) {
@@ -409,7 +423,7 @@ define('io.ox/calendar/invitations/register', [
                         } else {
                             // repaint only if there is something left to repaint
                             refresh.then(function () {
-                                // if the delete action was succesfull we don't need the button anymore, see Bug 40852
+                                // if the delete action was successful we don't need the button anymore, see Bug 40852
                                 if (action === 'delete') {
                                     self.model.set('actions', _(self.model.get('actions')).without('delete'));
                                 }
@@ -428,15 +442,15 @@ define('io.ox/calendar/invitations/register', [
                 action(self.imip, {
                     api: {
                         checkConflicts: function () {
+                            // no need to check if appointment was declined
+                            if (!doConflictCheck) return $.when([]);
+
                             if (_.isArray(self.options.conflicts)) return $.when(self.options.conflicts);
 
                             var conflicts = [];
-                            // no need to check if appointment was declined
-                            if (doConflictCheck) {
-                                _(self.model.get('changes')).each(function (change) {
-                                    if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
-                                });
-                            }
+                            _(self.model.get('changes')).each(function (change) {
+                                if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
+                            });
                             return $.when(conflicts);
                         }
                     }
@@ -788,8 +802,6 @@ define('io.ox/calendar/invitations/register', [
                 module: 'chronos/itip',
                 params: {
                     action: 'analyze',
-                    dataSource: 'com.openexchange.mail.ical',
-                    descriptionFormat: 'html',
                     timezone: 'UTC'
                 },
                 data: {

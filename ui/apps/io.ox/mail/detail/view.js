@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /* global blankshield */
 
@@ -226,14 +226,18 @@ define('io.ox/mail/detail/view', [
             var sender = util.parseRecipients(data.headers.Sender);
             if (from[0] && from[0][1] === sender[0][1]) return;
 
+            // for deputies we display we switch order of from and header
+            var isDeputy = !!util.getDeputy(data);
             this.append(
                 $('<div class="sender">').append(
                     $('<span class="io-ox-label">').append(
                         //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
-                        $.txt(gt('Via')),
+                        $.txt(isDeputy ? gt('on behalf of') : gt('via')),
                         $.txt('\u00A0\u00A0')
                     ),
-                    $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
+                    isDeputy ?
+                        $('<span class="address">').text((from[0][0] || '') + ' <' + from[0][1] + '>') :
+                        $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
                 )
             );
         }

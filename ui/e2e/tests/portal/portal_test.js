@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -38,6 +38,7 @@ After(async function ({ users }) {
 Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
     // TODO: Need to add Appointment, latest file(upload?)
     const moment = require('moment');
+    const utcDiff = (moment().utcOffset()) / 60; // offset by X hours for api calls
     let testrailID = 'C7471';
     let testrailName = 'Open items via portal-tile';
     //Create Mail in Inbox
@@ -69,8 +70,7 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
         folder_id: await I.grabDefaultFolder('contacts', { user: users[0] }),
         first_name: testrailID,
         last_name: testrailID,
-        birthday: moment().add(2, 'days').valueOf()
-
+        birthday: moment().add(2, 'days').add(utcDiff, 'hours').valueOf()
     };
     await I.haveContact(contact, { user: users[0] });
     //Upload File to Infostore
@@ -86,11 +86,11 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
         description: testrailID,
         endDate: {
             tzid: 'Europe/Berlin',
-            value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: moment().add(4 + utcDiff, 'hours').format('YYYYMMDD[T]HHmm00')
         },
         startDate: {
             tzid: 'Europe/Berlin',
-            value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00')
+            value: moment().add(2 + utcDiff, 'hours').format('YYYYMMDD[T]HHmm00')
         }
     }, { user: users[0] });
 

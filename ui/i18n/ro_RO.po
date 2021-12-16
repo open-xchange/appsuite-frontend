@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:06+0100\n"
+"PO-Revision-Date: 2021-11-28 17:29+0200\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -315,7 +315,6 @@ msgstr "Niciun memento"
 msgid "Edit reminders"
 msgstr "Editează mementourile"
 
-#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -508,8 +507,8 @@ msgid "toggle password visibility"
 msgstr "comută vizibilitatea parolei"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Copiază în clipboard"
@@ -582,7 +581,6 @@ msgstr "Ajutor online: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -625,8 +623,8 @@ msgstr "Șterge"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
@@ -876,6 +874,16 @@ msgstr "Zoom: %1$d%"
 msgid "Zoom"
 msgstr "Mărire"
 
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate left"
+msgstr "Rotește la stânga"
+
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate right"
+msgstr "Rotește la dreapta"
+
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Remove photo"
 msgstr "Elimină fotografia"
@@ -883,6 +891,7 @@ msgstr "Elimină fotografia"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/deputy/dialog.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
 #: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
@@ -993,6 +1002,7 @@ msgstr "Interval"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -1053,9 +1063,9 @@ msgstr "Înainte"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/contacts/enterprisepicker/dialog.js apps/io.ox/core/desktop.js
+#: apps/io.ox/core/main/apps.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1562,9 +1572,10 @@ msgstr "Afișat ca"
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-#: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/api.js apps/io.ox/core/import/import.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
@@ -1644,7 +1655,8 @@ msgstr "Creează o întâlnire"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2060,12 +2072,36 @@ msgid "Add new participant"
 msgstr "Adaugă participant"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Actualizează întâlnirea"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Adaugă în calendar"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Acceptă propunerea"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Eliminați întâlnirea"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Respinge modificările"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignoră"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Solicitați o întâlnire"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Trimite o întâlnire"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2084,8 +2120,20 @@ msgid "The appointment has been updated"
 msgstr "Întâlnirea a fost actualizată"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Întâlnirea a fost adăugată"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Modificările au fost acceptate"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Întâlnirea a fost ștearsă"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Ați respins întâlnirea"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2094,10 +2142,6 @@ msgstr "Modificările au fost respinse"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Ați acceptat provizoriu întâlnirea"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Ați respins întâlnirea"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -2507,6 +2551,20 @@ msgid ""
 msgstr ""
 "Șterge automat mailul de invitație după ce întâlnirea a fost acceptată sau "
 "respinsă"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid ""
+"Automatically apply appointment changes received via email to your calendar"
+msgstr ""
+"Aplicați automat în calendar modificările de întâlniri primite prin e-mail"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Only from known senders"
+msgstr "Numai de la expeditori cunoscuți"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Always"
+msgstr "Întotdeauna"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Reminders"
@@ -3165,15 +3223,16 @@ msgstr "Seria nu se termină niciodată."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Niciuna"
 
@@ -3244,6 +3303,10 @@ msgstr "Întâlnirea conține participanți"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Appointment has attachments"
 msgstr "Întâlnirea conține atașamente"
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid "This appointment was cancelled."
+msgstr "Întâlnirea a fost anulată."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
@@ -3472,7 +3535,7 @@ msgid "A channel with the same name already exists"
 msgstr "Există deja un canal cu același nume"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Ceva nu a funcționat corect. Încercați din nou."
@@ -3909,6 +3972,11 @@ msgstr[2] "%1$d de membri"
 msgid "Join"
 msgstr "Participă"
 
+#. shown above a chat window when there are network issues
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Connection problems"
+msgstr "Probleme de conexiune"
+
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Acțiuni de chat"
@@ -4146,6 +4214,144 @@ msgstr "%1$s, %2$s, și %3$s tastează ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s și alții %3$d tastează ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Alăturați-vă întâlnirii Zoom"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Alăturați-vă întâlnirii Jitsi"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Alăturați-vă conferinței telefonice"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Întâlnire Zoom"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Întâlnire Jitsi"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Conferinţă"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Legătură:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Copiere în câmpul locație"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Întâlnire Jitsi: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Parola întâlnirii: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Acces rapid mobil (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "ID întâlnire: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Cod de acces prin apel: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Apelarea după locația dvs."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Mai întâi trebuie să conectați %1$s cu Zoom. Pentru a face acest lucru, "
+"aveți nevoie de un cont Zoom. Dacă nu aveți încă un cont, este suficient să "
+"creați unul gratuit."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Conectare la Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Se conectează la Zoom…"
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Copiază legătura la locație"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Copiază legătura în clipboard"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Copierea informațiilor de apel în descriere"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Întâlnirile de Zoom expiră după 365 de zile. Vă recomandăm să limitați seria "
+"la un an. Alternativ, puteți actualiza seria înainte de expirarea întâlnirii "
+"Zoom."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr ""
+"A apărut o problemă la încărcarea întâlnirii Zoom. Este posibil ca "
+"întâlnirea Zoom să fi expirat."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Creează o nouă întâlnire Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Serviciul de integrare Zoom nu este disponibil în prezent. Încercați din nou "
+"mai târziu."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Întâlnire nouă"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Contactele au fost mutate"
@@ -4283,6 +4489,7 @@ msgstr ""
 "limitare. Prin urmare, unele elemente nu sunt listate."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -4343,8 +4550,8 @@ msgid "Empty"
 msgstr "Gol"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/tk/tokenfield.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -5004,6 +5211,124 @@ msgstr ""
 msgid "This is an invalid email address."
 msgstr "Adresă de e-mail nevalidă."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Listele mele de adrese"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Liste de adrese publice"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Liste de adrese partajate"
+
+#. %1$d is number of selected contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "%1$d contact selected"
+msgid_plural "%1$d contacts selected"
+msgstr[0] "%1$d contact selectat"
+msgstr[1] "%1$d contacte selectate"
+msgstr[2] "%1$d de contacte selectate"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Remove contact from selection"
+msgstr "Eliminați contactul din selecție"
+
+#. %1$s name of the department a contact is working in
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "department %1$s"
+msgstr "departamentul de %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "posiția %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "adresă de e-mail %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "număr de telefon %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "camera %1$s"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Show contact details"
+msgstr "Afișează detaliile de contact"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Contact list"
+msgstr "Lista de contacte"
+
+#. This is followed by a list of contacts from the address book
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Last searched for"
+msgstr "Ultimii căutați"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "No contacts found."
+msgstr "Niciun contact găsit."
+
+#. %1$d is the limit of displayable contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid ""
+"You have reached the limit of %1$d contacts to display. Please enter a "
+"search term to narrow down your results."
+msgstr ""
+"Ați atins limita de %1$d de contacte de afișat. Vă rugăm să introduceți un "
+"termen de căutare pentru a restrânge rezultatele."
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Global address list"
+msgstr "Lista globală de adrese"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Search all address lists"
+msgstr "Căutați în toate listele de adrese"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Could not load contacts"
+msgstr "Nu s-a putut încărca contactele"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Search for name, department, position"
+msgstr "Căutare după nume, departament, poziție"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Filter"
+msgstr "Filtrează"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Filter address lists"
+msgstr "Filtrează listele de adrese"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Address list"
+msgstr "Listă de adrese"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Could not load address book."
+msgstr "Nu s-a putut încărca agenda."
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/find/view-facets.js module:io.ox/core
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Select"
+msgstr "Selectează"
+
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "S-au găsit un nume și o descriere vide."
@@ -5356,10 +5681,8 @@ msgid "User name"
 msgstr "Nume utilizator"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Utilizează parola"
+msgstr "Resetează parola"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5619,6 +5942,126 @@ msgstr "Închide funcționalitățile premium"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Încercați acum!"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
+msgid "Inbox"
+msgstr "Mesaje primite"
+
+#. Role: view folder + read all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Viewer"
+msgstr "Vizualizare"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
+#. Role: create folder + read/write/delete all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Author"
+msgstr "Autor"
+
+#. String that is used to describe permissions
+#. %1$s name of module (mail, calendar etc)
+#. %2$s the granted role (author, editor, viewer, none)
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Allowed to send emails on your behalf"
+msgstr "Autorizat să trimită e-mailuri în numele dvs."
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputy: %1$s"
+msgstr "Adjunct: %1$s"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "The deputy has the following permissions"
+msgstr "Adjunctul are următoarele permisiuni"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Viewer (read emails)"
+msgstr "Vizualizare (doar citire)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Editor (create/edit emails)"
+msgstr "Editare (creează/editează e-mailuri)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Author (create/edit/delete emails)"
+msgstr "Autor (creează/editează/șterge e-mailuri)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputy can send emails on your behalf"
+msgstr "Adjunctul poate trimite e-mailuri în numele dvs."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Viewer (view appointments)"
+msgstr "Vizualizare (vizualizare întâlniri)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Editor (create/edit appointments)"
+msgstr "Editare (creează/modifică întâlniri)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Author (create/edit/delete appointments)"
+msgstr "Autor (crează/modifică/șterge întâlniri)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not create deputy."
+msgstr "Adjunctul nu a putut fi creat."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not update deputy permissions."
+msgstr "Permisiunile adjunctului nu au putut fi actualizate."
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Remove deputy %1$s"
+msgstr "Elimină adjunctul %1$s"
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Doriți să eliminați pe %1$s din lista dumneavoastră de adjuncți?"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not remove deputy."
+msgstr "Adjunctul nu a putut fi eliminat."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "You have currently no deputies assigned."
+msgstr "În prezent nu aveți niciun adjunct desemnat."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputies can get acces to your Inbox and Calendar."
+msgstr "Adjuncții pot avea acces la inboxul și la calendarul dvs"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
+msgid "Manage deputies"
+msgstr "Gestionează adjuncți"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Add people"
+msgstr "Adaugă persoane"
+
+#. Generic error message when something when wrong on the server while fetching data about your deputies
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not load deputy data."
+msgstr "Nu s-au putut încărca datele despre adjuncți."
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
@@ -6322,7 +6765,6 @@ msgstr "Acțiuni pentru %1$s"
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Ok"
 
@@ -6335,6 +6777,10 @@ msgstr "Selectează dosarul"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Creează dosar"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Nu se poate selecta acest dosar."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -6471,6 +6917,10 @@ msgid "Skip to main content"
 msgstr "Treceți la conținutul principal"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Address directory"
+msgstr "Director de adrese"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
@@ -6480,10 +6930,14 @@ msgstr "Reactualizează"
 msgid "Currently refreshing"
 msgstr "Actualizare în curs"
 
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/accounts/settings.js apps/io.ox/mail/invitations/register.js
+#: module:io.ox/mail apps/io.ox/mail/settings/pane.js
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Mail"
@@ -6527,11 +6981,6 @@ msgstr "Chat"
 msgctxt "app"
 msgid "Notes"
 msgstr "Notițe"
-
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
@@ -6806,13 +7255,6 @@ msgstr "Aveți notificări noi"
 msgid "Guest"
 msgstr "Invitat"
 
-#. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permission-pre-selection.js
-#: apps/io.ox/files/share/permissions.js
-msgid "Author"
-msgstr "Autor"
-
 #. Role: all permissions
 #. object permissions - admin role
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -6914,7 +7356,6 @@ msgid "The user has administrative rights"
 msgstr "Utilizatorul are drepturi de administrare"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Aplică pentru toate dosarele subordonate"
 
@@ -7395,14 +7836,17 @@ msgstr ""
 "extern. Modificările făcute în cadrul appsuite vor fi suprascrise"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
 msgstr "Dezactivează"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable"
 msgstr "Activează"
 
@@ -8405,6 +8849,11 @@ msgstr "Introduceți titlul documentului aici"
 msgid "Note"
 msgstr "Notiță"
 
+#. This is a placeholder for macOS. Keep in line with local mac keyboard layout
+#: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "You can quick-save your changes via Cmd+Enter."
+msgstr "Puteți să salvați modificările rapid apăsând pe Cmd+Enter."
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Puteți să salvați modificările rapid apăsând pe Ctrl+Enter."
@@ -8706,6 +9155,11 @@ msgstr "Șterge elementul"
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "Elementele fără niciun fișier nu pot fi descărcate."
+
+#. %1$d: max number of characters
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+msgid "File description can only be %1$d characters long."
+msgstr "Descrierea fișierului poate avea doar %1$d caractere."
 
 #: apps/io.ox/files/actions/restore.js module:io.ox/files
 msgid ""
@@ -9164,12 +9618,6 @@ msgstr "Utilizatori interni"
 msgid "Reviewer"
 msgstr "Analiză"
 
-#. Role: view folder + read all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Viewer"
-msgstr "Vizualizare"
-
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
@@ -9197,6 +9645,11 @@ msgstr "Utilizator intern"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Grup"
+
+#. description in the permission dialog to indicate that this user can act on your behalf (send mails, check calendar for you, etc)
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Deputy"
+msgstr "Adjunct"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Guests are only allowed to have viewer rights."
@@ -9512,15 +9965,6 @@ msgstr "Confirmare"
 msgid "Adjust"
 msgstr "Ajustează"
 
-#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/find/view-facets.js module:io.ox/core
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Select"
-msgstr "Selectează"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -9716,6 +10160,14 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Folosește mesageria unificată pentru acest cont"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Open %1$s in %2$s"
+msgstr "Deschide cu %1$s"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
@@ -10024,16 +10476,23 @@ msgstr ""
 "pentru publicarea de fișiere atașate de %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, fuzzy
-#| msgid ""
-#| "The attachment cannot be uploaded because it exceeds the infostore quota "
-#| "limit of %2$s"
 msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
+"The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
 "Atașamentul nu poate fi încărcat deoarece depășește limita cotei infostore "
 "de %2$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+msgstr "Atașamentul încărcat depășește dimensiunea maximă a e-mailului de %1$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file cannot be uploaded because it exceeds the maximum email size of %1$s"
+msgstr ""
+"Fișierul nu poate fi încărcat deoarece depășește dimensiunea maximă a e-"
+"mailului de %1$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10416,6 +10875,15 @@ msgid "Add subject"
 msgstr "Adaugă subiect"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid ""
+"This sender address is related to a disabled mail account. Please choose "
+"another sender address or visit settings to enable again."
+msgstr ""
+"Această adresă de expeditor este legată de un cont de e-mail dezactivat. Vă "
+"rugăm să alegeți o altă adresă de expeditor sau să vizitați setările pentru "
+"a o activa din nou."
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
 msgstr "eroare"
 
@@ -10491,6 +10959,10 @@ msgid "Added %s to attachments."
 msgstr "S-au adăugat următoarele fișiere atașate: %s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "În numele proprietarului"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Afișează numele"
 
@@ -10502,6 +10974,13 @@ msgstr "Editează numele"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Compune un mesaj nou"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Acest email a fost trimis de %1$s în numele lui %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10568,6 +11047,10 @@ msgstr "Selectați un fișier imagine corect de inserat"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Trimis de pe %s utilizând un mobil"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Acest e-mail a fost trimis în numele unei alte persoane."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -10953,6 +11436,16 @@ msgstr "Mesaj de la %1$s: %2$s"
 msgid "Via"
 msgstr "Via"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "în numele proprietarului"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "prin"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
 msgstr "Conținut mesaj"
@@ -11086,9 +11579,7 @@ msgid "Edit rule"
 msgstr "Editează regula"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Save and apply rule now"
-msgid "Save and apply"
+msgid "Save and apply rule now"
 msgstr "Salvează și aplică regula acum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -11117,10 +11608,13 @@ msgid "Drag to reorder filter rules"
 msgstr "Glisați pentru a reordona regulile de filtrare"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Please select the folder to apply the rule to"
-msgid "Select the folder to apply the rule to"
+msgid "Please select the folder to apply the rule to"
 msgstr "Selectați dosarul la care se va aplica această regula"
+
+#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Apply filter rule"
+msgstr "Aplicați regula de filtrare"
 
 #. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -12155,12 +12649,6 @@ msgstr "Vertical"
 msgid "Horizontal"
 msgstr "Orizontal"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
-#: module:io.ox/portal apps/plugins/portal/mail/register.js
-#: module:plugins/portal
-msgid "Inbox"
-msgstr "Mesaje primite"
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Utilizează categoriile"
@@ -12696,13 +13184,6 @@ msgstr "Contul meu %1$s (%2$d)"
 msgid "Reauthorize"
 msgstr "Autorizează din nou"
 
-#. link title for related accounts into the corresponding folder
-#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
-#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Open %1$s in %2$s"
-msgstr "Deschide cu %1$s"
-
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Account Name"
 msgstr "Nume cont"
@@ -12989,6 +13470,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "Aplicația OX Sync"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -13324,6 +13809,7 @@ msgid "Disable %1$s"
 msgstr "Dezactivează %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable %1$s"
 msgstr "Activează %1$s"
 
@@ -13848,11 +14334,6 @@ msgstr "Detalii certificat"
 msgid "Trust certificate"
 msgstr "Certificatul este de încredere"
 
-#. 'Sign out from device' as header of a modal dialog to sign out of a session.
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Sign out from device"
-msgstr "Deconectare dispozitiv"
-
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Linux"
@@ -13963,6 +14444,10 @@ msgid "Do you really want to sign out from all clients except the current one?"
 msgstr ""
 "Sigur doriți să vă deconectați de la toți clienții, cu excepția celui curent?"
 
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from device"
+msgstr "Deconectare dispozitiv"
+
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
@@ -14063,29 +14548,6 @@ msgid "Call via Jitsi"
 msgstr "Apel prin Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Alăturați-vă întâlnirii Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Alăturați-vă întâlnirii Jitsi"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Alăturați-vă conferinței telefonice"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Întâlnire Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Întâlnire Jitsi"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Integrare Zoom"
@@ -14156,23 +14618,6 @@ msgid "Open Zoom profile"
 msgstr "Deschide profilul de Zoom"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Mai întâi trebuie să conectați %1$s cu Zoom. Pentru a face acest lucru, "
-"aveți nevoie de un cont Zoom. Dacă nu aveți încă un cont, este suficient să "
-"creați unul gratuit."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Conectare la Zoom"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Ați conectat următorul cont de Zoom:"
 
@@ -14183,15 +14628,6 @@ msgstr "ID întâlnire personală:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Elimină profilul"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Serviciul de integrare Zoom nu este disponibil în prezent. Încercați din nou "
-"mai târziu."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14222,99 +14658,6 @@ msgstr "Apel răspuns de la %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Ați sunat pe %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Conferinţă"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Legătură:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Copiere în câmpul locație"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Întâlnire Jitsi: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Se conectează la Zoom…"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Zoom Meeting: %1$s"
-msgstr "Întâlnire Zoom: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Parola întâlnirii: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Acces rapid mobil (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "ID întâlnire: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Cod de acces prin apel: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Apelarea după locația dvs."
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Copiază legătura la locație"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Copiază legătura în clipboard"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Copierea informațiilor de apel în descriere"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Întâlnirile de Zoom expiră după 365 de zile. Vă recomandăm să limitați seria "
-"la un an. Alternativ, puteți actualiza seria înainte de expirarea întâlnirii "
-"Zoom."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr ""
-"A apărut o problemă la încărcarea întâlnirii Zoom. Este posibil ca "
-"întâlnirea Zoom să fi expirat."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Creează o nouă întâlnire Zoom"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Întâlnire nouă"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -16036,190 +16379,17 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
-#~ msgid "Rotate left"
-#~ msgstr "Rotește la stânga"
-
-#~ msgid "Rotate right"
-#~ msgstr "Rotește la dreapta"
-
-#~ msgid ""
-#~ "Automatically apply appointment changes received via email to your "
-#~ "calendar"
-#~ msgstr ""
-#~ "Aplicați automat în calendar modificările de întâlniri primite prin e-mail"
-
-#~ msgid "Only from known senders"
-#~ msgstr "Numai de la expeditori cunoscuți"
-
-#~ msgid "Always"
-#~ msgstr "Întotdeauna"
-
-#~ msgid "This appointment was cancelled."
-#~ msgstr "Întâlnirea a fost anulată."
-
-#~ msgid "Connection problems"
-#~ msgstr "Probleme de conexiune"
-
-#~ msgid "%1$d contact selected"
-#~ msgid_plural "%1$d contacts selected"
-#~ msgstr[0] "%1$d contact selectat"
-#~ msgstr[1] "%1$d contacte selectate"
-#~ msgstr[2] "%1$d de contacte selectate"
-
-#~ msgid "Remove contact from selection"
-#~ msgstr "Eliminați contactul din selecție"
+#~ msgid "save"
+#~ msgstr "salvează"
 
 #~ msgid "Select/Deselect contact %1$s"
 #~ msgstr "Selectează/deselectează contactul %1$s"
 
-#~ msgid "Show contact details"
-#~ msgstr "Afișează detaliile de contact"
-
-#~ msgid "Contact list"
-#~ msgstr "Lista de contacte"
-
-#~ msgid "Last searched for"
-#~ msgstr "Ultimii căutați"
-
-#~ msgid "No contacts found."
-#~ msgstr "Niciun contact găsit."
-
-#~ msgid ""
-#~ "You have reached the limit of %1$d contacts to display. Please enter a "
-#~ "search term to narrow down your results."
-#~ msgstr ""
-#~ "Ați atins limita de %1$d de contacte de afișat. Vă rugăm să introduceți "
-#~ "un termen de căutare pentru a restrânge rezultatele."
-
-#~ msgid "Global address list"
-#~ msgstr "Lista globală de adrese"
-
-#~ msgid "Search all address lists"
-#~ msgstr "Căutați în toate listele de adrese"
-
-#~ msgid "Could not load contacts"
-#~ msgstr "Nu s-a putut încărca contactele"
-
-#~ msgid "Search for name, department, position"
-#~ msgstr "Căutare după nume, departament, poziție"
-
-#~ msgid "Filter"
-#~ msgstr "Filtrează"
-
-#~ msgid "Filter address lists"
-#~ msgstr "Filtrează listele de adrese"
-
-#~ msgid "Address list"
-#~ msgstr "Listă de adrese"
-
-#~ msgid "Could not load address book."
-#~ msgstr "Nu s-a putut încărca agenda."
-
 #~ msgid "Confirm new Password"
 #~ msgstr "Confirmați parola nouă"
 
-#~ msgid "%1$s (%2$s)"
-#~ msgstr "%1$s (%2$s)"
-
-#~ msgid "Allowed to send emails on your behalf"
-#~ msgstr "Autorizat să trimită e-mailuri în numele dvs."
-
-#~ msgid "Deputy: %1$s"
-#~ msgstr "Adjunct: %1$s"
-
-#~ msgid "The deputy has the following permissions"
-#~ msgstr "Adjunctul are următoarele permisiuni"
-
-#~ msgid "Viewer (read emails)"
-#~ msgstr "Vizualizare (doar citire)"
-
-#~ msgid "Editor (create/edit emails)"
-#~ msgstr "Editare (creează/editează e-mailuri)"
-
-#~ msgid "Author (create/edit/delete emails)"
-#~ msgstr "Autor (creează/editează/șterge e-mailuri)"
-
-#~ msgid "Deputy can send emails on your behalf"
-#~ msgstr "Adjunctul poate trimite e-mailuri în numele dvs."
-
-#~ msgid "Viewer (view appointments)"
-#~ msgstr "Vizualizare (vizualizare întâlniri)"
-
-#~ msgid "Editor (create/edit appointments)"
-#~ msgstr "Editare (creează/modifică întâlniri)"
-
-#~ msgid "Author (create/edit/delete appointments)"
-#~ msgstr "Autor (crează/modifică/șterge întâlniri)"
-
-#~ msgid "save"
-#~ msgstr "salvează"
-
-#~ msgid "Could not create deputy."
-#~ msgstr "Adjunctul nu a putut fi creat."
-
-#~ msgid "Could not update deputy permissions."
-#~ msgstr "Permisiunile adjunctului nu au putut fi actualizate."
-
-#~ msgid "Remove deputy %1$s"
-#~ msgstr "Elimină adjunctul %1$s"
-
-#~ msgid "Do you want to remove %1$s from your deputy list"
-#~ msgstr "Doriți să eliminați %1$s din lista dumneavoastră de adjuncți?"
-
-#~ msgid "Could not remove deputy."
-#~ msgstr "Adjunctul nu a putut fi eliminat."
-
-#~ msgid "You have currently no deputies assigned."
-#~ msgstr "În prezent nu aveți niciun adjunct desemnat."
-
-#~ msgid "Deputies can get acces to your Inbox and Calendar."
-#~ msgstr "Adjuncții pot avea acces la inboxul și la calendarul dvs"
-
 #~ msgid "Remobe"
 #~ msgstr "Elimină"
-
-#~ msgid "Manage deputies"
-#~ msgstr "Gestionează adjuncți"
-
-#~ msgid "Add people"
-#~ msgstr "Adaugă persoane"
-
-#~ msgid "Could not load deputy data."
-#~ msgstr "Nu s-au putut încărca datele despre adjuncți."
-
-#~ msgid "Address directory"
-#~ msgstr "Director de adrese"
-
-#~ msgid "You can quick-save your changes via Cmd+Enter."
-#~ msgstr "Puteți să salvați modificările rapid apăsând pe Cmd+Enter."
-
-#~ msgid "File description can only be %1$d characters long."
-#~ msgstr "Descrierea fișierului poate avea doar %1$d caractere."
-
-#~ msgid "Deputy"
-#~ msgstr "Adjunct"
-
-#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
-#~ msgstr ""
-#~ "Atașamentul încărcat depășește dimensiunea maximă a e-mailului de %1$s"
-
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the maximum email size of "
-#~ "%1$s"
-#~ msgstr ""
-#~ "Fișierul nu poate fi încărcat deoarece depășește dimensiunea maximă a e-"
-#~ "mailului de %1$s"
-
-#~ msgid ""
-#~ "This sender address is related to a disabled mail account. Please choose "
-#~ "another sender address or visit settings to enable again."
-#~ msgstr ""
-#~ "Această adresă de expeditor este legată de un cont de e-mail dezactivat. "
-#~ "Vă rugăm să alegeți o altă adresă de expeditor sau să vizitați setările "
-#~ "pentru a o activa din nou."
-
-#~ msgid "Apply filter rule"
-#~ msgstr "Aplicați regula de filtrare"
 
 #~ msgid "Password recovery"
 #~ msgstr "Recuperare parolă"
@@ -16241,6 +16411,9 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Recover passwords"
 #~ msgstr "Recuperează parolele"
+
+#~ msgid "Zoom Meeting: %1$s"
+#~ msgstr "Întâlnire Zoom: %1$s"
 
 #~ msgid "Please set password"
 #~ msgstr "Setați parola"
@@ -18330,9 +18503,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Country:"
 #~ msgstr "Țară:"
-
-#~ msgid "Create Appointment"
-#~ msgstr "Creează o întâlnire"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Creează un cont %s pe baza datelor stocate aici"
@@ -20776,9 +20946,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "Never."
 #~ msgstr "Niciodată."
 
-#~ msgid "New Appointment"
-#~ msgstr "Întâlnire nouă"
-
 #~ msgid "New Caledonia"
 #~ msgstr "Noua Caledonie"
 
@@ -21329,9 +21496,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Phone alt"
 #~ msgstr "Număr de telefon alternativ"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Numere de telefon"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefon:"
@@ -23454,12 +23618,6 @@ msgstr "Adaugă pe %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Acest e-mail conține o legătură către o publicație."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Mesajul a fost adăugat la portal"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Acest mesaj a fost trimis de %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Această operație poate să dureze câteva secunde"
 
@@ -25071,9 +25229,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "vacation"
 #~ msgstr "absență"
-
-#~ msgid "via"
-#~ msgstr "prin"
 
 #~ msgid "waiting"
 #~ msgstr "în așteptare"

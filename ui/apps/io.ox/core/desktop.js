@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /* global assert: true */
 
@@ -992,7 +992,6 @@ define('io.ox/core/desktop', [
         getCurrentFloatingApp: function () {
             return _.chain(ox.ui.apps.pluck('window')).compact()
                 .map(function (win) {
-                    if (win.app.get('name') === 'io.ox/help') return undefined;
                     return win.floating && win.floating.model && win.floating.model.get('active') ? win.app : undefined;
                 }).compact().first().value();
         },
@@ -1804,14 +1803,14 @@ define('io.ox/core/desktop', [
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search'),
                                     'id': baton.data.id
-                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
+                                }).append($.icon('fa-search'))
                                 .tooltip(),
                             // cancel/reset
                             $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Cancel search'),
                                     'aria-label': gt('Cancel search')
-                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
+                                }).append($.icon('fa-times-circle'))
                                 .tooltip()
                         );
                     }

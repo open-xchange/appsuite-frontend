@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -109,6 +109,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
         I.clickDropdown('Group chat');
         chat.fillNewGroupForm(groupTitle, emails);
         I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         chat.sendMessage('Second message');
         chat.sendMessage('Third message');
@@ -120,6 +121,7 @@ Scenario('Increasing unreadCounter that gets reset on opening the chats', async 
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitle);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('First message');
     });
 
@@ -198,6 +200,7 @@ Scenario('Check layouts: compact, standard and detailed', async ({ I, users, con
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('Hey group!');
     chat.sendMessage('Second message');
     chat.sendMessage('Third message');
@@ -209,13 +212,15 @@ Scenario('Check layouts: compact, standard and detailed', async ({ I, users, con
     I.clickDropdown('Channel');
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
+
     chat.sendMessage('First message');
 
     // open settings
     I.click('~Settings');
     I.clickDropdown('Settings');
     I.waitForElement('.folder.virtual.open[data-model="virtual/settings/main"]');
-    I.click({ css: 'li[data-id="virtual/settings/chat"]' });
+    I.click({ css: 'li[data-id="virtual/settings/io.ox/chat"]' });
     I.waitForText('View options', 3, '.scrollable-pane');
 
     // check density 'Compact'

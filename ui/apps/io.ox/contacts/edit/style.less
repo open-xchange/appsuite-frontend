@@ -20,7 +20,7 @@
 *
 */
 
-@size: 120px;
+@size: 7.5rem;
 
 .contact-edit {
 
@@ -45,7 +45,7 @@
     }
 
     input, select {
-        height: 32px;
+        height: 2rem;
     }
 
     textarea {
@@ -66,7 +66,7 @@
     .fileupload[data-add] button
      {
         color: #555;
-        height: 32px;
+        min-height: 32px;
         .fa-plus-circle {
             color: #4b7916;
             font-size: 20px;
@@ -90,6 +90,12 @@
                 color: #333;
             }
         }
+    }
+
+    // more space for the day field etc
+    .native-date-picker div {
+        &:first-child { padding-right: 8px; }
+        &:last-child { padding-left: 8px; }
     }
 }
 
@@ -133,8 +139,8 @@
     button.remove {
         font-size: 18px;
         position: absolute;
-        bottom: -4px;
-        right: @size + 4px;
+        bottom: -0.25rem;
+        right: @size + 0.25rem;
         outline: 0;
     }
 

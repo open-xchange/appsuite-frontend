@@ -1,0 +1,221 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2021 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+
+ .io-ox-contacts-enterprisepicker-window {
+    height: 660px;
+    width: 60rem;
+    .window-content {
+        display: flex;
+        flex-direction: column;
+        .enterprise-picker-body {
+            padding: 16px;
+            min-height: 60px;
+            overflow-y: auto;
+            height: auto;
+         }
+         .enterprise-picker-header {
+            padding: 16px;
+             .top-bar {
+                margin-top: 8px;
+            }
+         }
+    }
+ }
+
+ // a bit specific but we want to overrule the default style without !important
+ .modal.flex.enterprise-picker .modal-dialog, .io-ox-contacts-enterprisepicker-window {
+    width: 60rem;
+
+    // keep footer at the bottom when body is hidden (busy spinner)
+    .modal-content {
+        justify-content: space-between;
+    }
+
+    .modal-content, .enterprise-picker-body {
+        height: 660px;
+
+        &.io-ox-busy .contact-list-view {
+            display: none;
+        }
+        .error {
+            font-size: 1rem;
+            height: 100%;
+            display: flex;
+            color: #767676;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .limit-warning {
+            margin: 4px 12px 0px 12px;
+        }
+
+        .contact-list-view:focus-within li.active-descendant {
+            background-color: #e6e6e6;
+        }
+    }
+
+    .modal-header, .enterprise-picker-header {
+        border-bottom: 1px solid #e5e5e5;
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+
+            label {
+                width: 32%;
+
+                .input-group {
+                    border: 1px solid #cccccc;
+                    border-radius: 3px;
+
+                    input {
+                        border: 0;
+                        box-shadow: none;
+                        padding-right: 4px;
+                    }
+                    .input-group-addon {
+                        border: 0;
+                        color: #767676;
+                        background: transparent;
+                    }
+                }
+            }
+
+            option.hidden {
+                display: none;
+            }
+            select option[value="sectionHeader"] {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .modal-body .contact-list-view li, .enterprise-picker-body .contact-list-view li {
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+
+        .contact-picture {
+            height: 40px;
+            min-width: 40px;
+            margin-right: 16px;
+            border-radius: 50%;
+            background-size: cover;
+            background-color: #eee;
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
+            font-size: 14px;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .multi-item-container {
+            display: flex;
+            align-items: center;
+
+            &.details-container {
+                justify-content: space-between;
+            }
+        }
+
+        // to group things together
+        .flex-container {
+            width: 32%;
+
+            .fa-checkmark {
+                height: 18px;
+                margin: 0 16px 0 0 ;
+            }
+        }
+
+        &[aria-selected="true"] .fa-checkmark {
+            color: #284171;
+            .checkbox { display: none; }
+        }
+        &[aria-selected="false"] .fa-checkmark {
+            color: #767676;
+            .checkmark { display: none; }
+        }
+
+        // so we can have 2 rows
+        .data-container {
+            overflow: hidden;
+            // empty fields should still take up space, to keep the layout consistent
+            div {
+                min-height: 20px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .show-details {
+            color: #767676;
+
+            &:hover, &:focus-within {
+                color:#000
+            }
+        }
+        .btn-link svg {
+            margin-top: 5px;
+            height: 20px;
+        }
+    }
+
+    .selected-contacts-view {
+        border-top: 1px solid #e5e5e5;
+        text-align: left;
+        max-height: 150px;
+        padding: 16px 0 16px 16px;
+
+        ul {
+            overflow-y: auto;
+            max-height: 97px;
+            margin-bottom: 0px;
+        }
+
+        &.empty {
+            display: none;
+        }
+
+        li {
+            background: #e6e6e6;
+            display: inline-block;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        .name {
+            display:inline;
+            vertical-align: middle;
+            padding: 0 4px;
+        }
+
+        button {
+            background: #e6e6e6;
+            width: 24px;
+            padding: 2px 0 0 0;
+            height: 24px;
+            border-radius: 4px;
+        }
+    }
+ }

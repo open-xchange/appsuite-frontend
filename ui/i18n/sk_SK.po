@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:07+0100\n"
+"PO-Revision-Date: 2021-11-24 14:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Virtaal 0.7.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -315,7 +315,6 @@ msgstr "Bez pripomenutia"
 msgid "Edit reminders"
 msgstr "Upraviť pripomienky"
 
-#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/backbone/mini-views/alarms.js module:io.ox/calendar
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
@@ -508,8 +507,8 @@ msgid "toggle password visibility"
 msgstr "prepnúť viditeľnosť hesla"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Skopírovať do schránky"
@@ -582,7 +581,6 @@ msgstr "Online pomocník: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -625,8 +623,8 @@ msgstr "Zmazať"
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/main.js apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
+#: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
@@ -878,6 +876,16 @@ msgstr "Priblíženie: %1$d%"
 msgid "Zoom"
 msgstr "Priblížiť"
 
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate left"
+msgstr "Otočiť doľava"
+
+#. button to rotate a contact image
+#: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
+msgid "Rotate right"
+msgstr "Otočiť doprava"
+
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
 msgid "Remove photo"
 msgstr "Odstrániť fotku"
@@ -885,6 +893,7 @@ msgstr "Odstrániť fotku"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/backbone/views/window.js apps/io.ox/calendar/freetime/main.js
 #: module:io.ox/calendar apps/io.ox/core/about/about.js
+#: apps/io.ox/core/deputy/dialog.js
 #: apps/io.ox/core/folder/actions/properties.js apps/io.ox/core/folder/tree.js
 #: apps/io.ox/core/main.js apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/tk/dialogs.js apps/io.ox/core/tk/wizard.js
@@ -995,6 +1004,7 @@ msgstr "Interval"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/core/notifications.js module:io.ox/core
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 #: apps/io.ox/mail/compose/sharing.js module:io.ox/mail
@@ -1055,9 +1065,9 @@ msgstr "Pred"
 
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js apps/io.ox/core/main/apps.js
-#: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
-#: apps/io.ox/find/view-tokenfield.js
+#: apps/io.ox/contacts/enterprisepicker/dialog.js apps/io.ox/core/desktop.js
+#: apps/io.ox/core/main/apps.js apps/io.ox/find/extensions-facets.js
+#: apps/io.ox/find/main.js apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
 #: module:io.ox/search apps/plugins/portal/flickr/register.js
 #: module:plugins/portal
@@ -1563,9 +1573,10 @@ msgstr "Zobraziť ako"
 #. Context: Session Management. Refers to the macos calendar
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/core/folder/api.js module:io.ox/core
-#: apps/io.ox/core/import/import.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/api.js apps/io.ox/core/import/import.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/personalData/settings/pane.js
 #: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Calendar"
@@ -1645,7 +1656,8 @@ msgstr "Vytvoriť schôdzku"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2061,12 +2073,36 @@ msgid "Add new participant"
 msgstr "Pridať nového účastníka"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Aktualizovať schôdzku"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Pridať do kalendára"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Prijať návrh"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Odstrániť schôdzku"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Odmietnuť zmeny"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorovať"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Požiadať o schôdzku"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Poslať schôdzku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2085,8 +2121,20 @@ msgid "The appointment has been updated"
 msgstr "Schôdzka bola aktualizovaná"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Schôdzka bola pridaná"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Zmeny boli prijaté"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Narodeninová schôdzka bola zmazaná"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Odmietli ste schôdzku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2095,10 +2143,6 @@ msgstr "Zmeny boli zamietnuté"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Schôdzku ste nezáväzne prijali"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Odmietli ste schôdzku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -2504,6 +2548,20 @@ msgid ""
 "accepted or declined"
 msgstr ""
 "Automaticky odstrániť email oznámenia po prijatí alebo odmietnutí schôdzky"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid ""
+"Automatically apply appointment changes received via email to your calendar"
+msgstr ""
+"Automaticky aplikovať zmeny schôdzok prijaté emailom do vášho kalendára"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Only from known senders"
+msgstr "Iba od známych odosielateľov"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Always"
+msgstr "Vždy"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Reminders"
@@ -3162,15 +3220,16 @@ msgstr "Táto séria nikdy nekončí."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js module:io.ox/core
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/view-options.js
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Žiadne"
 
@@ -3240,6 +3299,10 @@ msgstr "Schôdzka má účastníkov"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Appointment has attachments"
 msgstr "Schôdzka má prílohy"
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid "This appointment was cancelled."
+msgstr "Táto schôdzka bola zrušená."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid ""
@@ -3467,7 +3530,7 @@ msgid "A channel with the same name already exists"
 msgstr "Kanál s rovnakým názvom už existuje"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Niečo sa pokazilo. Prosím, skúste to znova."
@@ -3904,6 +3967,11 @@ msgstr[2] "%1$d členov"
 msgid "Join"
 msgstr "Pripojiť sa"
 
+#. shown above a chat window when there are network issues
+#: apps/io.ox/chat/views/chat.js module:io.ox/chat
+msgid "Connection problems"
+msgstr "Problém s pripojením"
+
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
 msgid "Chat actions"
 msgstr "Možnosti konverzácie"
@@ -4141,6 +4209,143 @@ msgstr "%1$s, %2$s a %3$s píšu..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s a %3$d ďalších píše..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Pridať sa do stretnutia Zoom"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Pridať sa do stretnutia Jitsi"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Pridať sa do konferenčného hovoru"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Stretnutie Zoom"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Stretnutie Jitsi"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Konferenčný hovor"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Odkaz:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Skopírovať do poľa umiestnenie"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Stretnutie Jitsi: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Heslo stretnutia: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Mobil jedným kliknutím (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "ID stretnutia: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Heslo na telefonické pripojenie: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Pripojiť sa telefonicky podľa toho, kde sa nachádzate"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Najprv je potrebné pripojiť %1$s pomocou Zoom. Potrebujete na to účet Zoom. "
+"Ak ešte nemáte účet, stačí si vytvoriť bezplatný."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Pripojiť Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Prebieha pripojenie k Zoom ..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Skopírovať odkaz do umiestnenia"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Skopírovať odkaz do schránky"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Skopírovať informácie o pripojení do popisu"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Platnosť stretnutí Zoom vyprší po 365 dňoch. Odporúčame sériu obmedziť na "
+"jeden rok. Alternatívne môžete sériu aktualizovať pred vypršaním platnosti "
+"schôdzky Zoom."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr ""
+"Pri načítavaní schôdzky Zoom sa vyskytol problém. Je možné, že platnosť "
+"stretnutia Zoom vypršala."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Vytvoriť nové stretnutie Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Služba na integráciu so Zoom je momentálne nedostupná. Prosím, skúste to "
+"neskôr znova."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Nové stretnutie"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakty boli presunuté"
@@ -4278,6 +4483,7 @@ msgstr ""
 "toto obmedzenie. Preto niektoré položky nie sú uvedené."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -4338,8 +4544,8 @@ msgid "Empty"
 msgstr "Prázdne"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/tk/tokenfield.js apps/io.ox/files/share/permissions.js
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -4998,6 +5204,124 @@ msgstr "Táto hodnota je príliš dlhá. Povolená dĺžka je %1$d znakov."
 msgid "This is an invalid email address."
 msgstr "Toto nie je platná emailová adresa"
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Moje adresáre kontaktov"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Verejné adresáre kontaktov"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Zdieľané adresáre kontaktov"
+
+#. %1$d is number of selected contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "%1$d contact selected"
+msgid_plural "%1$d contacts selected"
+msgstr[0] "%1$d kontakt vybraný"
+msgstr[1] "%1$d kontakty vybrané"
+msgstr[2] "%1$d kontaktov vybraných"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Remove contact from selection"
+msgstr "Odstrániť kontakt z výberu"
+
+#. %1$s name of the department a contact is working in
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "department %1$s"
+msgstr "oddelenie %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "pozícia %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "emailová adresa %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "telefónne číslo %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "miestnosť %1$s"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Show contact details"
+msgstr "Zobraziť podrobnosti kontaktu"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Contact list"
+msgstr "Zoznam kontaktov"
+
+#. This is followed by a list of contacts from the address book
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Last searched for"
+msgstr "Posledné vyhľadávanie"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "No contacts found."
+msgstr "Neboli nájdené žiadne kontakty."
+
+#. %1$d is the limit of displayable contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid ""
+"You have reached the limit of %1$d contacts to display. Please enter a "
+"search term to narrow down your results."
+msgstr ""
+"Dosiahli ste limit %1$d zobrazených kontaktov. Prosím, zadajte vyhľadávací "
+"termín, aby ste zmenšili počet výsledkov."
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Global address list"
+msgstr "Globálny adresár"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Search all address lists"
+msgstr "Vyhľadávať vo všetkých adresároch"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Could not load contacts"
+msgstr "Nepodarilo sa načítať kontakty"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Search for name, department, position"
+msgstr "Hľadať meno, oddelenie, pozíciu"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Filter"
+msgstr "Filtrovať"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Filter address lists"
+msgstr "Filtrovať zoznamy adries"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Address list"
+msgstr "Zoznam adries"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Could not load address book."
+msgstr "Nepodarilo sa načítať adresár."
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#: apps/io.ox/find/view-facets.js module:io.ox/core
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Select"
+msgstr "Vybrať"
+
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "Nájdený prázdny názov a popis."
@@ -5350,10 +5674,8 @@ msgid "User name"
 msgstr "Meno používateľa"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Použiť heslo"
+msgstr "Obnoviť heslo"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5610,6 +5932,127 @@ msgstr "Zatvoriť prémiové funkcie"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Vyskúšať teraz!"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
+#: module:io.ox/portal apps/plugins/portal/mail/register.js
+#: module:plugins/portal
+msgid "Inbox"
+msgstr "Prijaté"
+
+#. Role: view folder + read all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Viewer"
+msgstr "Prehliadač"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/main/apps.js apps/io.ox/editor/main.js module:io.ox/editor
+#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+msgid "Editor"
+msgstr "Editor"
+
+#. Role: create folder + read/write/delete all
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
+#: apps/io.ox/files/share/permission-pre-selection.js
+#: apps/io.ox/files/share/permissions.js
+msgid "Author"
+msgstr "Autor"
+
+#. String that is used to describe permissions
+#. %1$s name of module (mail, calendar etc)
+#. %2$s the granted role (author, editor, viewer, none)
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Allowed to send emails on your behalf"
+msgstr "Má povolené posielať emaily vo vašom mene"
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputy: %1$s"
+msgstr "Zástupca: %1$s"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "The deputy has the following permissions"
+msgstr "Zástupca má nasledovné oprávnenia"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Viewer (read emails)"
+msgstr "Prehliadanie (môže čítať emaily)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Editor (create/edit emails)"
+msgstr "Úprava (môže vytvárať/upravovať emaily)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Author (create/edit/delete emails)"
+msgstr "Autor (môže vytvárať/upravovať/mazať emaily)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputy can send emails on your behalf"
+msgstr "Zástupca má povolené posielať emaily vo vašom mene"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Viewer (view appointments)"
+msgstr "Prehliadanie (môže čítať schôdzky)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Editor (create/edit appointments)"
+msgstr "Úprava (môže vytvárať/upravovať schôdzky)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Author (create/edit/delete appointments)"
+msgstr "Autor (môže vytvárať/upravovať/mazať schôdzky)"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not create deputy."
+msgstr "Nepodarilo sa vytvoriť zástupcu."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not update deputy permissions."
+msgstr "Nepodarilo sa aktualizovať oprávnenia zástupcu."
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Remove deputy %1$s"
+msgstr "Odstrániť zástupcu %1$s"
+
+#. %1$s name of the deputy
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Skutočne chcete odstrániť %1$s zo zoznamu vašich zástupcov?"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not remove deputy."
+msgstr "Nepodarilo sa odstrániť zástupcu."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "You have currently no deputies assigned."
+msgstr "Momentálne nemáte menovaných žiadnych zástupcov."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Deputies can get acces to your Inbox and Calendar."
+msgstr ""
+"Zástupcovia môžu získať prístup k vašej doručenej pošte a ku kalendáru."
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
+msgid "Manage deputies"
+msgstr "Spravovať zástupcov"
+
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Add people"
+msgstr "Pridať ľudí"
+
+#. Generic error message when something when wrong on the server while fetching data about your deputies
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+msgid "Could not load deputy data."
+msgstr "Nepodarilo sa načítať údaje o zástupcovi."
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid ""
@@ -6310,7 +6753,6 @@ msgstr "Operácie s %1$s"
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/smsRegistrationView.js
 #: apps/io.ox/multifactor/settings/views/totpRegistrationView.js
-#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
 
@@ -6323,6 +6765,11 @@ msgstr "Vybrať priečinok"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Vytvoriť priečinok"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+#| msgid "You cannot move items to this folder"
+msgid "You cannot select this folder."
+msgstr "Nemôžete vybrať tento priečinok."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -6460,6 +6907,10 @@ msgid "Skip to main content"
 msgstr "Preskočiť na hlavný obsah"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
+msgid "Address directory"
+msgstr "Adresár kontaktov"
+
+#: apps/io.ox/core/main/appcontrol.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js apps/io.ox/core/sub/settings/pane.js
 #: module:io.ox/core/sub apps/io.ox/multifactor/login/loginScreen.js
 msgid "Refresh"
@@ -6469,10 +6920,14 @@ msgstr "Obnoviť"
 msgid "Currently refreshing"
 msgstr "Práve sa aktualizuje"
 
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
 #: apps/io.ox/core/main/apps.js module:io.ox/core
-#: apps/io.ox/mail/invitations/register.js module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js apps/io.ox/oauth/settings.js
-#: module:io.ox/settings apps/io.ox/settings/security/settings/pane.js
+#: apps/io.ox/mail/accounts/settings.js apps/io.ox/mail/invitations/register.js
+#: module:io.ox/mail apps/io.ox/mail/settings/pane.js
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/settings/security/settings/pane.js
 msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
@@ -6516,11 +6971,6 @@ msgstr "Rozhovor"
 msgctxt "app"
 msgid "Notes"
 msgstr "Poznámky"
-
-#: apps/io.ox/core/main/apps.js module:io.ox/core apps/io.ox/editor/main.js
-#: module:io.ox/editor apps/io.ox/mail/compose/view.js module:io.ox/mail
-msgid "Editor"
-msgstr "Editor"
 
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/main/topbar_right.js
@@ -6794,13 +7244,6 @@ msgstr "Máte nové oznámenia"
 msgid "Guest"
 msgstr "Hosť"
 
-#. Role: create folder + read/write/delete all
-#: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permission-pre-selection.js
-#: apps/io.ox/files/share/permissions.js
-msgid "Author"
-msgstr "Autor"
-
 #. Role: all permissions
 #. object permissions - admin role
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -6902,7 +7345,6 @@ msgid "The user has administrative rights"
 msgstr "Používateľ má práva správcu"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Použiť na všetky podpriečinky"
 
@@ -7383,14 +7825,17 @@ msgstr ""
 "Prepíše akékoľvek zmeny, ktoré ste vykonali v rámci appsuite"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Disable"
 msgstr "Vypnúť"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable"
 msgstr "Zapnúť"
 
@@ -8390,6 +8835,11 @@ msgstr "Sem zadajte názov dokumentu"
 msgid "Note"
 msgstr "Poznámka"
 
+#. This is a placeholder for macOS. Keep in line with local mac keyboard layout
+#: apps/io.ox/editor/main.js module:io.ox/editor
+msgid "You can quick-save your changes via Cmd+Enter."
+msgstr "Zmeny môžete rýchlo uložiť pomocou Cmd+Enter."
+
 #: apps/io.ox/editor/main.js module:io.ox/editor
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Zmeny môžete rýchlo uložiť pomocou Ctrl+Enter."
@@ -8688,6 +9138,11 @@ msgstr "Zmazať položku"
 #: apps/io.ox/files/actions/download.js module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "Položky bez súboru nie je možné stiahnuť."
+
+#. %1$d: max number of characters
+#: apps/io.ox/files/actions/edit-description.js module:io.ox/files
+msgid "File description can only be %1$d characters long."
+msgstr "Popis súboru môže mať najviac %1$d znakov."
 
 #: apps/io.ox/files/actions/restore.js module:io.ox/files
 msgid ""
@@ -9142,12 +9597,6 @@ msgstr "Interní používatelia"
 msgid "Reviewer"
 msgstr "Revidoval"
 
-#. Role: view folder + read all
-#: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
-msgid "Viewer"
-msgstr "Prehliadač"
-
 #: apps/io.ox/files/share/permission-pre-selection.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
 msgid "Read only"
@@ -9175,6 +9624,11 @@ msgstr "Vnútorný používateľ"
 #: apps/io.ox/participants/chronos-views.js apps/io.ox/participants/views.js
 msgid "Group"
 msgstr "Skupina"
+
+#. description in the permission dialog to indicate that this user can act on your behalf (send mails, check calendar for you, etc)
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Deputy"
+msgstr "Zástupca"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Guests are only allowed to have viewer rights."
@@ -9492,15 +9946,6 @@ msgstr "Potvrdenie"
 msgid "Adjust"
 msgstr "Upraviť"
 
-#. 'Select' as button text to confirm the selection of a chosen folder via a picker dialog.
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/find/view-facets.js module:io.ox/core
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Select"
-msgstr "Vybrať"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
@@ -9696,6 +10141,14 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Použiť pre tento účet Zjednotenú poštu"
+
+#. link title for related accounts into the corresponding folder
+#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
+#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Open %1$s in %2$s"
+msgstr "Otvoriť %1$s v %2$s"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Add other mail account"
@@ -10002,15 +10455,21 @@ msgstr ""
 "súboru %2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#, fuzzy
-#| msgid ""
-#| "The attachment cannot be uploaded because it exceeds the infostore quota "
-#| "limit of %2$s"
 msgid ""
-"The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota "
+"The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
 msgstr ""
 "Prílohu nie je možné nahrať, pretože prekračuje kvótu infoúložiska %2$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid "The uploaded attachment exceeds the maximum email size of %1$s"
+msgstr "Nahraná príloha prekračuje maximálnu veľkosť emailu %1$s"
+
+#: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
+msgid ""
+"The file cannot be uploaded because it exceeds the maximum email size of %1$s"
+msgstr ""
+"Súbor nie je možné nahrať, pretože prekračuje maximálnu veľkosť emailu %1$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10390,6 +10849,15 @@ msgid "Add subject"
 msgstr "Pridať predmet"
 
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
+msgid ""
+"This sender address is related to a disabled mail account. Please choose "
+"another sender address or visit settings to enable again."
+msgstr ""
+"Táto adresa odosielateľa sa vzťahuje k deaktivovanému emailovému účtu. "
+"Prosím, zvoľte inú adresu odosielateľa alebo navštívte nastavenia a znovu ho "
+"aktivujte."
+
+#: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "error"
 msgstr "chyba"
 
@@ -10465,6 +10933,10 @@ msgid "Added %s to attachments."
 msgstr "Pridané súbory %s medzi prílohy."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "V mene"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Zobraziť mená"
 
@@ -10476,6 +10948,13 @@ msgstr "Upraviť mená"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Napísať nový e-mail"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Tento mail odošle %1$s v mene %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10542,6 +11021,10 @@ msgstr "Prosím, vyberte platný súbor obrázka, ktorý chcete vložiť"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Odoslané prostredníctvom %s z mobilu"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Tento email bol odoslaný v mene inej osoby."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -10925,6 +11408,16 @@ msgstr "Email od %1$s: %2$s"
 msgid "Via"
 msgstr "prostredníctvom"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "v mene"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "prostredníctvom"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
 msgstr "Obsah e-mailu"
@@ -11058,9 +11551,7 @@ msgid "Edit rule"
 msgstr "Upraviť pravidlo"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Save and apply rule now"
-msgid "Save and apply"
+msgid "Save and apply rule now"
 msgstr "Uložiť a použiť pravidlo teraz"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -11089,10 +11580,13 @@ msgid "Drag to reorder filter rules"
 msgstr "Poradie pravidiel filtra zmeníte pretiahnutím myšou"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#, fuzzy
-#| msgid "Please select the folder to apply the rule to"
-msgid "Select the folder to apply the rule to"
+msgid "Please select the folder to apply the rule to"
 msgstr "Vyberte priečinok, na ktorý chcete použiť pravidlo"
+
+#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "Apply filter rule"
+msgstr "Použiť pravidlo filtra"
 
 #. 'Delete filter rule' as a header of a modal dialog to confirm to delete a mail filter rule.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
@@ -12129,12 +12623,6 @@ msgstr "Zvislé"
 msgid "Horizontal"
 msgstr "Vodorovné"
 
-#: apps/io.ox/mail/toolbar.js module:io.ox/mail apps/io.ox/portal/widgets.js
-#: module:io.ox/portal apps/plugins/portal/mail/register.js
-#: module:plugins/portal
-msgid "Inbox"
-msgstr "Prijaté"
-
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Use categories"
 msgstr "Použiť kategórie"
@@ -12667,13 +13155,6 @@ msgstr "Môj účet %1$s (%2$d)"
 msgid "Reauthorize"
 msgstr "Znovu autorizovať"
 
-#. link title for related accounts into the corresponding folder
-#. %1$s - the name of the folder to link into, e.g. "My G-Calendar"
-#. %2$s - the translated name of the application the link points to, e.g. "Mail", "Drive"
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Open %1$s in %2$s"
-msgstr "Otvoriť %1$s v %2$s"
-
 #: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Account Name"
 msgstr "Názov účtu"
@@ -12961,6 +13442,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -13298,6 +13783,7 @@ msgid "Disable %1$s"
 msgstr "Vypnúť %1$s"
 
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 msgid "Enable %1$s"
 msgstr "Zapnúť %1$s"
 
@@ -13817,11 +14303,6 @@ msgstr "Podrobnosti certifikátu"
 msgid "Trust certificate"
 msgstr "Dôverovať certifikátu"
 
-#. 'Sign out from device' as header of a modal dialog to sign out of a session.
-#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
-msgid "Sign out from device"
-msgstr "Odhlásiť sa zo zariadenia"
-
 #. Context: Session Management. Active session on platform/os.
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Linux"
@@ -13931,6 +14412,10 @@ msgstr "Odhlásiť sa zo všetkých klientov"
 msgid "Do you really want to sign out from all clients except the current one?"
 msgstr "Skutočne sa chcete odhlásiť zo všetkých klientov okrem súčasného?"
 
+#: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
+msgid "Sign out from device"
+msgstr "Odhlásiť sa zo zariadenia"
+
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
@@ -14031,29 +14516,6 @@ msgid "Call via Jitsi"
 msgstr "Volať prostredníctvom Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Pridať sa do stretnutia Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Pridať sa do stretnutia Jitsi"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Pridať sa do konferenčného hovoru"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Stretnutie Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Stretnutie Jitsi"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Integrácia so Zoom"
@@ -14124,22 +14586,6 @@ msgid "Open Zoom profile"
 msgstr "Otvoriť profil Zoom"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Najprv je potrebné pripojiť %1$s pomocou Zoom. Potrebujete na to účet Zoom. "
-"Ak ešte nemáte účet, stačí si vytvoriť bezplatný."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Pripojiť Zoom"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Pripojili ste nasledovný účet Zoom:"
 
@@ -14150,15 +14596,6 @@ msgstr "Osobný identifikátor stretnutia:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Odstrániť účet"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Služba na integráciu so Zoom je momentálne nedostupná. Prosím, skúste to "
-"neskôr znova."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14189,99 +14626,6 @@ msgstr "Prijatý hovor od %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Volali ste %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Konferenčný hovor"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Odkaz:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Skopírovať do poľa umiestnenie"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Stretnutie Jitsi: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Prebieha pripojenie k Zoom ..."
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Zoom Meeting: %1$s"
-msgstr "Stretnutie Zoom: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Heslo stretnutia: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Mobil jedným kliknutím (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "ID stretnutia: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Heslo na telefonické pripojenie: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Pripojiť sa telefonicky podľa toho, kde sa nachádzate"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Skopírovať odkaz do umiestnenia"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Skopírovať odkaz do schránky"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Skopírovať informácie o pripojení do popisu"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Platnosť stretnutí Zoom vyprší po 365 dňoch. Odporúčame sériu obmedziť na "
-"jeden rok. Alternatívne môžete sériu aktualizovať pred vypršaním platnosti "
-"schôdzky Zoom."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr ""
-"Pri načítavaní schôdzky Zoom sa vyskytol problém. Je možné, že platnosť "
-"stretnutia Zoom vypršala."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Vytvoriť nové stretnutie Zoom"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Nové stretnutie"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -15995,238 +16339,19 @@ msgstr "Pozvať na %s"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
-#~| msgid "Rotate image"
-#~ msgid "Rotate left"
-#~ msgstr "Otočiť doľava"
-
-#~| msgid "Rotate image"
-#~ msgid "Rotate right"
-#~ msgstr "Otočiť doprava"
-
-#~| msgid "The appointment has been added to your calendar"
-#~ msgid ""
-#~ "Automatically apply appointment changes received via email to your "
-#~ "calendar"
-#~ msgstr ""
-#~ "Automaticky aplikovať zmeny schôdzok prijaté emailom do vášho kalendára"
-
-#~| msgid "unknown sender"
-#~ msgid "Only from known senders"
-#~ msgstr "Iba od známych odosielateľov"
-
-#~ msgid "Always"
-#~ msgstr "Vždy"
-
-#~| msgid "The appointment has been deleted"
-#~ msgid "This appointment was cancelled."
-#~ msgstr "Táto schôdzka bola zrušená."
-
-#~| msgid "Connection error"
-#~ msgid "Connection problems"
-#~ msgstr "Problém s pripojením"
-
-#~| msgid "%1$d item selected"
-#~| msgid_plural "%1$d items selected"
-#~ msgid "%1$d contact selected"
-#~ msgid_plural "%1$d contacts selected"
-#~ msgstr[0] "%1$d kontakt vybraný"
-#~ msgstr[1] "%1$d kontakty vybrané"
-#~ msgstr[2] "%1$d kontaktov vybraných"
-
-#~| msgid "Remove contact"
-#~ msgid "Remove contact from selection"
-#~ msgstr "Odstrániť kontakt z výberu"
+#~ msgid "save"
+#~ msgstr "uložiť"
 
 #~| msgid "Select contacts"
 #~ msgid "Select/Deselect contact %1$s"
 #~ msgstr "Vybrať/zrušiť výber kontaktu %1$s"
 
-#~| msgid "Show task details"
-#~ msgid "Show contact details"
-#~ msgstr "Zobraziť podrobnosti kontaktu"
-
-#~| msgid "Contacts"
-#~ msgid "Contact list"
-#~ msgstr "Zoznam kontaktov"
-
-#~| msgid "Start search"
-#~ msgid "Last searched for"
-#~ msgstr "Posledné vyhľadávanie"
-
-#~| msgid "No items found"
-#~ msgid "No contacts found."
-#~ msgstr "Neboli nájdené žiadne kontakty."
-
-#~ msgid ""
-#~ "You have reached the limit of %1$d contacts to display. Please enter a "
-#~ "search term to narrow down your results."
-#~ msgstr ""
-#~ "Dosiahli ste limit %1$d zobrazených kontaktov. Prosím, zadajte "
-#~ "vyhľadávací termín, aby ste zmenšili počet výsledkov."
-
-#~| msgid "Email addresses"
-#~ msgid "Global address list"
-#~ msgstr "Globálny adresár"
-
-#~| msgid "Search results"
-#~ msgid "Search all address lists"
-#~ msgstr "Vyhľadávať vo všetkých adresároch"
-
-#~| msgid "Could not load data"
-#~ msgid "Could not load contacts"
-#~ msgstr "Nepodarilo sa načítať kontakty"
-
-#~ msgid "Search for name, department, position"
-#~ msgstr "Hľadať meno, oddelenie, pozíciu"
-
-#~| msgctxt "verb"
-#~| msgid "Filter"
-#~ msgid "Filter"
-#~ msgstr "Filtrovať"
-
-#~| msgid "Other address"
-#~ msgid "Filter address lists"
-#~ msgstr "Filtrovať zoznamy adries"
-
-#~| msgid "Addresses"
-#~ msgid "Address list"
-#~ msgstr "Zoznam adries"
-
-#~| msgid "Add to address book"
-#~ msgid "Could not load address book."
-#~ msgstr "Nepodarilo sa načítať adresár."
-
 #~ msgid "Confirm new Password"
 #~ msgstr "Potvrďte nové heslo"
-
-#~| msgid " %1$s (%2$s) "
-#~ msgid "%1$s (%2$s)"
-#~ msgstr "%1$s (%2$s)"
-
-#~ msgid "Allowed to send emails on your behalf"
-#~ msgstr "Má povolené posielať emaily vo vašom mene"
-
-#~| msgid "Date: %1$s"
-#~ msgid "Deputy: %1$s"
-#~ msgstr "Zástupca: %1$s"
-
-#~| msgid "Twitter reported the following errors:"
-#~ msgid "The deputy has the following permissions"
-#~ msgstr "Zástupca má nasledovné oprávnenia"
-
-#~| msgid "View details"
-#~ msgid "Viewer (read emails)"
-#~ msgstr "Prehliadanie (môže čítať emaily)"
-
-#~ msgid "Editor (create/edit emails)"
-#~ msgstr "Úprava (môže vytvárať/upravovať emaily)"
-
-#~ msgid "Author (create/edit/delete emails)"
-#~ msgstr "Autor (môže vytvárať/upravovať/mazať emaily)"
-
-#~ msgid "Deputy can send emails on your behalf"
-#~ msgstr "Zástupca má povolené posielať emaily vo vašom mene"
-
-#~| msgid "New appointment"
-#~ msgid "Viewer (view appointments)"
-#~ msgstr "Prehliadanie (môže čítať schôdzky)"
-
-#~| msgid "Edit this appointment"
-#~ msgid "Editor (create/edit appointments)"
-#~ msgstr "Úprava (môže vytvárať/upravovať schôdzky)"
-
-#~| msgid "Show declined appointments"
-#~ msgid "Author (create/edit/delete appointments)"
-#~ msgstr "Autor (môže vytvárať/upravovať/mazať schôdzky)"
-
-#~ msgid "save"
-#~ msgstr "uložiť"
-
-#~| msgid "Could not save settings."
-#~ msgid "Could not create deputy."
-#~ msgstr "Nepodarilo sa vytvoriť zástupcu."
-
-#~| msgid "no delete permissions"
-#~ msgid "Could not update deputy permissions."
-#~ msgstr "Nepodarilo sa aktualizovať oprávnenia zástupcu."
-
-#~| msgid "Removed %1$s."
-#~ msgid "Remove deputy %1$s"
-#~ msgstr "Odstrániť zástupcu %1$s"
-
-#~| msgid ""
-#~| "Do you really want to remove the extension \".%1$s\" from your filename?"
-#~ msgid "Do you want to remove %1$s from your deputy list"
-#~ msgstr "Skutočne chcete odstrániť  \"%1$s\" zo zoznamu vašich zástupcov"
-
-#~| msgid "Could not save settings."
-#~ msgid "Could not remove deputy."
-#~ msgstr "Nepodarilo sa odstrániť zástupcu."
-
-#~| msgid "There are currently no participants."
-#~ msgid "You have currently no deputies assigned."
-#~ msgstr "Momentálne nemáte menovaných žiadnych zástupcov."
-
-#~ msgid "Deputies can get acces to your Inbox and Calendar."
-#~ msgstr ""
-#~ "Zástupcovia môžu získať prístup k vašej doručenej pošte a ku kalendáru."
 
 #~| msgid "Remove"
 #~ msgid "Remobe"
 #~ msgstr "Odstrániť"
-
-#~| msgid "Manage applications"
-#~ msgid "Manage deputies"
-#~ msgstr "Spravovať zástupcov"
-
-#~ msgid "Add people"
-#~ msgstr "Pridať ľudí"
-
-#~| msgid "Could not load data"
-#~ msgid "Could not load deputy data."
-#~ msgstr "Nepodarilo sa načítať údaje o zástupcovi."
-
-#~| msgid "Address Other"
-#~ msgid "Address directory"
-#~ msgstr "Adresár kontaktov"
-
-#~| msgid "You can quick-save your changes via Ctrl+Enter."
-#~ msgid "You can quick-save your changes via Cmd+Enter."
-#~ msgstr "Zmeny môžete rýchlo uložiť pomocou Cmd+Enter."
-
-#~ msgid "File description can only be %1$d characters long."
-#~ msgstr "Popis súboru môže mať najviac %1$d znakov."
-
-#~ msgid "Deputy"
-#~ msgstr "Zástupca"
-
-#~| msgid ""
-#~| "The files cannot be uploaded because each file exceeds the maximum file "
-#~| "size of %1$s"
-#~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
-#~ msgstr "Nahraná príloha prekračuje maximálnu veľkosť emailu %1$s"
-
-#~| msgid ""
-#~| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-#~| "size of %2$s"
-#~ msgid ""
-#~ "The file cannot be uploaded because it exceeds the maximum email size of "
-#~ "%1$s"
-#~ msgstr ""
-#~ "Súbor nie je možné nahrať, pretože prekračuje maximálnu veľkosť emailu "
-#~ "%1$s"
-
-#~ msgid ""
-#~ "This sender address is related to a disabled mail account. Please choose "
-#~ "another sender address or visit settings to enable again."
-#~ msgstr ""
-#~ "Táto adresa odosielateľa sa vzťahuje k deaktivovanému emailovému účtu. "
-#~ "Prosím, zvoľte inú adresu odosielateľa alebo navštívte nastavenia a znovu "
-#~ "ho aktivujte."
-
-#~| msgid "Apply filter"
-#~ msgid "Apply filter rule"
-#~ msgstr "Použiť pravidlo filtra"
 
 #~ msgid "Password recovery"
 #~ msgstr "Obnovenie hesla"
@@ -16247,6 +16372,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Recover passwords"
 #~ msgstr "Obnovenie hesiel"
+
+#~ msgid "Zoom Meeting: %1$s"
+#~ msgstr "Stretnutie Zoom: %1$s"
 
 #~ msgid ""
 #~ "Other users can find and join your channel under \"All channels\". If you "
@@ -18339,9 +18467,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Country:"
 #~ msgstr "Krajina:"
-
-#~ msgid "Create Appointment"
-#~ msgstr "Vytvoriť schôdzku"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Vytvoriť účet %s pomocou tu uložených údajov."
@@ -20762,9 +20887,6 @@ msgstr "Pridať na %s"
 #~ msgid "Never."
 #~ msgstr "Nikdy."
 
-#~ msgid "New Appointment"
-#~ msgstr "Nová schôdzka"
-
 #~ msgid "New Caledonia"
 #~ msgstr "Nová Kaledónia"
 
@@ -21311,9 +21433,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Phone alt"
 #~ msgstr "Alt. telefón"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Telefónne čísla"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefón:"
@@ -23395,12 +23514,6 @@ msgstr "Pridať na %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Táto správa obsahuje URL k publikácii."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Tento email bol pridaný do portálu"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Tento mail bol odoslaný z %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Môže to trvať niekoľko sekúnd"
 
@@ -24947,9 +25060,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "vacation"
 #~ msgstr "dovolenka"
-
-#~ msgid "via"
-#~ msgstr "prostredníctvom"
 
 #~ msgid "waiting"
 #~ msgstr "čaká sa"

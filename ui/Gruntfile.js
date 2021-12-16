@@ -11,7 +11,7 @@
 module.exports = function (grunt) {
 
     try {
-        require('dotenv').config();
+        require('dotenv-defaults').config();
     } catch (e) {
         // silently ignore if no dotenv module is installed,
         // makes the module optional

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../../steps.d.ts" />
 
@@ -207,7 +207,7 @@ Scenario('[C7386] Write mail to CC recipients', async ({ I, users, mail }) => {
     I.waitForText(testrailID + ' - ' + timestamp, 5, '.mail-detail-pane .subject');
     I.logout();
 
-    // lgin and check with user2
+    // login and check with user2
     I.login('app=io.ox/mail', { user: users[2] });
     I.selectFolder('Inbox');
     mail.selectMail(testrailID);
@@ -707,42 +707,6 @@ Scenario('[C101620] Very long TO field', async ({ I, users, mail }) => {
         I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'overflow': 'hidden' });
         I.seeCssPropertiesOnElements('.floating-window-content .recipients', { 'text-overflow': 'ellipsis' });
     });
-});
-
-Scenario('[C163026] Change from display name when sending a mail', async ({ I, users, mail, dialogs }) => {
-    let [user] = users;
-    var timestamp = Math.round(+new Date() / 1000);
-    await I.haveSetting('io.ox/mail//messageFormat', 'text');
-
-    I.login('app=io.ox/mail', { user });
-    mail.waitForApp();
-
-    mail.newMail();
-
-    I.see(users[0].userdata.given_name + ' ' + users[0].userdata.sur_name, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.see('<' + users[0].userdata.primaryEmail + '>', '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-
-    I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
-    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
-    I.clickDropdown('Edit names');
-
-    dialogs.waitForVisible();
-    I.waitForVisible('.modal-dialog input[title="Use custom name"]', 5); // check for checkbox to be visible
-    I.click('input[title="Use custom name"]', dialogs.locators.body);
-    I.fillField('.modal-body input[title="Custom name"]', timestamp);
-    dialogs.clickButton('Edit');
-    I.waitForDetached('.modal-dialog');
-
-    I.waitForText(timestamp, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.waitForText('<' + users[0].userdata.primaryEmail + '>', 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-    I.click('.io-ox-mail-compose [data-dropdown="from"] .fa-caret-down');
-    I.waitForVisible('.dropdown.open [data-name="edit-real-names"]', 5);
-    I.click('.dropdown [data-name="sendDisplayName"]');
-    I.waitForElement('.dropdown.open [data-value^="[null,"]');
-    I.click('.dropdown [data-name="from"]');
-    I.waitForText(users[0].userdata.primaryEmail, 5, '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .address');
-    I.dontSee(timestamp.toString(), '.io-ox-mail-compose .mail-compose-fields [aria-label="From"] .name');
-    I.waitForText('This email just contains your email address as sender. Your real name is not used.', 5, '.io-ox-mail-compose .sender-realname .mail-input');
 });
 
 Scenario('[C207507] Forgot mail attachment hint', async ({ I, users, mail, dialogs }) => {

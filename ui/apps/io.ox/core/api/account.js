@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/api/account', [
     'settings!io.ox/mail',
@@ -30,6 +30,7 @@ define('io.ox/core/api/account', [
 
     // quick hash for sync checks
     var idHash = {},
+        hiddenHash = {},
         typeHash = {},
         // default separator
         separator = settings.get('defaultseparator', '/'),
@@ -143,6 +144,18 @@ define('io.ox/core/api/account', [
      */
     api.isExternal = function (id) {
         return api.isAccount(id) && !api.isPrimary(id);
+    };
+
+    /**
+     * is hidden secondary account
+     * @param  {string}  id (account_id)
+     * @return {boolean}
+     */
+    api.isHidden = function (data) {
+        if (data.id) return api.isAccount(data.id) && !!hiddenHash[data.id];
+        if (data.primary_address) return _.values(hiddenHash).indexOf(data.primary_address) >= 0;
+        if (data.folder_id) return !!hiddenHash[data.folder_id.split(separator)[0]];
+        return false;
     };
 
     /**
@@ -414,7 +427,7 @@ define('io.ox/core/api/account', [
      * @param  {object} account
      * @return { deferred} returns array the personal name and a list of (alias) addresses
      */
-    function getSenderAddress(account) {
+    api.getSenderAddress = function (account) {
 
         // just for robustness
         if (!account) return [];
@@ -433,7 +446,7 @@ define('io.ox/core/api/account', [
                 display_name = anonymouse ? '' : account.personal;
             return getAddressArray(display_name, address);
         });
-    }
+    };
 
     /**
      * get a list of addresses that can be used when sending mails
@@ -443,7 +456,7 @@ define('io.ox/core/api/account', [
     api.getSenderAddresses = function (accountId) {
         return this.get(accountId || 0)
             .then(ensureDisplayName)
-            .then(getSenderAddress);
+            .then(api.getSenderAddress);
     };
 
     /**
@@ -466,16 +479,16 @@ define('io.ox/core/api/account', [
                 return _(arguments).flatten(true);
             })
             .then(function (list) {
-                return $.when.apply($, _(list).map(getSenderAddress));
+                return $.when.apply($, _(list).map(api.getSenderAddress));
             })
             .then(function () {
                 return _(arguments).flatten(true);
             })
-            .then(function (addresses) {
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.unshift(['Matthias Biggeleben', 'all@open-xchange.com']);
-                // addresses.push(['Matthias Biggeleben', 'all@open-xchange.com']);
-                return addresses;
+            .then(function (list) {
+                // filter deactivated secondary accounts
+                return [].concat(list).filter(function (address) {
+                    return !api.isHidden({ primary_address: address[1] });
+                });
             });
     };
 
@@ -519,9 +532,12 @@ define('io.ox/core/api/account', [
 
         return load().done(function (list) {
             idHash = {};
+            hiddenHash = {};
             typeHash = {};
             // add check here
             _(list).each(function (account) {
+                // hidden secondary account
+                if (account.secondary) hiddenHash['default' + account.id] = account.deactivated ? account.primary_address : false;
                 // remember account id
                 idHash[account.id] = true;
                 // add inbox first
@@ -688,6 +704,9 @@ define('io.ox/core/api/account', [
             .done(function (result) {
                 api.trigger('refresh.all');
                 api.trigger('update', result);
+                ox.trigger('account:update', id);
+                if (!('deactivated' in data)) return;
+                ox.trigger('account:status', { deactivated: data.deactivated, root_folder: result.root_folder });
             });
         });
     };

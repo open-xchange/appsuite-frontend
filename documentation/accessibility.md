@@ -5,7 +5,7 @@ icon: fa-universal-access
 
 # Overview
 
-[Web accessibility][WCAG-INTRO] aims at helping users with disabilities to access the web, i.e. perceiving and interacting with web sites or web-based applications. In order to offer everyone – with or without disabilities – the best possible user experience, we continually strive to meet the [Level AA conformance][WCAG-WAI] as defined by the [Web Content Accessibility Guidelines][WCAG-TR] 2.1. 
+[Web accessibility][WCAG-INTRO] aims at helping users with disabilities to access the web, i.e. perceiving and interacting with web sites or web-based applications. In order to offer everyone – with or without disabilities – the best possible user experience, we continually strive to meet the [Level AA conformance][WCAG-WAI] as defined by the [Web Content Accessibility Guidelines][WCAG-TR] 2.1.
 
 Accessibility typically covers keyboard support, tab order, focus management, color contrast, semantic markup, WAI-ARIA support, and screen reader support.
 
@@ -19,6 +19,8 @@ Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE
 
 Date   | Version | Activity
 -------| --------| -----------------------------------------------------------------------
+May 21 | 7.10.6  | Fixed various issues in Chat, Calendar and updated documentation
+May 21 | 7.10.6  | Improved accessibility of Enterprise Picker
 Oct 20 | 7.10.5  | Fixed various issues in Mail, Help, and core components
 Oct 20 | 7.10.5  | Reworked Chat to improve keyboard support and fixed various accessibility issues
 Oct 20 | 7.10.5  | Added, fixed and improved accessibility e2e tests

@@ -45,7 +45,7 @@
 
     margin-bottom: 8px;
     position: relative;
-    min-height: 56px; /* for floating icon */
+    min-height: 3.5rem; /* for floating icon */
     line-height: 16px;
 
     .autocomplete-item & { margin: 0; }
@@ -99,6 +99,9 @@
 
     .extra-decorator {
         color: #757575;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         &:hover { color: #777; text-decoration: none }
     }
@@ -112,8 +115,10 @@
 
     .participant-image {
         float: left;
-        margin-right: 1em;
+        margin-right: 14px;
         .picture(54px, 54px); /* 54px allows 3 lines with 18px line-height */
+        max-height: 100px;
+        max-width: 100px;
 
         &.contact-image,
         &.external-user-image { background-image: url(@fallback-image-contact); }

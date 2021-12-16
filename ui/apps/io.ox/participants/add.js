@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/participants/add', [
     'io.ox/core/extensions',
@@ -175,14 +175,17 @@ define('io.ox/participants/add', [
                     field: 'email1', type: 5
                 });
             });
-            return this.addParticipant(e, participants, val);
+            return this.addParticipant(e, participants);
         },
 
         setFocus: function () {
             if (this.typeahead) this.typeahead.$el.focus();
         },
 
-        addParticipant: function (e, data, value) {
+        addParticipant: function (e, data) {
+            // clean typeahead input (important to clean before adding to collection or we might trigger addParticipant a second time (focusout event in event handlers etc))
+            this.typeahead.$el.typeahead('val', '');
+
             var list = [].concat(data),
                 distlists = [],
                 // validate is just used to check against blacklist
@@ -219,8 +222,6 @@ define('io.ox/participants/add', [
                 });
             }
 
-            // clean typeahad input
-            if (value) this.typeahead.$el.typeahead('val', '');
             // return possible errors, so views can react
             return error;
         },
@@ -274,7 +275,9 @@ define('io.ox/participants/add', [
                         }
                         self.options.collection.add(member);
                     },
-                    processRaw: self.options.processRaw
+                    processRaw: self.options.processRaw,
+                    useGABOnly: self.options.useGABOnly,
+                    selection: self.options.selection
                 });
                 this.$el.append(
                     this.addresspicker.render().$el

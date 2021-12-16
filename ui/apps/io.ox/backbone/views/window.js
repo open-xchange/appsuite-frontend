@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/backbone/views/window', [
     'io.ox/backbone/views/disposable',
@@ -166,16 +166,16 @@ define('io.ox/backbone/views/window', [
         renderControls: function () {
             var isNormal = this.model.get('mode') === 'normal';
             var controls = [];
-            if (this.model.get('stickable')) controls.push($('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Stick to the right side')).append($('<i class="fa fa-window-maximize fa-rotate-90" aria-hidden="true">').attr('title', gt('Stick to the right side'))));
+            if (this.model.get('stickable')) controls.push($('<button type="button" class="btn btn-link" data-action="stick" tabindex="-1">').attr('aria-label', gt('Stick to the right side')).append($($.icon('fa-window-maximize', false, 'fa-rotate-90')).attr('title', gt('Stick to the right side'))));
             if (this.model.get('resizable')) {
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="minimize" tabindex="-1">').attr('aria-label', gt('Minimize')).append($('<i class="fa fa-window-minimize" aria-hidden="true">').attr('title', gt('Minimize'))));
+                controls.push($('<button type="button" class="btn btn-link" data-action="minimize" tabindex="-1">').attr('aria-label', gt('Minimize')).append($($.icon('fa-window-minimize')).attr('title', gt('Minimize'))));
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($('<i class="fa fa-compress" aria-hidden="true">').attr('title', gt('Shrink'))).toggleClass('hidden', isNormal));
+                controls.push($('<button type="button" class="btn btn-link" data-action="normalize" tabindex="-1">').attr('aria-label', gt('Shrink')).append($($.icon('fa-window-compress')).attr('title', gt('Shrink'))).toggleClass('hidden', isNormal));
                 //#. window resize
-                controls.push($('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($('<i class="fa fa-expand" aria-hidden="true">').attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal));
+                controls.push($('<button type="button" class="btn btn-link" data-action="maximize" tabindex="-1">').attr('aria-label', gt('Maximize')).append($($.icon('fa-window-expand')).attr('title', gt('Maximize'))).toggleClass('hidden', !isNormal));
             }
-            if (this.model.get('closable')) controls.push($('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))));
+            if (this.model.get('closable')) controls.push($('<button type="button" class="btn btn-link" data-action="close" tabindex="-1">').attr('aria-label', gt('Close')).append($($.icon('fa-times')).attr('title', gt('Close'))));
             // Remove tabindex attribute from first attribute to make it tabable
             if (controls.length > 0) controls[0].removeAttr('tabindex');
             return $('<div class="controls" role="toolbar">').append(controls);
@@ -336,7 +336,7 @@ define('io.ox/backbone/views/window', [
             if (e.which !== 27) return;
             if (e.isDefaultPrevented()) return;
             if (!this.model.get('quitOnEscape')) return;
-            if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input')) return;
+            if ($(e.target).hasClass('mce-panel') || $(e.target).hasClass('mce-content-body') || $(e.target).hasClass('token-input') || $(e.target.offsetParent).hasClass('io-ox-sidepopup')) return;
             this.onQuit();
         },
 

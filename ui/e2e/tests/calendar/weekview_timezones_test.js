@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 const moment = require('moment-timezone');
 
@@ -36,7 +36,7 @@ Scenario('Create appointment and switch timezones', async function ({ I, dialogs
 
     await I.haveSetting('io.ox/core//timezone', 'Europe/Berlin');
     const folder = `cal://0/${await I.grabDefaultFolder('calendar')}`;
-    const time = moment().tz('Europe/Berlin').startOf('week').add(1, 'day').add('16', 'hours');
+    const time = moment().tz('Europe/Berlin').startOf('isoWeek').add('16', 'hours');
     const format = 'YYYYMMDD[T]HHmmss';
     await I.haveAppointment({
         folder: folder,
@@ -44,7 +44,6 @@ Scenario('Create appointment and switch timezones', async function ({ I, dialogs
         startDate: { value: time.format(format), tzid: 'Europe/Berlin' },
         endDate: { value: moment(time).add(1, 'hour').format(format), tzid: 'Europe/Berlin' }
     });
-
     I.login('app=io.ox/calendar');
     I.waitForVisible({ css: '.io-ox-calendar-window' }, 5);
 

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -218,7 +218,7 @@ Scenario('[C7451] Edit yearly series via doubleclick', async ({ I, calendar }) =
 });
 
 Scenario('[C7464] Change appointment in shared folder as guest', async ({ I, users, calendar }) => {
-    const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
         summary: 'Testappointment',
@@ -237,7 +237,7 @@ Scenario('[C7464] Change appointment in shared folder as guest', async ({ I, use
 
 Scenario('[C7465] Edit appointment in shared folder as author', async ({ I, users, calendar, dialogs }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
-    const time = moment().startOf('week').add(8, 'days').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(7, 'days').add(10, 'hours');
     await I.haveAppointment({
         folder,
         summary: 'Testappointment',
@@ -311,7 +311,7 @@ Scenario('[C234659] Split appointment series', async ({ I, users, calendar, dial
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.retry(5).fillField('Subject', 'Testsubject');
-    await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
+    await calendar.setDate('startDate', moment().startOf('isoWeek'));
     I.click('~Start time');
     I.click('4:00 PM');
 
@@ -365,7 +365,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.retry(5).fillField('Subject', 'Testsubject');
-    await calendar.setDate('startDate', moment().startOf('week').add(1, 'day'));
+    await calendar.setDate('startDate', moment().startOf('isoWeek'));
     I.click('~Start time');
     I.click('4:00 PM');
 
@@ -487,7 +487,7 @@ Scenario('[C7467] Delete recurring appointment in shared folder as author', asyn
 
 Scenario('[C7470] Delete a recurring appointment', async ({ I, calendar }) => {
     const folder = await I.haveFolder({ title: 'New calendar', module: 'event', parent: await calendar.defaultFolder() });
-    const time = moment().startOf('week').add(1, 'days').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     await I.haveAppointment({
         folder,
         summary: 'Testappointment',
@@ -528,7 +528,7 @@ Scenario('[C7470] Delete a recurring appointment', async ({ I, calendar }) => {
 // TODO: shaky, failed at least once (10 runs on 2019-11-28)
 Scenario('[C274402] Change organizer of appointment with internal attendees', async ({ I, users, calendar, dialogs }) => {
     await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
-    const time = moment().startOf('week').add(3, 'days').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(3, 'days').add(10, 'hours');
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
@@ -569,7 +569,7 @@ Scenario('[C274402] Change organizer of appointment with internal attendees', as
 
 Scenario('[C274409] Change organizer of series with internal attendees', async ({ I, users, calendar, dialogs }) => {
     await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
-    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
         summary: 'Testsubject',
@@ -631,7 +631,7 @@ Scenario('[C274409] Change organizer of series with internal attendees', async (
 Scenario('[C265149] As event organizer I can add a textual reason why an event was canceled', async ({ I, users, calendar, dialogs }) => {
     await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
     const folder = await calendar.defaultFolder();
-    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     // single appointment without additional participants
     await Promise.all([
         I.haveAppointment({
@@ -720,7 +720,7 @@ Scenario('[C265149] As event organizer I can add a textual reason why an event w
 
 Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async ({ I, calendar }) => {
     await I.haveSetting({ 'io.ox/calendar': { notifyNewModifiedDeleted: true } });
-    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     // recurring appointment without additional participants
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
@@ -744,6 +744,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async ({ I, 
 
     calendar.switchView('Week');
 
+    if (moment().day() === 0) I.click(locate('~Previous Week').at(2));
     I.waitForVisible('.page.current .appointment');
     I.see('Testappointment', locate('.page.current .day').at(3));
 
@@ -774,7 +775,7 @@ Scenario('[C7452] Edit weekly recurring appointment via Drag&Drop', async ({ I, 
 
 Scenario('[C7453] Edit appointment, set the all day checkmark', async ({ I, calendar }) => {
     await I.haveSetting({ 'io.ox/calendar': { 'chronos/allowChangeOfOrganizer': true } });
-    const time = moment().startOf('week').add(1, 'day').add(10, 'hours');
+    const time = moment().startOf('isoWeek').add(10, 'hours');
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
         summary: 'Testsubject',

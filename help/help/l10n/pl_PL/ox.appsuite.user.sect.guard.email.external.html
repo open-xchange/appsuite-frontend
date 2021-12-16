@@ -34,20 +34,18 @@
 <h2 class="sr-only">Szyfrowanie konwersacji e-mail</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.email.external">
 <div class="titlepage"><div><div><h3 class="title">13.2.3. Jak adresaci zewnętrzni mogą odczytać zaszyfrowaną wiadomość e-mail?</h3></div></div></div>
-<p id="ox.appsuite.user.concept.guard.email.external">Zaszyfrowane wiadomości e-mail możesz także wysyłać do adresatów zewnętrznych, którzy nie są użytkownikami oprogramowania do pracy grupowej. Gdy dodasz adresata zewnętrznego, aplikacja Guard sprawdzi, czy jest dostępny klucz publiczny dla danego adresu e-mail. Dalsze postępowanie zależy od wyniku tej kontroli.</p>
+<p id="ox.appsuite.user.concept.guard.email.external">Zaszyfrowane wiadomości e-mail możesz także wysyłać do adresatów zewnętrznych, którzy nie są użytkownikami oprogramowania do pracy grupowej. Gdy dodasz adresata zewnętrznego, aplikacja Guard sprawdzi, czy jest dostępny klucz publiczny dla danego adresu e-mail. Dalsze postępowanie zależy od wyniku tej kontroli. </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Jeśli adresat oferuje klucz publiczny:</p>
+<p role="presentation">Jeśli adresat oferuje klucz publiczny: </p>
 <ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">Wiadomość zostanie zaszyfrowana za pomocą tego klucza. Adresat może ją odczytać za pomocą klucza prywatnego.</p></li></ul>
-<p role="presentation">
-            </p>
 </li>
 <li class="listitem">
 <p role="presentation">Jeśli dla danego adresata nie ma klucza publicznego:</p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p role="presentation">Użytkownik zewnętrzny, który już ma konto gościa, razem z wiadomością e-mail otrzyma link do strony logowania na to konto. Użycie go i zalogowanie się pozwoli na odczytanie zaszyfrowanej wiadomości e-mail i ewentualne przesłanie odpowiedzi.</p></li>
+<li class="listitem"><p role="presentation">Użytkownik zewnętrzny, który już ma konto gościa, razem z wiadomością e-mail otrzyma link do strony logowania na to konto. Użycie tego linku i zalogowanie się pozwoli na odczytanie zaszyfrowanej wiadomości e-mail i ewentualne wysłanie odpowiedzi.</p></li>
 <li class="listitem">
-<p role="presentation">Jeśli dany użytkownik nie ma jeszcze takiego konta, zostanie ono założone. Następnie ten użytkownik otrzyma wiadomość z automatycznie wygenerowanym hasłem i linkiem do strony logowania na konto gościa. Po zalogowaniu się będzie możliwe utworzenie własnego hasła.</p>
+<p role="presentation">Jeśli dany użytkownik nie ma jeszcze takiego konta, zostanie ono założone. Następnie ten użytkownik otrzyma wiadomość z automatycznie wygenerowanym hasłem i linkiem do strony logowania na konto gościa. Po zalogowaniu się można utworzyć własne hasło.</p>
 <p role="presentation">W przypadku niektórych konfiguracji automatycznie utworzone hasło i link do strony są wysyłane w osobnych wiadomościach e-mail.</p>
 </li>
 <li class="listitem"><p role="presentation">W niektórych konfiguracjach wiadomości e-mail na koncie gościa są usuwane z serwera po określonej liczbie dni.</p></li>
@@ -56,13 +54,15 @@
 </li>
 </ul>
 <p>
-      </p>
-<p>
         </p>
 <p class="title">Powiązane tematy:</p>
 <ul class="itemizedlist" id="ox.appsuite.user.related.guard.email.external" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Odczytywanie zaszyfrowanych konwersacji e-mail</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">Wysyłanie zaszyfrowanych wiadomości e-mail</a></p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Odczytywanie zaszyfrowanych konwersacji e-mail</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">Wysyłanie zaszyfrowanych wiadomości e-mail</a>
+            </p>
 </li></ul>
 <p>
       </p>

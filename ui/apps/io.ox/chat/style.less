@@ -150,6 +150,20 @@
         .header {
             padding: .5rem 8px ~"calc(.5rem - 1px)" 16px;
         }
+
+        .connection-problem-banner {
+            font-size: 0.9375rem;
+            font-weight: bold;
+            height: 0px;
+            background-color: @lightgray;
+            text-align: center;
+            transition: height 0.3s;
+
+            &.disconnected {
+                height: 2rem;
+                padding: 0.5rem;
+            }
+        }
     }
 
     .classic-toolbar {
@@ -290,7 +304,7 @@
 
     .classic-toolbar-container {
         position: relative;
-        height: 2.5rem;
+        height: 40px;
         display: none;
         .classic-toolbar {
             height: 2.5rem;
@@ -1613,7 +1627,7 @@
     .btn-circle {
         width: @pictureSize;
         height: @pictureSize;
-        border-radius: 50%;
+        border-radius: @pictureSize / 2;
         text-align: center;
         background-color: transparent;
         color: @gray;
@@ -1691,15 +1705,6 @@
     &:focus-within [aria-selected="true"] {
         color: white;
         background-color: @selected-background;
-    }
-}
-
-/* global -- we also need this for availability icons */
-svg.fa {
-    height: 14px;
-    text {
-        font-size: 100px;
-        fill: currentColor;
     }
 }
 

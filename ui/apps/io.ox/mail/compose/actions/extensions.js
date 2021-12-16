@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/compose/actions/extensions', [
     'io.ox/mail/actions/attachmentEmpty',
@@ -88,7 +88,6 @@ define('io.ox/mail/compose/actions/extensions', [
                 sharedAttachments = model.get('sharedAttachments') || {},
                 isSharingEnabled = !_.device('smartphone') && settings.get('compose/shareAttachments/enabled', false) && capabilities.has('infostore'),
                 needsAction = isSharingEnabled && (model.exceedsMailQuota() || model.exceedsThreshold());
-
             //#. %1$s is usually "Drive Mail" (product name; might be customized)
             if (opt.yell && model.exceedsThreshold() && !sharedAttachments.enabled) yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
 
@@ -128,7 +127,7 @@ define('io.ox/mail/compose/actions/extensions', [
 
         var mailContent = (baton.model.get('subject') || '') + '|';
         if (baton.view.editor.getMode() === 'html') {
-            mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature').text();
+            mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature,.io-ox-hint').text();
         } else {
             mailContent += baton.view.editor.getContent().replace(/^>.*\n/gm, '');
         }

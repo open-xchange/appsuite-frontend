@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/extensions', [
     'io.ox/core/folder/node',
@@ -75,6 +75,7 @@ define('io.ox/core/folder/extensions', [
             var id = api.altnamespace ? 'default0' : INBOX;
             return api.list(id).then(function (list) {
                 return _(list).filter(function (data) {
+                    if (account.isHidden({ id: data.account_id })) return false;
                     if (data.id.indexOf('default0/External accounts') === 0) return false;
                     if (account.isStandardFolder(data.id)) return false;
                     if (api.is('public|shared', data)) return false;
@@ -940,7 +941,7 @@ define('io.ox/core/folder/extensions', [
                 this.append(placeholder);
 
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
-                api.flat({ module: moduleName, all: /^(event|contacts|tasks)$/.test(moduleName) }).always(function () {
+                api.flat({ module: moduleName }).always(function () {
 
                     privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private'), filter: function (id, model) { return !!model.get('subscribed'); } }));
 
@@ -1200,9 +1201,8 @@ define('io.ox/core/folder/extensions', [
 
     function openPermissions(e) {
         var id = e.data.id;
-        require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
-            var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-            permissions.showFolderPermissions(id, model);
+        require(['io.ox/files/share/permissions'], function (permissions) {
+            permissions.showFolderPermissions(id);
         });
     }
 

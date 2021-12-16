@@ -54,7 +54,7 @@ upload:
     - build spamexperts
     - build dynamic-theme
   rules:
-    - if: '$FORCE_PACKAGE_UPLOAD == "true" || $CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/'
+    - if: '$FORCE_PACKAGE_UPLOAD == "true" || $CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/ || $CI_COMMIT_REF_NAME =~ /^bug\/DOCS-/'
       when: always
       allow_failure: true
     - if: '$CI_COMMIT_TAG || $CI_PIPELINE_SOURCE == "schedule"'
@@ -88,6 +88,6 @@ trigger documents pipeline:
   needs:
     - upload
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^feature\/DOCS-/ || $CI_COMMIT_REF_NAME =~ /^bug\/DOCS-/'
       when: on_success
       allow_failure: true

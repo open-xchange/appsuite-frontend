@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /**
  * LESS is distributed under the terms of the Apache License, Version 2.0
@@ -581,7 +581,7 @@
             require(['io.ox/core/gettext'], function (gt) { gt.enable(); });
         },
         load: function (name, parentRequire, load) {
-            assert(langDef.state !== 'pending', _.printf(
+            assert(langDef.state() !== 'pending', _.printf(
                 'Invalid gettext dependency on %s (before login).', name));
             langDef.done(function () {
                 // use specific language?
@@ -591,19 +591,23 @@
                     language = name.substr(index + 1);
                     name = name.substr(0, index);
                 }
-                parentRequire([name + '.' + language], ox.signin ? wrap : load, error);
+                parentRequire([name + '.' + language], ox.signin ? wrap(name) : load, error);
             });
-            function wrap(f) {
-                var f2 = function () { return f.apply(this, arguments); };
-                // _.each by foot to avoid capturing members of f in closures
-                var f3 = function (i) {
-                    f2[i] = function () { return f[i].apply(f, arguments); };
-                };
-                for (var i in f) {
-                    f3(i);
-                }
+            function wrap(name) {
+                var f;
                 callbacks[name] = function (newF) { f = newF; };
-                load(f2);
+                return function (newF) {
+                    if (!f) f = newF;
+                    var f2 = function () { return f.apply(this, arguments); };
+                    // _.each by foot to avoid capturing members of f in closures
+                    var f3 = function (i) {
+                        f2[i] = function () { return f[i].apply(f, arguments); };
+                    };
+                    for (var i in f) {
+                        f3(i);
+                    }
+                    load(f2);
+                };
             }
             function error() {
                 require(['io.ox/core/gettext'], function (gt) {

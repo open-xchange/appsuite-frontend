@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/chat/views/chat', [
     'io.ox/core/extensions',
@@ -68,6 +68,8 @@ define('io.ox/chat/views/chat', [
             // we create the scrollpane early to pass it along the view chain
             // this is just an optimization for better lazyload behavior (aka less flickering)
             this.$scrollpane = $('<div class="scrollpane scrollable" tabindex="0">').lazyloadScrollpane();
+            //#. shown above a chat window when there are network issues
+            this.$connectionProblemBanner = $('<div class="connection-problem-banner">').text(gt('Connection problems'));
             this.messagesView = new MessagesView({ room: this.model, collection: this.model.messages, scrollpane: this.$scrollpane });
 
             this.listenTo(this.model, {
@@ -89,7 +91,9 @@ define('io.ox/chat/views/chat', [
             this.listenTo(events, {
                 'cmd:message:delete': this.onMessageDelete,
                 'cmd:message:edit': this.onMessageEdit,
-                'cmd:message:reply': this.onMessageReply
+                'cmd:message:reply': this.onMessageReply,
+                'socket:disconnected': this.updateConnectionProblemBanner.bind(this),
+                'socket:connected': this.updateConnectionProblemBanner.bind(this)
             });
 
             this.listenTo(this.messagesView, {
@@ -146,6 +150,10 @@ define('io.ox/chat/views/chat', [
             $(window).off('focus', this.onShow);
         },
 
+        updateConnectionProblemBanner: function () {
+            this.$connectionProblemBanner.toggleClass('disconnected', !data.session.socket.connected);
+        },
+
         render: function () {
             this.toolbar = new ToolbarView({ point: 'io.ox/chat/detail/toolbar', title: gt('Chat actions') });
             this.toolbar.render(new ext.Baton({ model: this.model, view: this.toolbar }));
@@ -179,6 +187,7 @@ define('io.ox/chat/views/chat', [
                     ),
                     this.$paginateNext = $('<div class="paginate next">').hide()
                 ),
+                this.$connectionProblemBanner,
                 $('<div class="controls">').append(
                     this.renderJumpDown(),
                     this.renderEditor()
@@ -186,6 +195,7 @@ define('io.ox/chat/views/chat', [
             );
             this.onUpdatePaginators();
             this.markMessageAsRead();
+            this.updateConnectionProblemBanner();
 
             if (this.$dropdown.find('.dropdown-menu').children().length > 0) this.$dropdown.css('visibility', 'visible');
 

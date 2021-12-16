@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -220,6 +220,7 @@ Scenario('Create new group chat', async ({ I, users, chat, dialogs }) => {
         I.waitForDetached('.edit-picture');
         dialogs.clickButton('Create chat');
 
+        I.waitForDetached('.modal-dialog');
         chat.sendMessage('Hey group!');
         I.click('~Close chat', '.ox-chat');
         I.waitForFunction(async () => $('.chat-list .group.avatar.image').css('background-image') !== 'none', 10);
@@ -255,6 +256,8 @@ Scenario('Create new group chat from floating window via dropdown', async ({ I, 
 
     chat.fillNewGroupForm(groupTitle, emails);
     dialogs.clickButton('Create chat');
+    I.waitForDetached('.modal-dialog');
+
 
     I.waitForElement('.ox-chat .controls');
     I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
@@ -278,6 +281,7 @@ Scenario('Create new group chat from floating window via icon', async ({ I, user
 
     chat.fillNewGroupForm(groupTitle, emails);
     dialogs.clickButton('Create chat');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.waitForVisible('.chat-rightside .chat-avatar svg[data-icon="fa-group"]');
@@ -364,8 +368,9 @@ Scenario('Create new group chat from appointment', async ({ I, dialogs, calendar
                 { entity: user3.userdata.id }
             ]
         });
-        I.login('app=io.ox/calendar&perspective=week', { user: user1 });
+        I.login('app=io.ox/calendar&perspective=week:week', { user: user1 });
         calendar.waitForApp();
+        chat.openChat();
         I.waitForText(subject, 5, '.appointment');
         I.retry(5).click(subject, '.appointment');
         I.waitForElement('.io-ox-sidepopup');
@@ -425,6 +430,8 @@ Scenario('Create new channel', async ({ I, users, contexts, chat, dialogs }) => 
 
         chat.fillNewChannelForm(channelTitle);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
+
 
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Hello everyone!');
@@ -458,6 +465,7 @@ Scenario('Create new channel from floating window via dropdown', async ({ I, use
 
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
 
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group-avatar.image').css('background-image') !== 'none', 10);
@@ -479,6 +487,8 @@ Scenario('Create new channel from floating window via icon', async ({ I, users, 
 
     chat.fillNewChannelForm(channelTitle);
     dialogs.clickButton('Create channel');
+    I.waitForDetached('.modal-dialog');
+
 
     I.waitForElement('.ox-chat .controls');
     I.waitForFunction(async () => $('.chat-rightside .group.avatar.image').css('background-image') !== 'none', 10);

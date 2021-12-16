@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -58,11 +58,11 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         calendar.waitForApp();
         calendar.newAppointment();
         I.fillField('Subject', 'MySubject');
-        await calendar.setDate('startDate', startDate);
-        await calendar.setDate('endDate', endDate);
         I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
         I.clearField(calendar.locators.endtime);
         I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
+        await calendar.setDate('startDate', startDate);
+        await calendar.setDate('endDate', endDate);
         await calendar.addParticipant(users[1].userdata.primaryEmail, false);
         I.click('Create');
         I.waitForDetached('.io-ox-calendar-edit-window');
@@ -101,16 +101,11 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         // 6.) User#A: Accept changes
         mail.selectMail(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`);
         I.waitForElement('.mail-detail-frame');
-        I.waitForText('Accept changes');
+        I.waitForText('MySubject');
         I.dontSeeElement({ xpath: './/button[text() = "Accept"]' });
         I.dontSee('Decline');
         I.dontSee('Tentative');
-        I.click('Accept changes');
-        I.waitForText('The appointment has been updated');
-        I.waitForInvisible(
-            locate('.list-view li.list-item')
-                .withText(`${users[1].userdata.display_name} ${current.emailTitle} the invitation: MySubject`)
-        );
+        I.dontSee('Accept changes');
         // 7.) User#A: Go to calendar and verify the updated appointment information
         I.openApp('Calendar');
         calendar.waitForApp();
@@ -136,7 +131,7 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
     });
     // 10.) User#A: Delete the appointment
     await session('Alice', () => {
-        I.click('Delete');
+        I.click('Delete', '.io-ox-sidepopup');
         I.waitForText('Add a message to the notification email for the other participants');
         I.fillField('comment', 'MyComment');
         I.click('Delete appointment');
@@ -150,7 +145,8 @@ Data(actions).Scenario('[C241073] OX - OX', async function ({ I, calendar, mail,
         mail.selectMail('Appointment canceled: MySubject');
         I.waitForElement('.mail-detail-frame');
         I.waitForText(`MySubject, ${startDate.format('ddd, M/D/YYYY h:mm – ') + endDate.format('h:mm A')}`);
-        I.waitForText(current.itipStatus);
+        // TODO: clarify whether this should show up or not
+        // I.waitForText(current.itipStatus)
         I.waitForText('MyComment');
         // 12.) User#B: Delete
         I.click('Delete');
@@ -174,11 +170,11 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     calendar.waitForApp();
     calendar.newAppointment();
     I.fillField('Subject', 'MySubject');
-    await calendar.setDate('startDate', startDate);
-    await calendar.setDate('endDate', endDate);
     I.fillField(calendar.locators.starttime, startDate.format('h:mm A'));
     I.clearField(calendar.locators.endtime);
     I.fillField(calendar.locators.endtime, endDate.format('h:mm A'));
+    await calendar.setDate('startDate', startDate);
+    await calendar.setDate('endDate', endDate);
     await calendar.addParticipant(users[1].userdata.primaryEmail, false);
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
@@ -218,12 +214,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.login('app=io.ox/mail', { user: users[0] });
     mail.waitForApp();
     I.waitForText(`${users[1].userdata.display_name} accepted the invitation: MySubject`, 30);
-    // 6.) User#A: Accept changes
+    // 6.) User#A: check mail
     mail.selectMail(`${users[1].userdata.display_name} accepted the invitation: MySubject`);
     I.waitForElement('.mail-detail-frame');
-    I.waitForText('Accept changes');
-    I.click('Accept changes');
-    I.waitForInvisible('.mail-detail-frame');
+    I.waitForText('MySubject');
     // 7.) User#A: Download and verify the appointment
     I.openApp('Calendar', { perspective: 'week:week' });
     calendar.waitForApp();
@@ -234,7 +228,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.click('testdocument.odt', '.io-ox-sidepopup .attachment-list');
     I.waitForText('Download');
     I.handleDownloads();
-    I.click('Download');
+    I.click('Download', '.io-ox-sidepopup .attachment-list');
     I.amInPath('/build/e2e/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
@@ -250,15 +244,16 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.waitForText('Appointment canceled: #1');
     mail.selectMail('Appointment canceled: #1');
     I.waitForText('This email contains an appointment');
-    I.waitForText('The organizer would like to cancel an appointment that could not be found.');
+    I.waitForText('The appointment "#1" has been canceled by');
+    I.waitForText('The appointment could not be found in your calendar.');
     // 3.) Import the attached mail 'mail2.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_2.eml' });
     // 4.) Read the mail2
     I.waitForText('tthamm accepted the invitation: #1');
     mail.selectMail('tthamm accepted the invitation: #1');
     I.waitForText('This email contains an appointment');
-    I.waitForText('An attendee wanted to change his/her participant state in an appointment that could not be found.');
-    I.waitForText('Probably the appointment was already canceled.');
+    I.waitForText('has accepted the invitation to the appointment "#1"');
+    I.waitForText('The appointment could not be found in your calendar.');
     // 5.) Import the attached mail 'mail1.eml'
     await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_1.eml' });
     // 6.) Read the mail1
@@ -280,7 +275,7 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.openApp('Mail');
     // 8.) Read the mail2
     mail.selectMail('tthamm accepted the invitation: #1');
-    I.waitForText("You have received an E-Mail containing a reply to an appointment that you didn't organize. Best ignore it.");
+    I.waitForText('The response needs to be applied manually to your calendar.');
     // 9.) Read the mail3
     mail.selectMail('Appointment canceled: #1');
     I.waitForText('Delete');

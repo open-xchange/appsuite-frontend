@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/extensions',
@@ -28,7 +28,7 @@ define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
-    'static/3rd.party/Chart.min.js'
+    'static/3rd.party/chart.min.js'
 ], function (ext, ExtensibleView, util, http, capabilities, settings, gt, Chart) {
 
     'use strict';
@@ -254,13 +254,17 @@ define('io.ox/core/settings/errorlog/settings/pane', [
                 type: 'line',
                 data: chart,
                 options: {
-                    legend: { display: false },
-                    tooltips: { enabled: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltips: { enabled: false }
+                    },
                     elements: {
                         line: {
                             backgroundColor: 'rgba(0, 136, 204, 0.15)',
                             borderColor: 'rgba(0, 136, 204, 0.80)',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.5
                         },
                         point: {
                             backgroundColor: 'rgba(0, 136, 204, 1)',

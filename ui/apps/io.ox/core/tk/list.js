@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/tk/list', [
     'io.ox/backbone/views/disposable',
@@ -42,7 +42,7 @@ define('io.ox/core/tk/list', [
         // PULL TO REFRESH constants
         PTR_START =           5,    // Threshold when pull-to-refresh starts
         PTR_TRIGGER =       150,    // threshold when refresh is done
-        PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to
+        PTR_MAX_PULLDOWN =  300,    // max distance where the PTR node can be dragged to
         PTR_ROTATE_ANGLE =  360;    // total rotation angle of the spinner while pulled down
 
     // helper
@@ -55,7 +55,7 @@ define('io.ox/core/tk/list', [
 
         scaffold: $(
             '<li class="list-item">' +
-            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
+            '<div class="list-item-checkmark">' + (_.device('smartphone') ? $.mobileCheckbox() : $.checkbox()) + '</div>' +
             '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
@@ -406,12 +406,12 @@ define('io.ox/core/tk/list', [
                 }
             }
 
-            if (this.isPulling && distance <= PTR_MAX_PULLDOWM) {
+            if (this.isPulling && distance <= PTR_MAX_PULLDOWN) {
                 this.pullToRefreshTriggerd = false;
                 e.preventDefault();
                 e.stopPropagation();
 
-                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWM) * distance,
+                var rotationAngle = (PTR_ROTATE_ANGLE / PTR_MAX_PULLDOWN) * distance,
                     top = -70 + ((70 / PTR_TRIGGER) * distance);
 
                 this.pullToRefreshIndicator
@@ -424,7 +424,7 @@ define('io.ox/core/tk/list', [
                 if ((currentY - this.pullToRefreshStartY) >= PTR_TRIGGER) {
                     this.pullToRefreshTriggerd = true;
                 }
-            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWM) {
+            } else if (this.isPulling && distance >= PTR_MAX_PULLDOWN) {
                 e.preventDefault();
                 e.stopPropagation();
             }

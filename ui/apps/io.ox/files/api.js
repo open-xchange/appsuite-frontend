@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/files/api', [
     'io.ox/core/http',
@@ -308,6 +308,7 @@ define('io.ox/files/api', [
             pdf:   (/^pdf$/),
             zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
             txt:   (/^(txt|md)$/),
+            odfmisc:   (/^(otf|odf|odi|oti|odc|otc)$/),
             guard: (/^(grd|grd2|pgp)$/i) // added case insensitive flag, was used by previous guard code that was refactored
         },
 
@@ -405,11 +406,14 @@ define('io.ox/files/api', [
         'csv':  'text/csv',
         // open office
         'odc':  'application/vnd.oasis.opendocument.chart',
+        'otc':  'application/vnd.oasis.opendocument.chart-template',
         'odb':  'application/vnd.oasis.opendocument.database',
         'odf':  'application/vnd.oasis.opendocument.formula',
+        'otf':  'application/vnd.oasis.opendocument.formula-template',
         'odg':  'application/vnd.oasis.opendocument.graphics',
         'otg':  'application/vnd.oasis.opendocument.graphics-template',
         'odi':  'application/vnd.oasis.opendocument.image',
+        'oti':  'application/vnd.oasis.opendocument.image-template',
         'odp':  'application/vnd.oasis.opendocument.presentation',
         'otp':  'application/vnd.oasis.opendocument.presentation-template',
         'ods':  'application/vnd.oasis.opendocument.spreadsheet',

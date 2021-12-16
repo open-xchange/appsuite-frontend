@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/contacts/view-detail', [
     'io.ox/core/extensions',
@@ -590,7 +590,7 @@ define('io.ox/contacts/view-detail', [
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
                             var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
-                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], SAFE_FOR_JQUERY: true, RETURN_DOM_FRAGMENT: true });
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], RETURN_DOM_FRAGMENT: true });
                         }),
                         // --- rare ---
                         simple(data, 'marital_status'),
@@ -668,12 +668,12 @@ define('io.ox/contacts/view-detail', [
                         phone(data, 'telephone_business2'),
                         phone(data, 'telephone_home1'),
                         phone(data, 'telephone_home2'),
+                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_other'),
                         simple(data, 'fax_business'),
                         simple(data, 'fax_home'),
                         simple(data, 'fax_other'),
                         // --- rare ---
-                        phone(data, 'telephone_company'),
                         phone(data, 'telephone_car'),
                         phone(data, 'telephone_isdn'),
                         phone(data, 'telephone_pager'),
@@ -791,6 +791,14 @@ define('io.ox/contacts/view-detail', [
 
                     function success(list) {
                         if (!list.length) return section.remove();
+
+                        _(list).each(function (attachment) {
+                            // cut off prefix con://0/ because document converter can only handle old folder ids atm
+                            attachment.folder = attachment.folder.split('/');
+                            // just take the last part
+                            attachment.folder = attachment.folder[attachment.folder.length - 1];
+                        });
+
                         section.replaceWith(
                             block(
                                 attachmentlist(gt('Attachments'), list)
@@ -873,7 +881,7 @@ define('io.ox/contacts/view-detail', [
             if (hideAddressBook()) return;
 
             // don't show folders path for folder 6 if global address book is disabled
-            if (String(id) === '6' && !capabilities.has('gab')) return;
+            if (String(id) === util.getGabId() && !capabilities.has('gab')) return;
 
             this.append(
                 $('<div class="clearfix">'),

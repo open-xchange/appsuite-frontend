@@ -137,6 +137,16 @@
 }
 .mce-window-head, .mce-foot { border-color: #e5e5e5; }
 
+// some fixes for text zoom support
+.tinymce-toolbar {
+    overflow: auto;
+    // remove fixed icon width and height so text zoom scales properly
+    .mce-ico {
+        width: auto;
+        height: auto;
+    }
+}
+
 
 // all the menu hover and active/selected states
 .mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }

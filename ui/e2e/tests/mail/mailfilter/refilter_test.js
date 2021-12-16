@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../../steps.d.ts" />
 
@@ -122,7 +122,7 @@ Scenario('[C290530] Create and apply new filter rule', async ({ I, users, dialog
     dialogs.clickButton('Select');
 
     I.waitForText('Create new rule', 5, dialogs.locators.header);
-    dialogs.clickButton('Save and apply');
+    dialogs.clickButton('Save and apply rule now');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
@@ -140,9 +140,9 @@ Scenario('[C290531] Edit and apply existing filter rule', async ({ I, users, dia
     dialogs.waitForVisible();
     I.fillField('Rule name', 'no foo in inbox');
     I.fillField('Subject Contains', 'foo');
-    dialogs.clickButton('Save and apply');
+    dialogs.clickButton('Save and apply rule now');
     I.waitForVisible(locate('.modal .folder.selected').withText('Inbox'));
-    dialogs.clickButton('Apply');
+    dialogs.clickButton('Apply filter rule');
 
     checkForFilteredMail(I);
 });

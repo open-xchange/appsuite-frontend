@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/edit/extensions', [
     'io.ox/core/extensions',
@@ -140,11 +140,12 @@ define('io.ox/calendar/edit/extensions', [
                     if (attachments.length) {
                         var attachmentData = [];
                         _(attachments).each(function (attachment) {
-                            attachmentData.push({
+                            var data = {
                                 filename: attachment.filename,
-                                fmtType: attachment.file.type,
                                 uri: 'cid:' + 'file_' + attachment.cid
-                            });
+                            };
+                            if (attachment.file.type) data.fmtType = attachment.file.type;
+                            attachmentData.push(data);
                         });
                         // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
                         attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
@@ -823,11 +824,8 @@ define('io.ox/calendar/edit/extensions', [
                 var colorLabel = gt('none');
                 if (!self.model.get('color')) {
                     // try to get the folder color
-                    var model = folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model(),
-                        props = model.get('com.openexchange.calendar.extendedProperties') || {},
-                        color = '#fff';
+                    var color = calendarUtil.getFolderColor(folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model());
 
-                    if (props.color && props.color.value) color = props.color.value;
                     pickedColor.css({ 'background-color': color });
                     if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;
                     pickedColorLabel.text(colorLabel);

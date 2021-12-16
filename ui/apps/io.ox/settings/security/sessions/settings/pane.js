@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/settings/security/sessions/settings/pane', [
     'io.ox/core/extensions',
@@ -33,20 +33,6 @@ define('io.ox/settings/security/sessions/settings/pane', [
 ], function (ext, ExtensibleView, gt, http, SettingsListView, DisposableView, listUtils, settings) {
 
     'use strict';
-
-    function buildConfirmationDialog(text, confirmText) {
-        var def = new $.Deferred();
-        confirmText = confirmText || gt('Ok');
-        require(['io.ox/backbone/views/modal'], function (ModalDialog) {
-            //#. 'Sign out from device' as header of a modal dialog to sign out of a session.
-            new ModalDialog({ title: gt('Sign out from device'), description: text, async: true })
-            .addCancelButton()
-            .addButton({ label: confirmText, action: 'ok' })
-            .on('ok', def.resolve)
-            .open();
-        });
-        return def.promise();
-    }
 
     var SessionModel = Backbone.Model.extend({
 
@@ -255,28 +241,20 @@ define('io.ox/settings/security/sessions/settings/pane', [
             return this;
         },
         onDelete: function (e) {
-            var self = this,
-                // assign collection here since the view might be removed later
-                collection = this.collection;
+            var self = this;
             e.preventDefault();
-            buildConfirmationDialog(gt('Do you really want to sign out from that device?'), gt('Sign out')).done(function () {
-                var dialog = this;
-                http.PUT({
-                    url: ox.apiRoot + '/sessionmanagement',
-                    params: { action: 'delete' },
-                    data: [self.model.get('sessionId')]
-                }).fail(function (error) {
-                    require(['io.ox/core/yell'], function (yell) {
-                        yell(error);
-                    });
-                    collection.fetch();
-                }).always(function () {
-                    dialog.close();
-                });
 
-                // trigger destroy will remove the model from all collections
-                // do not use destroy(), because that will use the backbone sync mechanism
-                self.model.trigger('destroy', self.model);
+            var baton = ext.Baton({
+                data: { sessionId: self.model.get('sessionId') },
+                model: self.model,
+                // assign collection here since the view might be removed later
+                collection: this.collection
+            });
+
+            ext.point('io.ox/settings/sessions/signout').invoke('render', this, baton, {
+                text: gt('Do you really want to sign out from that device?'),
+                confirmText: gt('Sign out'),
+                action: 'delete'
             });
         }
 
@@ -366,29 +344,87 @@ define('io.ox/settings/security/sessions/settings/pane', [
         index: 1000,
         render: function (baton) {
             var link;
+
             this.$el.append(
-                link = $('<button data-action="remove-all" class="btn btn-primary hidden">').text(gt('Sign out from all clients')).on('click', function (e) {
-                    e.preventDefault();
-                    buildConfirmationDialog(gt('Do you really want to sign out from all clients except the current one?'), gt('Sign out')).done(function () {
-                        var dialog = this;
-                        this.busy();
-                        http.GET({
-                            url: ox.apiRoot + '/sessionmanagement',
-                            params: { action: 'clear' }
-                        }).fail(function (error) {
-                            require(['io.ox/core/yell'], function (yell) {
-                                yell(error);
-                            });
-                        }).always(function () {
-                            baton.view.collection.fetch().always(dialog.close);
+                link = $('<button data-action="remove-all" class="btn btn-primary hidden">').text(gt('Sign out from all clients'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        ext.point('io.ox/settings/sessions/signout').invoke('render', this, baton, {
+                            text: gt('Do you really want to sign out from all clients except the current one?'),
+                            confirmText: gt('Sign out'),
+                            action: 'clear'
                         });
-                    });
-                })
+                    })
             );
             baton.view.collection.initial.done(function () {
                 if (baton.view.collection.length === 0) return;
                 link.removeClass('hidden');
             });
+        }
+    });
+
+    ext.point('io.ox/settings/sessions/signout').extend({
+        id: 'default',
+        index: 100,
+        render: function (baton, options) {
+            require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                //#. 'Sign out from device' as header of a modal dialog to sign out of a session.
+                new ModalDialog({
+                    title: gt('Sign out from device'),
+                    description: options.text,
+                    async: true,
+                    point: 'io.ox/settings/sessions/signout/dialog'
+                })
+                .addCancelButton()
+                .addButton({ label: options.confirmText, action: 'ok' })
+                .on('ok', function () {
+                    ext.point('io.ox/settings/sessions/signout/dialog/' + options.action).invoke('action', this, baton);
+                })
+                .open();
+            });
+        }
+    });
+
+    ext.point('io.ox/settings/sessions/signout/dialog/clear').extend({
+        id: 'default',
+        index: 100,
+        action: function (baton) {
+            var dialog = this;
+            this.busy();
+            http.GET({
+                url: ox.apiRoot + '/sessionmanagement',
+                params: { action: 'clear' }
+            }).fail(function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+            }).always(function () {
+                baton.view.collection.fetch().always(dialog.close);
+            });
+        }
+    });
+
+    ext.point('io.ox/settings/sessions/signout/dialog/delete').extend({
+        id: 'default',
+        index: 100,
+        action: function (baton) {
+            var dialog = this;
+            http.PUT({
+                url: ox.apiRoot + '/sessionmanagement',
+                params: { action: 'delete' },
+                data: [baton.data.sessionId]
+            }).fail(function (error) {
+                require(['io.ox/core/yell'], function (yell) {
+                    yell(error);
+                });
+                baton.collection.fetch();
+            }).always(function () {
+                dialog.close();
+            });
+
+            // trigger destroy will remove the model from all collections
+            // do not use destroy(), because that will use the backbone sync mechanism
+            baton.model.trigger('destroy', baton.model);
         }
     });
 

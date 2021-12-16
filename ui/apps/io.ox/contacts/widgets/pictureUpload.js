@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/contacts/widgets/pictureUpload', [
     'io.ox/backbone/views/disposable',
@@ -90,7 +90,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
             this.openEditDialog();
         },
 
-        onClickContainer: function () {
+        onClickContainer: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
             return disableEditPicture ? this.openFilePicker() : this.openEditDialog();
         },
 
@@ -155,7 +157,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
             var input = e.target,
                 file = input.files[0];
             // check for valid image type. especially, svg is not allowed (see Bug 50748)
-            if (file && !/(jpg|jpeg|gif|bmp|png)/i.test(file.type)) {
+            if (file && !/(jpg|jpeg|gif|bmp|png|webp)/i.test(file.type)) {
                 return notifications.yell('error', gt('The file type "%1$s" cannot be used as a contact photo. Supported file types are JPEG, GIF, BMP, and PNG.', file.type));
             }
             // may happen if a user first selects a picture and then when trying to choose a new one presses cancel

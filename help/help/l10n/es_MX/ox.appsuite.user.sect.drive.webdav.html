@@ -1,13 +1,13 @@
-<html lang="en">
+<html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.9. Acceso a archivos con WebDAV</title>
+<title>9.9. Acceso a archivos con WebDAV</title>
 <link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Guía del usuario">
-<link rel="up" href="ox.appsuite.user.chap.drive.html" title="Chapter 9.  fFicheros">
-<link rel="prev" href="ox.appsuite.user.sect.drive.search.html" title="9.8. Búsqueda de archivos">
-<link rel="next" href="ox.appsuite.user.sect.drive.webdav.linux.html" title="9.9.1. Configuración de WebDAV en Linux">
+<link rel="up" href="ox.appsuite.user.chap.drive.html" title="Capítulo 9. Ficheros">
+<link rel="prev" href="ox.appsuite.user.sect.drive.search.html" title="9.8. Búsqueda de archivos">
+<link rel="next" href="ox.appsuite.user.sect.drive.webdav.linux.html" title="9.9.1. Configuración de WebDAV en Linux">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,44 +19,43 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Cambiar la navegación</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.drive.search.html">Prev</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.drive.webdav.linux.html">Next</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.drive.search.html">Atrás</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.drive.webdav.linux.html">Siguiente</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">
-    <span class="phrase">fFicheros</span>
+    <span class="phrase">Ficheros</span>
+    
     
     
   </h1>
 <div class="sect1" id="ox.appsuite.user.sect.drive.webdav">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.9. Acceso a archivos con WebDAV</h2></div></div></div>
-<a class="indexterm" name="id-1.10.14.2"></a><a class="indexterm" name="id-1.10.14.3"></a><a class="indexterm" name="id-1.10.14.4"></a><p id="ox.appsuite.user.concept.drive.webdav">Con WebDAV se puede acceder a los archivos de la aplicación de <span class="phrase">Ficheros</span> del mismo modo que se accede a archivos locales de su disco. Comparado con el acceso desde la interfaz de usuario del software colaborativo, WebDAV tiene ventajas y desventajas:</p>
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">9.9. Acceso a archivos con WebDAV</h2></div></div></div>
+<a class="indexterm" name="id-1.10.15.2"></a><a class="indexterm" name="id-1.10.15.3"></a><a class="indexterm" name="id-1.10.15.4"></a><p id="ox.appsuite.user.orientation.drive.webdav">Aprenda a usar WebDAV para acceder a los archivos de la aplicación <span class="phrase">Ficheros</span> del mismo modo a como se accede a los archivos locales de su disco.</p>
+<p id="ox.appsuite.user.concept.drive.webdav">Comparado con el acceso desde la interfaz de usuario del software colaborativo, WebDAV tiene ventajas y desventajas:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">La ventaja es el acceso rápido y directo con un administrador de archivos, por ejemplo el Explorador de Windows. No necesita haber iniciado sesión en la interfaz de usuario del software colaborativo.</p></li>
-<li class="listitem"><p role="presentation">La desventaja es que solo puede ver la versión actual del documento. No se muestra ni el histórico de versiones ni información adicional, como los comentarios.</p></li>
+<li class="listitem"><p role="presentation">La ventaja es el acceso rápido y directo con un administrador de archivos, por ejemplo el Explorador de Windows. No se necesita haber iniciado sesión en la interfaz de usuario del software colaborativo.</p></li>
+<li class="listitem"><p role="presentation">La desventaja es que solo puede ver la versión actual del documento. No se muestra ni el historial de versiones ni información adicional, como los comentarios.</p></li>
 <li class="listitem"><p role="presentation"><span class="phrase"><strong>Advertencia:</strong></span> Si borra un archivo con WebDAV se perderán todas sus versiones, no solo la actual.</p></li>
 </ul>
 <p>Nota: Para crear objetos con WebDAV en una carpeta pública o compartida, necesita tener al menos los siguientes permisos en la carpeta correspondiente:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation">crear objetos, editar objetos propios. </p></li></ul>
-<p>Para leer también objetos propios, necesita este permiso adicional:</p>
+<p>Para leer también objetos propios, necesita este permiso adicional: </p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation">leer objetos propios</p></li></ul>
-<p>      
-    </p>
 <p id="ox.appsuite.user.concept.drive.webdav.setup">Antes de acceder a los archivos de la aplicación de <span class="phrase">Ficheros</span> con un administrador de archivos, por ejemplo el Explorador de Windows, se ha de configurar el acceso WebDAV. El procedimiento cambia dependiendo del software del sistema:</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.drive.webdav.linux.html">Configuración de WebDAV en Linux</a></p></li>
 <li class="listitem"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.drive.webdav.win.html">Configuración de WebDAV en Windows</a></p></li>
 </ul>
-<p>
-    </p>
 <p id="ox.appsuite.user.parent.drive.webdav">Tema superior: <a class="xref" href="ox.appsuite.user.chap.drive.html"><i>
-    <span class="phrase">fFicheros</span>
+    <span class="phrase">Ficheros</span>
+    
     
     
   </i></a></p>

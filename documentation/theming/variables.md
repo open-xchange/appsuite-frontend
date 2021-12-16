@@ -76,7 +76,7 @@ title: Variables
 @hc-border-color:                       @hc-gray;
 
 /*
- * 1.4 Typographie
+ * 1.4 Typography
  */
 
 @light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
@@ -220,7 +220,7 @@ title: Variables
 
 /*
  * 2.6 Wallpaper
- * - use for gradiant
+ * - use for gradient
  * - unused?
  */
 @wallpaper-color-1:                     rgba(255, 255, 255, 1);

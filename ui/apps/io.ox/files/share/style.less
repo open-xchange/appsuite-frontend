@@ -224,7 +224,10 @@
     }
 }
 
-.modal {
+.modal,.modal.get-link-dialog {
+    .modal-dialog {
+        min-width: 600px;
+    }
     .modal-body {
         .input-group.has-picker:focus-within {
             border-color: #66afe9;
@@ -252,6 +255,10 @@
 }
 
 .modal.share-permissions-dialog {
+
+    .modal-dialog {
+        min-width: 800px;
+    }
 
     .twitter-typeahead .tt-hint {
         color: #757575;
@@ -294,6 +301,17 @@
             font-size: 18px;
             line-height: 24px;
         }
+
+        .twitter-typeahead input {
+            height: 1.875rem
+        }
+
+        .input-group.has-picker:focus-within {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
     }
 
     .modal-header.help {
@@ -308,9 +326,13 @@
             display: table;
             position: relative;
             float: left;
-            margin-top: 0;
-            margin-right: 10px;
+            margin-top: 5px;
+            margin-right: 1rem;
             margin-bottom: 0;
+
+            .checkbox {
+                padding-left: ~"calc(1rem + 8px)";
+            }
         }
     }
 
@@ -466,7 +488,7 @@
         margin-bottom: 16px;
         &:last-child { margin-bottom: 0; }
 
-        @picture-height: 40px;
+        @picture-height: 2.5rem;
 
         .image { height: @picture-height; }
 
@@ -482,7 +504,6 @@
         }
 
         .role, .detail-dropdown, .entity-actions {
-            height: 40px;
             line-height: 40px;
             small {
                 padding-left: 25px;

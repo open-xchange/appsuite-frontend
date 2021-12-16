@@ -1,34 +1,35 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/compose/actions/send', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
+    'io.ox/core/api/account',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, composeAPI, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, composeAPI, mailAPI, accountAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -96,6 +97,17 @@ define('io.ox/mail/compose/actions/send', [
             perform: extensions.attachmentMissingCheck
         },
         {
+            id: 'check:valid-sender',
+            index: 450,
+            perform: function (baton) {
+                var from = baton.model.get('from') || [];
+                if (!accountAPI.isHidden({ primary_address: from[1] })) return;
+                notifications.yell('error', gt('This sender address is related to a disabled mail account. Please choose another sender address or visit settings to enable again.'));
+                baton.stopPropagation();
+                return $.Deferred().reject();
+            }
+        },
+        {
             id: 'busy:start',
             index: 500,
             perform: function (baton) {
@@ -149,8 +161,8 @@ define('io.ox/mail/compose/actions/send', [
                         // reenable the close button(s) in toolbar
                         if (baton.close) baton.close.show();
                         if (baton.launcherClose) baton.launcherClose.show();
-
-                        win.idle().show();
+                        // param 'resume' needed on mobile
+                        win.idle().show(undefined, _.device('smartphone'));
                     }
 
                     // special errors. Those are handled in 'io.ox/mail/compose/main'

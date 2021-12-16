@@ -24,6 +24,8 @@
     @border-color: #e5e5e5;
     border-radius: 10px;
     height: 704px;
+    // prevent overflow in small windows
+    max-height: ~"calc(100% - 32px)";
     width: 600px;
     max-width: 800px;
 
@@ -178,7 +180,7 @@
                                 }
                             }
                             &:focus {
-                                outline: 2px solid #000;
+                                outline: 2px solid #333;
                             }
                             background-color: @white;
                             border: none;

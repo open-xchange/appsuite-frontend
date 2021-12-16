@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="User Guide">
-<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.8. Using E-Mail Filters">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.8. Using Email Filters">
 <link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.8.1. Creating new rules">
 <link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.8.3. Adding an action">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
@@ -29,22 +29,21 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only"><span class="phrase">E-Mail</span></h1>
-<h2 class="sr-only">Using E-Mail Filters</h2>
+  <h1 class="sr-only"><span class="phrase">Email</span></h1>
+<h2 class="sr-only">Using Email Filters</h2>
 <div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
 <div class="titlepage"><div><div><h3 class="title">5.8.2. Adding a condition</h3></div></div></div>
-<a class="indexterm" name="id-1.6.14.11.2"></a><a class="indexterm" name="id-1.6.14.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">A condition helps to define the E-Mails to which the action should be applied. You can set one or multiple conditions.</p>
+<a class="indexterm" name="id-1.6.15.11.2"></a><a class="indexterm" name="id-1.6.15.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">A condition helps to define the emails to which the action should be applied. You can set one or multiple conditions.</p>
 <div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
 <p class="title">How to add a condition in the <span class="guilabel"><strong>Create new rule</strong></span> window:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Click on <span class="guibutton"><strong>Add condition</strong></span>. Make a selection from the drop-down menu. Note the following:<ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">In order to use an E-Mail part that is not contained in the list, select <span class="guibutton"><strong>Header</strong></span>. Enter a header entry in the Name input field. You can read an E-Mail's header by displaying the source data.</p></li>
-<li class="listitem"><p role="presentation">In order to consider the <span class="guibutton"><strong>BCC</strong></span> part, select <span class="guibutton"><strong>Envelope - To</strong></span>. Envelope includes the E-Mail recipients entered in the <span class="guibutton"><strong>To</strong></span>, <span class="guibutton"><strong>CC</strong></span> or <span class="guibutton"><strong>BCC</strong></span> field.</p></li>
-<li class="listitem"><p role="presentation">In order to use a part of the E-Mail content in the condition, select <span class="guibutton"><strong>Content</strong></span>.</p></li>
+<li class="step"><p role="presentation">Click on <span class="guibutton"><strong>Add condition</strong></span>. Make a selection from the drop-down menu. Note the following: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">In order to use an email part that is not contained in the list, select <span class="guibutton"><strong>Header</strong></span>. Enter a header entry in the Name input field. You can read an email's header by displaying the source data.</p></li>
+<li class="listitem"><p role="presentation">In order to consider the <span class="guibutton"><strong>BCC</strong></span> part, select <span class="guibutton"><strong>Envelope - To</strong></span>. Envelope includes the email recipients entered in the <span class="guibutton"><strong>To</strong></span>, <span class="guibutton"><strong>CC</strong></span> or <span class="guibutton"><strong>BCC</strong></span> field.</p></li>
+<li class="listitem"><p role="presentation">In order to use a part of the email content in the condition, select <span class="guibutton"><strong>Content</strong></span>.</p></li>
 <li class="listitem"><p role="presentation">In order to use the date of receipt in the condition, select <span class="guibutton"><strong>Current Date</strong></span>.</p></li>
-</ul>
-            </p></li>
-<li class="step"><p role="presentation">Select a criterion from the drop-down next to the E-Mail part. Enter an argument in the input field.</p></li>
+</ul></p></li>
+<li class="step"><p role="presentation">Select a criterion from the drop-down next to the email part. Enter an argument in the input field.</p></li>
 <li class="step">
 <p role="presentation">You can add further conditions. You can then specify whether one or all conditions are to be met in order to process the actions. To do so, click on <span class="guibutton"><strong>Apply rule if all conditions are met</strong></span>.</p>
 <p role="presentation">As soon as there is a condition, you can create nested conditions. To do so, click on <span class="guibutton"><strong>Add condition</strong></span>. Select <span class="guibutton"><strong>Nested condition</strong></span>.</p>
@@ -52,24 +51,22 @@
 </li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.example.email.mailfilter.condition">Example: The following details are used for the condition:</p>
+<p id="ox.appsuite.user.example.email.mailfilter.condition">Example: The following details are used for the condition: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">E-Mail part "Subject"</p></li>
+<li class="listitem"><p role="presentation">Email part "Subject"</p></li>
 <li class="listitem"><p role="presentation">Criterion "Is exactly"</p></li>
 <li class="listitem"><p role="presentation">Argument "minutes"</p></li>
 </ul>
-<p>In this case it would be verified whether the subject of an E-Mail exactly matches the argument "minutes". Further examples how to filter E-Mails using the subject:</p>
+<p> In this case it would be verified whether the subject of an email exactly matches the argument "minutes". Further examples how to filter emails using the subject: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Criterion: "contains"</p>
 <p role="presentation">The condition is met if the subject contains the characters in the argument.</p>
-<p role="presentation">Example: The argument is "minutes".</p>
+<p role="presentation">Example: The argument is "minutes". </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
 <li class="listitem"><p role="presentation">The condition is also met for the subject "meeting minutes".</p></li>
 </ul>
-<p role="presentation">
-            </p>
 </li>
 <li class="listitem">
 <p role="presentation">Criterion: "matches"</p>
@@ -89,29 +86,21 @@
 <li class="listitem"><p role="presentation">The condition is also met for the subject "organisation".</p></li>
 <li class="listitem"><p role="presentation">The condition is not met for the subject "Organic".</p></li>
 </ul>
-<p role="presentation">
-            </p>
 </li>
 </ul>
-<p>
-      </p>
-<p id="ox.appsuite.user.related.email.mailfilter.condition">
-        </p>
+<p id="ox.appsuite.user.related.email.mailfilter.condition"></p>
 <p class="title">Superordinated action:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Creating new rules</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.incoming.html">Encrypting incoming E-Mails by using a filter rule</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.email.incoming.html">Encrypting incoming emails by using a filter rule</a></p></li>
 </ul>
-<p>
-        </p>
+<p> </p>
 <p class="title">Related topics:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">Adding an action</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the E-Mail source</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the email source</a></p></li>
 </ul>
-<p>
-      </p>
-<p id="ox.appsuite.user.parent.email.mailfilter.condition">Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the E-Mail source</a></p>
+<p id="ox.appsuite.user.parent.email.mailfilter.condition">Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the email source</a></p>
 </div>
           </div>
         </body>

@@ -25,6 +25,9 @@
  .io-ox-mail-compose-window {
 
     .inline-yell {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         display: inline-block;
         float: right;
         color: #437d00;
@@ -78,7 +81,7 @@
         .composetoolbar {
             display: flex;
             flex: 1;
-            height: 32px;
+            height: 2.286em;
             padding-left: 32px;
             margin-left: 0;
 
@@ -90,18 +93,26 @@
             border: 1px transparent solid;
 
             // baseline icons
-            i.fa-font      { font-size: 20px; }
-            i.fa-paperclip { font-size: 21px; }
-            i.fa-cloud     { font-size: 22px; }
-            i.fa-bars      { font-size: 16px; }
+            a svg.font      { height: 20px; width: 28px; }
+            a svg.paperclip { height: 21px; width: 29px; }
+            a svg.cloud     { height: 22px; width: 31px; }
+            a svg.bars      { height: 16px; width: 22px; }
 
             // style icons
             & > a {
+                display: block;
+                padding-top: 4px;
+                // some backwards compatibility for non svg icons
                 & > i.fa {
                     width: 1.4em;
+                    margin-top: -4px;
+                }
+                & > .fa {
+                    width: 28px;
                     text-align: center;
                     line-height: 32px;
                     color:black;
+                    vertical-align: middle;
                 }
 
                 &:focus {
@@ -135,10 +146,14 @@
         // baseline adjustment
         display: flex;
         align-items: center;
-        min-height: 40px;
+        min-height: 2.5rem;
         .mail-input { flex: 1; }
         // padding is applied via .recipient-actions
         &.sender, &.recipient { padding-right: 0 };
+        &.sender .dropdown-caret {
+            top: 2px;
+            position: relative;
+        }
     }
 
     .mail-compose-fields {
@@ -154,7 +169,10 @@
             outline: 0;
         }
 
-        .tokenfield { background-color: transparent; }
+        .tokenfield {
+            min-height: 1.875rem;
+            background-color: transparent;
+        }
 
         // focus line instead
         .line-focus:focus-within {
@@ -190,12 +208,15 @@
             .address { color: @link-color; }
         }
 
-        // toggle sender-realname hint
-        .sender-realname {
+        // toggle sender-realname/sender-onbehalfof hint
+        .sender-realname, .sender-onbehalfof {
             display: none;
             color: #767676;
         }
-        &.no-realname .sender-realname { display: flex; }
+        &.no-realname .sender-realname,
+        &.onbehalfof .sender-onbehalfof {
+            display: flex;
+        }
 
         .info-line {
             i.fa {
@@ -449,5 +470,15 @@
 .share-attachments-view-dialog {
     .password-wrapper {
         margin-top: 24px;
+    }
+}
+
+.name-overwrite-view {
+    .checkbox.custom {
+        line-height: 1.42857143;
+        margin: 0;
+        i.toggle {
+            top: 0.25em;
+        }
     }
 }

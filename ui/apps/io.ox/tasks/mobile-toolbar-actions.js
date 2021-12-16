@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/tasks/mobile-toolbar-actions', [
     'io.ox/core/extensions',
@@ -36,14 +36,14 @@ define('io.ox/tasks/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             title: gt('New task'),
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             drawDisabled: true,
             ref: 'io.ox/tasks/actions/create'
         },
         'edit': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-pencil',
+            icon: 'fa-pencil',
             title: gt('Edit'),
             ref: 'io.ox/tasks/actions/edit',
             drawDisabled: true
@@ -51,7 +51,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         'delete': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-trash-o',
+            icon: 'fa-trash-o',
             title: gt('Delete'),
             ref: 'io.ox/tasks/actions/delete',
             drawDisabled: true
@@ -59,7 +59,7 @@ define('io.ox/tasks/mobile-toolbar-actions', [
         'done': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-check',
+            icon: 'fa-check',
             title: gt('Mark as done'),
             ref: 'io.ox/tasks/actions/done',
             drawDisabled: true

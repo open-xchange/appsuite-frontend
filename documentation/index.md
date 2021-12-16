@@ -2,10 +2,10 @@
 title: UI
 ---
 # Contents
-Please choose your desired topic from the navigation on the left. You will find some information about App Suite UI config, some development articles as well as information about Data Protection or Accessiblity in App Suite UI.
+Please choose your desired topic from the navigation on the left. You will find some information about App Suite UI config, some development articles as well as information about Data Protection or Accessibility in App Suite UI.
 
 # Developing for App Suite UI
-If you are looking for information about extending or modifing the App Suite UI source code, find some additionals information here.
+If you are looking for information about extending or modifying the App Suite UI source code, find some additional information here.
 
 ## How to get the App Suite UI code
 

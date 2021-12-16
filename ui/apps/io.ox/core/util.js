@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/util', [
     'io.ox/core/extensions',
@@ -156,7 +156,7 @@ define('io.ox/core/util', [
                 var node = $('<a target="_blank" rel="noopener">').attr('href', fix.url).append(that.breakableHTML(fix.url));
                 return node.prop('outerHTML') + fix.suffix;
             }.bind(this));
-            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'], SAFE_FOR_JQUERY: true });
+            text = DOMPurify.sanitize(text, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['a', 'wbr'], ALLOWED_ATTR: ['target', 'rel', 'href'] });
             text = that.injectAttribute(text, 'a', 'rel', 'noopener');
             return text;
 
@@ -277,7 +277,7 @@ define('io.ox/core/util', [
         getAddresses: function (str) {
             // cover simple case separately; simple string without comma, semi-colon or white-space (see bug 57870)
             if (/^[^,;\s]+$/.test(str)) return [str];
-            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;>\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });

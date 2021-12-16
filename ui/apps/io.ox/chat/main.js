@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/chat/main', [
     'io.ox/core/extensions',
@@ -47,9 +47,10 @@ define('io.ox/chat/main', [
     'io.ox/core/a11y',
     'settings!io.ox/chat',
     'gettext!io.ox/chat',
+    'settings!io.ox/core',
     'less!io.ox/chat/style',
     'io.ox/chat/commands'
-], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt) {
+], function (ext, launcher, api, data, events, util, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, url, toolbar, contactsAPI, ToolbarView, ModalDialog, AvatarView, presence, yell, a11y, settings, gt, coreSettings) {
 
     'use strict';
 
@@ -114,9 +115,15 @@ define('io.ox/chat/main', [
             this.onChangeState(_.extend(state, payload));
         },
 
+        switchToFloating: function () {
+            var cid = this.getCurrentMessageCid();
+            this.model.set('sticky', false);
+            this.scrollToMessage(cid);
+        },
+
         onStick: function () {
             var cid = this.getCurrentMessageCid();
-            FloatingWindow.View.prototype.onStick.apply(this);
+            this.model.set('sticky', true);
             this.scrollToMessage(cid);
         },
 
@@ -144,7 +151,7 @@ define('io.ox/chat/main', [
                 case 'open-chat': this.resubscribeChat(data.id); break;
                 case 'unsubscribe-chat': this.unsubscribeChat(data.id); break;
                 case 'add-member': this.addMember(data.id); break;
-                case 'switch-to-floating': this.model.set('sticky', false); break;
+                case 'switch-to-floating': this.switchToFloating(); break;
                 case 'discard-app': this.hideApp(); break;
                 case 'toggle-favorite': this.toggleFavorite(data.id); break;
                 case 'download': this.download(data); break;
@@ -153,9 +160,10 @@ define('io.ox/chat/main', [
         },
 
         startPrivateChat: function () {
-            var self = this;
+            var self = this,
+                picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
-            require(['io.ox/contacts/addressbook/popup'], function (picker) {
+            require([picker], function (picker) {
                 picker.open(
                     function callback(items) {
                         if (items.length === 0) return;
@@ -402,6 +410,7 @@ define('io.ox/chat/main', [
 
         resubscribeChat: function (roomId) {
             var model = data.chats.get(roomId);
+            if (model.get('active')) return this.showChat(roomId);
             model.toggleRecent().then(
                 this.showChat.bind(this, roomId)
             );
@@ -419,10 +428,8 @@ define('io.ox/chat/main', [
 
         toggleWindowMode: function () {
             var mode = this.model.get('sticky') ? 'sticky' : 'floating';
-            var cid = this.getCurrentMessageCid();
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
-            this.scrollToMessage(cid);
         },
 
         // we offer this via command because it's needed at different places, e.g. messages and file overview
@@ -501,6 +508,9 @@ define('io.ox/chat/main', [
         hideApp: function () {
             if (this.$el.is(':visible')) this.$el.hide(); else this.$body.hide();
             this.model.set('minimized', true);
+            // reset page title to current app
+            var app = ox.ui.App.getCurrentApp();
+            if (app && app.get('title')) ox.trigger('change:document:title', app.get('title'));
             return this;
         },
 
@@ -756,7 +766,7 @@ define('io.ox/chat/main', [
         var mode = settings.get('mode', 'sticky');
 
         win = new Window({
-            title: 'OX Chat',
+            title: 'Chat',
             sticky: mode === 'sticky',
             showInTaskbar: false,
             stickable: true,
@@ -766,13 +776,13 @@ define('io.ox/chat/main', [
             quitOnEscape: false
         })
         .render().open();
-
+        win.floating = win;
         // don't use setWindow method. Has to much overhead for the rather special chat window
         this.set('window', win);
         // strange circular dependency we need for getCurrentFloatingApp()
         win.app = app;
-
         app.settings = settings;
+        app.getContextualHelp = _.constant('ox.appsuite.user.sect.chat.gui.html');
 
         // add some scaffold css now to avoid invisible busy spinner (width 0px etc)
         win.$body.addClass('ox-chat').toggleClass('columns', mode === 'sticky').width(settings.get('width', 320)).parent().busy();

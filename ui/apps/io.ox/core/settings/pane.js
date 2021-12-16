@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/settings/pane', [
     'io.ox/core/extensions',
@@ -31,6 +31,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/core/capabilities',
     'io.ox/core/notifications',
     'io.ox/core/locale',
+    'io.ox/core/deputy/dialog',
     'io.ox/core/desktopNotifications',
     'plugins/portal/userSettings/register',
     'settings!io.ox/core',
@@ -39,7 +40,7 @@ define('io.ox/core/settings/pane', [
     'io.ox/backbone/mini-views/timezonepicker',
     'io.ox/core/main/appcontrol',
     'io.ox/core/settings/dialogs/quickLauncherDialog'
-], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
+], function (ext, ExtensibleView, DisposableView, mini, util, apps, upsell, capabilities, notifications, locale, deputyDialog, desktopNotifications, userSettings, settings, settingOptions, gt, TimezonePicker, appcontrol, quickLauncherDialog) {
 
     'use strict';
 
@@ -297,6 +298,14 @@ define('io.ox/core/settings/pane', [
                     );
                 }
 
+                if (capabilities.has('deputy')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                        .text(gt('Manage deputies'))
+                        .on('click', deputyDialog.open)
+                    );
+                }
+
                 if ($group.children().length) this.$el.append($group);
             }
         }
@@ -441,7 +450,7 @@ define('io.ox/core/settings/pane', [
             render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
-                if (availableApps <= 2) return;
+                if (availableApps.length <= 2) return;
 
                 baton.$el.append(
                     util.compactSelect('autoStart', gt('Default app after sign in'), this.model, availableApps)

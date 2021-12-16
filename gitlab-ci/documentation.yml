@@ -44,8 +44,8 @@ deploy documentation:
     - rsync -aHAX --delete doku/$VERSION/assets/ /var/www/documentation/$VERSION/assets
     - rsync -aHAX --delete doku/$VERSION/docs-general/ /var/www/documentation/$VERSION/docs-general
     - rsync -aHAX --delete doku/$VERSION/index.html /var/www/documentation/$VERSION/
-    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
-    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
+    - find /var/www/documentation.open-xchange.com -user gitlab-runner -exec chmod g+w '{}' \;
+    - find /var/www/documentation.open-xchange.com -user gitlab-runner -exec chgrp www-data '{}' \;
   dependencies:
     - build documentation
   needs:

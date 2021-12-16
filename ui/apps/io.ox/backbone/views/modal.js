@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/core/a11y', 'gettext!io.ox/core'], function (ExtensibleView, a11y, gt) {
 
@@ -93,7 +93,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.idle = idle.bind(this);
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
-            // apply max height if maximize is given as number
+            // apply max height if maximize is given as number or string
             if (_.isNumber(options.maximize) || _.isString(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
@@ -147,7 +147,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
         },
 
+        checkExtensions: function () {
+            var self = this;
+            // check extension requirements
+            this.point.each(function (extension) {
+                // support functions and booleans
+                if (_.isFunction(extension.requires)) self.point.toggle(extension.id, !!extension.requires(self.model));
+                if (_.isBoolean(extension.requires)) self.point.toggle(extension.id, extension.requires);
+            });
+        },
+
         render: function () {
+            this.checkExtensions();
             return this.invoke('render', this.$body);
         },
 
@@ -172,7 +183,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
-            this.toggleAriaHidden(true);
             this.trigger('open');
             this.setFocus(o);
             // track open instances
@@ -204,15 +214,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     if (focusNode.length !== 0) focusNode.focus();
                 });
             }
-        },
-
-        toggleAriaHidden: function () {
-            // A11y: This function may be removed in the future (needs more testing)
-            //
-            // New:
-            // Uses new WCAG 1.1 aria-modal on role="dialog" element
-            // Old:
-            // this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {
@@ -396,7 +397,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
             // use disableFormElements here, so when resuming, the correct disabled status can be set again (resume -> idle -> enableFormElements needs the correct marker classes)
             this.disableFormElements();
-            this.toggleAriaHidden(false);
             this.trigger('pause');
         },
 
@@ -409,7 +409,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             }
             // add marker class again(needed by yells for example)
             $(document.body).addClass('modal-open');
-            this.toggleAriaHidden(true);
             this.idle();
             this.trigger('resume');
         }
@@ -423,7 +422,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');
         if (!e || e.type !== 'hidden') this.$el.modal('hide');
-        this.toggleAriaHidden(false);
         this.trigger('close');
         var previousFocus = this.previousFocus;
         this.$el.remove();

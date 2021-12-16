@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/api', [
     'io.ox/core/http',
@@ -66,7 +66,7 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks|event)$/.test(item.module)) return false;
+                if (!/^(addressbooks|contacts|calendar|tasks|event)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(calSettings.get('chronos/defaultFolderId'))) return true;
                 // shared folders that have createdfrom data available
@@ -128,7 +128,7 @@ define('io.ox/core/folder/api', [
     }
 
     function isFlat(id) {
-        return /^(contacts|calendar|tasks|event)$/.test(id);
+        return /^(addressbooks|contacts|calendar|tasks|event)$/.test(id);
     }
 
     function isNested(id) {
@@ -222,8 +222,8 @@ define('io.ox/core/folder/api', [
         supportsInternalSharing: function () {
             // drive: always enabled
             if (this.is('drive')) return true;
-            // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
-            if (this.is('mail')) return capabilities.has('gab') && this.can('change:permissions');
+            // mail: no longer check gab. With ldap folder support we can have users while not having a gab. Check folder capability (bit 0), see Bug 47229
+            if (this.is('mail')) return this.can('change:permissions');
             // contacts, calendar, tasks
             if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');
@@ -275,7 +275,7 @@ define('io.ox/core/folder/api', [
             this.on('remove', this.onRemove, this);
 
             // sort shared and hidden folders by title
-            if (/^flat\/(contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
+            if (/^flat\/(addressbooks|contacts|calendar|tasks|event)\/shared$/.test(this.id) || /^flat\/(addressbooks|contacts|calendar|tasks|event)\/hidden$/.test(this.id)) {
                 this.comparator = function (model) {
                     return (model.get('display_title') || model.get('title')).toLowerCase();
                 };
@@ -629,7 +629,7 @@ define('io.ox/core/folder/api', [
         if (isVirtual(id)) return $.when({ id: id });
 
         // fetch GAB but GAB is disabled?
-        if (id === '6' && !capabilities.has('gab')) {
+        if (id === contactUtil.getGabId() && !capabilities.has('gab')) {
             return fail(gt('Accessing global address book is not permitted'));
         }
 
@@ -885,7 +885,8 @@ define('io.ox/core/folder/api', [
     }
 
     function flat(options) {
-        options = _.extend({ module: undefined, cache: true, force: false }, options);
+        // all modules with flat foldertrees need the full request here as default (contacts/tasks/calendar)
+        options = _.extend({ module: undefined, cache: true, force: false, all: true }, options);
         if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
@@ -899,7 +900,8 @@ define('io.ox/core/folder/api', [
             collection = getFlatCollection(module, 'private'),
             cached = {};
 
-        if (collection.fetched && options.cache === true) {
+        // no caching if options.all is set to false
+        if (options.all && collection.fetched && options.cache === true) {
             cached.private = collection.toJSON();
             ['public', 'shared', 'sharing', 'hidden'].forEach(function (section) {
                 var collection = getFlatCollection(module, section);
@@ -916,7 +918,7 @@ define('io.ox/core/folder/api', [
             params: {
                 action: 'allVisible',
                 altNames: true,
-                content_type: module === 'contacts' ? 'contact' : module,
+                content_type: module === 'contacts' || module === 'addressbooks' ? 'addressdata' : module,
                 timezone: 'UTC',
                 tree: 1,
                 forceRetry: !!options.force,
@@ -932,8 +934,9 @@ define('io.ox/core/folder/api', [
                         .chain()
                         .map(makeObject)
                         .filter(function (folder) {
+                            var isAdmin = !!new Bitmask(folder.own_rights).get('admin');
                             // read access?
-                            if (!util.can('read', folder) && !util.can('change:permissions', folder)) return false;
+                            if (!util.can('read', folder) && !util.can('change:permissions', folder) && !isAdmin) return false;
                             // otherwise
                             return true;
                         })
@@ -974,16 +977,23 @@ define('io.ox/core/folder/api', [
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
-                pool.addCollection(collectionId, sections[id] = array, { reset: true });
+                sections[id] = array;
+                // only cache when options.all is set or we get strange side effects
+                if (!options.all) return;
+                pool.addCollection(collectionId, array, { reset: true });
             });
             // add collection for hidden folders
             collectionId = getFlatCollectionId(module, 'hidden');
             hidden = processListResponse(collectionId, hidden);
-            pool.addCollection(collectionId, sections.hidden = hidden, { reset: true });
+            sections.hidden = hidden;
+            // only cache when options.all is set or we get strange side effects
+            if (options.all) pool.addCollection(collectionId, hidden, { reset: true });
             // add collection for folders shared by me
             collectionId = getFlatCollectionId(module, 'sharing');
             sharing = processListResponse(collectionId, sharing);
-            pool.addCollection(collectionId, sections.sharing = sharing, { reset: true });
+            sections.sharing = sharing;
+            // only cache when options.all is set or we get strange side effects
+            if (options.all) pool.addCollection(collectionId, sharing, { reset: true });
 
             api.trigger('after:flat:' + options.module);
             // done
@@ -1164,7 +1174,8 @@ define('io.ox/core/folder/api', [
             options = _.extend({
                 module: parent.module,
                 subscribed: 1,
-                title: gt('New Folder')
+                title: gt('New Folder'),
+                updateParentFolder: true
             }, options);
             // inherit permissions for private flat non-calendar folders
             if (isFlat(options.module) && options.module !== 'calendar' && options.module !== 'event' && !(parent.id === '2' || util.is('public', parent))) {
@@ -1173,12 +1184,16 @@ define('io.ox/core/folder/api', [
                     return !!(item.bits & 268435456);
                 });
             }
+
             var params = {
                 action: 'new',
                 autorename: true,
                 folder_id: id
             };
             if (options.module !== 'event') params.tree = tree(id);
+            // a bit of a missmatch, here although we are in contacts, use addressdata as module to call the new api (parameter is module but it seems mw uses it as content_type)
+            if (options.module === 'contacts') options.module = 'addressdata';
+
             // go!
             return http.PUT({
                 module: 'folders',
@@ -1190,6 +1205,8 @@ define('io.ox/core/folder/api', [
                 return get(newId);
             })
             .then(function reloadSubFolders(data) {
+                // and back again...
+                if (options.module === 'addressdata') options.module = 'contacts';
                 return (
                     isFlat(options.module) ? flat({ module: options.module, cache: false }) : list(id, { cache: false })
                 )
@@ -1203,10 +1220,12 @@ define('io.ox/core/folder/api', [
                 if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
             })
             .done(function updateParentFolder(data) {
-                pool.getModel(id).set('subscr_subflds', true);
-                virtual.refresh();
-                api.trigger('create', data);
-                api.trigger('create:' + id.replace(/\s/g, '_'), data);
+                if (options.updateParentFolder) {
+                    pool.getModel(id).set('subscr_subflds', true);
+                    virtual.refresh();
+                    api.trigger('create', data);
+                    api.trigger('create:' + id.replace(/\s/g, '_'), data);
+                }
             })
             .fail(function fail(error) {
                 api.trigger('create:fail', error, id);
@@ -1544,7 +1563,7 @@ define('io.ox/core/folder/api', [
             });
         // loop over flat views
         _(getFlatViews()).each(function (module) {
-            defs.push(flat({ module: module, all: module === 'event', cache: false }));
+            defs.push(flat({ module: module, cache: false }));
         });
 
         // we cannot use virtual.refresh right after the multiple returns, because it does not wait for the callback functions of the requests to finish. This would result in outdated models in the pool
@@ -1627,6 +1646,13 @@ define('io.ox/core/folder/api', [
     // register pool in util function. Needed for some checks. Cannot be done with require folderAPI or we would either be asynchronous or have circular dependencies
     util.registerPool(pool);
 
+    function removeFromPool(id) {
+        if (!id || !pool.models[id]) return;
+        removeFromAllCollections(pool.models[id]);
+        delete pool.models[id];
+        delete pool.collections[id];
+    }
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
@@ -1681,7 +1707,8 @@ define('io.ox/core/folder/api', [
         altnamespace: altnamespace,
         injectIndex: injectIndex,
         multipleLists: multipleLists,
-        renameDefaultCalendarFolders: renameDefaultCalendarFolders
+        renameDefaultCalendarFolders: renameDefaultCalendarFolders,
+        removeFromPool: removeFromPool
     });
 
     return api;

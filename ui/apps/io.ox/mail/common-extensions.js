@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/common-extensions', [
     'io.ox/core/extensions',
@@ -40,8 +40,9 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/attachments/view',
     'io.ox/backbone/views/action-dropdown',
     'io.ox/backbone/views/actions/util',
+    'io.ox/core/svg',
     'gettext!io.ox/mail'
-], function (ext, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, ToolbarView, settings, attachment, ActionDropdownView, actionsUtil, gt) {
+], function (ext, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, contactsUtil, userAPI, Pool, flagPicker, capabilities, ToolbarView, settings, attachment, ActionDropdownView, actionsUtil, svg, gt) {
 
     'use strict';
 
@@ -61,9 +62,7 @@ define('io.ox/mail/common-extensions', [
         if (status || isSpam) return node.text('!');
 
         // add initials
-        var initials = getInitials(baton.data.from);
-        node.text(initials);
-
+        node.append(svg.circleAvatar(getInitials(baton.data.from)));
         var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
 
         return contactsAPI.pictureHalo(
@@ -73,7 +72,6 @@ define('io.ox/mail/common-extensions', [
         );
     }
 
-    //
     function getInitials(from) {
         if (!_.isArray(from) || !from.length) return '';
         var name = util.getDisplayName(from[0]);
@@ -206,8 +204,7 @@ define('io.ox/mail/common-extensions', [
 
             var $el = $('<div class="from">'),
                 data = baton.data,
-                from = data.from || [],
-                length = from.length,
+                from = util.getDeputy(data) || data.from || [],
                 status = util.authenticity('icon', data);
 
             // from is special as we need to consider the "sender" header
@@ -219,14 +216,13 @@ define('io.ox/mail/common-extensions', [
                     name = util.getDisplayName(item),
                     $container;
                 if (!email) return;
-                $el.addClass(length > 1 || _.device('smartphone') ? 'no-max-height' : '')
-                   .append(
-                       $container = $('<a href="#" role="button" class="halo-link">')
+                $el.append(
+                    $container = $('<a href="#" role="button" class="halo-link">')
                         .data({ email: email, email1: email })
                         .append($('<span class="sr-only">').text(gt('From:')))
                         .append($('<span class="person-link person-from ellipsis">').text(name))
                         .addClass((name === email && status) ? 'authenticity-sender ' + status : '')
-                   );
+                );
 
                 // don't show email address on smartphones if status is pass or it's myself
                 var skipEmail = _.device('smartphone') && !!name && (status === 'pass' || account.is('sent', data.folder_id)),
@@ -725,7 +721,7 @@ define('io.ox/mail/common-extensions', [
                 self.append(
                     $('<span class="unread-toggle">')
                     .attr('aria-label', gt('Marked as unread'))
-                    .append($('<i class="fa fa-fircle" aria-hidden="true">'))
+                    .append($('<i class="fa fa-circle" aria-hidden="true">'))
                 );
             });
         },

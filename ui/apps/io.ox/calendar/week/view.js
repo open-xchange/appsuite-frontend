@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
@@ -430,7 +430,7 @@ define('io.ox/calendar/week/view', [
         },
 
         options: {
-            fulltimeHeight: 20,     // height of full-time appointments in px
+            fulltimeHeight: 1.25,   // height of full-time appointments in rem
             fulltimeMax:    5       // threshold for visible full-time appointments in scrollpane header
         },
 
@@ -548,7 +548,7 @@ define('io.ox/calendar/week/view', [
                     var startTimezone = moment(self.model.get('startDate')).tz(coreSettings.get('timezone')),
                         endTimezone = moment(self.model.get('startDate')).add(Math.max(0, self.model.get('numColumns') - 1), 'days').endOf('day').tz(coreSettings.get('timezone'));
 
-                    dropdown.$el.find('.dropdown-label').empty().append(startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(), $('<i class="fa fa-caret-down" aria-hidden="true">'));
+                    dropdown.$el.find('.dropdown-label').empty().append(startTimezone.zoneAbbr() === endTimezone.zoneAbbr() ? startTimezone.zoneAbbr() : startTimezone.zoneAbbr() + '/' + endTimezone.zoneAbbr(), $.icon('fa-caret-down', false, 'dropdown-caret'));
                     dropdown.$ul.empty();
                     render();
                 });
@@ -782,17 +782,17 @@ define('io.ox/calendar/week/view', [
                     // append it again to stick to the order of the collection
                     node.parent().append(node);
                     node.show().css({
-                        height: this.opt.fulltimeHeight,
-                        lineHeight: this.opt.fulltimeHeight + 'px',
+                        height: this.opt.fulltimeHeight + 'rem',
+                        lineHeight: this.opt.fulltimeHeight + 'rem',
                         width: (100 / numColumns) * fulltimeWidth + '%',
                         left: (100 / numColumns) * Math.max(0, fulltimePos) + '%',
-                        top: row * (this.opt.fulltimeHeight + 1)
+                        top: row * (this.opt.fulltimeHeight + 0.0625) + 'rem'
                     });
 
                     maxRow = Math.max(maxRow, row + 1);
                 }.bind(this));
 
-                var height = (maxRow <= this.opt.fulltimeMax ? maxRow : (this.opt.fulltimeMax + 0.5)) * (this.opt.fulltimeHeight + 1);
+                var height = (maxRow <= this.opt.fulltimeMax ? maxRow : (this.opt.fulltimeMax + 0.5)) * (this.opt.fulltimeHeight + 0.0625) + 'rem';
                 this.$el.css('height', height);
                 // enable/disable scrollbar
                 if (maxRow > this.opt.fulltimeMax) this.$appointmentContainer.css({ 'overflow-y': 'scroll', 'margin-right': '' });
@@ -995,7 +995,7 @@ define('io.ox/calendar/week/view', [
                     timezones.map(function (tz) {
                         return self.renderTimeLabel(tz)
                             .addClass('secondary-timezone')
-                            .css('height', height);
+                            .css('height', height / 16 + 'rem');
                     })
                 )
                 .toggleClass('secondary', timezones.length > 0);
@@ -1517,7 +1517,7 @@ define('io.ox/calendar/week/view', [
         onWindowResize: function () {
             this.updateCellHeight();
             var height = this.getContainerHeight();
-            this.$('.scrollpane').children().css('height', height);
+            this.$('.scrollpane').children().css('height', height / 16 + 'rem');
         }
 
     });

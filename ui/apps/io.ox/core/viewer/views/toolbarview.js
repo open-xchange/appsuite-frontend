@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
@@ -33,8 +33,9 @@ define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'io.ox/files/util',
+    'io.ox/core/api/tab',
     'gettext!io.ox/core'
-], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, gt) {
+], function (Dropdown, DisposableView, ToolbarView, Ext, actionsUtil, FilesAPI, HelpView, DocConverterUtils, Util, Settings, FileUtils, TabAPI, gt) {
 
     /**
      * The ToolbarView is responsible for displaying the top toolbar,
@@ -137,7 +138,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'zoomout': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-search-minus',
+                icon: 'fa-search-minus',
                 title: gt('Zoom out'),
                 section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomout',
@@ -148,7 +149,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'zoomin': {
                 prio: 'hi',
                 mobile: 'lo',
-                icon: 'fa fa-search-plus',
+                icon: 'fa-search-plus',
                 title: gt('Zoom in'),
                 section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
@@ -179,7 +180,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'autoplaystart': {
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
-                icon: 'fa fa-play',
+                icon: 'fa-play',
                 title: gt('Slideshow'),
                 tooltip: gt('Run slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystart',
@@ -190,7 +191,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'autoplaystop': {
                 prio: _.device('desktop') ? 'hi' : 'lo',
                 mobile: 'lo',
-                icon: 'fa fa-stop',
+                icon: 'fa-stop',
                 title: gt('Stop slideshow'),
                 ref: TOOLBAR_ACTION_ID + '/autoplaystop',
                 customize: function () {
@@ -202,7 +203,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'togglesidebar': {
                 prio: 'hi',
                 mobile: 'hi',
-                icon: 'fa fa-info-circle',
+                icon: 'fa-info-circle',
                 title: gt('View details'),
                 ref: TOOLBAR_ACTION_ID + '/togglesidebar',
                 customize: function () {
@@ -211,7 +212,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'popoutstandalone': {
                 prio: 'hi',
-                icon: 'fa fa-external-link-square',
+                icon: 'fa-external-link-square',
                 title: gt('Pop out standalone viewer'),
                 ref: TOOLBAR_ACTION_ID + '/popoutstandalone',
                 customize: function () {
@@ -220,7 +221,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             },
             'help': {
                 prio: 'hi',
-                icon: 'fa fa-question-circle',
+                icon: 'fa-question-circle',
                 title: gt('Help'),
                 ref: TOOLBAR_ACTION_ID + '/help',
                 customize: function () {
@@ -239,7 +240,7 @@ define('io.ox/core/viewer/views/toolbarview', [
             'close': {
                 prio: 'hi',
                 mobile: 'hi',
-                icon: 'fa fa-times',
+                icon: 'fa-times',
                 title: gt('Close'),
                 tooltip: gt('Close viewer'),
                 ref: TOOLBAR_ACTION_ID + '/close'
@@ -265,7 +266,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: _.device('ios && ios < 12') ? 'lo' : 'hi',      // download is active in toolbar for ios >= 12 and all other devices
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     section: 'export',
                     ref: Util.getRefByModelSource('drive')
@@ -281,7 +282,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'open': {
                     prio: 'lo',
                     mobile: _.device('!ios || ios >= 12') ? 'lo' : 'hi',    // 'window.open button' active in toolbar for ios < 12, for all other devices located in the burger menu
-                    icon: _.device('ios && ios < 12') ? 'fa fa-download' : '',
+                    icon: _.device('ios && ios < 12') ? 'fa-download' : '',
                     title: gt('Open attachment'),
                     section: 'export',
                     ref: 'io.ox/files/actions/open'
@@ -346,7 +347,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('mail')
                 },
@@ -365,7 +366,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadcomposeattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('compose')
                 }
@@ -381,7 +382,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     ref: Util.getRefByModelSource('pim')
                 },
@@ -411,7 +412,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 'download': {
                     prio: 'hi',
                     mobile: 'lo',
-                    icon: 'fa fa-download',
+                    icon: 'fa-download',
                     title: gt('Download'),
                     section: 'export',
                     ref: Util.getRefByModelSource('guardDrive')
@@ -511,54 +512,51 @@ define('io.ox/core/viewer/views/toolbarview', [
         },
         action: function (baton) {
             if (!FileUtils.isFileVersionUploading(baton.data.id, FILE_VERSION_IS_UPLOADING_MSG)) {
+                if (TabAPI.openInTabEnabled() && (_.url.hash('office:disable-openInTabs') !== 'true')) {
+                    // the url attributes to launch the popout viewer
+                    var urlAttrs = { app: 'io.ox/files/detail' };
 
-                if (ox.tabHandlingEnabled && (_.url.hash('office:disable-openInTabs') !== 'true')) {
-                    require(['io.ox/core/api/tab']).then(function (TabAPI) {
-                        // the url attributes to launch the popout viewer
-                        var urlAttrs = { app: 'io.ox/files/detail' };
+                    if (baton.model.isFile()) {
+                        _.extend(urlAttrs, {
+                            id: baton.model.get('id'),
+                            folder: baton.model.get('folder_id')
+                        });
 
-                        if (baton.model.isFile()) {
+                        if (baton.model.get('current_version') === false) {
+                            urlAttrs.version = baton.model.get('version');
+                        }
+
+                    } else if (baton.model.isMailAttachment()) {
+                        _.extend(urlAttrs, {
+                            id: baton.data.mail.id,
+                            folder: baton.data.mail.folder_id,
+                            attachment: baton.data.id
+                        });
+                        // Handle decrypted attachments
+                        if (baton.data.security && baton.data.security.decrypted) {
                             _.extend(urlAttrs, {
-                                id: baton.model.get('id'),
-                                folder: baton.model.get('folder_id')
-                            });
-
-                            if (baton.model.get('current_version') === false) {
-                                urlAttrs.version = baton.model.get('version');
-                            }
-
-                        } else if (baton.model.isMailAttachment()) {
-                            _.extend(urlAttrs, {
-                                id: baton.data.mail.id,
-                                folder: baton.data.mail.folder_id,
-                                attachment: baton.data.id
-                            });
-                            // Handle decrypted attachments
-                            if (baton.data.security && baton.data.security.decrypted) {
-                                _.extend(urlAttrs, {
-                                    decrypt: true,
-                                    cryptoAuth: baton.data.security.authentication || baton.data.auth
-                                });
-                            }
-
-                        } else if (baton.model.isPIMAttachment()) {
-                            _.extend(urlAttrs, {
-                                module: baton.data.module,
-                                id: baton.data.attached,
-                                folder: baton.data.folder,
-                                attachment: baton.data.id || baton.data.managedId
-                            });
-
-                        } else if (baton.model.isComposeAttachment()) {
-                            _.extend(urlAttrs, {
-                                space: baton.data.space,
-                                attachment: baton.data.id
+                                decrypt: true,
+                                cryptoAuth: baton.data.security.authentication || baton.data.auth
                             });
                         }
 
-                        var tabUrl = TabAPI.createUrl(urlAttrs);
-                        TabAPI.openChildTab(tabUrl);
-                    });
+                    } else if (baton.model.isPIMAttachment()) {
+                        _.extend(urlAttrs, {
+                            module: baton.data.module,
+                            id: baton.data.attached,
+                            folder: baton.data.folder,
+                            attachment: baton.data.id || baton.data.managedId
+                        });
+
+                    } else if (baton.model.isComposeAttachment()) {
+                        _.extend(urlAttrs, {
+                            space: baton.data.space,
+                            attachment: baton.data.id
+                        });
+                    }
+
+                    var tabUrl = TabAPI.createUrl(urlAttrs);
+                    TabAPI.openChildTab(tabUrl);
 
                 } else {
                     ox.launch('io.ox/files/detail/main', baton.model.isFile() ? baton.model : { file: baton.data });
@@ -579,7 +577,7 @@ define('io.ox/core/viewer/views/toolbarview', [
 
     new Action(TOOLBAR_ACTION_ID + '/close', {
         matches: function (baton) {
-            return !baton.standalone || !ox.tabHandlingEnabled || (_.url.hash('office:disable-openInTabs') === 'true');
+            return !baton.standalone || !TabAPI.openInTabEnabled() || (_.url.hash('office:disable-openInTabs') === 'true');
         },
         action: function (baton) {
             return baton.context.onClose(baton.e);

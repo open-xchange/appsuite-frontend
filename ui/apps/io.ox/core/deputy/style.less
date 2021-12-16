@@ -1,0 +1,110 @@
+// makes sure busy animation is visible and dialog does not jump (yeah we need this very specific selectors when we don't want to use important)
+.modal.flex.compact .modal-body.deputy-dialog-body, .modal.flex .modal-body.deputy-dialog-body {
+    min-height: 374px;
+}
+
+.deputy-list-view {
+
+    height: 300px;
+    width: 100%;
+    padding-top: 8px;
+    flex-direction: column;
+
+    .flex {
+        display: flex;
+    }
+
+    .empty-message {
+        text-align: center;
+        height: 100%;
+        padding: auto;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    li {
+        justify-content: space-between;
+        padding: 8px 0;
+        min-height: 76px;
+        width: 100%;
+
+        .flex-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .data-container>* {
+            min-height: 20px;
+        }
+
+        .remove {
+            color: #767676;
+            &:focus,&:hover {
+                color: #333;
+            }
+            svg.fasvg {
+                height: 20px;
+            }
+        }
+
+        .user-picture {
+            height: 60px;
+            min-width: 60px;
+            margin-right: 16px;
+            padding: 17px;
+            border-radius: 50%;
+            background-size: cover;
+            background-color: #eee;
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+        }
+    }
+}
+
+.deputy-permissions-dialog {
+
+    height: 250px;
+
+    .select-container {
+        display: flex;
+        margin-top: 32px;
+
+        label {
+            margin: 0;
+            color: #333;
+            width: 120px;
+        }
+
+        select {
+            width: 340px;
+        }
+    }
+
+    .checkbox {
+        margin-top: 16px;
+        margin-left: 120px;
+    }
+}
+
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
+
+    .deputy-permissions-dialog {
+
+        height: auto;
+
+        .select-container {
+            flex-wrap: wrap;
+
+            select {
+                width: 100%;
+                margin-top: 8px
+            }
+        }
+
+        .checkbox {
+            margin-left: 0;
+        }
+    }
+}

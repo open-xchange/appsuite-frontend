@@ -51,7 +51,12 @@
         label {
             margin-right: 10px;
         }
+    }
 
+    // support ellipsis for sub nodes
+    .list-item-subtitle {
+        display: flex;
+        .deeplink > { .ellipsis(); }
     }
 
     .drag-handle {
@@ -96,7 +101,7 @@
             }
         }
 
-        .remove {
+        .remove, .toggle {
 
             padding: 13px 16px;
             margin: 0;
@@ -114,6 +119,11 @@
 
             i { color: #aaa; }
         }
+        .toggle {
+            padding: 13px 14px;
+            &:hover, &:focus { background-color: @link-color }
+        }
+
     }
 
     &.default {
@@ -139,11 +149,14 @@
         align-items: center;
         padding: 0 0 13px 0;
 
-        .error-message {
+        .error-message, .message {
+            padding-left: 16px;
             margin-right: 2em;
         }
 
-        .error-icon {
+        .error-icon, .icon {
+            text-align: center;
+            width: 2.5rem;
             padding: 3px 13px;
             margin-left: 6px;
         }
@@ -156,7 +169,7 @@
 
     @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .list-item-controls {
-            .remove {
+            .remove, .toggle {
                 margin-left: 0;
             }
         }

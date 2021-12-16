@@ -65,13 +65,11 @@
 }
 
 .smartphone {
+
     .popover-signout {
         margin-right: 10px;
         .popover-content-signout { color: #333; }
     }
-}
-
-.smartphone {
 
     #io-ox-appcontrol {
 
@@ -98,23 +96,29 @@
     margin: 0 24px;
     // Keep this for dynamic themes
     font-size: 0;
-    line-height: @appcontrol-height - 1;
 
     .smartphone & {
         line-height: @appcontrol-height-smartphone;
         margin: 0 10px;
+
+        img {
+            margin-top: -2px;
+            position: initial;
+            top: auto;
+        }
     }
 
     img {
         width: 60px;
         max-height: 100%;
         margin-top: -1px;
+        position: relative;
+        top: ~"calc(50% - 11px)";
     }
 }
 
 .logo-btn {
     padding: 0;
-    margin: 0;
     border: 0;
     &:focus, &:hover {
         outline: 0;
@@ -137,13 +141,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     padding: 0;
     display: flex;
     align-content: center;
-
-    // correct some icon alignments
-    .fa-comment { padding-bottom: 3px; }
-    .fa-envelope-o { padding-bottom: 5px; }
-    .fa-comment-o { padding-bottom: 7px; }
-    .fa-calendar,
-    .fa-address-book-o { padding-bottom: 4px; }
 
     .smartphone & {
         height: @appcontrol-height-smartphone;
@@ -177,11 +174,15 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     }
 
     #io-ox-launcher, #io-ox-quicklaunch {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
         flex-shrink:0;
         align-self: auto;
         min-width: 0;
         min-height: auto;
         & > button {
+            .fasvg { height:18px }
             // styles for fa-icon
             font-size: 18px;
             color: @appcontrol-launcher-color;
@@ -207,14 +208,19 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
         button {
             outline:0;
-            &:hover, &:focus { color: @appcontrol-launcher-color-highlight; }
+            &:hover, &:focus {
+                // needed or svg icons are underlined on safari
+                text-decoration: none;
+                color: @appcontrol-launcher-color-highlight;
+            }
         }
     }
     #io-ox-quicklaunch > button {
         color: @quicklaunch-button-color;
         margin-top: initial;
         & > .lcell > .icon {
-            margin-bottom: 2px;
+            fill: #fff;
+            line-height: 0;
         }
     }
 
@@ -229,14 +235,6 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         //svg .stroke-c1 { fill: @brand-primary; }
     }
 
-    svg.indicator {
-        position: absolute;
-        z-index: 1;
-        top: 18px;
-        left: 33px;
-        circle { fill: #eb4400 }
-    }
-
     #io-ox-quicklaunch {
 
         .smartphone & {
@@ -247,13 +245,21 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         min-width: @quicklaunch-width;
         min-height: auto;
 
+        svg.indicator {
+            position: absolute;
+            z-index: 1;
+            top: 18px;
+            left: 33px;
+            circle { fill: #eb4400 }
+        }
+
         .title {
             // yes visibility hidden not display none. Otherwise the upsell icon is not displayed
             visibility: hidden;
             height: 0;
         }
 
-        .upsell i {
+        .upsell svg {
             color: @upsell-icon-color;
             visibility: visible;
             position: absolute;
@@ -261,6 +267,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             top: 32px;
             left: 30px;
             font-size: 14px;
+            width: 14px;
         }
     }
 
@@ -313,6 +320,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
     }
 
+    & > .logo-btn,
     #io-ox-topleftbar,
     #io-ox-topleftbar > ul,
     #io-ox-topleftbar > ul > li,
@@ -321,7 +329,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
     #io-ox-toprightbar > ul,
     #io-ox-toprightbar > ul > li,
     #io-ox-toprightbar > ul > li > a,
-    #io-ox-toprightbar > ul > li > button,
+    #io-ox-toprightbar > ul > li > button
     {
         display: inline-flex;
         align-items: center;
@@ -337,7 +345,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         .smartphone & { padding-right: 0}
         .launcher {
             & > a, & > button {
-                padding: 16px 11px;
+                padding: 16px 10px;
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
@@ -349,18 +357,28 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                     color: @appcontrol-launcher-color-highlight;
                 }
             }
+            .fasvg {
+                height: 18px;
+                text {
+                    fill: #fff;
+                }
+            }
         }
 
-        .launcher-icon.fa-question { font-size: 22px; }
-        .launcher-icon.fa-refresh { position: relative; }
+        #io-ox-topbar-help-dropdown-icon {
+            & > a { padding: 16px 5px; }
+            .launcher-icon { height: 22px; }
+        }
 
+        #io-ox-topbar-account-dropdown-icon > a { padding: 16px 11px; }
         .contact-picture {
             .picture(40px, 40px);
             .flex-center;
             background-color: #eee;
             color: rgba(0, 0, 0, 0.60);
-            font-size: 13px;
+            font-size: 18px;
             font-weight: bold;
+            fill: currentColor;
             background-clip: padding-box;
             border: 1px solid rgba(0, 0, 0, 0.50);
         }
@@ -390,8 +408,9 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         .picture(@sidelength, @sidelength);
         background-color: #eee;
         color: rgba(0, 0, 0, 0.60);
-        font-size: 20px;
+        font-size: 11px;
         font-weight: bold;
+        fill: currentColor;
         background-clip: padding-box;
         border: 1px solid rgba(0, 0, 0, 0.50);
 
@@ -454,13 +473,13 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 }
 // Fix for IE dropdown width calculation see OXUIB-184
 .ie11 .launcher-dropdown.dropdown-menu {
-    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2 !important;
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2.125 !important;
 }
 
 .launcher-dropdown.dropdown-menu {
 
     padding: @launcher-outer-spacing;
-    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2;
+    width: @launcher-vertical-amount * (@launcher-size  + @launcher-spacing * 2) + @launcher-outer-spacing *2 + 2.125;
 
     .smartphone & {
         width: 100% !important;
@@ -497,7 +516,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 
         margin: @launcher-spacing;
         height: 84px;
-        width: @launcher-size;
+        // grows width with textzoom. Makes sure that instead of overlapping text, items just move to the next line
+        width:  ~"calc(3rem + 48px)";
 
         svg.indicator { display: none; }
 
@@ -531,10 +551,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                 white-space: nowrap;
             }
             .flex-center(row);
-            &.upsell i {
+            &.upsell svg {
                 color: @upsell-icon-color;
                 margin-left: 4px;
                 font-size: 14px;
+                width: 14px;
                 top: 0;
             }
         }
@@ -560,6 +581,10 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             //width: 100%;
             top: 10px;
             font-size: 36px;
+            // overwrite default svg width/height
+            width:36px;
+            height: auto;
+
             color: @app-color-standard;
             overflow: visible;
             /*.smartphone & {

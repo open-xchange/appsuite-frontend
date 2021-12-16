@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/picker', [
     'io.ox/core/folder/tree',
@@ -45,7 +45,7 @@ define('io.ox/core/folder/picker', [
     //     context      {string}    tree context, e.g. 'app' or 'popup'
     //     flat         {bool}      use flat tree (e.g. for contacts)
     //     folder       {string}    Current folder (for preselection)
-    //     height       {number}    dialog height in px
+    //     height       {number}    dialog height in px or rem
     //     help         {string}    contextual help reference
     //     indent       {bool}      indent first level (default is true; also needed for flat trees)
     //     last         {bool}      Prefer last folder used (needs settings and persistent)
@@ -80,7 +80,7 @@ define('io.ox/core/folder/picker', [
             button: gt('Ok'),
             context: 'popup',
             flat: false,
-            height: 250,
+            height: '15.625rem',
             indent: true,
             module: 'mail',
             persistent: false,
@@ -89,7 +89,6 @@ define('io.ox/core/folder/picker', [
             open: [],
             selection: true,
             title: gt('Select folder'),
-            width: 500,
             // callbacks
             always: $.noop,
             done: $.noop,
@@ -168,7 +167,7 @@ define('io.ox/core/folder/picker', [
         if (id === undefined && o.settings && _.isString(o.persistent)) {
             id = o.settings.get(o.persistent + '/last');
         }
-
+        dialog.$el.find('.modal-dialog').css('max-width', '800px');
         // get open nodes
         var open = o.settings && _.isString(o.persistent) ? o.settings.get(o.persistent + '/open', []) : [];
 
@@ -247,7 +246,7 @@ define('io.ox/core/folder/picker', [
                             o.settings.set(o.persistent + '/last', undefined).save();
                         }
                     )
-                    // path might fail so we use always to con
+                    // path might fail so we use always to continue
                     .always(function () {
                         dialog.idle();
                         dialog.$body.prepend(tree.render().$el);

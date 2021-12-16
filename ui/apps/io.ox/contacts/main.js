@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/contacts/main', [
     'io.ox/contacts/util',
@@ -38,10 +38,11 @@ define('io.ox/contacts/main', [
     'io.ox/core/page-controller',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/core/svg',
     'io.ox/contacts/mobile-navbar-extensions',
     'io.ox/contacts/mobile-toolbar-actions',
     'less!io.ox/contacts/style'
-], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView) {
+], function (util, coreUtil, api, VGrid, viewDetail, ext, actionsUtil, commons, capabilities, toolbar, gt, settings, folderAPI, Bars, PageController, TreeView, FolderView, svg) {
 
     'use strict';
 
@@ -244,11 +245,15 @@ define('io.ox/contacts/main', [
                         fields.description.text(description);
                         fields.location.text(util.getSummaryLocation(data));
                         var url = api.getContactPhotoUrl(data, 48);
-                        fields.photo
-                            .empty()
-                            .text(url ? '' : util.getInitials(data))
-                            .css('background-image', url ? 'url(' + url + ')' : '')
-                            .toggleClass('empty', !url);
+                        var node = fields.photo.empty();
+                        if (url) {
+                            node.css('background-image', 'url(' + url + ')');
+                        } else {
+                            node
+                                .css('background-image', '')
+                                .addClass('empty')
+                                .append(svg.circleAvatar(util.getInitials(data)));
+                        }
                         if (name === '' && description === '') {
                             // nothing is written down, add some text, so user isn’t confused
                             fields.name.addClass('gray').text(gt('Empty name and description found.'));
@@ -1028,7 +1033,7 @@ define('io.ox/contacts/main', [
             return app.grid;
         };
 
-        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = '6';
+        if (capabilities.has('gab !alone') && !options.folder && app.settings.get('startInGlobalAddressbook', true)) options.folder = util.getGabId();
 
         // go!
         var def = $.Deferred();

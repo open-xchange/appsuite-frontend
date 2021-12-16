@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/views/toolbarview',
@@ -29,10 +29,11 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
     'io.ox/core/a11y',
+    'io.ox/core/api/tab',
     'less!io.ox/core/viewer/style',
     // prefetch file actions
     'io.ox/files/actions'
-], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y) {
+], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y, TabAPI) {
 
     'use strict';
 
@@ -203,7 +204,7 @@ define('io.ox/core/viewer/views/mainview', [
                         isDropdownMenuItem = escTarget.parents('.dropdown-menu').length > 0,
                         isDropdownToggler = escTarget.attr('data-toggle') === 'dropdown' && escTarget.attr('aria-expanded') === 'true';
                     // close the viewer only if user is not on a dropdown menu, or a dropdown menu item
-                    if (!isDropdownMenuItem && !isDropdownToggler && !(ox.tabHandlingEnabled && this.standalone)) {
+                    if (!isDropdownMenuItem && !isDropdownToggler && !(TabAPI.openInTabEnabled() && this.standalone)) {
                         this.viewerCloseHandler();
                     }
                     break;

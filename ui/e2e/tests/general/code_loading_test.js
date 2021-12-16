@@ -1,24 +1,26 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+const expect = require('chai').expect;
 
 Feature('General > Code Loading');
 
@@ -86,4 +88,23 @@ Scenario('[OXUIB-872] XSS using script code as module at app loader', async func
     I.amOnPage('#!!&app=io.ox/files:foo,' + module);
     I.refreshPage();
     drive.waitForApp();
+});
+
+Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, users, mail }) => {
+    await I.haveMail({
+        folder: 'default0/INBOX',
+        path: 'e2e/media/mails/OXUIB-1172.eml'
+    }, users[0]);
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    I.waitForText('This mail has a deeplink');
+    I.click('.list-view .list-item');
+    I.waitForElement('.mail-detail-frame');
+    within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForText('Click this link');
+        const classes = await I.grabAttributeFrom(locate('a').withText('Click this link'), 'class');
+        expect(classes || '').to.not.contain('deep-link-app');
+    });
 });

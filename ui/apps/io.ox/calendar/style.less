@@ -28,16 +28,15 @@
                (max-height: @smartphone-breakpoint) and (orientation: landscape) { display: none; }
 
         display: flex;
-        height: @calendar-toolbar-height;
+        height: ~"calc(2rem + 3px)";
         padding-top: 8px;
 
         .control {
-            padding: 9px;
+            padding: 0.25rem 0.5625rem 0 0.5625rem;
+            height: 2.1875rem;
             color: @black;
             background: none;
             border: none;
-            height: 35px;
-            width: 28px;
 
             &.prev {
                 margin-left: @weekview-time-width - 2 * 28;
@@ -50,7 +49,6 @@
             color: #333;
             text-decoration: none;
             line-height: 34px;
-            height: 30px;
             max-width: none;
             padding: 0;
             border: 0;
@@ -101,20 +99,20 @@
             &.hover:not(.disabled) { background-color: darken(@appointment-unconfirmed, @appointment-hover-pct); }
         }
 
-        &.declined {
+        &.declined, &.cancelled {
             background-color: @appointment-declined;
             border-left-color: rgba(0, 0, 0, 0.1);
 
             &.hover:not(.disabled) { background-color: darken(@appointment-declined, @appointment-hover-pct); }
-        }
 
-        &.declined .appointment-content * {
-            color: @appointment-declined-font;
-            text-decoration: line-through;
-        }
+            .appointment-content * {
+                color: @appointment-declined-font;
+                text-decoration: line-through;
+            }
 
-        &.declined .appointment-content .flags * {
-            text-decoration: none;
+            .appointment-content .flags * {
+                text-decoration: none;
+            }
         }
 
         &:focus {
@@ -184,7 +182,7 @@
 // avoid cutting of descenders in firefox
 .widget[data-widget-type="calendar"] {
     .item {
-        margin-bottom: 14px;
+        margin-bottom: ~"calc(1rem - 2px)";
         .summary {
             padding-bottom: 2px;
         }
@@ -203,38 +201,43 @@
         color: #333!important;
     }
 
-    .folder-tree .folder-node .folder-label {
-        position: relative;
-
-        .color-label {
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: -25px;
-            top: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            background-clip: border-box;
-            border-radius: @border-radius-small;
-
-            &.selected:before {
-                display: block;
-                font-family: 'FontAwesome';
-                content: '\f00c';
-                text-align: center;
-                font-size: 13px;
-                line-height: 16px;
-            }
+    .folder-tree .folder-node {
+        .folder-arrow {
+            width: 2.5rem;
         }
-
-        .smartphone & {
-            > * {
-                margin-left: 24px;
-            }
+        .folder-label {
+            position: relative;
 
             .color-label {
-                left: 0;
-                top: 16px;
-                margin-left: 0;
+                width: 1rem;
+                height: 1rem;
+                position: absolute;
+                left: ~"calc(-2.5rem + 15px)";
+                top: 4px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                background-clip: border-box;
+                border-radius: @border-radius-small;
+
+                &.selected:before {
+                    display: block;
+                    font-family: 'FontAwesome';
+                    content: '\f00c';
+                    text-align: center;
+                    font-size: 13px;
+                    line-height: 16px;
+                }
+            }
+
+            .smartphone & {
+                > * {
+                    margin-left: 24px;
+                }
+
+                .color-label {
+                    left: 0;
+                    top: 16px;
+                    margin-left: 0;
+                }
             }
         }
     }
@@ -275,7 +278,7 @@
             border: 1px solid rgba(0, 0, 0, 0.4);
         }
 
-        &.declined {
+        &.declined, &.cancelled {
 
             .title, .location {
                 text-decoration: line-through;
@@ -443,6 +446,12 @@
 
     .io-ox-inline-links:first-child { margin-top: 0; }
     .io-ox-inline-links:empty { display: none; }
+
+    &.cancelled {
+        h1.subject, .location, .date-time-recurrence {
+            text-decoration: line-through;
+        }
+    }
 
     h1.subject {
         //display: inline-block;

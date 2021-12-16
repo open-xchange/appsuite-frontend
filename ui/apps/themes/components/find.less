@@ -71,6 +71,8 @@
                 // adjust tokenfield (3 = placeholder padding)
                 padding-left: @placeholder-padding - 3;
                 padding-right: 9px;
+                // 30px but works with text zoom
+                height: 2.14285714em;
 
                 .token {
 
@@ -105,10 +107,20 @@
                 }
             }
 
+            .search-field {
+                padding-right: 2.34375rem;
+            }
+
             .action {
                 pointer-events: auto;
                 color: @action-color;
                 padding-right: 23px;
+                height: 100%;
+
+                svg {
+                    vertical-align: middle;
+                    margin-top: -2px;
+                }
 
                 &:hover { color: @link-color; }
                 &:focus {
@@ -145,6 +157,7 @@
         }
         .search-box-filter { display: none; }
         flex: 0 1 auto;
+        height: 2.5rem;
     }
 
     /**
@@ -156,7 +169,7 @@
         &:not(.mail-categories-visible) .window-body { transition: top .2s; }
 
         .folder-tree {
-            margin-top: 40px;
+            margin-top: 2.5rem;
         }
 
         .breadcrumb-ellipsis {
@@ -167,7 +180,6 @@
             //top: managed by backbone view
             position: absolute;
             width: 100vw;
-            height: 40px;
 
             .search-box {
                 float: left;

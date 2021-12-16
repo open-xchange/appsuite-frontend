@@ -20,6 +20,14 @@
 *
 */
 
+
+// set html font size to 1rem this way we are compliant with bootstrap 4 and 5.
+// setting this to 1 rem means we are using the browsers default font size which is usually 16px
+// careful though, bootstrap 3 sets this to 10px although never uses it
+html {
+    font-size: 1rem;
+}
+
 body {
     // add a bit of perfection
     -webkit-font-feature-settings: "liga", "kern";
@@ -148,7 +156,8 @@ legend {
     & > .dropdown {
         display: inline-block;
     }
-    .fa:first-child {
+    // work with icons and svg
+    .icon-container, .fa:first-child:not(svg) {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -161,8 +170,11 @@ legend {
         font-size: 16px;
         margin: 0 auto;
     }
-    i.fa.fa-phone {
-        font-size: 24px;
+    .icon-container svg {
+        height: 16px;
+    }
+    [data-action="join"] svg, .icon-container svg.call-icon {
+        height: 24px;
     }
     .btn-link:hover:not(:disabled), .btn-link:focus {
         outline: 0;
@@ -177,7 +189,7 @@ legend {
         button {
             display: flex;
             align-items: center;
-            i.fa { margin-right: 8px; }
+            i.fa, .icon-container { margin-right: 8px; }
         }
     }
 }
@@ -318,12 +330,12 @@ div.hopscotch-bubble {
 #io-ox-offline {
     position: absolute;
     bottom: 0;
-    width: 240px;
+    width: 15rem;
     left: 50%;
-    margin-left: -120px;
-    height: 40px;
+    margin-left: -7.5rem;
+    height: 2.5rem;
     font-weight: bold;
-    line-height: 40px;
+    line-height: 2.5rem;
     text-align: center;
     color: #fff;
     border: 1px solid #FF7000;
@@ -453,6 +465,16 @@ html:not(.internet-explorer) {
 
 .form-spacer { margin-top: 32px; }
 
+// form control inside input groups needs auto height (breaks layout otherwise)
+.input-group >.form-control {
+    height: auto;
+}
+
+.form-control {
+    // 30px with default 14px font size but scales with text zoom
+    height: 2.14285714em;
+}
+
 // ensure visibility for tooltips
 .tooltip { z-index: 100000; }
 
@@ -552,3 +574,13 @@ label.unstyled {
 
 /* Override Edge's Clear input behaviour */
 ::-ms-clear { display: none; }
+
+svg.fa, .fasvg {
+    height: 14px;
+    // needed for wider icons like the drive cloud
+    overflow: visible;
+    text {
+        font-size: 100px;
+        fill: currentColor;
+    }
+}

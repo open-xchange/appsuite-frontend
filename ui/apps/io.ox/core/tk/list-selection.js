@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settings) {
 
@@ -61,6 +61,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 break;
             case 'simple':
                 _.extend(this, simpleBehavior);
+                break;
+            case 'single':
+                _.extend(this, simpleBehavior, singleBehavior);
                 break;
             default:
                 console.error('Unknown selection behavior', this.behavior);
@@ -211,7 +214,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         isCheckmark: function (e) {
-            return e && $(e.target).is('.list-item-checkmark, .fa.fa-checkmark');
+            return e && $(e.target).is('.list-item-checkmark, .fa.fa-checkmark, .checkmark, .checkbox');
         },
 
         isMultiple: function (e) {
@@ -1143,6 +1146,18 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             this.triggerChange(items, current.attr('data-cid'));
             this.setPosition(e, index);
             this.focus(index, items);
+        }
+    };
+
+    var singleBehavior = {
+
+        isMultiple: function () {
+            return false;
+        },
+
+        onClick: function (e) {
+            var currentTarget = $(e.currentTarget);
+            this.set([currentTarget.attr('data-cid')]);
         }
     };
 

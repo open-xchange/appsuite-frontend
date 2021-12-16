@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/api', [
     'io.ox/core/http',
@@ -106,7 +106,7 @@ define('io.ox/calendar/api', [
             return response;
         },
 
-        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp'].join(','),
+        defaultFields = ['lastModified', 'color', 'createdBy', 'endDate', 'flags', 'folder', 'id', 'location', 'recurrenceId', 'rrule', 'seriesId', 'startDate', 'summary', 'timestamp', 'transp', 'attendeePrivileges'].join(','),
 
         api = {
             // used externally by itip updates in mail invites
@@ -653,15 +653,17 @@ define('io.ox/calendar/api', [
 
                 // only use uri. entity only works for internal users/resources, which can also appear as external in some cases, causing ugly issues
                 var order = _(list).map(function (attendee) { return attendee.uri; }),
-                    def = $.Deferred();
-
-                http.PUT({
-                    module: 'chronos',
-                    params: {
+                    def = $.Deferred(),
+                    params = {
                         action: 'freeBusy',
                         from: options.from,
                         until: options.until
-                    },
+                    };
+                if (options.maskUid) params.maskUid = options.maskUid;
+
+                http.PUT({
+                    module: 'chronos',
+                    params: params,
                     data: { attendees: list }
                 }).then(function (items) {
                     // response order might not be the same as in the request. Fix that.

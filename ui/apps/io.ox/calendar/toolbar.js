@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/toolbar', [
     'io.ox/core/extensions',
@@ -197,7 +197,6 @@ define('io.ox/calendar/toolbar', [
 
             setTimeout(function () {
                 // in case we get fast multiple renderings of the toolbar, the dropdown might already be disposed.
-                // TODO reduce those rerenderings, so this doesn't happen (or happens less often) in the first place. To fragile so close to release, so leave it as is ... for now (who am I kidding?)
                 if (dropdown.model === null) return;
                 updatePrintLink.call(dropdown, baton);
                 updateCheckboxOption.call(dropdown);
@@ -237,6 +236,8 @@ define('io.ox/calendar/toolbar', [
                 toolbarView.selection = null;
                 this.updateToolbar(selection);
             };
+
+            app.toolbarView = toolbarView;
         }
     });
 
@@ -247,6 +248,8 @@ define('io.ox/calendar/toolbar', [
             app.updateToolbar([]);
             // update toolbar on selection change
             app.listView.on('selection:change', function () {
+                // prevent unneeded redraws if new selection matches current selection
+                if (_.isEqual(_.compact((app.toolbarView.selection || '').split(',').sort()), _.compact(getSelection(app).sort()))) return;
                 app.updateToolbar(getSelection(app));
             });
             // folder change
@@ -272,7 +275,7 @@ define('io.ox/calendar/toolbar', [
 
             var toolbar = $('<div class="generic-toolbar calendar bottom visual-focus" role="region">').append(
                 $('<button type="button" class="btn btn-link toolbar-item" data-action="close-folder-view">').attr('aria-label', gt('Open folder view')).append(
-                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                    $.icon('fa-angle-double-right', gt('Open folder view'))
                 ).on('click', { state: true }, app.toggleFolderView)
             );
 

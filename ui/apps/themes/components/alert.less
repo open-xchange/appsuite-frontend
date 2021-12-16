@@ -26,8 +26,9 @@
     position: fixed;
     top: 15px;
     left: 50%;
-    margin-left: -230px;
-    width: 460px;
+    max-width: 100%;
+    margin-left: -14.375rem;
+    width: 28.75rem;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 65500;
     box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.80);
@@ -50,7 +51,7 @@
         padding: 25px 60px 25px 70px;
         min-height: 60px;
         & > div {
-            max-height: 300px;
+            max-height: 18.75rem;
             overflow: auto;
             + div { margin-top: 7px; }
             a { cursor: pointer; }
@@ -60,7 +61,7 @@
 
     .icon {
         position: absolute;
-        top: 18px;
+        top: ~"calc(26px - 0.5rem)";
         left: 10px;
         font-size: 24px;
         color: #aaa;
@@ -70,7 +71,7 @@
 
     .close {
         position: absolute;
-        top: 15px;
+        top: ~"calc(24px - 0.5625rem)";
         right: 15px;
         width: 36px;
         line-height: 40px;

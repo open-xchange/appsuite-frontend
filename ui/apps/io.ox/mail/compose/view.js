@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/compose/view', [
     'io.ox/mail/compose/extensions',
@@ -114,6 +114,11 @@ define('io.ox/mail/compose/view', [
             id: 'sender',
             index: INDEX += 100,
             draw: extensions.sender
+        },
+        {
+            id: 'sender-onbehalfof',
+            index: INDEX += 100,
+            draw: extensions.senderOnBehalfOf
         },
         {
             id: 'sender-realname',
@@ -451,21 +456,35 @@ define('io.ox/mail/compose/view', [
         id: 'image-loader',
         index: 200,
         perform: function (baton) {
-            var self = this;
+            var self = this,
+                space = baton.model.get('id');
+
             if (this.config.get('editorMode') !== 'html') return;
             baton.options.imageLoader = {
                 upload: function (file) {
-                    var attachment = new Attachments.Model({ filename: file.name, uploaded: 0, contentDisposition: 'INLINE' }),
+                    var attachment = new Attachments.Model({ filename: file.name, size: file.size, uploaded: 0, contentDisposition: 'INLINE' }),
                         def = new $.Deferred();
-                    composeUtil.uploadAttachment({
-                        model: self.model,
-                        filename: file.name,
-                        origin: { file: file },
-                        attachment: attachment,
-                        contentDisposition: 'inline'
+
+                    require(['io.ox/mail/actions/attachmentQuota'], function (attachmentQuota) {
+                        if (!attachmentQuota.checkQuota(self.model, [], attachment.get('size'))) {
+                            var $editor = self.view.$el.find('iframe').contents().find('#tinymce');
+                            $editor.children().remove();
+                            $editor.append(self.model._previousAttributes.content);
+                            composeAPI.space.attachments.remove(space, attachment.get('id'));
+                            return def.reject();
+                        }
+
+                        composeUtil.uploadAttachment({
+                            model: self.model,
+                            filename: file.name,
+                            origin: { file: file },
+                            attachment: attachment,
+                            contentDisposition: 'inline'
+                        });
+                        attachment.once('upload:complete', def.resolve);
+                        self.model.attachFiles([attachment]);
                     });
-                    attachment.once('upload:complete', def.resolve);
-                    self.model.attachFiles([attachment]);
+
                     return def;
                 },
                 getUrl: function (response) {
@@ -844,8 +863,8 @@ define('io.ox/mail/compose/view', [
             new ModalDialog({
                 title: gt('Save draft'),
                 description: gt('This email has not been sent. You can save the draft to work on later.'),
-                // up to 540px because of 3 buttons, french needs this for example
-                width: _.device('smartphone') ? undefined : '560px'
+                // up to 35rem (560px) because of 3 buttons, french needs this for example
+                width: _.device('smartphone') ? undefined : '35rem'
             })
             .addCancelButton()
             .addButton({ label: gt('Save draft'), action: 'savedraft' })
@@ -976,17 +995,18 @@ define('io.ox/mail/compose/view', [
         toggleEditorMode: function () {
 
             var self = this, content,
-                signature = this.config.get('signature');
+                signature = this.config.get('signature'),
+                hint = this.config.get('hint');
 
-            if (signature) {
-                this.config.set('signatureId', '');
-            }
+            if (signature) this.config.set('signatureId', '');
+            if (hint) this.config.set('hint', false);
+
             if (this.editor) {
                 // this.removeSignature();
                 content = this.editor.getPlainText();
                 this.editor.hide();
             } else if (this.model.get('contentType') === 'text/html' && this.config.get('editorMode') === 'text') {
-                // intial set, transfrom html to text
+                // initial set, transfrom html to text
                 content = require(['io.ox/core/tk/textproc']).then(function (textproc) {
                     return textproc.htmltotext(self.model.get('content'));
                 });
@@ -1001,13 +1021,15 @@ define('io.ox/mail/compose/view', [
             return $.when(content).then(function (content) {
                 return self.loadEditor(content);
             }).then(function () {
-                // TOOO-784: streamline
+                // TODO-784: streamline
                 if (this.app.get('window') && this.app.get('window').floating) {
                     this.app.get('window').floating.$el.toggleClass('text-editor', this.config.get('editorMode') === 'text');
                     this.app.get('window').floating.$el.toggleClass('html-editor', this.config.get('editorMode') !== 'text');
                     this.app.getWindowNode().trigger('scroll');
                 }
                 if (signature) this.config.set('signatureId', signature.id);
+                if (hint) this.config.set('hint', true);
+
                 this.editorContainer.idle();
                 // reset tinyMCE's undo stack
                 if (!_.isFunction(this.editor.tinymce)) return;

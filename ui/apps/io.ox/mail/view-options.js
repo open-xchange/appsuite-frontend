@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/view-options', [
     'io.ox/core/extensions',
@@ -134,7 +134,7 @@ define('io.ox/mail/view-options', [
                     if (!gridOptions.hasClass('disabled')) return;
                     listView.connect(mailAPI.collectionLoader);
                     listView.model.unset('criteria');
-                    gridOptions.removeClass('disabled');
+                    gridOptions.toggleClass('disabled', account.is('sent|drafts', baton.app.folder.get()));
                 })
                 .render();
             });
@@ -199,6 +199,9 @@ define('io.ox/mail/view-options', [
                 // toggle visibily of 'has attachments'
                 link = view.$('a[data-value="602"]');
                 link.toggleClass('hidden', !folderAPI.pool.getModel(folder).supports('ATTACHMENT_MARKER'));
+                // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
+                link = view.$('a[data-name="thread"]');
+                link.toggleClass('disabled', account.is('sent|drafts', folder)).parent().toggleClass('disabled', account.is('sent|drafts', folder));
             }
         }
     });
@@ -220,9 +223,11 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
             // don't add if thread view is disabled server-side
             if (baton.app.settings.get('threadSupport', true) === false) return;
+            var disabled = account.is('sent|drafts', baton.app.folder.get());
             this.data('view')
                 .divider()
-                .option('thread', true, gt('Conversations'));
+                .option('thread', true, gt('Conversations'))
+                .$ul.find('a[data-name="thread"]').toggleClass('disabled', disabled).parent().toggleClass('disabled', disabled);
         }
     });
 
@@ -385,7 +390,7 @@ define('io.ox/mail/view-options', [
 
             this.append(
                 $('<button type="button" class="btn btn-link toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
-                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
+                    $.icon('fa-angle-double-right', gt('Open folder view'))
                 )
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
@@ -414,7 +419,7 @@ define('io.ox/mail/view-options', [
                         id: guid,
                         'aria-label': gt('Close folder view')
                     }).append(
-                        $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                        $.icon('fa-angle-double-left', gt('Close folder view'))
                     ).on('click', { app: baton.app, state: false }, toggleFolderView)
                 )
             );

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -35,7 +35,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sharing link', async ({ I, users, calendar, dialogs }) => {
+Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing link', async ({ I, users, calendar, dialogs }) => {
     let url;
     I.say('Alice shares a folder with 2 appointments');
     await Promise.all([
@@ -71,12 +71,13 @@ Scenario.skip('[C104305] Calendar folders using “Permissions” dialog and sha
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 10, '.permissions-view');
         I.waitForText('Invited people only');
-        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.selectOption('Who can access this calendar?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
         url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
         url = Array.isArray(url) ? url[0] : url;
+        I.fillField('.message-text', 'Some text to trigger a mail');
         dialogs.clickButton('Save');
         I.waitForDetached('.modal-dialog');
         I.say(url);

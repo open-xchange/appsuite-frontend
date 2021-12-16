@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/compose/extensions', [
     'io.ox/mail/api',
@@ -37,13 +37,14 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
+    'settings!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, settingsContacts, Attachments, strings, ResizeView, imageResize) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -69,16 +70,9 @@ define('io.ox/mail/compose/extensions', [
     var attachmentUploadHelper = function (model, files) {
         // also support events
         files = files.target ? files.target.files : files;
-        var self = this,
-            attachmentCollection = model.get('attachments'),
-            accumulatedSize = attachmentCollection.filter(function (m) {
-                var size = m.get('size');
-                return typeof size !== 'undefined';
-            })
-            .map(function (m) { return m.get('size'); })
-            .reduce(function (m, n) { return m + n; }, 0);
+        var self = this;
 
-        if (attachmentQuota.checkQuota(files, accumulatedSize)) {
+        if (attachmentQuota.checkQuota(model, files)) {
             //#. %s is a list of filenames separeted by commas
             //#. it is used by screenreaders to indicate which files are currently added to the list of attachments
             self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.name; }).join(', ')));
@@ -152,20 +146,28 @@ define('io.ox/mail/compose/extensions', [
                 caret: true
             });
 
-            this.addresses = sender.getAddressesCollection();
-            this.addresses.update();
-            this.listenTo(ox, 'account:create account:delete', this.updateSenderList);
-            this.listenTo(ox, 'change:customDisplayNames', this.updateSenderList);
+            this.addresses = sender.collection;
             this.listenTo(this.addresses, 'reset', this.renderDropdown);
-            this.listenTo(this.model, 'change:from', this.updateSenderList);
+            this.listenTo(this.model, 'change:from', this.renderDropdown);
+            this.listenTo(ox, 'change:customDisplayNames', this.renderDropdown);
+            if (capabilities.has('deputy')) this.listenTo(this.model, 'change:from', this.updateDeputyData);
             this.listenTo(this.config, 'change:sendDisplayName', function (model, value) {
                 settings.set('sendDisplayName', value);
             });
         },
 
-        updateSenderList: function (options) {
-            var opt = _.extend({ useCache: false }, options);
-            this.addresses.update(opt);
+        updateDeputyData: function () {
+            var isDeputy = !!this.addresses.findWhere({ email: this.model.get('from')[1], type: 'deputy' });
+            if (!isDeputy) return this.model.unset('sender');
+            var defaultSender = this.addresses.findWhere({ type: 'default' });
+            this.model.set('sender', defaultSender.toArray({ name: this.config.get('sendDisplayName') }));
+        },
+
+        /**
+         * @deprecated
+         */
+        updateSenderList: function () {
+            this.addresses.update({ useCache: false });
         },
 
         render: function (/*options*/) {
@@ -196,19 +198,18 @@ define('io.ox/mail/compose/extensions', [
 
         setDropdownOptions: function () {
             var self = this;
-            this.addresses.forEach(function (address, index) {
-                var defaultname = settings.get(['customDisplayNames', address.get('email'), 'defaultName']);
-                if (!defaultname) settings.set(['customDisplayNames', address.get('email'), 'defaultName'], address.get('name'));
-
-                if (index === 1) self.dropdown.divider();
-
-                var item = mailUtil.getSender(address.toArray(), self.config.get('sendDisplayName'));
-                self.dropdown.option('from', item, function () {
-                    return self.getItemNode(item);
-                });
-            });
 
             if (_.device('smartphone') || this.addresses.length === 0) return;
+
+            this.addresses.getCommon().forEach(function (model, index, list) {
+                if (index === 1 && list.length > 2) self.dropdown.divider();
+                addOption(model);
+            });
+
+            this.addresses.getDeputies().forEach(function (model, index) {
+                if (index === 0) self.dropdown.divider().group(gt('On behalf of'));
+                addOption(model, { group: true });
+            });
 
             // append options to toggle and edit names
             this.dropdown
@@ -216,10 +217,21 @@ define('io.ox/mail/compose/extensions', [
                 .option('sendDisplayName', true, gt('Show names'), { keepOpen: true })
                 .divider()
                 .link('edit-real-names', gt('Edit names'), this.onEditNames);
+
+            function addOption(model, options) {
+                var item = mailUtil.getSender(model.toArray(), self.config.get('sendDisplayName'));
+                self.dropdown.option('from', item, _.bind(self.getItemNode, self, item), options);
+            }
+        },
+
+        getItem: function (item) {
+            // use latest display name
+            if (!item) return;
+            return this.addresses.getAsArray(item[1], { name: this.config.get('sendDisplayName') }) || item;
         },
 
         getItemNode: function (item) {
-            item = item || this.model.get('from');
+            item = this.getItem(item || this.model.get('from'));
             if (!item) return;
             var name = item[0], address = item[1];
             return [
@@ -282,6 +294,38 @@ define('io.ox/mail/compose/extensions', [
             ext.point(POINT + '/recipientActions').invoke('draw', view.$el);
         },
 
+        senderOnBehalfOf: function (baton) {
+
+            if (!capabilities.has('deputy')) return;
+
+            var fields = this,
+                model = baton.model;
+
+            function toggleVisibility() {
+                var sender = baton.model.get('sender'),
+                    from = baton.model.get('from'),
+                    displayname = baton.config.get('sendDisplayName');
+                if (!!sender) {
+                    fields.find('.sender-onbehalfof .mail-input').text(
+                        //#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+                        //#. %1$s: name of mail address of current user (technical: sender)
+                        //#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+                        gt('This email will be sent by %1$s on behalf of %2$s.', sender[displayname ? 0 : 1], from[displayname ? 0 : 1])
+                    );
+                }
+                fields.toggleClass('onbehalfof', !!sender);
+            }
+
+            this.append(
+                $('<div class="sender-onbehalfof" data-extension-id="sender-onbehalfof">').append(
+                    $('<div class="mail-input">')
+                )
+            );
+
+            model.on('change:sender', toggleVisibility);
+            toggleVisibility();
+        },
+
         senderRealName: function (baton) {
             var fields = this,
                 config = baton.config;
@@ -339,8 +383,11 @@ define('io.ox/mail/compose/extensions', [
 
             function openAddressBookPicker(e) {
                 e.preventDefault();
-                var attr = e.data.attr, model = e.data.model;
-                require(['io.ox/contacts/addressbook/popup'], function (popup) {
+                var attr = e.data.attr,
+                    model = e.data.model,
+                    picker = coreSettings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
+
+                require([picker], function (popup) {
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
@@ -362,7 +409,7 @@ define('io.ox/mail/compose/extensions', [
                         isMail: true,
                         apiOptions: {
                             users: true,
-                            limit: settings.get('compose/autocompleteApiLimit', 20),
+                            limit: settings.get('compose/autocompleteApiLimit', 50),
                             contacts: true,
                             distributionlists: true,
                             emailAutoComplete: true
@@ -380,7 +427,7 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/recipientActionsMobile').invoke('draw', actions);
                 }
 
-                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+                var usePicker = !_.device('smartphone') && capabilities.has('contacts') && contactSettings.get('picker/enabled', true);
 
                 var title = gt('Select contacts');
 
@@ -527,7 +574,7 @@ define('io.ox/mail/compose/extensions', [
         optionsmenu: (function () {
             return function (baton) {
                 var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">').attr('aria-label', gt('Options')).append(
-                    $('<i class="fa fa-bars" aria-hidden="true">').attr('title', gt('Options'))
+                    $($.icon('fa-bars', false, 'bars')).attr('title', gt('Options'))
                 );
                 var dropdown = new Dropdown({
                     tagName: 'li',
@@ -823,7 +870,7 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
                         .attr('aria-label', gt('Add local file'))
                         .append(
-                            $('<i class="fa fa-paperclip" aria-hidden="true">')
+                            $($.icon('fa-paperclip', false, 'paperclip'))
                                 .attr('title', gt('Add local file')))
                         .on('click', function () {
                             //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
@@ -872,7 +919,7 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" tabindex="-1">')
                         .attr('aria-label', gt('Add from Drive'))
                         .append(
-                            $('<i class="fa fa-cloud" aria-hidden="true">')
+                            $($.icon('fa-cloud', false, 'cloud'))
                             .attr('title', gt('Add from Drive'))
                         )
                         .on('click', openFilePicker.bind(this, baton.model))
@@ -886,7 +933,7 @@ define('io.ox/mail/compose/extensions', [
             var parent = this,
                 floatingView = baton.app.get('window').floating,
                 node = $('<a href="#" role="button" tabindex="0">')
-                    .append($('<i class="fa fa-font" aria-hidden="true">'))
+                    .append($.icon('fa-font', false, 'font'))
                     .on('click', function () {
                         if (parent.hasClass('disabled')) return;
                         baton.config.set('toolbar', !baton.config.get('toolbar'));

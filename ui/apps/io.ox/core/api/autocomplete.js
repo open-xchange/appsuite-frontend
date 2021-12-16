@@ -1,34 +1,35 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/api/autocomplete', [
     'io.ox/core/http',
     'io.ox/core/capabilities',
     'io.ox/contacts/api',
+    'io.ox/contacts/util',
     'io.ox/core/api/resource',
     'io.ox/core/api/group',
     'io.ox/core/extensions',
     'settings!io.ox/contacts'
-], function (http, capabilities, contactsAPI, resourceAPI, groupAPI, ext, settings) {
+], function (http, capabilities, contactsAPI, contactsUtil, resourceAPI, groupAPI, ext, settings) {
 
     'use strict';
 
@@ -154,10 +155,10 @@ define('io.ox/core/api/autocomplete', [
                     //process each field
                     _.each(self.fields, function (field) {
                         if (obj[field]) {
-                            // magic for users beyond global adress book
-                            if (String(obj.folder_id) !== '6' && obj.type === 'user') return;
+                            // remove users with internal_userid = 0 (those are from another context)
+                            if (obj.internal_userid === 0 && obj.type === 'user') return;
                             // remove users from contact api results
-                            if (self.options.users && String(obj.folder_id) === '6' && obj.type === 'contact') return;
+                            if (self.options.users && obj.contact_id && obj.type === 'contact') return;
                             // convert user from contact api to real user
                             if (obj.type === 'user' && obj.internal_userid) {
                                 obj.contact_id = obj.id;

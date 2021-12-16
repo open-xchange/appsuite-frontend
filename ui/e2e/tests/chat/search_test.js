@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 Feature('Chat > Search');
@@ -53,6 +53,7 @@ Scenario.skip('Search for a word - full text', async ({ I, users, chat }) => {
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate({ css: 'button' }).withText('Create chat'), '.ox-chat-popup');
+    I.waitForDetached('.modal-dialog');
     chat.sendMessage('Kairo Mumbai Berlin Lima');
     chat.sendMessage('Berlin');
 
@@ -99,6 +100,7 @@ Scenario('Search for a group name', async ({ I, users, chat }) => {
     I.clickDropdown('Group chat');
     chat.fillNewGroupForm(groupTitle, emails);
     I.click(locate('.btn-primary').withText('Create chat'));
+    I.waitForDetached('.modal-dialog');
     I.waitForElement('~Close chat', 3, '.ox-chat');
     I.click('~Close chat', '.ox-chat');
 
@@ -128,6 +130,7 @@ Scenario('Search for a channel name', async ({ I, users, contexts, chat, dialogs
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitleA);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
         I.waitForElement('~Close chat', 3, '.ox-chat');
@@ -138,6 +141,7 @@ Scenario('Search for a channel name', async ({ I, users, contexts, chat, dialogs
         I.clickDropdown('Channel');
         chat.fillNewChannelForm(channelTitleB);
         dialogs.clickButton('Create channel');
+        I.waitForDetached('.modal-dialog');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('Berlin Lima');
         I.waitForElement('~Close chat', 3, '.ox-chat');

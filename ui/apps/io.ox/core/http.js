@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
@@ -269,6 +269,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3010': 'com.openexchange.publish.publicationFlag',
                 '3020': 'com.openexchange.subscribe.subscriptionFlag',
                 '3030': 'com.openexchange.folderstorage.displayName',
+                '3031': 'com.openexchange.folderstorage.accountError',
                 // 3040 exists; around EAS; no need for it
                 '3050': 'com.openexchange.imap.extAccount',
                 '3060': 'com.openexchange.share.extendedPermissions',
@@ -277,7 +278,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3220': 'com.openexchange.caldav.url',
                 '3204': 'com.openexchange.calendar.accountError',
                 '3205': 'com.openexchange.calendar.config',
-                '3031': 'com.openexchange.folderstorage.accountError'
+                '3301': 'com.openexchange.contacts.extendedProperties'
             },
             'user': {
                 '610': 'aliases',
@@ -344,7 +345,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '1045': 'transport_starttls',
                 '1046': 'root_folder',
                 '1047': 'mail_oauth',
-                '1048': 'transport_oauth'
+                '1048': 'transport_oauth',
+                '1049': 'mail_disabled',
+                '1050': 'transport_disabled',
+                '1051': 'secondary',
+                '1052': 'deactivated'
             },
             'attachment': {
                 '1': 'id',
@@ -389,6 +394,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     $.extend(idMapping.tasks, idMapping.common);
     // See bug #25300
     idMapping.user = $.extend({}, idMapping.contacts, idMapping.common, idMapping.user);
+
+    // new api, same fields
+    idMapping.addressbooks = idMapping.contacts;
 
     var that = {};
 

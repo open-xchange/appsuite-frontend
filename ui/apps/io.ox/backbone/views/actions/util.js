@@ -1,33 +1,34 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/backbone/views/actions/util', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
     'io.ox/core/folder/api',
+    'io.ox/contacts/util',
     'io.ox/core/collection',
     'io.ox/core/capabilities',
     'settings!io.ox/core'
-], function (ext, upsell, api, Collection, capabilities, settings) {
+], function (ext, upsell, api, contactsUtil, Collection, capabilities, settings) {
 
     'use strict';
 
@@ -316,7 +317,7 @@ define('io.ox/backbone/views/actions/util', [
             if (!model) return false;
             var condition = String(action.folder).replace(/\w[\w:]+/ig, function (match) {
                 if (/^(undefined|null|true|false)$/.test(match)) return match;
-                if (match === 'gab') return String(baton.folder_id) === '6';
+                if (match === 'gab') return String(baton.folder_id) === contactsUtil.getGabId();
                 return model.can(match.toLowerCase());
             });
             try {
@@ -534,7 +535,7 @@ define('io.ox/backbone/views/actions/util', [
             tooltip = enabled !== false && (link.tooltip || (icon && title)),
             checkmarkFn = link.checkmarkFn;
         // icon vs title
-        if (icon) $el.attr('title', title).append($('<i aria-hidden="true">').addClass(icon));
+        if (icon) $el.attr('title', title).append($.icon(icon));
         else if (title) $el.text(title);
         if (_.isFunction(checkmarkFn)) $el.prepend($('<i class="fa fa-fw" aria-hidden="true">').addClass(checkmarkFn(baton) ? 'fa-check' : 'fa-none'));
         if (tooltip) $el.addActionTooltip(tooltip);

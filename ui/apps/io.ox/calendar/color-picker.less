@@ -21,7 +21,7 @@
 */
 
 .mixin-box {
-    @rect-size: 20px;
+    @rect-size: 1.25rem;
 
     width: @rect-size;
     height: @rect-size;
@@ -32,7 +32,7 @@
 }
 
 .color-picker-dropdown {
-    .folder-default-color {
+    a.folder-default-color {
         display: flex;
         align-content: center;
         // fake divider
@@ -40,12 +40,13 @@
         margin-bottom: 8px;
         border-bottom: 1px solid #e5e5e5;
 
-        i {
+        i.fa {
             .mixin-box();
             line-height: 18px;
             margin-right: 4px;
             border: 1px solid @dark-silver;
             margin-left: 2px;
+            width: @rect-size;
         }
     }
 }
@@ -63,7 +64,7 @@
     padding: 3px 14px 3px 14px;
     white-space: nowrap;
     text-align: left;
-    width: 340px;
+    width: ~"calc(16.25rem + 80px)";
 
     flex-wrap: wrap;
 

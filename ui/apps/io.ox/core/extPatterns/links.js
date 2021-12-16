@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/extPatterns/links', [
     'io.ox/core/extensions',
@@ -80,7 +80,7 @@ define('io.ox/core/extPatterns/links', [
                 // add icon or text? (icons are prefered over labels)
                 if (icons && prio === 'hi') {
                     // add icon and title attribut
-                    a.append(preRendered.i.clone().addClass(self.icon).attr('aria-hidden', 'true'));
+                    a.append($.icon(self.icon));
                 } else if (title) {
                     // add text. add title unless it matches content
                     a.append($.txt(title));
@@ -226,7 +226,7 @@ define('io.ox/core/extPatterns/links', [
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
                 .append(_.isString(self.label) ? $.txt(self.label) : $())
-                .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
+                .append(_.isString(self.icon) ? $.icon(self.icon) : $())
             );
         };
 
@@ -567,8 +567,8 @@ define('io.ox/core/extPatterns/links', [
                     'aria-label': options.ariaLabel ? options.ariaLabel : label.textContent
                 })
                 .append(
-                    options.icon ? $('<i aria-hidden="true">').addClass(options.icon).attr('title', label.textContent) : label,
-                    options.noCaret ? $() : $('<i class="fa fa-caret-down" aria-hidden="true">')
+                    options.icon ? $.icon(options.icon, label.textContent) : label,
+                    options.noCaret ? $() : $.icon('fa-caret-down')
                 ),
                 $ul: ul
             });

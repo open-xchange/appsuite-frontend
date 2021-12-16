@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="Manuel de l'utilisateur">
 <link rel="up" href="ox.appsuite.user.chap.security.html" title="Chapitre 12. Sécurité des données">
 <link rel="prev" href="ox.appsuite.user.sect.security.emaillinkedimages.html" title="12.2. Images insérées dans les courriels au moyen de liens externes">
-<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Utiliser une liste blanche">
+<link rel="next" href="ox.appsuite.user.sect.security.whitelist.html" title="12.4. Utiliser des listes d'autorisation">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,7 +32,7 @@
   <h1 class="sr-only">Sécurité des données</h1>
 <div class="sect1" id="ox.appsuite.user.sect.security.emailauthentication">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">12.3. Afficher l'authenticité d'un courriel</h2></div></div></div>
-<a class="indexterm" name="id-1.13.7.2"></a><a class="indexterm" name="id-1.13.7.3"></a><p id="ox.appsuite.user.concept.security.emailauthentication">Pour les courriels entrants, le serveur vérifie si le courriel provient effectivement de l'adresse renseignée pour l'expéditeur. Cette vérification sert à identifier les courriels illégitimes. La vérification de l'authenticité du courriel aboutit à l'un des résultats suivants : </p>
+<a class="indexterm" name="id-1.13.7.2"></a><a class="indexterm" name="id-1.13.7.3"></a><p id="ox.appsuite.user.concept.security.emailauthentication">Pour les courriels entrants, le serveur vérifie si le courriel provient effectivement de l'adresse renseignée pour l'expéditeur. Cette vérification sert à identifier les courriels illégitimes. La vérification de l'authenticité du courriel aboutit à l'un des résultats suivants : </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Le courriel est classé comme potentiellement dangereux. Dans la vue détaillée, l'expéditeur apparaît en rouge.</p></li>
 <li class="listitem"><p role="presentation">L'authenticité ne peut pas être vérifiée de manière définitive. Dans la vue détaillée, l'expéditeur apparaît en jaune.</p></li>
@@ -41,38 +41,48 @@
 </ul>
 <p> Suivant la configuration, vous pouvez définir les courriels pour lesquels l'authenticité doit être affichée.</p>
 <div class="task" id="ox.appsuite.user.task.security.emailauthentication">
-<p class="title">Pour définir les courriels pour lesquels les informations d'authenticité sont affichées :</p>
+<p class="title">Pour définir les courriels pour lesquels les informations d'authenticité sont affichées :</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Cliquer sur l'icône <span class="guibutton"><strong>Réglages</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>à droite de la barre de menu. Cliquez sur <span class="guibutton"><strong>Réglages</strong></span>.</p></li>
+<li class="step"><p role="presentation">Cliquez sur l'icône <span class="guibutton"><strong>Réglages</strong></span>  <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.security.emailauthentication.settings"><img src="../../images/appsuite_user_icon_settings.png"></span>à droite de la barre de menu. Cliquez sur <span class="guibutton"><strong>Réglages</strong></span>.</p></li>
 <li class="step"><p role="presentation">Dans la barre latérale, cliquez sur <span class="guibutton"><strong>Sécurité</strong></span>.</p></li>
-<li class="step"><p role="presentation">Choisissez une option dans le menu déroulant <span class="guibutton"><strong>Afficher l'authenticité du courriel</strong></span> dans la zone d'affichage.<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="step"><p role="presentation">Choisissez une option dans le menu déroulant <span class="guibutton"><strong>Afficher l'authenticité du courriel</strong></span> dans la zone d'affichage. <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Désactivé</strong></span>. Aucun élément d'authenticité n'est affiché. Toutefois, si un hébergeur identifie comme courriel de confiance un courriel envoyé depuis l'une de ses adresses, l'authenticité sera affichée.</p></li>
-<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Courriels suspicieux et non classés</strong></span>. Affiche les informations d'authenticité pour les courriels suivants :<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation"><span class="guibutton"><strong>Courriels suspicieux et non classés</strong></span>. Affiche les informations d'authenticité pour les courriels suivants : <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Courriels classés comme potentiellement dangereux.</p></li>
 <li class="listitem"><p role="presentation">Courriels dont l'authenticité ne peut pas être vérifiée de manière catégorique</p></li>
-</ul>
-                </p></li>
+</ul></p></li>
 <li class="listitem"><p role="presentation"><span class="guibutton"><strong>Tous les courriels</strong></span>. Affiche les informations d'authenticité pour tous les courriels.</p></li>
-</ul>
-          </p></li>
+</ul></p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.related.security.emailauthentication">      
+<p id="ox.appsuite.user.related.security.emailauthentication">
       </p>
 <p class="title">Voir aussi :</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Se déconnecter automatiquement</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Images insérées dans les courriels au moyen de liens externes</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser une liste blanche</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Afficher les clients actifs et vous en déconnecter</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Utiliser des mots de passe supplémentaires pour certaines applications</a></p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.autologout.html">Se déconnecter automatiquement</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.emaillinkedimages.html">Images insérées dans les courriels au moyen de liens externes</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser des listes d'autorisation</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Afficher les clients actifs et vous en déconnecter</a>
+          </p>
+<p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.security.apppasswords.html">Utiliser des mots de passe supplémentaires pour certaines applications</a>
+          </p>
 </li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">Afficher des courriels</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+            <a class="xref" href="ox.appsuite.user.sect.email.view.html">Afficher les courriels</a>
+          </p></li>
 </ul>
 <p>
     </p>
-<p id="ox.appsuite.user.parent.security.emailauthentication">Sujet parent : <a class="xref" href="ox.appsuite.user.chap.security.html"><i>Sécurité des données</i></a></p>
+<p id="ox.appsuite.user.parent.security.emailauthentication">Sujet parent : <a class="xref" href="ox.appsuite.user.chap.security.html"><i>Sécurité des données</i></a></p>
 </div>
           </div>
         </body>

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/calendar/view-detail', [
     'io.ox/core/extensions',
@@ -49,6 +49,15 @@ define('io.ox/calendar/view-detail', [
                 .setSelection(baton.array(), { data: baton.array(), model: baton.model })
                 .$el
             );
+        }
+    });
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 120,
+        id: 'cancel notification',
+        draw: function (baton) {
+            if (util.getStatusClass(baton.model) !== 'cancelled') return;
+            this.append($('<p class="alert alert-info cancel-warning" role="alert">').text(gt('This appointment was cancelled.')));
         }
     });
 
@@ -271,7 +280,7 @@ define('io.ox/calendar/view-detail', [
             }
             try {
                 var node = $.createViewContainer(baton, calAPI, calAPI.get, { cidGetter: calAPI.cid }).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
+                node.addClass('calendar-detail view user-select-text ' + util.getStatusClass(baton.data)).attr('data-cid', String(util.cid(baton.data)));
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
                 return node;
 

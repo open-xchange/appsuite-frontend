@@ -61,15 +61,13 @@
         right: -3px;
     }
 
-    @toolbar-height: 40px;
+    @toolbar-height: 2.5rem;
 
     .vgrid-toolbar {
         position: absolute;
         display: none;
         right: 0;
         left: 0;
-        height: @toolbar-height;
-        line-height: @toolbar-height - 1;
         background-color: #fff;
         z-index: 2;
 
@@ -81,7 +79,7 @@
 
         &.top {
             top: 0;
-
+            &.generic-toolbar { height: 2.5rem; }
             & .dropdown-menu {
                 top: 110%;
                 bottom: auto;
@@ -158,6 +156,8 @@
 
     &.top-toolbar .vgrid-toolbar.top,
     &.bottom-toolbar .vgrid-toolbar.bottom { display: flex; }
+
+    &:not(.bottom-toolbar) .vgrid-toolbar.bottom { display: none; }
 
     &.top-toolbar .vgrid-scrollpane { top: @toolbar-height; }
 

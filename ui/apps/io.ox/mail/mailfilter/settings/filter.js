@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/extensions',
@@ -119,16 +119,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
         rulename = _.copy(myView.model.get('rulename'), true);
 
         var Dialog = ModalDialog.extend({
-            // manipulating the focus renders the dialog dropdowns unfunctional
+            // manipulating the focus renders the dialog dropdown menus dysfunctional
             pause: function () {
                 // $(document).off('focusin', this.keepFocus);
                 this.$el.next().addBack().hide();
-                this.toggleAriaHidden(false);
             },
             resume: function () {
                 // $(document).on('focusin', $.proxy(this.keepFocus, this));
                 this.$el.next().addBack().show();
-                this.toggleAriaHidden(true);
             }
         });
 
@@ -148,8 +146,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         );
 
         if (defaults.applyMailFilterSupport) {
-            myView.dialog.addButton({
-                label: gt('Save and apply'),
+            myView.dialog.addAlternativeButton({
+                label: gt('Save and apply rule now'),
                 action: 'apply'
             });
         }
@@ -158,7 +156,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             label: gt('Save'),
             action: 'save'
         })
-        .addCancelButton({ left: true });
+        .addCancelButton();
 
         //disable save button if no action is set
         if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer[data-action="save"]').prop('disabled', true);
@@ -456,9 +454,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         picker({
                             async: true,
                             context: 'filter',
-                            title: gt('Select the folder to apply the rule to'),
+                            title: gt('Please select the folder to apply the rule to'),
                             //#. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
-                            button: gt('Apply'),
+                            button: gt('Apply filter rule'),
                             done: function (id, dialog) {
                                 dialog.close();
                                 var rule = self.$el.find('a[data-action="apply"]');

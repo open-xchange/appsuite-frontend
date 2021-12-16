@@ -19,8 +19,7 @@
 * Any use of the work other than as authorized under this license or copyright law is prohibited.
 *
 */
-
-@viewer-toolbar-height: 40px;
+@viewer-toolbar-height: 2.5rem;
 @viewer-toolbar-filename-width: 400px;
 @viewer-toolbar-filename-width-smartphone-portrait: 130px;
 @viewer-toolbar-filename-width-smartphone-landscape: 220px;
@@ -578,6 +577,10 @@
             .io-ox-busy::before { color: @viewer-busy-color; }
         }
 
+        .swiper-button-prev:after, .swiper-button-next:after {
+            display:none
+        }
+
         .viewer-displayer-item-container { max-height: 100%; }
 
         .viewer-displayer-item {
@@ -738,13 +741,14 @@
             background: @viewer-displayer-navigation-bgcolor;
             outline: 0;
             width: 50px;
-            height: 50px;
+            min-height: 50px;
+            height: auto;
             border-radius: 2px;
             text-align: center;
 
             i {
                 line-height: 50px;
-                font-size: 3rem;
+                font-size: 1.875rem;
             }
 
             &:hover,
@@ -780,7 +784,7 @@
             text-align: center;
             color: @viewer-toolbar-color;
 
-            i { font-size: 4rem; }
+            i { font-size: 2.5rem; }
 
             .apology { margin-top: 20px; }
         }

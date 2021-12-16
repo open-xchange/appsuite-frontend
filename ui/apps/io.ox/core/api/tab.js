@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/api/tab', [
     'io.ox/core/boot/util',
@@ -37,8 +37,7 @@ define('io.ox/core/api/tab', [
         api,
         _api = {},
         _checkTabHandlingSupport,
-        keepFunctions = ['openBlank'];
-
+        guestMode = false;
     /**
      * Initialization of the TabAPI.
      */
@@ -62,9 +61,8 @@ define('io.ox/core/api/tab', [
      * Disable the whole TabAPI
      */
     function disable() {
+        util.debugSession('TabSession: disable TabAPI');
         for (var key in api) {
-            if (_.contains(keepFunctions, key)) return;
-
             if (Object.prototype.hasOwnProperty.call(api, key)) {
                 api[key] = $.noop;
             }
@@ -80,12 +78,22 @@ define('io.ox/core/api/tab', [
      * Enable the whole TabAPI
      */
     function enable() {
+        util.debugSession('TabSession: enable TabAPI');
         if (!initialized) initialize();
 
         _.extend(api, _api);
 
         ox.tabHandlingEnabled = true;
         util.checkTabHandlingSupport = _checkTabHandlingSupport;
+    }
+
+    /**
+    * Enable the whole TabAPI in guest mode.
+    */
+    function enableGuestMode() {
+        util.debugSession('TabSession: enable GuestMode');
+        guestMode = true;
+        enable();
     }
 
     /**
@@ -133,23 +141,25 @@ define('io.ox/core/api/tab', [
             return tabHandling.openTab(url, windowNameObject);
         },
 
-        // Open a blank new tab window
         /**
          * Open a blank new tab window
          *
-         * @param url
+         * @param {string} url
          *  The url which should be opened in the new blank tab
          *
-         * @returns {Window}
+         * @returns {Window | null}
          *  The new browser tab window
          */
         openBlank: function (url) {
             var newWindow;
 
-            if (_.device('noopener') || _.browser.edgechromium >= 77) {
+            if (_.device('noopener')) {
                 newWindow = window.open('', '_blank');
-                newWindow.opener = null;
-                newWindow.location = url;
+                // DOCS-3349: may be `null` (popup blocker)
+                if (newWindow) {
+                    newWindow.opener = null;
+                    newWindow.location = url;
+                }
             } else {
                 newWindow = blankshield.open(url, '_blank');
             }
@@ -162,6 +172,38 @@ define('io.ox/core/api/tab', [
 
         // Enable the TabAPI
         enable: enable,
+
+        // Enable the TabAPI in guest mode
+        enableGuestMode: enableGuestMode,
+
+        /**
+        * Returns whether the TabAPI enabled the guestMode.
+        *
+        * The general for guest behavior and in tab enviroments is this:
+        *
+        *  - guestMode 'true' should update itself with new login information by the
+        *    same user to keep all existing tabs for this user sync (use-case: paste two
+        *    guest links in the browser without outdated session error). But do not answer
+        *    'responseGetSession' requests when a new browser tab is logging in, to prevent
+        *    that non-guests receive the guest session
+        *
+        *   - guestMode 'false' should update itself with new login information, but
+        *     also reply to new logging requests
+        *
+        * @returns {Boolean}
+        */
+        getGuestMode: function () {
+            return guestMode;
+        },
+
+        /**
+        * Returns whether it's allowed to open an additional, new tab for the current user.
+        *
+        * @returns {Boolean}
+        */
+        openInTabEnabled: function () {
+            return ox.tabHandlingEnabled && !guestMode;
+        },
 
         // Creates the URL for a new browser tab. Adds the anchor parameters of the
         // current URL (except for specific parameters) to the new URL.

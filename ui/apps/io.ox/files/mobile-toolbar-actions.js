@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/files/mobile-toolbar-actions', [
     'io.ox/core/extensions',
@@ -37,7 +37,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         'create': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-plus',
+            icon: 'fa-plus',
             dropdown: 'io.ox/files/toolbar/new',
             drawDisabled: true,
             caret: false
@@ -45,7 +45,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         'upload': {
             prio: 'hi',
             mobile: 'hi',
-            icon: 'fa fa-cloud-upload',
+            icon: 'fa-cloud-upload',
             dropdown: 'io.ox/files/toolbar/upload',
             drawDisabled: true,
             caret: false
@@ -54,7 +54,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show icons'),
-            icon: 'fa fa-th',
+            icon: 'fa-th',
             ref: 'io.ox/files/actions/layout-icon',
             drawDisabled: true
         },
@@ -62,7 +62,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show tiles'),
-            icon: 'fa fa-th-large',
+            icon: 'fa-th-large',
             ref: 'io.ox/files/actions/layout-tile',
             drawDisabled: true
         },
@@ -70,7 +70,7 @@ define('io.ox/files/mobile-toolbar-actions', [
             prio: 'hi',
             mobile: 'hi',
             label: gt('Show list'),
-            icon: 'fa fa-align-justify',
+            icon: 'fa-align-justify',
             ref: 'io.ox/files/actions/layout-list',
             drawDisabled: true
         }
@@ -86,7 +86,7 @@ define('io.ox/files/mobile-toolbar-actions', [
         ext.point('io.ox/files/links/inline').list().map(function (item) {
             item = _(item).pick('id', 'index', 'prio', 'mobile', 'icon', 'title', 'ref', 'section', 'sectionTitle');
             switch (item.id) {
-                case 'openviewer': item.icon = 'fa fa-eye'; break;
+                case 'openviewer': item.icon = 'fa-eye'; break;
                 // no default
             }
             return item;

@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 /// <reference path="../../steps.d.ts" />
 
@@ -157,7 +157,7 @@ Scenario('[C236795] Visibility Flags', ({ I, calendar }) => {
         // PUBLIC => Standard
         // CONFIDENTIAL => Private
         // PRIVATE => Secret
-        I.selectOption('.io-ox-calendar-edit select', visibility);
+        I.selectOption('Visibility', visibility);
 
         // save
         I.click('Create', '.io-ox-calendar-edit-window');
@@ -858,7 +858,7 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
     updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
     await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
 
-    I.login('app=io.ox/calendar');
+    I.login('app=io.ox/calendar&perspective=week:week');
 
     I.waitForText(subject);
     I.click(subject);

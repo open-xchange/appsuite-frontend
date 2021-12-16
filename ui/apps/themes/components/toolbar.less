@@ -215,18 +215,19 @@
 .bottom-toolbar.bottom-toolbar-visible .window-content { bottom: @toolbar-height; }
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
 .chromeless-window .window-body.mobile-toolbar-visible { bottom: @mobile-toolbar-height; }
-.chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
+.chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: ~"calc(2rem + 32px)"; }
 
 .smartphone .mobile-navbar {
     height: @mobile-toolbar-height;
+    display: block;
 }
 
 .classic-toolbar, .mobile-navbar {
-
+    display: flex;
     position: absolute;
     top: 0;
     width: 100%;
-    height: @toolbar-height;
+    height: 40px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
@@ -235,10 +236,10 @@
 
     & > li {
 
+        display: flex;
+        flex-direction: column;
         list-style: none;
-        display: inline-block;
         padding: 0;
-        float: left; // to support pull-right while keeping items in-order (a11y)
         height: 100%;
 
         & > a.upsell i.upsell-icon {
@@ -251,10 +252,14 @@
 
             height: 100%;
             display: inline-block;
-            line-height: @toolbar-line-height - 2;
-            padding: @toolbar-vertical-padding @default-padding;
+            // line-height: @toolbar-line-height - 0.125;
+            // padding: @toolbar-vertical-padding @default-padding;
+            // padding: 8px 16px;
+            padding: 0 16px 0;
+            display: flex;
+            align-items: center;
+
             text-decoration: none;
-            float: left;
             outline: 0;
 
             i { text-decoration: none; }
@@ -276,7 +281,7 @@
     }
 
     & > li.pull-right {
-        float: right;
+        margin-left: auto;
         & > .dropdown-menu { right: 4px; }
     }
 
@@ -393,7 +398,7 @@
     border: 0 solid mix(@text-color, @background, 200%/15);
 
     font-size: 14px;
-    line-height: @height-default - 1;
+    line-height: @height-default - 0.0625;
 
     &.top {
         top: 0;
@@ -401,16 +406,18 @@
     }
 
     &.bottom {
+        display: flex;
+        justify-content: space-between;
         bottom: 0;
         border-top-width: 1px;
         z-index: 1;
     }
 
     .toolbar-item {
+        display: flex;
+        align-items: center;
         color: #333;
-        display: inline-block;
-        float: left;
-        line-height: @height-default - 1;
+        line-height: @height-default - 0.0625;
         padding: 0 @default-padding;
         text-decoration: none;
 
@@ -422,7 +429,8 @@
     }
 
     .io-ox-context-help {
-        float: right;
+        display: flex;
+        align-items: center;
         padding-left: 16px;
         padding-right: 16px;
     }

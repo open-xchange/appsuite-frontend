@@ -74,9 +74,10 @@
             color: #767676;
             cursor: pointer;
             white-space: nowrap;
+            padding: 4px 14px;
             i {
                 color: #767676;
-                margin-right: 8px;
+                margin-right: 1rem;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
@@ -108,8 +109,8 @@
         }
     }
 
-    &.toolbar-top-visible .toolbar.top,
-    &.toolbar-bottom-visible .toolbar.bottom { display: block; margin-bottom: 0; }
+    &.toolbar-top-visible .toolbar.top { display: block; margin-bottom: 0; }
+    &.toolbar-bottom-visible .toolbar.bottom { display: flex; margin-bottom: 0; }
 
     &:not(.upside-down) {
         &.toolbar-top-visible .list-view { top: @height-default; }
@@ -196,12 +197,17 @@
         width: @list-view-padding + 30;
 
         .fa-checkmark {
-            color: #767676;
             position: absolute;
-            left: @default-padding;
+            left: 14px;
             top: 12px;
-            font-size: 18px;
-            &:before { content: "\f096"; } // fa-square-o
+            height: 18px;
+            .checkmark {
+                visibility: hidden;
+            }
+            .checkbox {
+                visibility: visible;
+                fill: #767676;
+            }
         }
     }
 
@@ -231,8 +237,14 @@
 
     .list-item.selected:not(.no-checkbox) {
         .fa-checkmark {
-            color: @control-background;
-            &:before { content: "\f14a"; }// fa-check-square-o
+            .checkmark {
+                fill: #fff;
+                visibility: visible;
+            }
+            .checkbox {
+                visibility: hidden;
+                fill: @control-background;
+            }
         }
     }
 
@@ -245,7 +257,7 @@
         color: @text-color;
         background-color: @selected-unfocussed-background;
         -webkit-font-smoothing: antialiased;
-        .fa-checkmark { color: @grid-checkbox-color; }
+        .fa-checkmark { fill: @grid-checkbox-color; }
         &:hover { background-color: lighten(@selected-unfocussed-background, 2%); }
     }
 
@@ -363,11 +375,9 @@
     .list-view .list-item .list-item-checkmark .fa-checkmark {
         top: 8px;
     }
-    .list-item .list-item-checkmark .fa-checkmark:before {
-        content: "\f1db"; // fa-circle-thin
-    }
-    .list-item.selected:not(.no-checkbox) .fa-checkmark:before {
-        content: "\f058"; // fa-check-circle
+
+    .list-item.selected:not(.no-checkbox) {
+        .fa-checkmark > .checkmark, .checkbox  { fill: @brand-primary; }
     }
 }
 

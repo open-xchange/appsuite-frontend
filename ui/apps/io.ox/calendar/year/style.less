@@ -5,7 +5,9 @@
     overflow: hidden;
 
     .header {
-        height: @toolbar-height;
+        .control {
+            padding: 0.5625rem 0.5625rem 0 0.5625rem;
+        }
     }
 
     .year-view-container {
@@ -15,11 +17,17 @@
         bottom: 0;
         top: @toolbar-height;
         overflow-y: scroll;
+        // not really needed in standard zoom but keeps the view from exploding when using text zoom
+        display: flex;
+        flex-wrap: wrap;
+        align-content: start;
     }
 
     .month-container {
         float: left;
         min-height: 300px;
+        // also helps with text zoom
+        min-width: 16rem;
     }
 
     .month {
@@ -33,8 +41,8 @@
 
         td, th {
             text-align: center;
-            width: 32px;
-            height: 32px;
+            width: ~"calc(1.5rem + 8px)";
+            height: ~"calc(1.5rem + 8px)";
         }
 
         caption {

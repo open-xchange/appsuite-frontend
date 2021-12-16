@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/api', [
     'io.ox/mail/api-legacy',
@@ -1497,12 +1497,16 @@ define('io.ox/mail/api', [
         delete data.to;
         return accountAPI.getAddressesFromFolder(data.folder).then(function (addresses) {
             // prefer alias for ack in case mail was addressed to it
-            var alias = _.find(addresses.aliases, function (alias) { return alias[1] === to[1]; }),
+            var alias = _.find(addresses.aliases, function (alias) { return alias[1].toLowerCase() === (to[1] || '').toLowerCase(); }),
                 addressArray = alias ? alias : addresses.primary,
                 name = addressArray[0],
-                address = addressArray[1],
-                from = !name ? address : '"' + name + '" <' + address + '>';
+                address = addressArray[1];
 
+            // default or custom display name
+            var custom = settings.get(['customDisplayNames', address], {});
+            name = (custom.overwrite ? custom.name : name || custom.defaultName) || '';
+
+            var from = !name ? address : '"' + name + '" <' + address + '>';
             return http.PUT({
                 module: 'mail',
                 params: { action: 'receipt_ack' },
@@ -1760,7 +1764,8 @@ define('io.ox/mail/api', [
                 };
             }
             // use threads?
-            if (params.thread === true) {
+            // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
+            if (params.thread === true && !accountAPI.is('sent|drafts', params.folder)) {
                 return {
                     action: 'threadedAll',
                     folder: params.folder,

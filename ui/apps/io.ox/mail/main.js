@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/mail/main', [
     'io.ox/mail/util',
@@ -30,7 +30,6 @@ define('io.ox/mail/main', [
     'io.ox/mail/threadview',
     'io.ox/core/extensions',
     'io.ox/backbone/views/actions/util',
-    'io.ox/core/api/account',
     'io.ox/core/notifications',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
@@ -54,7 +53,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actionsUtil, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, ActionDropdownView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
+], function (util, api, composeAPI, commons, MailListView, ListViewControl, ThreadView, ext, actionsUtil, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, ActionDropdownView, categories, accountAPI, gt, settings, coreSettings, certificateAPI, certUtils) {
 
     'use strict';
 
@@ -377,12 +376,13 @@ define('io.ox/mail/main', [
                 accountAPI.all().done(function (data) {
                     _.each(data, function (accountData) {
                         accountAPI.getStatus(accountData.id).done(function (obj) {
-                            if (obj[accountData.id].status !== 'ok') {
-                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
-                            } else if (obj[accountData.id].status === 'ok') {
+                            var status = obj[accountData.id].status;
+                            if (['ok', 'deactivated'].indexOf(status) >= 0) {
                                 var node = app.treeView.getNodeView(accountData.root_folder);
                                 if (!node) return;
                                 node.hideStatusIcon();
+                            } else if (status !== 'ok') {
+                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
                             }
                         });
                     });
@@ -419,7 +419,7 @@ define('io.ox/mail/main', [
                 ox.on('http:error:OAUTH-0040 http:error:MSG-0114', function (err) {
                     var account = keychain.accounts.get(err.error_params[reauthHandler.columnForError(err.code)]);
                     if (!account) return;
-                    var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
+                    var mailAccount = _(accountAPI.get('associations')).filter({ module: 'mail' })[0];
                     if (!mailAccount) return;
                     app.addAccountErrorHandler(mailAccount.folder, 'OAuthReauthorize', { account: account, err: err }, true);
                 });
@@ -661,6 +661,8 @@ define('io.ox/mail/main', [
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {});
                 if (!app.settings.get('threadSupport', true)) options.thread = false;
+                // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
+                if (accountAPI.is('sent|drafts', folder)) options.thread = false;
 
                 // ignore unavailable sort options
                 var isUnavailable =
@@ -688,7 +690,7 @@ define('io.ox/mail/main', [
             app.props.on('change:sort', function (model, value) {
                 model = app.listView.model;
                 // resolve from-to
-                if (value === 'from-to') value = account.is('sent|drafts', model.get('folder')) ? 604 : 603;
+                if (value === 'from-to') value = accountAPI.is('sent|drafts', model.get('folder')) ? 604 : 603;
                 // do not accidentally overwrite other attributes on folderchange
                 if (!app.changingFolders) {
                     // set proper order first
@@ -811,7 +813,7 @@ define('io.ox/mail/main', [
 
             app.supportsTextPreviewConfiguration = function () {
                 var id = app.folder.get();
-                return support && (account.isPrimary(id) || id === 'virtual/all-unseen');
+                return support && (accountAPI.isPrimary(id) || id === 'virtual/all-unseen');
             };
 
             app.useTextPreview = function () {
@@ -919,7 +921,7 @@ define('io.ox/mail/main', [
 
                 // explicitly update when set to from-to (see bug 44458)
                 if (options.sort === 'from-to') {
-                    app.listView.model.set('sort', account.is('sent|drafts', id) ? 604 : 603);
+                    app.listView.model.set('sort', accountAPI.is('sent|drafts', id) ? 604 : 603);
                 }
 
                 app.listView.model.set('folder', id);
@@ -1158,7 +1160,7 @@ define('io.ox/mail/main', [
                     if (app.props.get('checkboxes')) app.showMultiple(list);
                 },
                 'selection:action': function (list) {
-                    var isDraftFolder = _.contains(account.getFoldersByType('drafts'), this.model.get('folder'));
+                    var isDraftFolder = _.contains(accountAPI.getFoldersByType('drafts'), this.model.get('folder'));
 
                     if (app.listView.selection.get().length === 1 && !app.props.get('checkboxes')) {
                         // check for thread
@@ -1617,7 +1619,7 @@ define('io.ox/mail/main', [
                 if (app.isThreaded()) list = _(api.threads.get(list[0])).pluck('cid');
                 var cid = list[0],
                     obj = _.cid(cid),
-                    isDraft = account.is('drafts', obj.folder_id);
+                    isDraft = accountAPI.is('drafts', obj.folder_id);
                 if (isDraft) {
                     api.get(obj).then(function (data) {
                         actionsUtil.invoke('io.ox/mail/actions/edit', data);
@@ -1837,6 +1839,13 @@ define('io.ox/mail/main', [
                 notifications.yell(error);
             });
             app.folder.handleErrors();
+
+            // deactivated secondary mail account
+            ox.on('account:status', function (data) {
+                if (!data.deactivated) return;
+                if (app.folder.get().indexOf(data.root_folder) < 0) return;
+                app.folder.setDefault();
+            });
         },
 
         // drafts deleted outside of this client
@@ -1905,7 +1914,7 @@ define('io.ox/mail/main', [
                 if (!editFor || data.mailPath) return;
 
                 var cid = _.cid({ id: editFor.originalId, folder_id: editFor.originalFolderId }),
-                    draftsId = account.getFoldersByType('drafts');
+                    draftsId = accountAPI.getFoldersByType('drafts');
                 _(draftsId).each(function (id) {
                     _(api.pool.getByFolder(id)).each(function (collection) {
                         collection.remove(cid);
@@ -1916,14 +1925,14 @@ define('io.ox/mail/main', [
             composeAPI.on('after:save', function (data) {
                 if (data.mailPath) return;
                 var folder = app.folder.get();
-                if (account.is('drafts', folder)) app.listView.reload();
+                if (accountAPI.is('drafts', folder)) app.listView.reload();
             });
             // existing draft removed
             composeAPI.on('after:send', function (data) {
                 var editFor = data.meta.editFor;
                 if (!editFor || data.mailPath) return;
                 var folder = app.folder.get();
-                if (account.is('drafts', folder)) app.listView.reload();
+                if (accountAPI.is('drafts', folder)) app.listView.reload();
             });
         },
 
@@ -1944,7 +1953,7 @@ define('io.ox/mail/main', [
                 if (!mailPath) return;
                 // immediate reload when currently selected
                 var folder = app.folder.get();
-                if (account.is('drafts', folder)) return app.listView.reload();
+                if (accountAPI.is('drafts', folder)) return app.listView.reload();
                 // delayed reload on next select
 
                 _(api.pool.getByFolder(mailPath.folderId)).each(function (collection) {
@@ -2212,7 +2221,7 @@ define('io.ox/mail/main', [
 
         'unified-folder-support': function () {
             // only register if we have a unified mail account
-            account.getUnifiedMailboxName().done(function (unifiedMailboxName) {
+            accountAPI.getUnifiedMailboxName().done(function (unifiedMailboxName) {
                 if (!unifiedMailboxName) {
                     return;
                 }
@@ -2228,7 +2237,7 @@ define('io.ox/mail/main', [
                             12: 'Trash'
                         };
 
-                    return account.get(accountId).then(function (accountData) {
+                    return accountAPI.get(accountId).then(function (accountData) {
                         var folder, originalFolderId, unifiedFolderId, unifiedSubfolderId;
                         if (!accountData) {
                             folder = folderAPI.pool.models[model.get('folder_id')];

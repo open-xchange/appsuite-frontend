@@ -1,24 +1,24 @@
 /*
-*
-* @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
-* @license AGPL-3.0
-*
-* This code is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-
-* You should have received a copy of the GNU Affero General Public License
-* along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
-*
-* Any use of the work other than as authorized under this license or copyright law is prohibited.
-*
-*/
+ *
+ * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with OX App Suite. If not, see <https://www.gnu.org/licenses/agpl-3.0.txt>.
+ *
+ * Any use of the work other than as authorized under this license or copyright law is prohibited.
+ *
+ */
 
 define('io.ox/core/folder/contextmenu', [
     'io.ox/core/extensions',
@@ -28,10 +28,11 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
     'io.ox/backbone/mini-views/contextmenu-utils',
+    'io.ox/core/folder/actions/properties',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, contextUtils, settings, fileSettings, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, contextUtils, properties, settings, fileSettings, gt) {
 
     'use strict';
 
@@ -453,16 +454,15 @@ define('io.ox/core/folder/contextmenu', [
         }()),
 
         //
-        // Permissions / Sharing
+        // Share / Permissions
         //
         shares: (function () {
 
             function invite(e) {
                 e.preventDefault();
                 var id = e.data.id;
-                require(['io.ox/files/api', 'io.ox/files/share/permissions'], function (filesApi, permissions) {
-                    var model = new filesApi.Model(api.pool.getModel(id).toJSON());
-                    permissions.showFolderPermissions(id, model);
+                require(['io.ox/files/share/permissions'], function (permissions) {
+                    permissions.showFolderPermissions(id);
                 });
             }
 
@@ -493,6 +493,31 @@ define('io.ox/core/folder/contextmenu', [
                     enabled: true,
                     handler: invite,
                     text: (showInvitePeople || hasLinkSupport) ? gt('Share / Permissions') : gt('Permissions')
+                });
+            };
+        }()),
+
+        //
+        // Manage Deputies (only inbox and calendar for now)
+        //
+        deputies: (function () {
+            function handler(e) {
+                e.preventDefault();
+                require(['io.ox/core/deputy/dialog'], function (deputyDialog) {
+                    deputyDialog.open();
+                });
+            }
+
+            return function (baton) {
+                // needs deputy capability and needs to be inbox or default calendar
+                if (!capabilities.has('deputy') || (baton.data.id !== api.getDefaultFolder('mail') && baton.data.id !== api.getDefaultFolder('calendar'))) return;
+
+                contextUtils.addLink(this, {
+                    action: 'manageDeputies',
+                    data: { folder: baton.data.id, app: baton.app },
+                    enabled: true,
+                    handler: handler,
+                    text: gt('Manage deputies')
                 });
             };
         }()),
@@ -535,22 +560,14 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 e.preventDefault();
-                var id = e.data.id;
-                require(['io.ox/core/folder/actions/properties'], function (fn) {
-                    fn(id);
-                });
+                properties.openDialog(e.data.id);
             }
 
             return function (baton) {
 
                 if (_.device('smartphone')) return;
-                if (baton.module !== 'calendar' && baton.module !== 'tasks') return;
-
-                // do not show properties if provider is chronos and sync is disabled, because then we don't have any properties
-                var provider = baton.data['com.openexchange.calendar.provider'],
-                    usedForSync = baton.data.used_for_sync || {};
-                if (provider === 'chronos' && (!usedForSync || usedForSync.value !== 'true')) return;
-
+                // check if there is an extension that has something to show in the dialog
+                if (!properties.check(baton.data.id)) return;
                 contextUtils.addLink(this, {
                     action: 'properties',
                     data: { baton: baton, id: String(baton.data.id) },
@@ -742,6 +759,11 @@ define('io.ox/core/folder/contextmenu', [
             id: 'shares',
             index: 2000,
             draw: extensions.shares
+        },
+        {
+            id: 'deputies',
+            index: 2050,
+            draw: extensions.deputies
         },
         {
             id: 'divider-3',
