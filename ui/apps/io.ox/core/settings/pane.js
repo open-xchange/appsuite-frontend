@@ -486,7 +486,15 @@ define('io.ox/core/settings/pane', [
             index: INDEX += 100,
             render: function () {
                 var self = this;
-                // add ask now link (by design browsers only allow asking if there was no decision yet)
+
+                // mobile browsers generally don't support push notifications
+                // and by design browsers only allow asking if there was no decision yet
+                if (!desktopNotifications.isSupported() || desktopNotifications.getPermissionStatus().match(/granted|denied/)) {
+                    this.$requestLink = '';
+                    return;
+                }
+
+                // add ask now link
                 // Opens a native browser popup to decide if this applications/website is allowed to show notifications
                 this.$requestLink = $('<br>').add(
                     $('<a href="#" role="button" class="request-desktop-notifications">')
@@ -506,22 +514,19 @@ define('io.ox/core/settings/pane', [
                     });
                 }
 
-                if (desktopNotifications.isSupported()) {
-                    this.listenTo(this.model, 'change:showDesktopNotifications', function (value) {
-                        if (value !== true) return;
-                        var view = this;
-                        desktopNotifications.requestPermission(function (result) {
-                            if (result !== 'default') self.$requestLink.hide();
-                            if (result !== 'denied' || view.disposed) return;
-                            // revert if user denied the permission
-                            // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
-                            // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
-                            notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
-                            view.model.set('showDesktopNotifications', false, { silent: true });
-                        });
+                this.listenTo(this.model, 'change:showDesktopNotifications', function (value) {
+                    if (value !== true) return;
+                    var view = this;
+                    desktopNotifications.requestPermission(function (result) {
+                        if (result !== 'default') self.$requestLink.hide();
+                        if (result !== 'denied' || view.disposed) return;
+                        // revert if user denied the permission
+                        // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
+                        // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
+                        notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
+                        view.model.set('showDesktopNotifications', false, { silent: true });
                     });
-                }
-                if (desktopNotifications.getPermissionStatus().match(/granted|denied/)) this.$requestLink.hide();
+                });
             }
         },
         //
