@@ -395,6 +395,7 @@ define('io.ox/core/folder/extensions', [
             }
 
             function draw() {
+                if (capabilities.has('guest')) return node.hide();
                 getAvailableServices().done(function (services) {
                     var availableNonOauthServices = getAvailableNonOauthServices();
                     if (services.length > 0 || availableNonOauthServices.length) {
