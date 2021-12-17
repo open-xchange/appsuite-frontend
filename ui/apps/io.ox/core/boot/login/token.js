@@ -29,6 +29,14 @@ define('io.ox/core/boot/login/token', [
 
     'use strict';
 
+    // Multifactor requires a session rampup before continuing
+    function checkMultifactor(data) {
+        if (data.requires_multifactor) {
+            return session.rampup();
+        }
+        return $.when();
+    }
+
     ext.point('io.ox/core/boot/login').extend({
         id: 'token',
         index: 200,
@@ -44,8 +52,11 @@ define('io.ox/core/boot/login/token', [
 
                 session.set(data);
                 cleanup();
-                ox.trigger('login:success', data);
-                util.debug('TokenLogin SUCCESS', data);
+                return checkMultifactor(data)
+                .then(function () {
+                    ox.trigger('login:success', data);
+                    util.debug('TokenLogin SUCCESS', data);
+                });
             }, function () {
                 util.debug('TokenLogin login FAILED', baton.hash.session);
             });
@@ -83,6 +94,10 @@ define('io.ox/core/boot/login/token', [
         return http.GET({
             module: 'system',
             params: { action: 'whoami' }
+        }).then(function (user) {
+            checkMultifactor(user).then(function () {
+                return user;
+            });
         });
     }
 

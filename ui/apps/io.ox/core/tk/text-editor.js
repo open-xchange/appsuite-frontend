@@ -39,6 +39,8 @@ define('io.ox/core/tk/text-editor', [
         textarea.on('change', this.trigger.bind(this, 'change'));
         textarea.on('input', _.throttle(this.trigger.bind(this, 'change'), 100));
 
+        textarea.on('input', resizeTextarea);
+
         $(el).append(textarea);
 
         if (_.device('tablet && iOS >= 6')) {
@@ -81,6 +83,7 @@ define('io.ox/core/tk/text-editor', [
             set = function (str) {
                 val.call(textarea, trimEnd(str));
                 this.setCaretPosition();
+                resizeTextarea();
             },
 
             clear = function () {
@@ -235,6 +238,11 @@ define('io.ox/core/tk/text-editor', [
             // 12px is the bottom margin, keep in sync with css
             // there is a strange 6px height difference between the text area and the container, couldn't find the cause yet
             textarea.css('minHeight', Math.max(300, windowContainer.outerHeight() - fields.outerHeight() - windowFooter.outerHeight()));
+        }
+
+        function resizeTextarea() {
+            textarea[0].style.height = 'auto';
+            textarea[0].style.height = (textarea[0].scrollHeight) + 'px';
         }
 
         this.show = function () {

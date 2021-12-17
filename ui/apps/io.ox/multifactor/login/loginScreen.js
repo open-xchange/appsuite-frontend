@@ -66,7 +66,7 @@ define('io.ox/multifactor/login/loginScreen', ['io.ox/core/extensions', 'io.ox/c
             var topbar = $('#io-ox-appcontrol');
             ext.point('io.ox/core/appcontrol').invoke('draw', topbar);  // Draw the top bar
             $('#io-ox-core').show();  // We need to show the core if hidden
-            addPlaceholderIcons(topbar.find('.taskbar'));  // Add temporary icons
+            addPlaceholderIcons(topbar.find('#io-ox-toprightbar .taskbar'));  // Add temporary icons
             require(['io.ox/core/main/designs']);  // Load the users selected colors for the top bar
         },
         destroy: function () {
