@@ -52,7 +52,7 @@ Enable validiation for phone numbers. Default is `false`.
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
 
 <config>io.ox/core//disabledSettingsPanes=`<string>`</config>
-Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in adress bar). Default is unset;
+Comma-separated list of extension point ids of _io.ox/settings/pane_. Disable one or more settings panes and it's subgroup extension points (easily identifiable as "&folder=virtual/settings/<id>" in address bar). Default is unset;
 
 <config>io.ox/core//pdf/enablePreconversionOnUpload=`<bool>`</config>
 Enable/disable PDF preconversion of office documents on file upload and when a new file version is added. Default is `true`.
@@ -826,4 +826,3 @@ There is no default.
 
 <config>io.ox/core//whatsNew/autoStart`<boolean>`</config>
 set if the whats new dialog is shown automatically when a user logs in with a new version. Default is true
-
