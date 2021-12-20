@@ -44,8 +44,7 @@ const switchAndCloseTab = () => {
     I.closeCurrentTab();
 };
 
-// TODO: fix in code
-Scenario.skip('Create call and check call history from addressbook', async ({ I, users, contacts, dialogs }) => {
+Scenario('Create call and check call history from addressbook', async ({ I, users, contacts, dialogs }) => {
 
     const [user1, user2] = users;
 
@@ -80,7 +79,6 @@ Scenario.skip('Create call and check call history from addressbook', async ({ I,
         dialogs.clickButton('Answer');
         I.waitForDetached('.modal-dialog');
         switchAndCloseTab();
-
 
         I.waitForVisible('~Call history');
         I.click('~Call history');
@@ -117,6 +115,7 @@ Scenario.skip('Create call and check call history from addressbook', async ({ I,
     });
 
     session('userA', () => {
+        I.click('~Call history');
         I.waitForVisible(
             locate('.call-history-item')
             .inside('.dropdown.open')
@@ -228,8 +227,7 @@ Scenario('Call history is not visible when empty', ({ I, users }) => {
     I.waitForVisible('.dropdown.open .call-history-item');
 });
 
-// TODO: fix behaviour in code
-Scenario.skip('Call history closes on second click', ({ I, users }) => {
+Scenario('Call history closes on second click', ({ I, users }) => {
 
     const [user1, user2] = users;
     const { primaryEmail, display_name } = user2.userdata;

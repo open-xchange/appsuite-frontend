@@ -69,6 +69,7 @@ define('io.ox/switchboard/views/call-history', [
             this.$el.attr('role', 'presentation').append(
                 $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1" aria-haspopup="true" aria-expanded="false" role="button">')
                     .attr('aria-label', gt('Call history'))
+                    .on('mousedown', this.onMousedown.bind(this))
                     .on('click', this.onOpen.bind(this))
                     .one('click', this.onFirstOpen.bind(this))
                     .append(
@@ -99,6 +100,10 @@ define('io.ox/switchboard/views/call-history', [
         onOpen: function () {
             settings.set('callHistory/lastSeen', _.now()).save();
             this.updateIndicator();
+        },
+        onMousedown: function (e) {
+            // prevents closing dropdown on mousedown => only close on click
+            e.preventDefault();
         },
         onAddRemove: function () {
             this.updateIndicator();

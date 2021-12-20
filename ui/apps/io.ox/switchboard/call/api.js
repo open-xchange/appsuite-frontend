@@ -80,10 +80,12 @@ define('io.ox/switchboard/call/api', [
             if (this.isCalling() && this.isPending()) api.propagate('cancel', this.getCallees());
         },
         decline: function () {
+            this.active = false;
             this.states[api.userId] = 'declined';
             api.propagate('decline', [this.getCaller()]);
         },
         answer: function () {
+            this.active = false;
             this.states[api.userId] = 'answered';
             api.propagate('answer', [this.getCaller()]);
         },

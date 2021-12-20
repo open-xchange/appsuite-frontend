@@ -72,6 +72,8 @@ define('io.ox/switchboard/call/incoming', [
                 .on('decline', function () {
                     ringtone.incoming.stop();
                     call.decline();
+                    call.set('missed', true);
+                    call.addToHistory();
                 })
                 .on('answer', function () {
                     ringtone.incoming.stop();
