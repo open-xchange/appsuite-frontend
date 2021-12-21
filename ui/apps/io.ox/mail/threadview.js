@@ -88,6 +88,7 @@ define('io.ox/mail/threadview', [
                     animation: false,
                     container: 'body',
                     placement: 'left',
+                    trigger: 'hover',
                     title: gt('Open/close all messages')
                 })
             );
