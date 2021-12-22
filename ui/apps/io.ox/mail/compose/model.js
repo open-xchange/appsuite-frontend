@@ -86,6 +86,7 @@ define('io.ox/mail/compose/model', [
 
         initialize: function () {
             this.initialized = this.create().then(function (data) {
+                var serverData = _.extend({}, data);
                 // merge to, cc and bcc with server response
                 ['to', 'cc', 'bcc'].forEach(function (str) {
                     data[str] = _.chain()
@@ -107,10 +108,11 @@ define('io.ox/mail/compose/model', [
                     return new Attachments.Model(_.extend({}, attachment, { group: 'mail', space: collection.space }));
                 }));
                 data.attachments = collection;
-                return data;
-            }.bind(this)).then(function (data) {
+
+                // update model
                 this.set(data);
-                if (!this.prevAttributes) this.prevAttributes = data;
+                if (!this.prevAttributes) this.prevAttributes = serverData;
+                // add listeners
                 this.listenTo(data.attachments, 'remove', this.onRemoveAttachment);
                 this.listenTo(data.attachments, 'upload:failed', this.onError);
                 this.listenTo(this, 'fail:save', this.onError);
@@ -359,7 +361,6 @@ define('io.ox/mail/compose/model', [
                     data.contentType = this.get('contentType') || data.contentType;
                 }
 
-                this.prevAttributes = data;
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
