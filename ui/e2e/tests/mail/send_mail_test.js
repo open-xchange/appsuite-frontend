@@ -47,7 +47,7 @@ Scenario('Send and receive mail @smoketest', async ({ I, users, mail }) => {
     I.login('app=io.ox/mail', { user: recipient });
 
     let element = await I.grabNumberOfVisibleElements({ css: '.list-item.selectable' });
-    let retries = 6;
+    let retries = 6 * 10;
     while (!element && retries) {
         retries--;
         I.triggerRefresh();
