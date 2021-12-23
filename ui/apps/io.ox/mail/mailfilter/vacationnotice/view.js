@@ -112,12 +112,13 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 return (error && error.dateUntil) || '';
             },
             reflectValidity: function () {
-                var error = (this.model.validationError || {}).dateUntil;
+                var error = (this.model.validationError || {}).dateUntil,
+                    inactive = !this.model.get('active');
                 this.$('.error-message > .help-block').text(error).parent().toggle(!!error);
                 this.$('[name="dateUntil"]').parent().toggleClass('has-error', !!error);
                 this.$('.btn-primary[data-action="save"]').prop('disabled', !!error);
-                this.$('[name="subject"]').prop('disabled', !!error);
-                this.$('[name="text"]').prop('disabled', !!error);
+                this.$('[name="subject"]').prop('disabled', !!error || inactive);
+                this.$('[name="text"]').prop('disabled', !!error || inactive);
             }
         })
         .build(function () {
