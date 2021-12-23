@@ -706,6 +706,7 @@ define('io.ox/mail/common-extensions', [
 
         flagPicker: function (baton) {
             if (!settings.get('features/flag/color')) return;
+            if (util.isEmbedded(baton.data)) return;
             flagPicker.draw(this, baton);
         },
 
