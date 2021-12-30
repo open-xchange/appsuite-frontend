@@ -82,14 +82,13 @@ define('io.ox/search/view-template', [
                 opt = baton.model.getOptions(),
                 items = [],
                 titles = {},
-                apps = settings.get('search/modules') || [],
+                // apply mapping (infostore-files-drive chameleon)
+                apps = _.map(settings.get('search/modules') || [], function (module) {
+                    var id = 'io.ox/' + module;
+                    return opt.mapping[id] || id;
+                }),
+                supported = apps.indexOf(id) > -1,
                 elem;
-
-            // apply mapping (infostore-files-drive chameleon)
-            apps = _.map(apps, function (module) {
-                var id = 'io.ox/' + module;
-                return opt.mapping[id] || id;
-            });
 
             // create dropdown menu entries
             _(apps).each(function (id) {
@@ -129,16 +128,16 @@ define('io.ox/search/view-template', [
             cell.find('.dropdown-toggle')
                 .dropdown();
 
-            // current app
-            if (id !== '') {
-                // add icon
-                cell.find('[data-app="' + id + '"]')
+            // apply fallback (part 1)
+            id = supported ? id : apps[0];
+
+            // add icon
+            cell.find('[data-app="' + id + '"]')
                     .find('.icon')
                     .removeClass('fa-none')
                     .addClass('fa-check');
-                // add name
-                cell.find('.name').text(titles[id]);
-            }
+            // add name
+            cell.find('.name').text(titles[id]);
 
             // delegate handler
             $('body').on('click', '.app-dropdown a', function (e) {
@@ -158,6 +157,9 @@ define('io.ox/search/view-template', [
                 this.append(row);
             }
             ext.point('io.ox/search/facets/facets').invoke('draw', row, baton);
+
+            // apply fallback (part 2)
+            if (!supported) baton.model.setModule(id);
         }
     });
 
