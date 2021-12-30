@@ -490,12 +490,17 @@ define('io.ox/search/model', [
                         return data.facet === 'folder';
                     });
 
-                // reset current folder when switching apps (exept for drives account hack)
-                tmppool.folder.values.custom.id = 'custom';
-                tmppool.folder.values.custom.custom = undefined;
-                tmppool.folder.values.custom.name = undefined;
+                // reset current folder when switching apps (except for drives account hack)
+                if (tmppool.folder && tmppool.folder.values) {
+                    tmppool.folder.values.custom.id = 'custom';
+                    tmppool.folder.values.custom.custom = undefined;
+                    tmppool.folder.values.custom.name = undefined;
+                }
 
-                tmplist[0].value = 'custom';
+                if (tmplist[0]) {
+                    tmplist[0].value = 'custom';
+                }
+
                 this.set(
                     {
                         query: '',
