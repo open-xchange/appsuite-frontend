@@ -567,7 +567,7 @@ define('io.ox/core/commons', [
             var helpLinkView = new HelpLinkView({
                 href: getLink(baton && baton.app && baton.app.id)
             });
-            this.find('.generic-toolbar.bottom').append(
+            this.find('.generic-toolbar.bottom:last-of-type').append(
                 helpLinkView.render().$el
             );
 
