@@ -1067,9 +1067,10 @@ html.macos .preview-right, html.ios {
 //
 
 .mail-progress {
+    flex-direction: column;
     .progress {
         height: 4px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
         background-color: transparent;
         box-shadow: none;
         border-radius: 0;
@@ -1078,11 +1079,16 @@ html.macos .preview-right, html.ios {
         font-size: 12px;
         line-height: 16px;
         text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 8px;
+        flex: 1;
     }
 
     a {
         display: inline-block;
-        padding-right: 10px;
+        padding-right: 14px;
     }
 }
 
