@@ -174,8 +174,9 @@ Scenario('[C7412] Create private appointment @contentReview @bug', async ({ I, u
     }));
 });
 
-Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December, no end', async ({ I, calendar, dialogs }) => {
-    const date = moment('1216', 'MMDD');
+Scenario('[C7417] Create a Yearly recurring appointment a wednesday in December, no end', async ({ I, calendar, dialogs }) => {
+    const date = moment('1210', 'MMDD').isoWeekday(3);
+    const day = date.date();
 
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
@@ -190,10 +191,10 @@ Scenario('[C7417] Create a Yearly recurring appointment every 16 day of December
     dialogs.waitForVisible();
     I.waitForText('Edit recurrence', 5, dialogs.locators.header);
     I.selectOption('.modal-dialog [name="recurrence_type"]', 'Yearly');
-    I.see('Every year in December on day 16.');
+    I.see(`Every year in December on day ${day}.`);
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
-    I.see('Every year in December on day 16.');
+    I.see(`Every year in December on day ${day}.`);
 
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit-window');
