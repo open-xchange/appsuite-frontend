@@ -93,96 +93,8 @@ define('io.ox/calendar/edit/extensions', [
             this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
-                    var save = _.bind(baton.app.onSave || _.noop, baton.app),
-                        fail = _.bind(baton.app.onError || _.noop, baton.app),
-                        folder = baton.model.get('folder'),
-                        attachments = [],
-                        inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
-
-                    // check if attachments have changed
-                    if (baton.attachmentList.attachmentsToDelete.length > 0) {
-                        baton.model.set('attachments', _(baton.model.get('attachments')).difference(baton.attachmentList.attachmentsToDelete));
-                        baton.attachmentList.attachmentsToDelete = [];
-                    }
-                    if (baton.attachmentList.attachmentsToAdd.length > 0) {
-                        attachments = attachments.concat(baton.attachmentList.attachmentsToAdd);
-                    }
-
-                    if (oldFolder !== folder && baton.mode === 'edit') {
-                        baton.model.set({ 'folder': oldFolder }, { silent: true });
-                        // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
-                        baton.app.moveAfterSave = folder;
-                    }
-
-                    // check if participants inputfield contains a valid email address
-                    if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
-                        baton.model._attendees.add(
-                            new baton.model._attendees.model({
-                                cuType: 'INDIVIDUAL',
-                                cn: mailUtil.parseRecipient(inputfieldVal)[0],
-                                partStat: 'NEEDS-ACTION',
-                                email: mailUtil.parseRecipient(inputfieldVal)[1],
-                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1]
-                            })
-                        );
-                    }
-
-                    if (!baton.model.isValid({ isSave: true })) return;
-
-                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
-                    if (calendarUtil.isAllday(baton.model)) {
-                        // save unchanged dates, so they can be restored on error or when handling conflicts
-                        baton.parentView.tempEndDate = baton.model.get('endDate');
-                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
-                    }
-
-                    // save attachment data to model
-                    if (attachments.length) {
-                        var attachmentData = [];
-                        _(attachments).each(function (attachment) {
-                            var data = {
-                                filename: attachment.filename,
-                                uri: 'cid:' + 'file_' + attachment.cid
-                            };
-                            if (attachment.file.type) data.fmtType = attachment.file.type;
-                            attachmentData.push(data);
-                        });
-                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
-                        attachmentData = attachmentData.concat(_(baton.model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
-                        baton.model.set('attachments', attachmentData, { silent: true });
-                    }
-
-                    // do some cleanup
-                    // remove groups with entity. Those are not needed, as the attendees are also added individually.
-                    // we only remove them if there where changes to the attendees, as we don't want to create a false dirty status
-                    if (!_.isEqual(baton.app.initialModelData.attendees, baton.model.get('attendees'))) {
-                        baton.model._attendees.remove(baton.model._attendees.filter(function (attendee) {
-                            return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
-                        }));
-                    }
-
-                    baton.app.getWindow().busy();
-                    // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
-                    baton.app.attachmentsFormData = attachments;
-
-                    // in case some attendees are still resolved we wait fot that. We don't want missing attendees
-                    $.when(baton.model._attendees.toBeResolved).always(function () {
-                        if (baton.mode === 'edit') {
-                            var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
-                                    recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                                    attachments: attachments,
-                                    checkConflicts: true,
-                                    usedGroups: baton.model._attendees.usedGroups,
-                                    showRecurrenceInfo: true
-                                }),
-                                delta = baton.app.getDelta();
-                            api.update(delta, options).then(save, fail);
-                            return;
-                        }
-
-                        api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { usedGroups: baton.model._attendees.usedGroups, attachments: attachments, checkConflicts: true })).then(save, fail);
-
-                    });
+                    baton.data = { oldFolder: oldFolder, attachments: [] };
+                    ext.point('io.ox/calendar/edit/actions/save').cascade(this, baton);
                 })
             );
 
@@ -347,7 +259,7 @@ define('io.ox/calendar/edit/extensions', [
         nextTo: 'end-date',
         render: function () {
             var helpBlock = $('<div class="col-xs-12 help-block">').hide(),
-                // compare by offset, not timezone name or we would show the hint oo often (eyample: Europe/Paris and Europe/Berlin)
+                // compare by offset, not timezone name or we would show the hint oo often (example: Europe/Paris and Europe/Berlin)
                 userOffset = moment().utcOffset(),
                 userTimezone = moment().tz(),
                 self = this;
@@ -504,6 +416,147 @@ define('io.ox/calendar/edit/extensions', [
                 $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
                 new mini.TextView({ name: 'description', model: this.model }).render().$el.attr({ id: guid }).addClass('note')
             );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/actions/save').extend({
+        id: 'move',
+        index: 100,
+        perform: function (baton) {
+            var folder = baton.model.get('folder'),
+                oldFolder = baton.data.oldFolder;
+            if (oldFolder === folder || baton.mode !== 'edit') return;
+            // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts,
+            // so we don't need duplicated code
+            baton.model.set({ 'folder': oldFolder }, { silent: true });
+            baton.app.moveAfterSave = folder;
+        }
+    }, {
+        id: 'attendees:mail-address',
+        index: 200,
+        perform: function (baton) {
+            var inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
+            // check if participants inputfield contains a valid email address
+            if (_.isEmpty(inputfieldVal.replace(/\s*/, '')) || !coreUtil.isValidMailAddress(inputfieldVal)) return;
+            baton.model._attendees.add(
+                new baton.model._attendees.model({
+                    cuType: 'INDIVIDUAL',
+                    cn: mailUtil.parseRecipient(inputfieldVal)[0],
+                    partStat: 'NEEDS-ACTION',
+                    email: mailUtil.parseRecipient(inputfieldVal)[1],
+                    uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1]
+                })
+            );
+        }
+    }, {
+        id: 'validity',
+        index: 300,
+        perform: function (baton) {
+            if (baton.model.isValid({ isSave: true })) return;
+            return $.Deferred().reject();
+        }
+    }, {
+        id: 'allday',
+        index: 400,
+        perform: function (baton) {
+            // correct time for allday appointments (remove timezone and add 1 day to enddate)
+            if (!calendarUtil.isAllday(baton.model)) return;
+            // save unchanged dates, so they can be restored on error or when handling conflicts
+            baton.parentView.tempEndDate = baton.model.get('endDate');
+            baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
+        }
+    }, {
+        id: 'groups',
+        index: 500,
+        perform: function (baton) {
+            // remove groups with entity. Those are not needed, as the attendees are also added individually.
+            // we only remove them if there where changes to the attendees, as we don't want to create a false dirty status
+            if (_.isEqual(baton.app.initialModelData.attendees, baton.model.get('attendees'))) return;
+            baton.model._attendees.remove(baton.model._attendees.filter(function (attendee) {
+                return attendee.get('cuType') === 'GROUP' && attendee.get('entity');
+            }));
+        }
+    }, {
+        id: 'attendees:resolve',
+        index: 600,
+        perform: function (baton) {
+            baton.app.getWindow().busy();
+            // in case some attendees are still resolved we wait fot that. We don't want missing attendees
+            return $.when.apply($, baton.model._attendees.toBeResolved);
+        }
+    }, {
+        id: 'attachments',
+        index: 700,
+        perform: function (baton) {
+            var model = baton.model,
+                attachmentList = baton.attachmentList,
+                fail = _.bind(baton.app.onError || _.noop, baton.app);
+
+            // check if attachments have changed
+            if (attachmentList.attachmentsToDelete.length > 0) {
+                model.set('attachments', _(model.get('attachments')).difference(attachmentList.attachmentsToDelete));
+                attachmentList.attachmentsToDelete = [];
+            }
+            if (attachmentList.attachmentsToAdd.length > 0) {
+                baton.data.attachments = baton.data.attachments.concat(attachmentList.attachmentsToAdd);
+            }
+
+            // needed, so the formdata can be attached when selecting ignore conflicts in the conflict dialog
+            baton.app.attachmentsFormData = baton.data.attachments;
+
+            // extract file objects
+            var files = _.pluck(baton.data.attachments, 'file');
+            // check if local file references are still valid
+            return coreUtil.checkFileReferences(files).fail(fail);
+        }
+    }, {
+        id: 'attachments:cid',
+        index: 800,
+        perform: function (baton) {
+            var attachments = baton.data.attachments,
+                model = baton.model;
+
+            if (!attachments.length) return;
+            // save attachment data to model
+            var attachmentData = [];
+            _(attachments).each(function (attachment) {
+                var data = {
+                    filename: attachment.filename,
+                    uri: 'cid:' + 'file_' + attachment.cid
+                };
+                if (attachment.file.type) data.fmtType = attachment.file.type;
+                attachmentData.push(data);
+            });
+            // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
+            attachmentData = attachmentData.concat(_(model.get('attachments')).filter(function (att) { return att.managedId !== undefined; }) || []);
+            model.set('attachments', attachmentData, { silent: true });
+        }
+    }, {
+        id: 'save',
+        index: 900,
+        perform: function (baton) {
+            var save = _.bind(baton.app.onSave || _.noop, baton.app),
+                fail = _.bind(baton.app.onError || _.noop, baton.app);
+
+            switch (baton.mode) {
+                case 'create':
+                    return api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), {
+                        usedGroups: baton.model._attendees.usedGroups,
+                        attachments: baton.app.attachmentsFormData,
+                        checkConflicts: true })).then(save, fail);
+                case 'edit':
+                    var options = _.extend(calendarUtil.getCurrentRangeOptions(), {
+                            recurrenceRange: baton.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                            attachments: baton.app.attachmentsFormData,
+                            checkConflicts: true,
+                            usedGroups: baton.model._attendees.usedGroups,
+                            showRecurrenceInfo: true
+                        }),
+                        delta = baton.app.getDelta();
+                    return api.update(delta, options).then(save, fail);
+                default:
+                    break;
+            }
         }
     });
 
@@ -906,7 +959,7 @@ define('io.ox/calendar/edit/extensions', [
                     // force true boolean
                     var disabled = !!(folderAPI.pool.getModel(this.model.get('folder')).is('public') || isNotOrganizer || isException);
                     checkboxView.$el.toggleClass('disabled', disabled).find('input').attr('aria-disabled', disabled).prop('disabled', disabled ? 'disabled' : null);
-                    // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwisexd
+                    // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwised
                     // no changes if you are not the organizer or if this is an exception. We need to leave the value as is
                     if (disabled && !(isNotOrganizer || isException)) this.model.set('attendeePrivileges', 'DEFAULT');
                 }.bind(this);
@@ -1032,7 +1085,7 @@ define('io.ox/calendar/edit/extensions', [
                         // use initialrendering attribute to avoid autoscrolling
                         e.data.app.view.addParticipantsView.initialRendering = true;
                         e.data.model.getAttendees().reset(appointment.attendees);
-                        // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
+                        // set end_date in a separate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         e.data.model.set({
                             endDate: appointment.endDate
                         }, { validate: true });
