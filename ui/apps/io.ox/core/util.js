@@ -308,7 +308,38 @@ define('io.ox/core/util', [
                 widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
             $outer.remove();
             return 100 - widthWithScroll;
-        })
+        }),
+
+        // resolve in case all local files are still accessible
+        checkFileReferences: function (obj) {
+            var files = [].concat(obj);
+            return $.when.apply($, _.map(files, readFile));
+
+            function readFile(file) {
+                var reader = new FileReader(), def = $.Deferred();
+
+                reader.onloadstart = function () {
+                    def.resolve();
+                    this.abort();
+                };
+                reader.onerror = function (e) {
+                    def.reject({
+                        name: file.name,
+                        error: e.target.error.message,
+                        message: e.target.error.message + '(' + file.name + ')'
+                    });
+                };
+
+                if (/^image/.test(file.type)) {
+                    reader.readAsDataURL(file);
+                } else {
+                    reader.readAsText(file);
+                }
+
+                return def.promise();
+            }
+        }
+
     };
 
     return that;
