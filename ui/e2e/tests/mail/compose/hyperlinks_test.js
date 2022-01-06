@@ -74,17 +74,18 @@ Scenario('[C8821] Send mail with Hyperlink', async function ({ I, mail }) {
 });
 
 Scenario('[C8822] Send Mail with Hyperlink from existing text', function ({ I, mail }) {
+    const testText = 'testlink';
     I.login('app=io.ox/mail');
     mail.newMail();
     I.fillField('To', 'foo@bar');
     I.fillField('Subject', 'test subject');
     within({ frame: '#mce_0_ifr' }, () => {
-        I.fillField('.mce-content-body', 'testlink');
+        I.fillField('.mce-content-body', testText);
         I.doubleClick({ css: 'div.default-style' });
     });
     I.click({ css: 'i.mce-i-link' });
     I.waitForVisible('.mce-reset');
-    I.fillField('.mce-combobox input.mce-textbox', 'http://foo.bar');
+    I.fillField('.mce-combobox input.mce-textbox', 'https://foo.bar');
     I.click('Ok');
     within({ frame: '#mce_0_ifr' }, () => {
         I.seeElement('a');
@@ -93,7 +94,11 @@ Scenario('[C8822] Send Mail with Hyperlink from existing text', function ({ I, m
     I.selectFolder('Sent');
     I.waitForText('test subject', 30, '.list-view li[data-index="0"]');
     I.click('.list-view li[data-index="0"]');
-    I.waitForText('testlink', 5, '.rightside.mail-detail-pane .body.user-select-text');
+    I.waitForVisible('.mail-detail-frame');
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText(testText.trim());
+        I.seeElement({ css: 'a[href="https://foo.bar"]' });
+    });
 });
 
 Scenario('[C8823] Send Mail with Hyperlink by typing the link', function ({ I, mail }) {
