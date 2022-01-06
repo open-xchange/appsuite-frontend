@@ -561,8 +561,8 @@ define('io.ox/calendar/util', [
 
         getStatusClass: function (model) {
             var data = model.attributes || model;
-            // currently only cancelled statushas an extra class
-            return (data.status === 'CANCELLED' || this.hasFlag(data, 'ebent_cancelled')) ? 'cancelled' : '';
+            // currently only cancelled status has an extra class
+            return (data.status === 'CANCELLED' || this.hasFlag(data, 'event_cancelled')) ? 'cancelled' : '';
         },
 
         getConfirmationLabel: function (status) {
