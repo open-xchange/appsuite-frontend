@@ -169,7 +169,7 @@ define('io.ox/calendar/list/listview', [
                 m = moment(collection.originalStart).add(collection.range || 0, 'month').startOf('day');
             if (collection.cid.indexOf('folders') < 0) return;
             this.addClass('empty').text(gt('No appointments found until %s', m.format('LLL')));
-            baton.listView.drawTail();
+            _.defer(baton.listView.drawTail.bind(baton.listView));
         }
     });
 
