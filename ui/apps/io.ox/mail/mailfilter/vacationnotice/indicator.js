@@ -52,6 +52,7 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             this.model.fetch().done(function () {
                 $el.before(this.render().$el.hide());
                 this.listenTo(ox, 'mail:change:vacation-notice', this.onChange);
+                this.listenTo(ox, 'refresh^', this.checkIfActive);
                 this.onChange(this.model);
             }.bind(this));
         },
@@ -71,6 +72,10 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             } else if (key !== -1) {
                 this.activeElements.splice(key, 1);
             }
+        },
+
+        checkIfActive: function () {
+            this.onChange(this.model);
         },
 
         onChange: function (model) {
