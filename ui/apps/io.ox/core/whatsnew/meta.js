@@ -51,8 +51,8 @@ define('io.ox/core/whatsnew/meta', [
         {
             version: 1,
             capabilities: 'infostore',
-            name: gt('%1$s Usability', gt.pgettext('app', 'OX Drive')),
-            description: gt('%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The sharing dialogs have also been simplified and search performance was improved.', gt.pgettext('app', 'OX Drive'))
+            name: gt('%1$s Usability', gt.pgettext('app', 'Drive')),
+            description: gt('%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The sharing dialogs have also been simplified and search performance was improved.', gt.pgettext('app', 'Drive'))
         },
         {
             version: 1,

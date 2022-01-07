@@ -20,15 +20,11 @@
  *
  */
 
-define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], function (gt) {
+define('io.ox/onboarding/settings/defaults', [], function () {
 
     'use strict';
 
     var defaultSettings = {
-        'productNames': {
-            'mail': gt.pgettext('native app', 'OX Mail'),
-            'drive': gt.pgettext('native app', 'OX Drive')
-        },
         'android': {
             'mailapp': {
                 'url': 'https://play.google.com/store/apps/details?id=com.openxchange.mobile.oxmail',

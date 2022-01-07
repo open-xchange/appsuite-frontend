@@ -24,13 +24,14 @@ define('io.ox/settings/security/sessions/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'gettext!io.ox/core',
+    'gettext!io.ox/core/onboarding',
     'io.ox/core/http',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/views/disposable',
     'io.ox/backbone/mini-views/listutils',
     'settings!io.ox/core',
     'less!io.ox/settings/security/sessions/settings/style'
-], function (ext, ExtensibleView, gt, http, SettingsListView, DisposableView, listUtils, settings) {
+], function (ext, ExtensibleView, gt, gtOnboarding, http, SettingsListView, DisposableView, listUtils, settings) {
 
     'use strict';
 
@@ -114,9 +115,9 @@ define('io.ox/settings/security/sessions/settings/pane', [
         index: 200,
         customize: (function () {
             var mapping = {
-                oxdriveapp: settings.get('productname/oxdrive') || 'OXDrive',
-                oxmailapp: settings.get('productname/mailapp') || 'OX Mail',
-                oxsyncapp: settings.get('productname/oxsync') || 'OX Sync'
+                oxdriveapp: settings.get('productname/oxdrive', gtOnboarding.pgettext('native app', 'OX Drive')),
+                oxmailapp: settings.get('productname/mailapp', gtOnboarding.pgettext('native app', 'OX Mail')),
+                oxsyncapp: settings.get('productname/oxsync', gtOnboarding.pgettext('native app', 'OX Sync'))
             };
             return function () {
                 var deviceInfo = this.getDeviceInfo('client');

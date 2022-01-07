@@ -114,7 +114,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('android')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/mailapp'),
-                        title: settings.get('productNames/mail'),
+                        title: util.productNames.mail,
                         storeIcon: getStoreIcon('android'),
                         iconClass: 'mailapp playstore'
                     });
@@ -125,7 +125,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('android')) {
                     return new views.MobileDownloadView({
                         app: settings.get('android/driveapp'),
-                        title: settings.get('productNames/drive'),
+                        title: util.productNames.drive,
                         storeIcon: getStoreIcon('android'),
                         iconClass: 'driveapp playstore'
                     });
@@ -169,7 +169,7 @@ define('io.ox/onboarding/main', [
             'drive': function () {
                 return new views.MobileDownloadView({
                     app: settings.get('macos/driveapp'),
-                    title: settings.get('productNames/drive'),
+                    title: util.productNames.drive,
                     storeIcon: getStoreIcon('macos'),
                     iconClass: 'driveapp macappstore'
                 });
@@ -195,7 +195,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('ios')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/mailapp'),
-                        title: settings.get('productNames/mail'),
+                        title: util.productNames.mail,
                         storeIcon: getStoreIcon('ios'),
                         iconClass: 'mailapp appstore'
                     });
@@ -206,7 +206,7 @@ define('io.ox/onboarding/main', [
                 if (_.device('ios')) {
                     return new views.MobileDownloadView({
                         app: settings.get('ios/driveapp'),
-                        title: settings.get('productNames/drive'),
+                        title: util.productNames.drive,
                         storeIcon: getStoreIcon('ios'),
                         iconClass: 'driveapp appstore'
                     });

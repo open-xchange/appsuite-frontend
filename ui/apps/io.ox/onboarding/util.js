@@ -229,6 +229,7 @@ define('io.ox/onboarding/util', [
     return {
         titles: titles,
         platformList: platformList,
-        appList: appList
+        appList: appList,
+        productNames: productNames
     };
 });
