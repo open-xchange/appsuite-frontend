@@ -22,6 +22,8 @@
 
 define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], function (gt) {
 
+    'use strict';
+
     var defaultSettings = {
         'productNames': {
             'mail': gt.pgettext('native app', 'OX Mail'),

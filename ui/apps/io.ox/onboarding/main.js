@@ -29,6 +29,7 @@ define('io.ox/onboarding/main', [
     'gettext!io.ox/core/onboarding',
     'less!io.ox/onboarding/style'
 ], function (Wizard, http, views, util, settings, gt) {
+
     'use strict';
 
     var wizard,

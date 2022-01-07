@@ -25,6 +25,8 @@ define('io.ox/onboarding/util', [
     'gettext!io.ox/core/onboarding'
 ], function (settings, gt) {
 
+    'use strict';
+
     var productNames = {
         'mail': settings.get('productNames/mail', gt.pgettext('native app', 'OX Mail')),
         'drive': settings.get('productNames/drive', gt.pgettext('native app', 'OX Drive'))

@@ -29,6 +29,8 @@ define('io.ox/onboarding/views', [
     'gettext!io.ox/core/onboarding'
 ], function (DisposableView, http, capabilities, util, upsell, gt) {
 
+    'use strict';
+
     function createQr(url) {
         return require(['static/3rd.party/qrcode/qrcode.js']).then(function (qrcode) {
             var qr;

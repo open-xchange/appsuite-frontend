@@ -27,6 +27,7 @@ define('io.ox/core/main/apps', [
     'io.ox/core/main/icons',
     'gettext!io.ox/core'
 ], function (apps, capabilities, ui, icons, gt) {
+
     'use strict';
 
     // Mail
