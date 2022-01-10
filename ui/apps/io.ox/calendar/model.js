@@ -204,7 +204,7 @@ define('io.ox/calendar/model', [
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
             // when this is an allday appointment the util part of an rrule must not have a Time
-            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).endOf('day').utc().format(util.ZULU_FORMAT));
+            if (this.get('until')) args.push(util.isAllday(this.model) ? 'UNTIL=' + moment(this.get('until')).format('YYYYMMDD') : 'UNTIL=' + moment(this.get('until')).utc().format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.set('rrule', null);
@@ -294,7 +294,7 @@ define('io.ox/calendar/model', [
             }
 
             if (rrule.UNTIL) {
-                changes.until = moment(rrule.UNTIL).subtract(date.hour(), 'hours').valueOf() || 0;
+                changes.until = moment(rrule.UNTIL).valueOf() || 0;
             } else {
                 // we need to remove old and now invalid data too (might happen during series updates etc)
                 this.unset('until');
