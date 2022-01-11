@@ -733,6 +733,11 @@ define('io.ox/backbone/views/recurrence-view', [
                     return;
                 }
 
+                if (this.model.get('until') && !util.isAllday(this.model) && this.model.get('until') !== self.model.get('until')) {
+                    // set until to end of day if someone changed the value, so the end day is fully included. We try to keep existing values unchanged
+                    // needs to be done with silent flag or datepicker view changes it back immediately
+                    this.model.set('until', moment(this.model.get('until')).endOf('day').valueOf(), { silent: true });
+                }
                 // remove own fields
                 self.model.unset('every-weekday');
 
