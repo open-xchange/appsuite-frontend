@@ -211,10 +211,16 @@ define('io.ox/mail/compose/main', [
         id: 'update-cid',
         index: INDEX += 100,
         perform: function () {
+            var self = this;
             // fallback case: clone of actually deleted space
-            this.listenTo(this.model, 'change:id', function () {
-                this.cid = getAppCID(this.model.toJSON()) || this.cid;
-            }.bind(this));
+            this.listenTo(this.model, 'change:id', updateCID);
+            function updateCID() {
+                self.cid = getAppCID(self.model.toJSON()) || self.cid;
+                var win = self.getWindow();
+                if (!win.floating || !win.floating.model) return;
+                win.floating.model.set('cid', getAppCID(self.model.toJSON()) || self.cid);
+            }
+            updateCID();
         }
     }, {
         id: 'finally',
@@ -322,9 +328,26 @@ define('io.ox/mail/compose/main', [
                 // consider flags set by plugins (guard for example)
                 isCritical = e.critical;
             // critical errors: pause app
-            if (isMissing || isConcurrentEditing || isCritical) return app.pause(e);
+            if (isConcurrentEditing || isCritical) return app.pause(e);
+            // space deleted: pause app or remove taskbar item
+            if (isMissing) return app.onMissing(e);
+            // all other errors
             require(['io.ox/core/yell'], function (yell) {
                 yell(e);
+            });
+        };
+
+        app.onMissing = function (e) {
+            var taskbarmodel = ox.ui.floatingWindows.findWhere({ cid: app.cid }),
+                removable = _.device('smartphone') ?
+                    app.options.mobilelazyload :
+                    taskbarmodel && taskbarmodel.get('minimized');
+            // keep expanded compose windows visible (do not confuse users)
+            if (!removable) return app.pause(e);
+            // when minimized quit app and remove taskbar item
+            if (app.view) app.view.dirty(false);
+            return app.quit().then(function () {
+                taskbarmodel.trigger('close');
             });
         };
 

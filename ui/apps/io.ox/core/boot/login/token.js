@@ -95,7 +95,7 @@ define('io.ox/core/boot/login/token', [
             module: 'system',
             params: { action: 'whoami' }
         }).then(function (user) {
-            checkMultifactor(user).then(function () {
+            return checkMultifactor(user).then(function () {
                 return user;
             });
         });
