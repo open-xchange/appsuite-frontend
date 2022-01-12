@@ -1352,8 +1352,8 @@ define('io.ox/mail/api', [
                 params: {
                     action: 'all',
                     folder: inbox,
-                    //received_date, id, folder_id, flags
-                    columns: '610,600,601,611,661',
+                    // received_date, id, folder_id, flags, from
+                    columns: '610,600,601,611,661,603',
                     // only unseen mails are interesting here!
                     unseen: 'true',
                     // any reason to see them?
