@@ -401,7 +401,7 @@ msgid ""
 "Your personal data can be changed in the account dropdown. You can also sign "
 "out from there."
 msgstr ""
-"Ihre persönlichen Daten können in der Aufklappmenü des Kontos geändert "
+"Ihre persönlichen Daten können im Aufklappmenü des Kontos geändert "
 "werden. Sie können sich auch von dort aus abmelden."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
