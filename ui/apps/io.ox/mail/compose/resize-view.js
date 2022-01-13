@@ -115,6 +115,18 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         onAddReset: function (model) {
+            var self = this;
+
+            this.$ul.find('a').addClass('disabled');
+
+            model.once('change:id', function () {
+                if (_.some(_.pluck(self.options.mailModel.get('attachments').models, 'id'), function (id) { console.log(arguments); return !id; })) {
+                    self.$ul.find('a').addClass('disabled');
+                    return;
+                }
+                self.$ul.find('a').removeClass('disabled');
+            });
+
             resize(this.model.get('imageResizeOption'), model);
         },
 
