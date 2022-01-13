@@ -6915,10 +6915,10 @@ u2f-api@1.0.11:
   resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-1.0.11.tgz#240940ed3eb3e85842cb2959cf42ec9dada6dcec"
   integrity sha512-WxOasq8nJmyAISE7cSIm1X2gW7V0/4JfHH4dIVGLNr3s/D4h7IWyFfIEmxuDYHhQxRRZev+96xFmM5tXpvnQMg==
 
-ua-parser-js@0.7.22:
-  version "0.7.22"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.22.tgz#960df60a5f911ea8f1c818f3747b99c6e177eae3"
-  integrity sha512-YUxzMjJ5T71w6a8WWVcMGM6YWOTX27rCoIQgLXiWaxqXSx9D7DNjiGWn1aJIRSQ5qr0xuhra77bSIh6voR/46Q==
+ua-parser-js@0.7.22, ua-parser-js@0.7.24:
+  version "0.7.24"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.24.tgz#8d3ecea46ed4f1f1d63ec25f17d8568105dc027c"
+  integrity sha512-yo+miGzQx5gakzVK3QFfN0/L9uVhosXBBO7qmnk7c2iw1IhL212wfA3zbnI54B0obGwC/5NWub/iT9sReMx+Fw==
 
 uglify-js@^3.13.3:
   version "3.14.3"
