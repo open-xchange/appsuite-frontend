@@ -91,6 +91,12 @@ define('io.ox/core/main/icons', [
                 //'fallback': '<i class="fa fa-question">'
                 'fallback': $.icon('fa-question')
             };
+        }
+    }, {
+        id: 'expose',
+        index: 1500,
+        run: function () {
+            _.extend(icons, this.icons);
             exposeIcons();
         }
     });
@@ -108,7 +114,7 @@ define('io.ox/core/main/icons', [
         }
     });
 
-    ext.point('io.ox/core/main/icons').invoke('run');
+    ext.point('io.ox/core/main/icons').invoke('run', {});
 
     return icons;
 });
