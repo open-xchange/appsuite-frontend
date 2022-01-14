@@ -767,7 +767,7 @@ define('io.ox/mail/compose/extensions', [
 
         imageResizeOption: function (baton) {
             var attachmentView = baton.attachmentsView,
-                resizeView = new ResizeView({ model: baton.config, collection: attachmentView.collection, mailModel: baton.model });
+                resizeView = new ResizeView({ model: baton.config, collection: attachmentView.collection });
 
             attachmentView.$footer.append(
                 resizeView.render().$el

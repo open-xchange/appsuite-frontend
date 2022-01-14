@@ -119,8 +119,8 @@ define('io.ox/mail/compose/resize-view', [
 
             this.$ul.find('a').addClass('disabled');
 
-            model.once('change:id', function () {
-                if (_.some(_.pluck(self.options.mailModel.get('attachments').models, 'id'), function (id) { return !id; })) {
+            this.listenToOnce(model, 'change:id', function () {
+                if (_.some(_.pluck(self.collection.models, 'id'), function (id) { return !id; })) {
                     self.$ul.find('a').addClass('disabled');
                     return;
                 }
