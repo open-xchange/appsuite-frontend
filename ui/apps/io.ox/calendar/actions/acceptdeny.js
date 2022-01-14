@@ -204,18 +204,24 @@ define('io.ox/calendar/actions/acceptdeny', [
 
         // series?
         if (!options.taskmode && o.recurrenceId && o.seriesId) {
-            return new ModalDialog({ title: gt('Change appointment status'), width: 600 })
-                .build(function () {
-                    this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
-                })
-                .addCancelButton({ left: true })
-                .addButton({ className: 'btn-default', label: gt('Change appointment'), action: 'appointment' })
-                .addButton({ action: 'series',
-                    //#. Use singular in this context
-                    label: gt('Change series') })
-                .on('series', function () { _.defer(cont, true); })
-                .on('appointment', function () { _.defer(cont, false); })
-                .open();
+            // is this a real series or a virtual series (series is just used to keep track by MW (usually caused if user is invited to an series exception from an external calendar via mail), see MW-1134)
+            return (o.folder ? calApi.get({ folder: o.folder, id: o.seriesId }) : $.when()).always(function (seriesMaster) {
+                // error when trying to request series master -> we can only accept this exception
+                if (seriesMaster && seriesMaster.error) return cont(false);
+
+                return new ModalDialog({ title: gt('Change appointment status'), width: 600 })
+                    .build(function () {
+                        this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
+                    })
+                    .addCancelButton({ left: true })
+                    .addButton({ className: 'btn-default', label: gt('Change appointment'), action: 'appointment' })
+                    .addButton({ action: 'series',
+                        //#. Use singular in this context
+                        label: gt('Change series') })
+                    .on('series', function () { _.defer(cont, true); })
+                    .on('appointment', function () { _.defer(cont, false); })
+                    .open();
+            });
         }
         return cont();
     };

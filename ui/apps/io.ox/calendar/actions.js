@@ -152,7 +152,20 @@ define('io.ox/calendar/actions', [
         },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
-                action(baton.array());
+                var virtualSeriesIds = [],
+                    // map in 2 steps. This way we can clear duplicates before making the api call.
+                    defs = _(baton.array()).chain().map(function (event) {
+                        return event.folder && event.seriesId && event.id !== event.seriesId ? { folder: event.folder, id: event.seriesId } : false;
+                    }).compact().uniq().map(function (event) {
+                        return api.get(event).fail(function () {
+                            // series could not be found, treat it as a virtual series
+                            virtualSeriesIds.push(event.id);
+                        });
+                    }).valueOf();
+
+                $.when.apply($, defs).always(function () {
+                    action(baton.array(), virtualSeriesIds);
+                });
             });
         }
     });
@@ -470,36 +483,51 @@ define('io.ox/calendar/actions', [
             // check if only one appointment or the whole series should be accepted
             // treat exceptions as part of the series and offer to accept the series as a whole
             if (data.seriesId && appointment.recurrenceId) {
-                new ModalDialog({
-                    title: gt('Change appointment status'),
-                    width: 600
-                })
-                .build(function () {
-                    this.$body.append(accept
-                        ? gt('This appointment is part of a series. Do you want to confirm the whole series or just one appointment within the series?')
-                        : gt('This appointment is part of a series. Do you want to decline the whole series or just one appointment within the series?')
-                    );
-                })
-                .addCancelButton({ left: true })
-                .addButton({ label: accept ? gt('Accept appointment') : gt('Decline appointment'), action: 'appointment', className: 'btn-default' })
-                //#. Use singular in this context
-                .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
-                .on('action', function (action) {
-                    if (action === 'cancel') return;
-                    if (action === 'series') {
-                        delete appointment.recurrenceId;
-                        // use series id to make it work for exceptions
-                        if (appointment.id !== data.seriesId) {
-                            appointment.id = data.seriesId;
-                        }
+                $(baton.e.target).addClass('disabled');
+
+                // is this a real series or a virtual series (series is just used to keep track by MW (usually caused if user is invited to an series exception from an external calendar via mail), see MW-1134)
+                (data.folder ? api.get({ folder: data.folder, id: data.seriesId }) : $.when()).always(function (seriesMaster) {
+                    $(baton.e.target).removeClass('disabled');
+                    // error when trying to request series master -> we can only accept this exception
+                    if (seriesMaster && seriesMaster.error) {
+                        $(baton.e.target).addClass('disabled');
+                        util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
+                            if (e) yell(e);
+                            $(baton.e.target).removeClass('disabled');
+                        });
+                        return;
                     }
-                    $(baton.e.target).addClass('disabled');
-                    util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
-                        if (e) yell(e);
-                        $(baton.e.target).removeClass('disabled');
-                    });
-                })
-                .open();
+                    new ModalDialog({
+                        title: gt('Change appointment status'),
+                        width: 600
+                    })
+                    .build(function () {
+                        this.$body.append(accept
+                            ? gt('This appointment is part of a series. Do you want to confirm the whole series or just one appointment within the series?')
+                            : gt('This appointment is part of a series. Do you want to decline the whole series or just one appointment within the series?')
+                        );
+                    })
+                    .addCancelButton({ left: true })
+                    .addButton({ label: accept ? gt('Accept appointment') : gt('Decline appointment'), action: 'appointment', className: 'btn-default' })
+                    //#. Use singular in this context
+                    .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
+                    .on('action', function (action) {
+                        if (action === 'cancel') return;
+                        if (action === 'series') {
+                            delete appointment.recurrenceId;
+                            // use series id to make it work for exceptions
+                            if (appointment.id !== data.seriesId) {
+                                appointment.id = data.seriesId;
+                            }
+                        }
+                        $(baton.e.target).addClass('disabled');
+                        util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
+                            if (e) yell(e);
+                            $(baton.e.target).removeClass('disabled');
+                        });
+                    })
+                    .open();
+                });
                 return;
             }
             $(baton.e.target).addClass('disabled');

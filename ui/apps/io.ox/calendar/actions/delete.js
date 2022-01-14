@@ -31,7 +31,8 @@ define('io.ox/calendar/actions/delete', [
 
     'use strict';
 
-    return function (list) {
+    return function (list, virtualSeriesIds) {
+        virtualSeriesIds = virtualSeriesIds || [];
         api.getList(list).done(function (list) {
             var displayComment = _(list).every(function (event) {
                     return (event.hasFlag('organizer') || (event.hasFlag('organizer_on_behalf') && !event.hasFlag('attendee'))) && event.hasFlag('scheduled');
@@ -50,7 +51,7 @@ define('io.ox/calendar/actions/delete', [
                     obj = obj instanceof Backbone.Model ? obj.attributes : obj;
                     var options = {
                         // prefer the seriesId over the id to make it work for exeptions
-                        id:  action === 'thisandfuture' || action === 'series' ? obj.seriesId || obj.id : obj.id,
+                        id:  (action === 'thisandfuture' || action === 'series') && obj.seriesId && !_(virtualSeriesIds).contains(obj.seriesId) ? obj.seriesId : obj.id,
                         folder: obj.folder,
                         recurrenceRange: action === 'thisandfuture' ? 'THISANDFUTURE' : undefined
                     };
@@ -72,8 +73,8 @@ define('io.ox/calendar/actions/delete', [
             };
 
             var hasSeries = _(list).some(function (event) {
-                    if (event.hasFlag('last_occurrence')) return false;
-                    return event.has('recurrenceId');
+                    if (event.hasFlag('last_occurrence') || !event.get('seriesId')) return false;
+                    return event.has('recurrenceId') && !_(virtualSeriesIds).contains(event.get('seriesId'));
                 }),
                 text, dialog, hasFirstOccurence;
 
