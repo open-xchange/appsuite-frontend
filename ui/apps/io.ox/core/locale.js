@@ -36,6 +36,19 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         return meta.CLDRDefinitions[currentLocaleId];
     }
 
+    function isCLDRCustomized() {
+        var localeData = settings.get('localeData', {}),
+            keys = ['timeLong', 'firstDayOfYear', 'firstDayOfWeek', 'date'],
+            i, key;
+        if (_.isEmpty(localeData)) return false;
+        for (i = 0; i < keys.length; i++) {
+            key = keys[i];
+            if (localeData[key] && localeData[key] !== localeDefinitions[currentLocaleId][key]) return true;
+        }
+
+        return false;
+    }
+
     // support CLDR format strings for localized formats Moment does not know (see http://cldr.unicode.org/) or check the json files in the npm module
     moment.fn.formatCLDR = function (inputstring) {
         // check if the input string matches a CLDR format
@@ -55,8 +68,10 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
         options = options || {};
 
         // customized?
-        if (!_.isEmpty(settings.get('localeData', {})) && (!format || format === 'date' || format === 'time')) {
-            format = meta.translateCLDRToMoment(format === 'time' ? localeData.time : localeData.dateShort);
+        if (isCLDRCustomized()) {
+            if (format === 'time') format = meta.translateCLDRToMoment(localeData.time);
+            else if (format === 'date') format = meta.translateCLDRToMoment(localeData.date);
+            else format = 'L';
             return intervals.intervalFormatFallback.replace('{0}', start.format(format)).replace('{1}', end.format(format));
         }
 
