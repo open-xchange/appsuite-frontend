@@ -262,10 +262,19 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         getTimestamp: function () {
             var dateStr = this.nodes.dayField.val(),
-                formatStr = 'l';
+                formatStr = 'l',
+                autofill = false;
 
             // empty?
-            if (dateStr === '') return null;
+            if (dateStr === '') {
+                // so there is a filled time string  and we have no valid attribute in model already?-> insert today day as dateStr
+                if (!this.mobileMode && !this.model.get(this.attribute) && !this.isFullTime() && this.nodes.timeField && this.nodes.timeField.val() !== '') {
+                    dateStr = moment().format('l');
+                    autofill = true;
+                } else {
+                    return null;
+                }
+            }
 
             if (this.mobileMode) {
                 if (this.isFullTime()) formatStr = 'YYYY-MM-DD';
@@ -282,6 +291,8 @@ define('io.ox/backbone/mini-views/datepicker', [
 
             // parse string to timestamp
             var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute) || this.getFallback());
+            if (autofill && parsedDate.valueOf() < _.now()) parsedDate.add(1, 'day');
+
             if (this.chronos) {
                 if (this.isFullTime()) return { value: parsedDate.format('YYYYMMDD') };
                 return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment().tz() };
