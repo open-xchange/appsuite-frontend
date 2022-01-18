@@ -373,18 +373,17 @@ define('io.ox/mail/main', [
         'account-status-check': function () {
 
             function checkAllAccounts() {
-                accountAPI.all().done(function (data) {
+                $.when(accountAPI.all(), accountAPI.getStatus()).done(function (data, statusdata) {
+                    var statushash = statusdata[0];
                     _.each(data, function (accountData) {
-                        accountAPI.getStatus(accountData.id).done(function (obj) {
-                            var status = obj[accountData.id].status;
-                            if (['ok', 'deactivated'].indexOf(status) >= 0) {
-                                var node = app.treeView.getNodeView(accountData.root_folder);
-                                if (!node) return;
-                                node.hideStatusIcon();
-                            } else if (status !== 'ok') {
-                                app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
-                            }
-                        });
+                        var status = (statushash[accountData.id] || {}).status;
+                        if (['ok', 'deactivated'].indexOf(status) >= 0) {
+                            var node = app.treeView.getNodeView(accountData.root_folder);
+                            if (!node) return;
+                            node.hideStatusIcon();
+                        } else if (status !== 'ok') {
+                            app.addAccountErrorHandler(accountData.root_folder, 'checkAccountStatus');
+                        }
                     });
                 });
             }

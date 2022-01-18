@@ -229,6 +229,10 @@ define('io.ox/core/main/stages', [
             debug('Stage "secretCheck"');
             if (ox.online && ox.rampup && ox.rampup.oauth) {
                 var analysis = ox.rampup.oauth.secretCheck;
+                // health check that the secret string associated with a user (typically his/her password) is
+                // still correct to decrypt encryptedly stored sensitive data like passwords and/or tokens for
+                // subscribed external accounts. It does not reflect that the encryptedly stored sensitive
+                // data ist still correct in sense of: e.g. it is still the proper password
                 if (analysis && !analysis.secretWorks) {
                     // Show dialog
                     require(['io.ox/keychain/secretRecoveryDialog'], function (d) { d.show(); });

@@ -784,7 +784,7 @@ define('io.ox/core/api/account', [
 
     /**
      * gets the status for one or all accounts
-     * @param  { string } id account id
+     * @param  { string } id account id (optional)
      * @return { deferred }
      */
     api.getStatus = function (id) {
