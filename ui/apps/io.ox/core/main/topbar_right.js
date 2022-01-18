@@ -36,10 +36,9 @@ define('io.ox/core/main/topbar_right', [
     'io.ox/contacts/api',
     'io.ox/contacts/util',
     'io.ox/core/api/user',
-    'io.ox/core/svg',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (session, http, ext, Stage, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, contactsUtil, userAPI, svg, settings, gt) {
+], function (session, http, ext, Stage, capabilities, notifications, HelpLinkView, Dropdown, UpsellView, logout, refresh, addLauncher, contactAPI, contactsUtil, userAPI, settings, gt) {
 
     function getHelp() {
         // get active app (ignoring 'help')
