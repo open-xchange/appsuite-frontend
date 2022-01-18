@@ -372,7 +372,7 @@ define('io.ox/core/main/topbar_right', [
                     )
                 );
                 userAPI.me().then(function (data) {
-                    $initials.append(svg.circleAvatar(contactsUtil.getInitials(data)));
+                    $initials.append(contactsUtil.getInitials(data));
                 });
             }
 
