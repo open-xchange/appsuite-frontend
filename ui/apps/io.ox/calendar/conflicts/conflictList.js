@@ -58,6 +58,7 @@ define('io.ox/calendar/conflicts/conflictList', [
             appointment.nohalo = true;
             baton = ext.Baton.ensure(appointment.attributes);
             baton.model = appointment;
+            baton.isConflictView = true;
             ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), baton);
             e.data.content.show();
         });
