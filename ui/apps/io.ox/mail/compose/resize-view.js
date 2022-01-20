@@ -86,6 +86,7 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         setup: function () {
+            var self = this;
             Dropdown.prototype.setup.apply(this, arguments);
 
             this.$el.addClass('resize-options');
@@ -107,6 +108,13 @@ define('io.ox/mail/compose/resize-view', [
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
             this.listenTo(this.collection, 'add reset', this.onAddReset);
 
+            this.listenTo(this.collection, 'change:id', function () {
+                if (_.some(_.pluck(self.collection.models, 'id'), function (id) { return !id; })) {
+                    self.$ul.find('a').addClass('disabled');
+                    return;
+                }
+                self.$ul.find('a').removeClass('disabled');
+            });
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
@@ -115,18 +123,7 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         onAddReset: function (model) {
-            var self = this;
-
             this.$ul.find('a').addClass('disabled');
-
-            this.listenToOnce(model, 'change:id', function () {
-                if (_.some(_.pluck(self.collection.models, 'id'), function (id) { return !id; })) {
-                    self.$ul.find('a').addClass('disabled');
-                    return;
-                }
-                self.$ul.find('a').removeClass('disabled');
-            });
-
             resize(this.model.get('imageResizeOption'), model);
         },
 
