@@ -419,7 +419,7 @@ define('io.ox/mail/main', [
                 ox.on('http:error:OAUTH-0040 http:error:MSG-0114', function (err) {
                     var account = keychain.accounts.get(err.error_params[reauthHandler.columnForError(err.code)]);
                     if (!account) return;
-                    var mailAccount = _(accountAPI.get('associations')).filter({ module: 'mail' })[0];
+                    var mailAccount = _(account.get('associations')).filter({ module: 'mail' })[0];
                     if (!mailAccount) return;
                     app.addAccountErrorHandler(mailAccount.folder, 'OAuthReauthorize', { account: account, err: err }, true);
                 });
