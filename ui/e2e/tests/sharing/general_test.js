@@ -41,7 +41,7 @@ Scenario('[C45021] Generate simple link for sharing', async function ({ I, drive
     const myfiles = locate('.folder-tree .folder-label').withText('My files');
     I.waitForElement(myfiles);
     I.selectFolder('Music');
-    I.click('Share');
+    I.clickToolbar('Share');
     dialogs.waitForVisible();
     I.waitForText('Invited people only', 5);
     I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
