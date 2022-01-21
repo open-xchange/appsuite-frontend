@@ -297,25 +297,19 @@ define('io.ox/calendar/freetime/timeView', [
                 var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('uri')).appendTo(table);
 
                 _(baton.model.get('timeSlots')[attendee.get('uri')]).each(function (timeSlot, index) {
-                    var event;
-                    // analyze the timeslot to see if there is an event, and if so check the start dates
-                    if (timeSlot.event) {
-                        // we have an event that we can use
-                        event = timeSlot.event;
-                        if (util.isAllday(event)) {
-                            event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
-                            event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
-                        }
-                    } else {
-                        // we only have a timeslot. Fake some event data, so code can be reused
-                        event = {
-                            //#. used to describe a time frame that is blocked in the scheduling view, when no further information is available (appointment title etc.)
-                            summary: gt('Blocked time frame'),
-                            startDate: { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) },
-                            endDate: { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) },
-                            transp: timeSlot.fbType === 'BUSY' ? 'OPAQUE' : 'TRANSPARENT',
-                            isTimeslot: true
-                        };
+                    // Use event data that is there, fake the rest
+                    var event = _.extend({
+                        //#. used to describe a time frame that is blocked in the scheduling view, when no further information is available (appointment title etc.)
+                        summary: gt('Blocked time frame'),
+                        startDate: { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) },
+                        endDate: { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) },
+                        transp: timeSlot.fbType === 'BUSY' ? 'OPAQUE' : 'TRANSPARENT',
+                        isTimeslot: true
+                    }, timeSlot.event);
+
+                    if (timeSlot.event && util.isAllday(timeSlot.event)) {
+                        event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
+                        event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
                     }
 
                     var start = moment.tz(event.startDate.value, event.startDate.tzid).valueOf(),
@@ -334,7 +328,7 @@ define('io.ox/calendar/freetime/timeView', [
                     eventNode.css('z-index', 1 + zIndexbase[availabilityClasses[event.transp]] + index + (util.isAllday(event) ? 0 : 2000));
 
                     if (event.summary) {
-                        if (!event.isTimeslot) {
+                        if (timeSlot.event && timeSlot.event.summary && timeSlot.event.startDate && timeSlot.event.endDate) {
                             eventNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
                                 $('<div class="title">').text(event.summary).append(
                                     $('<span class="appointment-time">').text(util.isAllday(event) ? util.getDateInterval(event) : util.getTimeInterval(event))
@@ -356,7 +350,7 @@ define('io.ox/calendar/freetime/timeView', [
                         eventNode.addClass('has-location').append($('<div class="location">').text(event.location));
                     }
 
-                    if (!event.isTimeslot && baton.view.parentView.options.isApp && (event.folder || settings.get('freeBusyStrict', true) === false)) {
+                    if (timeSlot.event && timeSlot.event.summary && timeSlot.event.startDate && timeSlot.event.endDate && baton.view.parentView.options.isApp && (event.folder || settings.get('freeBusyStrict', true) === false)) {
                         eventNode.addClass('has-detailview').on('click', function (e) {
                             //don't open if this was a lasso drag
                             if (baton.view.lassoEnd === baton.view.lassoStart) {
