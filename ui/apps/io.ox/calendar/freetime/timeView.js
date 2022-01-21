@@ -303,10 +303,11 @@ define('io.ox/calendar/freetime/timeView', [
                         summary: gt('Blocked time frame'),
                         startDate: { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) },
                         endDate: { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) },
-                        transp: timeSlot.fbType === 'BUSY' ? 'OPAQUE' : 'TRANSPARENT',
                         isTimeslot: true
                     }, timeSlot.event);
 
+                    // fbType should overrule event transp
+                    if (timeSlot.fbType) event.transp = timeSlot.fbType === 'FREE' ? 'TRANSPARENT' : 'OPAQUE';
                     if (timeSlot.event && util.isAllday(timeSlot.event)) {
                         event.startDate = { value: new moment.utc(timeSlot.startTime).format(util.ZULU_FORMAT) };
                         event.endDate = { value: new moment.utc(timeSlot.endTime).format(util.ZULU_FORMAT) };
