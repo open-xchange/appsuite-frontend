@@ -123,6 +123,10 @@ define('io.ox/backbone/mini-views/combobox', [
         },
 
         onMousedownMenu: function (e) {
+            // dropdown is already closed, no need to add preventBlur flag
+            // event order of blur, focus etc is a bit messy, between browsers, see https://bugs.chromium.org/p/chromium/issues/detail?id=449857
+            if (!this.$dropdown.is(':visible')) return;
+
             var clickX = e.offsetX,
                 innerWidth = this.$('li').first().outerWidth(),
                 outerWidth = innerWidth + util.getScrollBarWidth();
@@ -147,6 +151,8 @@ define('io.ox/backbone/mini-views/combobox', [
         },
 
         onClickOption: function (e) {
+            // prevent onMousedownMenu handler
+            e.stopPropagation();
             this.preventBlur = false;
             this.index = $(e.currentTarget).closest('li').index();
             this.select();

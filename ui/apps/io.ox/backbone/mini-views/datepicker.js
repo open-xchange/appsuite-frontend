@@ -79,8 +79,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                         var ariaID = guid + '-aria',
                             dayFieldLabel = gt('Date') + ' (' + moment.localeData().longDateFormat('l') + ')',
                             timezoneContainer;
-
-                        self.nodes.dayField = $('<input type="text" class="form-control datepicker-day-field">').attr({
+                        // no autocomplete, overlaps with the picker
+                        self.nodes.dayField = $('<input type="text" autocomplete="off" class="form-control datepicker-day-field">').attr({
                             id: guid,
                             'aria-label': dayFieldLabel,
                             'aria-describedby': ariaID
@@ -93,8 +93,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                             ];
                         }
 
-                        // render time input
-                        self.nodes.timeField = $('<input type="text" class="form-control time-field">').attr('id', _.uniqueId('form-control-label-'));
+                        // render time input. no autocomplete, overlaps with the picker
+                        self.nodes.timeField = $('<input type="text" autocomplete="off" class="form-control time-field">').attr('id', _.uniqueId('form-control-label-'));
 
                         // render timezone badge
                         var timezone = self.chronos ? self.model.getMoment(self.attribute) : moment.tz(self.model.get(self.options.timezoneAttribute)),
@@ -174,6 +174,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                     self.nodes.timeField.replaceWith(combobox.$el.addClass('combobox'));
                     combobox.render();
                     self.nodes.timeField.on('change', _.bind(self.updateModel, self)).on('click', function () {
+                        if (!combobox.$dropdown.is(':visible')) self.nodes.timeField.trigger('focus');
                         self.trigger('click:time');
                     });
                     self.toggleTimeInput(!self.isFullTime());
