@@ -27,7 +27,7 @@ define('plugins/portal/oxdriveclients/settings/defaults', function () {
     return {
         linkTo: {
             'Android': 'https://play.google.com/store/apps/details?id=com.openexchange.drive.vanilla',
-            'iOS': 'https://itunes.apple.com/us/app/ox-drive/id798570177?l=de&ls=1&mt=8',
+            'iOS': 'https://apps.apple.com/us/app/ox-drive-by-open-xchange/id1585939206',
             'Mac OS': 'https://itunes.apple.com/us/app/ox-drive/id818195014?l=de&ls=1&mt=12',
             'Windows': '' // drive is not delivered via updater anymore, location is maintained by the onboarding wizard config
         },

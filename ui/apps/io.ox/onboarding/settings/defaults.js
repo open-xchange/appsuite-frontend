@@ -44,7 +44,7 @@ define('io.ox/onboarding/settings/defaults', ['gettext!io.ox/core/onboarding'], 
                 'icon': 'apps/themes/icons/default/apps/mailapp-appstore.png'
             },
             'driveapp': {
-                'url': 'https://itunes.apple.com/de/app/ox-drive/id798570177',
+                'url': 'https://apps.apple.com/us/app/ox-drive-by-open-xchange/id1585939206',
                 'icon': 'apps/themes/icons/default/apps/iOS_Drive_App_Icon.png'
             },
             'storeIcon': 'apps/themes/icons/default/appstore/App_Store_Badge_$country_135x40.svg'
