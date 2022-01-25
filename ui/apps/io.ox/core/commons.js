@@ -792,6 +792,11 @@ define('io.ox/core/commons', [
                     data = changed;
                 }
 
+                // folder change?
+                if (e && ((e.folder && e.folder !== data.folder))) {
+                    data = e;
+                }
+
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
                     if (!data.id) {
@@ -822,7 +827,7 @@ define('io.ox/core/commons', [
 
             move = function (e, targetFolderId) {
                 if (data) data.folder_id = targetFolderId;
-                if (update) update();
+                if (update) update(e);
             },
 
             // we use redraw directly if we're in multiple mode

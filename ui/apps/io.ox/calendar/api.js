@@ -762,6 +762,7 @@ define('io.ox/calendar/api', [
                 }).done(function (list) {
                     _(list).each(function (obj) {
                         api.trigger('move:' + util.cid(obj), targetFolderId);
+                        api.trigger('move:' + util.cid(obj.data.deleted[0]), obj.data.created[0]);
                         api.trigger('move', obj.data.created[0]);
                     });
                     api.trigger('refresh.all');
