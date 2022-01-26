@@ -261,7 +261,7 @@ define('io.ox/chat/views/chat', [
             function addItem(text, cmd) {
                 $ul.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" role="menuitem draggable="false" tabindex="-1">')
+                        $('<a href="#" role="menuitem" draggable="false" tabindex="-1">')
                             .attr({ 'data-cmd': cmd, 'data-id': id }).text(text)
                     )
                 );

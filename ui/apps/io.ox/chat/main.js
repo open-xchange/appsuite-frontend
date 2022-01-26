@@ -459,10 +459,13 @@ define('io.ox/chat/main', [
         },
 
         toggleWindowMode: function () {
-            var mode = this.model.get('sticky') ? 'sticky' : 'floating';
+            var mode = this.model.get('sticky') ? 'sticky' : 'floating',
+                cid = this.getCurrentMessageCid();
+
             settings.set('mode', mode).save();
             this.$body.toggleClass('columns', mode === 'sticky');
             this.scrollToMessage(cid);
+
             _.defer(function () {
                 a11y.getTabbable(this.$body).first().focus();
             }.bind(this));
