@@ -129,8 +129,11 @@
             border-radius: 3px;
             &.checked { background-color: #e6e6e6; }
             &.disabled {
-                i.fa { color: #aaaaaa; }
                 cursor: not-allowed;
+                background-color: initial;
+
+                svg.fa { color: #aaaaaa; }
+                a[role="button"] { cursor: not-allowed; }
             }
         }
     }
