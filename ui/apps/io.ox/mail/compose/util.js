@@ -45,13 +45,16 @@ define('io.ox/mail/compose/util', [
                 def,
                 instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
-            model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
-                var def = new $.Deferred();
-                attachment.once('upload:complete', def.resolve);
-                attachment.once('upload:aborted', def.resolve);
-                attachment.once('upload:failed', def.reject);
-                return _.constant(def);
-            })());
+            function initPendingUploadingAttachments() {
+                model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
+                    var def = new $.Deferred();
+                    attachment.once('upload:complete', def.resolve);
+                    attachment.once('upload:aborted', def.resolve);
+                    attachment.once('upload:failed', def.reject);
+                    return _.constant(def);
+                })());
+            }
+            initPendingUploadingAttachments();
 
             function process() {
                 if (!data) return;
@@ -112,6 +115,7 @@ define('io.ox/mail/compose/util', [
                     attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {
+                        initPendingUploadingAttachments();
                         // only abort when uploaded is less than 1. Otherwise, the MW might not receive the abort signal in time
                         if (def && def.state() === 'pending' && attachment.get('uploaded') < 1) def.abort();
 
