@@ -1167,7 +1167,7 @@ define('io.ox/mail/main', [
 
                         if (isDraftFolder) {
                             var data = _.cid(cid);
-                            ox.registry.call('mail-compose', 'open', { type: 'copy', original: { folderId: data.folder_id, id: data.id } });
+                            ox.registry.call('mail-compose', 'open', { type: 'edit', original: { folderId: data.folder_id, id: data.id } });
                         } else if (isThread) {
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
