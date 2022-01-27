@@ -115,6 +115,20 @@ define('io.ox/mail/compose/resize-view', [
                 }
                 self.$ul.find('a').removeClass('disabled');
             });
+
+            this.listenTo(this.collection, 'change:uploaded', function () {
+                var collectedStates = [];
+                _.each(self.collection.models, function (model) {
+                    collectedStates.push(model.get('uploaded'));
+                });
+
+                if (_.some(collectedStates, function (uploaded) { return uploaded !== 1; })) {
+                    self.$ul.find('a').addClass('disabled');
+                    return;
+                }
+                self.$ul.find('a').removeClass('disabled');
+            });
+
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
@@ -123,10 +137,12 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         onAddReset: function (model) {
-            this.$ul.find('a').addClass('disabled');
+            var self = this;
+            _.delay(function () {
+                self.$ul.find('a').addClass('disabled');
+            }, 4000);
             resize(this.model.get('imageResizeOption'), model);
         },
-
 
         label: function () {
             //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
