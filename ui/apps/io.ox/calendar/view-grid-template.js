@@ -79,7 +79,7 @@ define('io.ox/calendar/view-grid-template', [
                 fields.location.text(data.location || '\u00A0');
                 fields.time.text(util.getTimeInterval(data));
                 fields.date.text(util.getDateInterval(data));
-                fields.transp.addClass(util.getShownAsLabel(data)).attr('summary', util.getShownAs(data));
+                fields.transp.addClass(util.getShownAsLabel(data)).attr({ summary: util.getShownAs(data), title: util.getShownAs(data) });
 
                 fields.isPrivate.toggle(isPrivate);
 
