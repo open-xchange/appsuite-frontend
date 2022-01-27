@@ -96,6 +96,8 @@
     margin: 0 24px;
     // Keep this for dynamic themes
     font-size: 0;
+    // this is needed for firefox when logo has auto width, see OXUIB-1213
+    height: 100%;
 
     .smartphone & {
         line-height: @appcontrol-height-smartphone;
@@ -111,9 +113,7 @@
     img {
         width: 60px;
         max-height: 100%;
-        margin-top: -1px;
         position: relative;
-        top: ~"calc(50% - 11px)";
     }
 }
 
@@ -167,6 +167,11 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 
     & > div {
         display: block;
+    }
+
+    #io-ox-top-logo {
+        display: flex;
+        align-items: center;
     }
 
     .badge {

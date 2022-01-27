@@ -114,22 +114,23 @@ define('io.ox/core/tk/image-util', [
             return function getImageFromFile(file, opt) {
                 opt = _.extend({ exif: false }, opt);
                 var promise = _(cache).find(function (obj) {
-                    if (obj.file !== file) return;
-                    if (opt.exif && !obj.exif) return;
-                    return true;
-                });
+                        if (obj.file !== file) return;
+                        if (opt.exif && !obj.exif) return;
+                        return true;
+                    }),
+                    badChromeVersion = _.browser.chrome && _.browser.chrome >= 77;
 
                 // early exit if image is in cache
                 if (promise) return promise.promise;
 
                 if (!opt.exif && self.createImageBitmap) {
-                    promise = worker.invoke('getImage', file);
+                    promise = badChromeVersion ? createImageBitmap(file) : worker.invoke('getImage', file);
                 } else {
                     var exif;
                     promise = worker.invoke('readFile', file).then(function (result) {
                         if (opt.exif) exif = exifread.getOrientation(result);
 
-                        if (self.createImageBitmap) return worker.invoke('getImage', file);
+                        if (self.createImageBitmap) return badChromeVersion ? createImageBitmap(file) : worker.invoke('getImage', file);
 
                         var def = new $.Deferred();
                         getImageFallback(result, function (error, size) {

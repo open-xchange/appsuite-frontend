@@ -28,15 +28,17 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
     'io.ox/core/upsell',
     'io.ox/backbone/mini-views/common',
     'settings!io.ox/core',
+    'io.ox/core/capabilities',
     'io.ox/core/main/appcontrol',
     'io.ox/core/extensions'
-], function (DisposableView, gt, ModalDialog, apps, upsell, mini, settings, appcontrol, ext) {
+], function (DisposableView, gt, ModalDialog, apps, upsell, mini, settings, capabilities, appcontrol, ext) {
 
     'use strict';
 
     var availableApps = apps.forLauncher().filter(function (model) {
         var requires = model.get('requires');
-        return upsell.has(requires);
+        // no requirements, has capability or possible upsell(not for guests)
+        return !requires || upsell.has(requires) || (!capabilities.has('guest') && upsell.enabled(requires));
     }).map(function (o) {
         return {
             label: o.getTitle(),
@@ -86,6 +88,9 @@ define('io.ox/core/settings/dialogs/quickLauncherDialog', [
                 options = options || {};
                 var id = 'settings-' + name,
                     view = new mini.SelectView({ id: id, name: name, model: this.model, list: availableApps, pos: options.pos });
+
+                // invalid or not available app? set to 'none'
+                if (!_(_(availableApps).pluck('value')).contains(this.model.get(name))) this.model.set(name, 'none');
 
                 view.listenTo(this.model, 'change:' + name, function () {
                     var appName = this.model.get(name),

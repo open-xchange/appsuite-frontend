@@ -46,7 +46,7 @@ define('io.ox/onboarding/util', [
             'syncapp': gt('OX Sync App')
         },
         'macos': {
-            'title': gt('MacOS'),
+            'title': gt('macOS'),
             'drive': productNames.drive,
             'mailsync': gt('Apple Mail'),
             'calendar': gt('Calendar'),
@@ -75,7 +75,7 @@ define('io.ox/onboarding/util', [
             'platform': 'android'
         },
         {
-            'title': gt('MacOS'),
+            'title': gt('macOS'),
             'icon': 'fa-apple',
             'platform': 'macos'
         },

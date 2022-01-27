@@ -673,6 +673,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         refresh: function () {
             this.initialize().done(function (data) {
+                collection.reset();
                 _(data).each(function (rule) {
                     collection.add(factory.create(rule), { merge: true });
                 });
