@@ -374,8 +374,9 @@ define('io.ox/calendar/month/view', [
         onAddAppointment: function (model) {
             if (settings.get('showDeclinedAppointments', false) === false && util.getConfirmationStatus(model) === 'DECLINED') return;
 
-            var startMoment = moment.max(model.getMoment('startDate'), this.model.get('startDate')).clone(),
-                endMoment = moment.min(model.getMoment('endDate'), this.model.get('endDate')).clone();
+            // we need to convert start and end time to the local timezone of this calendar or we will display appointments from other timezones on the wrong day
+            var startMoment = moment.max(util.getMomentInLocalTimezone(model.get('startDate')), this.model.get('startDate')).clone(),
+                endMoment = moment.min(util.getMomentInLocalTimezone(model.get('endDate')), this.model.get('endDate')).clone();
 
             // subtract 1ms. This will not be visible and will fix appointments till 12am to not be drawn on the next day (e.g. allday appointments)
             if (!startMoment.isSame(endMoment)) endMoment.subtract(1, 'millisecond');
