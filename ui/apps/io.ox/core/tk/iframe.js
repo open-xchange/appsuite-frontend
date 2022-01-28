@@ -76,7 +76,7 @@ define('io.ox/core/tk/iframe', [
 
             if (data && data.token) {
 
-                urlWithOxToken = /[?]/.test(url) ? url + '&ox_token=' + data.token : url + '?ox_token=' + data.token;
+                urlWithOxToken = /[?]/.test(url) ? url + '&ox_token=' + encodeURIComponent(data.token) : url + '?ox_token=' + encodeURIComponent(data.token);
 
                 iframe.attr('src', urlWithOxToken);
             }
