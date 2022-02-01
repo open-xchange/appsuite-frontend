@@ -209,13 +209,12 @@ Scenario('[C114376] Default font style', async function ({ I, users, mail, dialo
         I.clickToolbar('Edit');
 
         I.waitForElement('.io-ox-mail-compose-window');
-        within('.io-ox-mail-compose-window', () => {
-            I.waitForText('Testsubject Draft');
-            I.waitForText('Testcontent');
-            I.waitForText('Send', 5, '.io-ox-mail-compose-window .window-footer button');
-            I.wait(0.5);
-            I.click('Send', '.io-ox-mail-compose-window .window-footer button');
+        I.waitForText('Testsubject Draft', 10, '.io-ox-mail-compose-window');
+        I.waitForElement('#mce_2_ifr', 10);
+        await within({ frame: '#mce_2_ifr' }, () => {
+            I.waitForText('Testcontent', 10);
         });
+        mail.send();
         I.waitForDetached('.io-ox-mail-compose-window', 5);
     });
 
