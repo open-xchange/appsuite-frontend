@@ -78,7 +78,6 @@ Scenario('Create appointment and check if the color is correctly applied and rem
     expect(appointmentColor).be.oneOf(['rgb(181, 54, 54)', 'rgb(200, 70, 70)']);
 
     I.say('Change color back to folder color');
-    I.click('test appointment one', '.workweek .appointment .title');
     I.waitForText('Edit', 5, '.io-ox-sidepopup');
     I.click('Edit', '.io-ox-sidepopup');
     I.waitForVisible('.io-ox-calendar-edit-window');

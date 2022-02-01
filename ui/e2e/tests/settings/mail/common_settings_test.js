@@ -216,7 +216,7 @@ Scenario('[C114376] Default font style', async function ({ I, users, mail, dialo
             I.wait(0.5);
             I.click('Send', '.io-ox-mail-compose-window .window-footer button');
         });
-        I.waitForDetached('.io-ox-mail-compose-window');
+        I.waitForDetached('.io-ox-mail-compose-window', 5);
     });
 
     session('Bob', async () => {

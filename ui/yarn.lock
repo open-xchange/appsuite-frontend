@@ -1237,14 +1237,14 @@ cliui@^6.0.0:
     wrap-ansi "^6.2.0"
 
 cockatiel@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/cockatiel/-/cockatiel-2.0.1.tgz#2b59587d54d53d33ed49b601cfaab97cad9cc6e7"
-  integrity sha512-fAw5ToPGZSnoYl5NpW2zKnY/d4gAUeP4GuGnxm7W23ayTtZipwPrIv7h3z8pq0NMDISuCEkKGsXCk3bKkzb13A==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/cockatiel/-/cockatiel-2.0.2.tgz#b8bc06df324dd1c769833c4d91478eb1d5519b4f"
+  integrity sha512-ehw7t3twohGiMTxARX0AcFiUxndXLhnIBWbnRnHtfde2jRywlPpPB/o3s9YSptXPj6tkOG0fzET4CUUx4GIpEg==
 
-codeceptjs@3.0.5, codeceptjs@^3.0.0:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-3.0.5.tgz#9522298a53e47c716210d705027f3ad2c8ec2939"
-  integrity sha512-NQxE2bBBpM8pR/p46PR13T21vBLsSIQVP8FaMgzUorAA6ueFL4pTup00OQQa6fUH6MK+i8lXYzBDWr5e8elYhg==
+codeceptjs@^3.0.0, codeceptjs@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-3.2.3.tgz#992cb9ead53159b49fe9f4193abecd9fcab73b20"
+  integrity sha512-ju+rirffFXnPNG/ZBzqsVRzGmJ9j2e6iHfOXl/J+D3XYVp92zvjUpX0cBFdooPqOI8/eA4v/RyxZ74UtITxB+Q==
   dependencies:
     "@codeceptjs/configure" "^0.6.2"
     "@codeceptjs/helper" "^1.0.2"

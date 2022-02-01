@@ -179,7 +179,7 @@ Scenario('Add typeahead suggestion via mouse', async ({ I, users, mail }) => {
     await I.executeScript(async () => { $('.tt-dropdown-menu .tt-suggestion:first').addClass('tt-cursor'); });
     I.waitForElement('.tt-dropdown-menu .tt-cursor', 3);
     // create and check token
-    I.click('.tt-suggestion:last-child', '.tt-dropdown-menu');
+    I.click(target, '.tt-dropdown-menu');
     I.waitForText(target, 2, '.tokenfield.to');
     I.pressKey(['Command', 'a']);
     I.pressKey('Backspace');
