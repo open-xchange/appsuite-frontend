@@ -86,7 +86,6 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         setup: function () {
-            var self = this;
             Dropdown.prototype.setup.apply(this, arguments);
 
             this.$el.addClass('resize-options');
@@ -108,26 +107,6 @@ define('io.ox/mail/compose/resize-view', [
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
             this.listenTo(this.collection, 'add reset', this.onAddReset);
 
-            this.listenTo(this.collection, 'change:id', function () {
-                if (_.some(_.pluck(self.collection.models, 'id'), function (id) { return !id; })) {
-                    self.$ul.find('a').addClass('disabled');
-                    return;
-                }
-                self.$ul.find('a').removeClass('disabled');
-            });
-
-            this.listenTo(this.collection, 'change:uploaded', function () {
-                var collectedStates = [];
-                _.each(self.collection.models, function (model) {
-                    collectedStates.push(model.get('uploaded'));
-                });
-
-                if (_.some(collectedStates, function (uploaded) { return uploaded !== 1; })) {
-                    self.$ul.find('a').addClass('disabled');
-                    return;
-                }
-                self.$ul.find('a').removeClass('disabled');
-            });
 
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
@@ -137,10 +116,6 @@ define('io.ox/mail/compose/resize-view', [
         },
 
         onAddReset: function (model) {
-            var self = this;
-            _.delay(function () {
-                self.$ul.find('a').addClass('disabled');
-            }, 4000);
             resize(this.model.get('imageResizeOption'), model);
         },
 

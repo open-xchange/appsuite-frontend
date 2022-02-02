@@ -54,11 +54,12 @@ define('io.ox/mail/compose/util', [
                     return _.constant(def);
                 })());
             }
-            initPendingUploadingAttachments();
 
             function process() {
                 if (!data) return;
                 if (instantAttachmentUpload === false) return;
+
+                initPendingUploadingAttachments();
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
                 data = undefined;
@@ -115,9 +116,8 @@ define('io.ox/mail/compose/util', [
                     attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {
-                        initPendingUploadingAttachments();
                         // only abort when uploaded is less than 1. Otherwise, the MW might not receive the abort signal in time
-                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 1) def.abort();
+                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 0.998) def.abort();
 
                         data = { file: image };
                         if (!def) return;
