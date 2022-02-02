@@ -879,3 +879,40 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
     I.amInPath('/build/e2e/');
     I.waitForFile('attachments.zip', 5);
 });
+
+Scenario('OXUIB-1278 Events from different timezones displayed on wrong day', async ({ I, users }) => {
+
+    // create appointment
+    await I.haveAppointment({
+        folder: `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        summary: 'Pacific time',
+        startDate: { value: '20220105T193000', tzid: 'America/Los_Angeles' },
+        endDate: { value: '20220105T200000', tzid: 'America/Los_Angeles' },
+        attendees: [{ entity: users[0].userdata.id }]
+    });
+
+    // America timezone -> Event should be on january 5th
+    await I.haveSetting('io.ox/core//timezone', 'America/Los_Angeles');
+    I.login(['app=io.ox/calendar&perspective=month']);
+    I.waitForText('Scheduling');
+    I.waitForText('Today');
+    I.executeScript(function () {
+        // january 2022
+        ox.ui.App.getCurrentApp().setDate(1643379200000);
+    });
+    I.waitForText('Pacific time');
+    I.see('Pacific time', '#\\32 022-1-5');
+    I.logout();
+
+    // Asia Timezone -> Event should be on january 6th
+    await I.haveSetting('io.ox/core//timezone', 'Asia/Hong_Kong');
+    I.login(['app=io.ox/calendar&perspective=month']);
+    I.waitForText('Scheduling');
+    I.waitForText('Today');
+    I.executeScript(function () {
+        // january 2022
+        ox.ui.App.getCurrentApp().setDate(1643379200000);
+    });
+    I.waitForText('Pacific time');
+    I.see('Pacific time', '#\\32 022-1-6');
+});
