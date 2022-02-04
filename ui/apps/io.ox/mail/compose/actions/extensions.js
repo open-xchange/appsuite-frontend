@@ -41,10 +41,15 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
+    function recursiveWait(model) {
+        if (model.pendingUploadingAttachments.state() !== 'pending') return;
+        return model.pendingUploadingAttachments.then(function () {
+            return recursiveWait(model);
+        });
+    }
 
     api.waitForPendingUploads = function (baton) {
-        if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
-        return baton.model.pendingUploadingAttachments.then(function () {
+        return recursiveWait(baton.model).then(function () {
             baton.view.syncMail();
         });
     };
