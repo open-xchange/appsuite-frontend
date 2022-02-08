@@ -41,15 +41,18 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
-    function recursiveWait(model) {
-        if (model.pendingUploadingAttachments.state() !== 'pending') return;
-        return model.pendingUploadingAttachments.then(function () {
-            return recursiveWait(model);
-        });
-    }
+    // function recursiveWait(model) {
+    //     if (model.pendingUploadingAttachments.state() !== 'pending') return;
+    //     return model.pendingUploadingAttachments.then(function () {
+    //         return recursiveWait(model);
+    //     });
+    // }
 
     api.waitForPendingUploads = function (baton) {
-        return recursiveWait(baton.model).then(function () {
+        console.log('waitForPendingUploads', baton.model.test);
+        if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
+        return baton.model.pendingUploadingAttachments.then(function () {
+            console.log('im wait');
             baton.view.syncMail();
         });
     };
