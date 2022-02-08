@@ -58,10 +58,10 @@ define('io.ox/mail/compose/util', [
                     model.test = model.test || [];
                     model.test.push(attachment.counter);
 
-                    attachment.once('upload:complete', function () { console.log('complete', attachment.counter, def.counter); });
-                    attachment.once('upload:aborted', function () { console.log('aborted', attachment.counter, def.counter); });
-                    attachment.once('upload:failed', function () { console.log('failed', attachment.counter, def.counter); });
+                    def.done(function () { console.log('complete', attachment.counter, def.counter); });
+                    def.fail(function () { console.log('fail', attachment.counter, def.counter); });
 
+                    attachment.once('upload:ready', def.resolve);
                     attachment.once('upload:complete', def.resolve);
                     attachment.once('upload:aborted', def.resolve);
                     attachment.once('upload:failed', def.reject);
@@ -70,8 +70,8 @@ define('io.ox/mail/compose/util', [
             }
 
             function process() {
-                if (!data) return;
-                if (instantAttachmentUpload === false) return;
+                if (!data) return $.when();
+                if (instantAttachmentUpload === false) return $.when();
                 console.log('pre:started', attachment.get('filename'), attachment.counter);
                 initPendingUploadingAttachments();
                 console.log('started', attachment.get('filename'), attachment.counter);
@@ -138,9 +138,16 @@ define('io.ox/mail/compose/util', [
 
                         data = { file: image };
                         if (!def) return;
+                        initPendingUploadingAttachments();
+
 
                         def.always(function () {
-                            _.defer(process);
+
+                            _.defer(function () {
+                                process().done(function () {
+                                    attachment.trigger('upload:ready');
+                                });
+                            });
                         });
                     });
 
