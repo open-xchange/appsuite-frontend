@@ -106,17 +106,23 @@ define('io.ox/mail/compose/resize-view', [
 
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
             this.listenTo(this.collection, 'add reset', this.onAddReset);
+            this.collection.processing = $.when();
 
 
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
+        // all
         onChange: function () {
-            this.collection.each(resize.bind(null, this.model.get('imageResizeOption')));
+            this.collection.processing = $.Deferred();
+            var list = this.collection.map(resize.bind(null, this.model.get('imageResizeOption')));
+            $.when.apply($, list).done(this.collection.processing.resolve);
         },
 
+        //single
         onAddReset: function (model) {
-            resize(this.model.get('imageResizeOption'), model);
+            this.collection.processing = $.Deferred();
+            resize(this.model.get('imageResizeOption'), model).done(this.collection.processing.resolve);
         },
 
         label: function () {

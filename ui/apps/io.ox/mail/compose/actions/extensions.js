@@ -52,7 +52,8 @@ define('io.ox/mail/compose/actions/extensions', [
         console.log('%c' + 'waitForPendingUploads: ' + baton.model.test.length, 'color: white; background-color: green');
         console.log(baton.model.test);
         if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
-        return baton.model.pendingUploadingAttachments.then(function () {
+        // debugger;
+        return $.when(baton.model.get('attachments').processing, baton.model.pendingUploadingAttachments).then(function () {
             console.log('%c' + 'im wait: ' + baton.model.test.length, 'color: white; background-color: blue');
             console.log(baton.model.test);
             //debugger;
