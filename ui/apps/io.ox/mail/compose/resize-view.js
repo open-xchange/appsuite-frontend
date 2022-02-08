@@ -45,7 +45,7 @@ define('io.ox/mail/compose/resize-view', [
         // no computation necessary for original, but fileupload needs to be triggered
         if (size === 'original') {
             delete model.resized;
-            model.trigger('image:resized', file);
+            model.trigger('image:resized', file, size);
             return $.when();
         }
         if (!imageResize.matches('type', file)) return $.when();
@@ -63,7 +63,7 @@ define('io.ox/mail/compose/resize-view', [
         }).then(function (file) {
             if (file) {
                 model.resized.resolve(file);
-                model.trigger('image:resized', file);
+                model.trigger('image:resized', file, size);
             }
         });
     }
