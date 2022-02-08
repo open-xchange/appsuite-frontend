@@ -56,7 +56,6 @@ define('io.ox/mail/compose/actions/extensions', [
         return $.when(baton.model.get('attachments').processing, baton.model.pendingUploadingAttachments).then(function () {
             console.log('%c' + 'im wait: ' + baton.model.test.length, 'color: white; background-color: blue');
             console.log(baton.model.test);
-            //debugger;
             baton.view.syncMail();
         });
     };

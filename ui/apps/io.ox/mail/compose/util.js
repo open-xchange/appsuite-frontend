@@ -50,7 +50,7 @@ define('io.ox/mail/compose/util', [
 
             attachment.counter = attachment.counter || count++;
 
-            function initPendingUploadingAttachments() {
+            function initPendingUploadingAttachments(eventname) {
 
                 model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
                     var def = new $.Deferred();
@@ -58,13 +58,17 @@ define('io.ox/mail/compose/util', [
                     model.test = model.test || [];
                     model.test.push(attachment.counter);
 
-                    def.done(function () { console.log('complete', attachment.counter, def.counter); });
-                    def.fail(function () { console.log('fail', attachment.counter, def.counter); });
+                    console.log('watch   ', attachment.get('filename'), attachment.counter, def.counter);
+                    def.done(function () { console.log('done    ', attachment.get('filename'), attachment.counter, def.counter); });
+                    def.fail(function () { console.log('fail    ', attachment.get('filename'), attachment.counter, def.counter); });
 
-                    attachment.once('upload:ready', def.resolve);
-                    attachment.once('upload:complete', def.resolve);
-                    attachment.once('upload:aborted', def.resolve);
-                    attachment.once('upload:failed', def.reject);
+                    if (eventname) {
+                        attachment.once(eventname, def.resolve);
+                    } else {
+                        attachment.once('upload:complete', def.resolve);
+                        attachment.once('upload:aborted', def.resolve);
+                        attachment.once('upload:failed', def.reject);
+                    }
                     return _.constant(def);
                 })());
             }
@@ -72,9 +76,7 @@ define('io.ox/mail/compose/util', [
             function process() {
                 if (!data) return $.when();
                 if (instantAttachmentUpload === false) return $.when();
-                console.log('pre:started', attachment.get('filename'), attachment.counter);
                 initPendingUploadingAttachments();
-                console.log('started', attachment.get('filename'), attachment.counter);
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
                 data = undefined;
@@ -131,18 +133,15 @@ define('io.ox/mail/compose/util', [
                 if (isResizableImage) {
                     attachment.set('uploaded', 0);
 
-                    attachment.on('image:resized', function (image, size) {
-                        console.log('image:resized', attachment.get('filename'), size, attachment.counter);
+                    attachment.on('image:resized', function (image) {
                         // only abort when uploaded is less than 0.998. Otherwise, the MW might not receive the abort signal in time
                         if (def && def.state() === 'pending' && attachment.get('uploaded') < 0.998) def.abort();
 
                         data = { file: image };
                         if (!def) return;
-                        initPendingUploadingAttachments();
-
+                        initPendingUploadingAttachments('upload:ready');
 
                         def.always(function () {
-
                             _.defer(function () {
                                 process().done(function () {
                                     attachment.trigger('upload:ready');
