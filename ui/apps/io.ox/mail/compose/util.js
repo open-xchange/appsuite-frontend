@@ -29,6 +29,9 @@ define('io.ox/mail/compose/util', [
 
     'use strict';
 
+
+    var count = 0;
+
     return {
 
         getGroup: function (data) {
@@ -45,9 +48,16 @@ define('io.ox/mail/compose/util', [
                 def,
                 instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
-            function initPendingUploadingAttachments() {
+            function initPendingUploadingAttachments(counter) {
+
                 model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
                     var def = new $.Deferred();
+                    def._counter = model.test = counter;
+
+                    attachment.once('upload:complete', function () { console.log('complete', def._counter); });
+                    attachment.once('upload:aborted', function () { console.log('aborted', def._counter); });
+                    attachment.once('upload:failed', function () { console.log('failed', def._counter); });
+
                     attachment.once('upload:complete', def.resolve);
                     attachment.once('upload:aborted', def.resolve);
                     attachment.once('upload:failed', def.reject);
@@ -58,8 +68,11 @@ define('io.ox/mail/compose/util', [
             function process() {
                 if (!data) return;
                 if (instantAttachmentUpload === false) return;
+                var counter =  count++;
+                console.log('pre:started', attachment.get('filename'), counter);
 
-                initPendingUploadingAttachments();
+                initPendingUploadingAttachments(counter);
+                console.log('started', attachment.get('filename'), counter);
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
                 data = undefined;
@@ -76,6 +89,7 @@ define('io.ox/mail/compose/util', [
                         });
                     }
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
+                    console.log('finished', attachment.get('filename'), counter);
                     attachment.set(data);
                     // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
                     attachment.trigger('upload:complete', data);
