@@ -49,10 +49,13 @@ define('io.ox/mail/compose/actions/extensions', [
     // }
 
     api.waitForPendingUploads = function (baton) {
-        console.log('waitForPendingUploads', baton.model.test);
+        console.log('%c' + 'waitForPendingUploads: ' + baton.model.test.length, 'color: white; background-color: green');
+        console.log(baton.model.test);
         if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
         return baton.model.pendingUploadingAttachments.then(function () {
-            console.log('im wait');
+            console.log('%c' + 'im wait: ' + baton.model.test.length, 'color: white; background-color: blue');
+            console.log(baton.model.test);
+            //debugger;
             baton.view.syncMail();
         });
     };
