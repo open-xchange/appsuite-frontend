@@ -5,7 +5,7 @@ title: Settings list
 This page shows a list of useful config option to customize App Suite UI. We recommend to read the [main article](../configuration.html) on how to configure App Suite UI first.
 
 ## Namespaces
-Settings are logically divided via namespaces for each module. The namespace itself is divided by a doube slash `//` from the setting's name when written down to a config file.
+Settings are logically divided via namespaces for each module. The namespace itself is divided by a double slash `//` from the setting's name when written down to a config file.
 Ensure to always use the double slash in your settings string, otherwise this will lead to errors and your setting will
 not work.
 
@@ -43,10 +43,10 @@ Show a modal dialog to enable an inline relogin without showing the login page. 
 Enable/disable restorepoints for edit dialogs. Default is `true`.
 
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
-Enable validiation for email addresses in mail compose dialog. Default is `true`.
+Enable validation for email addresses in mail compose dialog. Default is `true`.
 
 <config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
-Enable validiation for phone numbers. Default is `false`.
+Enable validation for phone numbers. Default is `false`.
 
 <config>io.ox/core//features/windowHeaderPosition=`<string>`</config>
 Placement of buttons in new/edit dialogs. Default is 'bottom' (`'top', 'bottom'`)
@@ -128,7 +128,7 @@ Default: `false`
 ## Mail compose: tinyMCE text editor
 
 <config>io.ox/core//maxUploadIdleTimeout=`<number>`</config> 200000
-Timeout in miliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
+Timeout in milliseconds for contenteditable-editor in milliseconds when adding inline images. Default is `200000`.
 
 <config>io.ox/core//tinyMCE/theme_advanced_buttons1=`<string>`</config>
 List of tinyMCE toolbar actions separated by space - targets toolbar1<br>
@@ -287,7 +287,7 @@ Current user theme. Default is `default`
 # Onboarding
 
 To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
-The corresponding capabilites for the different apps are:
+The corresponding capabilities for the different apps are:
 
 - Mail App: `webmail mobile_mail_app`
 - Drive App: `infostore drive`
@@ -564,7 +564,7 @@ Enables the authenticity feature. Please note that `com.openexchange.mail.authen
 <!-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
 If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
-controls how strict the authenticty results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
+controls how strict the authenticity results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
 -->
 
 <config>io.ox/mail//features/autoCollapseBlockquotes=`<bool>`</config>
@@ -620,7 +620,7 @@ Fetch limit when selecting multiple contacts. A number of selected contacts beyo
 ## Addressbook picker
 
 <config>io.ox/contacts//picker/limits/departments=`<number>`</config>
-Maxium departments to show. Default `100`
+Maximum departments to show. Default `100`
 
 <config>io.ox/contacts//picker/limits/fetch=`<number>`</config>
 Maximum number of contacts to fetch. Default `10000`
