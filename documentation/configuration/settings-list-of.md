@@ -298,6 +298,9 @@ The corresponding capabilites for the different apps are:
 <config>io.ox/core//onboardingWizard=`<bool>`</config>
 Enabled new onboarding wizard and disables the old one
 
+<config>io.ox/onboarding//hidden/apps=`<array>`</config>
+Hide specific apps ([mailapp|mailsync|drive|driveapp|addressbook|calendar|eassync|syncapp]). Defaults to `['syncapp']`
+
 <config>io.ox/onboarding//productNames/mail=`<string>`</config>
 Name of the webmail product. Defaults to `OX Mail`
 
