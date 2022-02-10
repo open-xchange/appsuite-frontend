@@ -226,6 +226,14 @@ define('io.ox/onboarding/util', [
         }
     ]);
 
+    // hide specific apps by jslob setting
+    var appListHidden = settings.get('hidden/apps', ['syncapp']);
+    appList.remove(
+        appList.filter(function (model) {
+            return appListHidden.indexOf(model.get('app')) > -1;
+        })
+    );
+
     return {
         titles: titles,
         platformList: platformList,
