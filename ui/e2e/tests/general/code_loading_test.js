@@ -20,6 +20,8 @@
 *
 */
 
+const expect = require('chai').expect;
+
 Feature('General > Code Loading');
 
 Before(async function ({ users }) {
@@ -86,4 +88,23 @@ Scenario('[OXUIB-872] XSS using script code as module at app loader', async func
     I.amOnPage('#!!&app=io.ox/files:foo,' + module);
     I.refreshPage();
     drive.waitForApp();
+});
+
+Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, users, mail }) => {
+    await I.haveMail({
+        folder: 'default0/INBOX',
+        path: 'e2e/media/mails/OXUIB-1172.eml'
+    }, users[0]);
+
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+
+    I.waitForText('This mail has a deeplink');
+    I.click('.list-view .list-item');
+    I.waitForElement('.mail-detail-frame');
+    within({ frame: '.mail-detail-frame' }, async () => {
+        I.waitForText('Click this link');
+        const classes = await I.grabAttributeFrom(locate('a').withText('Click this link'), 'class');
+        expect(classes || '').to.not.contain('deep-link-app');
+    });
 });
