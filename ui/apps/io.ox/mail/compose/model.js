@@ -172,7 +172,6 @@ define('io.ox/mail/compose/model', [
             data.attachments.forEach(function (attachment) {
                 delete attachment.meta;
             });
-            console.log(data.attachments);
             this.destroyed = true;
             return $.when.apply($, getFiles).then(function () {
                 var files = _(arguments).toArray();

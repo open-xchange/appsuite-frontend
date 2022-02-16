@@ -29,9 +29,6 @@ define('io.ox/mail/compose/util', [
 
     'use strict';
 
-    var count = 0;
-    var defcounter = 0;
-
     return {
 
         getGroup: function (data) {
@@ -48,34 +45,22 @@ define('io.ox/mail/compose/util', [
                 def,
                 instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
-            attachment.counter = attachment.counter || count++;
-
-            function initPendingUploadingAttachments(eventname) {
-
+            function initPendingUploadingAttachments() {
                 model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
                     var def = new $.Deferred();
-                    def.counter = defcounter++;
-                    model.test = model.test || [];
-                    model.test.push(attachment.counter);
 
-                    console.log('watch   ', attachment.get('filename'), attachment.counter, def.counter);
-                    def.done(function () { console.log('done    ', attachment.get('filename'), attachment.counter, def.counter); });
-                    def.fail(function () { console.log('fail    ', attachment.get('filename'), attachment.counter, def.counter); });
+                    attachment.once('upload:complete', def.resolve);
+                    attachment.once('upload:aborted', def.resolve);
+                    attachment.once('upload:failed', def.reject);
 
-                    if (eventname) {
-                        attachment.once(eventname, def.resolve);
-                    } else {
-                        attachment.once('upload:complete', def.resolve);
-                        attachment.once('upload:aborted', def.resolve);
-                        attachment.once('upload:failed', def.reject);
-                    }
                     return _.constant(def);
                 })());
             }
 
             function process() {
-                if (!data) return $.when();
-                if (instantAttachmentUpload === false) return $.when();
+                if (!data) return;
+                if (instantAttachmentUpload === false) return;
+
                 initPendingUploadingAttachments();
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
@@ -93,7 +78,6 @@ define('io.ox/mail/compose/util', [
                         });
                     }
                     data = _({ group: 'mail', space: space, uploaded: 1 }).extend(data);
-                    console.log('finished', attachment.get('filename'), attachment.counter);
                     attachment.set(data);
                     // trigger is important, extensionpoint cascade on save needs it to resolve or fail correctly.
                     attachment.trigger('upload:complete', data);
@@ -139,14 +123,9 @@ define('io.ox/mail/compose/util', [
 
                         data = { file: image };
                         if (!def) return;
-                        initPendingUploadingAttachments('upload:ready');
 
                         def.always(function () {
-                            _.defer(function () {
-                                process().done(function () {
-                                    attachment.trigger('upload:ready');
-                                });
-                            });
+                            _.defer(process);
                         });
                     });
 

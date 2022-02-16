@@ -45,7 +45,7 @@ define('io.ox/mail/compose/resize-view', [
         // no computation necessary for original, but fileupload needs to be triggered
         if (size === 'original') {
             delete model.resized;
-            model.trigger('image:resized', file, size);
+            model.trigger('image:resized', file);
             return $.when();
         }
         if (!imageResize.matches('type', file)) return $.when();
@@ -63,7 +63,8 @@ define('io.ox/mail/compose/resize-view', [
         }).then(function (file) {
             if (file) {
                 model.resized.resolve(file);
-                model.trigger('image:resized', file, size);
+                model.trigger('image:resized', file);
+
             }
         });
     }
@@ -106,23 +107,17 @@ define('io.ox/mail/compose/resize-view', [
 
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
             this.listenTo(this.collection, 'add reset', this.onAddReset);
-            this.collection.processing = $.when();
 
 
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
-        // all
         onChange: function () {
-            this.collection.processing = $.Deferred();
-            var list = this.collection.map(resize.bind(null, this.model.get('imageResizeOption')));
-            $.when.apply($, list).done(this.collection.processing.resolve);
+            this.collection.each(resize.bind(null, this.model.get('imageResizeOption')));
         },
 
-        //single
         onAddReset: function (model) {
-            this.collection.processing = $.Deferred();
-            resize(this.model.get('imageResizeOption'), model).done(this.collection.processing.resolve);
+            resize(this.model.get('imageResizeOption'), model);
         },
 
         label: function () {

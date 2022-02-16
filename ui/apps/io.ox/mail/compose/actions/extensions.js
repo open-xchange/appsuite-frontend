@@ -41,21 +41,16 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
-    // function recursiveWait(model) {
-    //     if (model.pendingUploadingAttachments.state() !== 'pending') return;
-    //     return model.pendingUploadingAttachments.then(function () {
-    //         return recursiveWait(model);
-    //     });
-    // }
+    // needs some refactoring - see bug OXUIB-1095
+    function wait(model) {
+        if (model.pendingUploadingAttachments.state() !== 'pending') return;
+        return model.pendingUploadingAttachments.then(function () {
+            return wait(model);
+        });
+    }
 
     api.waitForPendingUploads = function (baton) {
-        console.log('%c' + 'waitForPendingUploads: ' + baton.model.test.length, 'color: white; background-color: green');
-        console.log(baton.model.test);
-        if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
-        // debugger;
-        return $.when(baton.model.get('attachments').processing, baton.model.pendingUploadingAttachments).then(function () {
-            console.log('%c' + 'im wait: ' + baton.model.test.length, 'color: white; background-color: blue');
-            console.log(baton.model.test);
+        return wait(baton.model).then(function () {
             baton.view.syncMail();
         });
     };
