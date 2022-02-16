@@ -267,6 +267,7 @@
         'fa-cog': '\uf013',
         'fa-comment': '\uf075',
         'fa-comment-o': '\uf0e5',
+        'fa-diamond': '\uf219',
         'fa-download': '\uf019',
         'fa-edit': '\uf044',
         'fa-envelope': '\uf0e0',
