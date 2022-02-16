@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Kullanım Kılavuzu">
 <link rel="up" href="index.html" title="Kullanım Kılavuzu">
-<link rel="prev" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard Ayarları">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Ortak anahtarları yönetme">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Yasal Uyarı">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -21,7 +21,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigasyonu aç/kapat</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.html">Geri</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Geri</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Başlangıç</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">İçindekiler</a></li>
 </ul></div>
@@ -36,7 +36,9 @@
 <dt class="cap-chat cap-call">, <a class="indexterm" href="ox.appsuite.user.chap.chat.html"></a>
 </dt>
 <dd><dl>
-<dt class="cap-chat">Bileşenler, <a class="indexterm" href="ox.appsuite.user.sect.chat.gui.html"> penceresi</a>
+<dt class="cap-chat">bileşenler, <a class="indexterm" href="ox.appsuite.user.sect.chat.gui.html"> Penceresi</a>
+</dt>
+<dt class="cap-chat">Bir sohbete katılma, <a class="indexterm" href="ox.appsuite.user.sect.chat.conversation.join.html">Bir sohbete katılma</a>
 </dt>
 <dt class="cap-chat">diğer uygulamalarda sohbetler oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.chat.objects.html">Diğer Uygulamalarda Sohbet Oluşturma</a>
 </dt>
@@ -46,15 +48,13 @@
 </dt>
 <dt class="cap-chat">mesajlarla çalışma, <a class="indexterm" href="ox.appsuite.user.sect.chat.message.html">Mesajlarla Çalışma</a>
 </dt>
-<dt class="cap-chat">mesajları okuma, gönderme, yanıtlama, <a class="indexterm" href="ox.appsuite.user.sect.chat.message.create.html">Mesajları okuma, gönderme, yanıtlama</a>
+<dt class="cap-chat">Mesajları okuma, gönderme, yanıtlama, <a class="indexterm" href="ox.appsuite.user.sect.chat.message.create.html">Mesajları okuma, gönderme, yanıtlama</a>
 </dt>
-<dt class="cap-chat">mesajları yönetme, <a class="indexterm" href="ox.appsuite.user.sect.chat.message.manage.html">Mesajları Yönetme</a>
+<dt class="cap-chat">mesajları yönetme, <a class="indexterm" href="ox.appsuite.user.sect.chat.message.manage.html">Mesajları yönetme</a>
 </dt>
 <dt class="cap-chat">randevu katılımcılarıyla sohbet başlatma, <a class="indexterm" href="ox.appsuite.user.sect.chat.objects.appointment.html">Randevu katılımcılarıyla sohbet başlatma</a>
 </dt>
 <dt class="cap-chat">sohbet oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.chat.conversation.create.html">Sohbet oluşturma</a>
-</dt>
-<dt class="cap-chat">sohbete katılma, <a class="indexterm" href="ox.appsuite.user.sect.chat.conversation.join.html">Bir sohbete katılma</a>
 </dt>
 <dt class="cap-chat">sohbeti kapatma, <a class="indexterm" href="ox.appsuite.user.sect.chat.conversation.hide.html">Sohbeti kapatma</a>
 </dt>
@@ -72,6 +72,9 @@
 <div class="indexdiv">
 <h3>A</h3>
 <dl>
+<dt class="cap-calendar">Abon olma</dt>
+<dd><dl><dt class="cap-calendar">takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribe.html">Harici takvimlere abone olma</a>
+</dt></dl></dd>
 <dt class="cap-portal">Abone olma</dt>
 <dd><dl>
 <dt class="cap-contacts">adres defteri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.subscribe.html">Dış adres defterlerine abone olma</a>
@@ -91,7 +94,7 @@
 </dl></dd>
 <dt class="cap-contacts">Adres Defteri, <a class="indexterm" href="ox.appsuite.user.chap.contacts.html">Adres Defteri</a>
 </dt>
-<dd><dl><dt class="cap-contacts">Bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.html">Adres Defteri Bileşenleri</a>
+<dd><dl><dt class="cap-contacts">bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.html">Adres Defteri Bileşenleri</a>
 </dt></dl></dd>
 <dt class="cap-contacts">Adres defteri</dt>
 <dd><dl>
@@ -99,51 +102,60 @@
 </dt>
 <dt class="cap-webmail">e-posta gönderme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">Adres defteri içinden e-posta gönderme</a>
 </dt>
-<dt class="cap-contacts">kişisel adres defterleri ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">Adres defteri ekleme</a>
+<dt class="cap-contacts">kişisel adres defterleri ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">Kişisel adres defterleri ekleme</a>
 </dt>
 <dt class="cap-calendar">randevuya kişi davet etme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">Kişileri bir randevuya davet etme</a>
 </dt>
 </dl></dd>
 <dt class="cap-contacts">Adres defteri ayarları</dt>
 <dd><dl>
-<dt class="cap-contacts">Adların görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
+<dt class="cap-contacts">adların görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
-<dt class="cap-contacts">İletişim bilgilerim, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
+<dt class="cap-contacts">iletişim bilgilerim, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
 <dt class="cap-contacts">ilk açılacak klasör, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
 <dt class="cap-contacts">paylaşılan adres defterlerine abone ol, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
-<dt class="cap-contacts">Posta adreslerini harita servisine bağla, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
+<dt class="cap-contacts">posta adreslerini harita servisine bağla, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
 </dl></dd>
 <dt class="cap-contacts">Adres Defteri-Kullanıcı arayüzü</dt>
 <dd><dl>
-<dt class="cap-contacts">Araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.toolbar.html">Adres Defteri araç çubuğu</a>
+<dt class="cap-contacts">araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.toolbar.html">Adres Defteri araç çubuğu</a>
 </dt>
-<dt class="cap-contacts">Ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.detailview.html">Adres Defteri ayrıntı görünümü</a>
+<dt class="cap-contacts">ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.detailview.html">Adres Defteri ayrıntı görünümü</a>
 </dt>
 <dt class="cap-contacts">dağıtım listesi düzenleme penceresi, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.createlist.html">Dağıtım listesi düzenleme penceresi</a>
 </dt>
 <dt class="cap-contacts">düzenleme penceresi, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.create.html">Kişi düzenleme penceresi</a>
 </dt>
-<dt class="cap-contacts">Gezinti çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.navbar.html">Adres Defteri gezinti çubuğu</a>
+<dt class="cap-contacts">gezinti çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.navbar.html">Adres Defteri gezinti çubuğu</a>
 </dt>
-<dt class="cap-contacts">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.content.html">Adres Defteri içerik alanı</a>
+<dt class="cap-contacts">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.content.html">Adres Defteri içerik alanı</a>
 </dt>
 <dt class="cap-contacts">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.foldertree.html">Adres Defteri klasör görünümü</a>
 </dt>
-<dt class="cap-contacts">Liste, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.list.html">Adres Defteri listesi</a>
+<dt class="cap-contacts">liste, <a class="indexterm" href="ox.appsuite.user.sect.contacts.gui.list.html">Adres Defteri listesi</a>
 </dt>
 </dl></dd>
-<dt class="cap-contacts">Adresler</dt>
+<dt class="cap-enterpriseaddressbook">Adres listesi</dt>
 <dd><dl>
-<dt class="cap-contacts">adres defterinden seçme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Adres defterinden kişi seçme</a>
+<dt class="cap-enterpriseaddressbook">kişileri görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">Adres listesindeki kişileri görüntüleme</a>
 </dt>
-<dt class="cap-webmail">toplama, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">Adresleri toplama</a>
+<dt class="cap-enterpriseaddressbook">otomatik olarak e-posta adresi ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">W-posta adreslerini adres listesinden otomatik olarak ekleme</a>
 </dt>
 </dl></dd>
-<dt class="">Aktif istemcileri görüntüleme ve oturumlarını kapatma, <a class="indexterm" href="ox.appsuite.user.sect.security.sessions.html">Aktif istemcileri görüntüleme ve oturumlarını kapatma</a>
+<dt class="cap-webmail">Adresler</dt>
+<dd><dl>
+<dt class="cap-contacts">adres defterinden otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">Adres defterinden otomatik olarak e-posta adresleri ekleme</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">adres listesinden otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">W-posta adreslerini adres listesinden otomatik olarak ekleme</a>
+</dt>
+<dt class="cap-webmail">toplama, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">adresleri toplama</a>
+</dt>
+</dl></dd>
+<dt class="">Aktif istemcileri görüntüleme ve oturumlarını kapatma, <a class="indexterm" href="ox.appsuite.user.sect.security.sessions.html">Aktif İstemcileri Görüntüleme ve Oturumlarını Kapatma</a>
 </dt>
 <dt class="cap-calendar">Anımsatıcılar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
@@ -152,9 +164,9 @@
 </dt></dl></dd>
 <dt class="cap-webmail cap-call">Arama</dt>
 <dd><dl>
-<dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.search.html">Dosya Arama</a>
+<dt class="cap-infostore">dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.search.html">Dosya Arama</a>
 </dt>
-<dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">E-postalarda arama</a>
+<dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">E-postalarda Arama</a>
 </dt>
 <dt class="cap-webmail cap-call">göndereni veya başka bir alıcıyı, <a class="indexterm" href="ox.appsuite.user.sect.email.call.html">Göndereni veya başka Bir alıcıyı arama</a>
 </dt>
@@ -164,7 +176,7 @@
 </dt>
 <dt class="cap-contacts cap-call">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kişileri arama</a>, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Kişi Arama</a>
 </dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Randevu Arama</a>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Randevu Arama</a>
 </dt>
 </dl></dd>
 <dt class="cap-guard">Autocrypt</dt>
@@ -180,40 +192,42 @@
 <dt class="cap-guard">anahtarları silme, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt anahtarlarını yönetme</a>
 </dt>
 </dl></dd>
-<dt class="">Ayarar</dt>
-<dd><dl><dt class="">kişisel verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
+<dt class="cap-dataexport">Ayarar</dt>
+<dd><dl><dt class="cap-dataexport">kişisel verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
 </dt></dl></dd>
 <dt class="">Ayarlar</dt>
 <dd><dl>
 <dt class="cap-contacts">adres defteri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">Adres Defteri Ayarları</a>
 </dt>
-<dt class="">Bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">Bölgesel Ayarları Değiştirme</a>
+<dt class="">bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">Bölgesel Ayarları Değiştirme</a>
+</dt>
+<dt class="cap-infostore">Drive, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">Drive Ayarlar</a>
 </dt>
 <dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">E-posta Ayarları</a>
 </dt>
 <dt class="cap-webmail">E-postalar, alma, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
-<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görevler Ayarları</a>
+<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görev Ayarları</a>
 </dt>
 <dt class="cap-guard">Guard, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
-<dt class="">Hesaplar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.html">Hesapları Yönetme</a>
+<dt class="">hesaplar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.html">Hesapları Yönetme</a>
 </dt>
 <dt class="">kişisel iletişim bilgileri, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Kişisel İletişim Bilgilerini Değiştirme</a>
-</dt>
-<dt class="cap-infostore">oxfs-Sürücü, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">oxfs-SürücüAyarları</a>
 </dt>
 <dt class="">parola değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">Parola değiştirme</a>
 </dt>
 <dt class="cap-portal">Portal, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
-<dt class="cap-coi">sohbet, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">sohbet, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-calendar">Takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="">Temel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">temel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
 <dt class="cap-call">uygunluk durumunu ayarlama, <a class="indexterm" href="ox.appsuite.user.sect.settings.presencestatus.html">Uygunluk durumunu ayarlama</a>
+</dt>
+<dt class="cap-deputy">vekil atama, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">Vekil Atama</a>
 </dt>
 <dt class="">yerel uygulamaları sihirbaz yardımıyla ayarlama, <a class="indexterm" href="ox.appsuite.user.sect.settings.wizard.html">Yerel Uygulamaları Sihirbaz Yardımıyla Ayarlama</a>
 </dt>
@@ -231,31 +245,28 @@
 <dl>
 <dt class="">Bağlam menüsü</dt>
 <dd><dl>
-<dt class="">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.foldertree.html">Klasör görünümü</a>
+<dt class="cap-infostore">Drive-içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.content.html">Drive içerik alanı</a>
 </dt>
-<dt class="cap-infostore">oxfs-Sürücü-içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.content.html">oxfs-Sürücü içerik alanı</a>
+<dt class="">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.foldertree.html">Klasör görünümü</a>
 </dt>
 </dl></dd>
 <dt class="">Belge, <a class="indexterm" href="ox.appsuite.user.chap.about.html">Bu belge hakkında</a>
 </dt>
-<dt class="cap-webmail">Beyaz liste</dt>
-<dd><dl><dt class="cap-webmail">kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Beyaz Liste Kullanma</a>
-</dt></dl></dd>
-<dt class="">Bildirim alanı, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirim Alma</a>
+<dt class="">Bildirim alanı, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirimlerle Çalışma</a>
 </dt>
 <dt class="">Bildirimler</dt>
 <dd><dl>
-<dt class="">bildirim alanında bildirim alma, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirim Alma</a>
+<dt class="">bildirim alanında bildirim alma, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirimlerle Çalışma</a>
 </dt>
-<dt class="">masaüstü bildirimlerini alma, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirim Alma</a>
+<dt class="">masaüstü bildirimlerini alma, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirimlerle Çalışma</a>
 </dt>
 </dl></dd>
 <dt class="cap-webmail">Birleşik e-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Birleşik e-postayı kullanma</a>
 </dt>
-<dt class="">Bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">Bölgesel Ayarları Değiştirme</a>
+<dt class="">bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">Bölgesel Ayarları Değiştirme</a>
 </dt>
 <dt class="cap-infostore">Bulut depolama</dt>
-<dd><dl><dt class="cap-infostore">bkz. depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama hesabı ekleme</a>
+<dd><dl><dt class="cap-infostore">bkz. depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama Hesabı Ekleme</a>
 </dt></dl></dd>
 </dl>
 </div>
@@ -274,7 +285,7 @@
 <dd><dl>
 <dt class="cap-contacts">dışa aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kişileri dışa aktarma</a>
 </dt>
-<dt class="cap-contacts">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
+<dt class="cap-contacts">İçe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
 </dt>
 </dl></dd>
 </dl>
@@ -284,6 +295,8 @@
 <dl>
 <dt class="cap-contacts">Dağıtım listesi</dt>
 <dd><dl>
+<dt class="cap-contacts">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
+</dt>
 <dt class="cap-webmail">e-posta gönderme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">Adres defteri içinden e-posta gönderme</a>
 </dt>
 <dt class="cap-contacts">ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.html">Dağıtım Listeleri Ekleme</a>
@@ -293,10 +306,7 @@
 <dt class="cap-calendar">randevuya davet etme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">Kişileri bir randevuya davet etme</a>
 </dt>
 </dl></dd>
-<dt class="cap-contacts">dağıtım listesi</dt>
-<dd><dl><dt class="cap-contacts">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
-</dt></dl></dd>
-<dt class="cap-infostore">Depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama hesabı ekleme</a>
+<dt class="cap-infostore">Depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama Hesabı Ekleme</a>
 </dt>
 <dt class="cap-multifactor">Doğrulama yöntemlerini ayarlama, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.settings.html">Doğrulama yöntemlerini ayarlama</a>
 </dt>
@@ -318,13 +328,13 @@
 </dt>
 <dt class="cap-infostore">e-posta eki olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.send.html">Dosyaları e-posta eki olarak gönderme</a>
 </dt>
-<dt class="cap-infostore">e-posta eklerini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">oxfs-Sürücü uygulamasında e-posta eklerini görüntüleme</a>
+<dt class="cap-infostore">e-posta eklerini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">Drive uygulamasında e-posta eklerini görüntüleme</a>
 </dt>
-<dt class="cap-infostore">favori ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veoxfs-Sürücü klasörlerini Favoriler'e ekleme</a>
+<dt class="cap-infostore">favori ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veDrive klasörlerini Favoriler'e ekleme</a>
 </dt>
-<dt class="cap-infostore">görüntüleyicide görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dosyaları görüntüleyicide görüntüleme</a>
+<dt class="cap-infostore">görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları Ggörüntüleme</a>
 </dt>
-<dt class="cap-infostore">görünüm, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları görüntüleme</a>
+<dt class="cap-infostore">görüntüleyicide görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Bir dosyanın içeriğini görüntüleme</a>
 </dt>
 <dt class="cap-infostore">indirme, <a class="indexterm" href="ox.appsuite.user.sect.drive.download.html">Dosya ve Klasör İçeriklerini İndirme</a>
 </dt>
@@ -350,34 +360,104 @@
 </dt>
 <dt class="cap-guard">şifrelenmiş dosyaları indirme, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.download.html">Şifrelenmiş dosyaları indirme</a>
 </dt>
-<dt class="cap-infostore">silme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve oxfs-Sürücü klasörlerini silme</a>
+<dt class="cap-infostore">silme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve Drive klasörlerini silme</a>
 </dt>
 <dt class="cap-infostore">sürümleri düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.versions.html">Sürümlerle çalışma</a>
 </dt>
-<dt class="cap-infostore">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve oxfs-Sürücü klasörlerini taşıma</a>
+<dt class="cap-infostore">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve Drive klasörlerini taşıma</a>
 </dt>
 <dt class="cap-webdav">WebDAV ile erişim, <a class="indexterm" href="ox.appsuite.user.sect.drive.webdav.html">WebDAV ile Dosyalara Erişme</a>
 </dt>
 <dt class="cap-webdav">Windows'ta WebDAV, <a class="indexterm" href="ox.appsuite.user.sect.drive.webdav.win.html">Windows'ta WebDAV kurulumu</a>
 </dt>
-<dt class="cap-infostore">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.html">Dosyaları ve oxfs-Sürücü Klasörlerini Yönetme</a>
+<dt class="cap-infostore">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.html">Dosyaları ve Drive Klasörlerini Yönetme</a>
 </dt>
 <dt class="cap-infostore">yükle, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
 </dt>
 </dl></dd>
 <dt class="cap-infostore">Dosyaları</dt>
-<dd><dl>
-<dt class="cap-infostore">görüntüleyicide görüntüle, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dosyaları görüntüleyicide görüntüleme</a>
-</dt>
-<dt class="cap-infostore">veya oxfs-Sürücü klasörlerini yeniden planlama, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve oxfs-Sürücü klasörlerini taşıma</a>
-</dt>
-</dl></dd>
+<dd><dl><dt class="cap-infostore">veya Drive klasörlerini yeniden planlama, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve Drive klasörlerini taşıma</a>
+</dt></dl></dd>
 <dt class="cap-infostore">Dosyaları kilitleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">Dosyaları kilitleme ve kilitlerini açma</a>
 </dt>
 <dt class="cap-infostore">Dosyaların kilidini açma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">Dosyaları kilitleme ve kilitlerini açma</a>
 </dt>
 <dt class="cap-infostore">Drive, <a class="indexterm" href="ox.appsuite.user.chap.drive.html">Drive</a>
 </dt>
+<dd><dl>
+<dt class="cap-infostore">açıklama oluşturma ve düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.editdescription.html">Açıklama oluşturma ve düzenleme</a>
+</dt>
+<dt class="cap-infostore">bileşenler, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.html">Drive Bileşenleri</a>
+</dt>
+<dt class="cap-infostore">dosya arama, <a class="indexterm" href="ox.appsuite.user.sect.drive.search.html">Dosya Arama</a>
+</dt>
+<dt class="cap-infostore">dosya içeriğini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Bir dosyanın içeriğini görüntüleme</a>
+</dt>
+<dt class="cap-infostore">dosya kopyalama, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.copy.html">Dosyaları kopyalama</a>
+</dt>
+<dt class="cap-infostore">dosya ve klasörleri favorilere ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veDrive klasörlerini Favoriler'e ekleme</a>
+</dt>
+<dt class="cap-infostore">dosya ve klasörleri silme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve Drive klasörlerini silme</a>
+</dt>
+<dt class="cap-infostore">dosya ve klasörleri taşıma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve Drive klasörlerini taşıma</a>
+</dt>
+<dt class="cap-infostore">dosya veya klasör içeriğini indirme, <a class="indexterm" href="ox.appsuite.user.sect.drive.download.html">Dosya ve Klasör İçeriklerini İndirme</a>
+</dt>
+<dt class="cap-infostore">dosya yükle, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
+</dt>
+<dt class="cap-infostore">dosyaları e-posta eki olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.send.html">Dosyaları e-posta eki olarak gönderme</a>
+</dt>
+<dt class="cap-infostore">Dosyaları Görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları Ggörüntüleme</a>
+</dt>
+<dt class="cap-infostore">dosyaları kilitleme ve kilidini açma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">Dosyaları kilitleme ve kilitlerini açma</a>
+</dt>
+<dt class="cap-infostore">dosyaları PDF olarak kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">Dosyaları PDF olarak kaydetme</a>
+</dt>
+<dt class="cap-portal">dosyaları portale ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.addportal.html">Portale dosya ekleme</a>
+</dt>
+<dt class="cap-infostore">dosyaları ve klasörleri yönetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.html">Dosyaları ve Drive Klasörlerini Yönetme</a>
+</dt>
+<dt class="cap-infostore">e-posta eklerini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">Drive uygulamasında e-posta eklerini görüntüleme</a>
+</dt>
+<dt class="cap-infostore">klasör ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">Drive: Klasör Ekleme</a>
+</dt>
+<dt class="cap-infostore">klasör oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">Drive: klasör oluşturma</a>
+</dt>
+<dt class="cap-infostore">klasör yükle, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
+</dt>
+<dt class="cap-infostore">metin dosyası oluşturma ve düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.text.html">Metin Dosyaları Oluşturma ve Düzenleme</a>
+</dt>
+<dt class="cap-contacts">Ortak ve paylaşılan Drive klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.subscribeshared.html">Ortak ve paylaşılan Drive klasörlerine abone olma</a>
+</dt>
+<dt class="cap-infostore">sürümlerle çalışma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.versions.html">Sürümlerle çalışma</a>
+</dt>
+</dl></dd>
+<dt class="cap-infostore">Drive ayarlar</dt>
+<dd><dl>
+<dt class="cap-infostore">aynı adı taşıyan dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">Drive Ayarlar</a>
+</dt>
+<dt class="cap-infostore">resimler için slayt gösterisi / otomatik oynatma modu, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">Drive Ayarlar</a>
+</dt>
+<dt class="cap-infostore">sürüm geçmişi, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">Drive Ayarlar</a>
+</dt>
+<dt class="cap-infostore">varsayılan görünüm, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">Drive Ayarlar</a>
+</dt>
+</dl></dd>
+<dt class="cap-infostore">Drive kullanıcı arayüzü</dt>
+<dd><dl>
+<dt class="cap-infostore">araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.toolbar.html">Drive araç çubuğu</a>
+</dt>
+<dt class="cap-infostore">dosya ayrıntıları, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.details.html">Dosya ayrıntıları</a>
+</dt>
+<dt class="cap-infostore">gezinti çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.navbar.html">Drive gezinti çubuğu</a>
+</dt>
+<dt class="cap-infostore">görüntüleyici, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">Görüntüleyici</a>
+</dt>
+<dt class="cap-infostore">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.content.html">Drive içerik alanı</a>
+</dt>
+<dt class="cap-infostore">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.foldertree.html">Drive klasör görünümü</a>
+</dt>
+</dl></dd>
 <dt class="cap-infostore">Düzenle</dt>
 <dd><dl><dt class="cap-infostore">dosya açıklaması, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.editdescription.html">Açıklama oluşturma ve düzenleme</a>
 </dt></dl></dd>
@@ -385,48 +465,58 @@
 <dd><dl>
 <dt class="cap-contacts">dağıtım listesi, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
 </dt>
-<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">Görevleri düzenleme</a>
+<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">Görevleri Düzenleme</a>
 </dt>
 <dt class="">hesap, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
 </dt>
-<dt class="cap-contacts">Kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
 </dt>
 <dt class="cap-infostore">metin dosyası, <a class="indexterm" href="ox.appsuite.user.sect.drive.text.html">Metin Dosyaları Oluşturma ve Düzenleme</a>
 </dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları düzenleme</a>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları Düzenleme</a>
 </dt>
 <dt class="cap-infostore">sürümler, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.versions.html">Sürümlerle çalışma</a>
 </dt>
 </dl></dd>
 <dt class="">Dış e-posta hesabı</dt>
 <dd><dl>
-<dt class="">ad değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Birinci e-posta hesabını düzenleme</a>
+<dt class="">ad değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Birinci e-posta hesabını düzenleme</a>
 </dt>
-<dt class="">gönderen adını değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Birinci e-posta hesabını düzenleme</a>
+<dt class="">gönderen adını değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Birinci e-posta hesabını düzenleme</a>
 </dt>
-<dt class="">klasör atama, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Birinci e-posta hesabını düzenleme</a>
+<dt class="">klasör atama, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Birinci e-posta hesabını düzenleme</a>
 </dt>
 </dl></dd>
-<dt class="cap-tasks">Dışa aktarma</dt>
-<dd><dl><dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Görevleri dışa aktarma</a>
-</dt></dl></dd>
+<dt class="cap-contacts">Dışa aktarma</dt>
+<dd><dl>
+<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Görevleri dışa aktarma</a>
+</dt>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kişileri dışa aktarma</a>
+</dt>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Randevuları dışa aktarma</a>
+</dt>
+</dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>E</h3>
 <dl>
-<dt class="cap-webmail">E-mail, bkz. E-posta, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-posta</a>
-</dt>
 <dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-posta</a>
 </dt>
 <dd><dl>
 <dt class="cap-webmail">adres defterinden gönderme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">Adres defteri içinden e-posta gönderme</a>
 </dt>
-<dt class="cap-webmail">Adres toplama, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">Adresleri toplama</a>
+<dt class="cap-contacts">adres defterinden otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">Adres defterinden otomatik olarak e-posta adresleri ekleme</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">adres listesinden otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">W-posta adreslerini adres listesinden otomatik olarak ekleme</a>
+</dt>
+<dt class="cap-webmail">adres toplama, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">adresleri toplama</a>
+</dt>
+<dt class="cap-contacts">adresi giriş alanına otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">E-posta Adreslerini Giriş Alanına Otomatik Olarak Ekleme</a>
 </dt>
 <dt class="cap-tasks">anımsatıcı oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.reminder.html">E-posta anımsatıcıları oluşturma</a>
 </dt>
-<dt class="cap-webmail">arama, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">E-postalarda arama</a>
+<dt class="cap-webmail">arama, <a class="indexterm" href="ox.appsuite.user.sect.email.search.html">E-postalarda Arama</a>
 </dt>
 <dt class="cap-webmail">arşivleme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-postaları arşivleme</a>
 </dt>
@@ -440,19 +530,15 @@
 </dt>
 <dt class="cap-guard">Autocrypt anahtarlarını silme, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt anahtarlarını yönetme</a>
 </dt>
-<dt class="cap-webmail">beyaz liste kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Beyaz Liste Kullanma</a>
-</dt>
 <dt class="cap-webmail">bildirim sesleri, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">Bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.html">E-posta Bileşenleri</a>
 </dt>
-<dt class="cap-contacts">bir adres defterinden kişi seçme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Adres defterinden kişi seçme</a>
-</dt>
 <dt class="cap-webmail">Birleşik e-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">Birleşik e-postayı kullanma</a>
 </dt>
-<dt class="cap-webmail">Dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachments.html">Dosya ekleme</a>
+<dt class="cap-webmail">dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachments.html">Dosya ekleme</a>
 </dt>
-<dt class="cap-webmail">e-posta hesabı ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">E-posta Hesabı Ekleme</a>
+<dt class="cap-webmail">e-posta hesabı ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">E-posta Hesapları Ekleme</a>
 </dt>
 <dt class="cap-webmail">e-posta kaynağını göster, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.source.html">E-posta kaynağını gösterme</a>
 </dt>
@@ -460,33 +546,37 @@
 </dt>
 <dt class="cap-webmail">eki kaydet, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">E-posta Eklerini Görüntüleme ve Kaydetme</a>
 </dt>
-<dt class="cap-infostore">Ekleri bağlantı olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachmentlink.html">Ekleri bağlantı olarak gönderme</a>
+<dt class="cap-infostore">ekleri bağlantı olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachmentlink.html">Ekleri bağlantı olarak gönderme</a>
 </dt>
-<dt class="cap-infostore">ekleri görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">oxfs-Sürücü uygulamasında e-posta eklerini görüntüleme</a>
+<dt class="cap-infostore">ekleri görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">Drive uygulamasında e-posta eklerini görüntüleme</a>
 </dt>
 <dt class="cap-webmail">EML olarak kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.save.html">E-postaları kaydetme</a>
 </dt>
 <dt class="cap-webmail">EML'den içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">E-postaları içe aktarma</a>
 </dt>
-<dt class="cap-webmail">filtreler, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.html">E-posta filtrelerini kullanma</a>
+<dt class="cap-webmail">filtreler, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.html">E-posta Filtrelerini Kullanma</a>
 </dt>
 <dt class="cap-guard">gelen e-postaları şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.incoming.html">Gelen e-postaları filtre kuralı kullanarak şifreleme</a>
 </dt>
-<dt class="cap-webmail">Gönderen adresini seçme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.sender.html">Gönderen adresini seçme</a>
+<dt class="cap-webmail">gönderen adresini seçme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.sender.html">Gönderen adresini seçme</a>
 </dt>
 <dt class="cap-webmail cap-call">göndereni veya başka bir alıcıyı arama, <a class="indexterm" href="ox.appsuite.user.sect.email.call.html">Göndereni veya başka Bir alıcıyı arama</a>
 </dt>
 <dt class="cap-webmail">gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">Yeni bir e-posta gönderme</a>
 </dt>
-<dt class="cap-webmail">görünüm, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-postaları görüntüleme</a>
+<dt class="cap-webmail">görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-postaları Görüntüleme</a>
 </dt>
 <dt class="cap-webmail">iletme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-postaları iletme</a>
 </dt>
 <dt class="cap-webmail">imzaları kullanma, <a class="indexterm" href="ox.appsuite.user.sect.email.send.signatures.html">İmzaları kullanma</a>
 </dt>
+<dt class="cap-webmail">işlevsel e-posta hesaplarını devre dışı bırakma ve etkinleştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">İşlevsel e-posta hesaplarını devre dışı bırakma ve etkinleştirme</a>
+</dt>
+<dt class="cap-webmail">izin listelerini kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">İzin Listelerini Kullanma</a>
+</dt>
 <dt class="cap-webmail">kategorize etme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.label.html">E-postaları kategorize etme</a>
 </dt>
-<dt class="cap-webmail">Klasör ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.folder.html">E-posta klasörleri ekleme</a>
+<dt class="cap-webmail">klasör ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.folder.html">E-posta Klasörleri Ekleme</a>
 </dt>
 <dt class="cap-webmail">klasörleri temizleme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.expungefolder.html">E-posta klasörlerini temizleme</a>
 </dt>
@@ -518,60 +608,64 @@
 </dt>
 <dt class="cap-webmail">silme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">E-postaları silme</a>
 </dt>
-<dt class="cap-webmail">taslakları kullanma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">E-posta taslaklarını kullanma</a>
+<dt class="cap-webmail">taslak kullanma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">E-posta taslaklarını kullanma</a>
 </dt>
 <dt class="cap-webmail">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.movecopy.html">E-postaları taşıma ve kopyalama</a>
 </dt>
 <dt class="cap-webmail">tatil bildirimi gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Otomatik olarak tatil bildirimi gönderme</a>
 </dt>
+<dt class="cap-deputy">vekil olarak düzenleme ve yönetme, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">Vekil Olarak E-posta Gönderme ve Alma</a>
+</dt>
+<dt class="cap-deputy">vekil olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">Vekil Olarak E-posta Gönderme ve Alma</a>
+</dt>
 <dt class="cap-webmail">yanıtlama, <a class="indexterm" href="ox.appsuite.user.sect.email.send.reply.html">E-postaları yanıtlama</a>
 </dt>
 <dt class="cap-webmail">yazdırma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.print.html">E-postaları yazdırma</a>
 </dt>
-<dt class="cap-webmail">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">E-postaları yönetme</a>
+<dt class="cap-webmail">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">E-postaları Yönetme</a>
 </dt>
 </dl></dd>
 <dt class="cap-tasks">E-posta anımsatıcıları oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.reminder.html">E-posta anımsatıcıları oluşturma</a>
 </dt>
 <dt class="cap-webmail">E-posta ayarları</dt>
 <dd><dl>
-<dt class="cap-webmail">Alıntılanan satırları renklendir, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">alıntılanan satırları renklendir, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Asıl e-posta metnini yanıta ekle, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
+<dt class="cap-webmail">asıl e-posta metnini yanıta ekle, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
 <dt class="cap-webmail">bildirim sesleri, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">e-posta biçimi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
-<dt class="cap-webmail">E-postaları iletme biçimi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
+<dt class="cap-webmail">e-postaları iletme biçimi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
 <dt class="cap-webmail">e-postaları otomatik olarak BCC'ye gönder, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
 <dt class="cap-webmail">gelişmiş ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
-<dt class="cap-webmail">Gönderirken kişileri otomatik olarak topla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">gönderirken kişileri otomatik olarak topla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">HTML biçimli e-postalara izin ver?, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">HTML biçimli e-postalara izin ver, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">IMAP klasör aboneliği, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Klasörü tüm görülmemiş iletilerle göster, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">klasörü tüm görülmemiş iletilerle göster, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">mailto bağlantılarını kaydetmeyi sor, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Okundu bilgisi isteklerini göster, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">okundu bilgisi isteklerini göster, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Okurken kişileri otomatik olarak topla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">okurken kişileri otomatik olarak topla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">otomatik ilet, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Posta listesini yanıtlarken alıcıları onayla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
+<dt class="cap-webmail">posta listesini yanıtlarken alıcıları onayla, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
-<dt class="cap-webmail">Sabit genişlikli yazı tipi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">sabit genişlikli yazı tipi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">Silinen e-postaları kalıcı olarak kaldır, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">silinen e-postaları kalıcı olarak kaldır, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
-<dt class="cap-webmail">tatil bildirimi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
+<dt class="cap-webmail">Tatil bildirimi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">E-posta alma ayarları.</a>
 </dt>
 <dt class="cap-webmail">varsayılan gönderen adresi, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
@@ -580,7 +674,7 @@
 <dt class="cap-webmail">vCard iliştir, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">E-posta oluşturma ayarları</a>
 </dt>
 </dl></dd>
-<dt class="cap-webmail">E-posta filtreleri, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.html">E-posta filtrelerini kullanma</a>
+<dt class="cap-webmail">E-posta filtreleri, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.html">E-posta Filtrelerini Kullanma</a>
 </dt>
 <dd><dl>
 <dt class="cap-webmail">eylem ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.action.html">Eylem ekleme</a>
@@ -591,11 +685,11 @@
 </dt>
 <dt class="cap-webmail">koşul ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">Koşul ekleme</a>
 </dt>
-<dt class="cap-webmail">koşul örnekleri, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">Koşul ekleme</a>
-</dt>
 <dt class="cap-webmail">kural oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.create.html">Yeni kurallar oluşturma</a>
 </dt>
 <dt class="cap-webmail">kuralları değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.change.html">Bir kuralı değiştirme</a>
+</dt>
+<dt class="cap-webmail">örnek koşullar, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">Koşul ekleme</a>
 </dt>
 <dt class="cap-webmail">taşıma sırasında kural oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Taşıma sırasında kural oluşturma</a>
 </dt>
@@ -603,25 +697,25 @@
 <dt class="cap-webmail">E-posta Oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">Yeni bir e-posta gönderme</a>
 </dt>
 <dt class="cap-webmail">E-posta sekmeleri</dt>
-<dd><dl><dt class="cap-webmail">birlikte çalışma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.categories.html">Sekmelerle çalışma</a>
+<dd><dl><dt class="cap-webmail">sekmelerle çalışma, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.categories.html">Sekmelerle çalışma</a>
 </dt></dl></dd>
 <dt class="cap-webmail">E-posta-Kullanıcı arayüzü</dt>
 <dd><dl>
-<dt class="cap-webmail">Açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.popup.html">E-posta açılır penceresi</a>
+<dt class="cap-webmail">açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.popup.html">E-posta açılır penceresi</a>
 </dt>
 <dt class="cap-webmail">araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.toolbar.html">E-posta araç çubuğu</a>
 </dt>
-<dt class="cap-webmail">Ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.detailview.html">E-posta ayrıntı görünümü</a>
+<dt class="cap-webmail">ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.detailview.html">E-posta ayrıntı görünümü</a>
 </dt>
 <dt class="cap-webmail">düzenleme penceresi, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.create.html">E-posta düzenleme penceresi</a>
 </dt>
-<dt class="cap-webmail">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.content.html">E-posta içerik alanı</a>
+<dt class="cap-webmail">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.content.html">E-posta içerik alanı</a>
 </dt>
-<dt class="cap-webmail">Kategoriler çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.tabs.html">E-posta kategoriler çubuğu</a>
+<dt class="cap-webmail">kategoriler çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.tabs.html">E-posta kategoriler çubuğu</a>
 </dt>
 <dt class="cap-webmail">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.foldertree.html">E-posta klasör görünümü</a>
 </dt>
-<dt class="cap-webmail">Liste, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.list.html">E-posta listesi</a>
+<dt class="cap-webmail">liste, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.list.html">E-posta listesi</a>
 </dt>
 </dl></dd>
 <dt class="cap-webmail">E-postal filtreleri</dt>
@@ -629,9 +723,11 @@
 </dt></dl></dd>
 <dt class="">E-postalardaki dış bağlantılı görüntüler, <a class="indexterm" href="ox.appsuite.user.sect.security.emaillinkedimages.html">E-postalardaki Dış Bağlantılı Görüntüler</a>
 </dt>
-<dt class="cap-webmail">e-postaları arşivleme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-postaları arşivleme</a>
+<dt class="cap-webmail">E-postaları arşivleme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">E-postaları arşivleme</a>
 </dt>
 <dt class="cap-webmail">E-postaları iletme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.forward.html">E-postaları iletme</a>
+</dt>
+<dt class="cap-webmail">Email, bkz. E-posta, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-posta</a>
 </dt>
 </dl>
 </div>
@@ -639,10 +735,11 @@
 <h3>F</h3>
 <dl>
 <dt class="cap-calendar">favoriler</dt>
+<dd><dl><dt class="cap-calendar">favori saat dilimleri, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.timezones.html">Favori saat dilimlerini yönetme</a>
+</dt></dl></dd>
+<dt class="cap-infostore">Favoriler</dt>
 <dd><dl>
-<dt class="cap-infostore">dosyaları ve oxfs-Sürücü klasörlerini ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veoxfs-Sürücü klasörlerini Favoriler'e ekleme</a>
-</dt>
-<dt class="cap-calendar">Favori saat dilimleri, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.timezones.html">Favori saat dilimlerini yönetme</a>
+<dt class="cap-infostore">dosyaları ve Drive klasörlerini ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veDrive klasörlerini Favoriler'e ekleme</a>
 </dt>
 <dt class="">klasör favorileri, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
 </dt>
@@ -654,7 +751,7 @@
 <dl>
 <dt class="cap-multifactor">Giriş</dt>
 <dd><dl>
-<dt class="cap-multifactor">doğrulama kurtarma, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.recovery.html">Doğrulamayı kurtarma</a>
+<dt class="cap-multifactor">doğrulama kurtarma, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.recovery.html">Doğrulamaları kurtarma</a>
 </dt>
 <dt class="cap-multifactor">güvenlik anahtarıyla doğrulama, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.securitykey.html">Girişi güvenlik anahtarıyla doğrulama</a>
 </dt>
@@ -674,13 +771,13 @@
 </dl></dd>
 <dt class="cap-tasks">Görev ayarları</dt>
 <dd><dl>
-<dt class="cap-tasks">Bir katılımcı, katıldığım bir görevi kabul ettiğinde veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görevler Ayarları</a>
+<dt class="cap-tasks">bir katılımcı, katıldığım bir görevi kabul ettiğinde veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görev Ayarları</a>
 </dt>
-<dt class="cap-tasks">Bir katılımcı, oluşturduğum bir görevi kabul ettiğinde veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görevler Ayarları</a>
+<dt class="cap-tasks">bir katılımcı, oluşturduğum bir görevi kabul ettiğinde veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görev Ayarları</a>
 </dt>
-<dt class="cap-tasks">Katıldığım bir görev oluşturulduğunda, değiştirildiğinde veya silindiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görevler Ayarları</a>
+<dt class="cap-tasks">katıldığım bir görev oluşturulduğunda, değiştirildiğinde veya silindiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görev Ayarları</a>
 </dt>
-<dt class="cap-tasks">paylaşılan görev klasörlerine abone ol, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görevler Ayarları</a>
+<dt class="cap-tasks">paylaşılan görev klasörlerine abone ol, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">Görev Ayarları</a>
 </dt>
 </dl></dd>
 <dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Görevler</a>
@@ -688,7 +785,7 @@
 <dd><dl>
 <dt class="cap-tasks">arama, <a class="indexterm" href="ox.appsuite.user.sect.tasks.search.html">Görevlerde Arama Yapma</a>
 </dt>
-<dt class="cap-tasks">Bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.html">Görevler Bileşenleri</a>
+<dt class="cap-tasks">bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.html">Görevler Bileşenleri</a>
 </dt>
 <dt class="cap-tasks">bitiş tarihini değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">Bir görevin bitiş tarihini değiştirme</a>
 </dt>
@@ -696,11 +793,9 @@
 </dt>
 <dt class="cap-tasks">davetleri yanıtlama, <a class="indexterm" href="ox.appsuite.user.sect.tasks.invitation.html">Görev Davetlerini Yanıtlama</a>
 </dt>
-<dt class="cap-tasks">Dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.attachments.html">Dosya ekleme</a>
+<dt class="cap-tasks">dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.attachments.html">Dosya ekleme</a>
 </dt>
-<dt class="cap-tasks">durumu değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changestatus.html">Görev onaylarını değiştirme</a>
-</dt>
-<dt class="cap-tasks">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">Görevleri düzenleme</a>
+<dt class="cap-tasks">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">Görevleri Düzenleme</a>
 </dt>
 <dt class="cap-tasks">dışa aktarma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">Görevleri dışa aktarma</a>
 </dt>
@@ -714,7 +809,7 @@
 </dt>
 <dt class="cap-tasks">görünüm, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Görevleri Görüntüleme</a>
 </dt>
-<dt class="cap-tasks">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Görevleri içe aktarma</a>
+<dt class="cap-tasks">İçe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Görevleri içe aktarma</a>
 </dt>
 <dt class="cap-tasks">katılımcı ekle, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.participants.html">Göreve katılımcı ekleme</a>
 </dt>
@@ -722,11 +817,11 @@
 </dt>
 <dt class="cap-tasks">oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.create.html">Yeni görev oluşturma</a>
 </dt>
+<dt class="cap-tasks">onayı değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changestatus.html">Görev onaylarını değiştirme</a>
+</dt>
 <dt class="cap-contacts">ortak ve paylaşılan görev klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.subscribeshared.html">Ortak ve paylaşılan görev klasörlerine abone olma</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">paylaş, bkz. paylaşım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Veri Paylaşma</a>
-</dt>
-<dt class="cap-tasks">silme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Görevleri silme</a>
+<dt class="cap-tasks">Silme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Görevleri silme</a>
 </dt>
 <dt class="cap-tasks">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Görevleri başka bir klasöre taşıma</a>
 </dt>
@@ -734,52 +829,59 @@
 </dt>
 <dt class="cap-tasks">yazdırma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Görevleri yazdırma</a>
 </dt>
-<dt class="cap-tasks">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Görevleri yönetme</a>
+<dt class="cap-tasks">Yönetme, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Görevleri Yönetme</a>
 </dt>
 </dl></dd>
+<dt class="cap-share_links cap-share_mail_attachments">görevler</dt>
+<dd><dl><dt class="cap-share_links cap-share_mail_attachments">paylaş, bkz. paylaşım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Veri Paylaşma</a>
+</dt></dl></dd>
 <dt class="cap-tasks">Görevler-Kullanıcı arayüzü</dt>
 <dd><dl>
-<dt class="cap-tasks">Araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.toolbar.html">Görevler araç çubuğu</a>
+<dt class="cap-tasks">araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.toolbar.html">Görevler araç çubuğu</a>
 </dt>
-<dt class="cap-tasks">Ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.detailview.html">Görevler ayrıntı görünümü</a>
+<dt class="cap-tasks">ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.detailview.html">Görevler ayrıntı görünümü</a>
 </dt>
 <dt class="cap-tasks">düzenleme penceresi, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.create.html">Düzenleme penceresi</a>
 </dt>
-<dt class="cap-tasks">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.content.html">Görevler içerik alanı</a>
+<dt class="cap-tasks">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.content.html">Görevler içerik alanı</a>
 </dt>
 <dt class="cap-tasks">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.foldertree.html">Görevler klasör görünümü</a>
 </dt>
-<dt class="cap-tasks">Liste, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.list.html">Görevler listesi</a>
+<dt class="cap-tasks">liste, <a class="indexterm" href="ox.appsuite.user.sect.tasks.gui.list.html">Görevler listesi</a>
 </dt>
 </dl></dd>
-<dt class="cap-calendar">Görüntüleme</dt>
+<dt class="cap-webmail">Görüntüle</dt>
+<dd><dl><dt class="cap-webmail">e-posta eki, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">E-posta Eklerini Görüntüleme ve Kaydetme</a>
+</dt></dl></dd>
+<dt class="cap-webmail">Görüntüleme</dt>
 <dd><dl>
+<dt class="cap-contacts">adres defterindeki kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">Bir adres defterindeki kişileri görüntüleme</a>
+</dt>
+<dt class="cap-infostore">dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları Ggörüntüleme</a>
+</dt>
+<dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-postaları Görüntüleme</a>
+</dt>
 <dt class="cap-tasks">görev eki, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">Görev Eklerini Görüntüleme ve Kaydetme</a>
+</dt>
+<dt class="cap-infostore">görüntüleyicide görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Bir dosyanın içeriğini görüntüleme</a>
 </dt>
 <dt class="">hesaplar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
 </dt>
-<dt class="cap-calendar">randevu eki, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Randevu Eklerini Görüntüleme ve Kaydetme</a>
-</dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Randevuları Görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Randevuları takvim görünümünde görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Liste görünümünde randevuları görüntüleme</a>
-</dt>
-</dl></dd>
-<dt class="cap-infostore">Görüntüleyici, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">Görüntüleyici</a>
-</dt>
-<dt class="cap-webmail">Görünüm</dt>
-<dd><dl>
-<dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları görüntüleme</a>
-</dt>
-<dt class="cap-webmail">E-posta eki, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">E-posta Eklerini Görüntüleme ve Kaydetme</a>
-</dt>
-<dt class="cap-webmail">E-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">E-postaları görüntüleme</a>
-</dt>
-<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Görevleri Görüntüleme</a>
-</dt>
 <dt class="cap-contacts">kişi eki, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Kişi Eklerini Görüntüleme ve Kaydetme</a>
 </dt>
-<dt class="cap-contacts">Kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kişileri görüntüleme</a>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kişileri Görüntüleme</a>
+</dt>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">Randevuları Görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Randevuları farklı görünümlerde görüntüleme</a>
 </dt>
 </dl></dd>
+<dt class="cap-calendar">görüntüleme</dt>
+<dd><dl><dt class="cap-calendar">randevu eki, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">Randevu Eklerini Görüntüleme ve Kaydetme</a>
+</dt></dl></dd>
+<dt class="cap-infostore">Görüntüleyici, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">Görüntüleyici</a>
+</dt>
+<dt class="cap-tasks">Görünüm</dt>
+<dd><dl><dt class="cap-tasks">görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">Görevleri Görüntüleme</a>
+</dt></dl></dd>
 <dt class="cap-calendar">Gruplar</dt>
 <dd><dl><dt class="cap-calendar">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.groups.html">Grupları Yönetme</a>
 </dt></dl></dd>
@@ -796,7 +898,7 @@
 </dt>
 <dt class="cap-guard">Autocrypt anahtarlarını silme, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Autocrypt anahtarlarını yönetme</a>
 </dt>
-<dt class="cap-guard">Ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard"> ayarları, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
 <dt class="cap-guard">çıkış yapma, <a class="indexterm" href="ox.appsuite.user.sect.guard.logout.html">Guard'dan Çıkış Yapma</a>
 </dt>
@@ -812,7 +914,7 @@
 </dt>
 <dt class="cap-guard">kurulumu, <a class="indexterm" href="ox.appsuite.user.sect.guard.setup.html">Guard kurulumu</a>
 </dt>
-<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office Belgelerini Şifreleme</a>
+<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office belgelerini şifreleme</a>
 </dt>
 <dt class="cap-guard">ortak anahtarları yönetme, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Ortak anahtarları yönetme</a>
 </dt>
@@ -820,7 +922,7 @@
 </dt>
 <dt class="cap-guard">parola yönetimi, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
 </dt>
-<dt class="cap-guard">Parolayı sıfırlama, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
+<dt class="cap-guard">parolayı sıfırlama, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
 </dt>
 <dt class="cap-guard">seçili belgeleri şifrelenmiş biçimde kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.saveencrypted.html">Seçili belgeleri şifrelenmiş biçimde kaydetme</a>
 </dt>
@@ -843,34 +945,33 @@
 </dl></dd>
 <dt class="cap-guard">GuardGüvenlik ayarları</dt>
 <dd><dl>
-<dt class="cap-guard">Anahtarlarınız, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard">anahtarlarınız, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
-<dt class="cap-guard">E-posta yazarken varsayılan olarak şifreleme yap, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard">e-posta yazarken varsayılan olarak şifreleme yap, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
 <dt class="cap-guard">gelişmiş ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
-</dt>
-<dt class="cap-guard">Giden e-postalara varsayılan olarak imza ekle, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
 <dt class="cap-guard">ortak anahtarlar, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
 <dt class="cap-guard">ortak anahtarı indir, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
-<dt class="cap-guard">Varsayılan olarak parolayı hatırla, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard">varsayılan olarak parolayı hatırla, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
-<dt class="cap-guard">Yeni e-postalarda varsayılan olarak PGP inline kullan, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard">yeni e-postalarda varsayılan olarak PGP inline kullan, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
 </dl></dd>
+<dt class="cap-guard">GuardGüvenlik Ayarları</dt>
+<dd><dl><dt class="cap-guard">giden e-postalara varsayılan olarak imza ekle, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+</dt></dl></dd>
 <dt class="">Güvenlik</dt>
 <dd><dl>
-<dt class="">Aktif istemcileri görüntüleme ve oturumlarını kapatma, <a class="indexterm" href="ox.appsuite.user.sect.security.sessions.html">Aktif istemcileri görüntüleme ve oturumlarını kapatma</a>
-</dt>
-<dt class="cap-webmail">beyaz liste kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">Beyaz Liste Kullanma</a>
+<dt class="">Aktif istemcileri görüntüleme ve oturumlarını kapatma, <a class="indexterm" href="ox.appsuite.user.sect.security.sessions.html">Aktif İstemcileri Görüntüleme ve Oturumlarını Kapatma</a>
 </dt>
 <dt class="cap-multifactor">çok faktörlü kimlik doğrulama, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.html">Çok Faktörlü Kimlik Doğrulama</a>
 </dt>
 <dt class="cap-guard">dosyaları şifreleme ve şifrelerini çözme, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.html">Dosyaları Şifreleme ve Şifrelerini Çözme</a>
 </dt>
-<dt class="">E-posta Özgünlüğünü Gösterme, <a class="indexterm" href="ox.appsuite.user.sect.security.emailauthentication.html">E-posta Özgünlüğünü Gösterme</a>
+<dt class="">e-posta özgünlüğünü gösterme, <a class="indexterm" href="ox.appsuite.user.sect.security.emailauthentication.html">E-posta Özgünlüğünü Gösterme</a>
 </dt>
 <dt class="">e-postalardaki dış bağlantılı görüntüler, <a class="indexterm" href="ox.appsuite.user.sect.security.emaillinkedimages.html">E-postalardaki Dış Bağlantılı Görüntüler</a>
 </dt>
@@ -878,11 +979,13 @@
 </dt>
 <dt class="cap-guard">e-postaları şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.html">E-posta Yazışmalarını Şifreleme</a>
 </dt>
-<dt class="cap-guard">GuardAyarlar, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
+<dt class="cap-guard">Guard ayarları, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard Ayarları</a>
 </dt>
-<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office Belgelerini Şifreleme</a>
+<dt class="cap-webmail">izin listelerini kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">İzin Listelerini Kullanma</a>
 </dt>
-<dt class="">Otomatik çıkış, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">Otomatik Çıkış Yapma</a>
+<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office belgelerini şifreleme</a>
+</dt>
+<dt class="">Otomatik çıkış yapma, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">Otomatik Çıkış Yapma</a>
 </dt>
 <dt class="">uygulamalar için ek parolalar kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.apppasswords.html">Uygulamalara Özel Ek Parolalar Kullanma</a>
 </dt>
@@ -892,19 +995,21 @@
 <div class="indexdiv">
 <h3>H</h3>
 <dl>
-<dt class="cap-webmail cap-calendar cap-tasks">hale görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">Kişileri hale görünümünde görüntüleme</a>
+<dt class="cap-webmail cap-calendar cap-tasks">hale görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">Kişileri hale görünümünde görüntüleme</a>
 </dt>
 <dt class="cap-portal">Hesap</dt>
 <dd><dl>
-<dt class="">birinci e-posta hesabını düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">Birinci e-posta hesabını düzenleme</a>
+<dt class="">birinci e-posta hesabını düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Birinci e-posta hesabını düzenleme</a>
 </dt>
-<dt class="cap-infostore">depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama hesabı ekleme</a>
+<dt class="cap-infostore">depolama hesapları ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">Depolama Hesabı Ekleme</a>
 </dt>
 <dt class="">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
 </dt>
-<dt class="cap-webmail">e-posta hesabı ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">E-posta Hesabı Ekleme</a>
+<dt class="cap-webmail">e-posta hesabı ekleme, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">E-posta Hesapları Ekleme</a>
 </dt>
 <dt class="">görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
+</dt>
+<dt class="cap-webmail">işlevsel e-posta hesaplarını devre dışı bırakma ve etkinleştirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">İşlevsel e-posta hesaplarını devre dışı bırakma ve etkinleştirme</a>
 </dt>
 <dt class="">kaldırma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
 </dt>
@@ -930,40 +1035,51 @@
 </dt>
 </dl></dd>
 <dt class="cap-webmail">içe aktarma</dt>
+<dd><dl><dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">E-postaları içe aktarma</a>
+</dt></dl></dd>
+<dt class="cap-contacts">İçe aktarma</dt>
 <dd><dl>
-<dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.import.html">E-postaları içe aktarma</a>
+<dt class="cap-contacts">CSV biçiminde içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
 </dt>
 <dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">Görevleri içe aktarma</a>
 </dt>
-<dt class="cap-calendar">Takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.import.html">Dosyalardan takvimleri içe aktarma</a>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Randevuları içe aktarma</a>
+</dt>
+<dt class="cap-calendar">takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.import.html">Dosyalardan takvimleri içe aktarma</a>
+</dt>
+<dt class="cap-contacts">vCard biçiminde içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
 </dt>
 </dl></dd>
-<dt class="cap-infostore">Içeriği görüntüleme</dt>
+<dt class="cap-infostore">İçeriği görüntüleme</dt>
 <dd><dl>
-<dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dosyaları görüntüleyicide görüntüleme</a>
+<dt class="cap-infostore">dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Bir dosyanın içeriğini görüntüleme</a>
 </dt>
-<dt class="cap-infostore">Sunumlar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.presentation.html">Sunum yapma</a>
+<dt class="cap-infostore">sunumlar, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.presentation.html">Sunum yapma</a>
 </dt>
 </dl></dd>
-<dt class="">İlk Adımlar, <a class="indexterm" href="ox.appsuite.user.chap.firststeps.html">İlk Adımlar</a>
+<dt class="">İlk adımlar, <a class="indexterm" href="ox.appsuite.user.chap.firststeps.html">İlk Adımlar</a>
 </dt>
+<dt class="">İzin listesi, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+</dt>
+<dd><dl><dt class="cap-webmail">kullanma, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">İzin Listelerini Kullanma</a>
+</dt></dl></dd>
 <dt class="cap-share_links cap-share_mail_attachments">İzin örnekleri, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">İzinlerin kullanım alanları</a>
 </dt>
 <dt class="">İzinler</dt>
 <dd><dl>
-<dt class="cap-share_links cap-share_mail_attachments">Düzenleyici, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
+<dt class="cap-share_links cap-share_mail_attachments">düzenleyici, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
 </dt>
 <dt class="cap-share_links cap-share_mail_attachments">görüntüleyici, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">Örnekler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">İzinlerin kullanım alanları</a>
+<dt class="cap-share_links cap-share_mail_attachments">örnekler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">İzinlerin kullanım alanları</a>
 </dt>
-<dt class="">tanım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">İzinlerin amacı nedir?</a>
+<dt class="">Tanım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html">İzinlerin amacı nedir?</a>
 </dt>
 <dt class="cap-share_links cap-share_mail_attachments">uygulama, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">Yazar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
+<dt class="cap-share_links cap-share_mail_attachments">yazar, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">Yönetici, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
+<dt class="cap-share_links cap-share_mail_attachments">yönetici, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">Hangi izinleri kullanabilirim?</a>
 </dt>
 </dl></dd>
 </dl>
@@ -980,15 +1096,17 @@
 <dt class="cap-calendar">Kaynak</dt>
 <dd><dl><dt class="cap-calendar">yönetim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.resources.html">Kaynakları Yönetme</a>
 </dt></dl></dd>
-<dt class="">kişi resmi, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Kişisel İletişim Bilgilerini Değiştirme</a>
+<dt class="">Kişi resmi, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Kişisel İletişim Bilgilerini Değiştirme</a>
 </dt>
 <dt class="cap-contacts">Kişiler</dt>
 <dd><dl>
 <dt class="cap-contacts">abone olunan adres defterlerini yenileme ve yönetme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.managesubscribed.html">Abone olunan adres defterlerini yenileme ve yönetme</a>
 </dt>
-<dt class="cap-contacts">adres defterinden seçme, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">Adres defterinden kişi seçme</a>
+<dt class="cap-contacts">adres defterinden otomatik olarak e-posta adresi ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">Adres defterinden otomatik olarak e-posta adresleri ekleme</a>
 </dt>
 <dt class="cap-contacts">adres defterleri ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.html">Adres Defteri Ekleme</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">adres listesinde görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">Adres listesindeki kişileri görüntüleme</a>
 </dt>
 <dt class="cap-contacts cap-call">arama, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kişileri arama</a>, <a class="indexterm" href="ox.appsuite.user.sect.contacts.search.html">Kişi Arama</a>
 </dt>
@@ -996,13 +1114,17 @@
 </dt>
 <dt class="cap-contacts">dağıtım listeleri oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.html">Dağıtım Listeleri Ekleme</a>
 </dt>
-<dt class="cap-contacts">Dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.attachments.html">Dosya ekleme</a>
+<dt class="cap-contacts">dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.attachments.html">Dosya ekleme</a>
 </dt>
 <dt class="cap-contacts">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.edit.html">Kişileri ve Dağıtım Listelerini Düzenleme</a>
 </dt>
 <dt class="cap-contacts">dış adres defterlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.subscribe.html">Dış adres defterlerine abone olma</a>
 </dt>
 <dt class="cap-contacts">dışa aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kişileri dışa aktarma</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">e-posta adresini adres listesinden otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">W-posta adreslerini adres listesinden otomatik olarak ekleme</a>
+</dt>
+<dt class="cap-contacts">e-posta adresini giriş alanına otomatik olarak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">E-posta Adreslerini Giriş Alanına Otomatik Olarak Ekleme</a>
 </dt>
 <dt class="cap-webmail">e-posta alıcılarını dağıtım listesi olarak kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.recipients.html">E-posta alıcılarını dağıtım listesi olarak kaydetme</a>
 </dt>
@@ -1012,9 +1134,9 @@
 </dt>
 <dt class="cap-contacts">eki kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">Kişi Eklerini Görüntüleme ve Kaydetme</a>
 </dt>
-<dt class="cap-contacts">görünüm, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kişileri görüntüleme</a>
+<dt class="cap-contacts">görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">Kişileri Görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">Bir adres defterindeki kişileri görüntüleme</a>
 </dt>
-<dt class="cap-webmail cap-calendar cap-tasks">hale görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">Kişileri hale görünümünde görüntüleme</a>
+<dt class="cap-webmail cap-calendar cap-tasks">hale görünümü, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">Kişileri hale görünümünde görüntüleme</a>
 </dt>
 <dt class="cap-calendar">katılımcı listesinden dağıtım listesi oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.attendees.html">Katılımcı listesinden dağıtım listesi oluşturma</a>
 </dt>
@@ -1051,28 +1173,26 @@
 <dt class="cap-contacts">yönetim, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.html">Kişileri Yönetme</a>
 </dt>
 </dl></dd>
-<dt class="cap-contacts">kişileri</dt>
-<dd><dl>
-<dt class="cap-contacts">CSV biçiminde içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
-</dt>
-<dt class="cap-contacts">vCard biçiminde içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
-</dt>
-</dl></dd>
-<dt class="cap-contacts">Kişileri</dt>
-<dd><dl><dt class="cap-contacts">dışa aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kişileri dışa aktarma</a>
-</dt></dl></dd>
 <dt class="">kişisel iletişim bilgileri, <a class="indexterm" href="ox.appsuite.user.sect.settings.personaldata.html">Kişisel İletişim Bilgilerini Değiştirme</a>
 </dt>
-<dt class="">Kişisel verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
+<dt class="cap-dataexport">Kişisel verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">Klasör</dt>
-<dd><dl><dt class="cap-share_links cap-share_mail_attachments">e-posta klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">Paylaşılan veya kişisel e-posta klasörlerine abone olma</a>
-</dt></dl></dd>
-<dt class="">klasör görünümü</dt>
+<dt class="">Klasör</dt>
+<dd><dl>
+<dt class="cap-share_links cap-share_mail_attachments">e-posta klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.subscribeimap.html">Paylaşılan veya kişisel e-posta klasörlerine abone olma</a>
+</dt>
+<dt class="">gizleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Klasörleri gizleme</a>
+</dt>
+<dt class="">silme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Klasörleri silme</a>
+</dt>
+<dt class="">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Klasörleri taşıma</a>
+</dt>
+</dl></dd>
+<dt class="">Klasör görünümü</dt>
 <dd><dl>
 <dt class="">aç, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Klasör yapısı içinde gezinme</a>
 </dt>
-<dt class="">favoriler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
+<dt class="">Favoriler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
 </dt>
 <dt class="">genişliği değiştir, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Klasör yapısı içinde gezinme</a>
 </dt>
@@ -1081,7 +1201,7 @@
 </dl></dd>
 <dt class="">Klasör yapısı</dt>
 <dd><dl>
-<dt class="">favoriler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
+<dt class="">Favoriler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
 </dt>
 <dt class="">gezinme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html">Klasör yapısı içinde gezinme</a>
 </dt>
@@ -1095,11 +1215,9 @@
 </dt>
 <dt class="">Adını değiştir, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">Klasörleri yeniden adlandırma</a>
 </dt>
-<dt class="cap-infostore">favori ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veoxfs-Sürücü klasörlerini Favoriler'e ekleme</a>
+<dt class="cap-infostore">favori ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veDrive klasörlerini Favoriler'e ekleme</a>
 </dt>
 <dt class="">favorilere klasör ekleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">Klasörleri favorilere ekleme</a>
-</dt>
-<dt class="">gizleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.hide.html">Klasörleri gizleme</a>
 </dt>
 <dt class="cap-infostore">içeriği indirme, <a class="indexterm" href="ox.appsuite.user.sect.drive.download.html">Dosya ve Klasör İçeriklerini İndirme</a>
 </dt>
@@ -1114,10 +1232,6 @@
 <dt class="cap-share_links cap-share_mail_attachments">paylaş, bkz. paylaşım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Veri Paylaşma</a>
 </dt>
 <dt class="">paylaşılan klasörler, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.kind.html">Klasör türleri nelerdir?</a>
-</dt>
-<dt class="">sil, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Klasörleri silme</a>
-</dt>
-<dt class="">taşıma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.move.html">Klasörleri taşıma</a>
 </dt>
 <dt class="cap-webmail">temizleme, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.expungefolder.html">E-posta klasörlerini temizleme</a>
 </dt>
@@ -1138,12 +1252,9 @@
 </dl></dd>
 <dt class="cap-calendar cap-call">Konferans planlama, sesli/görüntülü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.call.html">Sesli/görüntülü görüşme planlama</a>
 </dt>
-<dt class="">Konuk grubu</dt>
-<dd><dl><dt class="">bkz. konuk, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="cap-webmail">Kopyalama</dt>
 <dd><dl>
-<dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.copy.html">Dosyaları kopyalama</a>
+<dt class="cap-infostore">dosya, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.copy.html">Dosyaları kopyalama</a>
 </dt>
 <dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.movecopy.html">E-postaları taşıma ve kopyalama</a>
 </dt>
@@ -1152,7 +1263,7 @@
 </dl></dd>
 <dt class="">Kullanıcı arayüzü</dt>
 <dd><dl>
-<dt class="">Açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.popup.html">Açılır pencere</a>
+<dt class="">açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.popup.html">Açılır pencere</a>
 </dt>
 <dt class="">Araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.toolbar.html">Araç çubuğu</a>
 </dt>
@@ -1166,15 +1277,15 @@
 </dt>
 <dt class="">hale görünümü, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.popup.html">Açılır pencere</a>
 </dt>
-<dt class="">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.content.html">İçerik alanı</a>
+<dt class="">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.content.html">İçerik alanı</a>
 </dt>
 <dt class="">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.foldertree.html">Klasör görünümü</a>
 </dt>
-<dt class="">Klavye girişi, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.html">Klavye Girişi</a>, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html">Tuşlar ve tuş kombinasyonları</a>, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.elements.html">Klavyeyi kullanarak kullanıcı arayüzüyle etkileşim</a>
+<dt class="">klavye girişi, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.html">Klavye Girişi</a>, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.shortcuts.html">Tuşlar ve tuş kombinasyonları</a>, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.keyboard.elements.html">Klavyeyi kullanarak kullanıcı arayüzüyle etkileşim</a>
 </dt>
 <dt class="">Menü çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.menubar.html">Menü çubuğu</a>
 </dt>
-<dt class="">Uygulama Başlatıcı, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.applauncher.html">Uygulama Başlatıcı</a>
+<dt class="">uygulama başlatıcı, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.gui.applauncher.html">Uygulama Başlatıcı</a>
 </dt>
 </dl></dd>
 </dl>
@@ -1182,7 +1293,7 @@
 <div class="indexdiv">
 <h3>M</h3>
 <dl>
-<dt class="">Masaüstü bildirimleri, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirim Alma</a>
+<dt class="">Masaüstü bildirimleri, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">Bildirimlerle Çalışma</a>
 </dt>
 <dt class="cap-infostore">Metin dosyaları</dt>
 <dd><dl><dt class="cap-infostore">oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.drive.text.html">Metin Dosyaları Oluşturma ve Düzenleme</a>
@@ -1202,87 +1313,10 @@
 <div class="indexdiv">
 <h3>O</h3>
 <dl>
-<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office Belgelerini Şifreleme</a>
+<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office belgelerini şifreleme</a>
 </dt>
-<dt class="">Otomatik çıkış, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">Otomatik Çıkış Yapma</a>
+<dt class="">Otomatik olarak çıkış yap, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">Otomatik Çıkış Yapma</a>
 </dt>
-<dt class="">otomatik olarak çıkış yap, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">Otomatik Çıkış Yapma</a>
-</dt>
-<dt class="cap-infostore">oxfs-Sürücü</dt>
-<dd><dl>
-<dt class="cap-infostore">Açıklama oluşturma ve düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.editdescription.html">Açıklama oluşturma ve düzenleme</a>
-</dt>
-<dt class="cap-infostore">Bileşenler, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.html">oxfs-Sürücü Bileşenleri</a>
-</dt>
-<dt class="cap-infostore">dosya arama, <a class="indexterm" href="ox.appsuite.user.sect.drive.search.html">Dosya Arama</a>
-</dt>
-<dt class="cap-infostore">dosya içeriğini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">Dosyaları görüntüleyicide görüntüleme</a>
-</dt>
-<dt class="cap-infostore">Dosya kopyalama, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.copy.html">Dosyaları kopyalama</a>
-</dt>
-<dt class="cap-infostore">Dosya ve klasör ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve oxfs-Sürücü klasörlerini silme</a>
-</dt>
-<dt class="cap-infostore">Dosya ve klasörleri favorilere ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">Dosyaları veoxfs-Sürücü klasörlerini Favoriler'e ekleme</a>
-</dt>
-<dt class="cap-infostore">Dosya ve klasörleri taşıma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">Dosyaları ve oxfs-Sürücü klasörlerini taşıma</a>
-</dt>
-<dt class="cap-infostore">dosya veya klasör içeriğini indirme, <a class="indexterm" href="ox.appsuite.user.sect.drive.download.html">Dosya ve Klasör İçeriklerini İndirme</a>
-</dt>
-<dt class="cap-infostore">dosya yükle, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
-</dt>
-<dt class="cap-infostore">Dosyaları e-posta eki olarak gönderme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.send.html">Dosyaları e-posta eki olarak gönderme</a>
-</dt>
-<dt class="cap-infostore">Dosyaları görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">Dosyaları görüntüleme</a>
-</dt>
-<dt class="cap-infostore">Dosyaları kilitleme ve kilidini açma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">Dosyaları kilitleme ve kilitlerini açma</a>
-</dt>
-<dt class="cap-infostore">Dosyaları PDF olarak kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">Dosyaları PDF olarak kaydetme</a>
-</dt>
-<dt class="cap-portal">Dosyaları portale ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.addportal.html">Portale dosya ekleme</a>
-</dt>
-<dt class="cap-infostore">Dosyaları ve klasörleri yönetme, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.html">Dosyaları ve oxfs-Sürücü Klasörlerini Yönetme</a>
-</dt>
-<dt class="cap-infostore">e-posta eklerini görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">oxfs-Sürücü uygulamasında e-posta eklerini görüntüleme</a>
-</dt>
-<dt class="cap-infostore">klasör ekle, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">oxfs-Sürücüklasör ekle</a>
-</dt>
-<dt class="cap-infostore">klasör oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">oxfs-Sürücü: Klasör Oluşturma</a>
-</dt>
-<dt class="cap-infostore">klasör yükle, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
-</dt>
-<dt class="cap-infostore">metin dosyası oluşturma ve düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.text.html">Metin Dosyaları Oluşturma ve Düzenleme</a>
-</dt>
-<dt class="cap-contacts">ortak ve paylaşılan oxfs-Sürücü klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.subscribeshared.html">Ortak ve paylaşılan oxfs-Sürücü klasörlerine abone olma</a>
-</dt>
-<dt class="cap-infostore">Sürümlerle çalışma, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.versions.html">Sürümlerle çalışma</a>
-</dt>
-</dl></dd>
-<dt class="cap-infostore">oxfs-Sürücü-Kullanıcı arayüzü</dt>
-<dd><dl>
-<dt class="cap-infostore">Araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.toolbar.html">oxfs-Sürücü araç çubuğu</a>
-</dt>
-<dt class="cap-infostore">dosya ayrıntıları, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.details.html">Dosya ayrıntıları</a>
-</dt>
-<dt class="cap-infostore">Gezinti çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.navbar.html">oxfs-Sürücü gezinti çubuğu</a>
-</dt>
-<dt class="cap-infostore">Görüntüleyici, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">Görüntüleyici</a>
-</dt>
-<dt class="cap-infostore">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.content.html">oxfs-Sürücü içerik alanı</a>
-</dt>
-<dt class="cap-infostore">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.foldertree.html">oxfs-Sürücü klasör görünümü</a>
-</dt>
-</dl></dd>
-<dt class="cap-infostore">oxfs-SürücüAyarlar</dt>
-<dd><dl>
-<dt class="cap-infostore">aynı adı taşıyan dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">oxfs-SürücüAyarları</a>
-</dt>
-<dt class="cap-infostore">Resimler için slayt gösterisi / otomatik oynatma modu, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">oxfs-SürücüAyarları</a>
-</dt>
-<dt class="cap-infostore">sürüm geçmişi, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">oxfs-SürücüAyarları</a>
-</dt>
-<dt class="cap-infostore">varsayılan görünüm, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">oxfs-SürücüAyarları</a>
-</dt>
-</dl></dd>
 </dl>
 </div>
 <div class="indexdiv">
@@ -1294,7 +1328,7 @@
 </dt>
 <dt class="cap-guard">Guard parola değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
 </dt>
-<dt class="cap-guard">Guard Parolayı sıfırlama, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
+<dt class="cap-guard">Guard parolayı sıfırlama, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">Parola yönetimi</a>
 </dt>
 <dt class="">uygulamalar için ek parolalar, <a class="indexterm" href="ox.appsuite.user.sect.security.apppasswords.html">Uygulamalara Özel Ek Parolalar Kullanma</a>
 </dt>
@@ -1304,7 +1338,11 @@
 <dd><dl>
 <dt class="cap-share_mail_attachments">daveti yeniden gönderme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.resend.html">Daveti yeniden gönderme</a>
 </dt>
-<dt class="cap-share_links cap-share_mail_attachments">Diğer kullanıcıların paylaşımlarına erişme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">Diğer kullanıcıların paylaşımlarına erişme</a>
+<dt class="cap-share_links cap-share_mail_attachments">diğer kullanıcıların paylaşımlarına erişme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">Diğer kullanıcıların paylaşımlarına erişme</a>
+</dt>
+<dt class="cap-infostore cap-share_links cap-share_mail_attachments">Drive uygulamasında düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">Drive uygulamasında paylaşımları görme ve düzenleme</a>
+</dt>
+<dt class="cap-infostore cap-share_links cap-share_mail_attachments">Drive uygulamasında görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">Drive uygulamasında paylaşımları görme ve düzenleme</a>
 </dt>
 <dt class="cap-share_links cap-share_mail_attachments">düzenle, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.edit.html">Paylaşımları düzenleme</a>
 </dt>
@@ -1316,15 +1354,11 @@
 </dt>
 <dt class="cap-contacts">ortak ve paylaşılan adres defterlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.subscribeshared.html">Ortak ve paylaşılan adres defterlerine abone olma</a>
 </dt>
+<dt class="cap-contacts">Ortak ve paylaşılan Drive klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.subscribeshared.html">Ortak ve paylaşılan Drive klasörlerine abone olma</a>
+</dt>
 <dt class="cap-contacts">ortak ve paylaşılan görev klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.subscribeshared.html">Ortak ve paylaşılan görev klasörlerine abone olma</a>
 </dt>
-<dt class="cap-contacts">ortak ve paylaşılan oxfs-Sürücü klasörlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.subscribeshared.html">Ortak ve paylaşılan oxfs-Sürücü klasörlerine abone olma</a>
-</dt>
 <dt class="cap-calendar">Ortak ve paylaşılan takvimlere abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribeshared.html">Ortak ve paylaşılan takvimlere abone olma</a>
-</dt>
-<dt class="cap-infostore cap-share_links cap-share_mail_attachments">oxfs-Sürücü uygulamasında düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">oxfs-Sürücü uygulamasında paylaşımları görme ve düzenleme</a>
-</dt>
-<dt class="cap-infostore cap-share_links cap-share_mail_attachments">oxfs-Sürücü uygulamasında görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.drive.html">oxfs-Sürücü uygulamasında paylaşımları görme ve düzenleme</a>
 </dt>
 <dt class="cap-share_mail_attachments">veri paylaşma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.share.html">Veri paylaşma</a>
 </dt>
@@ -1336,7 +1370,7 @@
 <dt class="cap-portal">Portal, <a class="indexterm" href="ox.appsuite.user.chap.portal.html">Portal</a>
 </dt>
 <dd><dl>
-<dt class="cap-portal">Bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.portal.gui.html">Portal Bileşenleri</a>
+<dt class="cap-portal">bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.portal.gui.html">Portal Bileşenleri</a>
 </dt>
 <dt class="cap-portal">dosya ekle, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.addportal.html">Portale dosya ekleme</a>
 </dt>
@@ -1353,11 +1387,11 @@
 </dt>
 <dt class="cap-portal">Düzenle simgesi , <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
-<dt class="cap-portal">Etkinleştir, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
+<dt class="cap-portal">etkinleştir, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
 <dt class="cap-portal">renk, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
-<dt class="cap-portal">Sil, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
+<dt class="cap-portal">sil, <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
 <dt class="cap-portal">Taşı simgesi , <a class="indexterm" href="ox.appsuite.user.sect.portal.settings.html">Portal Ayarları</a>
 </dt>
@@ -1382,12 +1416,12 @@
 <div class="indexdiv">
 <h3>R</h3>
 <dl>
-<dt class="cap-calendar">Randevu</dt>
+<dt class="cap-calendar">randevu</dt>
 <dd><dl><dt class="cap-calendar">oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.create.html">Yeni randevu oluşturma</a>
 </dt></dl></dd>
 <dt class="cap-calendar">Randevu organizatörünü değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changeorganizer.html">Organizatörü değiştirme</a>
 </dt>
-<dt class="cap-calendar">Randevular</dt>
+<dt class="cap-calendar">randevular</dt>
 <dd><dl>
 <dt class="cap-calendar">adres defterinden davet etme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.inviteappointment.html">Kişileri bir randevuya davet etme</a>
 </dt>
@@ -1395,7 +1429,7 @@
 </dt>
 <dt class="cap-calendar">arama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.search.html">Randevu Arama</a>
 </dt>
-<dt class="cap-calendar">başka bir güne planlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları düzenleme</a>
+<dt class="cap-calendar">başka bir güne planlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları Düzenleme</a>
 </dt>
 <dt class="cap-calendar">başka bir takvime taşıma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.move.html">Randevuları başka bir takvime taşıma</a>
 </dt>
@@ -1405,11 +1439,7 @@
 </dt>
 <dt class="cap-calendar">davetleri yanıtlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.invitation.html">Randevu Davetlerini Yanıtlama</a>
 </dt>
-<dt class="cap-calendar">Dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.attachments.html">Dosya ekleme</a>
-</dt>
-<dt class="cap-calendar">durumu değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Randevu onayını veya durumunu değiştirme</a>
-</dt>
-<dt class="cap-calendar">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları düzenleme</a>
+<dt class="cap-calendar">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları Düzenleme</a>
 </dt>
 <dt class="cap-calendar">dışa aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Randevuları dışa aktarma</a>
 </dt>
@@ -1425,13 +1455,11 @@
 </dt>
 <dt class="cap-calendar">iCal'den oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.icalattachment.html">iCal eklerinden randevu oluşturma</a>
 </dt>
-<dt class="cap-calendar">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Randevuları içe aktarma</a>
+<dt class="cap-calendar">İçe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Randevuları içe aktarma</a>
 </dt>
 <dt class="cap-calendar">katılımcı veya kaynak ekleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.participants.html">Katılımcı veya kaynak ekleme</a>
 </dt>
-<dt class="cap-calendar">Katılımcıları yeni bir randevuya davet etme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.attendees.html">Katılımcıları yeni bir randevuya davet etme</a>
-</dt>
-<dt class="cap-calendar">liste görünümünde görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">Liste görünümünde randevuları görüntüleme</a>
+<dt class="cap-calendar">liste görünümünde görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Randevuları farklı görünümlerde görüntüleme</a>
 </dt>
 <dt class="cap-calendar">organizatörü değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changeorganizer.html">Organizatörü değiştirme</a>
 </dt>
@@ -1447,7 +1475,7 @@
 </dt>
 <dt class="cap-calendar">saat dilimlerini görüntüle, birden çok -, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.timezones.html">Birden çok saat dilimini görüntüleme</a>
 </dt>
-<dt class="cap-calendar">saati veya süreyi değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları düzenleme</a>
+<dt class="cap-calendar">saati veya süreyi değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları Düzenleme</a>
 </dt>
 <dt class="cap-calendar cap-call">sesli/görüntülü görüşme planlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.call.html">Sesli/görüntülü görüşme planlama</a>
 </dt>
@@ -1455,7 +1483,7 @@
 </dt>
 <dt class="cap-calendar">takip randevusu oluşturma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.followup.html">Takip randevusu oluşturma</a>
 </dt>
-<dt class="cap-calendar">takvim görünümünde görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">Randevuları takvim görünümünde görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">Randevular takvim görünümünde nasıl görüntülenir?</a>
+<dt class="cap-calendar">takvim görünümünde görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">Randevuları farklı görünümlerde görüntüleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">Randevular takvim görünümünde nasıl görüntülenir?</a>
 </dt>
 <dt class="cap-calendar">takvim renklerini kullanma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.colors.html">Takvim renklerini kullanma</a>
 </dt>
@@ -1463,20 +1491,27 @@
 </dt>
 <dt class="cap-calendar">tekrarlanan randevuları ayarlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.serial.html">Tekrarlanan randevuları ayarlama</a>
 </dt>
-<dt class="cap-calendar">yazdırma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
+<dt class="cap-calendar">Yazdırma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
 </dt>
 <dt class="cap-calendar">yönetme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.html">Randevuları yönetme</a>
 </dt>
 </dl></dd>
+<dt class="cap-calendar">Randevular</dt>
+<dd><dl>
+<dt class="cap-calendar">dosya ekleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.attachments.html">Dosya ekleme</a>
+</dt>
+<dt class="cap-calendar">katılımcıları yeni bir randevuya davet etme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.attendees.html">Katılımcıları yeni bir randevuya davet etme</a>
+</dt>
+<dt class="cap-calendar">randevu durumunu değiştirme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">Randevu durumunu değiştirme</a>
+</dt>
+<dt class="cap-deputy">vekil olarak oluşturma, düzenleme, yönetme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">Vekil Olarak Randevu Oluşturma, Düzenleme ve Yönetme</a>
+</dt>
+</dl></dd>
 <dt class="cap-calendar">Randevuları</dt>
 <dd><dl>
-<dt class="cap-calendar"> başka bir güne planlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları düzenleme</a>
+<dt class="cap-calendar"> başka bir güne planlama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">Randevuları Düzenleme</a>
 </dt>
 <dt class="cap-calendar">başka takvimlere taşıma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.move.html">Randevuları başka bir takvime taşıma</a>
-</dt>
-<dt class="cap-calendar">Dışa Aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.export.html">Randevuları dışa aktarma</a>
-</dt>
-<dt class="cap-calendar">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.import.html">Randevuları içe aktarma</a>
 </dt>
 </dl></dd>
 <dt class="cap-calendar">Randevunun rengi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">Randevular takvim görünümünde nasıl görüntülenir?</a>
@@ -1510,11 +1545,11 @@
 <dd><dl>
 <dt class="cap-guard">Autocrypt ile Şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.html">E-posta Yazışmalarını Autocrypt ile Şifreleme</a>
 </dt>
-<dt class="cap-guard">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.html">Dosyaları Şifreleme ve Şifrelerini Çözme</a>, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.encrypt.html">Dosyaları şifreleme</a>
+<dt class="cap-guard">dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.html">Dosyaları Şifreleme ve Şifrelerini Çözme</a>, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.encrypt.html">Dosyaları şifreleme</a>
 </dt>
 <dt class="cap-guard">E-postalar, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.html">E-posta Yazışmalarını Şifreleme</a>
 </dt>
-<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office Belgelerini Şifreleme</a>
+<dt class="cap-guard">Office belgelerini şifreleme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.html">Office belgelerini şifreleme</a>
 </dt>
 <dt class="cap-guard">seçili belgeleri şifrelenmiş biçimde kaydetme, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.saveencrypted.html">Seçili belgeleri şifrelenmiş biçimde kaydetme</a>
 </dt>
@@ -1546,40 +1581,42 @@
 <dt class="cap-guard">okuma, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.read.html">Şifrelenmiş e-postaları okuma</a>
 </dt>
 </dl></dd>
-<dt class="">sil</dt>
-<dd><dl><dt class="">klasör, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Klasörleri silme</a>
-</dt></dl></dd>
 <dt class="cap-webmail">silme</dt>
 <dd><dl>
-<dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve oxfs-Sürücü klasörlerini silme</a>
-</dt>
 <dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.delete.html">E-postaları silme</a>
+</dt>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Kişileri silme</a>
+</dt>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Randevuları silme</a>
+</dt>
+</dl></dd>
+<dt class="cap-tasks">Silme</dt>
+<dd><dl>
+<dt class="cap-infostore">dosya, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">Dosyaları ve Drive klasörlerini silme</a>
 </dt>
 <dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.delete.html">Görevleri silme</a>
 </dt>
 <dt class="">hesap, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">Hesapları görüntüleme, düzenleme, silme</a>
 </dt>
-<dt class="cap-contacts">Kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.delete.html">Kişileri silme</a>
-</dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.delete.html">Randevuları silme</a>
+<dt class="">klasör, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">Klasörleri silme</a>
 </dt>
 </dl></dd>
 <dt class="cap-coi">Sohbet</dt>
-<dd><dl><dt class="cap-coi">ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dd><dl><dt class="cap-coi">ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt></dl></dd>
 <dt class="cap-coi">Sohbet ayarları</dt>
 <dd><dl>
-<dt class="cap-coi">Başlangıçta son sohbeti seç, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">başlangıçta son sohbeti seç, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-coi">Çevrimdışı e-posta bildirimleri, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">çevrimdışı e-posta bildirimleri, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-coi">Liste yoğunluğu, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">liste yoğunluğu, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-coi">Sohbetleri türüne göre grupla, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">sohbetleri türüne göre grupla, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-coi">Yeni mesajlar için bildirim sesi çal, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">yeni mesajlar için bildirim sesi çal, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
-<dt class="cap-coi">Yeni mesajlar için masaüstü bildirimlerini göster, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet ayarları</a>
+<dt class="cap-coi">yeni mesajlar için masaüstü bildirimleri göster, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">Sohbet Ayarları</a>
 </dt>
 </dl></dd>
 <dt class="cap-infostore">Sunumlar</dt>
@@ -1595,25 +1632,26 @@
 <dt class="cap-calendar">Takvim, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Takvim</a>
 </dt>
 <dd><dl>
-<dt class="cap-calendar">Abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribe.html">Harici takvimlere abone olma</a>
+<dt class="cap-calendar">bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.html">Takvim Bileşenleri</a>
 </dt>
-<dt class="cap-calendar">Bileşenleri, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.html">Takvim Bileşenleri</a>
+<dt class="cap-calendar">mini takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">Mini takvim</a>
 </dt>
+<dt class="cap-share_links cap-share_mail_attachments">paylaş, bkz. paylaşım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Veri Paylaşma</a>
+</dt>
+</dl></dd>
+<dt class="cap-calendar">takvim</dt>
+<dd><dl>
 <dt class="cap-calendar">Google takvimlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribe.html">Harici takvimlere abone olma</a>
 </dt>
 <dt class="cap-calendar">harici takvimlere abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribe.html">Harici takvimlere abone olma</a>
 </dt>
 <dt class="cap-calendar">iCal takvimlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribe.html">Harici takvimlere abone olma</a>
 </dt>
-<dt class="cap-calendar">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.import.html">Dosyalardan takvimleri içe aktarma</a>
+<dt class="cap-calendar">İçe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.import.html">Dosyalardan takvimleri içe aktarma</a>
 </dt>
 <dt class="cap-calendar">kişisel takvimler ekleme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.personal.html">Kişisel takvimler ekleme</a>
 </dt>
-<dt class="cap-calendar">mini takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">Mini takvim</a>
-</dt>
-<dt class="cap-calendar">Ortak ve paylaşılan takvimlere abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribeshared.html">Ortak ve paylaşılan takvimlere abone olma</a>
-</dt>
-<dt class="cap-share_links cap-share_mail_attachments">paylaş, bkz. paylaşım, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.html">Veri Paylaşma</a>
+<dt class="cap-calendar">ortak ve paylaşılan takvimlere abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.subscribeshared.html">Ortak ve paylaşılan takvimlere abone olma</a>
 </dt>
 <dt class="cap-calendar">planlama görünümünü kullanma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.scheduling.html">Planlama görünümünü kullanma</a>
 </dt>
@@ -1626,25 +1664,27 @@
 </dl></dd>
 <dt class="cap-calendar">Takvim ayarları</dt>
 <dd><dl>
-<dt class="cap-calendar">anımsatıcılar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">Anımsatıcılar, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">Doğum günü takvimi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">doğum günü takvimi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
 <dt class="cap-calendar">iCal takvimlerine abone olma, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">İş günü başlangıcı, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">iş günü başlangıcı, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">İş günü bitişi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">iş günü bitişi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">Katıldığım bir randevu oluşturulduğunda, değiştirildiğinde veya silindiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">katıldığım bir randevu oluşturulduğunda, değiştirildiğinde veya silindiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
 <dt class="cap-calendar">katılımcılar randevuları düzenleyebilir, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">Randevu kabul veya reddedildikten sonra davet e-postasını otomatik olarak sil, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">randevu kabul veya reddedildikten sonra davet e-postasını otomatik olarak sil, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
 <dt class="cap-calendar">Randevu katılımcısıysam diğer katılımcılar kabul veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
-<dt class="cap-calendar">Reddedilen randevuları görüntüle, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+<dt class="cap-calendar">randevu katılımcısıysam diğer katılımcılar kabul veya reddettiğinde bildirim gönder, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
+</dt>
+<dt class="cap-calendar">reddedilen randevuları görüntüle, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
 <dt class="cap-calendar">takvim iş haftası görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">Takvim Ayarları</a>
 </dt>
@@ -1653,21 +1693,21 @@
 </dl></dd>
 <dt class="cap-calendar">Takvim-Kullanıcı arayüzü</dt>
 <dd><dl>
-<dt class="cap-calendar">Açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.popup.html">Takvim açılır penceresi</a>
+<dt class="cap-calendar">açılır pencere, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.popup.html">Takvim açılır penceresi</a>
 </dt>
-<dt class="cap-calendar">Araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.toolbar.html">Takvim araç çubuğu</a>
+<dt class="cap-calendar">araç çubuğu, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.toolbar.html">Takvim araç çubuğu</a>
 </dt>
-<dt class="cap-calendar">Ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.detailview.html">Takvim ayrıntı görünümü</a>
+<dt class="cap-calendar">ayrıntı görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.detailview.html">Takvim ayrıntı görünümü</a>
 </dt>
 <dt class="cap-calendar">düzenleme penceresi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.create.html">Randevu düzenleme penceresi</a>
 </dt>
-<dt class="cap-calendar">İçerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.content.html">Takvim içerik alanı</a>
+<dt class="cap-calendar">içerik alanı, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.content.html">Takvim içerik alanı</a>
 </dt>
 <dt class="cap-calendar">klasör görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.foldertree.html">Takvim klasör görünümü</a>
 </dt>
 <dt class="cap-calendar">mini takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.minicalendar.html">Mini takvim</a>
 </dt>
-<dt class="cap-calendar">Planlama görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">Planlama görünümü</a>
+<dt class="cap-calendar">planlama görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.scheduling.html">Planlama görünümü</a>
 </dt>
 <dt class="cap-calendar">takvim görünümü, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.calendarview.html">Gün, İş haftası, Hafta, Ay veya Yıl takvim görünümü</a>
 </dt>
@@ -1675,7 +1715,7 @@
 </dt>
 </dl></dd>
 <dt class="cap-calendar">Takvim-Kullanıcı Arayüzü</dt>
-<dd><dl><dt class="cap-calendar">Liste, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.list.html">Takvim listesi</a>
+<dd><dl><dt class="cap-calendar">liste, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.list.html">Takvim listesi</a>
 </dt></dl></dd>
 <dt class="">Tanımlar, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html">Terminoloji</a>
 </dt>
@@ -1686,32 +1726,47 @@
 </dt></dl></dd>
 <dt class="cap-webmail">Tatil bildirimi, <a class="indexterm" href="ox.appsuite.user.sect.email.send.vacationnotice.html">Otomatik olarak tatil bildirimi gönderme</a>
 </dt>
-<dt class="">Temel ayarlar, <a class="indexterm" href="ox.appsuite.user.chap.settings.html">Temel Ayarlar</a>, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="cap-contacts cap-call">Telefon</dt>
+<dd><dl>
+<dt class="cap-tasks cap-call">görev katılımcılarını arama, <a class="indexterm" href="ox.appsuite.user.sect.tasks.call.html">Görev Katılımcılarını Arama</a>
+</dt>
+<dt class="cap-contacts cap-call">kişileri arama, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kişileri arama</a>
+</dt>
+<dt class="cap-calendar cap-call">randevusu katılımcılarını arama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.call.html">Randevu Katılımcılarını Arama</a>
+</dt>
+</dl></dd>
+<dt class="">Temel ayarlar, <a class="indexterm" href="ox.appsuite.user.chap.settings.html">Temel Ayarlar</a>
 </dt>
 <dd><dl>
-<dt class="">Bildirim alanı otomatik olarak açılsın, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">Diğer bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Diğer bölgesel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">giriş sonrası varsayılan uygulama, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Dil, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">hızlı başlat, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Giriş sonrası varsayılan uygulama, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">iletişim bilgilerim, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">hızlı başlat, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">masaüstü bildirimlerini göster, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">İletişim bilgilerim, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">vekilleri yönet, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Masaüstü bildirimlerini göster, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+</dl></dd>
+<dt class="">temel ayarlar, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Otomatik çıkış, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dd><dl>
+<dt class="">bildirim alanını otomatik olarak aç, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">parolayı değiştir, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">Dil, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Saat dilimi, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">Otomatik çıkış, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Tasarım, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">parolayı değiştir, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
-<dt class="">Yenileme aralığı, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel ayarları özelleştirme</a>
+<dt class="">Saat dilimi, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
+</dt>
+<dt class="">Tasarım, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
+</dt>
+<dt class="">Yenileme aralığı, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">Temel Ayarları Özelleştirme</a>
 </dt>
 </dl></dd>
 <dt class="">Terminoloji, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html">Terminoloji</a>
@@ -1727,11 +1782,11 @@
 </dt>
 <dt class="cap-contacts">Adres Defteri, <a class="indexterm" href="ox.appsuite.user.chap.contacts.html">Adres Defteri</a>
 </dt>
+<dt class="cap-infostore">Drive, <a class="indexterm" href="ox.appsuite.user.chap.drive.html">Drive</a>
+</dt>
 <dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.chap.email.html">E-posta</a>
 </dt>
 <dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">Görevler</a>
-</dt>
-<dt class="cap-infostore">oxfs-Sürücü, <a class="indexterm" href="ox.appsuite.user.chap.drive.html">Drive</a>
 </dt>
 <dt class="cap-calendar">Takvim, <a class="indexterm" href="ox.appsuite.user.chap.calendar.html">Takvim</a>
 </dt>
@@ -1747,34 +1802,43 @@
 <div class="indexdiv">
 <h3>V</h3>
 <dl>
-<dt class="">Varsayılan grup</dt>
-<dd><dl>
-<dt class="">bkz. grup, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt>
-<dt class="">bkz. kullanıcılar, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt>
-</dl></dd>
 <dt class="cap-contacts">vCard</dt>
 <dd><dl>
 <dt class="cap-contacts">dış aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.export.html">Kişileri dışa aktarma</a>
 </dt>
 <dt class="cap-contacts">gönderme, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">Kişileri vCard olarak gönderme</a>
 </dt>
-<dt class="cap-contacts">içe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
+<dt class="cap-contacts">İçe aktarma, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">Kişileri içe aktarma</a>
 </dt>
 </dl></dd>
+<dt class="cap-deputy">Vekil</dt>
+<dd><dl>
+<dt class="cap-deputy">düzenleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Vekilleri görüntüleme, düzenleme, silme</a>
+</dt>
+<dt class="cap-deputy">e-posta gönderme, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">Vekil Olarak E-posta Gönderme ve Alma</a>
+</dt>
+<dt class="cap-deputy">e-postaları yönetme, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">Vekil Olarak E-posta Gönderme ve Alma</a>
+</dt>
+<dt class="cap-deputy">ekleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.add.html">Vekil ekleme</a>
+</dt>
+<dt class="cap-deputy">görüntüleme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Vekilleri görüntüleme, düzenleme, silme</a>
+</dt>
+<dt class="cap-deputy">randevu oluşturma, düzenleme, yönetme, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">Vekil Olarak Randevu Oluşturma, Düzenleme ve Yönetme</a>
+</dt>
+<dt class="cap-deputy">silme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">Vekilleri görüntüleme, düzenleme, silme</a>
+</dt>
+</dl></dd>
+<dt class="cap-deputy">Vekil atama, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">Vekil Atama</a>
+</dt>
 <dt class="cap-share_mail_attachments">Veri paylaşma, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.share.html">Veri paylaşma</a>
 </dt>
-<dt class="">Verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
+<dt class="cap-dataexport">Verileri indirme, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">Kişisel Verileri İndirme</a>
 </dt>
 </dl>
 </div>
 <div class="indexdiv">
 <h3>W</h3>
 <dl>
-<dt class="">Web adresi</dt>
-<dd><dl><dt class="">bkz. alan adı, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="cap-webdav">WebDAV</dt>
 <dd><dl>
 <dt class="cap-webdav">dosyalara erişme, <a class="indexterm" href="ox.appsuite.user.sect.drive.webdav.html">WebDAV ile Dosyalara Erişme</a>
@@ -1815,25 +1879,26 @@
 </dt>
 <dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.print.html">Görevleri yazdırma</a>
 </dt>
-<dt class="cap-contacts">Kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Kişileri yazdırma</a>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.print.html">Kişileri yazdırma</a>
 </dt>
 <dt class="cap-calendar">randevu listesi, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
 </dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
+</dt>
+<dt class="cap-calendar">takvim sayfası, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
 </dt>
 </dl></dd>
-<dt class="cap-calendar">yazdırma</dt>
-<dd><dl><dt class="cap-calendar">takvim sayfası, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.print.html">Randevuları yazdırma</a>
-</dt></dl></dd>
 <dt class="cap-webmail">Yeni</dt>
 <dd><dl>
 <dt class="cap-contacts">adres defteri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.html">Adres Defteri Ekleme</a>
 </dt>
 <dt class="cap-contacts">dağıtım listesi, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.html">Dağıtım Listeleri Ekleme</a>
 </dt>
+<dt class="cap-infostore">Drive klasörleri, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">Drive: Klasör Ekleme</a>, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">Drive: klasör oluşturma</a>
+</dt>
 <dt class="cap-webmail">E-posta, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">Yeni bir e-posta gönderme</a>
 </dt>
-<dt class="cap-webmail">E-posta klasörleri, <a class="indexterm" href="ox.appsuite.user.sect.email.folder.html">E-posta klasörleri ekleme</a>
+<dt class="cap-webmail">E-posta klasörleri, <a class="indexterm" href="ox.appsuite.user.sect.email.folder.html">E-posta Klasörleri Ekleme</a>
 </dt>
 <dt class="cap-tasks">görev, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.create.html">Yeni görev oluşturma</a>
 </dt>
@@ -1841,15 +1906,13 @@
 </dt>
 <dt class="cap-contacts">kişi, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.create.html">Yeni bir kişi oluşturma</a>
 </dt>
-<dt class="cap-contacts">Kişisel adres defteri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">Adres defteri ekleme</a>
+<dt class="cap-contacts">Kişisel adres defteri, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">Kişisel adres defterleri ekleme</a>
 </dt>
 <dt class="cap-tasks">kişisel görev klasörü, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.personal.html">Kişisel görev klasörleri ekleme</a>
 </dt>
 <dt class="cap-calendar">kişisel takvimler, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.personal.html">Kişisel takvimler ekleme</a>
 </dt>
 <dt class="cap-infostore">metin dosyaları, <a class="indexterm" href="ox.appsuite.user.sect.drive.text.html">Metin Dosyaları Oluşturma ve Düzenleme</a>
-</dt>
-<dt class="cap-infostore">oxfs-Sürücüklasörleri, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">oxfs-Sürücüklasör ekle</a>, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">oxfs-Sürücü: Klasör Oluşturma</a>
 </dt>
 <dt class="cap-calendar">randevu, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.create.html">Yeni randevu oluşturma</a>
 </dt>
@@ -1859,14 +1922,14 @@
 </dt>
 <dt class="cap-guard">şifrelenmiş e-postalar gönderme, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.send.html">Şifrelenmiş e-posta gönderme</a>
 </dt>
-<dt class="cap-calendar">Takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.html">Takvim Ekleme</a>
+<dt class="cap-calendar">takvim, <a class="indexterm" href="ox.appsuite.user.sect.calendar.folder.html">Takvim Ekleme</a>
 </dt>
 </dl></dd>
 <dt class="">Yeniden adlandır</dt>
 <dd><dl><dt class="">klasör, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.rename.html">Klasörleri yeniden adlandırma</a>
 </dt></dl></dd>
 <dt class="cap-infostore">Yeniden adlandırma</dt>
-<dd><dl><dt class="cap-infostore">Dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.rename.html">Dosya adlarını düzenleme</a>
+<dd><dl><dt class="cap-infostore">dosyalar, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.rename.html">Dosya adlarını düzenleme</a>
 </dt></dl></dd>
 <dt class="cap-tasks">Yeniden planlama</dt>
 <dd><dl><dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.move.html">Görevleri başka bir klasöre taşıma</a>
@@ -1875,7 +1938,7 @@
 <dd><dl>
 <dt class="cap-webmail">E-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.movecopy.html">E-postaları taşıma ve kopyalama</a>
 </dt>
-<dt class="cap-contacts">Kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.movecopy.html">Kişileri taşıma ve kopyalama</a>
+<dt class="cap-contacts">kişiler, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.movecopy.html">Kişileri taşıma ve kopyalama</a>
 </dt>
 </dl></dd>
 <dt class="cap-contacts">yönetim</dt>
@@ -1883,13 +1946,14 @@
 </dt></dl></dd>
 <dt class="cap-webmail">yönetme</dt>
 <dd><dl>
-<dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">E-postaları yönetme</a>
+<dt class="cap-webmail">e-postalar, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.html">E-postaları Yönetme</a>
 </dt>
-<dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Görevleri yönetme</a>
-</dt>
-<dt class="cap-calendar">Randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.html">Randevuları yönetme</a>
+<dt class="cap-calendar">randevular, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.html">Randevuları yönetme</a>
 </dt>
 </dl></dd>
+<dt class="cap-tasks">Yönetme</dt>
+<dd><dl><dt class="cap-tasks">Görevler, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.html">Görevleri Yönetme</a>
+</dt></dl></dd>
 <dt class="cap-infostore">Yükle</dt>
 <dd><dl><dt class="cap-infostore">dosya veya klasör, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">Dosya veya Klasör Yükleme</a>
 </dt></dl></dd>
@@ -1908,7 +1972,7 @@
 </dt>
 <dt class="cap-tasks cap-call">görev katılımcılarını arama, <a class="indexterm" href="ox.appsuite.user.sect.tasks.call.html">Görev Katılımcılarını Arama</a>
 </dt>
-<dt class="cap-contacts cap-call">Kişileri arama, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kişileri arama</a>
+<dt class="cap-contacts cap-call">kişileri arama, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">Kişileri arama</a>
 </dt>
 <dt class="cap-calendar cap-call">randevusu katılımcılarını arama, <a class="indexterm" href="ox.appsuite.user.sect.calendar.call.html">Randevu Katılımcılarını Arama</a>
 </dt>
@@ -1917,15 +1981,15 @@
 </dl></dd>
 <dt class="cap-call">Zoom ayarları</dt>
 <dd><dl>
-<dt class="cap-call">Arama geldiğinde zil sesini çal, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
+<dt class="cap-call">arama geldiğinde zil sesini çal, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
 </dt>
-<dt class="cap-call">Her zaman rastgele bir toplantı parolası ekle, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
+<dt class="cap-call">her zaman rastgele bir toplantı parolası ekle, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
 </dt>
-<dt class="cap-call">Masaüstü bildirimlerini göster, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
+<dt class="cap-call">masaüstü bildirimlerini göster, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
 </dt>
-<dt class="cap-call">Otomatik olarak bağlantıyı konuma kopyala, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
+<dt class="cap-call">otomatik olarak bağlantıyı konuma kopyala, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
 </dt>
-<dt class="cap-call">Otomatik olarak telefon bilgisini açıklamaya kopyala, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
+<dt class="cap-call">otomatik olarak telefon bilgisini açıklamaya kopyala, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">Zoom Entegrasyonunu Ayarlama ve Yapılandırma</a>
 </dt>
 </dl></dd>
 </dl>

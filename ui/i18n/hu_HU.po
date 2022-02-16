@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-14 19:31+0300\n"
+"PO-Revision-Date: 2021-11-25 15:29+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -505,8 +505,8 @@ msgid "toggle password visibility"
 msgstr "jelszó láthatóság átkapcsolása"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Másolás vágólapra"
@@ -576,7 +576,6 @@ msgstr "Online súgó: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -870,13 +869,11 @@ msgstr "Nagyítás"
 
 #. button to rotate a contact image
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#| msgid "Rotate image"
 msgid "Rotate left"
 msgstr "Forgatás balra"
 
 #. button to rotate a contact image
 #: apps/io.ox/backbone/views/edit-picture.js module:io.ox/contacts
-#| msgid "Rotate image"
 msgid "Rotate right"
 msgstr "Forgatás jobbra"
 
@@ -1629,7 +1626,8 @@ msgstr "Találkozó létrehozása"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2041,12 +2039,36 @@ msgid "Add new participant"
 msgstr "Új résztvevő hozzáadása"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Találkozó szerkesztése"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Hozzáadás a Naptárhoz"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Javaslat elfogadása"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Találkozó eltávolítása"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Változások elvetése"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Mellőzés"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Találkozó kérése"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Találkozó küldése"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2065,8 +2087,20 @@ msgid "The appointment has been updated"
 msgstr "A találkozó frissítve"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "A találkozó hozzáadva"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "A változások elfogadva"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "A találkozó törölve"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Elutasította a találkozót"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2075,10 +2109,6 @@ msgstr "A változtatások elutasítva"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Feltételesen elfogadta a találkozót"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Elutasította a találkozót"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -2472,13 +2502,11 @@ msgid ""
 msgstr "Automatikusan törli a meghívó levelet a találkozó elfogadása vagy elutasítása után"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid "The appointment has been added to your calendar"
 msgid ""
 "Automatically apply appointment changes received via email to your calendar"
 msgstr "Automatikusan alkalmazza az e mailben kapott találkozó módosításait a naptárában"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#| msgid "unknown sender"
 msgid "Only from known senders"
 msgstr "Csak az ismert feladóktól"
 
@@ -3131,6 +3159,7 @@ msgstr "A sorozat nem fejeződik be."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
@@ -3139,8 +3168,7 @@ msgstr "A sorozat nem fejeződik be."
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Nincs"
 
@@ -3209,7 +3237,6 @@ msgid "Appointment has attachments"
 msgstr "A találkozónak vannak mellékletei"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-#| msgid "The appointment has been deleted"
 msgid "This appointment was cancelled."
 msgstr "A találkozót törölték"
 
@@ -3433,7 +3460,7 @@ msgid "A channel with the same name already exists"
 msgstr "Már létezik azonos nevű csatorna"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Valami elromlott. Kérem, próbálja meg újra."
@@ -3867,7 +3894,6 @@ msgstr "Csatlakozás"
 
 #. shown above a chat window when there are network issues
 #: apps/io.ox/chat/views/chat.js module:io.ox/chat
-#| msgid "Connection error"
 msgid "Connection problems"
 msgstr "Kapcsolódási hiba"
 
@@ -4104,6 +4130,134 @@ msgstr "%1$s, %2$s, és %3$s gépel ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s, és még %3$s személy gépel ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Csatlakoztatás a Zoom meetinghez"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Csatlakoztatás a Jitsi meetinghez"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Csatlakozás a konferenciahíváshoz"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Zoom Meeting"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Jitsi Meeting"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Tárgyalás"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Hivatkozás:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Másolás a hely mezőbe"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Jitsi Meeting: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Meeting jelszó: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Mobil gyorshívás (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Meeting-ID: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Telefonos jelszó: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Tárcsázás a tartózkodási hely szerint"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr "Először %1$s-t kell csatlakoztatnia a Zoomhoz. Ehhez Zoom-fiókra van szüksége. Ha még nincs fiókja, elegendő létrehoznia egy ingyenes fiókot."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Csatlakozás Zoom-mal"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Kapcsolódás a Zoomhoz ..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Másolás a hely mezőbe"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Hivatkozás másolása a vágólapra"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "A telefonos információkat másolása a leírásba"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr "A Zoom Meetingek 365 nap után lejárnak. Javasoljuk, hogy a sorozatokat egy évre korlátozza. Alternatív megoldásként frissítheti a sorozatot a Zoom Meeting lejárta előtt."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr "Probléma merült fel a Zoom meeting betöltésekor. Lehet, hogy lejárt a Zoom Meeting."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Új Zoom Meeting létrehozása"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr "A Zoom integrációs szolgáltatás jelenleg nem érhető el. Próbálja újra később."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Új értekezlet"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "A névjegyek áthelyezésre kerültek"
@@ -4239,6 +4393,7 @@ msgid ""
 msgstr "Ez az ablak %1$d elemet képes kezelni, és a címjegyzékében ennél több található. Ezért néhány bejegyzés nincs felsorolva."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -4951,44 +5106,68 @@ msgstr "Ez az érték túl hosszú. Az engedélyezett karakterhossz %1$d."
 msgid "This is an invalid email address."
 msgstr "Érvénytelen e-mail cím"
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Saját címjegyzékek"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Nyilvános címjegyzékek"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Megosztott címjegyzékek"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "%1$d item selected"
-#| msgid_plural "%1$d items selected"
 msgid "%1$d contact selected"
 msgid_plural "%1$d contacts selected"
 msgstr[0] "%1$d névjegy kijelölve"
 msgstr[1] "%1$d névjegy kijelölve"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Remove contact"
 msgid "Remove contact from selection"
 msgstr "Névjegy eltávolítása a kiválasztásból"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Select contacts"
-msgid "Select/Deselect contact %1$s"
-msgstr "%1$s kiválasztása/törlése"
+msgid "department %1$s"
+msgstr "%1$s osztály"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "%1$s pozíció"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "%1$s e-mail-cím"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "%1$s telefonszám"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "%1$s szoba"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Show task details"
 msgid "Show contact details"
 msgstr "Névjegy részleteinek megjelenítése"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Contacts"
 msgid "Contact list"
 msgstr "Névjegyzék"
 
 #. This is followed by a list of contacts from the address book
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Start search"
 msgid "Last searched for"
 msgstr "Utolsó keresés:"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "No items found"
 msgid "No contacts found."
 msgstr "Nem találhatók névjegyek."
 
@@ -5000,17 +5179,14 @@ msgid ""
 msgstr "Elérte a megjelenítendő névjegyek korlátját: %1$d. Kérjük, adjon meg egy keresési kifejezést az eredmények szűkítéséhez."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Email addresses"
 msgid "Global address list"
 msgstr "Globális címjegyzék"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Search results"
 msgid "Search all address lists"
 msgstr "Keresés az összes címjegyzékekben"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Could not load data"
 msgid "Could not load contacts"
 msgstr "A kapcsolatok nem tölthetők be"
 
@@ -5019,23 +5195,18 @@ msgid "Search for name, department, position"
 msgstr "Név, osztály, pozíció keresése"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgctxt "verb"
-#| msgid "Filter"
 msgid "Filter"
 msgstr "Szűrő"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Other address"
 msgid "Filter address lists"
 msgstr "Címjegyzékek szűrése"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Address"
 msgid "Address list"
 msgstr "Címjegyzék"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#| msgid "Add to address book"
 msgid "Could not load address book."
 msgstr "Nem sikerült betölteni az címjegyzéket."
 
@@ -5388,6 +5559,21 @@ msgid "User name"
 msgstr "Felhasználónév"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Jelszó visszaállítása"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Jelszó beállítása"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-mail cím"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Bejelentkezés"
@@ -5537,7 +5723,7 @@ msgid "Imprint"
 msgstr "Imprint"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Új jelszó megerősítése"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5561,13 +5747,6 @@ msgstr "Adja meg %1$s felhasználóhoz tartozó e-mail címét. Egy e-mailt kül
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Következő"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-mail cím"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5655,7 +5834,6 @@ msgstr "Szerző"
 #. %1$s name of module (mail, calendar etc)
 #. %2$s the granted role (author, editor, viewer, none)
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "%1$s %2$s"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
@@ -5665,17 +5843,14 @@ msgstr "Engedélyezett e-mailek küldése az Ön nevében"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Date: %1$s"
 msgid "Deputy: %1$s"
 msgstr "Helyettes: %1$s"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Twitter reported the following errors:"
 msgid "The deputy has the following permissions"
 msgstr "A helyettes a következő jogosultságokkal rendelkezik"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "View details"
 msgid "Viewer (read emails)"
 msgstr "Megtekintő (e-mailek olvasása)"
 
@@ -5692,54 +5867,40 @@ msgid "Deputy can send emails on your behalf"
 msgstr "A helyettes e-maileket küldhet az Ön nevében"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "New appointment"
 msgid "Viewer (view appointments)"
 msgstr "Megtekintő (találkozók megtekintése)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Edit this appointment"
 msgid "Editor (create/edit appointments)"
 msgstr "Szerkesztő (találkozók írása és szerkesztése)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Show declined appointments"
 msgid "Author (create/edit/delete appointments)"
 msgstr "Szerző (találkozók írása, szerkesztése és törlése)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "save"
-msgstr "mentés"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not save settings."
 msgid "Could not create deputy."
 msgstr "Nem sikerült létrehozni a helyettest."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "no delete permissions"
 msgid "Could not update deputy permissions."
 msgstr "Nem sikerült frissíteni a helyettesi jogosultságokat."
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Removed %1$s."
 msgid "Remove deputy %1$s"
 msgstr "%1$s helyettes eltávolítása"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid ""
-#| "Do you really want to remove the extension \".%1$s\" from your filename?"
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Szeretné eltávolítani %1$s helyettest a listájáról"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Szeretné eltávolítani %1$s helyettest a listájáról?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not save settings."
 msgid "Could not remove deputy."
 msgstr "Nem sikerült eltávolítani a helyettest."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "There are currently no participants."
 msgid "You have currently no deputies assigned."
 msgstr "Jelenleg nincs kijelölt helyettese."
 
@@ -5748,13 +5909,7 @@ msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "A helyettesek hozzáférhetnek a beérkező levelekhez és a naptárhoz."
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Remove"
-msgid "Remobe"
-msgstr "Eltávolítás"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
-#| msgid "Manage applications"
 msgid "Manage deputies"
 msgstr "Helyettesek kezelése"
 
@@ -5764,7 +5919,6 @@ msgstr "Személy hozzáadása"
 
 #. Generic error message when something when wrong on the server while fetching data about your deputies
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid "Could not load data"
 msgid "Could not load deputy data."
 msgstr "Nem sikerült betölteni a helyettes adatait."
 
@@ -6465,6 +6619,11 @@ msgstr "Válasszon mappát"
 msgid "Create folder"
 msgstr "Mappa létrehozása"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+#| msgid "You cannot move items to this folder"
+msgid "You cannot select this folder."
+msgstr "Ezt a mappát nem választhatja ki."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Nincs elérhető művelet"
@@ -6592,7 +6751,6 @@ msgid "Skip to main content"
 msgstr "Ugrás a fő tartalomra"
 
 #: apps/io.ox/core/main/appcontrol.js module:io.ox/core
-#| msgid "Address Other"
 msgid "Address directory"
 msgstr "Címlista"
 
@@ -7014,7 +7172,6 @@ msgid "The user has administrative rights"
 msgstr "A felhasználó rendelkezik adminisztrációs jogosultságokkal"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
@@ -8438,7 +8595,6 @@ msgstr "Megjegyzés"
 
 #. This is a placeholder for macOS. Keep in line with local mac keyboard layout
 #: apps/io.ox/editor/main.js module:io.ox/editor
-#| msgid "You can quick-save your changes via Ctrl+Enter."
 msgid "You can quick-save your changes via Cmd+Enter."
 msgstr "A módosításokat gyorsan elmentheti a Cmd+Enter billentyűkombinációval."
 
@@ -9296,22 +9452,18 @@ msgid "Anyone with the link and invited people"
 msgstr "Bárki, aki rendelkezik a hivatkozással és a meghívott személyek"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Invited people only"
 msgid "Listed people only"
 msgstr "Csak a felsorolt személyek"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Anyone with the link and invited people"
 msgid "Anyone with the link and listed people"
 msgstr "Bárki, aki rendelkezik a hivatkozással és a felsorolt személyek"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Who can access this folder?"
 msgid "Who can access this file?"
 msgstr "Ki férhet hozzá ehhez a fájlhoz?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Who can access this folder?"
 msgid "Who can access this calendar?"
 msgstr "Ki férhet hozzá ehhez a naptárhoz?"
 
@@ -9320,7 +9472,6 @@ msgid "Who can access this folder?"
 msgstr "Ki férhet hozzá ehhez a mappához?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#| msgid "Calendar"
 msgid "calendar"
 msgstr "naptár"
 
@@ -9392,12 +9543,10 @@ msgid "Anyone on the internet with the link can view the file."
 msgstr "A hivatkozás birtokában bárki megtekintheti a fájlt."
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-#| msgid "Anyone on the internet with the link can view the file."
 msgid "Anyone on the internet with the link can view the calendar."
 msgstr "A hivatkozás birtokában bárki megtekintheti a naptárt."
 
 #: apps/io.ox/files/share/public-link.js module:io.ox/files
-#| msgid "Anyone on the internet with the link can view the file."
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "A hivatkozás birtokában bárki megtekintheti a mappát."
 
@@ -10014,25 +10163,16 @@ msgid ""
 msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja a melléklet-közzétételi maximális %2$s fájlméretet"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The file \"%1$s\" cannot be uploaded because it exceeds the infostore "
-#| "quota limit of %2$s"
 msgid ""
 "The attachment cannot be uploaded because it exceeds the infostore quota "
 "limit of %2$s"
-msgstr "A fájl („%1$s”) nem tölthető fel, mert meghaladja az infostore kvótakorlátot (%2$s)"
+msgstr "A melléklet nem tölthető fel, mert meghaladja az infostore kvótakorlátot (%2$s)"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The files cannot be uploaded because each file exceeds the maximum file "
-#| "size of %1$s"
 msgid "The uploaded attachment exceeds the maximum email size of %1$s"
 msgstr "A feltöltött melléklet meghaladja a maximális e-mail méretet (%1$s)"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js module:io.ox/mail
-#| msgid ""
-#| "The file \"%1$s\" cannot be uploaded because it exceeds the maximum file "
-#| "size of %2$s"
 msgid ""
 "The file cannot be uploaded because it exceeds the maximum email size of %1$s"
 msgstr "A feltöltött melléklet meghaladja a maximális e-mail méretet (%1$s)"
@@ -10339,9 +10479,6 @@ msgstr "A melléklet mérete túl nagy. Vagy a(z) %1$s szolgáltatást használj
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/sharing.js
-#| msgid ""
-#| "Attachment file size too large. You have to use %1$s or reduce the "
-#| "attachment file size."
 msgid ""
 "Mail quota limit reached. You have to use %1$s or reduce the mail size in "
 "some other way."
@@ -10471,6 +10608,10 @@ msgid "Added %s to attachments."
 msgstr " %s hozzáadva a mellékletekhez."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "Meghatalmazó:"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Nevek megjelenítése"
 
@@ -10482,6 +10623,13 @@ msgstr "Nevek szerkesztése"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Új levél írása"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Ezt az e-mailt %1$s küldte %2$s nevében."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10546,6 +10694,10 @@ msgstr "Válassza ki a beszúrandó érvényes képfájlt"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Küldve erről: %s mobilon"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Ezt a levelet egy másik személy nevében küldték."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -10913,6 +11065,16 @@ msgstr "E-mail innen: %1$s: %2$s"
 msgid "Via"
 msgstr "Ezen keresztül:"
 
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "meghatalmazó:"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "megbízó:"
+
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
 msgstr "E-mail tartalom"
@@ -11040,7 +11202,6 @@ msgid "Edit rule"
 msgstr "Szabály szerkesztése"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Save and apply"
 msgid "Save and apply rule now"
 msgstr "Szabály azonnali mentése és engedélyezése"
 
@@ -11070,13 +11231,11 @@ msgid "Drag to reorder filter rules"
 msgstr "Húzza a szűrőszabályok átrendezéséhez"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Select the folder to apply the rule to"
 msgid "Please select the folder to apply the rule to"
 msgstr "Válassza ki a mappát, amelyre a szabályt alkalmazza"
 
 #. 'Apply' as button text to confirm the chosen email folder where a new filter rule shall be applied to via a picker dialog.
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
-#| msgid "Apply filter"
 msgid "Apply filter rule"
 msgstr "Szűrési szabály alkalmazása"
 
@@ -12839,8 +12998,6 @@ msgid "Please scan this code with your phone's camera:"
 msgstr "Olvassa be ezt a kódot a telefon kamerájával:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
-#| msgid ""
-#| "Scan this code with your phone's camera to synchronize your \"%1$s\":"
 msgid ""
 "Scan this code with your phone's camera to synchronize your Mail, Calendar "
 "and Address Book via Exchange Active Sync:"
@@ -12869,6 +13026,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -13908,29 +14069,6 @@ msgid "Call via Jitsi"
 msgstr "Hívás a Jitsin keresztül"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Csatlakoztatás a Zoom meetinghez"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Csatlakoztatás a Jitsi meetinghez"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Csatlakozás a konferenciahíváshoz"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Zoom Meeting"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Jitsi Meeting"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Zoom integráció"
@@ -13999,20 +14137,6 @@ msgid "Open Zoom profile"
 msgstr "Zoom profil megnyitása"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr "Először %1$s-t kell csatlakoztatnia a Zoomhoz. Ehhez Zoom-fiókra van szüksége. Ha még nincs fiókja, elegendő létrehoznia egy ingyenes fiókot."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Csatlakozás Zoom-mal"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "A következő Zoom-fiókot kapcsolta össze:"
 
@@ -14023,13 +14147,6 @@ msgstr "Személyes Meeting azonosító:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Fiók eltávolítása"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr "A Zoom integrációs szolgáltatás jelenleg nem érhető el. Próbálja újra később."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14060,89 +14177,6 @@ msgstr "Fogadott hívás a következőtől: %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "%1$s-t hívta"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Tárgyalás"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Hivatkozás:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Másolás a hely mezőbe"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Jitsi Meeting: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Kapcsolódás a Zoomhoz ..."
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Meeting jelszó: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Mobil gyorshívás (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Meeting-ID: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Telefonos jelszó: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Tárcsázás a tartózkodási hely szerint"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Másolás a hely mezőbe"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Hivatkozás másolása a vágólapra"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "A telefonos információkat másolása a leírásba"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr "A Zoom Meetingek 365 nap után lejárnak. Javasoljuk, hogy a sorozatokat egy évre korlátozza. Alternatív megoldásként frissítheti a sorozatot a Zoom Meeting lejárta előtt."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr "Probléma merült fel a Zoom meeting betöltésekor. Lehet, hogy lejárt a Zoom Meeting."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Új Zoom Meeting létrehozása"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Új értekezlet"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -15799,6 +15833,17 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid "save"
+#~ msgstr "mentés"
+
+#~| msgid "Select contacts"
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "%1$s kiválasztása/törlése"
+
+#~| msgid "Remove"
+#~ msgid "Remobe"
+#~ msgstr "Eltávolítás"
 
 #~ msgid "Password recovery"
 #~ msgstr "Jelszó visszaállítása"
@@ -17658,9 +17703,6 @@ msgstr "Hozzáadás itt: %s"
 #~ msgid "Personal"
 #~ msgstr "Személyes"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonszámok"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Válasszon itt időpontot"
 
@@ -18444,12 +18486,6 @@ msgstr "Hozzáadás itt: %s"
 #~ "Ez egy gyanús levél, mert nem tudtuk ellenőrizni, hogy ez az e-mail "
 #~ "valóban a(z) %1$s feladótól származik-e."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "A levél hozzáadva a portálhoz"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Ezt az e-mailt %1$s küldte."
-
 #~ msgid "This message is from a trusted sender."
 #~ msgstr "Ez az üzenet egy megbízható feladóból származik."
 
@@ -18932,9 +18968,6 @@ msgstr "Hozzáadás itt: %s"
 
 #~ msgid "unselect all"
 #~ msgstr "kijelölés törlése"
-
-#~ msgid "via"
-#~ msgstr "megbízó:"
 
 #~ msgid "weekly"
 #~ msgstr "hetente"

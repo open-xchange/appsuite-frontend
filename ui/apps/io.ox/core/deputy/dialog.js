@@ -207,7 +207,7 @@ define('io.ox/core/deputy/dialog', [
         },
 
         tagName: 'ul',
-        className: 'deputy-list-view list-unstyled',
+        className: 'flex deputy-list-view list-unstyled',
 
         initialize: function (options) {
             options = options || {};
@@ -217,7 +217,7 @@ define('io.ox/core/deputy/dialog', [
         render: function () {
             this.$el.attr('role', 'list').empty();
 
-            if (this.collection.length === 0) this.$el.append($('<li class="empty-message" role="listitem">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
+            if (this.collection.length === 0) this.$el.append($('<li class="flex empty-message" role="listitem">').append(gt('You have currently no deputies assigned.') + '<br/>' + gt('Deputies can get acces to your Inbox and Calendar.')));
 
             this.collection.each(this.renderDeputy.bind(this));
             return this;
@@ -231,7 +231,7 @@ define('io.ox/core/deputy/dialog', [
 
 
             this.$el.append(
-                $('<li role="listitem">').attr('data-id', user.get('id')).append(
+                $('<li class="flex" role="listitem">').attr('data-id', user.get('id')).append(
                     $('<div class="flex-item">').append(
                         userPicture,
                         $('<div class="data-container">').append(
@@ -241,7 +241,7 @@ define('io.ox/core/deputy/dialog', [
                     ),
                     $('<div class="flex-item">').append(
                         $('<button class="btn btn-link edit">').attr('data-cid', deputy.cid).text(gt('Edit')),
-                        $('<button class="btn btn-link remove">').attr({ 'aria-label': gt('Remove'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
+                        $('<button class="btn btn-link remove flex">').attr({ 'aria-label': gt('Remove'), 'data-cid': deputy.cid }).append($.icon('fa-trash', gt('Remove')))
                     )
                 )
             );

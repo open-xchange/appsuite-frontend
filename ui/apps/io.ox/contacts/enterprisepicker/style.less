@@ -37,6 +37,11 @@
  .modal.flex.enterprise-picker .modal-dialog, .io-ox-contacts-enterprisepicker-window {
     width: 60rem;
 
+    // keep footer at the bottom when body is hidden (busy spinner)
+    .modal-content {
+        justify-content: space-between;
+    }
+
     .modal-content, .enterprise-picker-body {
         height: 660px;
 

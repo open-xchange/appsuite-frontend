@@ -7,7 +7,7 @@ title: Simple application
 First create a new folder helloWorld in your namespace in the app folder, in this example the namespace com.example will be used. (`apps/com.example/helloWorld`)
 
 For starters we need three files: a manifest File `manifest.json`, the main application file, and an entry point plugin registering the application within App Suite.
-It is convention to name your main application file `main.js` and the intrypoint file `register.js`.
+It is convention to name your main application file `main.js` and the entrypoint file `register.js`.
 
 ## Manifest
 
@@ -130,9 +130,9 @@ Refresh the browser to activate the changes.
 ### Setting an app icon
 
 The `icon` attribute can be used to define an icon for the app.
-The valua is injected directly into the DOM, so this can be an img tag, inline SVG code, or as in this example a font-awesome icon.
+The value is injected directly into the DOM, so this can be an img tag, inline SVG code, or as in this example a font-awesome icon.
 
-# Advaned topics
+# Advanced topics
 
 This section should help to implement some advanced use cases.
 
@@ -234,11 +234,11 @@ If you want to display notifications you can require `io.ox/core/notifications` 
 ```javascript
 require(['io.ox/core/notifications'], function (notifications) {
     win.nodes.main.append(
-        $('<a class="btn">').text('Display success notfication')
+        $('<a class="btn">').text('Display success notification')
             .on('click', function () {
                 notifications.yell('success', 'Ah success!');
             }),
-        $('<a class="btn">').text('Display error notfication')
+        $('<a class="btn">').text('Display error notification')
             .on('click', function () {
                 notifications.yell('error', 'Oh failed!');
             })

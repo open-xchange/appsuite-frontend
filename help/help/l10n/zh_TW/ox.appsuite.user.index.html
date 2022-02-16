@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="使用者指南&gt;">
 <link rel="up" href="index.html" title="使用者指南&gt;">
-<link rel="prev" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Guard 設定">
+<link rel="prev" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. 管理公鑰">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
       <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -21,7 +21,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.html">前一頁</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.settings.publickeys.html">前一頁</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
 </ul></div>
@@ -36,14 +36,36 @@
 <dt class="cap-infostore">上傳</dt>
 <dd><dl><dt class="cap-infostore">檔案或資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.upload.html">上傳檔案或資料夾</a>
 </dt></dl></dd>
-<dt class="">下載個人資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
+<dt class="cap-dataexport">下載個人資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
 </dt>
-<dt class="">下載資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
+<dt class="cap-dataexport">下載資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
 </dt>
+<dt class="cap-deputy">代理</dt>
+<dd><dl>
+<dt class="cap-deputy">寄出電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">代理收發信件</a>
+</dt>
+<dt class="cap-deputy">管理郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">代理收發信件</a>
+</dt>
+</dl></dd>
+<dt class="cap-deputy">代理人</dt>
+<dd><dl>
+<dt class="cap-deputy">刪除, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">檢視、編輯、刪除代理人</a>
+</dt>
+<dt class="cap-deputy">建立、編輯或管理約會, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">以代理人身分建立、編輯或管理約會</a>
+</dt>
+<dt class="cap-deputy">新增, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.add.html">新增代理人</a>
+</dt>
+<dt class="cap-deputy">編輯, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">檢視、編輯、刪除代理人</a>
+</dt>
+<dt class="cap-deputy">顯示, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.edit.html">檢視、編輯、刪除代理人</a>
+</dt>
+</dl></dd>
 <dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">任務</a>
 </dt>
 <dd><dl>
 <dt class="cap-tasks">修改到期日, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changeduedate.html">修改任務的到期日</a>
+</dt>
+<dt class="cap-tasks">修改確認, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changestatus.html">修改任務確認</a>
 </dt>
 <dt class="cap-tasks">儲存附件, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">檢視或保存任務附件</a>
 </dt>
@@ -59,7 +81,7 @@
 </dt>
 <dt class="cap-tasks">匯出, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.export.html">匯出任務</a>
 </dt>
-<dt class="cap-tasks">回覆邀請, <a class="indexterm" href="ox.appsuite.user.sect.tasks.invitation.html">回復任務邀請</a>
+<dt class="cap-tasks">回覆邀請函, <a class="indexterm" href="ox.appsuite.user.sect.tasks.invitation.html">回覆任務邀請</a>
 </dt>
 <dt class="cap-tasks">建立, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.create.html">建立新任務</a>
 </dt>
@@ -77,8 +99,6 @@
 </dt>
 <dt class="cap-tasks">新增附件, <a class="indexterm" href="ox.appsuite.user.sect.tasks.add.attachments.html">新增附件</a>
 </dt>
-<dt class="cap-tasks">更改狀態, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.changestatus.html">修改任務邀請</a>
-</dt>
 <dt class="cap-tasks">標示為完成, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.markasdone.html">將任務標記為已完成</a>
 </dt>
 <dt class="cap-tasks">檢視附件, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">檢視或保存任務附件</a>
@@ -89,9 +109,9 @@
 </dt>
 <dt class="cap-tasks">編輯, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">編輯任務</a>
 </dt>
-<dt class="cap-contacts">訂閱公開與共享任務資料夾, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.subscribeshared.html">訂閱公開與共享任務資料夾</a>
+<dt class="cap-tasks">視圖, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">查看任務</a>
 </dt>
-<dt class="cap-tasks">顯示, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">查看任務</a>
+<dt class="cap-contacts">訂閱公開與共享任務資料夾, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.subscribeshared.html">訂閱公開與共享任務資料夾</a>
 </dt>
 </dl></dd>
 <dt class="cap-tasks">任務 使用者介面</dt>
@@ -111,13 +131,13 @@
 </dl></dd>
 <dt class="cap-tasks">任務設定</dt>
 <dd><dl>
-<dt class="cap-tasks">當參與者接受或拒絕了您參與的任務時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務設置</a>
+<dt class="cap-tasks">當參與者接受或拒絕了您參與的任務時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務選項</a>
 </dt>
-<dt class="cap-tasks">當參與者接受或拒絕了您建立的任務時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務設置</a>
+<dt class="cap-tasks">當參與者接受或拒絕了您建立的任務時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務選項</a>
 </dt>
-<dt class="cap-tasks">當您參與的任務建立、修改或刪除時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務設置</a>
+<dt class="cap-tasks">當您參與的任務建立、修改或刪除時接收通知, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務選項</a>
 </dt>
-<dt class="cap-tasks">訂閱共享任務資料夾, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務設置</a>
+<dt class="cap-tasks">訂閱共享任務資料夾, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務選項</a>
 </dt>
 </dl></dd>
 <dt class="cap-calendar">使用約會排程, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.scheduling.html">使用排程畫面</a>
@@ -157,7 +177,7 @@
 </dt>
 <dt class="cap-webmail">傳送</dt>
 <dd><dl>
-<dt class="cap-contacts">作為 vCard 傳送, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">作為 vCard 發送聯絡人</a>
+<dt class="cap-contacts">聯絡人作為 vCard, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendvcard.html">作為 vCard 發送聯絡人</a>
 </dt>
 <dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">發送新電子郵件</a>
 </dt>
@@ -323,9 +343,9 @@
 </dl></dd>
 <dt class="cap-webmail">匯入</dt>
 <dd><dl>
-<dt class="cap-contacts">CSV 格式的聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">匯入聯絡人</a>
+<dt class="cap-contacts">CSV 格式的聯繫人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">匯入聯絡人</a>
 </dt>
-<dt class="cap-contacts">vCard 格式的聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">匯入聯絡人</a>
+<dt class="cap-contacts">vCard 格式的聯繫人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.import.html">匯入聯絡人</a>
 </dt>
 <dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.manage.import.html">匯入 任務</a>
 </dt>
@@ -365,11 +385,20 @@
 </dl></dd>
 <dt class="">在行動裝置中使用, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.mobile.html">在行動裝置中使用</a>
 </dt>
-<dt class="cap-contacts">地址</dt>
+<dt class="cap-webmail">地址</dt>
 <dd><dl>
 <dt class="cap-webmail">收集, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.collectaddress.html">收集地址</a>
 </dt>
-<dt class="cap-contacts">自通訊錄選擇, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">從通訊錄選擇聯絡人</a>
+<dt class="cap-enterpriseaddressbook">自動從地址清單新增, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">自動加入地址清單中的電子郵件地址</a>
+</dt>
+<dt class="cap-contacts">自動從通訊錄新增, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">自動加入通訊錄中的電子郵件地址</a>
+</dt>
+</dl></dd>
+<dt class="cap-enterpriseaddressbook">地址清單</dt>
+<dd><dl>
+<dt class="cap-enterpriseaddressbook">自動新增電子郵件地址, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">自動加入地址清單中的電子郵件地址</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">顯示連絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">於地址清單顯示聯絡人</a>
 </dt>
 </dl></dd>
 <dt class="">基礎設定, <a class="indexterm" href="ox.appsuite.user.chap.settings.html">基礎設定</a>, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
@@ -384,6 +413,8 @@
 <dt class="">更改密碼, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
 </dt>
 <dt class="">登入後的預設應用程式, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
+</dt>
+<dt class="">管理代理人, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
 </dt>
 <dt class="">自動登出, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
 </dt>
@@ -400,11 +431,11 @@
 </dl></dd>
 <dt class="">外部郵件帳號</dt>
 <dd><dl>
-<dt class="">指定信件匣, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">編輯主要郵件帳號</a>
+<dt class="">指定信件匣, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">編輯主要郵件帳號</a>
 </dt>
-<dt class="">更改名稱, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">編輯主要郵件帳號</a>
+<dt class="">更改名稱, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">編輯主要郵件帳號</a>
 </dt>
-<dt class="">更改寄件者名稱, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">編輯主要郵件帳號</a>
+<dt class="">更改寄件者名稱, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">編輯主要郵件帳號</a>
 </dt>
 </dl></dd>
 <dt class="cap-multifactor">多因素驗證, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.html">多因素驗證</a>
@@ -444,6 +475,10 @@
 </dt>
 <dt class="">密碼</dt>
 <dd><dl>
+<dt class="cap-guard">Guard 更改密碼, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">密碼管理</a>
+</dt>
+<dt class="cap-guard">Guard 重設密碼, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">密碼管理</a>
+</dt>
 <dt class="">應用程式附加密碼, <a class="indexterm" href="ox.appsuite.user.sect.security.apppasswords.html">使用應用程式附加密碼</a>
 </dt>
 <dt class="">更改密碼, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">更改密碼</a>
@@ -453,19 +488,21 @@
 </dt>
 <dt class="cap-portal">帳號</dt>
 <dd><dl>
+<dt class="cap-webmail">停用或啟用功能性郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">停用或啟用功能性郵件帳號</a>
+</dt>
 <dt class="cap-infostore">新增儲存空間帳號, <a class="indexterm" href="ox.appsuite.user.sect.drive.accounts.html">新增儲存空間帳號</a>
 </dt>
 <dt class="cap-webmail">新增電子郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">新增電子郵件帳號</a>
-</dt>
-<dt class="">檢視, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
 </dt>
 <dt class="">移除, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
 </dt>
 <dt class="">編輯, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
 </dt>
-<dt class="">編輯主要郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.editprimary.html">編輯主要郵件帳號</a>
+<dt class="">編輯主要郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">編輯主要郵件帳號</a>
 </dt>
 <dt class="cap-portal">設定社交網路, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.addsocial.html">為社交網路新增入口小工具</a>
+</dt>
+<dt class="">顯示, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
 </dt>
 </dl></dd>
 <dt class="cap-webmail">建立</dt>
@@ -496,6 +533,8 @@
 <dd><dl>
 <dt class="cap-chat cap-call">, <a class="indexterm" href="ox.appsuite.user.chap.chat.html"></a>
 </dt>
+<dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">任務</a>
+</dt>
 <dt class="">使用精靈設定本地應用程式, <a class="indexterm" href="ox.appsuite.user.sect.settings.wizard.html">使用精靈設定本地應用程式</a>
 </dt>
 <dt class="">安裝本地應用程式, <a class="indexterm" href="ox.appsuite.user.sect.settings.clients.html">手動安裝本地應用程式</a>
@@ -515,6 +554,8 @@
 <dt class="cap-infostore">投影片</dt>
 <dd><dl><dt class="cap-infostore">進行簡報, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.presentation.html">進行簡報</a>
 </dt></dl></dd>
+<dt class="cap-deputy">指派代理人, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">指派代理人</a>
+</dt>
 <dt class="cap-calendar cap-call">排程會議，語音/視訊, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.call.html">排程語音/視訊會議</a>
 </dt>
 <dt class="cap-calendar cap-call">排程語音/視訊會議, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.call.html">排程語音/視訊會議</a>
@@ -559,7 +600,7 @@
 <dd><dl>
 <dt class="cap-tasks">個人任務資料夾, <a class="indexterm" href="ox.appsuite.user.sect.tasks.folder.personal.html">新增個人任務資料夾</a>
 </dt>
-<dt class="cap-contacts">個人通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">新增通訊錄</a>
+<dt class="cap-contacts">個人通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">新增個人通訊錄</a>
 </dt>
 <dt class="cap-guard">建立加密檔案, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.upload.html">透過加密方式安全地上傳檔案或資料夾</a>, <a class="indexterm" href="ox.appsuite.user.sect.guard.documents.createencrypted.html">建立新加密文件</a>
 </dt>
@@ -567,7 +608,7 @@
 </dt>
 <dt class="cap-contacts">通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.html">新增通訊錄</a>
 </dt>
-<dt class="cap-infostore">雲端空間資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">雲端空間新增資料夾</a>, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">雲端空間：建立資料夾</a>
+<dt class="cap-infostore">雲端空間資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">雲端空間：新增資料夾</a>, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.personal.html">雲端空間：建立資料夾</a>
 </dt>
 <dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">發送新電子郵件</a>
 </dt>
@@ -595,10 +636,9 @@
 </dt>
 <dt class="cap-calendar">生日行事曆, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">日曆設置</a>
 </dt>
+<dt class="cap-calendar">顯示被拒絕的約會, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">日曆設置</a>
+</dt>
 </dl></dd>
-<dt class="cap-calendar">日曆設置</dt>
-<dd><dl><dt class="cap-calendar">檢視已拒絕的約會, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">日曆設置</a>
-</dt></dl></dd>
 <dt class="cap-calendar">日期選取器, <a class="indexterm" href="ox.appsuite.user.sect.calendar.gui.datepicker.html">日期選取器</a>
 </dt>
 <dt class="cap-calendar">時區</dt>
@@ -620,7 +660,7 @@
 <dt class="">資料夾最愛, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.favorite.html">將資料夾新增至我的最愛</a>
 </dt>
 </dl></dd>
-<dt class="">桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">接收通知</a>
+<dt class="">桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">使用通知</a>
 </dt>
 <dt class="cap-infostore">檔案</dt>
 <dd><dl>
@@ -646,7 +686,7 @@
 </dt>
 <dt class="cap-webdav">在 Windows 下存取 WebDAV, <a class="indexterm" href="ox.appsuite.user.sect.drive.webdav.win.html">在 Windows 設定 WebDAV</a>
 </dt>
-<dt class="cap-infostore">在檢視器顯示, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">在檢視器中顯示檔案。</a>
+<dt class="cap-infostore">在檢視器顯示, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">顯示檔案內容</a>
 </dt>
 <dt class="cap-guard">建立加密檔案, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.upload.html">透過加密方式安全地上傳檔案或資料夾</a>
 </dt>
@@ -678,39 +718,19 @@
 </dt>
 <dt class="cap-guard">開啟加密檔案, <a class="indexterm" href="ox.appsuite.user.sect.guard.drive.open.html">開啟加密檔案</a>
 </dt>
-<dt class="cap-infostore">顯示, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">查看檔案</a>
+<dt class="cap-infostore">顯示, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">檢視檔案</a>
 </dt>
 <dt class="cap-infostore">顯示電子郵件附件, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">在 雲端空間 顯示郵件附件</a>
 </dt>
 </dl></dd>
-<dt class="cap-webmail">檢視</dt>
-<dd><dl>
-<dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">查看任務</a>
+<dt class="cap-tasks">檢視</dt>
+<dd><dl><dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.view.html">查看任務</a>
+</dt></dl></dd>
+<dt class="cap-infostore">檢視器, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">檢視者</a>
 </dt>
-<dt class="cap-infostore">在檢視器中顯示檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">在檢視器中顯示檔案。</a>
-</dt>
-<dt class="">帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
-</dt>
-<dt class="cap-infostore">檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">查看檔案</a>
-</dt>
-<dt class="cap-calendar">約會, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">查看約會</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">顯示行事曆畫面中的約會</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">在清單畫面中顯示約會</a>
-</dt>
-<dt class="cap-calendar">約會附件, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">檢視或儲存約會附件</a>
-</dt>
-<dt class="cap-contacts">聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">顯示聯絡人</a>
-</dt>
-<dt class="cap-contacts">聯絡人附件, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">檢視或保存聯絡人附件</a>
-</dt>
-<dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">顯示電子郵件</a>
-</dt>
-<dt class="cap-webmail">電子郵件附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或保存電子郵件附件</a>
-</dt>
-</dl></dd>
 <dt class="cap-tasks">檢視存</dt>
 <dd><dl><dt class="cap-tasks">任務附件, <a class="indexterm" href="ox.appsuite.user.sect.tasks.attachments.html">檢視或保存任務附件</a>
 </dt></dl></dd>
-<dt class="cap-infostore">檢視者, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">檢視者</a>
-</dt>
 <dt class="">權限</dt>
 <dd><dl>
 <dt class="cap-share_links cap-share_mail_attachments">作者, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.sharing.permissions.html">可以使用那些權限？</a>
@@ -743,7 +763,8 @@
 </dl></dd>
 <dt class="">登入、登出, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.login.html">登入、登出</a>
 </dt>
-<dt class="cap-webmail">白名單</dt>
+<dt class="">白名單, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+</dt>
 <dd><dl><dt class="cap-webmail">使用, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">使用白名單</a>
 </dt></dl></dd>
 <dt class="">第一步, <a class="indexterm" href="ox.appsuite.user.chap.firststeps.html">第一步</a>
@@ -765,6 +786,8 @@
 </dt>
 <dt class="cap-calendar">約會</dt>
 <dd><dl>
+<dt class="cap-deputy">以代理人身分建立、編輯或管理, <a class="indexterm" href="ox.appsuite.user.sect.calendar.deputy.html">以代理人身分建立、編輯或管理約會</a>
+</dt>
 <dt class="cap-calendar">使用排程畫面, <a class="indexterm" href="ox.appsuite.user.sect.calendar.add.scheduling.html">使用排程畫面</a>
 </dt>
 <dt class="cap-calendar">使用日曆色彩, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.colors.html">使用日曆色彩</a>
@@ -805,7 +828,7 @@
 </dt>
 <dt class="cap-calendar">更改提醒, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changereminder.html">更改約會提醒</a>
 </dt>
-<dt class="cap-calendar">更改狀態, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">更改約會確認狀態</a>
+<dt class="cap-calendar">更改約會狀態, <a class="indexterm" href="ox.appsuite.user.sect.calendar.manage.changestatus.html">更改約會狀態</a>
 </dt>
 <dt class="cap-calendar">檢視附件, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">檢視或儲存約會附件</a>
 </dt>
@@ -839,9 +862,9 @@
 </dt>
 <dt class="cap-calendar">重新排到另一天, <a class="indexterm" href="ox.appsuite.user.sect.calendar.edit.html">編輯約會</a>
 </dt>
-<dt class="cap-calendar">顯示於清單畫面, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.list.html">在清單畫面中顯示約會</a>
+<dt class="cap-calendar">顯示於清單畫面, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">於不同畫面中顯示約會</a>
 </dt>
-<dt class="cap-calendar">顯示於行事曆試圖, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.calendar.html">顯示行事曆畫面中的約會</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">約會如何顯示於行事曆畫面？</a>
+<dt class="cap-calendar">顯示於行事曆畫面, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">於不同畫面中顯示約會</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.appointments.html">約會如何顯示於行事曆畫面？</a>
 </dt>
 <dt class="cap-calendar">顯示時區，多個, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.timezones.html">顯示多個時區</a>
 </dt>
@@ -850,9 +873,6 @@
 </dt>
 <dt class="cap-webmail">統一郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.unifiedmail.html">使用統一郵件</a>
 </dt>
-<dt class="">網址</dt>
-<dd><dl><dt class="">請參考網域, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="cap-contacts">編輯</dt>
 <dd><dl>
 <dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.edit.html">編輯任務</a>
@@ -876,21 +896,21 @@
 <dd><dl><dt class="cap-calendar">管理, <a class="indexterm" href="ox.appsuite.user.sect.calendar.groups.html">管理群組</a>
 </dt></dl></dd>
 <dt class="cap-coi">聊天</dt>
-<dd><dl><dt class="cap-coi">選項, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dd><dl><dt class="cap-coi">選項, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt></dl></dd>
 <dt class="cap-coi">聊天設定</dt>
 <dd><dl>
-<dt class="cap-coi">依據類型對聊天分組, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">依據類型對聊天分組, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-coi">在啟動時選擇上次的聊天, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">在啟動時選擇上次的聊天, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-coi">在收到新訊息時播放通知音效, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">在收到新訊息時播放通知音效, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-coi">在收到新訊息時顯示桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">在收到新訊息時顯示桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-coi">清單密度, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">清單密度, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-coi">離線郵件通知, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">離線郵件通知, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
 </dl></dd>
 <dt class="cap-contacts">聯絡人</dt>
@@ -933,6 +953,8 @@
 </dt>
 <dt class="cap-contacts">新增附件, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.attachments.html">新增附件</a>
 </dt>
+<dt class="cap-enterpriseaddressbook">於地址清單顯示聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressdirectory.html">於地址清單顯示聯絡人</a>
+</dt>
 <dt class="cap-contacts">檢視附件, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">檢視或保存聯絡人附件</a>
 </dt>
 <dt class="cap-contacts">移動, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.movecopy.html">移動或複製聯絡人</a>
@@ -943,9 +965,13 @@
 </dt>
 <dt class="cap-contacts">自 vCard 新增, <a class="indexterm" href="ox.appsuite.user.sect.contacts.add.vcardattachment.html">從 vCard 附件新增聯絡人</a>
 </dt>
-<dt class="cap-calendar">自參與者清單建立通訊組清單, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.attendees.html">將所有參與者加入新通訊組清單</a>
+<dt class="cap-enterpriseaddressbook">自動加入地址清單中的電子郵件地址, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">自動加入地址清單中的電子郵件地址</a>
 </dt>
-<dt class="cap-contacts">自通訊錄選擇, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">從通訊錄選擇聯絡人</a>
+<dt class="cap-contacts">自動加入通訊錄中的電子郵件地址, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">自動加入通訊錄中的電子郵件地址</a>
+</dt>
+<dt class="cap-contacts">自動新增電子郵件地址到輸入欄位中, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">自動新增電子郵件地址到輸入欄位中</a>
+</dt>
+<dt class="cap-calendar">自參與者清單建立通訊組清單, <a class="indexterm" href="ox.appsuite.user.sect.contacts.distributionlist.attendees.html">將所有參與者加入新通訊組清單</a>
 </dt>
 <dt class="cap-contacts">複製, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.movecopy.html">移動或複製聯絡人</a>
 </dt>
@@ -959,9 +985,9 @@
 </dt>
 <dt class="cap-contacts">重新整理或管理訂閱的通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.managesubscribed.html">重新整理或管理訂閱的通訊錄</a>
 </dt>
-<dt class="cap-contacts">顯示, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">顯示聯絡人</a>
+<dt class="cap-contacts">顯示, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">顯示聯絡人</a>, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">顯示通訊錄聯絡人</a>
 </dt>
-<dt class="cap-webmail cap-calendar cap-tasks">顯示詳細畫面, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">如何在詳細畫面中顯示聯絡人:</a>
+<dt class="cap-webmail cap-calendar cap-tasks">顯示詳細畫面, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">如何在詳細畫面中顯示聯絡人</a>
 </dt>
 </dl></dd>
 <dt class="">自動登出, <a class="indexterm" href="ox.appsuite.user.sect.security.autologout.html">自動登出</a>
@@ -1072,16 +1098,13 @@
 </dl></dd>
 <dt class="cap-portal">訂閱 RSS 資訊來源, <a class="indexterm" href="ox.appsuite.user.sect.portal.customize.add.html">新增入口小工具</a>
 </dt>
-<dt class="">訪客群組</dt>
-<dd><dl><dt class="">檢視訪客, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
-</dt></dl></dd>
 <dt class="">設定</dt>
 <dd><dl>
 <dt class="cap-guard">Guard, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.html">Guard 設定</a>
 </dt>
-<dt class="">下載個人資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
+<dt class="cap-dataexport">下載個人資料, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.downloadpersonaldata.html">下載個人資料</a>
 </dt>
-<dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務設置</a>
+<dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.sect.tasks.settings.html">任務選項</a>
 </dt>
 <dt class="">使用精靈設定本地應用程式, <a class="indexterm" href="ox.appsuite.user.sect.settings.wizard.html">使用精靈設定本地應用程式</a>
 </dt>
@@ -1095,9 +1118,9 @@
 </dt>
 <dt class="">更改密碼, <a class="indexterm" href="ox.appsuite.user.sect.firststeps.changepassword.html">更改密碼</a>
 </dt>
-<dt class="cap-coi">聊天, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天 選項</a>
+<dt class="cap-coi">聊天, <a class="indexterm" href="ox.appsuite.user.sect.chat.settings.html">聊天選項</a>
 </dt>
-<dt class="cap-call">設定 Zoom 整合, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">設定 Zoom 整合, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
 <dt class="cap-call">設定上線狀態, <a class="indexterm" href="ox.appsuite.user.sect.settings.presencestatus.html">設定上線狀態</a>
 </dt>
@@ -1108,7 +1131,7 @@
 </dt>
 <dt class="cap-multifactor">設定驗證方式, <a class="indexterm" href="ox.appsuite.user.sect.security.multifactor.settings.html">設定驗證方式</a>
 </dt>
-<dt class="cap-webmail cap-calendar cap-tasks">詳細畫面, <a class="indexterm" href="ox.appsuite.user.sect.contacts.haloview.html">如何在詳細畫面中顯示聯絡人:</a>
+<dt class="cap-webmail cap-calendar cap-tasks">詳細畫面, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.haloview.html">如何在詳細畫面中顯示聯絡人</a>
 </dt>
 <dt class="cap-webmail">資料夾, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.folder.html">使用資料夾管理資料</a>
 </dt>
@@ -1177,12 +1200,12 @@
 </dt>
 <dt class="">通知</dt>
 <dd><dl>
-<dt class="">接收桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">接收通知</a>
+<dt class="">接收桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">使用通知</a>
 </dt>
-<dt class="">於通知區域接收桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">接收通知</a>
+<dt class="">於通知區域接收桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">使用通知</a>
 </dt>
 </dl></dd>
-<dt class="">通知區域, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">接收通知</a>
+<dt class="">通知區域, <a class="indexterm" href="ox.appsuite.user.sect.settings.getnotifications.html">使用通知</a>
 </dt>
 <dt class="cap-contacts">通訊組清單</dt>
 <dd><dl>
@@ -1208,7 +1231,7 @@
 </dt>
 <dt class="cap-contacts">姓名顯示方式, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">通訊錄設定</a>
 </dt>
-<dt class="cap-contacts">新增個人通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">新增通訊錄</a>
+<dt class="cap-contacts">新增個人通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.folder.personal.html">新增個人通訊錄</a>
 </dt>
 <dt class="cap-contacts">設定, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">通訊錄設定</a>
 </dt>
@@ -1247,7 +1270,9 @@
 <dd><dl>
 <dt class="">區域設定, <a class="indexterm" href="ox.appsuite.user.sect.settings.regionalsettings.html">更改區域設定。</a>
 </dt>
-<dt class="">基礎設定, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
+<dt class="">基本設置, <a class="indexterm" href="ox.appsuite.user.sect.settings.globalsettings.html">自訂基礎設定</a>
+</dt>
+<dt class="cap-deputy">指派代理人, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.deputy.html">指派代理人</a>
 </dt>
 <dt class="cap-calendar">日曆, <a class="indexterm" href="ox.appsuite.user.sect.calendar.settings.html">日曆設置</a>
 </dt>
@@ -1255,7 +1280,7 @@
 </dt>
 <dt class="cap-contacts">通訊錄, <a class="indexterm" href="ox.appsuite.user.sect.contacts.settings.html">通訊錄設定</a>
 </dt>
-<dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">電子郵件設置</a>
+<dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.html">電子郵件設定</a>
 </dt>
 <dt class="cap-webmail">電子郵件，收信, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
@@ -1263,6 +1288,12 @@
 <dt class="cap-webmail">郵件</dt>
 <dd><dl>
 <dt class="cap-portal">新增至入口, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.addportal.html">新增郵件到入口</a>
+</dt>
+<dt class="cap-enterpriseaddressbook">自動加入地址清單中的電子郵件地址, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressdirectory.html">自動加入地址清單中的電子郵件地址</a>
+</dt>
+<dt class="cap-contacts">自動加入通訊錄中的電子郵件地址, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.addressbook.html">自動加入通訊錄中的電子郵件地址</a>
+</dt>
+<dt class="cap-contacts">自動將地址新增到輸入欄位中, <a class="indexterm" href="ox.appsuite.user.sect.contacts.use.html">自動新增電子郵件地址到輸入欄位中</a>
 </dt>
 <dt class="cap-webmail">自通訊錄傳送, <a class="indexterm" href="ox.appsuite.user.sect.contacts.manage.sendmail.html">在通訊錄中傳送郵件</a>
 </dt>
@@ -1338,15 +1369,13 @@
 </dt>
 <dt class="cap-portal">新增檔案到入口, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.addportal.html">新增檔案到入口</a>
 </dt>
-<dt class="cap-infostore">新增檔案或資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">刪除檔案或 雲端空間 資料夾</a>
-</dt>
 <dt class="cap-infostore">新增檔案或資料夾到最愛, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.favorite.html">新增檔案或 雲端空間資料夾到我的最愛</a>
 </dt>
-<dt class="cap-infostore">新增資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">雲端空間新增資料夾</a>
+<dt class="cap-infostore">新增資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.folder.html">雲端空間：新增資料夾</a>
 </dt>
-<dt class="cap-infostore">檢視檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">查看檔案</a>
+<dt class="cap-infostore">檢視檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">檢視檔案</a>
 </dt>
-<dt class="cap-infostore">移動檔案或資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">移動檔案或 雲端空間 資料夾</a>
+<dt class="cap-infostore">移動檔案或資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.move.html">移動檔案或 雲端空間 資料夾</a>, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.delete.html">刪除檔案或 雲端空間 資料夾</a>
 </dt>
 <dt class="cap-infostore">管理檔案與資料夾, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.html">管理檔案與 雲端空間 資料夾</a>
 </dt>
@@ -1356,20 +1385,20 @@
 </dt>
 <dt class="cap-infostore">鎖定或解鎖檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.lock.html">鎖定或解鎖檔案</a>
 </dt>
-<dt class="cap-infostore">顯示檔案內容, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">在檢視器中顯示檔案。</a>
+<dt class="cap-infostore">顯示檔案內容, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">顯示檔案內容</a>
 </dt>
 <dt class="cap-infostore">顯示電子郵件附件, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.attachments.html">在 雲端空間 顯示郵件附件</a>
 </dt>
 </dl></dd>
 <dt class="cap-infostore">雲端空間 使用者介面</dt>
 <dd><dl>
-<dt class="cap-infostore">Viewer, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">檢視者</a>
-</dt>
 <dt class="cap-infostore">導航列, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.navbar.html">雲端空間 導航列</a>
 </dt>
 <dt class="cap-infostore">工具列, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.toolbar.html">雲端空間 工具列</a>
 </dt>
 <dt class="cap-infostore">檔案詳細資訊, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.details.html">檔案詳情</a>
+</dt>
+<dt class="cap-infostore">檢視器, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.viewer.html">檢視者</a>
 </dt>
 <dt class="cap-infostore">資料夾畫面, <a class="indexterm" href="ox.appsuite.user.sect.drive.gui.foldertree.html">雲端空間 資料夾畫面</a>
 </dt>
@@ -1378,7 +1407,7 @@
 </dl></dd>
 <dt class="cap-infostore">雲端空間設定</dt>
 <dd><dl>
-<dt class="cap-infostore">幻燈片 / 圖片自動播放, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">雲端空間 設定</a>
+<dt class="cap-infostore">幻燈片 / 自動播放, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">雲端空間 設定</a>
 </dt>
 <dt class="cap-infostore">新增同名檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.settings.html">雲端空間 設定</a>
 </dt>
@@ -1390,15 +1419,17 @@
 <dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.chap.email.html">電子郵件</a>
 </dt>
 <dd><dl>
-<dt class="cap-infostore">以連結傳送附件, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachmentlink.html">以連結傳送附件</a>
+<dt class="cap-deputy">以代理身分寄信, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">代理收發信件</a>
 </dt>
-<dt class="cap-webmail">使用白名單, <a class="indexterm" href="ox.appsuite.user.sect.security.whitelist.html">使用白名單</a>
+<dt class="cap-deputy">以代理身分管理, <a class="indexterm" href="ox.appsuite.user.sect.email.deputy.html">代理收發信件</a>
 </dt>
 <dt class="cap-webmail">使用簽名, <a class="indexterm" href="ox.appsuite.user.sect.email.send.signatures.html">使用簽名檔</a>
 </dt>
 <dt class="cap-webmail">使用草稿, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.draft.html">使用電子郵件草稿</a>
 </dt>
 <dt class="cap-webmail">假期通知, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
+</dt>
+<dt class="cap-webmail">停用或啟用功能性郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">停用或啟用功能性郵件帳號</a>
 </dt>
 <dt class="cap-webmail">傳送, <a class="indexterm" href="ox.appsuite.user.sect.email.send.new.html">發送新電子郵件</a>
 </dt>
@@ -1408,7 +1439,7 @@
 </dt>
 <dt class="cap-webmail">儲存為 EML, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.save.html">保存電子郵件</a>
 </dt>
-<dt class="cap-webmail">儲存附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或保存電子郵件附件</a>
+<dt class="cap-webmail">儲存附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或儲存電子郵件附件</a>
 </dt>
 <dt class="cap-webmail">元件, <a class="indexterm" href="ox.appsuite.user.sect.email.gui.html">電子郵件 元件</a>
 </dt>
@@ -1424,7 +1455,7 @@
 </dt>
 <dt class="cap-guard">刪除 Autocrypt 金鑰, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">管理 Autocrypt 金鑰</a>
 </dt>
-<dt class="cap-webmail">加入附件, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachments.html">新增附件</a>
+<dt class="cap-guard">加密來信, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.incoming.html">根據過濾器規則加密來信</a>
 </dt>
 <dt class="cap-guard">匯入 Autocrypt 金鑰, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">匯入 Autocrypt 金鑰</a>
 </dt>
@@ -1432,9 +1463,9 @@
 </dt>
 <dt class="cap-webmail">封存, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.archive.html">封存郵件</a>
 </dt>
-<dt class="cap-tasks">建立提醒, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.reminder.html">建立郵件提醒</a>
+<dt class="cap-webmail">將信件匣標示為已讀, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.mark.html">將郵件標示為已讀或未讀</a>
 </dt>
-<dt class="cap-contacts">從通訊錄清單選擇收件者, <a class="indexterm" href="ox.appsuite.user.sect.email.send.addressbook.html">從通訊錄選擇聯絡人</a>
+<dt class="cap-tasks">建立提醒, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.reminder.html">建立郵件提醒</a>
 </dt>
 <dt class="cap-webmail">指派色彩, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.label.html">分類郵件</a>
 </dt>
@@ -1446,17 +1477,19 @@
 </dt>
 <dt class="cap-webmail">新增信件匣, <a class="indexterm" href="ox.appsuite.user.sect.email.folder.html">新增電子郵件信件匣</a>
 </dt>
-<dt class="cap-webmail">新增電子郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">新增電子郵件帳號</a>
+<dt class="cap-webmail">新增附件, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachments.html">新增附件</a>
 </dt>
-<dt class="cap-guard">根據過濾器規則加密來信, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.incoming.html">根據過濾器規則加密來信</a>
+<dt class="cap-webmail">新增電子郵件帳號, <a class="indexterm" href="ox.appsuite.user.sect.email.accounts.html">新增電子郵件帳號</a>
 </dt>
 <dt class="cap-webmail">標示為已讀, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.mark.html">將郵件標示為已讀或未讀</a>
 </dt>
 <dt class="cap-webmail">標示為未讀, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.mark.html">將郵件標示為已讀或未讀</a>
 </dt>
-<dt class="cap-webmail">檢視附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或保存電子郵件附件</a>
+<dt class="cap-webmail">檢視附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或儲存電子郵件附件</a>
 </dt>
 <dt class="cap-webmail">清理資料夾, <a class="indexterm" href="ox.appsuite.user.sect.email.manage.expungefolder.html">清理電子郵件信件匣</a>
+</dt>
+<dt class="cap-infostore">發送附件鏈結, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attachmentlink.html">以連結傳送附件</a>
 </dt>
 <dt class="cap-calendar">發送電子郵件給參與者, <a class="indexterm" href="ox.appsuite.user.sect.email.send.attendees.html">發送電子郵件給參與者</a>
 </dt>
@@ -1482,7 +1515,7 @@
 </dt>
 <dt class="cap-guard">閱讀加密郵件, <a class="indexterm" href="ox.appsuite.user.sect.guard.email.read.html">閱讀加密郵件</a>
 </dt>
-<dt class="cap-webmail">顯示, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">顯示電子郵件</a>
+<dt class="cap-webmail">顯示, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">檢視電子郵件</a>
 </dt>
 <dt class="cap-guard">顯示 Autocrypt 金鑰, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">管理 Autocrypt 金鑰</a>
 </dt>
@@ -1522,19 +1555,19 @@
 <dd><dl>
 <dt class="cap-webmail">IMAP 資料夾訂閱, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
-<dt class="cap-webmail">允許 HTML 格式的電子郵件？, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
+<dt class="cap-webmail">允許 HTML 格式的電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
 <dt class="cap-webmail">回覆至郵件群組時確認收件者, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
 <dt class="cap-webmail">固定寬度字體, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
-<dt class="cap-webmail">在回復中插入原始電子郵件文本？, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
+<dt class="cap-webmail">在回覆中插入原始電子郵件內容, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
 <dt class="cap-webmail">將電子郵件格式化為, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
-<dt class="cap-webmail">永久移除已刪除的電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
+<dt class="cap-webmail">引用行上色, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
-<dt class="cap-webmail">為引用行加上顏色, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
+<dt class="cap-webmail">永久移除已刪除的電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
 <dt class="cap-webmail">發送電子郵件時自動收集聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
@@ -1548,7 +1581,7 @@
 </dt>
 <dt class="cap-webmail">進階設定, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
-<dt class="cap-webmail">閱讀電子郵件時自動收集聯絡人？, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
+<dt class="cap-webmail">閱讀電子郵件時自動收集聯繫人？, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.receive.html">收信設定</a>
 </dt>
 <dt class="cap-webmail">附加 vCard, <a class="indexterm" href="ox.appsuite.user.sect.email.settings.compose.html">寫信設定</a>
 </dt>
@@ -1578,23 +1611,48 @@
 </dt>
 <dt class="cap-webmail">新增條件, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">新增條件</a>
 </dt>
-<dt class="cap-webmail">條件範例, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">新增條件</a>
-</dt>
 <dt class="cap-webmail">為主旨或寄件者建立新規則, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.createsubjectfrom.html">為主旨或寄件者建立新規則</a>
+</dt>
+<dt class="cap-webmail">範例條件, <a class="indexterm" href="ox.appsuite.user.sect.email.mailfilter.condition.html">新增條件</a>
 </dt>
 </dl></dd>
 <dt class="cap-webmail">電子郵件，請參考電子郵件, <a class="indexterm" href="ox.appsuite.user.chap.email.html">電子郵件</a>
 </dt>
-<dt class="">預設群組</dt>
+<dt class="cap-contacts cap-call">電話</dt>
 <dd><dl>
-<dt class="">檢視使用者, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+<dt class="cap-calendar cap-call">撥打給約會參與者, <a class="indexterm" href="ox.appsuite.user.sect.calendar.call.html">撥打給約會參與者。</a>
 </dt>
-<dt class="">檢視群組, <a class="indexterm" href="ox.appsuite.user.sect.about.glossary.html#ox.appsuite.user.reference.about.glossary"></a>
+<dt class="cap-contacts cap-call">撥打給聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">撥打給聯絡人</a>
+</dt>
+<dt class="cap-tasks cap-call">撥打電話給任務參與者, <a class="indexterm" href="ox.appsuite.user.sect.tasks.call.html">撥打電話給任務參與者。</a>
+</dt>
+</dl></dd>
+<dt class="cap-webmail">顯示</dt>
+<dd><dl>
+<dt class="cap-infostore">在檢視器中顯示檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">顯示檔案內容</a>
+</dt>
+<dt class="">帳號, <a class="indexterm" href="ox.appsuite.user.sect.dataorganisation.accounts.edit.html">檢視、編輯、刪除帳號</a>
+</dt>
+<dt class="cap-infostore">檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.html">檢視檔案</a>
+</dt>
+<dt class="cap-calendar">約會, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.html">查看約會</a>, <a class="indexterm" href="ox.appsuite.user.sect.calendar.view.views.html">於不同畫面中顯示約會</a>
+</dt>
+<dt class="cap-calendar">約會附件, <a class="indexterm" href="ox.appsuite.user.sect.calendar.attachments.html">檢視或儲存約會附件</a>
+</dt>
+<dt class="cap-contacts">聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.html">顯示聯絡人</a>
+</dt>
+<dt class="cap-contacts">聯絡人附件, <a class="indexterm" href="ox.appsuite.user.sect.contacts.attachments.html">檢視或保存聯絡人附件</a>
+</dt>
+<dt class="cap-contacts">通訊錄聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.view.addressbook.html">顯示通訊錄聯絡人</a>
+</dt>
+<dt class="cap-webmail">電子郵件, <a class="indexterm" href="ox.appsuite.user.sect.email.view.html">檢視電子郵件</a>
+</dt>
+<dt class="cap-webmail">電子郵件附件, <a class="indexterm" href="ox.appsuite.user.sect.email.attachments.html">檢視或儲存電子郵件附件</a>
 </dt>
 </dl></dd>
 <dt class="cap-infostore">顯示內容</dt>
 <dd><dl>
-<dt class="cap-infostore">檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">在檢視器中顯示檔案。</a>
+<dt class="cap-infostore">檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.content.html">顯示檔案內容</a>
 </dt>
 <dt class="cap-infostore">簡報, <a class="indexterm" href="ox.appsuite.user.sect.drive.view.presentation.html">進行簡報</a>
 </dt>
@@ -1647,9 +1705,6 @@
 <div class="indexdiv">
 <h3>A</h3>
 <dl>
-<dt class="cap-tasks">App</dt>
-<dd><dl><dt class="cap-tasks">任務, <a class="indexterm" href="ox.appsuite.user.chap.tasks.html">任務</a>
-</dt></dl></dd>
 <dt class="cap-guard">Autocrypt</dt>
 <dd><dl>
 <dt class="cap-guard">刪除金鑰, <a class="indexterm" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">管理 Autocrypt 金鑰</a>
@@ -1776,17 +1831,8 @@
 </div>
 <div class="indexdiv">
 <h3>P</h3>
-<dl>
-<dt class="cap-guard">Password</dt>
-<dd><dl>
-<dt class="cap-guard">Guard 更改密碼, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">密碼管理</a>
-</dt>
-<dt class="cap-guard">Guard 重設密碼, <a class="indexterm" href="ox.appsuite.user.sect.guard.settings.password.html">密碼管理</a>
-</dt>
-</dl></dd>
-<dt class="cap-infostore">PDF，另存檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">另存檔案為 PDF</a>
-</dt>
-</dl>
+<dl><dt class="cap-infostore">PDF，另存檔案, <a class="indexterm" href="ox.appsuite.user.sect.drive.manage.saveaspdf.html">另存檔案為 PDF</a>
+</dt></dl>
 </div>
 <div class="indexdiv">
 <h3>S</h3>
@@ -1857,20 +1903,20 @@
 </dt>
 <dt class="cap-contacts cap-call">撥打給聯絡人, <a class="indexterm" href="ox.appsuite.user.sect.contacts.call.html">撥打給聯絡人</a>
 </dt>
-<dt class="cap-call">設定整合, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">設定整合, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
 </dl></dd>
 <dt class="cap-call">Zoom 設定</dt>
 <dd><dl>
-<dt class="cap-call">將撥入號碼複製到描述, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">將撥入號碼複製到描述, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
-<dt class="cap-call">收到來電時播放鈴聲, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">收到來電時播放鈴聲, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
-<dt class="cap-call">總是加入隨機會議密碼, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">總是加入隨機會議密碼, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
-<dt class="cap-call">自動複製鏈結到會議位置, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">自動複製鏈結到會議位置, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
-<dt class="cap-call">顯示桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">設定 Zoom 整合</a>
+<dt class="cap-call">顯示桌面通知, <a class="indexterm" href="ox.appsuite.user.sect.settings.zoom.html">建立並設定 Zoom 整合</a>
 </dt>
 </dl></dd>
 </dl>

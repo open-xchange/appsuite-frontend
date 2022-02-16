@@ -79,7 +79,7 @@ Just add the parameter "cap" to URL hash. A leading minus disables a capability.
 # Changes do not apply while developing
 
 You did changes in your code and they don't simply don't apply?
-There are several possibilites, you should check in order to find a solution.
+There are several possibilities, you should check in order to find a solution.
 
 - Reload OX App Suite with cleared Browser Cache. Using Firefox on Linux-Distributions you can simply press Ctrl+F5. Please check the documentation of your Browser for Shortcuts and how to clear the cache.
 - Disable Source Caching. Therefor add the parameter "debug-js=true" to URL hash. Example:

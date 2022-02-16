@@ -4,7 +4,7 @@ title: Welcome Wizards
 
 # Writing a wizard
 
-## A simple welcome wizzard
+## A simple welcome wizard
 
 ```javascript
 /**

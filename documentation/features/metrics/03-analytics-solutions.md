@@ -58,7 +58,7 @@ Now we have to extract some of the information used in this script. The script i
 
 ### base url
 
-You need to specify the base url that allows OX App Suite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https&#x3A;%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similiar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
+You need to specify the base url that allows OX App Suite calling the PIWIK tracking API. You can simply check if got the right url by trying to open the url followed by ‘piwik.php’ in the browser (example: ‘https&#x3A;%%//%%metrics.example.com/piwik/piwik.php’). You should see some message similar to ‘Piwik is a free/libre web analytics that lets you keep control of your data.’
 
 _generated PIWIK script_
 
@@ -77,7 +77,7 @@ _appsuite property_
 
 ### siteId
 
-With PIWIK you can separate tracking by using different contextes called ‘websites’. These contextes are identified by an unique id that usually starts with 1 and increments by 1 for every newly created page. To guarantee tracked date is added to the right context you have to specify this id in the settings. In case no setting is provided the id ‘1’ is used as default
+With PIWIK you can separate tracking by using different contexts called ‘websites’. These contexts are identified by an unique id that usually starts with 1 and increments by 1 for every newly created page. To guarantee tracked date is added to the right context you have to specify this id in the settings. In case no setting is provided the id ‘1’ is used as default
 
 _generated PIWIK script_
 
@@ -112,9 +112,9 @@ As a default the metrics framework tracks three values for each session:
 
 - language: the one defined in the user setting of OX App Suite
 - version: the current version of OX App Suite
-- capabilities: a list of active capablities
+- capabilities: a list of active capabilities
 
-Unfortunatly PIWIK limits the maximal length of custom variable values to [200 chars](http://piwik.org/docs/custom-variables/). Usually the list of capabilites has more than 800 chars. For this reason the capabilites are split into smaller chunks (id: capabilities-1, id: capabilities-2, ...). As default PIWIK only supports 5 custom variables so you have to [increase the number](http://piwik.org/faq/how-to/faq_17931/) to at least 7.
+Unfortunately PIWIK limits the maximal length of custom variable values to [200 chars](http://piwik.org/docs/custom-variables/). Usually the list of capabilities has more than 800 chars. For this reason the capabilities are split into smaller chunks (id: capabilities-1, id: capabilities-2, ...). As default PIWIK only supports 5 custom variables so you have to [increase the number](http://piwik.org/faq/how-to/faq_17931/) to at least 7.
 
 # Google Analytics
 
@@ -161,9 +161,9 @@ As a default the metrics framework tracks three values for each session:
 
 - language: the one defined in the user setting of OX App Suite
 - version: the current version of OX App Suite
-- capabilities: a list of active capablities
+- capabilities: a list of active capabilities
 
-To submit this data to Google Analytics you have to setup corresponding [custom dimensons](https://support.google.com/analytics/answer/2709828) and specifiy mappings in the OX App Suite property file.
+To submit this data to Google Analytics you have to setup corresponding [custom dimensions](https://support.google.com/analytics/answer/2709828) and specify mappings in the OX App Suite property file.
 
 _appsuite property_
 

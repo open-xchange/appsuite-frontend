@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-15 13:29+0300\n"
+"PO-Revision-Date: 2021-11-24 19:41+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -505,8 +505,8 @@ msgid "toggle password visibility"
 msgstr "показать пароль"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Копировать в буфер"
@@ -578,7 +578,6 @@ msgstr "Онлайн помощь: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -1648,7 +1647,8 @@ msgstr "Создать встречу"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2066,12 +2066,36 @@ msgid "Add new participant"
 msgstr "Добавить нового участника"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Обновить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Добавить в календарь"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Принять предложение"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Удалить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Отклонить изменения"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Игнорировать"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Запросить встречу"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Отправить встречу"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2090,8 +2114,20 @@ msgid "The appointment has been updated"
 msgstr "Встреча обновлена"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Встреча была добавлена"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Изменения были приняты"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Встреча удалена"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Вы отказались от встречи"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2100,10 +2136,6 @@ msgstr "Изменения отклонены"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Приглашение принято под вопросом"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Вы отказались от встречи"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -3181,6 +3213,7 @@ msgstr "Серия мероприятий никогда не заканчива
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
@@ -3189,8 +3222,7 @@ msgstr "Серия мероприятий никогда не заканчива
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Нет"
 
@@ -3491,7 +3523,7 @@ msgid "A channel with the same name already exists"
 msgstr "Канал с таким названием уже существует"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Что-то пошло не так. Пожалуйста, повторите попытку."
@@ -4169,6 +4201,144 @@ msgstr "%1$s, %2$s и %3$s печатают ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s и ещё %3$d печатают ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Присоединяйтесь к встрече Zoom"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Присоединяйтесь к встрече Jitsi"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Присоединиться к конференц-звонку"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Zoom Встреча"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Jitsi Встреча"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Конференция"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Ссылка:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Копировать в поле местоположения"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Встреча Джитси: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Пароль встречи: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Мобильный телефон в одно касание (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Идентификатор встречи: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Код доступа для подключения: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Набор по своему местоположению"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Сначала вам нужно подключить %1$s к Zoom. Для этого Вам понадобится учетная "
+"запись Zoom. Если у Вас еще нет учетной записи, достаточно создать "
+"бесплатную."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Подключиться к Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Подключение к Zoom ..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Скопировать ссылку в расположение"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Скопировать ссылку в буфер обмена"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Скопируйте информацию о телефонном подключении в описание"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Срок действия собраний Zoom истекает через 365 дней. Мы рекомендуем "
+"ограничить серию одним годом. Кроме того, вы можете обновить серию до "
+"истечения срока действия собрания Zoom."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr ""
+"Возникла проблема при загрузке собрания Zoom. Возможно, срок встречи Zoom "
+"истек."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Создать новую встречу Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Служба интеграции Zoom в настоящее время недоступна. Пожалуйста, повторите "
+"попытку позже."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Новая встреча"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Контакты перенесены"
@@ -4306,6 +4476,7 @@ msgstr ""
 "лимит. Кроме того некоторые элементы не отображаются."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -5027,6 +5198,18 @@ msgstr ""
 msgid "This is an invalid email address."
 msgstr "Это не корректный адрес электронной почты."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Мой список адресов"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Общие списки адресов"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Общие списки адресов"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5039,10 +5222,30 @@ msgstr[2] "%1$d контактов выбрано"
 msgid "Remove contact from selection"
 msgstr "Удалить контакт из выбора"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Выбрать/Убрать контакт %1$s"
+msgid "department %1$s"
+msgstr "отдел %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "должность %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "электронная почта %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "номер телефона %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "комната %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5465,6 +5668,21 @@ msgid "User name"
 msgstr "Имя пользователя"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Сбросить пароль"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Установить пароль"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Электронный адрес"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Вход"
@@ -5620,8 +5838,8 @@ msgid "Imprint"
 msgstr "Отпечаток"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Подтвердите новый Пароль"
+msgid "Confirm new password"
+msgstr "Подтвердите новый пароль"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5646,13 +5864,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Вперед"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Электронный адрес"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5789,10 +6000,6 @@ msgid "Author (create/edit/delete appointments)"
 msgstr "Автор (создание/редактирование/удаление встреч)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "save"
-msgstr "сохранить"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not create deputy."
 msgstr "Не удалось создать заместителя."
 
@@ -5807,8 +6014,8 @@ msgstr "Удалить заместителя %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Вы хотите удалить %1$s из вашего списка заместителей"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Вы хотите удалить %1$s из своего списка заместителей?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5822,10 +6029,6 @@ msgstr "В настоящее время у вас нет назначенных
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr ""
 "Заместители могут получить доступ к вашей папке «Входящие» и календарю."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Удалить"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -6554,6 +6757,10 @@ msgstr "Выбор папки"
 msgid "Create folder"
 msgstr "Создать папку"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Вы не можете выбрать эту папку."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Действия недоступны"
@@ -7125,7 +7332,6 @@ msgid "The user has administrative rights"
 msgstr "Пользователь обладает правами администратора"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Применить к вложенным папкам"
 
@@ -10714,6 +10920,10 @@ msgid "Added %s to attachments."
 msgstr "Вложено в сообщение: %s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "От имени"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Показать имена"
 
@@ -10725,6 +10935,13 @@ msgstr "Изменить имена"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Создать новое сообщение"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Это письмо было отправлено %1$s от имени %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10791,6 +11008,10 @@ msgstr "Выберите файл изображения для вставки"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Отправлено с мобильного из %s"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Это письмо было отправлено от имени другого человека."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11173,6 +11394,16 @@ msgstr "Сообщение от %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "От"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "от имени"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "через"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -13188,6 +13419,10 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
 msgstr "MacOS"
 
@@ -14252,29 +14487,6 @@ msgid "Call via Jitsi"
 msgstr "Звоните через Jits"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Присоединяйтесь к встрече Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Присоединяйтесь к встрече Jitsi"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Присоединиться к конференц-звонку"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Zoom Встреча"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Jitsi Встреча"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Интеграция Zoom"
@@ -14347,23 +14559,6 @@ msgid "Open Zoom profile"
 msgstr "Открыть профиль Zoom"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Сначала вам нужно подключить %1$s к Zoom. Для этого Вам понадобится учетная "
-"запись Zoom. Если у Вас еще нет учетной записи, достаточно создать "
-"бесплатную."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Подключиться к Zoom"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Вы связали следующую учетную запись Zoom:"
 
@@ -14374,15 +14569,6 @@ msgstr "Персональный идентификатор встречи (Meet
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Удалить учетную запись"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Служба интеграции Zoom в настоящее время недоступна. Пожалуйста, повторите "
-"попытку позже."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14413,94 +14599,6 @@ msgstr "Ответ на вызов от %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Вы позвонили %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Конференция"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Ссылка:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Копировать в поле местоположения"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Встреча Джитси: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Подключение к Zoom ..."
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Пароль встречи: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Мобильный телефон в одно касание (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Идентификатор встречи: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Код доступа для подключения: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Набор по своему местоположению"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Скопировать ссылку в расположение"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Скопировать ссылку в буфер обмена"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Скопируйте информацию о телефонном подключении в описание"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Срок действия собраний Zoom истекает через 365 дней. Мы рекомендуем "
-"ограничить серию одним годом. Кроме того, вы можете обновить серию до "
-"истечения срока действия собрания Zoom."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr ""
-"Возникла проблема при загрузке собрания Zoom. Возможно, срок встречи Zoom "
-"истек."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Создать новую встречу Zoom"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Новая встреча"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -16204,6 +16302,15 @@ msgstr "Пригласить на %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Добавить в %s"
+
+#~ msgid "save"
+#~ msgstr "сохранить"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Выбрать/Убрать контакт %1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "Удалить"
 
 #~ msgid "Password recovery"
 #~ msgstr "Восстановление пароля"
@@ -18968,9 +19075,6 @@ msgstr "Добавить в %s"
 #~ msgid "Phone alt"
 #~ msgstr "Телефон (доп.)"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Телефоны"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Выберите время"
 
@@ -20191,12 +20295,6 @@ msgstr "Добавить в %s"
 #~ msgstr ""
 #~ "Мы не смогли убедиться, что это письмо действительно получено от %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Это сообщение добавлено в портал"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Это письмо было отправлено %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Это может занять несколько секунд"
 
@@ -21153,9 +21251,6 @@ msgstr "Добавить в %s"
 
 #~ msgid "unselect all"
 #~ msgstr "Снять выделение"
-
-#~ msgid "via"
-#~ msgstr "через"
 
 #~ msgid "weekly"
 #~ msgstr "каждую неделю"

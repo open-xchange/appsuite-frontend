@@ -103,7 +103,7 @@ condensed in a single string.
 This part of the event data contains the application were the event
 occurred. You can Interpret it as 'a user action within \[appname]
 occurred'. Please be aware that the category is based on the technical
-app that might differ from the abstract application that is communicted
+app that might differ from the abstract application that is communicated
 by the user interface.
 
 _example: 'io.ox/mail'_

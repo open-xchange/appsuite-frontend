@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-20 11:41+0200\n"
+"PO-Revision-Date: 2021-11-25 19:00+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -511,8 +511,8 @@ msgid "toggle password visibility"
 msgstr "Skift adgangskodesynlighed"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Kopiér til udklipsholder"
@@ -585,7 +585,6 @@ msgstr "On-line-hjælp: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -1656,7 +1655,8 @@ msgstr "Opret aftale"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2073,12 +2073,36 @@ msgid "Add new participant"
 msgstr "Tilføj ny deltager"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Opdatér aftale"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Tilføj til kalender"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Acceptér forslag"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Fjern aftale"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Afvis ændringer"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorér"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Forespørg om aftale"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Send aftale"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2097,8 +2121,20 @@ msgid "The appointment has been updated"
 msgstr "Aftalen blev opdateret"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Aftalen blev tilføjet"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Ændringerne er blevet accepteret"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Aftalen blev slettet"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Du har afslået aftalen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2107,10 +2143,6 @@ msgstr "Ændringerne blev afvist"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Du har accepteret denne aftale foreløbigt"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Du har afslået aftalen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -3176,6 +3208,7 @@ msgstr "Serien slutter aldrig."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
@@ -3184,8 +3217,7 @@ msgstr "Serien slutter aldrig."
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Ingen"
 
@@ -3485,7 +3517,7 @@ msgid "A channel with the same name already exists"
 msgstr "En kanal med samme navn findes allerede"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Der gik noget galt. Prøv venligst igen senere."
@@ -4158,6 +4190,142 @@ msgstr "%1$s, %2$s, og %3$s skriver ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s, %3$d samt flere skriver ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Deltag i Zoom-møde"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Deltag i Jitsi-møde"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Deltag i konferenceopkald"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Zoom-møde"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Jitsi-møde"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Konference"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Link:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Kopiér til placeringsfelt"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Jitsi-møde: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Kodeord til mødet: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Ét-tryk mobil (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Møde-ID: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Opkalds-kodeord: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Ring fra din placering"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Du skal først forbinde %1$s med Zoom. For at gøre det, har du brug for en "
+"Zoom-konto. Hvis du ikke har en endnu, er en gratis-konto tilstrækkeligt."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Forbind med Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Forbinder til Zoom ..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Kopiér link til placering"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Kopiér link til udklipsholder"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Kopiér opkalds-information til beskrivelse"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Zoom-møder udløber efter 365 dage. Vi anbefaler at begrænse serien til ét "
+"år. Alternativt kan du opdatere serien inden at Zoom-møderne udløber."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr ""
+"Der opstod et problem under indlæsningen af Zoom-mødet. Måske er mødet "
+"udløbet."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Lav nyt Zoom-møde"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Integrerings-servicen til Zoom er ikke til rådighed i øjeblikket. Prøv "
+"venligst igen senere."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Nyt møde"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakterne blev flyttet"
@@ -4295,6 +4463,7 @@ msgstr ""
 "denne grænse. Nogle felter vises ikke."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -5014,6 +5183,18 @@ msgstr "Denne værdi er for lang. Den tilladte længde er %1$d karaktere."
 msgid "This is an invalid email address."
 msgstr "Dette er ikke en gyldig e-mail-adresse."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Mine adresselister"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Offentlige adressebøger"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Delte adressebøger"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5025,10 +5206,30 @@ msgstr[1] "%1$d kontakter valgt"
 msgid "Remove contact from selection"
 msgstr "Fjern kontakt fra valgte"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Vælg/fravælg kontakten %1$s"
+msgid "department %1$s"
+msgstr "afdeling %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "plads %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "e-mailadresse %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "telefonnummer %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "rum %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5441,6 +5642,21 @@ msgid "User name"
 msgstr "Brugernavn"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Nulstil adgangskode"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Sæt adgangskode"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-mail-adresse"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Log ind"
@@ -5597,7 +5813,7 @@ msgid "Imprint"
 msgstr "Imprint"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Bekræft ny adgangskode"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5623,13 +5839,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Næste"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-mail-adresse"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5765,10 +5974,6 @@ msgid "Author (create/edit/delete appointments)"
 msgstr "Forfatter (opret/redigér/slet aftaler)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "save"
-msgstr "gem"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not create deputy."
 msgstr "Kunne ikke oprette hjælper."
 
@@ -5783,8 +5988,8 @@ msgstr "Fjern hjælper %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Vil du fjerne %1$s fra listen over hjælpere"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Vil du fjerne %1$s fra listen over hjælpere?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5797,10 +6002,6 @@ msgstr "Du har ikke nogen hjælpere tildelt i øjeblikket."
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "Hjælpere kan få adgang til din indbakke og kalender"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Fjern"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -6529,6 +6730,10 @@ msgstr "Vælg mappe"
 msgid "Create folder"
 msgstr "Opret mappe"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Du kan ikke vælge denne mappe."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Ingen handling tilgængelig"
@@ -7100,7 +7305,6 @@ msgid "The user has administrative rights"
 msgstr "Brugeren har administrative"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Anvend på alle undermapper"
 
@@ -10665,6 +10869,10 @@ msgid "Added %s to attachments."
 msgstr "Føjet %s til vedhæftninger."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "På vegne af"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Vis navne"
 
@@ -10676,6 +10884,13 @@ msgstr "Redigér navne"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Skriv ny e-mail"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Denne e-mail bliver sendt af %1$s på vegne af %2$s."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10742,6 +10957,10 @@ msgstr "Vælg venligst en gyldig billedfil at indsætte"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Sendt fra %s via mobil"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Denne e-mail blev sendt på vegne af en anden person."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11121,6 +11340,16 @@ msgstr "E-mail fra %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "Gennem"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "på vegne af"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "via"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -13127,6 +13356,10 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync app"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
 msgstr "MacOS"
 
@@ -14190,29 +14423,6 @@ msgid "Call via Jitsi"
 msgstr "Ring med Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Deltag i Zoom-møde"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Deltag i Jitsi-møde"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Deltag i konferenceopkald"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Zoom-møde"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Jitsi-møde"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Zoom-integration"
@@ -14283,22 +14493,6 @@ msgid "Open Zoom profile"
 msgstr "Åbn Zoom-profil"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Du skal først forbinde %1$s med Zoom. For at gøre det, har du brug for en "
-"Zoom-konto. Hvis du ikke har en endnu, er en gratis-konto tilstrækkeligt."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Forbind med Zoom"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Du har linket den følgende Zoom-konto:"
 
@@ -14309,15 +14503,6 @@ msgstr "Personligt møde-ID:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Fjern konto"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Integrerings-servicen til Zoom er ikke til rådighed i øjeblikket. Prøv "
-"venligst igen senere."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14348,93 +14533,6 @@ msgstr "Besvarede opkald fra %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Du ringede til %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Konference"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Link:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Kopiér til placeringsfelt"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Jitsi-møde: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Forbinder til Zoom ..."
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Kodeord til mødet: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Ét-tryk mobil (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Møde-ID: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Opkalds-kodeord: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Ring fra din placering"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Kopiér link til placering"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Kopiér link til udklipsholder"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Kopiér opkalds-information til beskrivelse"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Zoom-møder udløber efter 365 dage. Vi anbefaler at begrænse serien til ét "
-"år. Alternativt kan du opdatere serien inden at Zoom-møderne udløber."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr ""
-"Der opstod et problem under indlæsningen af Zoom-mødet. Måske er mødet "
-"udløbet."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Lav nyt Zoom-møde"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Nyt møde"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -16138,6 +16236,15 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "save"
+#~ msgstr "gem"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Vælg/fravælg kontakten %1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "Fjern"
 
 #~ msgid "Password recovery"
 #~ msgstr "Gendan adgangskode"
@@ -18825,9 +18932,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Phone alt"
 #~ msgstr "Telefon, alternativ"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonnumre"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Vælg en tid her"
 
@@ -20011,12 +20115,6 @@ msgstr "Tilføj på %s"
 #~ "Dette er en mistænkelig besked.  Vi kunne ikke verificere at beskeden "
 #~ "virkelig er fra %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Denne e-mail er blevet tilføjet portalen"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Denne besked er sendt fra %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Dette kan tage nogle sekunder"
 
@@ -20921,9 +21019,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "unselect all"
 #~ msgstr "fravælg alle"
-
-#~ msgid "via"
-#~ msgstr "via"
 
 #~ msgid "weekly"
 #~ msgstr "ugentligt"

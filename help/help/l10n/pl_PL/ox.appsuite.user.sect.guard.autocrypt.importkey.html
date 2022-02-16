@@ -34,54 +34,53 @@
 <h2 class="sr-only">Szyfrowanie konwersacji e-mail przy użyciu protokołu Autocrypt</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
 <div class="titlepage"><div><div><h3 class="title">13.3.1. Importowanie kluczy Autocrypt</h3></div></div></div>
-<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">W ustawieniach zaawansowanych aplikacji <span class="phrase">Strażnik</span> możesz określić, czy klucze Autocrypt mają być importowane automatycznie. Możesz skonfigurować następujące działania:</p>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">W ustawieniach zaawansowanych aplikacji <span class="phrase">Strażnik</span> możesz określić, czy klucze Autocrypt mają być importowane automatycznie. Możesz skonfigurować następujące działania: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Wszystkie otrzymane klucze Autocrypt są importowane automatycznie.</p>
-<p role="presentation">Automatycznie zaimportowany klucz jest używany następująco:</p>
+<p role="presentation">Automatycznie zaimportowany klucz jest używany następująco: </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Za pomocą tego klucza możesz zaszyfrować wiadomość wysyłaną do kontaktu.</p></li>
 <li class="listitem"><p role="presentation">Podpis w odebranej wiadomości od tego kontaktu nie jest weryfikowany za pomocą tego klucza. Oznacza to, że nie możesz zweryfikować, czy nadawca jest prawdziwy, a treść wiadomości dotarła w niezmienionej postaci.</p></li>
 </ul>
-<p role="presentation"> 
-            </p>
 </li>
 <li class="listitem">
-<p role="presentation">W przypadku każdego otrzymanego klucza Autocrypt pojawia się pytanie, czy chcesz go zaimportować. Zostaną wyświetlone szczegóły klucza Autocrypt, które umożliwiają sprawdzenie jego ważności. Jeśli zaimportujesz klucz, zostanie on uznany za zweryfikowany. Zweryfikowany klucz zostanie użyty następująco:</p>
+<p role="presentation">W przypadku każdego otrzymanego klucza Autocrypt pojawia się pytanie, czy chcesz go zaimportować. Zostaną wyświetlone szczegóły klucza Autocrypt, które umożliwiają sprawdzenie jego ważności. Jeśli zaimportujesz klucz, zostanie on uznany za zweryfikowany. Zweryfikowany klucz zostanie użyty następująco: </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Za pomocą tego klucza możesz zaszyfrować wiadomość wysyłaną do kontaktu.</p></li>
 <li class="listitem"><p role="presentation">Podpis w odebranej wiadomości od danego kontaktu zostanie zweryfikowany za pomocą tego klucza. Jeśli wynik weryfikacji będzie pomyślny, nadawca jest prawdziwy, a treść wiadomości dotarła w niezmienionej postaci.</p></li>
 </ul>
-<p role="presentation"> 
-            </p>
 </li>
 </ul>
-<p>
-      </p>
 <div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
 <p class="title">Jak zdefiniować sposób importowania kluczy Autocrypt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Ustawienia</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>. Kliknij <span class="guibutton"><strong>Ustawienia</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Ustawienia</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span> widoczną po prawej stronie paska menu. Kliknij pozycję <span class="guibutton"><strong>Ustawienia</strong></span>.</p></li>
 <li class="step"><p role="presentation">Na pasku bocznym kliknij pozycję <span class="guibutton"><strong>Zabezpieczenia aplikacji</strong></span>. Kliknij polecenie <span class="phrase"><span class="guibutton"><strong>Strażnik</strong></span></span>.</p></li>
-<li class="step"><p role="presentation">Włącz opcję <span class="guibutton"><strong>Pokaż ustawienia zaawansowane</strong></span>. Zostaną wyświetlone elementy służące do zarządzania kluczami i ustawienia szyfrowania Autocrypt. </p></li>
-<li class="step"><p role="presentation">W sekcji <span class="guibutton"><strong>Autocrypt</strong></span> zrób tak:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="step"><p role="presentation">Włącz opcję <span class="guibutton"><strong>Pokaż ustawienia zaawansowane</strong></span>. Zostaną wyświetlone elementy służące do zarządzania kluczami i ustawienia szyfrowania Autocrypt.</p></li>
+<li class="step"><p role="presentation">W sekcji <span class="guibutton"><strong>Autocrypt</strong></span> zrób tak: <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Aby zaimportować klucze Autocrypt, włącz opcję <span class="guibutton"><strong>Szukaj kluczy w nagłówkach przychodzących wiadomości e-mail</strong></span>.</p></li>
 <li class="listitem">
 <p role="presentation">W przypadku włączenia opcji <span class="guibutton"><strong>Importuj klucze Autocrypt bez pytania</strong></span>, klucze Autocrypt będą importowane automatycznie.</p>
 <p role="presentation">Jest to ustawienie domyślne, jeśli opcja <span class="guibutton"><strong>Pokaż ustawienia zaawansowane</strong></span> jest wyłączona.</p>
 </li>
 <li class="listitem"><p role="presentation">Jeśli wyłączysz opcję <span class="guibutton"><strong>Importuj klucze Autocrypt bez pytania</strong></span>, pojawi się pytanie, czy chcesz zaimportować klucz. Zostaną wyświetlone szczegóły klucza, aby możesz było sprawdzić jego ważność. Jeśli zaakceptujesz klucz, zostanie on uznany za zweryfikowany.</p></li>
-</ul>
-            </p></li>
+</ul></p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.related.guard.autocrypt.importkey">
         </p>
 <p class="title">Powiązane tematy:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Importowanie kluczy Autocrypt</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Zarządzanie kluczami Autocrypt</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Przesyłanie kluczy Autocrypt do innych klientów</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Importowanie kluczy Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Zarządzanie kluczami Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Przesyłanie kluczy Autocrypt do innych klientów</a>
+            </p></li>
 </ul>
 <p>
       </p>

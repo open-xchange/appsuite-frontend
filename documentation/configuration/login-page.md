@@ -108,7 +108,7 @@ With attribute 'customCss' custom css rules can be applied for elements within t
 To get a better contrast for the page header, a vignette shadow at the top of the page can be set. This is useful if the background of the login page is too bright and it gets hard to read the text of the header.
 
 <config>transparency</config>
-This sets the transparency of the top vigenette between 0 and 1. Please note, that this is also a **string**.
+This sets the transparency of the top vignette between 0 and 1. Please note, that this is also a **string**.
 
 ### Section "header":
 This section describe elements inside the header. The header elements are those, displayed in the top bar.
@@ -147,7 +147,7 @@ The attributes in the button section describe the buttons within the login box.
 - **textColor**: The attribute 'textColor' sets the text color of the button. Any valid values for css 'color' can be used.
 
 ### Section "footer":
-The attributes of the footer section describe the elemeents displayed at the bottom of the login page.
+The attributes of the footer section describe the elements displayed at the bottom of the login page.
 
 <config>sorting</config>
 The attribute 'sorting' describes the order of the footer elements. There can be set multiple `$spacer` elements to align the elements the same way it's described for the 'sorting' attribute of the page header.

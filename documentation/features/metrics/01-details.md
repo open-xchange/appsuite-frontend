@@ -8,7 +8,7 @@ title: Details
 
 With metrics in mind listeners are waiting for special events to occur - usually a user action that manifests as a mouse click.
 
-Common practice is to register listeners by using [http://api.jquery.com/delegate/](<jQuerie’s delagat>) function. For example this snippet would listen for any mousedown event on an action icon within the mail app toolbar.
+Common practice is to register listeners by using [http://api.jquery.com/delegate/](<jQuerie’s delagate>) function. For example this snippet would listen for any mousedown event on an action icon within the mail app toolbar.
 
 ```javascript
   $('.classic-toolbar-container').delegate('.io-ox-action-link', 'mousedown', yourHandler);

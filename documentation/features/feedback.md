@@ -15,7 +15,7 @@ language
 client_version
 ```
 
-The feedback Dialog can also be opened via direkt link, if the url parameter 'showfeedbackdialog' is set to true (add '&showfeedbackdialog=true' to url)
+The feedback Dialog can also be opened via direct link, if the url parameter 'showfeedbackdialog' is set to true (add '&showfeedbackdialog=true' to url)
 
 # Configuration
 

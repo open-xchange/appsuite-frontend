@@ -58,7 +58,7 @@ If your plugin, for example, is only relevant when the user has access to the ca
 }
 ```
 
-In case you have to consider more than one capability use the same logial operators like you would do when calling `capabilies.has` directly:
+In case you have to consider more than one capability use the same logical operators like you would do when calling `capabilities.has` directly:
 
 ```js
     # logical conjunction
@@ -84,7 +84,7 @@ If a plugin is designed only for specific devices, screen sizes or languages, th
 }
 ```
 
-In case you have to consider more than one aspect use the same logial operators like you would do when calling  `_.device` directly:
+In case you have to consider more than one aspect use the same logical operators like you would do when calling  `_.device` directly:
 
 ```js
 {

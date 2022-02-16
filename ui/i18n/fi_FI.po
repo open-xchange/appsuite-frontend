@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-26 21:53+0300\n"
+"PO-Revision-Date: 2021-11-27 19:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -503,8 +503,8 @@ msgid "toggle password visibility"
 msgstr "vaihtele salasanan näkymistä"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Kopioi leikepöydälle"
@@ -576,7 +576,6 @@ msgstr "Online -ohje: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -1651,7 +1650,8 @@ msgstr "Luo tapaaminen"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2064,12 +2064,36 @@ msgid "Add new participant"
 msgstr "Lisää uusi osallistuja"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Päivitä tapaaminen"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Lisää kalenteriin"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Hyväksy ehdotus"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Poista tapaaminen"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Hylkää muutokset"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Älä huomioi"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Pyydä tapaamista"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Lähetä tapaaminen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2088,8 +2112,20 @@ msgid "The appointment has been updated"
 msgstr "Tapaaminen päivitetty"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Tapaaminen lisättiin"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Muutokset on hyväksytty"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Tapaaminen poistettu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Kieltäydyit tapaamisesta"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2098,10 +2134,6 @@ msgstr "Muutokset hylätty"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Alustavasti hyväksyit tämän tapaamisen"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Kieltäydyit tapaamisesta"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -3164,6 +3196,7 @@ msgstr "Sarja ei lopu koskaan."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
@@ -3172,8 +3205,7 @@ msgstr "Sarja ei lopu koskaan."
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Ei tunnistetta"
 
@@ -3472,7 +3504,7 @@ msgid "A channel with the same name already exists"
 msgstr "Samanniminen kanava on jo olemassa"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Jokin meni vikaan. Yritä myöhemmin uudelleen."
@@ -4144,6 +4176,141 @@ msgstr "%1$s, %2$s ja %3$d kirjoittavat ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s ja %3$d ja muut kirjoittavat ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Liity Zoom-kokoukseen"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Liity Jitsi-kokoukseen"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Liity konferenssipuheluun"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Zoom-kokous"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Jitsi-kokous"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Konferenssi"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Linkki:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Kopioi sijaintikenttään"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Jitsi-kokous: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Kokouksen salasana: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Mobiilipikavalinta (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Kokoustunniste: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Soittosalasana: %1$s"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Valitse sijaintisi mukaan"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Yhdistä ensin %1$s Zoomia käyttäen. Tähän tarvitse Zoom-tilin. Jos sinulle "
+"ei vielä ole Zoom-tiliä, riittää ilmaistilin perustaminen."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Yhdistä Zoomilla"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Yhdistetään Zoomiin..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Kopioi linkki kohteeseen"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Kopioi linkki leikepöydälle"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Kopioi soittotiedot kuvaukseen"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Zoom-kokoukset vanhenevat 365 päivän jälkeen. Suosittelemme, että rajaat "
+"sarjan pituuden yhteen vuoteen. Voit myös päivittää sarjaa ennen Zoom-"
+"kokouksen vanhenemista."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr "Ongelma ladattaessa Zoom-kokousta. Ehkä Zoom-kokous on vanhentunut."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Luo uusi Zoom-kokous"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Zoomin varmistuspalvelu ei ole juuri nyt käytettävissä. Yritä myöhemmin "
+"uudelleen."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Uusi kokous"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Yhteystiedot siirretty"
@@ -4281,6 +4448,7 @@ msgstr ""
 "Kaikki osallistujat eivät siis näy listassa."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -4999,6 +5167,18 @@ msgstr "Tämä arvo on liian pitkä. Sallittu pituus on %1$d merkkiä."
 msgid "This is an invalid email address."
 msgstr "Tämä on virheellinen sähköpostiosoite."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Omat osoiteluettelot"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Julkiset osoiteluettelot"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Jaetut osoiteluettelot"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5010,10 +5190,30 @@ msgstr[1] "%1$d yhteystietoa valittuna"
 msgid "Remove contact from selection"
 msgstr "Poista yhteystieto valikoimasta"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Valitse/Poista yhteystieto %1$s"
+msgid "department %1$s"
+msgstr "osasto %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "asema %s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "sähköpostiosoite %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "puhelinnumero %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "huone %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5430,6 +5630,21 @@ msgid "User name"
 msgstr "Käyttäjätunnus"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Aseta salasana uudelleen"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Aseta salasana"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Kirjaudu"
@@ -5587,7 +5802,7 @@ msgid "Imprint"
 msgstr "Leimaa"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
+msgid "Confirm new password"
 msgstr "Vahvista uusi salasana"
 
 #. While or after requesting a new password you can go back to the initial login page
@@ -5613,13 +5828,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Seuraava"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "Sähköpostiosoite"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5755,10 +5963,6 @@ msgid "Author (create/edit/delete appointments)"
 msgstr "Tekijä (tapaamisten luominen, muokkaaminen tai poistaminen)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "save"
-msgstr "tallenna"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not create deputy."
 msgstr "Sijaista ei voitu luoda."
 
@@ -5773,8 +5977,8 @@ msgstr "Poista sijainen %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Haluatko poistaa %1$s sijaisluettelostasi"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Haluatko poistaa %1$s sijaisluettelostasi?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5787,10 +5991,6 @@ msgstr "Sijaisia ei tällä hetkellä ole."
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "Sijaiset pääsevät Saapuneet-kansioosi ja kalenteriisi."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Poista"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -6516,6 +6716,10 @@ msgstr "Valitse kansio"
 msgid "Create folder"
 msgstr "Luo kansio"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Tätä kansiota ei voi valita."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Ei toimintoa saatavilla"
@@ -7081,7 +7285,6 @@ msgid "The user has administrative rights"
 msgstr "Käyttäjällä on ylläpitäjän oikeuksia"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Käytä kaikkiin alakansioihin"
 
@@ -10649,6 +10852,10 @@ msgid "Added %s to attachments."
 msgstr "%s lisätty liitteisiin."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "Puolesta"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Näytä nimet"
 
@@ -10660,6 +10867,13 @@ msgstr "Muokkaa nimiä"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Uusi viesti"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Tämän sähköpostin lähettää %1$s %2$s:n puolesta."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10726,6 +10940,10 @@ msgstr "Valitse lisättäväksi käypä kuvatiedosto"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Lähetetty tuotteella %s mobiililaitteelta"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Tämä viesti on lähetetty toisen henkilön puolesta."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11104,6 +11322,16 @@ msgstr "Viesti lähettäjältä %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "Lähettäjä"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "puolesta"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "kautta"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -13107,6 +13335,10 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
 msgstr "MacOS"
 
@@ -14170,29 +14402,6 @@ msgid "Call via Jitsi"
 msgstr "Soita Jitsin kautta"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Liity Zoom-kokoukseen"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Liity Jitsi-kokoukseen"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Liity konferenssipuheluun"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Zoom-kokous"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Jitsi-kokous"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Zoom-integraatio"
@@ -14263,22 +14472,6 @@ msgid "Open Zoom profile"
 msgstr "Avaa Zoom-profiili"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Yhdistä ensin %1$s Zoomia käyttäen. Tähän tarvitse Zoom-tilin. Jos sinulle "
-"ei vielä ole Zoom-tiliä, riittää ilmaistilin perustaminen."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Yhdistä Zoomilla"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Olet linkittänyt seuraavan Zoom-tilin:"
 
@@ -14289,15 +14482,6 @@ msgstr "Henkilökohtainen kokoustunniste: %1$s:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Poista tili"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Zoomin varmistuspalvelu ei ole juuri nyt käytettävissä. Yritä myöhemmin "
-"uudelleen."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14328,92 +14512,6 @@ msgstr "Vastattu puhelu soittajalta %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Soitit henkilölle %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Konferenssi"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Linkki:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Kopioi sijaintikenttään"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Jitsi-kokous: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Yhdistetään Zoomiin..."
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Kokouksen salasana: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Mobiilipikavalinta (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Kokoustunniste: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Soittosalasana: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Valitse sijaintisi mukaan"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Kopioi linkki kohteeseen"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Kopioi linkki leikepöydälle"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Kopioi soittotiedot kuvaukseen"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Zoom-kokoukset vanhenevat 365 päivän jälkeen. Suosittelemme, että rajaat "
-"sarjan pituuden yhteen vuoteen. Voit myös päivittää sarjaa ennen Zoom-"
-"kokouksen vanhenemista."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr "Ongelma ladattaessa Zoom-kokousta. Ehkä Zoom-kokous on vanhentunut."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Luo uusi Zoom-kokous"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Uusi kokous"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -16118,6 +16216,15 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "save"
+#~ msgstr "tallenna"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Valitse/Poista yhteystieto %1$s"
+
+#~ msgid "Remobe"
+#~ msgstr "Poista"
 
 #~ msgid "Password recovery"
 #~ msgstr "Salasanan palautus"
@@ -18586,9 +18693,6 @@ msgstr "%s lisää"
 #~ msgid "Phone alt"
 #~ msgstr "Puhelin vaihtoehtoinen"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Puhelinnumerot"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Valitse aika tästä"
 
@@ -19699,12 +19803,6 @@ msgstr "%s lisää"
 #~ "Sähköposti on epäilyttävä, koske emme voineet varmistaa, että sen lähetti "
 #~ "todella %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Tämä viesti on lisätty portaaliin"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Tämä viesti on lähetetty laitteesta %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Tämä voi kestää muutaman sekunnin"
 
@@ -20594,9 +20692,6 @@ msgstr "%s lisää"
 
 #~ msgid "unselect all"
 #~ msgstr "Poista kaikki valinnat"
-
-#~ msgid "via"
-#~ msgstr "kautta"
 
 #~ msgid "weekly"
 #~ msgstr "viikoittain"

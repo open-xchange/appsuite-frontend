@@ -362,7 +362,7 @@ Target of 'get started' labled link in 'getting started' widget
 ## Widget properties
 
 <config>io.ox/portal//widgets/user/\[widgetid\]/color=`<string>`</config>
-Color of title and highligting within widget preview/content
+Color of title and highlighting within widget preview/content
 
 <config>io.ox/portal//widgets/user/\[widgetid\]/enabled=`<bool>`</config>
 Enabled state
@@ -433,11 +433,11 @@ Automatically collect contacts in the folder "Collected addresses" while reading
 Ask for mailto link registration (`true|false`)
 
 <config>io.ox/mail//features/trusted/user=`<string>`</config>
-User-defined, comma-separated list of mail adresses or specific domains
+User-defined, comma-separated list of mail addresses or specific domains
 which will be whitlisted for loading external images in HTML mails.
 
 <config>io.ox/mail//features/trusted/admin=`<string>`</config>
-Admin-defined, comma-separated list of mail adresses or specific domains
+Admin-defined, comma-separated list of mail addresses or specific domains
 which will be whitlisted for loading external images in HTML mails. I.e. useful for
 customer care email addresses or domains.
 
@@ -566,7 +566,7 @@ Enables the authenticity feature. Please note that `com.openexchange.mail.authen
 
 <!-- currently hardcoded as 'fail_neutral_trusted' and 'protected' by MW and not adjustable by any property file change or user interaction.
 <config>io.ox/mail//authenticity/level=`<string>`</config>
-If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as proteced, the user can select a level which
+If authenticity is enabled on MW and UI (see `features/authenticity`) and this value is not marked as protected, the user can select a level which
 controls how strict the authenticity results are shown at UI side. (default: `none`, values: `none`, `fail_neutral_trusted` and `all`)
 -->
 

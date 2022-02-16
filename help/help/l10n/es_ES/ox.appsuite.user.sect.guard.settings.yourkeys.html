@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="../../../help/help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Guía del usuario">
-<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Ajustes de Guard">
+<link rel="up" href="ox.appsuite.user.sect.guard.settings.html" title="13.7. Configuración de Guard">
 <link rel="prev" href="ox.appsuite.user.sect.guard.settings.password.html" title="13.7.1. Gestión de contraseñas">
 <link rel="next" href="ox.appsuite.user.sect.guard.settings.publickeys.html" title="13.7.3. Gestión de claves públicas">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
@@ -29,13 +29,13 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">Cifrar datos con <span class="phrase">Guard</span>
+  <h1 class="sr-only">Cifrado de datos con <span class="phrase">Guard</span>
 </h1>
-<h2 class="sr-only">Ajustes de <span class="phrase">Guard</span>
+<h2 class="sr-only">Configuración de <span class="phrase">Guard</span>
 </h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
 <div class="titlepage"><div><div><h3 class="title">13.7.2. Gestión de claves propias</h3></div></div></div>
-<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">En la página de <span class="phrase"><span class="guilabel"><strong>ajustes de seguridad de Guard</strong></span></span>, puede:</p>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">En la página de <span class="phrase"><span class="guilabel"><strong>ajustes de seguridad de Guard</strong></span></span>, puede: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">mostrar claves propias, mostrar detalles</p></li>
 <li class="listitem">
@@ -49,8 +49,6 @@
 <li class="listitem"><p role="presentation">descargar claves</p></li>
 <li class="listitem"><p role="presentation">borrar claves</p></li>
 </ul>
-<p>
-      </p>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
 <p class="title">Cómo visualizar sus propias claves o convertir una clave en la actual:</p>
 <div class="procedure"><ol class="procedure" type="1">
@@ -59,37 +57,35 @@
 <p role="presentation">Pulse en <span class="guibutton"><strong>Sus claves</strong></span> debajo de <span class="guilabel"><strong>Claves</strong></span>. Se abre la ventana <span class="guilabel"><strong>Sus claves</strong></span>.</p>
 <p role="presentation">
               <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Se muestran sus claves ya existentes. Cada clave consta de una clave maestra y una subclave.<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Se muestran sus claves ya existentes. Cada clave consta de una clave maestra y una subclave. <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Entre otras cosas, la clave maestra se usa para firmar sus correos.</p></li>
 <li class="listitem"><p role="presentation">La subclave se usa para cifrar y descifrar correos y ficheros.</p></li>
-</ul>
-                  </p></li>
-<li class="listitem"><p role="presentation">Dependiendo de las necesidades, <span class="phrase">Guard</span> usa automáticamente la clave maestra o la subclave. </p></li>
+</ul></p></li>
+<li class="listitem"><p role="presentation">Dependiendo de las necesidades, <span class="phrase">Guard</span> usa automáticamente la clave maestra o la subclave.</p></li>
 </ul>
             </p>
 </li>
 <li class="step"><p role="presentation">Si su lista de claves contiene más de una, puede definir cuál es la clave actual. Para ello, marque la casilla de verificación <span class="guibutton"><strong>Actual</strong></span> ubicada junto a la clave principal. Desde ese momento, la clave actual se utilizará para cifrar.</p></li>
-<li class="step"><p role="presentation">Para visualizar detalles de una clave, pulse el icono <span class="guibutton"><strong>Detalles</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Se abre la ventana <span class="guilabel"><strong>Detalles de la clave</strong></span>. Para ver las firmas de la clave, pulse en <span class="guibutton"><strong>Firmas</strong></span>.</p></li>
+<li class="step"><p role="presentation">Para visualizar detalles de una clave, pulse el icono <span class="guibutton"><strong>Detalles</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span> al lado de una clave. Se abre la ventana <span class="guilabel"><strong>Detalles de la clave</strong></span>. Para ver las firmas de la clave, pulse en <span class="guibutton"><strong>Firmas</strong></span>.</p></li>
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
 <p class="title">Cómo añadir una nueva clave en la ventana <span class="guilabel"><strong>Sus claves</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Añadir</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>. Se abre la ventana <span class="guilabel"><strong>Adición de claves</strong></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Añadir</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span> que hay junto a <span class="guilabel"><strong>Claves del servidor</strong></span>. Se abre la ventana <span class="guilabel"><strong>Adición de claves</strong></span>.</p></li>
 <li class="step">
-<p role="presentation">Tiene las siguientes opciones:<ul class="itemizedlist" style="list-style-type: disc; ">
+<p role="presentation">Tiene las siguientes opciones: <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Para añadir una clave privada, pulse <span class="guibutton"><strong>Subir clave privada</strong></span>. Seleccione un fichero que contenga una clave privada. Se abre la ventana <span class="guilabel"><strong>Subir claves privadas</strong></span>.</p>
 <p role="presentation">Para subir una nueva clave, introduzca su contraseña de seguridad de <span class="phrase">Guard</span>. Indique una nueva contraseña para la nueva clave.</p>
 </li>
-<li class="listitem"><p role="presentation">Para añadir una clave pública, pulse <span class="guibutton"><strong>Subir solo clave pública</strong></span>. Seleccione un fichero que contenga una clave pública. </p></li>
+<li class="listitem"><p role="presentation">Para añadir una clave pública, pulse <span class="guibutton"><strong>Subir solo clave pública</strong></span>. Seleccione un fichero que contenga una clave pública.</p></li>
 <li class="listitem">
 <p role="presentation">Para crear un nuevo par de claves, pulse <span class="guibutton"><strong>Crear claves nuevas</strong></span>. Se abre la ventana <span class="phrase"><span class="guilabel"><strong>Crear claves de seguridad de Guard</strong></span></span>.</p>
 <p role="presentation">Introduzca una contraseña para la nueva clave. Confirme la contraseña.</p>
 <p role="presentation">La nueva clave consta de una clave maestra y una subclave acorde a ella.</p>
 </li>
-</ul>
-            </p>
+</ul></p>
 <p role="presentation">La nueva clave se insertará al principio de lista de claves, y se convertirá en la clave actual.</p>
 </li>
 </ol></div>
@@ -97,18 +93,17 @@
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
 <p class="title">Cómo añadir un ID de usuario adicional en la ventana <span class="guilabel"><strong>Sus claves</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Editar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>. Se abre la ventana <span class="guilabel"><strong>Añadir identificador de usuario</strong></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Editar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span> que hay junto a una clave. Se abre la ventana <span class="guilabel"><strong>Añadir identificador de usuario</strong></span>.</p></li>
 <li class="step">
 <p role="presentation">Introduzca un nombre para el ID de usuario. Introduzca la dirección de correo que quiera usar para esta clave.</p>
 <p role="presentation">Introduzca su contraseña para esta clave.</p>
-<p role="presentation">Pulse <span class="guibutton"><strong>Aceptar</strong></span>.</p>
 </li>
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
 <p class="title">Cómo descargar una clave en la ventana <span class="guilabel"><strong>Sus claves</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Descargar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Descargar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span> que hay junto a una clave.</p></li>
 <li class="step">
 <p role="presentation">Determina si solo se descarga su clave privada, su clave pública o ambas.</p>
 <p role="presentation"><span class="phrase"><strong>Precaución:</strong></span> Su clave privada se descargará cifrada. De todas formas, no debería descargar su clave privada en un sistema accesible públicamente.</p>
@@ -121,16 +116,16 @@
           <p><span class="phrase"><strong>Advertencia:</strong></span> Si borra una clave privada, ya no podrá descifrar objetos que se hayan cifrado con dicha clave. Si no está seguro no debería borrarla sino revocarla. Una clave revocada no se puede usar para cifrar, pero aún se puede usar para descifrar objetos que se hubiesen cifrado con ella.</p>
         </div>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Borrar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. Se abre la ventana <span class="guilabel"><strong>Borrar clave privada</strong></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Borrar</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span> que hay junto a una clave. Se abre la ventana <span class="guilabel"><strong>Borrar clave privada</strong></span>.</p></li>
 <li class="step"><p role="presentation">Tiene las siguientes opciones:<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p role="presentation">Para revocar una clave privada, pulse <span class="guibutton"><strong>Revocar</strong></span>. </p>
+<p role="presentation">Para revocar una clave privada, pulse <span class="guibutton"><strong>Revocar</strong></span>.</p>
 <p role="presentation">Si revoca una clave, ya no la podrá usar pero aún podrá descifrar objetos cifrados con dicha clave. Por ello, revocar una clave es mejor que borrarla.</p>
 <p role="presentation">Introduzca la contraseña de la clave privada. Si se le pide, seleccione un motivo para la revocación.</p>
 <p role="presentation">Pulse <span class="guibutton"><strong>Revocar</strong></span>.</p>
 </li>
 <li class="listitem">
-<p role="presentation">Para borrar una clave privada, pulse <span class="guibutton"><strong>Borrar</strong></span>. </p>
+<p role="presentation">Para borrar una clave privada, pulse <span class="guibutton"><strong>Borrar</strong></span>.</p>
 <p role="presentation"><span class="phrase"><strong>Advertencia:</strong></span> Si borra una clave privada, ya no podrá descifrar objetos cifrados con dicha clave.</p>
 <p role="presentation">Introduzca la contraseña de la clave privada.</p>
 <p role="presentation">Pulse el botón <span class="guibutton"><strong>Borrar</strong></span>.</p>
@@ -142,12 +137,16 @@
         </p>
 <p class="title">Temas relacionados:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Gestión de claves públicas</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Gestión de contraseñas</a></p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Gestión de claves públicas</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Gestión de contraseñas</a>
+            </p>
 </li></ul>
 <p>
       </p>
-<p id="ox.appsuite.user.parent.guard.settings.yourkeys">Tema superior: <a class="xref" href="ox.appsuite.user.sect.guard.settings.html">Ajustes de <span class="phrase">Guard</span></a></p>
+<p id="ox.appsuite.user.parent.guard.settings.yourkeys">Tema superior: <a class="xref" href="ox.appsuite.user.sect.guard.settings.html">Configuración de <span class="phrase">Guard</span></a></p>
 </div>
           </div>
         </body>

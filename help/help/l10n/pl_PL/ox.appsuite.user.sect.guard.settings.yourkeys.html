@@ -35,7 +35,7 @@
 </h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.settings.yourkeys">
 <div class="titlepage"><div><div><h3 class="title">13.7.2. Zarządzanie własnymi kluczami</h3></div></div></div>
-<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Na stronie <span class="phrase"><span class="guilabel"><strong>Ustawienia zabezpieczeń aplikacji Strażnik</strong></span></span> są dostępna następujące możliwości:</p>
+<a class="indexterm" name="id-1.14.12.13.2"></a><p id="ox.appsuite.user.concept.guard.settings.yourkeys">Na stronie <span class="phrase"><span class="guilabel"><strong>Ustawienia zabezpieczeń aplikacji Strażnik</strong></span></span> są dostępna następujące możliwości: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Wyświetlanie własnych kluczy, wyświetlanie szczegółowych informacji</p></li>
 <li class="listitem">
@@ -49,8 +49,6 @@
 <li class="listitem"><p role="presentation">pobieranie kluczy</p></li>
 <li class="listitem"><p role="presentation">usuwanie kluczy</p></li>
 </ul>
-<p>
-      </p>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.display">
 <p class="title">Jak wyświetlić własne klucze lub ustawić klucz jako bieżący:</p>
 <div class="procedure"><ol class="procedure" type="1">
@@ -59,37 +57,35 @@
 <p role="presentation">Kliknij polecenie <span class="guibutton"><strong>Twoje klucze</strong></span> poniżej opcji <span class="guilabel"><strong>Klucze</strong></span>. Pojawi się okno <span class="guilabel"><strong>Twoje klucze</strong></span>.</p>
 <p role="presentation">
               <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation">Istniejące klucze zostaną wyświetlone Każdy klucz składa się z klucza głównego i dodatkowego odpowiedniego klucza.<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">Istniejące klucze zostaną wyświetlone Każdy klucz składa się z klucza głównego i odpowiedniego klucza zależnego. <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Klucz główny służy między innymi do szyfrowania wiadomości e-mail.</p></li>
-<li class="listitem"><p role="presentation">Klucz zależny służący do szyfrowania i odszyfrowywania wiadomości e-mail oraz plików.</p></li>
-</ul>
-                  </p></li>
-<li class="listitem"><p role="presentation">Przy odpowiedniej konfiguracji program <span class="phrase">Strażnik</span> automatycznie użyje odpowiedniego klucza. </p></li>
+<li class="listitem"><p role="presentation">Klucz zależny służy do szyfrowania i odszyfrowywania wiadomości e-mail oraz plików.</p></li>
+</ul></p></li>
+<li class="listitem"><p role="presentation">Przy odpowiedniej konfiguracji program <span class="phrase">Strażnik</span> automatycznie użyje klucza głównego lub zależnego.</p></li>
 </ul>
             </p>
 </li>
 <li class="step"><p role="presentation">Jeśli lista kluczy ma zawierać więcej niż jeden klucz główny i zależny, możesz zdefiniować bieżący klucz. Aby to zrobić, kliknij przycisk <span class="guibutton"><strong>Bieżące</strong></span> obok głównego klucza. Od teraz szyfrowanie będzie realizowane za pomocą klucza bieżącego.</p></li>
-<li class="step"><p role="presentation">Aby wyświetlić szczegóły klucza, kliknij ikonę <span class="guibutton"><strong>Szczegóły</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span>. Pojawi się okno <span class="guilabel"><strong>Szczegóły klucza</strong></span>. Aby wyświetlić podpisy danego klucza, kliknij <span class="guibutton"><strong>Podpisy</strong></span>.</p></li>
+<li class="step"><p role="presentation">Aby wyświetlić szczegóły klucza, kliknij ikonę <span class="guibutton"><strong>Szczegóły</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.detail"><img src="../../images/guard_user_icon_detail.png"></span> obok klucza. Pojawi się okno <span class="guilabel"><strong>Szczegóły klucza</strong></span>. Aby wyświetlić podpisy danego klucza, kliknij <span class="guibutton"><strong>Podpisy</strong></span>.</p></li>
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addkey">
 <p class="title">Jak dodać nowe klucze do okna <span class="guilabel"><strong>Twoje klucze</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Dodaj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span>. Pojawi się okno <span class="guilabel"><strong>Dodawanie kluczy</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Dodaj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addkey.add"><img src="../../images/guard_user_icon_add.png"></span> obok opcji <span class="guilabel"><strong>Klucze na serwerze</strong></span>. Pojawi się okno <span class="guilabel"><strong>Dodawanie kluczy</strong></span>.</p></li>
 <li class="step">
-<p role="presentation">Dostępne są następujące możliwości:<ul class="itemizedlist" style="list-style-type: disc; ">
+<p role="presentation">Dostępne są następujące możliwości: <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Aby dodać klucz prywatny, kliknij przycisk <span class="guibutton"><strong>Prześlij prywatny klucz</strong></span>. Wybierz plik z kluczem prywatnym. Pojawi się okno <span class="guilabel"><strong>Prześlij prywatne klucze</strong></span>.</p>
 <p role="presentation">Aby przesłać nowy klucz, wpisz hasło zabezpieczające aplikacji <span class="phrase">Strażnik</span>. Wpisz nowe hasło do nowego klucza.</p>
 </li>
-<li class="listitem"><p role="presentation">Aby dodać klucz publiczny, kliknij przycisk <span class="guibutton"><strong>Prześlij tylko klucz publiczny</strong></span>. Wybierz plik z kluczem publicznym. </p></li>
+<li class="listitem"><p role="presentation">Aby dodać klucz publiczny, kliknij przycisk <span class="guibutton"><strong>Prześlij tylko klucz publiczny</strong></span>. Wybierz plik z kluczem publicznym.</p></li>
 <li class="listitem">
 <p role="presentation">Aby utworzyć nową parę kluczy, kliknij polecenie <span class="guibutton"><strong>Utwórz nowe klucze</strong></span>. Pojawi się okno <span class="phrase"><span class="guilabel"><strong>Utwórz nowe klucze aplikacji Strażnik</strong></span></span>.</p>
 <p role="presentation">Wpisz hasło do nowego klucza i potwierdź je.</p>
 <p role="presentation">Nowy klucz składa się z klucza głównego i odpowiedniego klucza zależnego.</p>
 </li>
-</ul>
-            </p>
+</ul></p>
 <p role="presentation">Nowy klucz zostanie umieszczony na górze listy kluczy i stanie się automatycznie kluczem bieżącym.</p>
 </li>
 </ol></div>
@@ -97,18 +93,17 @@
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.addaccount">
 <p class="title">Jak dodać kolejny identyfikator użytkownika w oknie <span class="guilabel"><strong>Twoje klucze</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Edytuj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span>. Otworzy się okno <span class="guilabel"><strong>Dodaj ID użytkownika</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Edytuj</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.addaccount.edit"><img src="../../images/guard_user_icon_edit.png"></span> obok klucza. Pojawi się okno <span class="guilabel"><strong>Dodaj ID użytkownika</strong></span>.</p></li>
 <li class="step">
 <p role="presentation">Wpisz nazwę identyfikatora użytkownika i adres e-mail, którego chcesz użyć w tym kluczu.</p>
 <p role="presentation">Wpisz hasło do danego klucza.</p>
-<p role="presentation">Kliknij <span class="guibutton"><strong>OK</strong></span>.</p>
 </li>
 </ol></div>
 </div>
 <div class="task" id="ox.appsuite.user.task.guard.settings.yourkeys.download">
 <p class="title">Jak pobrać klucz w oknie <span class="guilabel"><strong>Twoje klucze</strong></span>:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Pobierz</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij umieszczoną obok klucza ikonę <span class="guibutton"><strong>Pobieranie</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.download.key"><img src="../../images/guard_user_icon_download.png"></span>.</p></li>
 <li class="step">
 <p role="presentation">Określ, czy pobrać tylko klucz prywatny, tylko klucz publiczny czy oba klucze.</p>
 <p role="presentation"><span class="phrase"><strong>Uwaga:</strong></span> klucz prywatny zostanie pobrany w postaci zaszyfrowanej. Nie należy jednak pobierać klucza prywatnego do systemu dostępnego publicznie.</p>
@@ -121,11 +116,11 @@
           <p><span class="phrase"><strong>Ostrzeżenie:</strong></span> w razie usunięcia klucza prywatnego nie będzie już można odszyfrowywać obiektów zaszyfrowanych za pomocą tego klucza. Jeśli nie masz pewności, co robić, nie usuwaj klucza, tylko go odwołaj. Odwołanego klucza nie można już używać do szyfrowania. Można go jednak użyć do odszyfrowania obiektów zaszyfrowanych za jego pomocą.</p>
         </div>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Kliknij ikonę <span class="guibutton"><strong>Usuń</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. Pojawi się okno <span class="guilabel"><strong>Usuń klucz prywatny</strong></span>.</p></li>
+<li class="step"><p role="presentation">Kliknij widoczną obok klucza ikonę <span class="guibutton"><strong>Usuń</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.settings.yourkeys.delete.trash"><img src="../../images/guard_user_icon_trash.png"></span>. Pojawi się okno <span class="guilabel"><strong>Usuń klucz prywatny</strong></span>.</p></li>
 <li class="step"><p role="presentation">Dostępne są następujące opcje:<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Aby odwołać klucz prywatny, kliknij <span class="guibutton"><strong>Odwołaj</strong></span>. </p>
-<p role="presentation">Jeśli odwołasz klucz, nie będzie on już używany. Będzie jednak nadal można odszyfrować obiekty zaszyfrowane za jego pomocą. Dlatego odwołanie klucza jest lepszym rozwiązaniem niż jego usunięcie.</p>
+<p role="presentation">Odwołany klucz nie będzie już używany. Będzie jednak nadal można odszyfrować obiekty zaszyfrowane za jego pomocą. Dlatego odwołanie klucza jest lepszym rozwiązaniem niż jego usunięcie.</p>
 <p role="presentation">Wprowadź hasło do klucza prywatnego. W razie potrzeby wybierz powód odwołania klucza.</p>
 <p role="presentation">Kliknij <span class="guibutton"><strong>Odwołaj</strong></span>.</p>
 </li>
@@ -142,8 +137,12 @@
         </p>
 <p class="title">Powiązane tematy:</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Zarządzanie kluczami publicznymi</a></p>
-<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Zarządzanie hasłem</a></p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.publickeys.html">Zarządzanie kluczami publicznymi</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.settings.password.html">Zarządzanie hasłem</a>
+            </p>
 </li></ul>
 <p>
       </p>

@@ -29,59 +29,58 @@
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
-  <h1 class="sr-only">Cifrar datos con <span class="phrase">Guard</span>
+  <h1 class="sr-only">Cifrado de datos con <span class="phrase">Guard</span>
 </h1>
 <h2 class="sr-only">Cifrado de conversaciones de correo con Autocrypt</h2>
 <div class="sect2" id="ox.appsuite.user.sect.guard.autocrypt.importkey">
 <div class="titlepage"><div><div><h3 class="title">13.3.1. Importación de claves de Autocrypt</h3></div></div></div>
-<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">En los ajustes avanzados de <span class="phrase">Guard</span> se puede indicar si las claves de Autocrypt se importarán automáticamente. Se puede configurar lo siguiente:</p>
+<a class="indexterm" name="id-1.14.8.7.2"></a><a class="indexterm" name="id-1.14.8.7.3"></a><a class="indexterm" name="id-1.14.8.7.4"></a><p id="ox.appsuite.user.concept.guard.autocrypt.importkey">En los ajustes avanzados de <span class="phrase">Guard</span> se puede indicar si las claves de Autocrypt se importarán automáticamente. Se puede configurar lo siguiente: </p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
 <p role="presentation">Todas las claves de Autocrypt recibidas se importan automáticamente.</p>
-<p role="presentation">Una clave importada automáticamente se usa así:</p>
+<p role="presentation">Una clave importada automáticamente se usa así: </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Un mensaje saliente para este contacto se puede cifrar con esta clave.</p></li>
 <li class="listitem"><p role="presentation">La firma de un mensaje entrante de este contacto no se verificará con la clave. Por tanto: no se puede verificar si el remitente es auténtico y el contenido del mensaje se ha transferido sin alteraciones.</p></li>
 </ul>
-<p role="presentation"> 
-            </p>
 </li>
 <li class="listitem">
-<p role="presentation">Por cada clave de Autocrypt recibida se le preguntará si desea importarla. Se mostrarán los detalles de la clave de Autocrypt para permitirle comprobar su validez. Si se importa la clave, se la considerará verificada. Una clave verificada se usa así:</p>
+<p role="presentation">Por cada clave de Autocrypt recibida se le preguntará si desea importarla. Se mostrarán los detalles de la clave de Autocrypt para permitirle comprobar su validez. Si se importa la clave, se la considerará verificada. Una clave verificada se usa así: </p>
 <ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem"><p role="presentation">Un mensaje saliente para este contacto se puede cifrar con esta clave.</p></li>
 <li class="listitem"><p role="presentation">La firma de un mensaje entrante de este contacto se verificará usando la clave. Si la verificación es satisfactoria, el remitente es auténtico y el contenido del mensaje no ha sido alterado.</p></li>
 </ul>
-<p role="presentation"> 
-            </p>
 </li>
 </ul>
-<p>
-      </p>
 <div class="task" id="ox.appsuite.user.task.guard.autocrypt.importkey">
 <p class="title">Cómo definir la forma en que se importan las claves de Autocrypt:</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span>. Pulse en <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
+<li class="step"><p role="presentation">Pulse el icono <span class="guibutton"><strong>Configuración</strong></span> <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.guard.autocrypt.importkey"><img src="../../images/appsuite_user_icon_settings.png"></span> de la parte derecha de la barra de menús. Pulse en <span class="guibutton"><strong>Configuración</strong></span>.</p></li>
 <li class="step"><p role="presentation">Pulse en <span class="guibutton"><strong>Seguridad</strong></span> en la barra lateral. Pulse <span class="phrase"><span class="guibutton"><strong>Guard</strong></span></span>.</p></li>
-<li class="step"><p role="presentation">Marque <span class="guibutton"><strong>Mostrar ajustes avanzados</strong></span>. Se muestran los elementos de gestión de claves y de configuración de Autocrypt. </p></li>
-<li class="step"><p role="presentation">En <span class="guibutton"><strong>Autocrypt</strong></span>, haga lo siguiente:<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="step"><p role="presentation">Marque <span class="guibutton"><strong>Mostrar ajustes avanzados</strong></span>. Se muestran los elementos de gestión de claves y de configuración de Autocrypt.</p></li>
+<li class="step"><p role="presentation">En <span class="guibutton"><strong>Autocrypt</strong></span>, haga lo siguiente: <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">Para importar claves de Autocrypt, marque <span class="guibutton"><strong>Buscar claves en las cabeceras de los correos entrantes</strong></span>.</p></li>
 <li class="listitem">
 <p role="presentation">Si marca <span class="guibutton"><strong>Importar claves de autocrypt sin preguntar</strong></span>, las claves de Autocrypt se importarán automáticamente.</p>
 <p role="presentation">Esta es la configuración predeterminada si <span class="guibutton"><strong>Mostrar ajustes avanzados</strong></span> está desactivado.</p>
 </li>
 <li class="listitem"><p role="presentation">Si desactiva <span class="guibutton"><strong>Importar claves de autocrypt sin preguntar</strong></span>, se le preguntará si quiere importar la clave. Se muestran los detalles de la clave para que pueda comprobar su validez. Si la acepta, será considerada como verificada.</p></li>
-</ul>
-            </p></li>
+</ul></p></li>
 </ol></div>
 </div>
 <p id="ox.appsuite.user.related.guard.autocrypt.importkey">
         </p>
 <p class="title">Temas relacionados:</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Importación de claves de Autocrypt</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Gestión de claves de Autocrypt</a></p></li>
-<li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Transferencia de claves de Autocrypt a otros clientes</a></p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.importkey.html">Importación de claves de Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.manage.html">Gestión de claves de Autocrypt</a>
+            </p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.autocrypt.clients.html">Transferencia de claves de Autocrypt a otros clientes</a>
+            </p></li>
 </ul>
 <p>
       </p>

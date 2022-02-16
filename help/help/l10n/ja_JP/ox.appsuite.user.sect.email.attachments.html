@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="第5章 メール">
-<link rel="prev" href="ox.appsuite.user.sect.email.view.html" title="5.2. メールの表示">
+<link rel="prev" href="ox.appsuite.user.sect.email.view.html" title="5.2. メールを表示する">
 <link rel="next" href="ox.appsuite.user.sect.email.send.html" title="5.4. メールの送信">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
       <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
@@ -32,21 +32,22 @@
   <h1 class="sr-only"><span class="phrase">メール</span></h1>
 <div class="sect1" id="ox.appsuite.user.sect.email.attachments">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">5.3. 添付ファイルの表示、保存</h2></div></div></div>
-<a class="indexterm" name="id-1.6.9.2"></a><a class="indexterm" name="id-1.6.9.3"></a><a class="indexterm" name="id-1.6.9.4"></a><p id="ox.appsuite.user.concept.email.attachments">添付ファイルのファイル名は詳細エリアに表示されます。構成によって、次の機能が利用できます。</p>
+<a class="indexterm" name="id-1.6.10.2"></a><a class="indexterm" name="id-1.6.10.3"></a><a class="indexterm" name="id-1.6.10.4"></a><p id="ox.appsuite.user.concept.email.attachments">添付ファイルのファイル名は詳細エリアに表示されます。構成によって、次の機能が利用できます。</p>
 <ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p role="presentation"><span class="phrase">ドライブ</span>に添付ファイルを表示、ダウンロード、または保存する</p></li>
+<li class="listitem"><p role="presentation">プレビューまたは一覧として添付ファイルとを表示</p></li>
+<li class="listitem"><p role="presentation">ビューアで添付ファイルを表示</p></li>
+<li class="listitem"><p role="presentation">添付ファイルのダウンロード</p></li>
+<li class="listitem"><p role="presentation"><span class="phrase">ドライブ</span>に添付ファイルを保存</p></li>
 <li class="listitem"><p role="presentation">添付ファイルドキュメントを編集、添付のプレゼンテーションを開始</p></li>
 <li class="listitem"><p role="presentation">送信した、また受信したメールの添付ファイルを<span class="phrase">ドライブ</span>アプリケーションに表示する</p></li>
 </ul>
-<p> 
-    </p>
 <div class="task" id="ox.appsuite.user.task.email.attachments.view">
 <p class="title">添付ファイルの機能を使用する：</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
 <p role="presentation">一つまたは複数のファイルが添付されたメールを選択します。</p>
 <p role="presentation">添付ファイルを表示するには、詳細ビューのメール内容の上の<span class="guibutton"><strong>添付ファイル</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.attachments.view"><img src="../../images/appsuite_user_icon_clip.png"></span>をクリックします。添付ファイルがプレビューまたはリストで表示されます。</p>
-<p role="presentation">ビューを切り替えるには、右側の<span class="guibutton"><strong>プレビューを表示</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.attachments.unfold.tiles"><img src="../../images/appsuite_user_icon_tiles.png"></span>、または<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.attachments.unfold.list"><img src="../../images/appsuite_user_icon_list.png"></span>をクリックします。</p>
+<p role="presentation">ビューを切り替えるには、<span class="guibutton"><strong>プレビューを表示</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.attachments.unfold.tiles"><img src="../../images/appsuite_user_icon_tiles.png"></span>、または<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.attachments.unfold.list"><img src="../../images/appsuite_user_icon_list.png"></span>をクリックします。</p>
 </li>
 <li class="step"><p role="presentation">機能を全ての添付ファイルに適用するには、<span class="guibutton"><strong>添付ファイル</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.attachments.symbol"><img src="../../images/appsuite_user_icon_clip.png"></span>の横のボタンをクリックします。</p></li>
 <li class="step">
@@ -63,8 +64,6 @@
 <p role="presentation">この場合、ダウンロードをキャンセルできます。</p>
 </li>
 </ul>
-<p>
-    </p>
 <div class="task" id="ox.appsuite.user.task.email.attachments.drive">
 <p class="title"><span class="phrase">ドライブ</span>アプリケーションで、すべてのメールの添付ファイルを表示：</p>
 <div class="taskprerequisites">
@@ -75,23 +74,18 @@
 <p role="presentation">次のいずれかの方法を使用します。<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">ツールバーで、<span class="guibutton"><strong>ビュー</strong></span>をクリックします。<span class="guibutton"><strong>全添付ファイル</strong></span>をクリックします。</p></li>
 <li class="listitem"><p role="presentation">フォルダービューの<span class="guibutton"><strong>全添付ファイル表示</strong></span>をクリックします。</p></li>
-</ul>
-          </p>
+</ul></p>
 <p role="presentation"><span class="phrase">ドライブ</span>アプリケーションを開きます。<span class="guibutton"><strong>添付ファイル</strong></span>フォルダーには、送信または受信したメールすべての添付ファイルが表示されます。</p>
 </li>
 <li class="step"><p role="presentation"><span class="phrase">ドライブ</span>の機能が使えます。</p></li>
 </ol></div>
 </div>
-<p id="ox.appsuite.user.related.email.attachments">
-      </p>
+<p id="ox.appsuite.user.related.email.attachments"></p>
 <p class="title">ユーザ インターフェース</p>
 <ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.gui.detailview.html"><span class="phrase">メール</span>詳細ビュー</a></p></li></ul>
-<p>
-      </p>
+<p> </p>
 <p class="title">関連トピック</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">メールの表示</a></p></li></ul>
-<p>
-    </p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.view.html">メールを表示する</a></p></li></ul>
 <p id="ox.appsuite.user.parent.email.attachments">親記事：<a class="xref" href="ox.appsuite.user.chap.email.html"><i><span class="phrase">メール</span></i></a></p>
 </div>
           </div>

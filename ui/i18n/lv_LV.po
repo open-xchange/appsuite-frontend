@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-10-31 16:48+0200\n"
+"PO-Revision-Date: 2021-12-05 15:25+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -504,8 +504,8 @@ msgid "toggle password visibility"
 msgstr "pārslēgt paroles redzamību"
 
 #: apps/io.ox/backbone/mini-views/copy-to-clipboard.js module:io.ox/core
-#: apps/io.ox/switchboard/views/jitsi-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/jitsi-call.js
 #: apps/io.ox/switchboard/views/zoom-call.js
 msgid "Copy to clipboard"
 msgstr "Kopēt uz starpliktuvi"
@@ -578,7 +578,6 @@ msgstr "Tiešsaistes palīgs: %1$s"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 #: apps/io.ox/calendar/mobile-toolbar-actions.js apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
@@ -1650,7 +1649,8 @@ msgstr "Izveidot mītiņu"
 #: apps/io.ox/chat/actions/openGroupDialog.js module:io.ox/chat
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/edit/view-form.js
-#: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
+#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
+#: apps/io.ox/core/folder/actions/imap-subscription.js
 #: apps/io.ox/core/permissions/permissions.js
 #: apps/io.ox/core/settings/editLocale.js apps/io.ox/core/sub/sharedFolders.js
 #: apps/io.ox/editor/main.js module:io.ox/editor
@@ -2068,12 +2068,36 @@ msgid "Add new participant"
 msgstr "Pievienot dalībnieku"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Update Appointment"
+msgstr "Atjaunināt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Add to Calendar"
+msgstr "Pievienot kalendāram"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Accept Proposal"
+msgstr "Apstiprināt piedāvājumu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Remove Appointment"
+msgstr "Noņemt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Atteikt izmaiņas"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignorēt"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Request Appointment"
+msgstr "Pieprasīt mītiņu"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "Send Appointment"
+msgstr "Nosūtīt mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have accepted the appointment"
@@ -2092,8 +2116,20 @@ msgid "The appointment has been updated"
 msgstr "Mītiņš ir jaunināts"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The appointment was added"
+msgstr "Mītiņš ir pievienots"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "The changes have been accepted"
+msgstr "Izmaiņas ir akceptētas"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "Mītiņš ir izdzēsts"
+
+#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
+msgid "You have declined the appointment"
+msgstr "Jūs esat atteicis mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The changes have been rejected"
@@ -2102,10 +2138,6 @@ msgstr "Izmaiņas ir atteiktas"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "You have tentatively accepted the appointment"
 msgstr "Jūs esat pagaidu apstiprinājis mītiņu"
-
-#: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
-msgid "You have declined the appointment"
-msgstr "Jūs esat atteicis mītiņu"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
@@ -3184,6 +3216,7 @@ msgstr "Sērija nekad nebeidzas."
 #. Auth type. None. No authentication
 #. Connection security. None.
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/settings/dialogs/quickLauncherDialog.js
 #: apps/io.ox/core/settings/pane.js apps/io.ox/core/tk/attachments.js
@@ -3192,8 +3225,7 @@ msgstr "Sērija nekad nebeidzas."
 #: module:io.ox/files apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Nekas"
 
@@ -3492,7 +3524,7 @@ msgid "A channel with the same name already exists"
 msgstr "Kanāls ar tādu pat vārdu jau eksistē"
 
 #: apps/io.ox/chat/data.js module:io.ox/chat
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/zoom.js
 msgid "Something went wrong. Please try again."
 msgstr "Kaut kas nogāja greizi. Lūdzu mēģiniet vēlreiz."
@@ -4171,6 +4203,143 @@ msgstr "%1$s, %2$s, un %3$s raksta ..."
 msgid "%1$s, %2$s and %3$d others are typing ..."
 msgstr "%1$s, %2$s un %3$d citi raksta ..."
 
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Join Zoom meeting"
+msgstr "Pievienoties Zoom mītiņam"
+
+#: apps/io.ox/conference/api.js module:io.ox/switchboard
+msgid "Join Jitsi meeting"
+msgstr "Pievienoties Jitsi mītiņam"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+msgid "Join conference call"
+msgstr "Pievienoties konferences zvanam"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Zoom Meeting"
+msgstr "Zoom mītiņš"
+
+#: apps/io.ox/conference/extensions.js module:io.ox/conference
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting"
+msgstr "Jitsi mītiņš"
+
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid "Conference"
+msgstr "Konference"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+#: apps/io.ox/conference/views/zoom-meeting.js
+msgid "Link:"
+msgstr "Saite:"
+
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Copy to location field"
+msgstr "Kopēt uz vietas lauku"
+
+#. %1$s contains the URL to join the meeting
+#: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
+msgid "Jitsi Meeting: %1$s"
+msgstr "Jitsi mītiņš: %1$s"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Mītiņa parole: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Ātrā uzziņa (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Mītiņa ID: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Iezvana kods: %1$d"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Iezvans pēc atrašanās vietas"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid ""
+"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
+"If you don't have an account yet, it is sufficient to create a free one."
+msgstr ""
+"Vispirms jums ir jāsasaista %1$s ar Zoom. Lai to paveiktu, jums ir "
+"nepieciešams Zoom konts. Ja jums vēl šī konta nav, ir pietiekami izveidot "
+"bezmaksas kontu."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connect with Zoom"
+msgstr "Pieslēgties Zoom"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/views/zoom-call.js
+msgid "Connecting to Zoom ..."
+msgstr "Pieslēgšanās pie Zoom ..."
+
+#. Copy the meeting link into the appointment's location field
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to location"
+msgstr "Kopēt saiti atrašanās vietas laukā"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy link to clipboard"
+msgstr "Kopēt saiti starpliktuvē"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Copy dial-in information to description"
+msgstr "Kopēt iezvana informāciju apraksta laukā"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"Zoom meetings expire after 365 days. We recommend to limit the series to one "
+"year. Alternatively, you can update the series before the Zoom meeting "
+"expires."
+msgstr ""
+"Zoom mītiņi ir derīgi 365 dienas. Mēs iesakām ierobežot sēriju viena gada "
+"garumā. Alternatīvi, jūs varat jaunināt sēriju pirms tās derīgums ir "
+"izbeidzies."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid ""
+"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
+"expired."
+msgstr ""
+"Problēma pie Zoom mītiņa ielādēšanas. Iespējams, Zoom mītiņa derīguma "
+"termiņš ir beidzies."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "Create new Zoom meeting"
+msgstr "Izveidot jaunu Zoom mītiņu"
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+#: apps/io.ox/switchboard/settings/pane.js
+msgid ""
+"The Zoom integration service is currently unavailable. Please try again "
+"later."
+msgstr ""
+"Zoom integrācijas serviss pašlaik nav pieejams. Lūdzu mēģiniet vēlāk vēlreiz."
+
+#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
+msgid "New meeting"
+msgstr "Jauns mītiņš"
+
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Kontakts ir pārvietots"
@@ -4308,6 +4477,7 @@ msgstr ""
 "ierobežojumu. Tāpēc daži ieraksti nav uzrādīti."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/contacts/enterprisepicker/dialog.js
 #: apps/io.ox/contacts/listview.js apps/io.ox/contacts/main.js
 #: apps/io.ox/contacts/model.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/participants/views.js module:io.ox/core
@@ -5030,6 +5200,18 @@ msgstr "Norādītā vērtība ir pārāk gara. Atļautais garums ir %1$d simboli
 msgid "This is an invalid email address."
 msgstr "Šī nav derīga e-pasta adrese."
 
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "My address lists"
+msgstr "Mani adrešu saraksti"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Public address lists"
+msgstr "Publiskie adrešu saraksti"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "Shared address lists"
+msgstr "Koplietojuma adrešu saraksti"
+
 #. %1$d is number of selected contacts
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "%1$d contact selected"
@@ -5042,10 +5224,30 @@ msgstr[2] "Izvelētas %1$s kontaktpersonas"
 msgid "Remove contact from selection"
 msgstr "Noņemt kontaktu no izvēlnes"
 
-#. %1$s is the contact's name
+#. %1$s name of the department a contact is working in
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-msgid "Select/Deselect contact %1$s"
-msgstr "Izvēlieties/atcelt kontaktu %1$s"
+msgid "department %1$s"
+msgstr "struktūrvienība %1$s"
+
+#. %1$s job position of a contact, CEO, working student etc
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "position %1$s"
+msgstr "pozīcija %1$s"
+
+#. %1$s mail address of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "email address %1$s"
+msgstr "e-pasta adrese %1$s"
+
+#. %1$s phone number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "phone number %1$s"
+msgstr "telefona numurs %1$s"
+
+#. %1$s room number of a contact
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "room %1$s"
+msgstr "telpa %1$s"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Show contact details"
@@ -5462,6 +5664,21 @@ msgid "User name"
 msgstr "Lietotāja vārds"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Reset password"
+msgstr "Atiestatīt paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Set password"
+msgstr "Iestatīt paroli"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Email address"
+msgstr "E-pasta adrese"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/core/relogin.js module:io.ox/core
 msgid "Sign in"
 msgstr "Pieslēgšanās"
@@ -5621,8 +5838,8 @@ msgid "Imprint"
 msgstr "Nospiedums"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-msgid "Confirm new Password"
-msgstr "Apstiprināt jauno paroli"
+msgid "Confirm new password"
+msgstr "Apstiprināt paroli"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -5647,13 +5864,6 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Nākošais"
-
-#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Email address"
-msgstr "E-pasta adrese"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -5745,7 +5955,6 @@ msgstr "Autors"
 #. %1$s name of module (mail, calendar etc)
 #. %2$s the granted role (author, editor, viewer, none)
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-#| msgid " %1$s (%2$s) "
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
@@ -5791,10 +6000,6 @@ msgid "Author (create/edit/delete appointments)"
 msgstr "Autors (mītiņu izveide/rediģēšana/dzēšana)"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "save"
-msgstr "saglabāt"
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not create deputy."
 msgstr "Nevar izveidot vietnieku."
 
@@ -5809,8 +6014,8 @@ msgstr "Noņemt vietnieku %1$s"
 
 #. %1$s name of the deputy
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Do you want to remove %1$s from your deputy list"
-msgstr "Vai tiešām vēlaties noņemt %1$s no vietnieku saraksta?"
+msgid "Do you want to remove %1$s from your deputy list?"
+msgstr "Vai tiešām vēlaties noņemt %1$s no sava vietnieku saraksta?"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Could not remove deputy."
@@ -5823,10 +6028,6 @@ msgstr "Pašlaik vietnieki jums nav piešķirti."
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 msgid "Deputies can get acces to your Inbox and Calendar."
 msgstr "Deputāti var saņemt piekļuvi jūsu iesūtnei un kalendāram."
-
-#: apps/io.ox/core/deputy/dialog.js module:io.ox/core
-msgid "Remobe"
-msgstr "Noņemt"
 
 #: apps/io.ox/core/deputy/dialog.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/settings/pane.js
@@ -6552,6 +6753,10 @@ msgstr "Izvēlēties mapi"
 msgid "Create folder"
 msgstr "Izveidot mapi"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Šo mapi nevar atlasīt."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Darbības nav pieejamas"
@@ -7127,7 +7332,6 @@ msgid "The user has administrative rights"
 msgstr "Lietotājam ir administratīvās tiesības"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "Apply to all subfolders"
 msgstr "Piemērot visam apakšmapēm"
 
@@ -10717,6 +10921,10 @@ msgid "Added %s to attachments."
 msgstr "%s pievienots pielikumiem."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "On behalf of"
+msgstr "Kā vārdā"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Show names"
 msgstr "Rādīt vārdus"
 
@@ -10728,6 +10936,13 @@ msgstr "Rediģēt vārdus"
 #: apps/io.ox/mail/toolbar.js
 msgid "Compose new email"
 msgstr "Sastādīt jaunu e-pastu"
+
+#. Used to display hint in mail compose that user sends a mail "on behalf of" someone else
+#. %1$s: name of mail address of current user (technical: sender)
+#. %2$s: name of mail address of "on behalf of"-user (technical: from)
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid "This email will be sent by %1$s on behalf of %2$s."
+msgstr "Šīs e-pasts tiks nosūtīts no %1$s %2$s vārdā."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
@@ -10794,6 +11009,10 @@ msgstr "Lūdzu izvēlieties derīgu attēla failu"
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "Sent from %s via mobile"
 msgstr "Nosūtīts no %s ar mobilo ierīci"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "This mail has been sent on behalf of another person."
+msgstr "Šī vēstule ir nosūtīta citas personas vārdā."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
@@ -11174,6 +11393,16 @@ msgstr "E-pasts no %1$s: %2$s"
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Via"
 msgstr "Sūtītājs"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "on behalf of"
+msgstr "kā vārdā"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "via"
+msgstr "caur"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -13185,6 +13414,10 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX sinhronizācijas programma"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
 msgstr "MacOS"
 
@@ -14247,29 +14480,6 @@ msgid "Call via Jitsi"
 msgstr "Zvanīt ar Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Join Zoom meeting"
-msgstr "Pievienoties Zoom mītiņam"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join Jitsi meeting"
-msgstr "Pievienoties Jitsi mītiņam"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Join conference call"
-msgstr "Pievienoties konferences zvanam"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Zoom Meeting"
-msgstr "Zoom mītiņš"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/jitsi-meeting.js
-msgid "Jitsi Meeting"
-msgstr "Jitsi mītiņš"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
 msgid "Zoom Integration"
 msgstr "Zoom integrācija"
@@ -14341,23 +14551,6 @@ msgid "Open Zoom profile"
 msgstr "Atvērt Zoom profilu"
 
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"You first need to connect %1$s with Zoom. To do so, you need a Zoom Account. "
-"If you don't have an account yet, it is sufficient to create a free one."
-msgstr ""
-"Vispirms jums ir jāsasaista %1$s ar Zoom. Lai to paveiktu, jums ir "
-"nepieciešams Zoom konts. Ja jums vēl šī konta nav, ir pietiekami izveidot "
-"bezmaksas kontu."
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-call.js
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connect with Zoom"
-msgstr "Pieslēgties Zoom"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "You have linked the following Zoom account:"
 msgstr "Jūs esat piesaistīji sekojošu Zoom kontu:"
 
@@ -14368,14 +14561,6 @@ msgstr "Personīgais mītiņa ID:"
 #: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
 msgid "Remove account"
 msgstr "Noņemt kontu"
-
-#: apps/io.ox/switchboard/settings/pane.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid ""
-"The Zoom integration service is currently unavailable. Please try again "
-"later."
-msgstr ""
-"Zoom integrācijas serviss pašlaik nav pieejams. Lūdzu mēģiniet vēlāk vēlreiz."
 
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "Call history"
@@ -14406,94 +14591,6 @@ msgstr "Atbildēts zvans no %1$s"
 #: apps/io.ox/switchboard/views/call-history.js module:io.ox/switchboard
 msgid "You called %1$s"
 msgstr "Jūs zvanījāt %1$s"
-
-#: apps/io.ox/switchboard/views/conference-select.js module:io.ox/switchboard
-msgid "Conference"
-msgstr "Konference"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Link:"
-msgstr "Saite:"
-
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Copy to location field"
-msgstr "Kopēt uz vietas lauku"
-
-#. %1$s contains the URL to join the meeting
-#: apps/io.ox/switchboard/views/jitsi-meeting.js module:io.ox/switchboard
-msgid "Jitsi Meeting: %1$s"
-msgstr "Jitsi mītiņš: %1$s"
-
-#: apps/io.ox/switchboard/views/zoom-call.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/views/zoom-meeting.js
-msgid "Connecting to Zoom ..."
-msgstr "Pieslēgšanās pie Zoom ..."
-
-#. %1$s contains a password
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Mītiņa parole: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Ātrā uzziņa (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Mītiņa ID: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Iezvana kods: %1$d"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Iezvans pēc atrašanās vietas"
-
-#. Copy the meeting link into the appointment's location field
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to location"
-msgstr "Kopēt saiti atrašanās vietas laukā"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy link to clipboard"
-msgstr "Kopēt saiti starpliktuvē"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Copy dial-in information to description"
-msgstr "Kopēt iezvana informāciju apraksta laukā"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"Zoom meetings expire after 365 days. We recommend to limit the series to one "
-"year. Alternatively, you can update the series before the Zoom meeting "
-"expires."
-msgstr ""
-"Zoom mītiņi ir derīgi 365 dienas. Mēs iesakām ierobežot sēriju viena gada "
-"garumā. Alternatīvi, jūs varat jaunināt sēriju pirms tās derīgums ir "
-"izbeidzies."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid ""
-"A problem occured while loading the Zoom meeting. Maybe the Zoom meeting has "
-"expired."
-msgstr ""
-"Problēma pie Zoom mītiņa ielādēšanas. Iespējams, Zoom mītiņa derīguma "
-"termiņš ir beidzies."
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Create new Zoom meeting"
-msgstr "Izveidot jaunu Zoom mītiņu"
-
-#: apps/io.ox/switchboard/views/zoom-meeting.js module:io.ox/switchboard
-msgid "New meeting"
-msgstr "Jauns mītiņš"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -16201,6 +16298,18 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "save"
+#~ msgstr "saglabāt"
+
+#~ msgid "Select/Deselect contact %1$s"
+#~ msgstr "Izvēlieties/atcelt kontaktu %1$s"
+
+#~ msgid "Confirm new Password"
+#~ msgstr "Apstiprināt jauno paroli"
+
+#~ msgid "Remobe"
+#~ msgstr "Noņemt"
 
 #~ msgid "Password recovery"
 #~ msgstr "Paroles atgūšana"
@@ -18229,9 +18338,6 @@ msgstr "Pievienot %s"
 #~ msgid "Confirm"
 #~ msgstr "Apstiprināt"
 
-#~ msgid "Confirm new password"
-#~ msgstr "Apstiprināt paroli"
-
 #~ msgid "Confirmation status"
 #~ msgstr "Apstiprinājumu statuss"
 
@@ -18329,9 +18435,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Country:"
 #~ msgstr "Valsts:"
-
-#~ msgid "Create Appointment"
-#~ msgstr "Izveidot tikšanos"
 
 #~ msgid "Create a %s account using the data stored here"
 #~ msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
@@ -20761,9 +20864,6 @@ msgstr "Pievienot %s"
 #~ msgid "Never."
 #~ msgstr "Nekad"
 
-#~ msgid "New Appointment"
-#~ msgstr "Jauna tikšanās"
-
 #~ msgid "New Caledonia"
 #~ msgstr "Jaunkaledonija"
 
@@ -21310,9 +21410,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Phone alt"
 #~ msgstr "Telefons (alt.)"
-
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonu numuri"
 
 #~ msgid "Phone:"
 #~ msgstr "Telefons:"
@@ -23404,12 +23501,6 @@ msgstr "Pievienot %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Šis pasts satur URL uz publikāciju."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Šī vēstule ir pievienota portālam"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Šī e-pasta sūtītājs ir %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Process var aizņemt dažas sekundes"
 
@@ -25001,9 +25092,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "vacation"
 #~ msgstr "prombūtne"
-
-#~ msgid "via"
-#~ msgstr "caur"
 
 #~ msgid "waiting"
 #~ msgstr "gaida"

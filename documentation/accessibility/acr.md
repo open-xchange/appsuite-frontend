@@ -651,7 +651,7 @@ Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are
                 </ul>
             </td>
             <td>Web: Supports</td>
-            <td>Web: There are no specific motion actiuated interface components.</td>
+            <td>Web: There are no specific motion activated interface components.</td>
         </tr>
         <tr>
             <td><a href="https://www.w3.org/TR/WCAG20/#meaning-doc-lang-id">3.1.1 Language of Page</a> (Level A)<br>

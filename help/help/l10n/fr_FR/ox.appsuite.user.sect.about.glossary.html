@@ -39,15 +39,11 @@
 <dd class="glossdef"><p role="presentation">Une application est un composant du collecticiel qui fournit certaines fonctionnalités. Par exemple, avec l'application <span class="phrase">Courriel</span>, vous pouvez envoyer, recevoir et organiser votre courrier électronique.</p></dd>
 <dt id="ox.appsuite.user.reference.about.glossary.globaladdressbook"><span class="glossterm">Carnet d'adresses global</span></dt>
 <dd class="glossdef"><p role="presentation">Contient les données de contact pour tous les utilisateurs internes. Les utilisateurs peuvent modifier leurs données personnelles dans le carnet d'adresses global.</p></dd>
-<dt id="ox.appsuite.user.reference.about.glossary.groupware"><span class="glossterm">
-          <span class="phrase">Collecticiel</span>
-          
-          
-        </span></dt>
+<dt id="ox.appsuite.user.reference.about.glossary.groupware"><span class="glossterm">Collecticiel (Logiciel de travail collaboratif)</span></dt>
 <dd class="glossdef"><p role="presentation">Le logiciel décrit dans cette documentation.</p></dd>
 <dt id="ox.appsuite.user.reference.about.glossary.account"><span class="glossterm">Compte</span></dt>
 <dd class="glossdef">
-<p role="presentation">Un compte ou un compte utilisateur est un droit d'accès au système d'un ordinateur. Exemples de comptes :<ul class="itemizedlist" style="list-style-type: disc; ">
+<p role="presentation">Un compte ou un compte utilisateur est un droit d'accès au système d'un ordinateur. Exemples de comptes :<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">compte dans le collecticiel</p></li>
 <li class="listitem"><p role="presentation">compte GMail</p></li>
 <li class="listitem"><p role="presentation">compte DropBox</p></li>
@@ -55,35 +51,52 @@
 </ul>Pour obtenir un accès, un utilisateur doit s'authentifier avec son nom d'utilisateur et son mot de passe. C'est grâce à ce compte que le système de l'ordinateur identifie chaque utilisateur. Cela permet ainsi d'assigner des propriétés spécifiques à un utilisateur, telles que des droits d'accès ou des réglages.</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.dataorganisation.accounts.html">Gérer les comptes</a></p>
 </dd>
-<dt id="ox.appsuite.user.reference.about.glossary.internalmailaccount"><span class="glossterm">Compte de courrier électronique interne</span></dt>
-<dd class="glossdef"><p role="presentation">Votre compte de courrier électronique lié au logiciel de travail collaboratif. Vous obtenez automatiquement ce compte. Vous ne pouvez pas le supprimer.</p></dd>
+<dt id="ox.appsuite.user.reference.about.glossary.primarymailaccount"><span class="glossterm">Compte de courrier externe</span></dt>
+<dd class="glossdef">
+<p role="presentation">Votre compte de courrier électronique lié au logiciel de travail collaboratif. Vous obtenez ce compte automatiquement. Vous ne pouvez pas le supprimer.</p>
+<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.dataorganisation.accounts.primarymail.html">Modifier le compte de courrier principal</a></p>
+</dd>
+<dt id="ox.appsuite.user.reference.about.glossary.functionalmailaccount"><span class="glossterm">Compte de courrier externe</span></dt>
+<dd class="glossdef">
+<p role="presentation">L'administrateur peut configurer des comptes de courrier électronique fonctionnels et les attribuer à des utilisateurs spécifiques. Un compte de courrier électronique fonctionnel possède les propriétés suivantes : <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Il répond à un objectif précis, tel que la communication avec les clients.</p>
+<p role="presentation">Des comptes comme assistance@exemple.com, info@exemple.com en sont des exemples typiques.</p>
+</li>
+<li class="listitem">
+<p role="presentation">Il peut être utilisé conjointement par plusieurs utilisateurs pour lire et envoyer des courriels ou y répondre.</p>
+<p role="presentation">L'administrateur définit quels utilisateurs sont autorisés à utiliser un compte de courrier électronique fonctionnel.</p>
+</li>
+<li class="listitem"><p role="presentation">Les utilisateurs ne peuvent ni modifier, ni supprimer un compte de courrier électronique fonctionnel.</p></li>
+</ul></p>
+<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.dataorganisation.accounts.functionalmail.html">Activer ou désactiver des comptes de courrier électronique fonctionnels</a></p>
+</dd>
 <dt class="cap-webmail" id="ox.appsuite.user.reference.about.glossary.domain"><span class="glossterm">Domaine</span></dt>
-<a class="indexterm" name="id-1.2.5.4.22.2"></a><dd class="glossdef cap-webmail">
-<p role="presentation">Un domaine est l'adresse utilisée pour ouvrir une page sur Internet. Exemple :<span class="guilabel"><strong>www.exemple.com</strong></span>. Les termes "adresse web" ou "adresse Internet" sont également utilisés pour désigner un domaine.</p>
-<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser une liste blanche</a></p>
+<dd class="glossdef cap-webmail">
+<p role="presentation">Un domaine est l'adresse utilisée pour ouvrir une page sur Internet. Exemple : www.exemple.com. Les termes "adresse web" ou "adresse Internet" sont également utilisés pour désigner un domaine.</p>
+<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser des listes d'autorisation</a></p>
 </dd>
 <dt id="ox.appsuite.user.reference.about.glossary.folder"><span class="glossterm">Dossiers</span></dt>
 <dd class="glossdef">
-<p role="presentation">Les dossiers contiennent des objets spécifiques à une application. Dans certaines applications, les dossiers peuvent également comprendre des sous-dossiers. Certains dossiers sont pré-configurés, d'autres peuvent être mis en place par l'utilisateur. Exemples de dossiers : dossiers de courriel, carnet d'adresses, agenda, dossier de tâches, dossiers <span class="phrase">Fichiers</span>  .</p>
+<p role="presentation">Les dossiers contiennent des objets spécifiques à une application. Dans certaines applications, les dossiers peuvent également comprendre des sous-dossiers. Certains dossiers sont pré-configurés, d'autres peuvent être mis en place par l'utilisateur. Exemples de dossiers : dossiers de courriel, carnet d'adresses, agenda, dossier de tâches</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.html">Gestion des données avec les dossiers</a></p>
 </dd>
 <dt id="ox.appsuite.user.reference.about.glossary.elements"><span class="glossterm">Éléments</span></dt>
 <dd class="glossdef">
-<p role="presentation">Des éléments de l'interface utilisateur. Exemples : des fenêtres, des titres, des boutons.</p>
+<p role="presentation">Des éléments de l'interface utilisateur. Exemples : des fenêtres, des titres, des boutons.</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html">Description générale de l'interface utilisateur</a></p>
 </dd>
 <dt class="cap-webmail" id="ox.appsuite.user.reference.about.glossary.mailthread"><span class="glossterm">Fil de conversation par courriel</span></dt>
 <dd class="glossdef cap-webmail">
-<p role="presentation">Un fil de conversation est une série de courriers électroniques listant de manière dynamique toutes les réponses successives associées au message d'origine. Tous les messages d'un fil de conversation ont le même sujet. Le message courant correspond à la dernière réponse. </p>
+<p role="presentation">Un fil de conversation est une série de courriers électroniques listant de manière dynamique toutes les réponses successives associées au message d'origine. Tous les messages d'un fil de conversation ont le même sujet. Le message courant correspond à la dernière réponse.</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.email.gui.list.html">La liste <span class="phrase">Courriel</span></a></p>
 </dd>
 <dt class="cap-calendar" id="ox.appsuite.user.reference.about.glossary.group"><span class="glossterm">Groupe</span></dt>
-<a class="indexterm" name="id-1.2.5.4.12.2"></a><dd class="glossdef cap-calendar">
-<p role="presentation">Un groupe est constitué d'un nom de groupe et d'un certain nombre d'utilisateurs internes. Les groupes peuvent être utilisés des différentes manières suivantes :<ul class="itemizedlist" style="list-style-type: disc; ">
+<dd class="glossdef cap-calendar">
+<p role="presentation">Un groupe est constitué d'un nom de groupe et d'un certain nombre d'utilisateurs internes. Les groupes peuvent être utilisés des différentes manières suivantes : <ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">être ajoutés à un rendez-vous ou à une tâche</p></li>
 <li class="listitem"><p role="presentation">se voir accorder des autorisations par invitation à un partage</p></li>
-</ul>
-          </p>
+</ul></p>
 <p role="presentation">Suivant la configuration, il existe des groupes spécifiques prédéfinis. La configuration du collecticiel peut également autoriser certains utilisateurs à créer des groupes supplémentaires.</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.calendar.groups.html">Gérer les groupes</a></p>
 </dd>
@@ -93,19 +106,19 @@
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html">Description générale de l'interface utilisateur</a></p>
 </dd>
 <dt id="ox.appsuite.user.reference.about.glossary.guest"><span class="glossterm">Invité</span></dt>
-<a class="indexterm" name="id-1.2.5.4.11.2"></a><dd class="glossdef"><p role="presentation">Une personne recevant une invitation vers un partage par un autre utilisateur, ou ajoutée à un rendez-vous ou une tâche est un participant externe. Chaque utilisateur invité appartient au groupe <span class="guilabel"><strong>Invités</strong></span>. Ce groupe ne peut ni être modifié, ni être supprimé.</p></dd>
-<dt class="cap-webmail" id="ox.appsuite.user.reference.about.glossary.whitelist"><span class="glossterm">Liste blanche</span></dt>
-<dd class="glossdef cap-webmail">
-<p role="presentation">Une liste blanche est une liste de noms de domaines ou d'adresses de courrier électronique auxquels vous faites confiance.</p>
-<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser une liste blanche</a></p>
+<dd class="glossdef"><p role="presentation">Une personne recevant une invitation vers un partage par un autre utilisateur, ou ajoutée à un rendez-vous ou une tâche est un participant externe. Chaque utilisateur invité appartient au groupe <span class="guilabel"><strong>Invités</strong></span>. Ce groupe ne peut ni être modifié, ni être supprimé.</p></dd>
+<dt class="cap-webmail" id="ox.appsuite.user.reference.about.glossary.whitelist"><span class="glossterm">Liste d'autorisation</span></dt>
+<a class="indexterm" name="id-1.2.5.4.22.2"></a><dd class="glossdef cap-webmail">
+<p role="presentation">Une liste d'autorisation est une liste de noms de domaines ou d'adresses de courrier électronique auxquels vous faites confiance.</p>
+<p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.security.whitelist.html">Utiliser des listes d'autorisation</a></p>
 </dd>
 <dt class="cap-calendar" id="ox.appsuite.user.reference.about.glossary.distributionlist"><span class="glossterm">Liste de diffusion</span></dt>
 <dd class="glossdef cap-calendar">
-<p role="presentation">Une liste de diffusion se compose d'un nom de liste et d'un certain nombre d'adresses électroniques d'utilisateurs internes ou de partenaires extérieurs. Vous pouvez créer et modifier vos propres listes de diffusion. Les autres utilisateurs ne peuvent pas voir vos listes de diffusion. Elles peuvent être employées pour :<ul class="itemizedlist" style="list-style-type: disc; ">
+<p role="presentation">Une liste de diffusion se compose d'un nom de liste et d'un certain nombre d'adresses électroniques d'utilisateurs internes ou de partenaires extérieurs. Vous pouvez créer et modifier vos propres listes de diffusion. Les autres utilisateurs ne peuvent pas voir vos listes de diffusion. Elles peuvent être employées pour :<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p role="presentation">envoyer un courriel à plusieurs contacts</p></li>
 <li class="listitem"><p role="presentation">ajouter des participants internes ou externes à un rendez-vous ou une tâche</p></li>
 <li class="listitem"><p role="presentation">inviter plusieurs utilisateurs ou invités à accéder à un partage</p></li>
-</ul> Suivant la configuration du collecticiel, des listes de diffusion spécifiques sont prédéfinies.</p>
+</ul> Suivant la configuration du collecticiel, des listes de diffusion spécifiques sont prédéfinies pour l'ensemble des utilisateurs.</p>
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html">Créer des listes de diffusion</a></p>
 </dd>
 <dt id="ox.appsuite.user.reference.about.glossary.object"><span class="glossterm">Objets</span></dt>
@@ -133,7 +146,7 @@
 <p role="presentation">Voir aussi : <a class="xref" href="ox.appsuite.user.sect.security.sessions.html">Afficher les clients actifs et vous en déconnecter</a></p>
 </dd>
 <dt id="ox.appsuite.user.reference.about.glossary.user"><span class="glossterm">Utilisateur</span></dt>
-<a class="indexterm" name="id-1.2.5.4.10.2"></a><dd class="glossdef"><p role="presentation">Une personne qui travaille avec le logiciel de travail collaboratif. Chaque utilisateur a un identifiant (nom d'utilisateur) et un mot de passe. L'ensemble des utilisateurs du collecticiel appartient au <span class="guilabel"><strong>groupe par défaut</strong></span>. Ces utilisateurs sont également appelés les utilisateurs internes.</p></dd>
+<dd class="glossdef"><p role="presentation">Une personne qui travaille avec le logiciel de travail collaboratif. Chaque utilisateur a un identifiant (nom d'utilisateur) et un mot de passe. L'ensemble des utilisateurs du collecticiel appartient au <span class="guilabel"><strong>groupe par défaut</strong></span>. Ces utilisateurs sont également appelés les utilisateurs internes.</p></dd>
 </dl>
 </div>
 </div>

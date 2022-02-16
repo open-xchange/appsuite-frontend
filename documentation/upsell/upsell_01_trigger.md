@@ -77,7 +77,7 @@ If the user clicks on the upsell trigger, a upsell event of type 'custom' with i
 
 If you want certain upsell trigger to appear on different [capabilities](../customize/manifests.html#capabilities), you can configure this inside the `.properties` file.
 
-Therefore, you have to configure the required field with a logical expression of capabilities for the trigger. If the actual capabilities does not satisfy the expression and the upsell capabilites satisfies the expression, the upsell trigger will be drawn.
+Therefore, you have to configure the required field with a logical expression of capabilities for the trigger. If the actual capabilities does not satisfy the expression and the upsell capabilities satisfies the expression, the upsell trigger will be drawn.
 
 See the following example which requires *eas* and *caldav* or not *carddav*:
 
