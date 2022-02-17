@@ -64,7 +64,6 @@ define('io.ox/mail/compose/resize-view', [
             if (file) {
                 model.resized.resolve(file);
                 model.trigger('image:resized', file);
-
             }
         });
     }
