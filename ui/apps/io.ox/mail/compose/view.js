@@ -1100,7 +1100,9 @@ define('io.ox/mail/compose/view', [
                 return self.signaturesLoading;
             })
             .done(function () {
-                var target;
+                var modalOpen = $(document.body).hasClass('modal-open'),
+                    target;
+
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) target = config.is('new|forward') ? self.$('.tokenfield:first .token-input') : self.editor;
 
@@ -1115,12 +1117,12 @@ define('io.ox/mail/compose/view', [
                     var defaultFontStyle = settings.get('defaultFontStyle', {}),
                         family = (defaultFontStyle.family || '').split(',')[0];
                     if (!_.isEmpty(defaultFontStyle)) {
-                        if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family);
-                        if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size);
+                        if (family && family !== 'browser-default') self.editor.tinymce().execCommand('fontName', false, family, { skip_focus: modalOpen });
+                        if (defaultFontStyle.size && defaultFontStyle.size !== 'browser-default') self.editor.tinymce().execCommand('fontSize', false, defaultFontStyle.size, { skip_focus: modalOpen });
                     }
                 }
 
-                if (target) target.focus();
+                if (target && !modalOpen) target.focus();
             });
         },
 
