@@ -449,7 +449,7 @@ define('io.ox/core/settings/pane', [
             index: INDEX += 100,
             render: function (baton) {
 
-                if (!settings.isConfigurable('autoStart')) return;
+                if (!settings.isConfigurable('autoStart') || capabilities.has('guest')) return;
                 if (availableApps.length <= 2) return;
 
                 baton.$el.append(
