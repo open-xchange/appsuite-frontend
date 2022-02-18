@@ -131,6 +131,7 @@ define('io.ox/mail/compose/util', [
 
                     attachment.on('force:upload', process);
 
+                    initPendingUploadingAttachments();
                     return _.delay(process, 5000);
                 }
             }

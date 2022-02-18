@@ -50,6 +50,7 @@ define('io.ox/mail/compose/actions/extensions', [
     }
 
     api.waitForPendingUploads = function (baton) {
+        if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
         return wait(baton.model).then(function () {
             baton.view.syncMail();
         });
