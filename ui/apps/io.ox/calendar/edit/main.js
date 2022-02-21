@@ -224,297 +224,300 @@ define('io.ox/calendar/edit/main', [
             size: 'width-sm'
         });
 
-        var win = ox.ui.createWindow({
-            name: 'io.ox/calendar/edit',
-            chromeless: true,
-            floating: !_.device('smartphone'),
-            closable: true,
-            title: gt('Edit Appointment')
-        });
+        app.setLauncher(function () {
 
-        app.setWindow(win);
+            var win = ox.ui.createWindow({
+                name: 'io.ox/calendar/edit',
+                chromeless: true,
+                floating: !_.device('smartphone'),
+                closable: true,
+                title: gt('Edit Appointment')
+            });
 
-        _.extend(app, {
+            app.setWindow(win);
 
-            /*
-            * should cleanly remove every outbounding reference
-            * of all objects created. this could be a awkward task
-            * but better for longtime perf. IE still has a hu
-            * :(
-            */
-            dispose: function () {
-                this.view.off('save', _.bind(this.onSave, this));
-                this.model.off();
-            },
+            _.extend(app, {
 
-            // published via callbacks objects in baton (see below)
-            // baton makes its journey through all extensions
-            // description field (resource only) uses this function to
-            // offer "Copy to description"; the click event lands here
-            extendDescription: function (e) {
-                // we simply have to look for the textarea
-                // this whole thing could be solved differently (more local)
-                // but I had no clue how to hook into the
-                // 'new forms.InputField({...})' stuff in template.js
-                e.preventDefault();
-                var textarea = app.view.$el.find('textarea.note');
-                // trigger change to update the model
-                textarea.val(textarea.val() + e.data.description).trigger('change');
-                notifications.yell('success', gt('Description has been copied'));
-            },
+                /*
+                * should cleanly remove every outbounding reference
+                * of all objects created. this could be a awkward task
+                * but better for longtime perf. IE still has a hu
+                * :(
+                */
+                dispose: function () {
+                    this.view.off('save', _.bind(this.onSave, this));
+                    this.model.off();
+                },
 
-            edit: function (data, opt) {
+                // published via callbacks objects in baton (see below)
+                // baton makes its journey through all extensions
+                // description field (resource only) uses this function to
+                // offer "Copy to description"; the click event lands here
+                extendDescription: function (e) {
+                    // we simply have to look for the textarea
+                    // this whole thing could be solved differently (more local)
+                    // but I had no clue how to hook into the
+                    // 'new forms.InputField({...})' stuff in template.js
+                    e.preventDefault();
+                    var textarea = app.view.$el.find('textarea.note');
+                    // trigger change to update the model
+                    textarea.val(textarea.val() + e.data.description).trigger('change');
+                    notifications.yell('success', gt('Description has been copied'));
+                },
 
-                var def = new $.Deferred();
+                edit: function (data, opt) {
 
-                opt = _.extend({
-                    mode: 'edit'
-                }, opt);
+                    var def = new $.Deferred();
 
-                app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(data);
+                    opt = _.extend({
+                        mode: 'edit'
+                    }, opt);
 
-                // Set window and toolbars invisible initially
-                win.nodes.header.addClass('sr-only');
-                win.nodes.body.addClass('sr-only');
+                    app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(data);
 
-                win.busy().show(function () {
-                    ext.point('io.ox/calendar/edit/boot').cascade(app, { app: app, data: data || {}, options: opt, win: win }).then(function success() {
-                        def.resolve({ app: app });
-                    }, function fail(e) {
-                        app.quit();
-                        def.reject(e);
+                    // Set window and toolbars invisible initially
+                    win.nodes.header.addClass('sr-only');
+                    win.nodes.body.addClass('sr-only');
+
+                    win.busy().show(function () {
+                        ext.point('io.ox/calendar/edit/boot').cascade(app, { app: app, data: data || {}, options: opt, win: win }).then(function success() {
+                            def.resolve({ app: app });
+                        }, function fail(e) {
+                            app.quit();
+                            def.reject(e);
+                        });
                     });
-                });
-                return def;
-            },
+                    return def;
+                },
 
-            considerSaved: false,
+                considerSaved: false,
 
-            create: function (data) {
-                data = data instanceof Backbone.Model ? data.toJSON() : data;
-                // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
-                if (!data.class) data.class = 'PUBLIC';
-                this.edit(data, { mode: 'create' });
-            },
+                create: function (data) {
+                    data = data instanceof Backbone.Model ? data.toJSON() : data;
+                    // apply defaults. Cannot be done in default of model, because then events in week/month view have class public by default
+                    if (!data.class) data.class = 'PUBLIC';
+                    this.edit(data, { mode: 'create' });
+                },
 
-            getDirtyStatus: function () {
-                if (this.considerSaved) return false;
-                return !_.isEqual(this.model.toJSON(), this.initialModelData);
-            },
+                getDirtyStatus: function () {
+                    if (this.considerSaved) return false;
+                    return !_.isEqual(this.model.toJSON(), this.initialModelData);
+                },
 
-            // gets the delta for an update request. That way we don't need to send the whole model
-            getDelta: function () {
+                // gets the delta for an update request. That way we don't need to send the whole model
+                getDelta: function () {
 
-                if (this.view.options.mode !== 'edit') return this.model.toJSON();
-                var self = this,
-                    data = this.model.toJSON(),
-                    delta = {
-                        id: this.initialModelData.id,
-                        folder: this.initialModelData.folder,
-                        timestamp: this.initialModelData.timestamp
-                    },
-                    keys = _(data).keys();
+                    if (this.view.options.mode !== 'edit') return this.model.toJSON();
+                    var self = this,
+                        data = this.model.toJSON(),
+                        delta = {
+                            id: this.initialModelData.id,
+                            folder: this.initialModelData.folder,
+                            timestamp: this.initialModelData.timestamp
+                        },
+                        keys = _(data).keys();
 
-                _(keys).each(function (key) {
-                    // endDate needs some special attention since it's one day off for allday appointments (for user convenience)
-                    if ((key === 'endDate' && util.isAllday(data) ? (self.view.tempEndDate && !_.isEqual(self.view.tempEndDate, self.initialModelData[key])) : (!_.isEqual(self.initialModelData[key], data[key])))
-                        && (self.initialModelData[key] || data[key])) {
-                        delta[key] = data[key];
-                    }
-                });
-
-                if (this.initialModelData.recurrenceId) {
-                    delta.recurrenceId = this.initialModelData.recurrenceId;
-                    delta.seriesId = this.initialModelData.seriesId;
-                }
-
-                return delta;
-            },
-
-            // clean up model so no empty values are saved and dirty check has no false positives
-            cleanUpModel: function () {
-                var data = this.model.toJSON(),
-                    self = this;
-
-                _(data).each(function (value, key) {
-                    // if value is undefined, '' or null and the key is not in the initial model data, we can omit it
-                    if (!value && !_(self.initialModelData).has(key)) {
-                        // use silent or miniviews add the attribute again with undefined value. We want to omit them here
-                        self.model.unset(key, { silent: true });
-                    }
-                });
-            },
-
-            onShowWindow: function () {
-
-                var array = [],
-                    signatureSequenz = ['keyup', 'focus'];
-
-                function stopPointerEvents(e) {
-
-                    if (e.type === 'focus') array.push('focus');
-                    if (e.type === 'keyup') array.push('keyup');
-
-                    if (array.length === 2) {
-                        if (_.isEmpty(_.difference(signatureSequenz, array))) {
-                            e.data.list.css('pointer-events', 'none');
+                    _(keys).each(function (key) {
+                        // endDate needs some special attention since it's one day off for allday appointments (for user convenience)
+                        if ((key === 'endDate' && util.isAllday(data) ? (self.view.tempEndDate && !_.isEqual(self.view.tempEndDate, self.initialModelData[key])) : (!_.isEqual(self.initialModelData[key], data[key])))
+                            && (self.initialModelData[key] || data[key])) {
+                            delta[key] = data[key];
                         }
-                        array = [];
+                    });
+
+                    if (this.initialModelData.recurrenceId) {
+                        delta.recurrenceId = this.initialModelData.recurrenceId;
+                        delta.seriesId = this.initialModelData.seriesId;
                     }
 
-                    self.getWindow().nodes.main.find('.control-group').on('mousemove', function () {
-                        e.data.list.css('pointer-events', 'auto');
-                    });
-                }
+                    return delta;
+                },
 
-                var self = this;
-                self.model.adjustEndDate = true;
-                if (self.model.get('summary')) {
-                    self.getWindow().setTitle(self.model.get('summary'));
-                    self.setTitle(self.model.get('summary'));
-                }
-                self.model.on('keyup:summary', function (value) {
-                    if (!value) value = self.model.get('id') ? gt('Edit appointment') : gt('Create appointment');
+                // clean up model so no empty values are saved and dirty check has no false positives
+                cleanUpModel: function () {
+                    var data = this.model.toJSON(),
+                        self = this;
 
-                    self.getWindow().setTitle(value);
-                    self.setTitle(value);
-                });
-
-                // no autofocus on smartphone and for iOS in special (see bug #36921)
-                if (_.device('!smartphone && !iOS')) {
-                    // focus first input element
-                    $(self.getWindow().nodes.main).find('input')[0].focus();
-                }
-                // make window scrollable
-                $(self.getWindow().nodes.main[0]).addClass('scrollable');
-
-                var controlsBlock = $(self.getWindow().nodes.main).find('.controls'),
-                    list = controlsBlock.find('ul'),
-                    input = controlsBlock.find('input');
-
-                input.on('keyup focus', { list: list }, stopPointerEvents);
-            },
-
-            onSave: function (data) {
-                var self = this;
-                if (data && data.conflicts) {
-                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                        conflictView.dialog(data.conflicts)
-                            .on('cancel', function () {
-                                self.getWindow().idle();
-
-                                // restore times (we add a day before saving allday appointments)
-                                if (self.view.tempEndDate) {
-                                    self.model.set('endDate', self.view.tempEndDate, { silent: true });
-                                    self.view.tempEndDate = null;
-                                }
-                            })
-                            .on('ignore', function () {
-                                if (self.view.options.mode === 'create') {
-                                    api.create(
-                                        self.model,
-                                        _.extend(util.getCurrentRangeOptions(), {
-                                            usedGroups: self.model._attendees.usedGroups,
-                                            attachments: self.attachmentsFormData || [],
-                                            checkConflicts: false })
-                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
-                                } else {
-                                    api.update(
-                                        self.getDelta(),
-                                        _.extend(util.getCurrentRangeOptions(), {
-                                            attachments: self.attachmentsFormData || [],
-                                            checkConflicts: false,
-                                            recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
-                                            usedGroups: self.model._attendees.usedGroups,
-                                            showRecurrenceInfo: true
-                                        })
-                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
-                                }
-                            });
-                    });
-                    return;
-                }
-
-                // update model with current data (omit undefined)
-                if (data) this.model.set(_(data.toJSON()).omit(function (value) { return !value; }));
-
-                // needed for attachment uploads to work
-                if (this.view.options.mode === 'create') {
-                    this.model.trigger('create');
-                    ox.trigger('appointment:create', this.model.get('attendeePrivileges') === 'MODIFY' ? 1 : 0);
-                } else {
-                    this.model.trigger('update');
-                }
-
-                if (this.moveAfterSave) {
-                    var save = _.bind(this.onSave, this),
-                        fail = _.bind(this.onError, this);
-                    api.move(this.model, this.moveAfterSave, util.getCurrentRangeOptions()).then(function () {
-                        delete self.moveAfterSave;
-                        save();
-                    }, fail);
-                } else {
-                    this.model.adjustEndDate = false;
-                    this.considerSaved = true;
-                    self.getWindow().idle();
-                    this.quit();
-                }
-            },
-
-            onError: function (error) {
-
-                // restore state of model attributes for moving
-                if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
-                    this.model.set('folder', this.moveAfterSave, { silent: true });
-                }
-                delete this.moveAfterSave;
-                this.getWindow().idle();
-
-                // restore times (we add a day before saving allday appointments)
-                if (this.tempEndDate && self.tempStartDate) {
-                    this.model.set('endDate', this.tempEndDate);
-                    this.model.set('startDate', this.tempStartDate);
-                    this.tempEndDate = this.tempStartDate = null;
-                }
-                // when to do what?
-                // show validation errors inline -> dont yell
-                // show server errors caused -> yell
-                if (error) notifications.yell(error);
-            },
-
-            failSave: function () {
-                if (this.model) {
-                    var summary = this.model.get('summary');
-                    return {
-                        description: gt('Appointment') + (summary ? ': ' + summary : ''),
-                        module: 'io.ox/calendar/edit',
-                        point:  {
-                            data: this.model.attributes,
-                            action: this.model.mode,
-                            meta: { usedGroups: this.model._attendees.usedGroups },
-                            // save this so the dirty check works correctly after the restore
-                            initialModelData: this.initialModelData
+                    _(data).each(function (value, key) {
+                        // if value is undefined, '' or null and the key is not in the initial model data, we can omit it
+                        if (!value && !_(self.initialModelData).has(key)) {
+                            // use silent or miniviews add the attribute again with undefined value. We want to omit them here
+                            self.model.unset(key, { silent: true });
                         }
-                    };
+                    });
+                },
+
+                onShowWindow: function () {
+
+                    var array = [],
+                        signatureSequenz = ['keyup', 'focus'];
+
+                    function stopPointerEvents(e) {
+
+                        if (e.type === 'focus') array.push('focus');
+                        if (e.type === 'keyup') array.push('keyup');
+
+                        if (array.length === 2) {
+                            if (_.isEmpty(_.difference(signatureSequenz, array))) {
+                                e.data.list.css('pointer-events', 'none');
+                            }
+                            array = [];
+                        }
+
+                        self.getWindow().nodes.main.find('.control-group').on('mousemove', function () {
+                            e.data.list.css('pointer-events', 'auto');
+                        });
+                    }
+
+                    var self = this;
+                    self.model.adjustEndDate = true;
+                    if (self.model.get('summary')) {
+                        self.getWindow().setTitle(self.model.get('summary'));
+                        self.setTitle(self.model.get('summary'));
+                    }
+                    self.model.on('keyup:summary', function (value) {
+                        if (!value) value = self.model.get('id') ? gt('Edit appointment') : gt('Create appointment');
+
+                        self.getWindow().setTitle(value);
+                        self.setTitle(value);
+                    });
+
+                    // no autofocus on smartphone and for iOS in special (see bug #36921)
+                    if (_.device('!smartphone && !iOS')) {
+                        // focus first input element
+                        $(self.getWindow().nodes.main).find('input')[0].focus();
+                    }
+                    // make window scrollable
+                    $(self.getWindow().nodes.main[0]).addClass('scrollable');
+
+                    var controlsBlock = $(self.getWindow().nodes.main).find('.controls'),
+                        list = controlsBlock.find('ul'),
+                        input = controlsBlock.find('input');
+
+                    input.on('keyup focus', { list: list }, stopPointerEvents);
+                },
+
+                onSave: function (data) {
+                    var self = this;
+                    if (data && data.conflicts) {
+                        ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                            conflictView.dialog(data.conflicts)
+                                .on('cancel', function () {
+                                    self.getWindow().idle();
+
+                                    // restore times (we add a day before saving allday appointments)
+                                    if (self.view.tempEndDate) {
+                                        self.model.set('endDate', self.view.tempEndDate, { silent: true });
+                                        self.view.tempEndDate = null;
+                                    }
+                                })
+                                .on('ignore', function () {
+                                    if (self.view.options.mode === 'create') {
+                                        api.create(
+                                            self.model,
+                                            _.extend(util.getCurrentRangeOptions(), {
+                                                usedGroups: self.model._attendees.usedGroups,
+                                                attachments: self.attachmentsFormData || [],
+                                                checkConflicts: false })
+                                        ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                    } else {
+                                        api.update(
+                                            self.getDelta(),
+                                            _.extend(util.getCurrentRangeOptions(), {
+                                                attachments: self.attachmentsFormData || [],
+                                                checkConflicts: false,
+                                                recurrenceRange: self.view.model.mode === 'thisandfuture' ? 'THISANDFUTURE' : undefined,
+                                                usedGroups: self.model._attendees.usedGroups,
+                                                showRecurrenceInfo: true
+                                            })
+                                        ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                    }
+                                });
+                        });
+                        return;
+                    }
+
+                    // update model with current data (omit undefined)
+                    if (data) this.model.set(_(data.toJSON()).omit(function (value) { return !value; }));
+
+                    // needed for attachment uploads to work
+                    if (this.view.options.mode === 'create') {
+                        this.model.trigger('create');
+                        ox.trigger('appointment:create', this.model.get('attendeePrivileges') === 'MODIFY' ? 1 : 0);
+                    } else {
+                        this.model.trigger('update');
+                    }
+
+                    if (this.moveAfterSave) {
+                        var save = _.bind(this.onSave, this),
+                            fail = _.bind(this.onError, this);
+                        api.move(this.model, this.moveAfterSave, util.getCurrentRangeOptions()).then(function () {
+                            delete self.moveAfterSave;
+                            save();
+                        }, fail);
+                    } else {
+                        this.model.adjustEndDate = false;
+                        this.considerSaved = true;
+                        self.getWindow().idle();
+                        this.quit();
+                    }
+                },
+
+                onError: function (error) {
+
+                    // restore state of model attributes for moving
+                    if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
+                        this.model.set('folder', this.moveAfterSave, { silent: true });
+                    }
+                    delete this.moveAfterSave;
+                    this.getWindow().idle();
+
+                    // restore times (we add a day before saving allday appointments)
+                    if (this.tempEndDate && self.tempStartDate) {
+                        this.model.set('endDate', this.tempEndDate);
+                        this.model.set('startDate', this.tempStartDate);
+                        this.tempEndDate = this.tempStartDate = null;
+                    }
+                    // when to do what?
+                    // show validation errors inline -> dont yell
+                    // show server errors caused -> yell
+                    if (error) notifications.yell(error);
+                },
+
+                failSave: function () {
+                    if (this.model) {
+                        var summary = this.model.get('summary');
+                        return {
+                            description: gt('Appointment') + (summary ? ': ' + summary : ''),
+                            module: 'io.ox/calendar/edit',
+                            point:  {
+                                data: this.model.attributes,
+                                action: this.model.mode,
+                                meta: { usedGroups: this.model._attendees.usedGroups },
+                                // save this so the dirty check works correctly after the restore
+                                initialModelData: this.initialModelData
+                            }
+                        };
+                    }
+                    return false;
+                },
+
+                failRestore: function (point) {
+                    // support for legacy restore points
+                    var data = point.data || point;
+                    app.edit(data, {
+                        mode: _.isUndefined(data.id) ? 'create' : 'edit',
+                        initialModelData: point.initialModelData,
+                        action: point.action,
+                        usedGroups: point.meta ? point.meta.usedGroups : []
+                    });
+                    return $.when();
+                },
+
+                getContextualHelp: function () {
+                    return 'ox.appsuite.user.sect.calendar.gui.create.html';
                 }
-                return false;
-            },
-
-            failRestore: function (point) {
-                // support for legacy restore points
-                var data = point.data || point;
-                this.edit(data, {
-                    mode: _.isUndefined(data.id) ? 'create' : 'edit',
-                    initialModelData: point.initialModelData,
-                    action: point.action,
-                    usedGroups: point.meta ? point.meta.usedGroups : []
-                });
-                return $.when();
-            },
-
-            getContextualHelp: function () {
-                return 'ox.appsuite.user.sect.calendar.gui.create.html';
-            }
+            });
         });
 
         app.setQuit(function (options) {
