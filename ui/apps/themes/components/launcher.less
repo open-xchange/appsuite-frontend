@@ -450,6 +450,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         justify-content: center;
         // overflow handling
         min-width: 0;
+        // dropdown would just grow to infinity instead of doing ellipsis without it
+        max-width: 400px;
         overflow: hidden;
         text-overflow: ellipsis;
         .name {
@@ -460,6 +462,8 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
+            // fixes new line and ellipsis at breaking points. For example '-' in mail addresses
+            white-space: nowrap;
         }
     }
     .smartphone & {
@@ -476,6 +480,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         }
         .text-container {
             text-align: left;
+            max-width: none;
         }
         width: auto;
     }
