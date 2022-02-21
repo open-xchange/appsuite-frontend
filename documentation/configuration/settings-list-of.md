@@ -608,9 +608,6 @@ Use the primary account name as label for the folder tree root node of non stand
 <config>io.ox/contacts//showAdmin=`<bool>`</config>
 Show context admin in addressbook. Default `false`
 
-<config>io.ox/contacts//showDepartment=`<bool>`</config>
-Whenever a contact from the global addressbook is rendered, additionally show the department (field) next to the name. Default `false`
-
 <config>io.ox/contacts//startInGlobalAddressbook=`<bool>`</config>
 Start in global addressbook when Contacts App is launched. Default `true`
 
