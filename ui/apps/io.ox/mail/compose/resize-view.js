@@ -107,6 +107,7 @@ define('io.ox/mail/compose/resize-view', [
             this.listenTo(this.model, 'change:imageResizeOption', this.onChange);
             this.listenTo(this.collection, 'add reset', this.onAddReset);
 
+
             if (!_.device('smartphone')) this.$el.prepend($('<span class="image-resize-label">').text(label + ':\u00A0'));
         },
 
@@ -117,7 +118,6 @@ define('io.ox/mail/compose/resize-view', [
         onAddReset: function (model) {
             resize(this.model.get('imageResizeOption'), model);
         },
-
 
         label: function () {
             //#. In the context of resizing images before uploading them this text is used as a label for a dropdown
