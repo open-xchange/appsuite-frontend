@@ -86,9 +86,16 @@ define('io.ox/mail/sanitizer', [
             // clear url paths from inline css when image loading is disabled
             currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
         }
-        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.hasAttribute && currentNode.hasAttribute('src')) {
+
+        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.getAttribute && !_.isEmpty(currentNode.getAttribute('src')) &&
+        // data:image are embedded images -> don't block it
+        !String(currentNode.getAttribute('src')).startsWith('data:image') &&
+        // mail attachment used as inline image -> don't block it
+        !String(currentNode.getAttribute('src')).startsWith('/api/image/mail/picture')) {
             // clear url paths from inline css when image loading is disabled
             currentNode.setAttribute('src', '');
+            // mark mail as modified (to show blocked images button)
+            if (config.mail) config.mail.modified = 1;
         }
 
         return currentNode;
@@ -101,8 +108,9 @@ define('io.ox/mail/sanitizer', [
         return true;
     }
 
-    function sanitize(data, options) {
+    function sanitize(data, options, mail) {
         options = _.extend({}, defaultOptions, options);
+        if (_.isObject(mail)) options.mail = mail;
 
         if (data.content_type !== 'text/html') return data;
         // See bug 66936, ensure sanitize returns a string
