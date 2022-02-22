@@ -118,8 +118,8 @@ define('io.ox/mail/compose/util', [
                     attachment.set('uploaded', 0);
 
                     attachment.on('image:resized', function (image) {
-                        // only abort when uploaded is less than 0.998. Otherwise, the MW might not receive the abort signal in time
-                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 0.998) def.abort();
+                        // only abort when uploaded is less than 1. Otherwise, the MW might not receive the abort signal in time
+                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 1 && attachment.id) def.abort();
 
                         data = { file: image };
                         if (!def) return;
