@@ -45,17 +45,23 @@ define('io.ox/mail/compose/util', [
                 def,
                 instantAttachmentUpload = settings.get('features/instantAttachmentUpload', true) || contentDisposition === 'inline';
 
-            model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
-                var def = new $.Deferred();
-                attachment.once('upload:complete', def.resolve);
-                attachment.once('upload:aborted', def.resolve);
-                attachment.once('upload:failed', def.reject);
-                return _.constant(def);
-            })());
+            function initPendingUploadingAttachments() {
+                model.pendingUploadingAttachments = model.pendingUploadingAttachments.catch(_.constant()).then((function () {
+                    var def = new $.Deferred();
+
+                    attachment.once('upload:complete', def.resolve);
+                    attachment.once('upload:aborted', def.resolve);
+                    attachment.once('upload:failed', def.reject);
+
+                    return _.constant(def);
+                })());
+            }
 
             function process() {
                 if (!data) return;
                 if (instantAttachmentUpload === false) return;
+
+                initPendingUploadingAttachments();
 
                 def = composeAPI.space.attachments[attachment.has('id') ? 'update' : 'add'](space, data, contentDisposition, attachment.get('id'));
                 data = undefined;
@@ -113,7 +119,7 @@ define('io.ox/mail/compose/util', [
 
                     attachment.on('image:resized', function (image) {
                         // only abort when uploaded is less than 1. Otherwise, the MW might not receive the abort signal in time
-                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 1) def.abort();
+                        if (def && def.state() === 'pending' && attachment.get('uploaded') < 1 && attachment.id) def.abort();
 
                         data = { file: image };
                         if (!def) return;
@@ -125,6 +131,7 @@ define('io.ox/mail/compose/util', [
 
                     attachment.on('force:upload', process);
 
+                    initPendingUploadingAttachments();
                     return _.delay(process, 5000);
                 }
             }
