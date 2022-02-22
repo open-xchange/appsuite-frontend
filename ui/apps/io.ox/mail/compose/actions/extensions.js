@@ -41,10 +41,17 @@ define('io.ox/mail/compose/actions/extensions', [
         });
     };
 
+    // needs some refactoring - see bug OXUIB-1095
+    function wait(model) {
+        if (model.pendingUploadingAttachments.state() !== 'pending') return;
+        return model.pendingUploadingAttachments.then(function () {
+            return wait(model);
+        });
+    }
 
     api.waitForPendingUploads = function (baton) {
         if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
-        return baton.model.pendingUploadingAttachments.then(function () {
+        return wait(baton.model).then(function () {
             baton.view.syncMail();
         });
     };
