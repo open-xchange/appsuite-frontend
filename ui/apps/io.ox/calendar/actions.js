@@ -144,12 +144,6 @@ define('io.ox/calendar/actions', [
 
     new Action('io.ox/calendar/detail/actions/delete', {
         collection: 'some && delete',
-        matches: function (baton) {
-            var f = generateFlagHash(baton.first());
-            if (f.organizer || f.organizer_on_behalf) return true;
-            if (f.attendee || f.attendee_on_behalf) return true;
-            return false;
-        },
         action: function (baton) {
             ox.load(['io.ox/calendar/actions/delete']).done(function (action) {
                 var virtualSeriesIds = [],
