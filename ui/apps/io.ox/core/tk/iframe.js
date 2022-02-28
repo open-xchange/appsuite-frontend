@@ -23,15 +23,15 @@
 define('io.ox/core/tk/iframe', [
     'io.ox/core/http',
     'io.ox/core/notifications',
+    'io.ox/core/desktop',
     'gettext!io.ox/core/tk/iframe'
-], function (http, notifications, gt) {
+], function (http, notifications, ui, gt) {
 
     'use strict';
 
     function createIframeApp(o) {
 
-        var app = ox.ui.createApp(o);
-
+        var app = ui.createApp(o);
         app.setLauncher(function () {
 
             var win = ox.ui.createWindow({
