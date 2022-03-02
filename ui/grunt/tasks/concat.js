@@ -480,8 +480,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/multifactor/views/selectDeviceView.js',
                             'apps/io.ox/multifactor/views/smsProvider.js',
                             'apps/io.ox/multifactor/views/totpProvider.js',
-                            'apps/io.ox/multifactor/views/u2fProvider.js',
-                            'node_modules/u2f-api/dist/lib/generated-google-u2f-api.js'
+                            'apps/io.ox/multifactor/views/u2fProvider.js'
                         ],
                         dest: 'build/apps/io.ox/multifactor/bundle.js',
                         nonull: true

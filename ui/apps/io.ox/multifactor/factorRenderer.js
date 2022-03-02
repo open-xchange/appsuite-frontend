@@ -58,10 +58,6 @@ define('io.ox/multifactor/factorRenderer', [
             case 'WEB-AUTH':
                 return createLi('fa-microchip', gt('Web auth'), device, selectable);
             case constants.U2F:
-                if (!window.u2f && !selectable) {
-                    console.log('U2F not compatible with this browser');
-                    return;  //  If browser not compatible, and being used for auth, then don't display
-                }
                 if (!selectable && duplicates.u2f) return;  // Only display one u2f device when authenticating
                 duplicates.u2f = true;
                 return createLi(constants.U2F_ICON, gt('Security Token'), device, selectable);
