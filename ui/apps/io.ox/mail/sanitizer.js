@@ -72,32 +72,49 @@ define('io.ox/mail/sanitizer', [
 
     // add hook before sanitizing, to catch some issues
     DOMPurify.addHook('beforeSanitizeElements', function (currentNode, hookEvent, config) {
-        // dompurify removes the title tag but keeps the text in it, creating strange artefacts
-        if (currentNode.tagName === 'TITLE') currentNode.innerHTML = '';
-        // add a class namespace to style nodes so that they overrule our stylesheets without !important
-        // if not for IE support we could just use a namespacerule here oh joy. Instead we have to parse every rule...
-        if (currentNode.tagName === 'STYLE' && currentNode.sheet && currentNode.sheet.cssRules) {
-            var rules = '';
-            _(currentNode.sheet.cssRules).each(function (rule) {
-                rules = rules + processRule(rule, config) + ' ';
-            });
-            currentNode.innerHTML = rules;
-        } else if (config.noImages && currentNode.hasAttribute && currentNode.hasAttribute('style')) {
-            // clear url paths from inline css when image loading is disabled
-            currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
+        // we're just interested in elements, i.e. tagName is set
+        // anything else, e.g. text nodes, comments, can be skipped
+        if (!currentNode.tagName) return currentNode;
+        // if (!currentNode.tagName) debugger
+        switch (currentNode.tagName) {
+            // dompurify removes the title tag but keeps the text in it, creating strange artifacts
+            case 'TITLE':
+                currentNode.innerHTML = '';
+                break;
+            case 'STYLE':
+                // add a class namespace to style nodes so that they overrule our stylesheets without !important
+                // if not for IE support we could just use a namespacerule here oh joy. Instead we have to parse every rule...
+                if (currentNode.sheet && currentNode.sheet.cssRules) {
+                    currentNode.innerHTML = _(currentNode.sheet.cssRules).reduce(function (concat, rule) {
+                        return concat + processRule(rule, config) + ' ';
+                    }, '');
+                }
+                break;
+            case 'IMG':
+                if (config.noImages && currentNode.getAttribute) {
+                    var src = String(currentNode.getAttribute('src') || '').trim();
+                    if (!src) break;
+                    // data:image are embedded images -> don't block it
+                    if (/^data:image/i.test(src)) break;
+                    // mail attachment used as inline image -> don't block it
+                    // the path is a bit tricky and quite unpredictable because it might differ from ox.root
+                    // ox.root might be /appsuite but inline images start with /ajax/image/... *sigh*
+                    // we could also assume that any path starting with '/' must be an inline image
+                    // but let's cover the typical patterns (/api/image/... or /appsuite/api/image/... /ajax/image/...)
+                    if (/^(\/\w+)*\/image\/mail\/picture/i.test(src)) break;
+                    // clear url paths from inline css when image loading is disabled
+                    currentNode.setAttribute('src', '');
+                    // mark mail as modified (to show blocked images button)
+                    if (config.mail) config.mail.modified = 1;
+                }
+                break;
+            default:
+                if (config.noImages && currentNode.hasAttribute && currentNode.hasAttribute('style')) {
+                    // clear url paths from inline css when image loading is disabled
+                    currentNode.setAttribute('style', currentNode.getAttribute('style').replace(urlDetectionRule, ''));
+                }
+                break;
         }
-
-        if (config.noImages && currentNode.tagName === 'IMG' && currentNode.getAttribute && !_.isEmpty(currentNode.getAttribute('src')) &&
-        // data:image are embedded images -> don't block it
-        !String(currentNode.getAttribute('src')).startsWith('data:image') &&
-        // mail attachment used as inline image -> don't block it
-        !String(currentNode.getAttribute('src')).startsWith('/api/image/mail/picture')) {
-            // clear url paths from inline css when image loading is disabled
-            currentNode.setAttribute('src', '');
-            // mark mail as modified (to show blocked images button)
-            if (config.mail) config.mail.modified = 1;
-        }
-
         return currentNode;
     });
 
