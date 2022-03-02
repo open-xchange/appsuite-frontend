@@ -44,6 +44,15 @@ define('io.ox/multifactor/api', [
         return false;
     }
 
+    // Establish if we use U2F or webuathn.  Firefox still supports U2F
+    function checkProvider(provider) {
+        if (provider.indexOf('U2F') > -1) {
+            if (window.u2f) return provider;
+            return 'WebAuthn';
+        }
+        return provider;
+    }
+
     var api = {
         getProviders: function (backup) {
             return $.when(
@@ -139,7 +148,7 @@ define('io.ox/multifactor/api', [
             return $.when(
                 http.PUT({
                     module: 'multifactor/device',
-                    params: { action: 'startAuthentication', deviceId: id, providerName: provider },
+                    params: { action: 'startAuthentication', deviceId: id, providerName: checkProvider(provider) },
                     force: true
                 }));
         },
