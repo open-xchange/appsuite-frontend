@@ -111,8 +111,14 @@ Set position of the feedback button. Default value is `right`. (`left|right`).
 <config>io.ox/core//feedback/showHover=`<bool>`</config>
 Show rating string on mouse hover in feedback dialog. Default `true`.
 
+<config>io.ox/core//feedback/mode=`<string>`</config>
+Dialog has different feedback modes. `nps-v1` to show nps rating, `star-rating-v1` to show star rating. Star rating is recommended.
+Default `star-rating-v1`
+
 <config>io.ox/core//feedback/showModuleSelect=`<bool>`</config>
-Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" every App can be rated regardless which App is currently running. Default `true`.
+Defines if the feedback dialog is aware of it's current App and the rating is based on this. If set to "true" a selection box is shown to select which app you want to rate.
+Only works with `star-rating-v1`
+Default `true`.
 
 <config>io.ox/core//feedback/maxFeedbacks=`<number>`</config>
 maximum number of feedbacks that are allowed in one timeframe (works with relative and absolute dates)
@@ -122,8 +128,9 @@ Default: `1` if io.ox/core//feedback/timeLimit is set else `undefined` (i.e. unl
 <config>io.ox/core//feedback/timeLimit=`<string>`</config>
 Can be relative or absolute ISO strings to define a time, e.g. “2020-01-21” or “3M” (meaning within 3 months).
 See [momentjs parsing](https://momentjs.com/docs/#/parsing/string/) documentation for details. Please ensure you wrap the value in quotes to avoid missinterprations as non-string data type.
+Set this to false to disable any restrictions (nps-v1 rating has a default of 6M otherwise)
 
-Default: `false`
+Default: default undefined for star-rating and 6M for nps-v1-rating
 
 ## Mail compose: tinyMCE text editor
 
@@ -287,7 +294,7 @@ Current user theme. Default is `default`
 # Onboarding
 
 To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
-The corresponding capabilities for the different apps are:
+The corresponding capabilites for the different apps are:
 
 - Mail App: `webmail mobile_mail_app`
 - Drive App: `infostore drive`
@@ -297,9 +304,6 @@ The corresponding capabilities for the different apps are:
 
 <config>io.ox/core//onboardingWizard=`<bool>`</config>
 Enabled new onboarding wizard and disables the old one
-
-<config>io.ox/onboarding//hidden/apps=`<array>`</config>
-Hide specific apps ([mailapp|mailsync|drive|driveapp|addressbook|calendar|eassync|syncapp]). Defaults to `['syncapp']`
 
 <config>io.ox/onboarding//productNames/mail=`<string>`</config>
 Name of the webmail product. Defaults to `OX Mail`
@@ -826,3 +830,4 @@ There is no default.
 
 <config>io.ox/core//whatsNew/autoStart`<boolean>`</config>
 set if the whats new dialog is shown automatically when a user logs in with a new version. Default is true
+
