@@ -294,7 +294,7 @@ Current user theme. Default is `default`
 # Onboarding
 
 To disable or enable different apps for client onboarding, the onboarding wizard checks enabled capabilities.
-The corresponding capabilites for the different apps are:
+The corresponding capabilities for the different apps are:
 
 - Mail App: `webmail mobile_mail_app`
 - Drive App: `infostore drive`
@@ -304,6 +304,9 @@ The corresponding capabilites for the different apps are:
 
 <config>io.ox/core//onboardingWizard=`<bool>`</config>
 Enabled new onboarding wizard and disables the old one
+
+<config>io.ox/onboarding//hidden/apps=`<array>`</config>
+Hide specific apps ([mailapp|mailsync|drive|driveapp|addressbook|calendar|eassync|syncapp]). Defaults to `['syncapp']`
 
 <config>io.ox/onboarding//productNames/mail=`<string>`</config>
 Name of the webmail product. Defaults to `OX Mail`
@@ -830,4 +833,3 @@ There is no default.
 
 <config>io.ox/core//whatsNew/autoStart`<boolean>`</config>
 set if the whats new dialog is shown automatically when a user logs in with a new version. Default is true
-
