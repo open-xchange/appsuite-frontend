@@ -220,10 +220,20 @@ define('io.ox/mail/detail/view', [
             }
 
             // add 'on behalf of'?
-            if (!('headers' in data)) return;
-            if (!('Sender' in data.headers)) return;
+            var sender = data.sender || [];
 
-            var sender = util.parseRecipients(data.headers.Sender);
+            // use sender header as fallback
+            if (sender.length === 0) {
+                if (!('headers' in data)) return;
+                if (!('Sender' in data.headers)) return;
+
+                sender = util.parseRecipients(data.headers.Sender);
+            }
+
+            // still no sender? -> return
+            if (sender.length === 0) return;
+
+            // compare mail address of sender and from
             if (from[0] && from[0][1] === sender[0][1]) return;
 
             // for deputies we display we switch order of from and header
