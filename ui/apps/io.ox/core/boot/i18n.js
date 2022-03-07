@@ -86,6 +86,7 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
         gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.');
         gt('Next');
         gt('Email address');
-
+        gt('Please enter your new password.');
+        gt('Please enter the same password.');
     }
 });

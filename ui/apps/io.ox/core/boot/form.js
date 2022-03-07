@@ -93,11 +93,11 @@ define('io.ox/core/boot/form', [
                     pass2 = $.trim($('#io-ox-retype-password').val());
                 if (pass1.length === 0 || pass2.length === 0) {
                     e.preventDefault();
-                    return util.fail({ error: util.gt('Please enter your new password.'), code: 'UI-0003' }, 'password');
+                    return util.fail({ error: gt('Please enter your new password.'), code: 'UI-0003' }, 'password');
                 }
                 if (pass1 !== pass2) {
                     e.preventDefault();
-                    return util.fail({ error: util.gt('Please enter the same password.'), code: 'UI-0004' }, 'password');
+                    return util.fail({ error: gt('Please enter the same password.'), code: 'UI-0004' }, 'password');
                 }
             });
             // remove unused fields
