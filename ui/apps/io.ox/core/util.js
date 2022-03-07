@@ -277,7 +277,7 @@ define('io.ox/core/util', [
         getAddresses: function (str) {
             // cover simple case separately; simple string without comma, semi-colon or white-space (see bug 57870)
             if (/^[^,;\s]+$/.test(str)) return [str];
-            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;>\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-'\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });

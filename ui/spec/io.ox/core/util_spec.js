@@ -155,7 +155,7 @@ define(['io.ox/core/util'], function (util) {
                 expect(util.breakableText('Hello World')).to.equal('Hello World');
             });
 
-            it('does not inseart breaks on text boundaries', function () {
+            it('does not insert breaks on text boundaries', function () {
                 expect(util.breakableText('01234567890123456789')).to.equal('01234567890123456789');
                 expect(util.breakableText('0123456789012345678901234567890123456789')).to.equal('01234567890123456789\u200B01234567890123456789');
                 expect(util.breakableText('012345678901234567890123456789012345678901')).to.equal('01234567890123456789\u200B01234567890123456789\u200B01');
@@ -294,6 +294,11 @@ define(['io.ox/core/util'], function (util) {
             it('recognizes complex addresses', function () {
                 expect(util.getAddresses('email1@domain.tld "quoted" <email2@domain.tld>, display name <email3@domain.tld>\t"email4"@domain.tld email5@[8.8.8.8],email6@domain.tld; bäre wörd <email7@domain.tld>'))
                     .to.deep.equal(['email1@domain.tld', '"quoted" <email2@domain.tld>', '"display name" <email3@domain.tld>', '"email4"@domain.tld', 'email5@[8.8.8.8]', 'email6@domain.tld', '"bäre wörd" <email7@domain.tld>']);
+            });
+
+            it('recognizes special quoted addresses', function () {
+                expect(util.getAddresses("single' quote <single.quote@mailbox.org>"))
+                    .to.deep.equal(['"single\' quote" <single.quote@mailbox.org>']);
             });
         });
     });
