@@ -1,7 +1,7 @@
 {
   "name": "open-xchange-appsuite",
   "description": "",
-  "version": "7.10.6",
+  "version": "7.10.x",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
