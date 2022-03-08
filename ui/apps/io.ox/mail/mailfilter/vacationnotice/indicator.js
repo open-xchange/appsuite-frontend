@@ -69,9 +69,11 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             var key = _.indexOf(this.activeElements, model.id);
             if (model.isActive() && key === -1) {
                 this.activeElements.push(model.id);
-            } else if (key !== -1) {
+            } else if (!model.isActive() && key !== -1) {
                 this.activeElements.splice(key, 1);
             }
+            // keep active state in sync
+            if (model.get('active') !== this.model.get('active')) this.model.set('active', model.get('active'));
         },
 
         checkIfActive: function () {
