@@ -11,7 +11,7 @@ To enable the old wizard, use the following setting:
 
 `io.ox/core//onboardingWizard=false`
 
-## Configuration and changes
+# Configuration and changes
 
 The old onboarding configuration via middleware properties is mostly obsolete now. Instead most of the configuration is handled by ui settings. Enabling and disabling of certain setup scenarios is now regulated by capabilities. The mentioned settings and capabilities are described in detail here:
 
@@ -30,5 +30,5 @@ Nevertheless the following properties from the old middleware configuration are 
 
 For more information please refer to this [article](https://oxpedia.org/wiki/index.php?title=AppSuite:Client_Onboarding), where the mentioned middleware properties are described in detail.
 
-## Upsell
+# Upsell
 For now the new wizard does not support the configuration of upsell scenarios. Support for upsell is planned to be added in a future update.
