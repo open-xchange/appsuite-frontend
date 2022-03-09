@@ -17,10 +17,9 @@ The old onboarding configuration via middleware properties is mostly obsolete no
 
 [Onboarding settings](https://documentation.open-xchange.com/7.10.5/ui/configuration/settings-list-of.html#onboarding)
 
-Additionally the following onboarding scenarios were removed and are no longer supported in favour of new onboarding methods like QR code support:
+Additionally the following onboarding scenario was removed and is no longer supported in favour of new onboarding methods like QR code support:
 
 - sending configuration via SMS/ E-mail
-- eM Client
 
 Nevertheless the following properties from the old middleware configuration are still in use and are mandatory for manual configuration scenarios with the new wizard:
 
