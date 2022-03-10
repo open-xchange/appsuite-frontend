@@ -79,7 +79,7 @@ define('io.ox/files/actions/save-as-pdf', [
                     FilesApi.trigger('add:file', { id: response.id, folder_id: fileOptions.saveas_folder_id });
 
                     if (!isAccessWrite) {
-                        notify('info', 'The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.');
+                        notify('info', gt('The PDF has been saved to "/drive/myfiles/documents" due to not having write access for the current folder.'));
                     }
                 } else {
                     errorMessage = ConverterUtils.getErrorTextFromResponse(response) || ConverterUtils.getErrorText('importError');
