@@ -107,10 +107,11 @@ define('io.ox/multifactor/settings/views/addMultifactorView', [
                 icon = constants.SMS_ICON;
                 text = gt('Code via text message');
                 break;
-            case 'WEB-AUTH':
-                text = gt('Use a FIDO2 compatible device to authenticate your identity.');
-                icon = 'fa-microchip';
-                break;
+            case 'WebAuthn':
+                //text = gt('Use a FIDO2 compatible device to authenticate your identity.');
+                //icon = 'fa-microchip';
+                //break;
+                return;   // Currently, not allowing webauth additions
             case constants.U2F:
                 if (!window.u2f || location.protocol !== 'https:') return;
                 text = gt('Yubikey, Google Security Keys, or compatible FIDO device');
