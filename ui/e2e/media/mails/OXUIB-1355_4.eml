@@ -1,0 +1,16 @@
+To: Jane Doe <jane@doe.com>
+Subject: testcase4
+From: John Doe <john@doe.com>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+X-OX-Marker: 750c3888-d98c-4687-9e40-55bf20ca28cb
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+	<img class="externalImage" src="https://evilexternalimagesource.evil/images/notevilatall.png" width="100" height="100">
+</body>
+</html>
