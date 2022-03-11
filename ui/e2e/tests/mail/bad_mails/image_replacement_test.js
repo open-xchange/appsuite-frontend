@@ -118,3 +118,129 @@ Scenario('[OXUIB-39] XSS after loading external images on demand', async ({ I, m
         I.see('XSS?');
     });
 });
+
+Scenario('[OXUIB-1355] block external images correctly', async ({ I, mail }) => {
+    await Promise.all([
+        I.haveSetting('io.ox/mail//allowHtmlImages', false),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_1.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_2.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_3.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_4.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_5.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_6.eml' })
+    ]);
+
+    I.login();
+    mail.waitForApp();
+
+    // seems puppeteer returns current url (loaction origin + / to be exact) instead of empty string if src is empty
+    var location = await I.executeScript(() => location.origin + '/');
+
+    I.say('testcase 1: No images');
+    mail.selectMail('testcase1');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText('No images today', 10);
+    });
+
+    I.say('testcase 2: embedded image');
+    mail.selectMail('testcase2');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 3: data url image');
+    mail.selectMail('testcase3');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.dataUrlImage', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 4: external image');
+    mail.selectMail('testcase4');
+    I.waitForElement('.mail-detail-frame');
+    I.see('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.equal(location);
+    });
+
+    I.say('testcase 5: embeded image + external image');
+    mail.selectMail('testcase5');
+    I.waitForElement('.mail-detail-frame');
+    I.see('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.be.empty;
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.be.equal(location);
+    });
+
+    I.say('testcase 6: embeded image + data url image + external image');
+    mail.selectMail('testcase6');
+    I.waitForElement('.mail-detail-frame');
+    I.see('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.equal(location);
+        expect(await I.grabAttributeFrom('.dataUrlImage', 'src')).to.not.equal(location);
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.equal(location);
+    });
+
+    // logout, change setting and login again
+    I.logout();
+    await I.haveSetting('io.ox/mail//allowHtmlImages', true);
+    I.login();
+    mail.waitForApp();
+
+    I.say('testcase 1b: No images, external images allowed');
+    mail.selectMail('testcase1');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    within({ frame: '.mail-detail-frame' }, () => {
+        I.waitForText('No images today', 10);
+    });
+
+    I.say('testcase 2b: embeded image, external images allowed');
+    mail.selectMail('testcase2');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 3b: data url image, external images allowed');
+    mail.selectMail('testcase3');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.dataUrlImage', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 4b: external image, external images allowed');
+    mail.selectMail('testcase4');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 5b: embeded image + external image, external images allowed');
+    mail.selectMail('testcase5');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.equal(location);
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.not.equal(location);
+    });
+
+    I.say('testcase 6b: embeded image + data url image + external image, external images allowed');
+    mail.selectMail('testcase6');
+    I.waitForElement('.mail-detail-frame');
+    I.dontSee('Show images');
+    await within({ frame: '.mail-detail-frame' }, async () => {
+        expect(await I.grabAttributeFrom('.aspect-ratio', 'src')).to.not.equal(location);
+        expect(await I.grabAttributeFrom('.dataUrlImage', 'src')).to.not.equal(location);
+        expect(await I.grabAttributeFrom('.externalImage', 'src')).to.not.equal(location);
+    });
+});
