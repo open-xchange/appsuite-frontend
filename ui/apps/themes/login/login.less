@@ -153,7 +153,6 @@ html.baseline {
 #io-ox-login-screen {
     height: 100%;
     z-index: 65102;
-    background-color: @wallpaper-end-color;
     color: #fff;
 
     .no-margin {
@@ -208,7 +207,7 @@ html.baseline {
     flex-grow: 1;
 }
 
-#io-ox-login-container {
+#io-ox-login-container, #io-ox-login-background-image {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -217,8 +216,11 @@ html.baseline {
     min-height: 100%;
     padding: 0;
     background-size: cover !important;
-    background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
     overflow-y: auto;
+
+    &#io-ox-login-container {
+        background: radial-gradient(at 33% 50%, lighten(@brand-primary, 20%), @brand-primary);
+    }
 
     .login-logo {
         max-height: 32px;
