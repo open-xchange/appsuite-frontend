@@ -144,109 +144,111 @@
         <!-- Login screen -->
         <div id="io-ox-login-screen" class="unselectable" style="display: block">
             <div id="io-ox-login-blocker" style="display: none"></div>
-            <div id="io-ox-login-container" class="wallpaper">
-                <header id="io-ox-login-header">
-                    <div id="io-ox-login-toolbar"></div>
-                </header>
-                <div id="io-ox-login-content">
-                    <div class="align-center col-sm-6 col-xs-12">
-                        <div class="row">
-                            <main id="io-ox-login-box" class="col-xs-12">
-                                <div class="row">
-                                    <div class="flex-column">
-                                        <div id="box-form" class="col-xs-12">
-                                            <div id="box-form-header" class="row"></div>
-                                            <div id="box-form-body" class="row">
-                                                <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
-                                                <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
-                                                    <div class="col-xs-12">
-                                                        <div class="row title">
-                                                            <h1 id="login-title" class="col-xs-12"></h1>
-                                                        </div>
-                                                        <input type="hidden" name="location" value="">
-                                                        <div class="row help">
-                                                            <div class="col-xs-12">
-                                                                <p id="io-ox-login-help" class="help-block"></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row username">
-                                                            <div class="form-group col-xs-12">
-                                                                <label for="io-ox-login-username" data-i18n="User name">User name</label>
-                                                                <input type="text" id="io-ox-login-username" name="username" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" autocomplete="username">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row password">
-                                                            <div class="form-group col-xs-12">
-                                                                <label for="io-ox-login-password" data-i18n="Password">Password</label>
-                                                                <input type="password" id="io-ox-login-password" name="password" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" autocomplete="current-password">
-                                                                <div class="text-right" id="io-ox-forgot-password">
-                                                                    <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row password-retype">
-                                                            <div class="form-group col-xs-12">
-                                                                <label for="io-ox-retype-password" data-i18n="Confirm new password">Confirm new password</label>
-                                                                <input type="password" id="io-ox-retype-password" name="password2" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" autocomplete="new-password">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row options">
-                                                            <div class="col-sm-6 col-xs-12" id="io-ox-login-store">
-                                                                <div class="checkbox custom">
-                                                                    <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
-                                                                        <input type="checkbox" class="sr-only" id="io-ox-login-store-box" checked="checked" name="staySignedIn" value="1">
-                                                                        <i class="toggle" aria-hidden="true"></i>
-                                                                        Stay signed in
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- Feedback area -->
-                                                        <div class="row feedback">
-                                                            <div class="col-xs-12" id="io-ox-login-feedback"></div>
-                                                        </div>
-                                                        <div class="row button">
-                                                            <div class="form-group col-xs-12">
-                                                                <button type="submit" name="signin" id="io-ox-login-button" class="btn btn-primary form-control"></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
+              <div id="io-ox-login-container">
+                <div id="io-ox-login-background-image">
+                  <header id="io-ox-login-header">
+                      <div id="io-ox-login-toolbar"></div>
+                  </header>
+                  <div id="io-ox-login-content">
+                      <div class="align-center col-sm-6 col-xs-12">
+                          <div class="row">
+                              <main id="io-ox-login-box" class="col-xs-12">
+                                  <div class="row">
+                                      <div class="flex-column">
+                                          <div id="box-form" class="col-xs-12">
+                                              <div id="box-form-header" class="row"></div>
+                                              <div id="box-form-body" class="row">
+                                                  <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
+                                                  <form action="/appsuite/api/redirect" method="post" id="io-ox-login-form" target="store-credentials" novalidate>
+                                                      <div class="col-xs-12">
+                                                          <div class="row title">
+                                                              <h1 id="login-title" class="col-xs-12"></h1>
+                                                          </div>
+                                                          <input type="hidden" name="location" value="">
+                                                          <div class="row help">
+                                                              <div class="col-xs-12">
+                                                                  <p id="io-ox-login-help" class="help-block"></p>
+                                                              </div>
+                                                          </div>
+                                                          <div class="row username">
+                                                              <div class="form-group col-xs-12">
+                                                                  <label for="io-ox-login-username" data-i18n="User name">User name</label>
+                                                                  <input type="text" id="io-ox-login-username" name="username" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true" autocomplete="username">
+                                                              </div>
+                                                          </div>
+                                                          <div class="row password">
+                                                              <div class="form-group col-xs-12">
+                                                                  <label for="io-ox-login-password" data-i18n="Password">Password</label>
+                                                                  <input type="password" id="io-ox-login-password" name="password" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" autocomplete="current-password">
+                                                                  <div class="text-right" id="io-ox-forgot-password">
+                                                                      <a href="#" target="_blank" data-i18n="Forgot your password?">Forgot your password?</a>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          <div class="row password-retype">
+                                                              <div class="form-group col-xs-12">
+                                                                  <label for="io-ox-retype-password" data-i18n="Confirm new password">Confirm new password</label>
+                                                                  <input type="password" id="io-ox-retype-password" name="password2" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" aria-required="true" autocomplete="new-password">
+                                                              </div>
+                                                          </div>
+                                                          <div class="row options">
+                                                              <div class="col-sm-6 col-xs-12" id="io-ox-login-store">
+                                                                  <div class="checkbox custom">
+                                                                      <label for="io-ox-login-store-box" aria-label="Stay signed in" data-i18n="Stay signed in" data-i18n-attr="label,aria-label">
+                                                                          <input type="checkbox" class="sr-only" id="io-ox-login-store-box" checked="checked" name="staySignedIn" value="1">
+                                                                          <i class="toggle" aria-hidden="true"></i>
+                                                                          Stay signed in
+                                                                      </label>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          <!-- Feedback area -->
+                                                          <div class="row feedback">
+                                                              <div class="col-xs-12" id="io-ox-login-feedback"></div>
+                                                          </div>
+                                                          <div class="row button">
+                                                              <div class="form-group col-xs-12">
+                                                                  <button type="submit" name="signin" id="io-ox-login-button" class="btn btn-primary form-control"></button>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </form>
 
-                                                <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
-                                                    <div class="col-xs-12">
-                                                        <div class="row help">
-                                                            <div class="col-xs-12">
-                                                                <p class="help-block"></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row email">
-                                                            <div class="form-group col-xs-12">
-                                                                <label for="io-ox-login-restoremail" data-i18n="Email address">Email address</label>
-                                                                <input type="email" id="io-ox-login-restoremail" name="restoremail" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true">
-                                                            </div>
-                                                        </div>
-                                                        <div class="row button">
-                                                            <div class="col-sm-6 col-xs-12 text-left" id="io-ox-backtosignin">
-                                                                <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
-                                                            </div>
-                                                            <div class="form-group col-sm-6 col-xs-12">
-                                                                <button type="submit" name="resetpassword" id="io-ox-resetpassword-button" class="btn btn-primary form-control"></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                  <form action="/appsuite/api/share/reset/password" method="get" id="io-ox-password-forget-form" style="display:none;" novalidate>
+                                                      <div class="col-xs-12">
+                                                          <div class="row help">
+                                                              <div class="col-xs-12">
+                                                                  <p class="help-block"></p>
+                                                              </div>
+                                                          </div>
+                                                          <div class="row email">
+                                                              <div class="form-group col-xs-12">
+                                                                  <label for="io-ox-login-restoremail" data-i18n="Email address">Email address</label>
+                                                                  <input type="email" id="io-ox-login-restoremail" name="restoremail" class="form-control" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false" aria-required="true">
+                                                              </div>
+                                                          </div>
+                                                          <div class="row button">
+                                                              <div class="col-sm-6 col-xs-12 text-left" id="io-ox-backtosignin">
+                                                                  <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>
+                                                              </div>
+                                                              <div class="form-group col-sm-6 col-xs-12">
+                                                                  <button type="submit" name="resetpassword" id="io-ox-resetpassword-button" class="btn btn-primary form-control"></button>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </form>
 
-                                            </div>
-                                        </div>
-                                    <div id="io-ox-information-message"></div>
-                                </div>
-                                </div>
-                            </main>
-                        </div>
-                    </div>
-                </div>
-                <footer id="io-ox-login-footer"></footer>
+                                              </div>
+                                          </div>
+                                      <div id="io-ox-information-message"></div>
+                                  </div>
+                                  </div>
+                              </main>
+                          </div>
+                      </div>
+                  </div>
+                  <footer id="io-ox-login-footer"></footer>
+              </div>
             </div>
         </div>
         <!-- offline notifier -->
