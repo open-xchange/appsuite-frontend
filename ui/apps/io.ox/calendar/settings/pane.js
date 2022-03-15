@@ -330,6 +330,7 @@ define('io.ox/calendar/settings/pane', [
             id: 'shared-calendars',
             index: 100,
             render: function () {
+                if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
                 function openDialog() {
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({

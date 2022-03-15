@@ -161,6 +161,9 @@ define('io.ox/contacts/settings/pane', [
             id: 'shared-address-books',
             index: 50,
             render: function (baton) {
+                // dialog serves multiple purposes, manage sync via carddav (all folder types) or subscribe/unsubscribe shared or public folders
+                if (!capabilities.has('edit_public_folders || read_create_shared_folders || carddav')) return;
+
                 function openDialog() {
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({
