@@ -86,6 +86,8 @@ define('io.ox/tasks/settings/pane', [
             id: 'shared-tasks',
             index: 50,
             render: function () {
+                if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
+
                 function openDialog() {
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({

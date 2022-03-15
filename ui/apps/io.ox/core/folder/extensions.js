@@ -485,6 +485,7 @@ define('io.ox/core/folder/extensions', [
         },
 
         subscribeShared: function (baton) {
+            if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var self = this;
 
             if (baton.module === 'contacts') {
@@ -850,6 +851,8 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'subscribeShared',
             index: 550,
+            // dialog serves multiple purposes, manage sync via carddav (all folder types) or subscribe/unsubscribe shared or public folders
+            capabilities: ['edit_public_folders || read_create_shared_folders || carddav'],
             draw: extensions.subscribeShared
         }
     );
@@ -1003,6 +1006,8 @@ define('io.ox/core/folder/extensions', [
                 index: 200,
                 id: 'shared',
                 draw: function (baton) {
+                    if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
+
                     if (baton.context !== 'app') return;
 
                     var folder = api.getDefaultFolder(module);
@@ -1110,6 +1115,7 @@ define('io.ox/core/folder/extensions', [
         id: 'shared',
         index: 500,
         draw: function () {
+            if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
             this.link('shared', gt('Subscribe to shared calendar'), function () {
                 require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                     subscribe.open({
