@@ -6,7 +6,7 @@ stages:
   - cleanup
 
 delete project on obs:
-  image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
+  image: registry.gitlab.open-xchange.com/frontend/osc_env:latest
   stage: cleanup
   dependencies: []
   variables:
