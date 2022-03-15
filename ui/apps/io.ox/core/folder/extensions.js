@@ -251,7 +251,7 @@ define('io.ox/core/folder/extensions', [
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
                 tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
-                noSync: isContact && !capabilities.has('carddav'),
+                noSync: isContact ? !capabilities.has('carddav') : !capabilities.has('caldav'),
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
                     shared: isContact ? gt('Shared address books') : gt('Shared tasks folders'),
@@ -485,7 +485,6 @@ define('io.ox/core/folder/extensions', [
         },
 
         subscribeShared: function (baton) {
-            if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var self = this;
 
             if (baton.module === 'contacts') {
@@ -851,7 +850,6 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'subscribeShared',
             index: 550,
-            capabilities: ['subscription'],
             draw: extensions.subscribeShared
         }
     );
