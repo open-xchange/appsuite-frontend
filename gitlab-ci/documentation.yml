@@ -1,7 +1,7 @@
 ---
 
 build documentation:
-  image: gitlab.open-xchange.com:4567/engineering/documentation:latest
+  image: registry.gitlab.open-xchange.com/engineering/documentation:latest
   stage: build
   script:
     - VERSION=develop
