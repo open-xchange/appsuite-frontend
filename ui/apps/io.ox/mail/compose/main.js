@@ -507,7 +507,7 @@ define('io.ox/mail/compose/main', [
                     if (e.code === 'MSGCS-0011') {
                         var num = e.error_params[0] || 20;
                         e.message = gt('You cannot open more than %1$s drafts at the same time.', num);
-                        return this.quit().then(function () {
+                        return app.quit().then(function () {
                             require(['io.ox/core/yell'], function (yell) {
                                 yell(e);
                             });
