@@ -1381,7 +1381,7 @@ define('io.ox/files/share/permissions', [
                 return permissions;
             }
 
-            dialog.on('save', function () {
+            function save(ignoreFolderWarnings) {
                 // Order matters. In case there is a unresolved 'removeLink' request this has to be finished first.
                 // Share must be called before the update call is invoked. Otherwise a file conflict is created.
                 $.when(dialog.waiting).always(function () {
@@ -1394,6 +1394,10 @@ define('io.ox/files/share/permissions', [
                             permissions = mergePermissionsAndPublicLink(permissions, entity, objModel.isFolder() ? 257 : 1);
                         }
                         if (objModel.isFolder()) {
+                            if (ignoreFolderWarnings) {
+                                dialog.busy();
+                                options.ignoreWarnings = true;
+                            }
                             changes = { permissions: permissions };
                             def = folderAPI.update(objModel.get('id'), changes, options);
                         } else {
@@ -1418,12 +1422,47 @@ define('io.ox/files/share/permissions', [
                                 );
                             },
                             function fail(error) {
-                                dialog.idle();
-                                yell(error);
+                                // Error if the user want share a folder with subfolders without permission
+                                if (objModel.isFolder() && onlyFolderPermissionWarnings(error)) {
+                                    showShareFolderConflictsDialog();
+                                } else {
+                                    dialog.idle();
+                                    yell(error);
+                                }
                             }
                         );
                     });
                 });
+            }
+
+            function onlyFolderPermissionWarnings(error) {
+                return error && error.code && error.code === 'FLD-1038' && !_.find(error.code.warnings, function (warning) {
+                    return warning && warning.code !== 'FLD-0099' && warning.code !== 'FLD-0100';
+                });
+            }
+
+            /**
+             * Show conflicts dialog if the user want to share a folder with subfolders for which the user has no permissions.
+             */
+            function showShareFolderConflictsDialog() {
+                var conflicts = {
+                    title: gt('Sharing folders without permissions'),
+                    warnings: [gt('Your are sharing one or more folders for which you do not have permissions. These folders will not be shared.')]
+                };
+                require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
+                    filestorageUtil.displayConflicts(conflicts, {
+                        callbackIgnoreConflicts: function () {
+                            save(true);
+                        },
+                        callbackCancel: function () {
+                            dialog.close();
+                        }
+                    });
+                });
+            }
+
+            dialog.on('save', function () {
+                save();
             });
 
             dialog.on('abort', function () {
