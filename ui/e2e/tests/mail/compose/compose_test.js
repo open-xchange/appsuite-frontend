@@ -299,7 +299,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function ({ I
     });
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
-    I.seeNumberOfVisibleElements('.inline-items > li', 1);
+    I.seeNumberOfVisibleElements('.inline-items.preview > li', 1);
 
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject #3');
