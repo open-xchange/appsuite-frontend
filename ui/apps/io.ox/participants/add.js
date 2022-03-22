@@ -118,7 +118,8 @@ define('io.ox/participants/add', [
             placeholder: gt('Add contact/resource') + ' \u2026',
             label: gt('Add contact/resource'),
             extPoint: 'io.ox/participants/add',
-            blacklist: false
+            blacklist: false,
+            autoselect: false
         },
 
         initialize: function (o) {
