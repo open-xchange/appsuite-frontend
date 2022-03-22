@@ -224,9 +224,13 @@
     }
 }
 
-.modal,.modal.get-link-dialog {
+.modal.get-link-dialog {
     .modal-dialog {
         min-width: 600px;
+
+        .smartphone & {
+            min-width: auto;
+        }
     }
     .modal-body {
         .input-group.has-picker:focus-within {
@@ -258,6 +262,10 @@
 
     .modal-dialog {
         min-width: 800px;
+
+        .smartphone & {
+            min-width: auto;
+        }
     }
 
     .twitter-typeahead .tt-hint {
