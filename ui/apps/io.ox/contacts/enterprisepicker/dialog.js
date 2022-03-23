@@ -694,9 +694,11 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                                         folder_id: item.folder_id,
                                         email: mail,
                                         // mail_field is used in distribution lists
-                                        field: (item.mail_field ? 'email' + item.mail_field : item.field) || 'email1',
+                                        field: item.mail_field || item.field || 'email1',
                                         user_id: item.user_id || item.internal_userid
                                     };
+                                // make sure result.field has the correct format
+                                if (_.isNumber(result.field) || String(result.field).length === 1) result.field = 'email' + result.field;
                                 return result;
                             }, this)
                             .flatten()
