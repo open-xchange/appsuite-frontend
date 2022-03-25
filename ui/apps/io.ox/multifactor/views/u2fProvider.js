@@ -69,7 +69,11 @@ define('io.ox/multifactor/views/u2fProvider', [
             def.reject();
         })
         .on('open', function () {
-            doAuthentication(authInfo.providerName, authInfo.device, challenge);
+            if (window.u2f) {
+                doAuthentication(authInfo.providerName, authInfo.device, challenge);
+            } else {
+                doWebAuthn(authInfo.providerName, authInfo.device, challenge);
+            }
         })
         .on('lost', function () {
             dialog.close();
@@ -102,7 +106,7 @@ define('io.ox/multifactor/views/u2fProvider', [
             id: 'header',
             render: function () {
                 var label;
-                if (window.u2f) {
+                if (window.u2f || navigator.credentials) {
                     label = $('<label>').append(
                         gt('You secured your account with 2-Step Verification. Please use your authentication token to complete verification.'));
                 } else {
@@ -125,6 +129,81 @@ define('io.ox/multifactor/views/u2fProvider', [
 
     );
 
+    // Converts a Base64 String to a Uint8 - ArrayBuffer
+    function bufferDecode(value) {
+        // eslint-disable-next-line no-undef
+        return Uint8Array.from(atob(value), function (c) { return c.charCodeAt(0); });
+    }
+
+    function bufferUrlDecode(value) {
+        return bufferDecode(base64UrlToBase64(value));
+    }
+
+    // Converts a base64URL encoded string to pure base64
+    function base64UrlToBase64(input) {
+        // Replace non-url compatible chars with base64 standard chars
+        input = input
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        // Pad out with standard base64 required padding characters
+        var pad = input.length % 4;
+        if (pad) {
+            if (pad === 1) {
+                throw new Error('InvalidLengthError: Input base64url string is the wrong length to determine padding');
+            }
+            input += new Array(5 - pad).join('=');
+        }
+        return input;
+    }
+
+    // ArrayBuffer to URLBase64URL
+    function bufferUrlEncode(value) {
+        // eslint-disable-next-line no-undef
+        return btoa(String.fromCharCode.apply(null, new Uint8Array(value)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/[=]/g, '');
+    }
+
+
+    // U2F support deprecated.  Using Webauthn to perform the U2F authentication
+    function doWebAuthn(provider, device, data) {
+        var publicKey = data.credentialsGetJson.publicKey;
+        publicKey.challenge = bufferUrlDecode(publicKey.challenge);
+        publicKey.allowCredentials.forEach(function (listItem) {
+            listItem.id = bufferUrlDecode(listItem.id);
+        });
+        navigator.credentials.get(data.credentialsGetJson)
+        .then(function (assertion) {
+            data = {
+                id: assertion.id,
+                response: {
+                    authenticatorData: bufferUrlEncode(assertion.response.authenticatorData),
+                    signature: bufferUrlEncode(assertion.response.signature),
+                    clientDataJSON: bufferUrlEncode(assertion.response.clientDataJSON),
+                    userHandle: bufferUrlEncode(assertion.response.userHandle)
+                },
+                clientExtensionResults: assertion.getClientExtensionResults(),
+                type: assertion.type,
+                rawId: bufferUrlEncode(assertion.rawId)
+            };
+            // Success
+            notify.yell.close();  // Remove any previous notification alerts/errors
+            dialog.close();
+            var resp = {
+                parameters: data,
+                id: device.id,
+                provider: 'WebAuthn'
+            };
+            def.resolve(resp);
+        }, function (fail) {
+            // TODO, evaluate error messages and display propper error
+            notify.yell(fail);
+        });
+    }
+
+    //  Use the classic U2F implementation.  Currently only firefox supported
     function doAuthentication(provider, device, data) {
 
         var appId = data.signRequests[0].appId;

@@ -1,11 +1,13 @@
 ---
 title: Login page
 ---
-# Introduction
-With 7.10.4 a new, configurable login page has been introduced which offers a custom page without a custom theme. The configuration will be loaded as part from the appsuite-configration. That means, it also supports multi-tenancy.
+
+# Login page
+
+With 7.10.4 a new, configurable login page has been introduced which offers a custom page without a custom theme. The configuration will be loaded as a part from the appsuite-configration. That means, it also supports multi-tenancy.
 
 # Configuration
-To configure the login page, different attributes in the `as-config.yml` to change the appearance of the login screen can be set. Every not configured property will fall back to its default.
+To configure the login page, different attributes in the `as-config.yml` can be set to change the appearance of the login screen. Every not configured property will fall back to its default.
 
 To change the configuration, the properties in the config file `as-config.yml` need to be set.
 
@@ -64,11 +66,11 @@ default:
 This sections describes how the different attributes are configured. All values are **strings** and the nested structure is mandatory.
 
 ## loginPage
-The attribute 'loginPage' is the root container that contains the whole configuration of the login page.
+The attribute 'loginPage' is the root level that contains the whole configuration of the login page.
 
 <config>backgroundImage</config>
 The attribute 'backgroundImage' sets the background. It can be used with any valid values within css 'background', like a color, gradient or image url.<br>
-**Important:** For mobile devices the background image won't be set. The attribute 'backgroundColor' will be used instead.
+**Important:** For mobile devices the background image won't be set. The attribute 'backgroundColor' or its default will be visible.
 
 examples
 
@@ -102,7 +104,7 @@ The attribute 'loginBox' describes the position of the login box on the page: `l
 The value of the attribute 'informationMessage' will be interpreted as HTML to display custom content below the login box. It will not be shown on mobile devices.
 
 <config>customCss</config>
-With attribute 'customCss' custom css rules can be applied for elements within the `div id="io-ox-login-screen"`. Note that the css rules will be scoped to the `io-ox-login-screen` id such that no other elements outside of the login page are affected.
+With attribute 'customCss' custom css rules can be applied for elements within the `div id="io-ox-login-screen"`. Note that the css rules will be scoped to the `io-ox-login-screen` id such that no other elements outside of the login page get affected.
 
 ### Section "topVignette":
 To get a better contrast for the page header, a vignette shadow at the top of the page can be set. This is useful if the background of the login page is too bright and it gets hard to read the text of the header.
