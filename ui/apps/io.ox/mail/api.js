@@ -294,7 +294,7 @@ define('io.ox/mail/api', [
         return preferred;
     }
 
-    function sanitizeAttachments(attachments, options) {
+    function sanitizeAttachments(attachments, options, mail) {
         if (!_.isArray(attachments)) {
             // make sure we always have data.attachments (see bug 58631)
             return [{ content: '', content_type: 'text/plain', disp: 'inline', id: '1', sanitized: true, size: 0, truncated: false }];
@@ -305,15 +305,15 @@ define('io.ox/mail/api', [
             if (!/^text\/(plain|html)/i.test(data.content_type)) return data;
             // only clean-up text and html; otherwise we lose data (see bug 43727)
             data.content_type = String(data.content_type).toLowerCase().split(';')[0];
-            return sanitizer.sanitize(data, options);
+            return sanitizer.sanitize(data, options, mail);
         });
     }
     function sanitizeMailData(data, options) {
-        data.attachments = sanitizeAttachments(data.attachments, options);
+        data.attachments = sanitizeAttachments(data.attachments, options, data);
 
         if (_.isArray(data.nested_msgs)) {
             data.nested_msgs = data.nested_msgs.map(function (nested_msg) {
-                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments, options);
+                nested_msg.attachments = sanitizeAttachments(nested_msg.attachments, options, nested_msg);
                 return nested_msg;
             });
         }

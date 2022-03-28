@@ -458,13 +458,13 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
-    if (!_.device('smartphone')) {
+    if (!_.device('smartphone') && settings.get('features/enterprisePicker/enabled', false)) {
 
         ext.point('io.ox/core/appcontrol/right').extend({
             id: 'enterprisePicker',
             index: 130,
             draw: function () {
-                if (!settings.get('features/enterprisePicker/showTopRightLauncher', false) || !settings.get('features/enterprisePicker/enabled', false)) return '';
+                if (!settings.get('features/enterprisePicker/showTopRightLauncher', false)) return '';
 
                 var node = $('<li role="presentation" class="launcher">').append(
                     $('<button id="io-ox-enterprise-picker-icon" class="launcher-btn btn btn-link">').attr('aria-label', gt('Address directory')).append($.icon('fa-address-card-o'))
@@ -482,7 +482,7 @@ define('io.ox/core/main/appcontrol', [
             id: 'enterprisePicker',
             index: 100,
             draw: function () {
-                if (!settings.get('features/enterprisePicker/showLauncher', true) || !settings.get('features/enterprisePicker/enabled', false)) return '';
+                if (!settings.get('features/enterprisePicker/showLauncher', true)) return '';
 
                 this.append(
                     $('<a tabindex="-1" href="#" role="menuitem" class="btn btn-link lcell">').append(
@@ -504,7 +504,7 @@ define('io.ox/core/main/appcontrol', [
             label: gt('Address directory'),
             index: 100,
             draw: function () {
-                if (!settings.get('features/enterprisePicker/showLauncher', true) || !settings.get('features/enterprisePicker/enabled', false)) return '';
+                if (!settings.get('features/enterprisePicker/showLauncher', true)) return '';
 
                 return $('<button tabindex="-1" type="button" class="btn btn-link lcell">').append(
                     $('<div class="lcell">').append(

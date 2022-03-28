@@ -35,7 +35,7 @@ variables:
 
 .build ui plugin:
   extends: .default_cache
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:latest
+  image: registry.gitlab.open-xchange.com/frontend/dev_env:latest
   variables:
     build_tasks: dist:build
     build_script: grunt ${build_tasks}
@@ -117,7 +117,7 @@ build update-themes:
       when: always
 
 test ui:
-  image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
+  image: registry.gitlab.open-xchange.com/frontend/dev_env/browser:latest
   variables:
     BROWSERS: DockerHeadless
   script:

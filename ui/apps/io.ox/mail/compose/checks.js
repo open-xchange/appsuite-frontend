@@ -50,6 +50,36 @@ define('io.ox/mail/compose/checks', [
 
     return {
 
+        composeWithoutExternalImages: function (data, threadViewModel) {
+            // images allowed in general
+            if (settings.get('allowHtmlImages', false)) return $.when(false);
+
+            // we don't have blocked images
+            if (threadViewModel && threadViewModel.hasBlockedExternalImages === false || data.view === 'noimg' && data.modified === 0) return $.when(false);
+
+            var def = $.Deferred(),
+                dialogOptions = { easyOut: false };
+
+            // we have blocked images
+            if (threadViewModel && threadViewModel.hasBlockedExternalImages || data.modified === 1) {
+                dialogOptions.title = gt('Mail contains hidden external images');
+                dialogOptions.description = [$('<p>').text(gt('This email contains images from external sources that are currently hidden. The sent email will not contain any images from external sources'))];
+            // we cannot be sure
+            } else {
+                dialogOptions.title = gt('Mail may contain external images');
+                dialogOptions.description = [$('<p>').text(gt('This email may contain images from external sources. The sent email will not contain any images from external sources'))];
+            }
+
+            new ModalDialog(dialogOptions)
+            .addCancelButton({ left: true })
+            .addButton({ label: gt('Compose mail without external images'), action: 'withoutImages' })
+            .on('withoutImages', function () { def.resolve(true); })
+            .on('cancel', def.reject)
+            .open();
+
+            return def;
+        },
+
         // a message sent via a mailing list contains special mime headers like "list-owner"
         isMailingList: function (data) {
             if (!data || !data.headers) return false;

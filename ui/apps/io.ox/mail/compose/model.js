@@ -250,10 +250,11 @@ define('io.ox/mail/compose/model', [
                     original = meta.replyFor || meta.forwardsFor;
 
                 // get the content inside the body of the mail
-                // yes do this also for multipart alternative., to get rid of excess html like doctype etc (you will get strange artefacts otherwise)
+                // yes do this also for multipart alternative., to get rid of excess html like doctype etc (you will get strange artifacts otherwise)
                 // in case this is really plain text (couldn't create a situation where it is, also mw says it should always be html), the sanitizer will simply return it as is, no harm done.
                 if (data.contentType === 'text/html' || (data.contentType === 'multipart/alternative')) {
-                    data.content = sanitizer.simpleSanitize(data.content);
+                    // remove external images when not loaded in the source mail
+                    data.content = sanitizer.simpleSanitize(data.content, { noImages: !!this.get('excludeImages') });
                 }
 
                 original = [].concat(original)[0];

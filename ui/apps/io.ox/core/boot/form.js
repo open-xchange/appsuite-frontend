@@ -240,9 +240,9 @@ define('io.ox/core/boot/form', [
 
             var configCss = '';
 
-            var background = lc.backgroundColor || lc.backgroundImage;
-            if (!_.device('smartphone')) background = lc.backgroundImage || lc.backgroundColor;
-            if (background) configCss += '#io-ox-login-container { background: ' + background + ' } ';
+            lc.backgroundImage = !_.device('smartphone') && lc.backgroundImage;
+            if (lc.backgroundColor) configCss += '#io-ox-login-container { background: ' + lc.backgroundColor + ' } ';
+            if (lc.backgroundImage) configCss += '#io-ox-login-background-image { background: ' + lc.backgroundImage + ' } ';
 
             if (lc.topVignette && lc.topVignette.transparency) configCss += '#io-ox-login-header { background: linear-gradient(rgba(0,0,0,' + lc.topVignette.transparency + '),rgba(0,0,0,0)) } ';
 
@@ -378,11 +378,8 @@ define('io.ox/core/boot/form', [
         $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').removeAttr('aria-hidden');
 
         // update footer
-        var footer = sc.copyright ? sc.copyright + ' ' : '';
-        footer += sc.version ? 'Version: ' + sc.version + ' ' : '';
-        var revision = 'revision' in sc ? sc.revision : ('Rev' + ox.revision);
-        footer += revision !== '' ? revision + ' ' : '';
-        footer += sc.buildDate ? '(' + sc.buildDate + ')' : '';
+        var revision = 'revision' in sc ? sc.revision : 'Rev$' + ox.revision;
+        var footer = [sc.copyright, sc.version && ('Version: ' + sc.version), revision, sc.buildDate].filter(Boolean).join(' ');
         $('#io-ox-copyright').text(footer.replace(/\(c\)/i, '\u00A9'));
 
         // check/uncheck?
