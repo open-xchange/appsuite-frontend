@@ -71,12 +71,13 @@ define('io.ox/core/deputy/dialog', [
 
 
     function getPermissionText(model) {
-        var parts = _(model.get('modulePermissions')).map(function (module, key) {
+        var parts = _(_(['mail', 'calendar', 'contacts', 'drive', 'tasks']).map(function (module) {
+            if (!model.get('modulePermissions')[module]) return '';
             //#. String that is used to describe permissions
             //#. %1$s name of module (mail, calendar etc)
             //#. %2$s the granted role (author, editor, viewer, none)
-            return gt('%1$s (%2$s)', moduleMap[key], permissionMap[module.permission]);
-        });
+            return gt('%1$s (%2$s)', moduleMap[module], permissionMap[model.get('modulePermissions')[module].permission]);
+        })).compact();
 
         if (model.get('sendOnBehalfOf')) parts.unshift(gt('Allowed to send emails on your behalf'));
         return parts.join(', ');
