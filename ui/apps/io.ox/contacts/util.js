@@ -206,6 +206,7 @@ define('io.ox/contacts/util', [
         },
 
         getDisplayName: function (obj) {
+            if (!obj) return '';
             // use existing display name?
             if (obj.display_name) {
                 return util.unescapeDisplayName(obj.display_name);

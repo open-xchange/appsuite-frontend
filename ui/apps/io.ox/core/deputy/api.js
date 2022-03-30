@@ -30,7 +30,8 @@ define('io.ox/core/deputy/api', [
 
     // simple caches for requests used in mail compose.
     var granteeAddressCache = [],
-        granteeAddressFolderCache = {};
+        granteeAddressFolderCache = {},
+        availableModules = [];
 
     var api = {
         getAll: function () {
@@ -79,6 +80,20 @@ define('io.ox/core/deputy/api', [
                 ox.trigger('please:refresh');
             });
         },
+        getAvailableModules: function () {
+            if (availableModules.length) return $.when(availableModules);
+
+            return http.GET({
+                module: 'deputy',
+                params: {
+                    action: 'available'
+                }
+            }).then(function (modules) {
+                availableModules = modules;
+                return modules;
+            });
+        },
+
         // returns deputy data where the current user is deputy
         reverse: function () {
             return http.GET({
@@ -105,7 +120,7 @@ define('io.ox/core/deputy/api', [
             api.reverse(useCache).then(function (grantedPermissions) {
                 var addresses = _(grantedPermissions).chain().map(function (deputyData) {
                     // can there be more than one address?
-                    return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : undefined;
+                    return deputyData.granteeAddresses ? [deputyData.granteeId, deputyData.granteeAddresses[0]] : false;
                 }).compact().valueOf();
 
                 var userIds = _(addresses).chain().map(function (address) { return address[0]; }).uniq().compact().valueOf();
@@ -166,6 +181,7 @@ define('io.ox/core/deputy/api', [
     ox.on('refresh^', function () {
         granteeAddressCache = [];
         granteeAddressFolderCache = {};
+        availableModules = [];
     });
 
 

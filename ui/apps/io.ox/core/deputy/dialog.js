@@ -44,20 +44,17 @@ define('io.ox/core/deputy/dialog', [
         },
         // permissions given to newly added deputies
         defaultPermissions = {
-            'sendOnBehalfOf': false,
-            'modulePermissions': {
-                'mail': {
-                    'permission': permissions.viewer,
-                    'folderIds': [
-                        folderApi.getDefaultFolder('mail')
-                    ]
-                },
-                'calendar': {
-                    'permission': permissions.viewer,
-                    'folderIds': [
-                        folderApi.getDefaultFolder('calendar')
-                    ]
-                }
+            mail: {
+                permission: permissions.viewer,
+                folderIds: [
+                    folderApi.getDefaultFolder('mail')
+                ]
+            },
+            calendar: {
+                permission: permissions.viewer,
+                folderIds: [
+                    folderApi.getDefaultFolder('calendar')
+                ]
             }
         },
         // some translation helpers
@@ -97,43 +94,43 @@ define('io.ox/core/deputy/dialog', [
         })
         .build(function () {
             // temp models for the selectboxes since the cannot work with the nested attributes directly
-            var calendarModel = new Backbone.Model({ permission: model.get('modulePermissions').calendar.permission }),
-                mailModel = new Backbone.Model({ permission: model.get('modulePermissions').mail.permission });
-
-            // sync to main model
-            mailModel.on('change:permission', function (obj, value) {
-                var permissions = model.get('modulePermissions');
-                permissions.mail.permission = value;
-                model.set('modulePermissions', permissions);
-            });
-            calendarModel.on('change:permission', function (obj, value) {
-                var permissions = model.get('modulePermissions');
-                permissions.calendar.permission = value;
-                model.set('modulePermissions', permissions);
-            });
+            function getTempModel(module) {
+                var tempModel = new Backbone.Model({ permission: model.get('modulePermissions')[module].permission });
+                // sync to main model
+                tempModel.on('change:permission', function (obj, value) {
+                    var permissions = model.get('modulePermissions');
+                    permissions[module].permission = value;
+                    model.set('modulePermissions', permissions);
+                });
+                return tempModel;
+            }
 
             this.$body.append(
                 $('<div>').text(gt('The deputy has the following permissions')),
-                $('<div class="select-container">').append(
-                    $('<label for="inbox-deputy-selector">').text(moduleMap.mail),
-                    new mini.SelectView({ id: 'inbox-deputy-selector', name: 'permission', model: mailModel, list: [
-                        { value: permissions.none, label: gt('None') },
-                        { value: permissions.viewer, label: gt('Viewer (read emails)') },
-                        // do these roles make any sense? Is this only for drafts?
-                        { value: permissions.editor, label: gt('Editor (create/edit emails)') },
-                        { value: permissions.author, label: gt('Author (create/edit/delete emails)') }
-                    ] }).render().$el
-                ),
-                new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalfOf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el,
-                $('<div class="select-container">').append(
-                    $('<label for="calendar-deputy-selector">').text(moduleMap.calendar),
-                    new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: calendarModel, list: [
-                        { value: permissions.none, label: gt('None') },
-                        { value: permissions.viewer, label: gt('Viewer (view appointments)') },
-                        { value: permissions.editor, label: gt('Editor (create/edit appointments)') },
-                        { value: permissions.author, label: gt('Author (create/edit/delete appointments)') }
-                    ] }).render().$el
-                )
+                model.get('modulePermissions').mail ? [
+                    $('<div class="select-container">').append(
+                        $('<label for="inbox-deputy-selector">').text(moduleMap.mail),
+                        new mini.SelectView({ id: 'inbox-deputy-selector', name: 'permission', model: getTempModel('mail'), list: [
+                            { value: permissions.none, label: gt('None') },
+                            { value: permissions.viewer, label: gt('Viewer (read emails)') },
+                            // do these roles make any sense? Is this only for drafts?
+                            { value: permissions.editor, label: gt('Editor (create/edit emails)') },
+                            { value: permissions.author, label: gt('Author (create/edit/delete emails)') }
+                        ] }).render().$el
+                    ),
+                    new mini.CustomCheckboxView({ id: 'send-on-behalf-checkbox', name: 'sendOnBehalfOf', label: gt('Deputy can send emails on your behalf'), model: model }).render().$el]
+                    : '',
+                model.get('modulePermissions').mail ?
+                    $('<div class="select-container">').append(
+                        $('<label for="calendar-deputy-selector">').text(moduleMap.calendar),
+                        new mini.SelectView({ id: 'calendar-deputy-selector', name: 'permission', model: getTempModel('calendar'), list: [
+                            { value: permissions.none, label: gt('None') },
+                            { value: permissions.viewer, label: gt('Viewer (view appointments)') },
+                            { value: permissions.editor, label: gt('Editor (create/edit appointments)') },
+                            { value: permissions.author, label: gt('Author (create/edit/delete appointments)') }
+                        ] }).render().$el
+                    )
+                    : ''
             ).addClass('deputy-permissions-dialog');
         });
 
@@ -280,12 +277,19 @@ define('io.ox/core/deputy/dialog', [
                 userCollection = new UserContactCollection();
 
             this.$body.addClass('deputy-dialog-body').busy();
-            api.getAll().then(function (deputies) {
+            $.when(api.getAll(), api.getAvailableModules()).then(function (deputies, availableModules) {
+                var availablePermissions = { modulePermissions: _(defaultPermissions).pick(availableModules) };
+                if (_(availableModules).contains('mail')) availablePermissions.sendOnBehalfOf = false;
+
+                // index 0 is data, index 1 is timestamp
+                deputies = deputies[0];
+
                 var defs = _(deputies).map(function (deputy) {
                     // fill in incomplete data
                     if (!deputy.modulePermissions) deputy.modulePermissions = {};
-                    if (!deputy.modulePermissions.mail) deputy.modulePermissions.mail = { 'permission': permissions.none, 'folderIds': [folderApi.getDefaultFolder('mail')] };
-                    if (!deputy.modulePermissions.calendar) deputy.modulePermissions.calendar = { 'permission': permissions.none, 'folderIds': [folderApi.getDefaultFolder('calendar')] };
+                    _(_(defaultPermissions).keys()).each(function (module) {
+                        if (!deputy.modulePermissions[module] && _(availableModules).contains(module)) deputy.modulePermissions[module] = { permission: permissions.none, folderIds: [folderApi.getDefaultFolder(module)] };
+                    });
 
                     return userApi.get({ id: deputy.userId }).then(function (data) {
                         userCollection.add(data);
@@ -328,7 +332,7 @@ define('io.ox/core/deputy/dialog', [
                             userCollection.remove(user, { silent: true });
                             return;
                         }
-                        var deputy = _.extend({}, defaultPermissions, { userId: id, userData: user }),
+                        var deputy = _.extend({}, availablePermissions, { userId: id, userData: user }),
                             model = self.deputyListView.collection.add(deputy);
 
                         openEditDialog(model);

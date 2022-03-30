@@ -26,14 +26,16 @@ define('io.ox/core/folder/tree', [
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
+    'io.ox/core/deputy/api',
     'io.ox/core/extensions',
     'io.ox/core/a11y',
     'settings!io.ox/core',
     'gettext!io.ox/core',
+    'io.ox/core/capabilities',
     'io.ox/core/folder/favorites',
     'io.ox/files/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Dropdown, ContextMenuUtils, Selection, api, ext, a11y, settings, gt) {
+], function (DisposableView, Dropdown, ContextMenuUtils, Selection, api, deputyApi, ext, a11y, settings, gt, capabilities) {
 
     'use strict';
 
@@ -286,35 +288,38 @@ define('io.ox/core/folder/tree', [
                 dropdownToggle = this.$dropdownToggle;
             // get folder data and redraw
             api.get(id).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data, view: view, module: module, originFavorites: favorite });
-                ext.point(point).invoke('draw', ul, baton);
-                if (_.device('smartphone')) {
-                    ul.append(
-                        $('<li>').append(
-                            $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
-                        )
-                    );
-                    if (ul.find('[role=menuitem]').length === 0) {
-                        ul.prepend(
+                // grab available deputy modules (needed for some extensions)
+                $.when(capabilities.has('deputy') ? deputyApi.getAvailableModules() : []).always(function (availableDeputyModules) {
+                    var baton = new ext.Baton({ app: app, data: data, view: view, module: module, originFavorites: favorite, availableDeputyModules: availableDeputyModules });
+                    ext.point(point).invoke('draw', ul, baton);
+                    if (_.device('smartphone')) {
+                        ul.append(
                             $('<li>').append(
-                                $('<div class="custom-dropdown-label">').text(gt('No action available'))
+                                $('<a href="#" class="io-ox-action-link" data-action="close-menu">').text(gt('Close'))
                             )
                         );
+                        if (ul.find('[role=menuitem]').length === 0) {
+                            ul.prepend(
+                                $('<li>').append(
+                                    $('<div class="custom-dropdown-label">').text(gt('No action available'))
+                                )
+                            );
+                        }
                     }
-                }
-                if (_.device('smartphone')) ul.find('.divider').remove();
-                // remove unwanted dividers
-                ul.find('.divider').each(function () {
-                    var node = $(this), next = node.next();
-                    // remove leading, subsequent, and tailing dividers
-                    if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
-                });
-                if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
+                    if (_.device('smartphone')) ul.find('.divider').remove();
+                    // remove unwanted dividers
+                    ul.find('.divider').each(function () {
+                        var node = $(this), next = node.next();
+                        // remove leading, subsequent, and tailing dividers
+                        if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
+                    });
+                    if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
 
-                if (view.focus) {
-                    ul.find(view.focus).focus();
-                }
-                view.focus = false;
+                    if (view.focus) {
+                        ul.find(view.focus).focus();
+                    }
+                    view.focus = false;
+                });
             }).always(function () {
                 // remove marker class
                 dropdownToggle.removeClass('opening');
