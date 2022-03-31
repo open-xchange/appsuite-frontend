@@ -292,7 +292,10 @@ define('io.ox/mail/compose/signatures', [
                         });
 
                     // remove entire block unless it seems edited
-                    if (unchanged) node.remove(); else node.removeAttr('class');
+                    if (unchanged) {
+                        if (unchanged.get('misc').insertion === 'below' && node.prevAll().length > 1 && node.prev()[0].innerHTML === '<br>') node.prev().remove();
+                        node.remove();
+                    } else node.removeAttr('class');
                 });
             } else if (currentSignature) {
                 // matches linebreaks in insertPostCite

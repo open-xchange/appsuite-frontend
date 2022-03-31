@@ -679,7 +679,7 @@ Scenario('[C7396] Send mail with different text fonts', async ({ I, users, mail 
         const styleWebdings = await I.grabCssPropertyFrom(locate({ css: 'span' }).withText(textWebdings), 'fontFamily');
 
         expect(styleDefault).to.be.empty;
-        expect(styleArial).to.include('Arial');
+        expect(styleArial).to.include('arial');
         expect(styleArialBlack).to.include('arial black');
         expect(styleComicSansMS).to.include('comic sans ms');
         expect(styleCourierNew).to.include('courier new');

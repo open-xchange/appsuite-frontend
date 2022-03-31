@@ -207,7 +207,7 @@ Scenario('Blocked images are blocked in compose too', async function ({ I, users
         I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
         I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
         within({ frame: '#mce_' + counter + '_ifr' }, () => {
-            I.seeElement('img[src=""]');
+            I.seeElement('img:not([src]');
         });
         // close again
         I.click('~Save and close', '.io-ox-mail-compose-window');
@@ -232,7 +232,7 @@ Scenario('Blocked images are blocked in compose too', async function ({ I, users
         I.waitForVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor');
         I.waitForInvisible('.io-ox-busy'); // wait for loading icon to disappear
         within({ frame: '#mce_' + counter + '_ifr' }, () => {
-            I.seeElement('img[src="/appsuite/apps/themes/default/logo.png"]');
+            I.seeElement('img[src$="/appsuite/apps/themes/default/logo.png"]');
         });
         // close again
         I.click('~Save and close', '.io-ox-mail-compose-window');
