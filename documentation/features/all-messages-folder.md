@@ -115,14 +115,14 @@ For App Suite to be able to display the original folders within the search resul
 ## OX App Suite
 
 
-After this we configure OX App Suite to make the feature visible. Open the file `/opt/open-xchange/etc/findbasic.properties` and configure [com.openexchange.find.basic.mail.allMessagesFolder](https://documentation.open-xchange.com/components/middleware/config/7.10.4/index.html#mode=search&term=com.openexchange.find.basic.mail.allMessagesFolder) to `Virtual/All`:
+After this we configure OX App Suite to make the feature visible. Open the file `/opt/open-xchange/etc/findbasic.properties` and configure [com.openexchange.find.basic.mail.allMessagesFolder](https://documentation.open-xchange.com/components/middleware/config/{{ site.baseurl }}/index.html#mode=search&term=com.openexchange.find.basic.mail.allMessagesFolder) to `Virtual/All`:
 
 ```
 # Set the value to the name of the virtual mail folder containing all messages.
 # Leave blank if no such folder exists.
 com.openexchange.find.basic.mail.allMessagesFolder = Virtual/All
 ```
-Additionally configure [com.openexchange.find.basic.mail.searchmailbody](https://documentation.open-xchange.com/components/middleware/config/7.10.4/index.html#mode=search&term=com.openexchange.find.basic.mail.searchmailbody) to `true`:
+Additionally configure [com.openexchange.find.basic.mail.searchmailbody](https://documentation.open-xchange.com/components/middleware/config/{{ site.baseurl }}/index.html#mode=search&term=com.openexchange.find.basic.mail.searchmailbody) to `true`:
 
 ```
 # Change the value to 'true', if fast full text search is supported.
