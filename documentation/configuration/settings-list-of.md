@@ -249,7 +249,7 @@ Passwort minimum length
 Password max length
 
 <config>io.ox/core//password/regexp=`<string>`</config>
-Check new password against a regular expression (i.e. "is there at least one upper case letter"). This is only used to determine password strength. This does not determine which passwords are allowed. Use com.openexchange.passwordchange.allowedPattern for this. See https://documentation.open-xchange.com/components/middleware/config/7.10.5/#mode=features&feature=Password%20Change for more information.
+Check new password against a regular expression (i.e. "is there at least one upper case letter"). This is only used to determine password strength. This does not determine which passwords are allowed. Use com.openexchange.passwordchange.allowedPattern for this. See https://documentation.open-xchange.com/components/middleware/config/{{ site.baseurl }}/#mode=features&feature=Password%20Change for more information.
 
 <config>io.ox/core//password/special=`<string>`</config>
 String of special characters for new passwords that is displayed to the user to increase password strength. This is not a requirement for new passwords.

@@ -82,6 +82,6 @@ settings pane, the user can not change this anymore.
 
 ## Further reading
 
- * Related Middleware article [Configuration Properties](https://documentation.open-xchange.com/components/middleware/config/7.10.3/)
+ * Related Middleware article [Configuration Properties](https://documentation.open-xchange.com/components/middleware/config/{{ site.baseurl }}/)
  * We highly recommend to read the Config Cascade article. You will learn how to use cascading configs and how to provide config changes user-, context- and system-wide [Config Cascade on OXPedia] (https://oxpedia.org/wiki/index.php?title=ConfigCascade)
 

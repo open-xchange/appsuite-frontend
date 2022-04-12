@@ -38,7 +38,7 @@ point: io.ox/portal/widget/client-onboarding/settings
 
 # Platforms, devices and scenarios
 The new onboarding wizard is configured via settings and capabilities, please see:
-https://documentation.open-xchange.com/7.10.5/ui/configuration/settings-list-of.html#onboarding
+https://documentation.open-xchange.com/{{ site.baseurl }}/ui/configuration/settings-list-of.html#onboarding
 
 The old wizard can still be enabled via setting:
 <config>io.ox/core//onboardingWizard=false</config>

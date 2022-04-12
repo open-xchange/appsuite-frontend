@@ -15,7 +15,7 @@ To enable the old wizard, use the following setting:
 
 The old onboarding configuration via middleware properties is mostly obsolete now. Instead most of the configuration is handled by ui settings. Enabling and disabling of certain setup scenarios is now regulated by capabilities. The mentioned settings and capabilities are described in detail here:
 
-[Onboarding settings](https://documentation.open-xchange.com/7.10.5/ui/configuration/settings-list-of.html#onboarding)
+[Onboarding settings](https://documentation.open-xchange.com/{{ site.baseurl }}/ui/configuration/settings-list-of.html#onboarding)
 
 Additionally the following onboarding scenario was removed and is no longer supported in favour of new onboarding methods like QR code support:
 
