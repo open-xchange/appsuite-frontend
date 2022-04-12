@@ -434,10 +434,13 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onToggle: function (e) {
                         e.preventDefault();
-                        var self = this;
                         this.model.set('active', !this.model.get('active'));
+                        this.toggleDebounce(e);
+                    },
 
-                        //yell on reject
+                    toggleDebounce: _.debounce(function (e) {
+                        var self = this;
+                        // yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
                                 self.$el.toggleClass('active', self.model.get('active'));
@@ -446,7 +449,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 self.propagate(self.model);
                             })
                         );
-                    },
+                    }, 300),
 
                     onApply: function (e) {
                         if (e) e.preventDefault();
