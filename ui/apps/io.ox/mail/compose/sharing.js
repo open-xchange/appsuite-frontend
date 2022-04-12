@@ -143,9 +143,9 @@ define('io.ox/mail/compose/sharing', [
                     new mini.CustomCheckboxView({ name: 'usepassword', model: model, label: gt('Use password') }).render().$el.addClass('use-password'),
                     $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('share-password-label-') }),
                     passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
-                        .find('input').attr('id', guid)
                 )
             );
+            passContainer.find('input').attr('id', guid);
             model.on('change:usepassword', toggleState);
             toggleState();
         }
@@ -206,7 +206,8 @@ define('io.ox/mail/compose/sharing', [
                 data = _.extend({
                     'language': coreSettings.get('language'),
                     'enabled': false,
-                    'autodelete': forceAutoDelete
+                    'autodelete': forceAutoDelete,
+                    'usepassword': !_.isEmpty(this.model.get('sharedAttachments').password)
                 }, this.model.get('sharedAttachments'));
             if (forceAutoDelete) data.autodelete = true;
 
