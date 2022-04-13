@@ -53,6 +53,11 @@ define('io.ox/mail/compose/actions/extensions', [
         if (baton.model.pendingUploadingAttachments.state() !== 'pending') return;
         return wait(baton.model).then(function () {
             baton.view.syncMail();
+        }, function () {
+            baton.view.syncMail();
+            baton.stopPropagation();
+            composeAPI.queue.remove(baton.model.get('id'));
+            baton.app.getWindow().idle().show();
         });
     };
 
