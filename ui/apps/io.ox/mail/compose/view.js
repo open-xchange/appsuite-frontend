@@ -481,6 +481,7 @@ define('io.ox/mail/compose/view', [
                             attachment: attachment,
                             contentDisposition: 'inline'
                         });
+                        attachment.once('upload:failed', def.reject);
                         attachment.once('upload:complete', def.resolve);
                         self.model.attachFiles([attachment]);
                     });
