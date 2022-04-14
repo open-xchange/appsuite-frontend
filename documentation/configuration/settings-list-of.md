@@ -43,7 +43,7 @@ Show a modal dialog to enable an inline relogin without showing the login page. 
 Enable/disable restorepoints for edit dialogs. Default is `true`.
 
 <config>io.ox/core//features/validateMailAddresses=`<bool>`</config>
-Enable validation for email addresses in mail compose dialog. Default is `true`.
+Enable validation for email addresses in mail compose and contacts edit dialog. Default is `true`.
 
 <config>io.ox/core//features/validatePhoneNumbers=`<bool>`</config>
 Enable validation for phone numbers. Default is `false`.
