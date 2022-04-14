@@ -944,7 +944,7 @@ define('io.ox/contacts/edit/view', [
 
         validateAddresses: function (data) {
             return this.validateArray(['email1', 'email2', 'email3'], data, function (name, value) {
-                if (coreUtil.isValidMailAddress(value)) return;
+                if (coreUtil.isValidMailAddress(value) || coreSettings.get('features/validateMailAddresses', true) === false) return;
                 return gt('This is an invalid email address.', View.i18n[name]);
             });
         },
