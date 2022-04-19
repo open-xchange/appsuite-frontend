@@ -214,16 +214,15 @@ define('io.ox/core/locale', ['io.ox/core/locale/meta', 'settings!io.ox/core'], f
                     LLL: meta.translateCLDRToMoment(localeData.date) + ' ' + time,
                     LT: time,
                     LTS: timeLong,
-                    l: null
+                    // this is kind of wrong. l is the same as L but without leading 0.
+                    // this makes the short format the same as the long format
+                    // We only show one select box for the date not a separate one for short and long formats. Users are confused if we use a different short format, see OXUIB-1569 or OXUIB-1108.
+                    l: meta.translateCLDRToMoment(localeData.date)
                 },
                 // dow = first day of week (0=Sunday, 1=Monday, ...)
                 // doy = 7 + dow - janX (first day of year)
                 week: { dow: dow, doy: 7 + dow - doy }
             };
-
-        // this is kind of wrong. l is the same as L but without leading 0.
-        // this makes the short format the same as the long format, but if that's what the user selected we will use that.
-        if (settings.get('localeData', {}).dateShort) { formats.longDateFormat.l = meta.translateCLDRToMoment(localeData.date); }
 
         moment.updateLocale(id, formats);
         ox.trigger('change:locale');
