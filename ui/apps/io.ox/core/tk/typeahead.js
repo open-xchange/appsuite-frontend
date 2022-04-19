@@ -233,9 +233,12 @@ define('io.ox/core/tk/typeahead', [
                     if (cursorDatum && _.isEmpty(hint)) {
                         this._select(cursorDatum);
                         $e.preventDefault();
-                    } else if (this.autoselect && topSuggestionDatum) {
-                        this._select(topSuggestionDatum);
-                        $e.preventDefault();
+                    } else if (topSuggestionDatum) {
+                        // select top suggestion when a) autoselect is true, b) there's a hint, c) if input equals the suggestion
+                        if (this.autoselect || !_.isEmpty(hint) || topSuggestionDatum.value === $e.currentTarget.value) {
+                            this._select(topSuggestionDatum);
+                            $e.preventDefault();
+                        }
                     }
                 }.bind(this.$el.data('ttTypeahead'));
             }
