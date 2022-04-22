@@ -63,6 +63,18 @@ define('io.ox/conference/views/conference-select', [
                 ),
                 this.$col
             );
+            if (this.appointment.get('warnOldConference')) {
+                this.$el.append(
+                    $('<div class="col-xs-12">').append(
+                        $('<div class="conference-view zoom">').append(
+                            $('<i class="fa fa-exclamation conference-logo" aria-hidden="true">'),
+                            $('<p class="alert alert-warning message">').append(
+                                gt('The appointment description might contain outdated information from a previous zoom conference that needs to be deleted manually.')
+                            )
+                        )
+                    )
+                );
+            }
             this.renderConferenceDetails();
             return this;
         },

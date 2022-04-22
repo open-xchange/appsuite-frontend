@@ -25,12 +25,11 @@ define('io.ox/conference/views/zoom-meeting', [
     'io.ox/switchboard/api',
     'io.ox/core/extensions',
     'settings!io.ox/switchboard',
-    'gettext!io.ox/switchboard'
-], function (zoom, api, ext, settings, gt) {
+    'gettext!io.ox/switchboard',
+    'io.ox/conference/views/zoom-util'
+], function (zoom, api, ext, settings, gt, util) {
 
     'use strict';
-
-    var filterCountry = settings.get('zoom/dialin/filterCountry', '');
 
     var ZoomMeetingView = zoom.View.extend({
 
@@ -98,38 +97,9 @@ define('io.ox/conference/views/zoom-meeting', [
         },
 
         copyToDescription: function () {
-            var meeting = this.model.get('meeting'),
-                meetingId, passcode, onetap, dialinNumbers, description;
+            var meeting = this.model.get('meeting');
             if (!meeting || !meeting.settings) return;
-            dialinNumbers = _(meeting.settings.global_dial_in_numbers).filter(function (dialin) {
-                if (!filterCountry) return true;
-                return filterCountry === dialin.country;
-            });
-            description = gt('Join Zoom meeting') + ': ' + this.getJoinURL() + '\n';
-            if (meeting.password) {
-                //#. %1$s contains a password
-                description += gt('Meeting password: %1$s', meeting.password) + '\n';
-            }
-            if (dialinNumbers.length) {
-                meetingId = String(meeting.id).replace(/^(\d{3})(\d{4})(\d+)$/, '$1 $2 $3');
-                passcode = meeting.h323_password;
-                onetap = dialinNumbers[0].number + ',,' + meeting.id + '#,,,,,,0#' + (passcode ? ',,' + passcode + '#' : '');
-                description += '\n' +
-                    //#. Zoom offers a special number to automatically provide the meeting ID and passcode
-                    //#. German: "Schnelleinwahl mobil"
-                    //#. %1$s is the country, %2$s contains the number
-                    gt('One tap mobile (%1$s): %2$s', dialinNumbers[0].country_name, onetap) + '\n\n' +
-                    //#. %1$s contains a numeric zoom meeting ID
-                    gt('Meeting-ID: %1$s', meetingId) + '\n' +
-                    //#. %1$s contains a numeric dialin passcode
-                    (passcode ? gt('Dial-in passcode: %1$d', passcode) + '\n' : '') +
-                    '\n' +
-                    gt('Dial by your location') + '\n' +
-                    dialinNumbers.map(function (dialin) {
-                        return '    ' + dialin.country_name + (dialin.city ? ' (' + dialin.city + ')' : '') + ': ' + dialin.number;
-                    })
-                    .join('\n') + '\n';
-            }
+            var description = util.getMeetingDescription(meeting);
             var existingDescription = this.appointment.get('description');
             if (existingDescription) description = description + '\n' + existingDescription;
             this.appointment.set('description', description);

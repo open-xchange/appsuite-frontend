@@ -21,8 +21,10 @@
  */
 
 define('io.ox/calendar/actions/follow-up', [
-    'io.ox/calendar/util'
-], function (util) {
+    'io.ox/calendar/util',
+    'io.ox/switchboard/zoom',
+    'io.ox/conference/views/zoom-util'
+], function (util, zoomAPI, zoomUtil) {
 
     'use strict';
 
@@ -61,8 +63,30 @@ define('io.ox/calendar/actions/follow-up', [
         // clean up attendees (remove confirmation status comments etc)
         copy.attendees = util.cleanupAttendees(copy.attendees);
 
+        var location = model.get('location');
+        var conferences = model.get('conferences');
+        var def = $.Deferred();
+        if (conferences) {
+            copy.warnOldConference = true;
+            var conference = conferences[0];
+            if (conferences.filter(function (c) { return c.uri === location; }).length) copy.location = '';
+            zoomAPI.getMeeting(conference.extendedParameters['X-OX-ID']).then(function (meeting) {
+                var meetingDescription = zoomUtil.getMeetingDescription(meeting);
+                if (copy.description.indexOf(meetingDescription) > -1) {
+                    copy.warnOldConference = false;
+                    copy.description = copy.description.replace(meetingDescription, '').trim();
+                }
+                def.resolve(copy);
+            }).catch(function (error) {
+                console.warn(error);
+                def.resolve(copy);
+            });
+        } else {
+            def.resolve(copy);
+        }
+
         // use ox.launch to have an indicator for slow connections
-        ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+        $.when(ox.load(['io.ox/calendar/edit/main']), def).done(function (edit, copy) {
             edit.getApp().launch().done(function () {
                 this.create(copy);
             });
