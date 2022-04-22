@@ -245,7 +245,7 @@
         if (index >= $list.length) index -= $list.length;
 
         _.defer(function () {
-            $list.eq(index).focus();
+            $list.eq(index).get(0).focus();
         });
     }
 
