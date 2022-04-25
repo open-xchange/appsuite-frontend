@@ -263,7 +263,14 @@
             outline: 0;
 
             i { text-decoration: none; }
-            &:focus { background-color: #eee; text-decoration: none; }
+            &:focus {
+                background-color: #eee;
+                text-decoration: none;
+
+                border-radius: 4px; // mozilla bases its outline radius on the border-radius
+                outline: auto Highlight;
+                outline: auto -webkit-focus-ring-color;
+            }
 
             &.disabled {
                 color: @toolbar-link-disabled-color;

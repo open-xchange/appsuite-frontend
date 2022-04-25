@@ -240,6 +240,12 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
         //svg .stroke-c1 { fill: @brand-primary; }
     }
 
+    #io-ox-launcher > button:focus,
+    #io-ox-quicklaunch > button:focus {
+        outline: 5px auto @appcontrol-launcher-color-highlight;
+        overflow: hidden;
+    }
+
     #io-ox-quicklaunch {
 
         .smartphone & {
@@ -360,6 +366,9 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
                     background: rgba(0, 0, 0, .3);
                     outline: 0;
                     color: @appcontrol-launcher-color-highlight;
+                }
+                &:focus {
+                    outline: 5px auto @appcontrol-launcher-color-highlight;
                 }
             }
             .fasvg {
@@ -512,7 +521,7 @@ html:not(.smartphone) #io-ox-appcontrol #io-ox-toprightbar #io-ox-launcher .laun
 
         .fa { width: auto; }
         a:focus {
-            i, .title { color: #fff; }
+            svg, i, .title { color: #fff; }
             outline: 0;
         }
     }
