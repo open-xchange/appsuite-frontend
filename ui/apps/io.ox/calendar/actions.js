@@ -175,8 +175,11 @@ define('io.ox/calendar/actions', [
             // cannot confirm appointments without proper id or folder (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
             if (!data.id || !data.folder) return false;
-            // folder must support alarms
+
             var folder = folderAPI.pool.getModel(data.folder).toJSON();
+            // special case. Folder is just a dummy model. User usually has no reading rights and event is only visible in the all public appointments folder. Try to offer reminder change action.
+            if (!folder.supported_capabilities && api.isInAllPublic(data) && (f.attendee || f.organizer)) return true;
+            // folder must support alarms
             if (folder.supported_capabilities.indexOf('alarms') === -1) return false;
             // In public folders we must be organizer or attendee, not on behalf
             if (folderAPI.is('public', folder) && !(f.attendee || f.organizer)) return false;
@@ -203,11 +206,18 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             var data = baton.first();
             ox.load(['io.ox/calendar/actions/acceptdeny']).done(function (action) {
+                var noFolderCheck = baton.noFolderCheck;
+
+                if (!noFolderCheck) {
+                    folderAPI.pool.getModel(data.folder).toJSON();
+                    // special case. Folder is just a dummy model. User usually has no reading rights and event is only visible in the all public appointments folder. Don't perform folder check then
+                    if (!folderAPI.pool.getModel(data.folder).toJSON().supported_capabilities && api.isInAllPublic(data)) noFolderCheck = true;
+                }
                 // get full data if possible
                 api.get(data).then(function (obj) {
-                    action(obj.toJSON(), { noFolderCheck: baton.noFolderCheck });
+                    action(obj.toJSON(), { noFolderCheck: noFolderCheck });
                 }, function () {
-                    action(data, { noFolderCheck: baton.noFolderCheck });
+                    action(data, { noFolderCheck: noFolderCheck });
                 });
             });
         }
