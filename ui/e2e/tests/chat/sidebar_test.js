@@ -48,7 +48,7 @@ Scenario('Show all files', ({ I, users, chat }) => {
     I.waitForElement(locate('.message-file-container .name').withText('spreadsheet.xls'), 5, '.ox-chat .messages');
 
     I.click('~Close chat', '.ox-chat');
-    I.wait(0.5); // gentle wait for listeners
+    I.wait(2); // gentle wait for listeners
     I.click('.chat-leftside button[data-cmd="show-all-files"]');
     I.waitForElement(scrollpaneLocator);
     I.waitForText('spreadsheet.xls', 15, scrollpaneLocator);
