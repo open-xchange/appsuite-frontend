@@ -494,7 +494,7 @@ define('io.ox/contacts/view-detail', [
         }
 
         obj[id] = number;
-        return simple(obj, id, gt('Messenger'));
+        return simple(obj, id);
     }
 
     // data is full contact data
@@ -576,8 +576,8 @@ define('io.ox/contacts/view-detail', [
                 this.append(
                     block(
                         simple(data, 'title'),
-                        simple(data, 'second_name'),
                         simple(data, 'nickname'),
+                        simple(data, 'second_name'),
                         simple(data, 'suffix'),
                         row('birthday', function () {
                             // check if null, undefined, empty string
@@ -585,17 +585,6 @@ define('io.ox/contacts/view-detail', [
                             if (!_.isNumber(baton.data.birthday)) return;
                             return util.getBirthday(baton.data.birthday, true);
                         }),
-                        row('url', function () {
-                            var url = $.trim(baton.data.url);
-                            if (!url) return;
-                            if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
-                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
-                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], RETURN_DOM_FRAGMENT: true });
-                        }),
-                        // --- rare ---
-                        simple(data, 'marital_status'),
-                        simple(data, 'number_of_children'),
-                        simple(data, 'spouse_name'),
                         row('anniversary', function () {
                             // check if null, undefined, empty string
                             // 0 is valid (1.1.1970)
@@ -603,7 +592,18 @@ define('io.ox/contacts/view-detail', [
                                 // use same mechanic as with birthdays
                                 return util.getBirthday(baton.data.anniversary);
                             }
-                        })
+                        }),
+                        // --- rare ---
+                        simple(data, 'marital_status'),
+                        simple(data, 'number_of_children'),
+                        row('url', function () {
+                            var url = $.trim(baton.data.url);
+                            if (!url) return;
+                            if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
+                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
+                            return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], RETURN_DOM_FRAGMENT: true });
+                        }),
+                        simple(data, 'spouse_name')
                     )
                     .attr('data-block', 'personal')
                 );
@@ -623,8 +623,8 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'department'),
                         simple(data, 'position'),
                         simple(data, 'profession'),
-                        simple(data, 'room_number'),
                         simple(data, 'manager_name'),
+                        simple(data, 'room_number'),
                         simple(data, 'assistant_name'),
                         // --- rare ---
                         simple(data, 'employee_type'),
