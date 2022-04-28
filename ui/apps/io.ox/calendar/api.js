@@ -1243,6 +1243,26 @@ define('io.ox/calendar/api', [
         }
     };
 
+    // helper function to check if an event is only in the all public folder
+    // This helps with checks when a user does not have viewing permissions on the actual public folder.
+    // This way we can still assume some things even without the actual folder data. (is public, etc)
+    // If you have the full folder data, use that instead.
+    api.isInAllPublic = function (model) {
+        if (!model) return false;
+        var folder = model.folder || model.get('folder'),
+            collections = api.pool.getByFolder('cal://0/allPublic'),
+            result = false;
+
+        _(collections).each(function (collection) {
+        // original folder is also in the collection, we cannot be sure the event is in the all public folder using this collection
+            if (_(collection.folders).contains(folder)) return;
+            if (collection.get(model)) result = true;
+        });
+
+        return result;
+    };
+
+
     _.extend(api, Backbone.Events);
 
     return api;
