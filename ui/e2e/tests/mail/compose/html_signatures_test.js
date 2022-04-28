@@ -119,11 +119,11 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
             new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[0].content}</div>`)
         );
     });
-    await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[1].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[3].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + emptyLine));
-    await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[0].content}</div>`));
+    await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[1].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[3].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + emptyLine + '$'));
+    await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[0].content}</div>$`));
 
     I.say('📢 blockquote and user input', 'blue');
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
@@ -133,11 +133,11 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
             new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div>`)
         );
     });
-    await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[1].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[2].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[3].content}</div>`));
-    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + someUserInput));
-    await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div>`));
+    await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[1].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[2].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[3].content}</div>$`));
+    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + someUserInput + '$'));
+    await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div>$`));
 
     // // discard mail
     I.click(mail.locators.compose.close);
@@ -163,7 +163,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
 
     await within({ frame: '.io-ox-mail-compose-window .editor iframe' }, async () => {
         expect(await I.grabHTMLFrom('body')).to.match(
-            new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>`)
+            new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>$`)
         );
     });
 
@@ -206,7 +206,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[1].content}</div><blockquote type="cite">.*</blockquote>$`));
     await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + emptyLine + '<blockquote type="cite">.*</blockquote>' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>$`));
     await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + emptyLine + '<blockquote type="cite">.*</blockquote>' + emptyLine + `<div class="io-ox-signature">${signatures[3].content}</div>$`));
-    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + emptyLine + '<blockquote type="cite">.*</blockquote>' + emptyLine + '$'));
+    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + emptyLine + '<blockquote type="cite">.*</blockquote>$'));
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + emptyLine + `<div class="io-ox-signature">${signatures[0].content}</div><blockquote type="cite">.*</blockquote>$`));
 
     I.say('📢 blockquote and user input', 'blue');
@@ -220,7 +220,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     await selectAndAssertSignature(I, mail, 'Second signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[1].content}</div><blockquote type="cite">.*</blockquote>$`));
     await selectAndAssertSignature(I, mail, 'First signature below', new RegExp('^' + someUserInput + '<blockquote type="cite">.*</blockquote>' + emptyLine + `<div class="io-ox-signature">${signatures[2].content}</div>$`));
     await selectAndAssertSignature(I, mail, 'Second signature below', new RegExp('^' + someUserInput + '<blockquote type="cite">.*</blockquote>' + emptyLine + `<div class="io-ox-signature">${signatures[3].content}</div>$`));
-    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + someUserInput + '<blockquote type="cite">.*</blockquote>' + emptyLine + '$'));
+    await selectAndAssertSignature(I, mail, 'No signature', new RegExp('^' + someUserInput + '<blockquote type="cite">.*</blockquote>$'));
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div><blockquote type="cite">.*</blockquote>$`));
 
     // discard mail
@@ -410,8 +410,8 @@ Scenario('[OXUIB-370] Default font style is used after appending signature', asy
     mail.newMail();
 
     await selectAndAssertSignature(I, mail, 'First signature below',
-        new RegExp('^<div style="font-size: 10pt; font-family: arial black,avant garde; color: #0000ff;" class="default-style"(.*)><br(.*)></div>' +
-        `<div class="io-ox-signature">${signatures[2].content}</div>`));
+        new RegExp('^<div class="default-style"(?: (?:data-mce-)?style="font-size: 10pt; font-family: arial black,avant garde; color: #0000ff;"){2}><br></div>' +
+        `<div class="io-ox-signature">${signatures[2].content}</div>$`));
 });
 
 Scenario('[OXUIB-370] Default font style is used when appending signature below quoted text', async ({ I, users, mail }) => {
