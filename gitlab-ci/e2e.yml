@@ -2,7 +2,7 @@
 
 run e2e tests:
   stage: e2e
-  image: registry.gitlab.open-xchange.com/frontend/dev_env/puppeteer:latest
+  image: registry.gitlab.open-xchange.com/frontend/dev_env/node_puppeteer:latest
   tags:
     - e2e
     - kubernetes
@@ -39,7 +39,7 @@ run e2e tests:
     - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
     - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
-    - npx ./e2e/customRerun.js
+    - node ./e2e/customRerun.js
   parallel: 20
   # reasonable timeout, enforce better partitioning
   timeout: 30 minutes
@@ -73,7 +73,7 @@ trigger appsuite-stack deployment pipeline:
 
 merge filter report and rerun:
   stage: merge
-  image: registry.gitlab.open-xchange.com/frontend/dev_env/puppeteer:latest
+  image: registry.gitlab.open-xchange.com/frontend/dev_env/node_puppeteer:latest
   dependencies:
     - run e2e tests
   needs:
@@ -218,7 +218,7 @@ run single test:
   - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
   - echo ${CI_COMMIT_REF_NAME#e2e/}
   - unset FILTER_SUITE
-  - npx ./e2e/customRerun.js "${CI_COMMIT_REF_NAME#e2e/}"
+  - node ./e2e/customRerun.js "${CI_COMMIT_REF_NAME#e2e/}"
   parallel: 5
   timeout: 60 minutes
   rules:
