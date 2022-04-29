@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:07+0100\n"
+"PO-Revision-Date: 2022-04-29 13:38+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -825,7 +825,7 @@ msgstr "Gå till nästa månad"
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 #: apps/io.ox/calendar/year/view.js module:io.ox/calendar
 msgid "CW"
-msgstr "KV"
+msgstr "V"
 
 #. CW is calender week and %1$d is the week number
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
@@ -1704,7 +1704,7 @@ msgstr "Kasta"
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
-msgstr "Rubrik"
+msgstr "Ämne"
 
 #. label for the server location, showing the hostname of a federsted share in Drive, in german probably 'Standort'
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -2415,7 +2415,7 @@ msgstr "Kalender"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgctxt "noun"
 msgid "View"
-msgstr "Vy"
+msgstr "Visa"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Start of working time"
@@ -4210,7 +4210,7 @@ msgstr "Radera objekt"
 
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 msgid "Delete distribution list"
-msgstr "Radera sändlista"
+msgstr "Radera distributionslista"
 
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js
@@ -5220,8 +5220,8 @@ msgstr ""
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with %1$d entry"
 msgid_plural "Distribution list with %1$d entries"
-msgstr[0] "Sändlista med %1$d post"
-msgstr[1] "Sändlista med %1$d poster"
+msgstr[0] "Distributionslista med %1$d post"
+msgstr[1] "Distributionslista med %1$d poster"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Private contact"
@@ -5321,14 +5321,12 @@ msgid "User name"
 msgstr "Användarnamn"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Använd lösenord"
+msgstr "Återställ lösenord"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
-msgstr "Ange lösenord"
+msgstr "Ställ in lösenord"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -5492,8 +5490,6 @@ msgid "Imprint"
 msgstr "Impressum"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "Bekräfta nytt lösenord"
 
@@ -6290,6 +6286,10 @@ msgstr "Välj mapp"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Skapa mapp"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Du kan inte markera den här mappen."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -7272,42 +7272,42 @@ msgstr "B"
 #. Kilobytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "KB"
-msgstr "Kb"
+msgstr "kB"
 
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
-msgstr "Mb"
+msgstr "MB"
 
 #. Gigabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "GB"
-msgstr "Gb"
+msgstr "GB"
 
 #. Terabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "TB"
-msgstr "Tb"
+msgstr "TB"
 
 #. Petabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "PB"
-msgstr "Pb"
+msgstr "PB"
 
 #. Exabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
-msgstr "Eb"
+msgstr "EB"
 
 #. Zettabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "ZB"
-msgstr "Zb"
+msgstr "ZB"
 
 #. Yottabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "YB"
-msgstr "Yb"
+msgstr "YB"
 
 #. File size
 #. %1$d is the number
@@ -8080,7 +8080,7 @@ msgstr "Visa detaljer"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out standalone viewer"
-msgstr "Hoppa ut fristående läsare"
+msgstr "Visa i separat fönster"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -8279,7 +8279,7 @@ msgid ""
 "settings easier."
 msgstr ""
 "Det övre navigeringsområdet om gjorts om för att göra det lättare att komma "
-"åt program, hjälp och inställningar."
+"åt appar, hjälp och inställningar."
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid "Audio and Video"
@@ -8671,6 +8671,14 @@ msgstr ""
 "Återställd till mapp:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF:en sparades till \"/drive/myfiles/documents\" eftersom skrivrättighet "
+"saknas i nuvarande mapp."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -11279,7 +11287,7 @@ msgstr "Är mindre än"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Bcc"
-msgstr "Dold kopia"
+msgstr "Blind kopia"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -11862,7 +11870,7 @@ msgstr "Infoga det ursprungliga meddelandets text i svaret"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
-msgstr "Bekräfta kvitton vid svar till sändlista"
+msgstr "Bekräfta mottagare vid svar till sändlista"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default sender address"
@@ -12306,11 +12314,6 @@ msgstr "Kod via SMS"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Använd en FIDO2-kompatibel enhet för att autentisera din identitet."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google Security-nycklar, eller kompatibel FIDO-enhet"
 
@@ -12519,7 +12522,7 @@ msgid ""
 "verification code from the Authenticator App."
 msgstr ""
 "Du skyddade ditt konto med 2-Step-verifiering. Ange verifieringskoden från "
-"autentiseringsprogrammet."
+"autentiseringsappen."
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -12618,7 +12621,7 @@ msgstr "Mac App Store"
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s."
-msgstr "Hämta programmet från %1$s."
+msgstr "Hämta appen från %1$s."
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -12633,7 +12636,7 @@ msgstr "Google Play"
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
-msgstr "Hämta program från %1$s"
+msgstr "Hämta appen från %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
@@ -12892,8 +12895,12 @@ msgid "Android"
 msgstr "Android"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync app"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
-msgstr "MacOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -12958,8 +12965,8 @@ msgid ""
 "Please note: After downloading you will have to enable the profile in the "
 "Settings app to complete the installation."
 msgstr ""
-"Observera: Efter nedladdning måste du aktivera profilen i Inställningar för "
-"att slutföra installeringen."
+"Observera: Efter nedladdning måste du aktivera profilen i inställningsappen "
+"för att slutföra installeringen."
 
 #. 1$s name of the product to install, e.g. OX Mail or Drive
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
@@ -13031,7 +13038,7 @@ msgstr "Vilket program vill du använda?"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "App"
-msgstr "Program"
+msgstr "App"
 
 #: apps/io.ox/onboarding/views.js module:io.ox/core/onboarding
 msgid "Platform"
@@ -14703,11 +14710,11 @@ msgstr "privat"
 
 #: apps/io.ox/tours/get-started.js module:io.ox/core
 msgid "Guided tour for this app"
-msgstr "Guidad visning för det här programmet"
+msgstr "Guidad visning för den här appen"
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid "App Launcher"
-msgstr "Programstartare"
+msgstr "Appstartare"
 
 #. %1$s is the product name, e.g. OX App Suite
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
@@ -15911,11 +15918,35 @@ msgstr "Lägg till på %s"
 #~ msgid "Rotate right"
 #~ msgstr "Rotera höger"
 
+#~ msgid "Update Appointment"
+#~ msgstr "Uppdatera möte"
+
+#~ msgid "Add to Calendar"
+#~ msgstr "Lägg till i kalendern"
+
+#~ msgid "Accept Proposal"
+#~ msgstr "Acceptera förslag"
+
+#~ msgid "Remove Appointment"
+#~ msgstr "Ta bort möte"
+
+#~ msgid "Request Appointment"
+#~ msgstr "Önska möte"
+
+#~ msgid "Send Appointment"
+#~ msgstr "Skicka möte"
+
+#~ msgid "The appointment was added"
+#~ msgstr "Mötet lades till"
+
+#~ msgid "The changes have been accepted"
+#~ msgstr "Ändringarna har accepterats"
+
 #~ msgid ""
 #~ "Automatically apply appointment changes received via email to your "
 #~ "calendar"
 #~ msgstr ""
-#~ "Tillämpa automatiskt mötesändringar mottagna via e-post till din kalender"
+#~ "Verkställ automatiskt mötesändringar mottagna via e-post till din kalender"
 
 #~ msgid "Only from known senders"
 #~ msgstr "Endast från kända avsändare"
@@ -15929,6 +15960,15 @@ msgstr "Lägg till på %s"
 #~ msgid "Connection problems"
 #~ msgstr "Anslutningsproblem"
 
+#~ msgid "My address lists"
+#~ msgstr "Mina adresslistor"
+
+#~ msgid "Public address lists"
+#~ msgstr "Offentliga adresslistor"
+
+#~ msgid "Shared address lists"
+#~ msgstr "Delade adresslistor"
+
 #~ msgid "%1$d contact selected"
 #~ msgid_plural "%1$d contacts selected"
 #~ msgstr[0] "%1$d kontakt markerad"
@@ -15937,8 +15977,20 @@ msgstr "Lägg till på %s"
 #~ msgid "Remove contact from selection"
 #~ msgstr "Ta bort kontakt från markering"
 
-#~ msgid "Select/Deselect contact %1$s"
-#~ msgstr "Markera/Avmarkera kontakt %1$s"
+#~ msgid "department %1$s"
+#~ msgstr "avdelningar %1$s"
+
+#~ msgid "position %1$s"
+#~ msgstr "position %1$s"
+
+#~ msgid "email address %1$s"
+#~ msgstr "e-postadress %1$s"
+
+#~ msgid "phone number %1$s"
+#~ msgstr "telefonnummer %1$s"
+
+#~ msgid "room %1$s"
+#~ msgstr "rum %1$s"
 
 #~ msgid "Show contact details"
 #~ msgstr "Visa detaljer om kontakt"
@@ -15958,6 +16010,11 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Du har nått gränsen på %1$d kontakter att visa. Ange en sökterm för att "
 #~ "begränsa dina resultat."
+
+#, fuzzy
+#~| msgid "New list"
+#~ msgid "User list"
+#~ msgstr "Ny lista"
 
 #~ msgid "Global address list"
 #~ msgstr "Global adresslista"
@@ -15982,6 +16039,16 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Could not load address book."
 #~ msgstr "Kunde inte läsa in adressbok."
+
+#, fuzzy
+#~| msgid "Please enter your password."
+#~ msgid "Please enter your new password."
+#~ msgstr "Skriv ditt lösenord."
+
+#, fuzzy
+#~| msgid "Please enter the password."
+#~ msgid "Please enter the same password."
+#~ msgstr "Ange lösenord."
 
 #~ msgid "%1$s (%2$s)"
 #~ msgstr "%1$s (%2$s)"
@@ -16016,9 +16083,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Author (create/edit/delete appointments)"
 #~ msgstr "Författare (skapa/redigera/radera möten)"
 
-#~ msgid "save"
-#~ msgstr "spara"
-
 #~ msgid "Could not create deputy."
 #~ msgstr "Kunde inte skapa ställföreträdare."
 
@@ -16028,8 +16092,8 @@ msgstr "Lägg till på %s"
 #~ msgid "Remove deputy %1$s"
 #~ msgstr "Ta bort ställföreträdare %1$s"
 
-#~ msgid "Do you want to remove %1$s from your deputy list"
-#~ msgstr "Vill du ta bort %1$s från din lista över ställföreträdare"
+#~ msgid "Do you want to remove %1$s from your deputy list?"
+#~ msgstr "Vill du ta bort %1$s från din lista över ställföreträdare?"
 
 #~ msgid "Could not remove deputy."
 #~ msgstr "Kunde inte ta bort ställföreträdare."
@@ -16039,9 +16103,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Deputies can get acces to your Inbox and Calendar."
 #~ msgstr "Ställföreträdare kan komma åt din Inkorg och Kalender."
-
-#~ msgid "Remobe"
-#~ msgstr "Ta bort"
 
 #~ msgid "Manage deputies"
 #~ msgstr "Hantera ställföreträdare"
@@ -16064,6 +16125,16 @@ msgstr "Lägg till på %s"
 #~ msgid "Deputy"
 #~ msgstr "Ställföreträdare"
 
+#~ msgid "Sharing folders without permissions"
+#~ msgstr "Delar mappar utan rättigheter"
+
+#~ msgid ""
+#~ "Your are sharing one or more folders for which you do not have "
+#~ "permissions. These folders will not be shared."
+#~ msgstr ""
+#~ "Du delar en eller flera mappar som du saknar delningsrättighet för. Dessa "
+#~ "mappar kommer inte att delas."
+
 #~ msgid "The uploaded attachment exceeds the maximum email size of %1$s"
 #~ msgstr ""
 #~ "Den uppladdade bilagan överskrider den maximala meddelandestorleken %1$s"
@@ -16082,547 +16153,549 @@ msgstr "Lägg till på %s"
 #~ "Avsändaradressen tillhör ett avaktiverat e-postkonto. Välj en annan "
 #~ "avsändaradress eller ändra inställningarna för att aktivera den igen."
 
+#~ msgid "Mail contains hidden external images"
+#~ msgstr "Meddelandet innehåller dolda externa bilder"
+
+#~ msgid ""
+#~ "This email contains images from external sources that are currently "
+#~ "hidden. The sent email will not contain any images from external sources"
+#~ msgstr ""
+#~ "Meddelandet innehåller bilder från externa källor som nu döljs. Det "
+#~ "skickade meddelandet kommer inte att innehålla några bilder från externa "
+#~ "källor"
+
+#~ msgid "Mail may contain external images"
+#~ msgstr "Meddelandet kan innehålla externa bilder"
+
+#~ msgid ""
+#~ "This email may contain images from external sources. The sent email will "
+#~ "not contain any images from external sources"
+#~ msgstr ""
+#~ "Meddelandet kan innehålla bilder från externa källor. Det skickade "
+#~ "meddelandet kommer inte att innehålla några bilder från externa källor"
+
+#~ msgid "Compose mail without external images"
+#~ msgstr "Skriv e-post utan externa bilder"
+
+#~ msgid "On behalf of"
+#~ msgstr "Åt"
+
+#~ msgid "This email will be sent by %1$s on behalf of %2$s."
+#~ msgstr "Detta meddelande kommer att skickas av %1$s åt %2$s."
+
+#~ msgid "This mail has been sent on behalf of another person."
+#~ msgstr "Meddelandet skickades åt en annan person."
+
+#~ msgid "on behalf of"
+#~ msgstr "åt"
+
+#~ msgid "via"
+#~ msgstr "via"
+
 #~ msgid "Apply filter rule"
 #~ msgstr "Verkställ filterregel"
 
-#~ msgid "Password recovery"
-#~ msgstr "Återställ lösenord"
-
-#~ msgid "Show information about account recovery"
-#~ msgstr "Visa information om återställning av konto"
-
-#~ msgid ""
-#~ "For security reasons, all credentials are encrypted with your primary "
-#~ "account password. If you change your primary password, your external "
-#~ "accounts might stop working. In this case, you can use your old password "
-#~ "to recover all account passwords."
-#~ msgstr ""
-#~ "Av säkerhetsskäl krypteras alla uppgifter med ditt primära kontos "
-#~ "lösenord. Om du ändrar ditt primära lösenord kan dina externa konton "
-#~ "sluta fungera. I så fall kan du använda ditt gamla lösenord för att hämta "
-#~ "ut alla kontons lösenord."
-
-#~ msgid "Recover passwords"
-#~ msgstr "Rädda lösenord"
-
-#~ msgid ""
-#~ "Other users can find and join your channel under \"All channels\". If you "
-#~ "prefer a conversiom in a closed group, please create a group chat."
-#~ msgstr ""
-#~ "Andra användare kan hitta och ansluta till din kanal under \"Alla kanaler"
-#~ "\". Om du vill ha en konversation inom en sluten grupp, skapa en "
-#~ "gruppchatt."
-
-#~ msgid "Please set password"
-#~ msgstr "Ange lösenord"
-
-#~ msgid ""
-#~ "This draft was changed outside of this window. To prevent possible loss "
-#~ "of data please continue editing in that other tab or browser."
-#~ msgstr ""
-#~ "Detta utkast ändrades utanför det här fönstret. För att förhindra "
-#~ "dataförlust, fortsätt redigera i den andra fliken eller webbläsaren."
-
-#~ msgid ""
-#~ "You are about to discard this message. Do you want to delete the related "
-#~ "draft?"
-#~ msgstr ""
-#~ "Du är på väg att förkasta det här meddelandet. Vill du också radera det "
-#~ "associerade utkastet?"
-
-#~ msgctxt "dialog"
-#~ msgid "Delete draft"
-#~ msgstr "Ta bort utkast"
-
-#~ msgctxt "dialog"
-#~ msgid "Discard message"
-#~ msgstr "Kasta meddelande"
-
-#~ msgid "Keep draft"
-#~ msgstr "Behåll utkast"
-
-#~ msgid "Save as draft"
-#~ msgstr "Spara som utkast"
-
-#~ msgid "Do you really want to delete this draft?"
-#~ msgstr "Vill du verkligen ta bort utkastet?"
-
-#~ msgid "Do you really want to discard your message?"
-#~ msgstr "Vill du verkligen kasta meddelandet?"
-
-#~ msgid "This type of link and is unsupported and can't be added."
-#~ msgstr "Den här länktypen stöds inte och kan inte läggas till."
-
-#~ msgid ""
-#~ "The top navigation area has been redesigned to make accessing modules, "
-#~ "help and settings easier."
-#~ msgstr ""
-#~ "Det översta navigeringsområdet har gjorts om för att göra det lättare att "
-#~ "komma åt moduler, hjälp och inställningar."
-
-#~ msgid ""
-#~ "This release comes with the ability to hold a video or audio chat with "
-#~ "other people. This can be scheduled within a calendar appointment, or "
-#~ "started spontaneously from the toolbar, contacts, halo and other logical "
-#~ "places. To help we have also added a presence indicator to the toolbar."
-#~ msgstr ""
-#~ "Den här utgåvan gör det möjligt att ha video- eller ljudchatt med andra "
-#~ "användare. Detta kan schemaläggas inom ett kalendermöte, eller startas "
-#~ "spontant från verktygsfältet, kontakter, halo och andra logiska platser. "
-#~ "För att hjälpa till har vi också lagt till en närvaroindikator till "
-#~ "verktygsfältet."
-
-#~ msgid ""
-#~ "With this release you will notice a new chat bubble icon in the toolbar. "
-#~ "This opens the new chat bar and lets you write messages to any other OX "
-#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
-#~ "halo."
-#~ msgstr ""
-#~ "Med den här utgåvan kommer du att lägga märke till en ny chattbubbla-ikon "
-#~ "i verktygsfältet. Detta öppnar det nya chattfältet och låter dig skriva "
-#~ "meddelanden till andra användare av OX programsvit. Chattar kan startas "
-#~ "från chattfältet, kontakter eller halo."
-
-#~ msgid ""
-#~ "You are moving an item out of a shared folder. People will lose access."
-#~ msgstr ""
-#~ "Du flyttar ett objekt ut ur en delad mapp. Folk kommer att förlora "
-#~ "åtkomst."
-
-#~ msgid "Manual"
-#~ msgstr "Handbok"
-
-#~ msgid "Mail from %1$s, %2$s"
-#~ msgstr "Meddelande från %1$s, %2$s"
-
-#~ msgid "Subscribe shared calendars"
-#~ msgstr "Prenumerera på delade kalendrar"
-
-#~ msgid "Create new channel"
-#~ msgstr "Skapa ny kanal"
-
-#~ msgid "Channels are public and can be joined by anybody"
-#~ msgstr "Kanaler är offentliga och kan ses av vem som helst"
-
-#~ msgid "There was an error during authentication."
-#~ msgstr "Ett fel uppstod vid autentisering."
-
-#~ msgid "The message could not be sent."
-#~ msgstr "Meddelandet kunde inte skickas."
-
-#~ msgid "Unknown user"
-#~ msgstr "Okänd användare"
-
-#~ msgid "You"
-#~ msgstr "Du"
-
-#~ msgid "Receive email notifications"
-#~ msgstr "Ta emot e-postaviseringar"
-
-#~ msgid "Private chats only"
-#~ msgstr "Endast privata chattar"
-
-#~ msgid "Join chat"
-#~ msgstr "Anslut till chat"
-
-#~ msgid "Chats could not be loaded."
-#~ msgstr "Chattar kunde inte laddas."
-
-#~ msgid "Create new chat"
-#~ msgstr "Skapa ny chat"
-
-#~ msgid "Subscribe shared address books"
-#~ msgstr "Prenumerera på delade adressböcker"
-
-#~ msgid "Sharing"
-#~ msgstr "Delar"
-
-#~ msgid "Permissions / Invite people"
-#~ msgstr "Tillstånd / Bjud in folk"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Prenumerera på adressbok"
-
-#~ msgid "Subscribe shared address book"
-#~ msgstr "Prenumerera på delad adressbok"
-
-#~ msgid "Subscribe shared folder"
-#~ msgstr "Prenumerera på delad mapp"
-
-#~ msgid "Subscribe shared Calendar"
-#~ msgstr "Prenumerera på delad kalender"
-
-#~ msgid "Share this file"
-#~ msgstr "Dela ut filen"
-
-#~ msgid ""
-#~ "Every recipient gets an individual link. Guests can also create and "
-#~ "change files."
-#~ msgstr ""
-#~ "Varje mottagare får en individuell länk. Gäster kan också skapa och ändra "
-#~ "filer."
-
-#~ msgid ""
-#~ "Everybody gets the same link. The link just allows to view the file or "
-#~ "folder."
-#~ msgstr ""
-#~ "Alla får samma länk. Länken tillåter bara visning av filen eller mappen."
-
-#~ msgid "Send link"
-#~ msgstr "Skicka länk"
-
-#~ msgid "Sharing link created for %1$d item"
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Delningslänk skapades för %1$d objekt"
-#~ msgstr[1] "Delningslänk skapades för %1$d objekt"
-
-#~ msgid "Sharing link created for file \"%1$s\""
-#~ msgstr "Delar länk skapad för filen \"%1$s\""
-
-#~ msgid "Sharing link created for folder \"%1$s\""
-#~ msgstr "Delar länk skapad för mappen \"%1$s\""
-
-#~ msgid "Remove link"
-#~ msgstr "Ta bort länk"
-
-#~ msgid "The link has been removed"
-#~ msgstr "Länken har tagits bort"
-
-#~ msgid "Edit Share"
-#~ msgstr "Redigera delning"
-
-#~ msgid "(Read only)"
-#~ msgstr "(Skrivskyddad)"
-
-#~ msgid "(Read and write)"
-#~ msgstr "(Läs och skriv)"
-
-#~ msgid "(Read, write, and delete)"
-#~ msgstr "(Läs, skriv och radera)"
-
-#~ msgid "Enter a Message to inform users"
-#~ msgstr "Skriv ett meddelande för att informera användare"
-
-#~ msgid ""
-#~ "Personal message (optional). This message is sent to all newly invited "
-#~ "people."
-#~ msgstr ""
-#~ "Personligt meddelande (valfritt). Meddelandet skickas till alla nya "
-#~ "inbjudna."
-
-#~ msgid ""
-#~ "You can copy and paste this link in an email, instant messenger or social "
-#~ "network. Please note that anyone with this link can access the share."
-#~ msgstr ""
-#~ "Du kan kopiera och klistra in den här länken i ett meddelande, "
-#~ "snabbmeddelanden eller sociala nätverk. Observera att alla som kommer åt "
-#~ "länken kan komma åt delningen."
-
-#~ msgid "Add recipients ..."
-#~ msgstr "Lägg till mottagare..."
-
-#~ msgid "Message (optional)"
-#~ msgstr "Meddelande (valfritt)"
-
-#~ msgid "one day"
-#~ msgstr "en dag"
-
-#~ msgid "one week"
-#~ msgstr "en vecka"
-
-#~ msgid "one month"
-#~ msgstr "en månad"
-
-#~ msgid "three months"
-#~ msgstr "tre månader"
-
-#~ msgid "six months"
-#~ msgstr "sex månader"
-
-#~ msgid "one year"
-#~ msgstr "ett år"
-
-#~ msgid "Expires in"
-#~ msgstr "Går ut om"
-
-#~ msgid "Password required"
-#~ msgstr "Lösenord krävs"
-
-#~ msgid ""
-#~ "Currently edited drafts with attachments can not be deleted until you "
-#~ "close the correspondig mail compose window."
-#~ msgstr ""
-#~ "Nyss redigerade utkast med bilagor kan inte raderas förrän du stänger "
-#~ "motsvarande meddelandefönster."
-
-#~ msgid "Address"
-#~ msgstr "Adress"
-
-#~ msgid "Manual Configuration"
-#~ msgstr "Manuell konfiguration"
-
-#~ msgid ""
-#~ "To synchronize your iOS Mail client automatically, scan this code with "
-#~ "your phone's camera:"
-#~ msgstr ""
-#~ "För att synkronisera din iOS Mail-klient automatiskt, skanna den här "
-#~ "koden med din telefonkamera:"
-
-#~ msgid "To install %1$s for Windows, download the installation file"
-#~ msgstr "För att installera %1$s för Windows, ladda ned installationsfilen"
-
-#~ msgid "%1$s for Windows Installer"
-#~ msgstr "%1$s för Windows installationsfil"
-
-#~ msgid ""
-#~ "If an automatic configuration is not possible, please use the following "
-#~ "information to manually setup your mail account:"
-#~ msgstr ""
-#~ "Om en automatisk konfiguration inte är möjlig, använd följande "
-#~ "information för att ställa in ditt e-postkonto manuellt:"
-
-#~ msgid "Subscribe shared task folders"
-#~ msgstr "Prenumerera på delad uppgifts mappar"
-
-#~ msgid "Subscribe shared tasks folders"
-#~ msgstr "Prenumerera på delade uppgifters mappar"
-
-#~ msgid "100%"
-#~ msgstr "100 %"
-
-#~ msgctxt "weekly"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d weeks on all days."
-#~ msgstr[0] "Varje dag."
-#~ msgstr[1] "Var %1$d vecka, alla dagar."
-
-#~ msgctxt "weekly"
-#~ msgid "Every %2$s."
-#~ msgid_plural "Every %1$d weeks on %2$s."
-#~ msgstr[0] "Varje %2$s."
-#~ msgstr[1] "Var %1$d vecka på %2$s."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on day %2$d."
-#~ msgid_plural "Every %1$d months on day %2$d."
-#~ msgstr[0] "Varje månad på dag %2$d."
-#~ msgstr[1] "Var %1$d månad på dag %2$d."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on the %2$s %3$s."
-#~ msgid_plural "Every %1$d months on the %2$s %3$s."
-#~ msgstr[0] "Varje månad den %2$s %3$s."
-#~ msgstr[1] "Var %1$d månad den %2$s %3$s."
-
-#~ msgid "The series ends after one occurrence."
-#~ msgid_plural "The series ends after %1$d occurences."
-#~ msgstr[0] "Serien slutar efter en upprepning."
-#~ msgstr[1] "Serien slutar efter %1$d upprepningar."
-
-#~ msgid "Birthday"
-#~ msgstr "Födelsedag"
-
-#~ msgid "Note: One contact is not shown due to missing phone numbers"
-#~ msgid_plural ""
-#~ "Note: %1$d contacts are not shown due to missing phone numbers"
-#~ msgstr[0] "OBS: En kontakt visas inte på grund av saknade telefonnummer"
-#~ msgstr[1] "OBS: %1$d kontakter visas inte på grund av saknade telefonnummer"
-
-#~ msgid "Distribution list with 1 entry"
-#~ msgid_plural "Distribution list with %1$d entries"
-#~ msgstr[0] "Distributionslista med 1 post"
-#~ msgstr[1] "Distributionslista med %1$d poster"
-
-#~ msgid "Your browser version is not supported!"
-#~ msgstr "Din webbläsarversion stöds inte!"
-
-#~ msgid "Your browser is not supported!"
-#~ msgstr "Din webbläsare stöds inte!"
-
-#~ msgid "Your platform is not supported!"
-#~ msgstr "Din plattform stöds inte!"
-
-#~ msgid "Support"
-#~ msgstr "Kundtjänst"
-
-#~ msgid "Attachments have been saved!"
-#~ msgstr "Bilagor har sparats!"
-
-#~ msgid "Download the %s client for %s"
-#~ msgstr "Ladda ner %s-klienten för %s"
-
-#~ msgid "1 item"
-#~ msgid_plural "%1$d items"
+#, fuzzy
+#~| msgid "Do you really want to leave the chat?"
+#~ msgid "Do you really want to remove the public link?"
+#~ msgstr "Vill du verkligen lämna chatten?"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "Använd en FIDO2-kompatibel enhet för att autentisera din identitet."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#, c-format
+#~ msgid "%1$s %"
+#~ msgstr "%1$s %"
+
+#, c-format
+#~ msgid "%1$s of %2$s used"
+#~ msgstr "%1$s av %2$s använt"
+
+#~ msgid "1 entry"
+#~ msgid_plural "%1$d entries"
 #~ msgstr[0] "1 objekt"
 #~ msgstr[1] "%1$d objekt"
 
-#~ msgid "One autocomplete entry found"
-#~ msgid_plural "%1$d autocomplete entries found"
-#~ msgstr[0] "En autofyllpost hittades"
-#~ msgstr[1] "%1$d autofyllposter hittades"
+#~ msgid "Accent colors"
+#~ msgstr "Accentfärger"
+
+#~ msgctxt "appointment participation status"
+#~ msgid "Accept"
+#~ msgstr "Acceptera"
+
+#~ msgid "Add comment"
+#~ msgstr "Lägg till kommentar"
+
+#~ msgid "Add new list"
+#~ msgstr "Lägg till ny lista"
+
+#~ msgid "Add new task list"
+#~ msgstr "Lägg till ny uppgiftslista"
+
+#~ msgid "All lists"
+#~ msgstr "Alla listor"
+
+#~ msgid "All settings"
+#~ msgstr "Alla inställningar"
+
+#~ msgid "All types"
+#~ msgstr "Alla typer"
+
+#~ msgid "All unseen messages"
+#~ msgstr "Alla olästa meddelanden"
+
+#~ msgid "Apps"
+#~ msgstr "Appar"
+
+#~ msgid "Archives"
+#~ msgstr "Arkiv"
+
+#~ msgid "Attachment name"
+#~ msgstr "Bilagans namn"
+
+#~ msgid "Audio files"
+#~ msgstr "Ljudfiler"
+
+#~ msgid "Auto dark-mode"
+#~ msgstr "Automatiskt mörkt läge"
+
+#~ msgid "Automatically switch to dark mode if this computer uses dark mode"
+#~ msgstr "Växla automatiskt till mörkt läge om datorn använder mörkt läge"
+
+#~ msgid "Backgrounds"
+#~ msgstr "Bakgrunder"
+
+#~ msgid "Beach"
+#~ msgstr "Strand"
+
+#~ msgid "Brown"
+#~ msgstr "Brunt"
+
+#~ msgid "Calendar options"
+#~ msgstr "Kalenderalternativ"
+
+#~ msgid "Capture"
+#~ msgstr "Bildfångstdata"
+
+#~ msgid "Change appointment confirmation"
+#~ msgstr "Ändra mötesbekräftelse"
+
+#~ msgid "Change participation"
+#~ msgstr "Ändra deltagande"
+
+#~ msgid "Choose a theme"
+#~ msgstr "Välj ett tema"
+
+#~ msgid "Continue"
+#~ msgstr "Fortsätt"
+
+#~ msgid "Current list"
+#~ msgstr "Aktuell lista"
+
+#~ msgid "Cyan"
+#~ msgstr "Cyan"
+
+#~ msgid "Dark"
+#~ msgstr "Mörk"
+
+#~ msgid "Dark Blue"
+#~ msgstr "Mörkblått"
+
+#~ msgid "Dark Gray"
+#~ msgstr "Mörkgrått"
+
+#~ msgid "Dark Purple"
+#~ msgstr "Mörklila"
+
+#~ msgid "Dark Red"
+#~ msgstr "Mörkrött"
+
+#~ msgid "Dark Turquoise"
+#~ msgstr "Mörkturkost"
+
+#~ msgid "Dark mode"
+#~ msgstr "Mörkt läge"
+
+#~ msgctxt "appointment participation status"
+#~ msgid "Decline"
+#~ msgstr "Neka"
+
+#~ msgid "Documents"
+#~ msgstr "Dokument"
+
+#~ msgid "Encrypted"
+#~ msgstr "Krypterat"
+
+#~ msgid ""
+#~ "Error while playing the audio file. Either your browser does not support "
+#~ "the format or you have connection problems."
+#~ msgstr ""
+#~ "Ett fel inträffade när ljudfilen spelades upp. Antingen saknar din "
+#~ "webbläsare stöd för formatet, eller så har du problem med anslutningen."
+
+#~ msgid "External participants (total: %1$d, accepted: %2$d)"
+#~ msgstr "Externa deltagare (totalt: %1$d, accepterat: %2$d)"
+
+#~ msgid "File names must not be empty"
+#~ msgstr "Filnamn får inte vara tomma"
+
+#~ msgid "File names must not contain slashes"
+#~ msgstr "Filnamn får inte innehålla snedstreck"
+
+#~ msgid "File or folder name"
+#~ msgstr "Fil- eller mappnamn"
+
+#~ msgid "File storage"
+#~ msgstr "Fillagring"
+
+#~ msgid "Flowers"
+#~ msgstr "Blommor"
+
+#~ msgid "Folder names must not be empty"
+#~ msgstr "Mappnamn får inte vara tomma"
+
+#~ msgid "Folder names must not contain slashes"
+#~ msgstr "Mappnamn får inte innehålla snedstreck"
+
+#~ msgid "From URL"
+#~ msgstr "Från URL"
+
+#~ msgid "Group by"
+#~ msgstr "Gruppera efter"
+
+#~ msgid "Has color flag"
+#~ msgstr "Har färgflagga"
+
+#~ msgid "Hidden lists"
+#~ msgstr "Dolda listor"
+
+#~ msgid "Landscape"
+#~ msgstr "Landskap"
+
+#~ msgid "Leave a comment for other participants"
+#~ msgstr "Lämna en kommentar för övriga deltagare"
+
+#~ msgid ""
+#~ "Let there be darkness! You can now select Dark Mode which uses bright "
+#~ "text on a dark background as opposed to the usual black text on a bright "
+#~ "white screen. Apart from personal preference, Dark Mode has significant "
+#~ "benefits. A device or application using Dark Mode emits less light which "
+#~ "improves readability in low light environments thus reducing eye strain."
+#~ msgstr ""
+#~ "Varde mörker! Du kan nu välja Mörkt läge, vilket använder ljus text på en "
+#~ "mörk bakgrund istället för den vanliga svarta texten på en skinande vit "
+#~ "skärm. Personliga preferenser åsido, mörkt läge har klara fördelar. En "
+#~ "enhet eller ett program som använder mörkt läge sänder ut mindre ljus, "
+#~ "vilket gör det lättare att läsa i ljussvaga omgivningar och gör att du "
+#~ "anstränger ögonen mindre."
+
+#~ msgid "Light Blue"
+#~ msgstr "Ljusblått"
+
+#~ msgid "Light Green"
+#~ msgstr "Ljusgrönt"
+
+#~ msgid "Light Purple"
+#~ msgstr "Ljuslila"
+
+#~ msgid "Light Red"
+#~ msgstr "Ljusrött"
+
+#~ msgid "Light Yellow"
+#~ msgstr "Ljusgult"
+
+#~ msgid "List name"
+#~ msgstr "Listnamn"
+
+#~ msgid "List options"
+#~ msgstr "Listalternativ"
+
+#~ msgid "Loading"
+#~ msgstr "Laddar"
+
+#~ msgid "Mail storage"
+#~ msgstr "Meddelandelagring"
+
+#~ msgid "Marked as favorite"
+#~ msgstr "Märkt som favorit"
+
+#~ msgid "Maybe"
+#~ msgstr "Kanske"
+
+#~ msgctxt "appointment participation status"
+#~ msgid "Maybe"
+#~ msgstr "Kanske"
+
+#~ msgid "Message list options"
+#~ msgstr "Sändlistealternativ"
+
+#~ msgid "Middleware version"
+#~ msgstr "Mellanvara version"
+
+#~ msgid ""
+#~ "More colors! You like purple? Prefer orange? You now have the choice! We "
+#~ "added a set of themes that covers the most common color preferences. And "
+#~ "you can combine different background and accent colors."
+#~ msgstr ""
+#~ "Fler färger! Tycker du om lila? Föredrar du orange? Du har nu fritt val! "
+#~ "Vi lade till en uppsättning teman som täcker de vanligaste "
+#~ "favoritfärgerna. Och du kan kombinera olika bakgrunds- och accentfärger."
+
+#~ msgid "More contacts options"
+#~ msgstr "Fler kontaktalternativ"
+
+#~ msgid "More messages options"
+#~ msgstr "Fler meddelandealternativ"
+
+#~ msgid "More search options"
+#~ msgstr "Fler sökalternativ"
+
+#~ msgid "Mountains"
+#~ msgstr "Berg"
+
+#~ msgid "My files"
+#~ msgstr "Mina filer"
+
+#~ msgid "My lists"
+#~ msgstr "Mina listor"
+
+#~ msgid "New design"
+#~ msgstr "Ny design"
+
+#~ msgid "New email"
+#~ msgstr "Nytt meddelande"
+
+#~ msgid "New search"
+#~ msgstr "Ny sökning"
+
+#~ msgid "Non blocking time frame"
+#~ msgstr "Ej blockerat tidsintervall"
+
+#~ msgid "Ocean"
+#~ msgstr "Ocean"
+
+#~ msgid "Open sharing dialog"
+#~ msgstr "Öppna delningsdialog"
+
+#~ msgid "Participants (total: %1$d, accepted: %2$d)"
+#~ msgstr "Deltagare (totalt: %1$d, accepterat: %2$d)"
+
+#~ msgid "Petrol"
+#~ msgstr "Bensin"
+
+#~ msgid "Phone number"
+#~ msgstr "Telefonnummer"
+
+#~ msgid "Photos and images"
+#~ msgstr "Foton och bilder"
+
+#~ msgid "Play audio"
+#~ msgstr "Spela upp ljud"
+
+#~ msgid "Public lists"
+#~ msgstr "Offentliga listor"
+
+#~ msgctxt "email"
+#~ msgid "Reading pane"
+#~ msgstr "Läsvy"
+
+#~ msgid "Recent files"
+#~ msgstr "Senaste filer"
+
+#~ msgid "Reload now"
+#~ msgstr "Ladda om nu"
+
+#~ msgid "Remove all shares"
+#~ msgstr "Ta bort alla delningar"
+
+#~ msgid "Saved in"
+#~ msgstr "Sparades i"
+
+#~ msgid "Scheduling"
+#~ msgstr "Schemaläggning"
+
+#~ msgid "Search appointments"
+#~ msgstr "Sök möten"
+
+#~ msgid "Search contacts"
+#~ msgstr "Sök kontakter"
+
+#~ msgid "Search files"
+#~ msgstr "Sök filer"
+
+#~ msgid "Search mail"
+#~ msgstr "Sök meddelande"
+
+#~ msgid "Search tasks"
+#~ msgstr "Sök uppgifter"
+
+#~ msgid ""
+#~ "Searching is one of the most used functions. We have simplified and "
+#~ "improved the search feature. It is now located in the most prominent "
+#~ "position: upper, top central navigation bar. It's a simple and easy-to-"
+#~ "use text field and more sophisticated filters are available in a separate "
+#~ "dropdown."
+#~ msgstr ""
+#~ "Sökning är en av de mest använda funktionerna. Vi har förenklat och "
+#~ "förbättrat sökfunktionen. Den finns nu där den syns bäst: överst, mitt i "
+#~ "navigeringsfältet. Det är ett enkelt och lättanvänt textfält, och mer "
+#~ "sofistikerade filter är tillgängliga i en separat utfällbar meny."
+
+#~ msgid "Server did not send a response"
+#~ msgstr "Servern skickade inget svar"
+
+#~ msgid "Server shutting down."
+#~ msgstr "Servern stängs av."
+
+#~ msgid "Shared by public link"
+#~ msgstr "Delad med offentlig länk"
+
+#~ msgid "Shared lists"
+#~ msgstr "Delade listor"
+
+#~ msgid "Shared with guest users"
+#~ msgstr "Dela med gästanvändare"
+
+#~ msgid "Shared with internal and guest users"
+#~ msgstr "Delad med interna och gästanvändare"
+
+#~ msgid "Shared with internal users"
+#~ msgstr "Delad med interna användare"
+
+#~ msgid "Shared with others"
+#~ msgstr "Dela med andra"
+
+#~ msgid "Show date and time"
+#~ msgstr "Visa tid och datum"
+
+#~ msgid "Show folder with all flagged messages"
+#~ msgstr "Visa mapp med alla flaggade meddelanden"
+
+#~ msgid "Show message size"
+#~ msgstr "Visa meddelandestorlek"
+
+#~ msgid "Show mini calendar"
+#~ msgstr "Visa minikalender"
+
+#~ msgid "Show text preview"
+#~ msgstr "Visa textförhandsgranskning"
+
+#~ msgid "Shown as %1$s"
+#~ msgstr "Visas som %1$s"
+
+#~ msgid "Simple"
+#~ msgstr "Enkel"
+
+#~ msgid "Smoke Gray"
+#~ msgstr "Rökgrått"
+
+#~ msgid "Sort by"
+#~ msgstr "Sortera efter"
+
+#~ msgid "Sort order"
+#~ msgstr "Sorteringsordning"
+
+#~ msgid "Stay up-to-date on your favorite devices."
+#~ msgstr "Håll dig informerad om det senaste på dina favoritenheter."
+
+#~ msgid "Steel gray"
+#~ msgstr "Stålgrått"
+
+#~ msgid "Storage"
+#~ msgstr "Lagring"
+
+#~ msgid "Subscribe to shared task list"
+#~ msgstr "Prenumerera på lista för delad uppgift"
+
+#~ msgid "Sunsets"
+#~ msgstr "Solnedgångar"
+
+#, c-format
+#~ msgid "Take %1$s with you!"
+#~ msgstr "Ta %1$s med dig!"
+
+#~ msgid "The icon could not be saved."
+#~ msgstr "Ikonen kunde inte startas."
+
+#~ msgid "There are new notifications"
+#~ msgstr "Du har nya aviseringar"
+
+#~ msgid "There is an update available! Please reload the app."
+#~ msgstr "En uppdatering är tillgänglig! Ladda om appen."
+
+#~ msgid "This address book is empty"
+#~ msgstr "Adressboken är tom"
+
+#~ msgid "This folder is empty"
+#~ msgstr "Mappen är tom"
+
+#~ msgid "This task list is empty"
+#~ msgstr "Uppgiftslistan är tom"
+
+#~ msgctxt "title"
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Updated %1$d minutes ago"
+#~ msgstr "Uppdaterades för %1$d minuter sedan"
+
+#~ msgid "Updated at %1$d"
+#~ msgstr "Uppdaterades %1$d"
+
+#~ msgid "Updated just now"
+#~ msgstr "Nyss uppdaterad"
+
+#~ msgid "Upgrade"
+#~ msgstr "Uppgradering"
 
 #~ msgid "Upload files"
 #~ msgstr "Ladda upp filer"
 
-#~ msgid "Add note"
-#~ msgstr "Lägg till anteckning"
+#~ msgid "Uploading folders is not supported in this display area."
+#~ msgstr "Inget stöd för att ladda upp mappar i detta visningsområde."
+
+#~ msgid "Versions"
+#~ msgstr "Versioner"
+
+#~ msgid "View more ..."
+#~ msgstr "Visa mer ..."
+
+#~ msgid "Warm Gray"
+#~ msgstr "Varmgrått"
+
+#~ msgid "Washed out"
+#~ msgstr "Urtvättad"
 
 #~ msgid ""
-#~ "This file (or folder) is shared with others. It won't be available for "
-#~ "them any more."
-#~ msgid_plural ""
-#~ "Some files/folder are shared with others. They won't be available for "
-#~ "them any more."
-#~ msgstr[0] ""
-#~ "Den här filen (eller mappen) delas med andra. Den kommer inte längre vara "
-#~ "tillgänglig för dem."
-#~ msgstr[1] ""
-#~ "Vissa filer/mappar delas med andra. De kommer inte längre vara "
-#~ "tillgängliga för dem."
-
-#~ msgid "%1$d seconds"
-#~ msgstr "%1$d sekunder"
-
-#~ msgid "The timeframe is not limited"
-#~ msgstr "Tidsramen är inte begränsad"
-
-#~ msgid "The timeframe is limited to 1 day."
-#~ msgid_plural "The timeframe is limited to %1$d days."
-#~ msgstr[0] "Tidsramen är begränsad till 1 dag."
-#~ msgstr[1] "Tidsramen är begränsad till %1$d dagar."
-
-#~ msgid "The number of versions is not limited"
-#~ msgstr "Antal versioner är inte begränsat"
-
-#~ msgid "The number of versions is limited to 1 version."
-#~ msgid_plural "The number of versions is limited to %1$d versions."
-#~ msgstr[0] "Antal versioner är begränsat till 1 version."
-#~ msgstr[1] "Antal versioner är begränsat till %1$d versioner."
-
-#~ msgid "All file versions are retained"
-#~ msgstr "Alla filversioner bevaras"
-
-#~ msgid "All file versions older than 1 day will be deleted after next login"
-#~ msgid_plural ""
-#~ "All file versions older than %1$d days will be deleted after next login"
-#~ msgstr[0] ""
-#~ "Alla meddelanden äldre än 1 dag kommer att raderas efter nästa inloggning"
-#~ msgstr[1] ""
-#~ "Alla meddelanden äldre än %1$d dagar kommer att raderas efter nästa "
-#~ "inloggning"
-
-#~ msgid ""
-#~ "When a file has more than 1 additional version, older versions will be "
-#~ "deleted when a new version is created"
-#~ msgid_plural ""
-#~ "When a file has more than %1$d additional versions, older versions will "
-#~ "be deleted when a new version is created"
-#~ msgstr[0] ""
-#~ "När en fil har fler än 1 ytterligare version kommer äldre versioner att "
-#~ "raderas när en ny version skapas"
-#~ msgstr[1] ""
-#~ "När en fil har fler än %1$d ytterligare versioner kommer äldre versioner "
-#~ "att raderas när en ny version skapas"
-
-#~ msgid "Drop files here to upload"
-#~ msgstr "Släpp filer här för att ladda upp"
-
-#~ msgid "Drop here!"
-#~ msgstr "Släpp här!"
-
-#~ msgid "Links have been disabled to protect you against potential spam!"
-#~ msgstr "Länkar har avaktiverats för att skydda dig mot eventuell skräppost!"
-
-#~ msgid ""
-#~ "External images have been blocked to protect you against potential spam!"
+#~ "We are very happy to introduce you to our brand new user interface. We "
+#~ "changed countless little details to offer you a great and contemporary "
+#~ "user experience."
 #~ msgstr ""
-#~ "Externa bilder har blockerats för att skydda dig mot eventuell skräppost!"
+#~ "Vi har nöjet att presentera vårt helt nya användargränssnitt för dig. Vi "
+#~ "ändrade ett enormt antal smådetaljer för att ge dig en fantastisk och "
+#~ "tidsenlig användarupplevelse."
 
-#~ msgid ""
-#~ "There are %1$d messages in this folder; not all messages are displayed in "
-#~ "the list currently."
-#~ msgstr ""
-#~ "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte "
-#~ "i listan just nu."
+#~ msgid "What's new in %1$s"
+#~ msgstr "Nyheter i %1$s"
 
-#~ msgid "Sending 1 message ... %2$d%"
-#~ msgid_plural "Sending %1$d messages ... %2$d%"
-#~ msgstr[0] "Skickar 1 meddelande... %2$d%"
-#~ msgstr[1] "Skickar %1$d meddelanden... %2$d%"
+#~ msgid "White"
+#~ msgstr "Vit"
 
-#~ msgid "Device %s logged in %s"
-#~ msgstr "Enhet %s loggade in %s"
+#~ msgid "Your Comment"
+#~ msgstr "Din kommentar"
 
-#~ msgid "Task has been deleted!"
-#~ msgid_plural "Tasks have been deleted!"
-#~ msgstr[0] "Uppgiften har tagits bort!"
-#~ msgstr[1] "Uppgifterna har tagits bort!"
+#~ msgid "Your platform is not supported!"
+#~ msgstr "Din plattform stöds inte!"
 
-#~ msgid "Task was already deleted!"
-#~ msgstr "Uppgiften är redan borttagen!"
+#~ msgid "language"
+#~ msgstr "språk"
 
-#~ msgid "Recent conversations"
-#~ msgstr "Senaste konversationer"
-
-#~ msgid "Download %s for %s now"
-#~ msgstr "Ladda ner %s för %s nu"
-
-#~ msgid ""
-#~ "The %s client lets you store and share your photos, files, documents and "
-#~ "videos, anytime, anywhere. Access any file you save to %s from all your "
-#~ "computers, iPhone, iPad or from within %s itself."
-#~ msgstr ""
-#~ "%s-klienten låter dig lagra och dela dina foton, filer, dokument och "
-#~ "videor; när som helst, var som helst. Kom åt en fil du har sparat till %s "
-#~ "från alla dina datorer, iPhone, iPad, eller från %s."
-
-#~ msgid "You tentatively accepted this invitation"
-#~ msgstr "Du har preliminärt accepterat den här inbjudan"
-
-#~ msgid ""
-#~ "Please provide the old password so the account passwords can be recovered."
-#~ msgstr "Ange det gamla lösenordet för att få tillbaka de andra lösenorden."
-
-#~ msgid "Draft saved %s"
-#~ msgstr "Utkast sparades %s"
-
-#~ msgid "Signed and verified"
-#~ msgstr "Signerat och verifierat"
-
-#~ msgid "%1$s. Press backspace to delete."
-#~ msgstr "%1$s. Tryck backsteg för att ta bort."
-
-#~ msgid "All timezones"
-#~ msgstr "Alla tidszoner"
-
-#~ msgid "An error occurred converting the document so it cannot be displayed."
-#~ msgstr ""
-#~ "Ett fel inträffade när dokumentet konverterades, så det kan inte visas."
-
-#~ msgid "Extremely likely"
-#~ msgstr "Extremt sannolikt"
-
-#~ msgid "How do you like %1$s?"
-#~ msgstr "Vad tycker du om %1$s?"
-
-#~ msgid "How likely is it that you would recommend %1$s to a friend?"
-#~ msgstr "Hur sannolikt är det att du rekommenderar %1$s till en vän?"
-
-#~ msgid "Ignore warnings"
-#~ msgstr "Ignorera varningar"
-
-#~ msgid "Send without subject"
-#~ msgstr "Skicka utan ämne"
-
-#~ msgid "Yes, with empty attachment"
-#~ msgstr "Ja, med tom bilaga"
-
-#~ msgid ""
-#~ "You attached an empty file. It could be, that this file has been deleted "
-#~ "on your hard drive. Send it anyway?"
-#~ msgstr ""
-#~ "Du bifogade en tom fil. Den kanske har tagits bort på din hårddisk. Vill "
-#~ "du skicka den ändå?"
+#~ msgid "today"
+#~ msgstr "idag"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -16662,6 +16735,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d av %2$s"
+
+#~ msgid "%1$d seconds"
+#~ msgstr "%1$d sekunder"
 
 #~ msgid "%1$d statements aren't closed."
 #~ msgstr "%1$d påståendena är inte stängda."
@@ -16704,15 +16780,18 @@ msgstr "Lägg till på %s"
 #~ msgid "%1$s for Android"
 #~ msgstr "%s-klient för Android"
 
-#, fuzzy
-#~| msgid "%s client for Mac OS"
-#~ msgid "%1$s for MacOS"
-#~ msgstr "%s-klient för Mac OS"
+#~ msgid "%1$s for Windows Installer"
+#~ msgstr "%1$s för Windows installationsfil"
 
 #, fuzzy
 #~| msgid "%1$s of %2$s"
 #~ msgid "%1$s for iOS"
 #~ msgstr "%1$s av %2$s"
+
+#, fuzzy
+#~| msgid "%s client for macOS"
+#~ msgid "%1$s for macOS"
+#~ msgstr "%s-klient för macOS"
 
 #~ msgid "%1$s has ended the presentation."
 #~ msgstr "%1$s har avslutat presentationen."
@@ -16736,16 +16815,14 @@ msgstr "Lägg till på %s"
 #~ msgstr[0] "%1$s e-brev, %2$s oläst"
 #~ msgstr[1] "%1$s e-brev, %2$s oläst"
 
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s on %2$s"
-#~ msgstr "%1$s av %2$s"
-
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s uppdaterade sin profil:"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
+
+#~ msgid "%1$s. Press backspace to delete."
+#~ msgstr "%1$s. Tryck backsteg för att ta bort."
 
 #~ msgctxt "in"
 #~ msgid "%d day"
@@ -16804,6 +16881,15 @@ msgstr "Lägg till på %s"
 #~ msgid "(Default)"
 #~ msgstr "(Standard)"
 
+#~ msgid "(Read and write)"
+#~ msgstr "(Läs och skriv)"
+
+#~ msgid "(Read only)"
+#~ msgstr "(Skrivskyddad)"
+
+#~ msgid "(Read, write, and delete)"
+#~ msgstr "(Läs, skriv och radera)"
+
 #~ msgid "(current app)"
 #~ msgstr "(aktuellt program)"
 
@@ -16829,11 +16915,19 @@ msgstr "Lägg till på %s"
 #~ msgid "1 hour"
 #~ msgstr "1 timme"
 
+#~ msgid "1 item"
+#~ msgid_plural "%1$d items"
+#~ msgstr[0] "1 objekt"
+#~ msgstr[1] "%1$d objekt"
+
 #~ msgid "1 minute"
 #~ msgstr "1 minut"
 
 #~ msgid "1 week"
 #~ msgstr "1 vecka"
+
+#~ msgid "100%"
+#~ msgstr "100 %"
 
 #~ msgid "150%"
 #~ msgstr "150%"
@@ -17302,20 +17396,26 @@ msgstr "Lägg till på %s"
 #~ msgid "Add new folder for this subscription"
 #~ msgstr "Lägg till ny mapp för den här prenumerationen"
 
-#~ msgid "Add new guest"
-#~ msgstr "Lägg till ny gäst"
-
 #~ msgid "Add new reminder"
 #~ msgstr "Lägg till ny påminnelse"
 
+#~ msgid "Add note"
+#~ msgstr "Lägg till anteckning"
+
 #~ msgid "Add original message as attachment"
 #~ msgstr "Lägg till ursprungligt meddelande som bilaga"
+
+#~ msgid "Add recipients ..."
+#~ msgstr "Lägg till mottagare..."
 
 #~ msgid "Add to Favorites"
 #~ msgstr "Lägg till i favoriter"
 
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
+
+#~ msgid "Address"
+#~ msgstr "Adress"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Avancerade facettblock stängdes."
@@ -17341,10 +17441,22 @@ msgstr "Lägg till på %s"
 #~ msgid "All contacts"
 #~ msgstr "Lägg till medlem"
 
+#~ msgid "All file versions are retained"
+#~ msgstr "Alla filversioner bevaras"
+
 #~ msgid "All file versions older than 1 day will be deleted"
 #~ msgid_plural "All file versions older than %1$d days will be deleted"
 #~ msgstr[0] "Alla filversioner äldre än 1 dag kommer att raderas"
 #~ msgstr[1] "Alla filversioner äldre än %1$d dagar kommer att raderas"
+
+#~ msgid "All file versions older than 1 day will be deleted after next login"
+#~ msgid_plural ""
+#~ "All file versions older than %1$d days will be deleted after next login"
+#~ msgstr[0] ""
+#~ "Alla meddelanden äldre än 1 dag kommer att raderas efter nästa inloggning"
+#~ msgstr[1] ""
+#~ "Alla meddelanden äldre än %1$d dagar kommer att raderas efter nästa "
+#~ "inloggning"
 
 #~ msgid "All future messages from %1$s will be moved to the selected folder."
 #~ msgid_plural ""
@@ -17361,6 +17473,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "All my appointments"
 #~ msgstr "Alla mina möten"
+
+#~ msgid "All timezones"
+#~ msgstr "Alla tidszoner"
 
 #~ msgid "Allow us to use your %s account here"
 #~ msgstr "Låt oss använda ditt %s-konto här"
@@ -17450,6 +17565,10 @@ msgstr "Lägg till på %s"
 
 #~ msgid "An error occurred"
 #~ msgstr "Ett fel inträffade"
+
+#~ msgid "An error occurred converting the document so it cannot be displayed."
+#~ msgstr ""
+#~ "Ett fel inträffade när dokumentet konverterades, så det kan inte visas."
 
 #~ msgid ""
 #~ "An error occurred during the load of deleted objects from a folder. "
@@ -17570,9 +17689,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Ungefärlig tidsgräns för prenumerationer"
 
-#~ msgid "Apps"
-#~ msgstr "Program"
-
 #~ msgid "April"
 #~ msgstr "April"
 
@@ -17609,6 +17725,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Attachments (%1$s)"
 #~ msgstr "Bilagor (%1$s)"
+
+#~ msgid "Attachments have been saved!"
+#~ msgstr "Bilagor har sparats!"
 
 #~ msgid "Attachments must contain a file."
 #~ msgstr "Bilagor måste innehålla en fil."
@@ -17693,6 +17812,9 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Nedanför mottagaren hittar du ytterligare funktioner, t.ex. skicka kopior "
 #~ "till andra mottagare eller för att lägga till bilagor."
+
+#~ msgid "Birthday"
+#~ msgstr "Födelsedag"
 
 #~ msgid "Blind copy (BCC) to"
 #~ msgstr "Blind kopia (BCC) till"
@@ -17997,6 +18119,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Changing recurrence type of a change exception denied"
 #~ msgstr "Ändra upprepade typer av en ändring undantaget nekat"
 
+#~ msgid "Channels are public and can be joined by anybody"
+#~ msgstr "Kanaler är offentliga och kan ses av vem som helst"
+
+#~ msgid "Chats could not be loaded."
+#~ msgstr "Chattar kunde inte laddas."
+
 #~ msgid "Checking credentials ..."
 #~ msgstr "Kontrollerar behörighet..."
 
@@ -18095,9 +18223,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Colombia"
 #~ msgstr "Färg"
 
-#~ msgid "Color scheme"
-#~ msgstr "Färgschema"
-
 #~ msgid "Common"
 #~ msgstr "Gemensam"
 
@@ -18170,9 +18295,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Context is locked."
 #~ msgstr "Kontext är låst."
-
-#~ msgid "Continue"
-#~ msgstr "Fortsätt"
 
 #, fuzzy
 #~ msgid "Continue Presentation"
@@ -18363,6 +18485,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Create new calendar"
 #~ msgstr "Skapa ny kalender"
 
+#~ msgid "Create new channel"
+#~ msgstr "Skapa ny kanal"
+
+#~ msgid "Create new chat"
+#~ msgstr "Skapa ny chat"
+
 #~ msgid "Create new task"
 #~ msgstr "Skapa ny uppgift"
 
@@ -18384,9 +18512,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Creating a new task"
 #~ msgstr "Skapa en ny uppgift"
-
-#~ msgid "Creating a note"
-#~ msgstr "Skapa en anteckning"
 
 #~ msgid "Creating new items"
 #~ msgstr "Skapa nya objekt"
@@ -18417,6 +18542,13 @@ msgstr "Lägg till på %s"
 #~| msgid "Currently refreshing"
 #~ msgid "Current session"
 #~ msgstr "Uppdaterar nu"
+
+#~ msgid ""
+#~ "Currently edited drafts with attachments can not be deleted until you "
+#~ "close the correspondig mail compose window."
+#~ msgstr ""
+#~ "Nyss redigerade utkast med bilagor kan inte raderas förrän du stänger "
+#~ "motsvarande meddelandefönster."
 
 #~ msgid "Custom colors"
 #~ msgstr "Egna färger"
@@ -18467,6 +18599,9 @@ msgstr "Lägg till på %s"
 #~ msgid "December"
 #~ msgstr "December"
 
+#~ msgid "Decending"
+#~ msgstr "Fallande"
+
 #~ msgid "Default folder %1$s cannot be deleted"
 #~ msgstr "Standardmapp %1$s kan ej tas bort"
 
@@ -18498,6 +18633,10 @@ msgstr "Lägg till på %s"
 #~ msgid "Delete all accounts"
 #~ msgstr "Ta bort alla konton"
 
+#~ msgctxt "dialog"
+#~ msgid "Delete draft"
+#~ msgstr "Ta bort utkast"
+
 #~ msgid "Delete exceptions: %1$s"
 #~ msgstr "Ta bort undantag: %1$s"
 
@@ -18528,6 +18667,9 @@ msgstr "Lägg till på %s"
 #~ "Detaljerade guider för alla moduler finns i hjälpavsnittet bland "
 #~ "inställningarna."
 
+#~ msgid "Device %s logged in %s"
+#~ msgstr "Enhet %s loggade in %s"
+
 #~ msgid ""
 #~ "Did you know that you can take OX App Suite with you? Just click this "
 #~ "icon and choose 'Connect your device' from the menu."
@@ -18537,6 +18679,10 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Direktlänk: %1$s"
+
+#~ msgctxt "dialog"
+#~ msgid "Discard message"
+#~ msgstr "Kasta meddelande"
 
 #~ msgid "Display"
 #~ msgstr "Visa"
@@ -18556,6 +18702,11 @@ msgstr "Lägg till på %s"
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Visa hjälp eller inställningar"
 
+#~ msgid "Distribution list with 1 entry"
+#~ msgid_plural "Distribution list with %1$d entries"
+#~ msgstr[0] "Distributionslista med 1 post"
+#~ msgstr[1] "Distributionslista med %1$d poster"
+
 #, fuzzy
 #~| msgid "About"
 #~ msgid "Djibouti"
@@ -18570,12 +18721,18 @@ msgstr "Lägg till på %s"
 #~ msgid "Do you really want to delete all older versions?"
 #~ msgstr "Vill du verkligen ta bort den här versionen?"
 
+#~ msgid "Do you really want to delete this draft?"
+#~ msgstr "Vill du verkligen ta bort utkastet?"
+
 #~ msgctxt "One file only"
 #~ msgid "Do you really want to delete this file?"
 #~ msgstr "Vill du verkligen ta bort den här filen?"
 
 #~ msgid "Do you really want to discard this mail?"
 #~ msgstr "Vill du verkligen kasta brevet?"
+
+#~ msgid "Do you really want to discard your message?"
+#~ msgstr "Vill du verkligen kasta meddelandet?"
 
 #, fuzzy
 #~| msgctxt "One file only"
@@ -18596,9 +18753,6 @@ msgstr "Lägg till på %s"
 #~ "series?"
 #~ msgstr "Vill du redigera hela serien, eller bara ett enstaka möte i serien?"
 
-#~ msgid "Documents"
-#~ msgstr "Dokument"
-
 #~ msgctxt "app"
 #~ msgid "Documents"
 #~ msgstr "Dokument"
@@ -18609,14 +18763,20 @@ msgstr "Lägg till på %s"
 #~ msgid "Doubleclick in this row for whole day appointment"
 #~ msgstr "Dubbelklicka i den här raden för heldagsmöte"
 
+#~ msgid "Download %s for %s now"
+#~ msgstr "Ladda ner %s för %s nu"
+
 #~ msgid "Download %s via the OX Updater"
 #~ msgstr "Ladda ner %s via OX Uppdatering"
 
 #~ msgid "Download installation file (for Windows)"
 #~ msgstr "Ladda ner installationsfil (för Windows)"
 
-#~ msgid "Draft saved at %1$s"
-#~ msgstr "Utkast sparades %1$s"
+#~ msgid "Download the %s client for %s"
+#~ msgstr "Ladda ner %s-klienten för %s"
+
+#~ msgid "Draft saved %s"
+#~ msgstr "Utkast sparades %s"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Dra och släpp"
@@ -18628,11 +18788,17 @@ msgstr "Lägg till på %s"
 #~ msgid "Driver class missing."
 #~ msgstr "Driver-klassen saknas."
 
+#~ msgid "Drop files here to upload"
+#~ msgstr "Släpp filer här för att ladda upp"
+
 #~ msgid "Drop here to import this mail"
 #~ msgstr "Släpp här för att importera meddelandet"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "Släpp här för att ladda upp en <b class='dndignore'>ny bilaga</b>"
+
+#~ msgid "Drop here!"
+#~ msgstr "Släpp här!"
 
 #~ msgid "Drop the file anywhere to add attachment"
 #~ msgstr "Släpp filen någonstans för att lägga till bilaga"
@@ -18720,6 +18886,9 @@ msgstr "Lägg till på %s"
 #~ "Ändringskonflikt. Din ändring kan inte göras på grund av att någon annan "
 #~ "har gjort en ändring på samma post. Uppdatera eller synkronisera och "
 #~ "försök igen. Kontext %1$d Mapp %2$d Användare %3$d Objekt %4$d"
+
+#~ msgid "Edit Share"
+#~ msgstr "Redigera delning"
 
 #~ msgid "Edit Tabs"
 #~ msgstr "Redigera flikar"
@@ -18811,9 +18980,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Encoding %s cannot be used."
 #~ msgstr "Kodningen %s kan inte användas."
 
-#~ msgid "Encrypt"
-#~ msgstr "Kryptera"
-
 #, fuzzy
 #~ msgid "End Presentation"
 #~ msgstr "Inbjudningar till uppgifter"
@@ -18829,6 +18995,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "End the presentation"
 #~ msgstr "Avsluta presentationen"
+
+#~ msgid "Enter a Message to inform users"
+#~ msgstr "Skriv ett meddelande för att informera användare"
 
 #~ msgid "Enter the E-Mail text below the subject."
 #~ msgstr "Skriv in meddelandets text nedanför rubriken."
@@ -18942,6 +19111,43 @@ msgstr "Lägg till på %s"
 #~ msgid "Every %1$d years on %2$s %3$d"
 #~ msgstr "Var %1$d år den %3$d %2$s"
 
+#~ msgctxt "weekly"
+#~ msgid "Every %2$s."
+#~ msgid_plural "Every %1$d weeks on %2$s."
+#~ msgstr[0] "Varje %2$s."
+#~ msgstr[1] "Var %1$d vecka på %2$s."
+
+#~ msgctxt "weekly"
+#~ msgid "Every day."
+#~ msgid_plural "Every %1$d weeks on all days."
+#~ msgstr[0] "Varje dag."
+#~ msgstr[1] "Var %1$d vecka, alla dagar."
+
+#~ msgctxt "monthly"
+#~ msgid "Every month on day %2$d."
+#~ msgid_plural "Every %1$d months on day %2$d."
+#~ msgstr[0] "Varje månad på dag %2$d."
+#~ msgstr[1] "Var %1$d månad på dag %2$d."
+
+#~ msgctxt "monthly"
+#~ msgid "Every month on the %2$s %3$s."
+#~ msgid_plural "Every %1$d months on the %2$s %3$s."
+#~ msgstr[0] "Varje månad den %2$s %3$s."
+#~ msgstr[1] "Var %1$d månad den %2$s %3$s."
+
+#~ msgid ""
+#~ "Every recipient gets an individual link. Guests can also create and "
+#~ "change files."
+#~ msgstr ""
+#~ "Varje mottagare får en individuell länk. Gäster kan också skapa och ändra "
+#~ "filer."
+
+#~ msgid ""
+#~ "Everybody gets the same link. The link just allows to view the file or "
+#~ "folder."
+#~ msgstr ""
+#~ "Alla får samma länk. Länken tillåter bara visning av filen eller mappen."
+
 #~ msgid "Exception while building JSON."
 #~ msgstr "Undantag när JSON byggs."
 
@@ -18975,6 +19181,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Expiration: %1$d"
 #~ msgstr "Utgår: %1$d"
 
+#~ msgid "Expires in"
+#~ msgstr "Går ut om"
+
 #, fuzzy
 #~| msgid "Send as vCard"
 #~ msgid "Export as vCard"
@@ -18990,8 +19199,16 @@ msgstr "Lägg till på %s"
 #~ msgid "External guests"
 #~ msgstr "Externa gäster"
 
+#~ msgid ""
+#~ "External images have been blocked to protect you against potential spam!"
+#~ msgstr ""
+#~ "Externa bilder har blockerats för att skydda dig mot eventuell skräppost!"
+
 #~ msgid "Extras link is not implemented."
 #~ msgstr "Extra-länkar är inte implementerat."
+
+#~ msgid "Extremely likely"
+#~ msgstr "Extremt sannolikt"
 
 #~ msgid "FATAL: CalendarFolderObject not initialized!"
 #~ msgstr "FATAL: CalendarFolderObject är inte initialiserat!"
@@ -19089,15 +19306,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "File name, click to rename"
 #~ msgstr "Filnamn, klicka för att döpa om"
-
-#~ msgid "File names must not be empty"
-#~ msgstr "Filnamn får inte vara tomma"
-
-#~ msgid "File names must not contain slashes"
-#~ msgstr "Filnamn får inte innehålla snedstreck"
-
-#~ msgid "File storage is full."
-#~ msgstr "Fillagringen är full"
 
 #~ msgid "File upload failed: %1$s"
 #~ msgstr "Filöverföring misslyckades: %1$s"
@@ -19229,9 +19437,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Folder module cannot be updated since folder is not empty"
 #~ msgstr "Mappmodul kan inte uppdateras eftersom mappen inte är tom"
 
-#~ msgid "Folder names must not contain slashes"
-#~ msgstr "Mappnamn får inte innehålla snedstreck"
-
 #~ msgid "Folder of the object is missing."
 #~ msgstr "Objektets mapp saknas."
 
@@ -19266,6 +19471,17 @@ msgstr "Lägg till på %s"
 #~ "primärkonto. Om du ändrar ditt primära lösenord kan dina externa konton "
 #~ "sluta fungera. I så fall kan du använda ditt gamla lösenord för att få "
 #~ "tillbaka alla andra lösenord:"
+
+#~ msgid ""
+#~ "For security reasons, all credentials are encrypted with your primary "
+#~ "account password. If you change your primary password, your external "
+#~ "accounts might stop working. In this case, you can use your old password "
+#~ "to recover all account passwords."
+#~ msgstr ""
+#~ "Av säkerhetsskäl krypteras alla uppgifter med ditt primära kontos "
+#~ "lösenord. Om du ändrar ditt primära lösenord kan dina externa konton "
+#~ "sluta fungera. I så fall kan du använda ditt gamla lösenord för att hämta "
+#~ "ut alla kontons lösenord."
 
 #~ msgid ""
 #~ "For tasks which are not started the percentage done must be 0 and not %d."
@@ -19450,8 +19666,14 @@ msgstr "Lägg till på %s"
 #~ msgid "Hours"
 #~ msgstr "Timmar"
 
+#~ msgid "How do you like %1$s?"
+#~ msgstr "Vad tycker du om %1$s?"
+
 #~ msgid "How does this work?"
 #~ msgstr "Hur funkar det här?"
+
+#~ msgid "How likely is it that you would recommend %1$s to a friend?"
+#~ msgstr "Hur sannolikt är det att du rekommenderar %1$s till en vän?"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Hur inställningarna är organiserade"
@@ -19524,6 +19746,13 @@ msgstr "Lägg till på %s"
 #~ "Om en mapp innehåller bilder kan du visa ett bildspel. För att göra det, "
 #~ "klicka på Bildspel längst upp till höger."
 
+#~ msgid ""
+#~ "If an automatic configuration is not possible, please use the following "
+#~ "information to manually setup your mail account:"
+#~ msgstr ""
+#~ "Om en automatisk konfiguration inte är möjlig, använd följande "
+#~ "information för att ställa in ditt e-postkonto manuellt:"
+
 #~ msgid "If you know what you are doing...just setup your account manually!"
 #~ msgstr "Om du vet vad du sysslar med… ställ in ditt konto manuellt!"
 
@@ -19564,6 +19793,9 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Ignorera befintliga händelser. Underlättar vid import av exempelvis "
 #~ "högtidskalendrar."
+
+#~ msgid "Ignore warnings"
+#~ msgstr "Ignorera varningar"
 
 #~ msgid "Illegal argument: Document %d contains no file"
 #~ msgstr "Ogiltigt argument: Dokumentet %d innehåller ingen fil"
@@ -19745,9 +19977,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Integer value exceeds max allowed value (65535): %1$d"
 #~ msgstr "Heltalsvärdet överstiger det högst tillåtna värdet (65535): %1$d"
 
-#~ msgid "Internal & external users"
-#~ msgstr "Interna & externa användare"
-
 #~ msgid "Invalid Content-Disposition value: %1$s"
 #~ msgstr "Ogiltigt Innehåll-Dispositionsvärde: %1$s"
 
@@ -19882,6 +20111,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Join Presentation"
 #~ msgstr "Delta i presentation"
 
+#~ msgid "Join chat"
+#~ msgstr "Anslut till chat"
+
 #~ msgid "Join presentation"
 #~ msgstr "Delta i presentation"
 
@@ -19904,6 +20136,9 @@ msgstr "Lägg till på %s"
 #~| msgid "Due on %1$s"
 #~ msgid "Just open %1$s"
 #~ msgstr "Deadline är %1$s"
+
+#~ msgid "Keep draft"
+#~ msgstr "Behåll utkast"
 
 #~ msgid "Keep looping endlessly"
 #~ msgstr "Upprepa ändlöst"
@@ -19964,6 +20199,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "LinkedIn reported an error:"
 #~ msgstr "LinkedIn gav ett fel:"
+
+#~ msgid "Links have been disabled to protect you against potential spam!"
+#~ msgstr "Länkar har avaktiverats för att skydda dig mot eventuell skräppost!"
 
 #~ msgid "List of public calendars and events"
 #~ msgstr "Lista över allmänna kalendrar och händelser"
@@ -20038,6 +20276,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Mail folder could not be found: %1$s"
 #~ msgstr "E-post-mappen kunde inte hittas: %1$s"
 
+#~ msgid "Mail from %1$s, %2$s"
+#~ msgstr "Meddelande från %1$s, %2$s"
+
 #~ msgid "Mail has been copied"
 #~ msgstr "Meddelandet har kopierats"
 
@@ -20103,6 +20344,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Mandatory field mail address for external participants"
 #~ msgstr "Obligatoriskt fält, e-post-adress för externa deltagare"
 
+#~ msgid "Manual"
+#~ msgstr "Handbok"
+
+#~ msgid "Manual Configuration"
+#~ msgstr "Manuell konfiguration"
+
 #~ msgid "Mapping for %1$d not implemented"
 #~ msgstr "Mappning för %1$d är inte implementerad"
 
@@ -20128,6 +20375,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "May"
 #~ msgstr "Maj"
+
+#~ msgid "Message (optional)"
+#~ msgstr "Meddelande (valfritt)"
 
 #~ msgid "Message could not be sent because it is too large"
 #~ msgstr "Meddelandet kunde inte skickas på grund av att det är för stort"
@@ -20616,6 +20866,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Note that some of the tabs can not be disabled."
 #~ msgstr "Observera att somliga flikar inte kan avaktiveras."
 
+#~ msgid "Note: One contact is not shown due to missing phone numbers"
+#~ msgid_plural ""
+#~ "Note: %1$d contacts are not shown due to missing phone numbers"
+#~ msgstr[0] "OBS: En kontakt visas inte på grund av saknade telefonnummer"
+#~ msgstr[1] "OBS: %1$d kontakter visas inte på grund av saknade telefonnummer"
+
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "OBS: vCard-formatet får inte innehålla distributionslistor"
 
@@ -20713,6 +20969,11 @@ msgstr "Lägg till på %s"
 #~ msgid "On new notifications except mails"
 #~ msgstr "Vid nya notifieringar förutom e-post"
 
+#~ msgid "One autocomplete entry found"
+#~ msgid_plural "%1$d autocomplete entries found"
+#~ msgstr[0] "En autofyllpost hittades"
+#~ msgstr[1] "%1$d autofyllposter hittades"
+
 #~ msgid "One item was found."
 #~ msgid_plural "%1$s items were found."
 #~ msgstr[0] "Ett objekt hittades."
@@ -20793,6 +21054,14 @@ msgstr "Lägg till på %s"
 #~ msgid "Other infostore folders"
 #~ msgstr "Andra infolagringsmappar"
 
+#~ msgid ""
+#~ "Other users can find and join your channel under \"All channels\". If you "
+#~ "prefer a conversiom in a closed group, please create a group chat."
+#~ msgstr ""
+#~ "Andra användare kan hitta och ansluta till din kanal under \"Alla kanaler"
+#~ "\". Om du vill ha en konversation inom en sluten grupp, skapa en "
+#~ "gruppchatt."
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Försenad uppgift. %1$s %2$s. Tryck [enter] för att öppna"
 
@@ -20839,6 +21108,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Participants can edit the appointment"
 #~ msgstr "Deltagare kan redigera mötet"
 
+#~ msgid "Password recovery"
+#~ msgstr "Återställ lösenord"
+
+#~ msgid "Password required"
+#~ msgstr "Lösenord krävs"
+
 #~ msgid "Pause"
 #~ msgstr "Paus"
 
@@ -20858,6 +21133,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Permanently remove deleted emails?"
 #~ msgstr "Ta bort borttagen e-post permanent?"
 
+#~ msgid "Permissions / Invite people"
+#~ msgstr "Tillstånd / Bjud in folk"
+
 #, fuzzy
 #~| msgid "Permissions"
 #~ msgid "Permissions for"
@@ -20871,20 +21149,21 @@ msgstr "Lägg till på %s"
 #~ msgid "Personal"
 #~ msgstr "Privat"
 
+#~ msgid ""
+#~ "Personal message (optional). This message is sent to all newly invited "
+#~ "people."
+#~ msgstr ""
+#~ "Personligt meddelande (valfritt). Meddelandet skickas till alla nya "
+#~ "inbjudna."
+
 #~ msgid "Phone (private)"
 #~ msgstr "Telefon (privat)"
 
 #~ msgid "Phone alt"
 #~ msgstr "Alt telefon"
 
-#~ msgid "Phone numbers"
-#~ msgstr "Telefonnummer"
-
 #~ msgid "Pick a time here"
 #~ msgstr "Välj tid här"
-
-#~ msgid "Play audio files"
-#~ msgstr "Spela upp ljudfiler"
 
 #~ msgid "Play video files"
 #~ msgstr "Spela upp videofiler"
@@ -20917,9 +21196,6 @@ msgstr "Lägg till på %s"
 #~ "Du får gärna döpa om flikarna för att bättre tillgodose dina behov. "
 #~ "Använd kryssrutor för att aktivera eller avaktivera specifika flikar."
 
-#~ msgid "Please leave a comment for other participants."
-#~ msgstr "Lämna en kommentar för övriga deltagare."
-
 #~ msgid "Please make sure the file is readable by the groupware."
 #~ msgstr "Se till att filen är läsbar av "
 
@@ -20932,8 +21208,15 @@ msgstr "Lägg till på %s"
 #~ msgid "Please note that other participants are removed on calendar export."
 #~ msgstr "Observera att andra deltagare tas bort vid kalenderexport."
 
+#~ msgid ""
+#~ "Please provide the old password so the account passwords can be recovered."
+#~ msgstr "Ange det gamla lösenordet för att få tillbaka de andra lösenorden."
+
 #~ msgid "Please select at least one participant"
 #~ msgstr "Välj minst en deltagare"
+
+#~ msgid "Please set password"
+#~ msgstr "Ange lösenord"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Definiera dessa saknade variabler: "
@@ -21030,6 +21313,9 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Privata möten kan inte ha deltagare. Ta bort deltagare och acceptera "
 #~ "mötet ändå."
+
+#~ msgid "Private chats only"
+#~ msgstr "Endast privata chattar"
 
 #~ msgid "Private flagged tasks cannot be delegated."
 #~ msgstr "Privat flaggade uppgifter kan ej delegeras."
@@ -21173,14 +21459,23 @@ msgstr "Lägg till på %s"
 #~ msgid "Reading the details"
 #~ msgstr "Läsa detaljerna"
 
+#~ msgid "Receive email notifications"
+#~ msgstr "Ta emot e-postaviseringar"
+
 #~ msgid "Receive notification for appointment changes"
 #~ msgstr "Ta emot avisering för mötesändringar"
 
 #~ msgid "Recent activities"
 #~ msgstr "Senaste aktiviteter"
 
+#~ msgid "Recent conversations"
+#~ msgstr "Senaste konversationer"
+
 #~ msgid "Recipients can edit"
 #~ msgstr "Mottagare kan redigera"
+
+#~ msgid "Recover passwords"
+#~ msgstr "Rädda lösenord"
 
 #~ msgid "Recurrence"
 #~ msgstr "Upprepning"
@@ -21202,6 +21497,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Remove facet"
 #~ msgstr "Ta bort facett"
+
+#~ msgid "Remove link"
+#~ msgstr "Ta bort länk"
 
 #~ msgid "Remove on cache failed"
 #~ msgstr "Borttagandet på cacheminnet misslyckades."
@@ -21352,22 +21650,19 @@ msgstr "Lägg till på %s"
 #~ "Spara i cacheminnet misslyckades. Ett objekt som är bundet till nyckel "
 #~ "finns redan."
 
+#~ msgid "Save as draft"
+#~ msgstr "Spara som utkast"
+
 #~ msgid "Save in file store"
 #~ msgstr "Spara i fillagringen"
 
 #~ msgid "Save to Drive"
 #~ msgstr "Spara till Drive"
 
-#~ msgid "Saved in"
-#~ msgstr "Sparades i"
-
 #~ msgid "Saving attachment to Drive"
 #~ msgid_plural "Saving attachments to Drive"
 #~ msgstr[0] "Sparar bilaga till Drive"
 #~ msgstr[1] "Sparar bilagor till Drive"
-
-#~ msgid "Scheduling"
-#~ msgstr "Schemaläggning"
 
 #~ msgid "Search here"
 #~ msgstr "Sök här"
@@ -21424,6 +21719,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Send feedback"
 #~ msgstr "Lämna synpunkter"
 
+#~ msgid "Send link"
+#~ msgstr "Skicka länk"
+
 #~ msgid "Send mail"
 #~ msgstr "Skicka e-post"
 
@@ -21433,11 +21731,19 @@ msgstr "Lägg till på %s"
 #~ msgid "Send new mail"
 #~ msgstr "Skicka nytt meddelande"
 
+#~ msgid "Send without subject"
+#~ msgstr "Skicka utan ämne"
+
 #~ msgid "Sender address"
 #~ msgstr "Avsändaradress"
 
 #~ msgid "Sender/From"
 #~ msgstr "Avsändare/Från"
+
+#~ msgid "Sending 1 message ... %2$d%"
+#~ msgid_plural "Sending %1$d messages ... %2$d%"
+#~ msgstr[0] "Skickar 1 meddelande... %2$d%"
+#~ msgstr[1] "Skickar %1$d meddelanden... %2$d%"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Skicka e-post till en kontakt"
@@ -21506,6 +21812,9 @@ msgstr "Lägg till på %s"
 #~ msgstr[0] "Dela mappen \"%1$d\""
 #~ msgstr[1] "Dela %1$d objekt"
 
+#~ msgid "Share this file"
+#~ msgstr "Dela ut filen"
+
 #, fuzzy
 #~ msgctxt "owner"
 #~ msgid "Shared by: %1$s"
@@ -21524,15 +21833,29 @@ msgstr "Lägg till på %s"
 #~ msgid "Shared folder owner not given !"
 #~ msgstr "Ägare för den delade mappen har ej angivits !"
 
+#~ msgid "Sharing"
+#~ msgstr "Delar"
+
+#~ msgid "Sharing link created for %1$d item"
+#~ msgid_plural "Sharing link created for %1$d items"
+#~ msgstr[0] "Delningslänk skapades för %1$d objekt"
+#~ msgstr[1] "Delningslänk skapades för %1$d objekt"
+
 #~ msgid "Sharing link created for file \"%1$d\""
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Delningslänk skapades för filen \"%1$d\""
 #~ msgstr[1] "Delningslänk skapades för %1$d objekt"
 
+#~ msgid "Sharing link created for file \"%1$s\""
+#~ msgstr "Delar länk skapad för filen \"%1$s\""
+
 #~ msgid "Sharing link created for folder \"%1$d\""
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Delningslänk skapades för mappen \"%1$d\""
 #~ msgstr[1] "Delningslänk skapades för %1$d objekt"
+
+#~ msgid "Sharing link created for folder \"%1$s\""
+#~ msgstr "Delar länk skapad för mappen \"%1$s\""
 
 #~ msgid ""
 #~ "Should all other past and future messages from %1$s also be moved to %2$s?"
@@ -21583,6 +21906,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Show first page"
 #~ msgstr "Visa första sidan"
 
+#~ msgid "Show information about account recovery"
+#~ msgstr "Visa information om återställning av konto"
+
 #~ msgid "Show internal link"
 #~ msgstr "Visa intern länk"
 
@@ -21594,9 +21920,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Show message authenticity"
 #~ msgstr "Visa meddelandets äkthet"
-
-#~ msgid "Show message size"
-#~ msgstr "Visa meddelandestorlek"
 
 #~ msgid "Show more comments"
 #~ msgstr "Visa fler kommentarer"
@@ -21613,9 +21936,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Show previous day"
 #~ msgstr "Visa föregående dag"
 
-#~ msgid "Show side panel"
-#~ msgstr "Visa sidopanelen"
-
 #, fuzzy
 #~ msgid "Show/hide folder"
 #~ msgstr "Flytta mapp"
@@ -21628,6 +21948,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Signature text"
 #~ msgstr "Signaturtext"
+
+#~ msgid "Signed and verified"
+#~ msgstr "Signerat och verifierat"
 
 #~ msgid "Signed in as %1$s"
 #~ msgstr "Inloggad som %1$s"
@@ -21778,8 +22101,32 @@ msgstr "Lägg till på %s"
 #~ msgid "Subscribe IMAP folders"
 #~ msgstr "Prenumerera på IMAP mappar"
 
+#~ msgid "Subscribe address book"
+#~ msgstr "Prenumerera på adressbok"
+
 #~ msgid "Subscribe calendar"
 #~ msgstr "Prenumerera på kalender"
+
+#~ msgid "Subscribe shared Calendar"
+#~ msgstr "Prenumerera på delad kalender"
+
+#~ msgid "Subscribe shared address book"
+#~ msgstr "Prenumerera på delad adressbok"
+
+#~ msgid "Subscribe shared address books"
+#~ msgstr "Prenumerera på delade adressböcker"
+
+#~ msgid "Subscribe shared calendars"
+#~ msgstr "Prenumerera på delade kalendrar"
+
+#~ msgid "Subscribe shared folder"
+#~ msgstr "Prenumerera på delad mapp"
+
+#~ msgid "Subscribe shared task folders"
+#~ msgstr "Prenumerera på delad uppgifts mappar"
+
+#~ msgid "Subscribe shared tasks folders"
+#~ msgstr "Prenumerera på delade uppgifters mappar"
 
 #~ msgid ""
 #~ "Subscribing to items that are not delivered by another Open-Xchange "
@@ -21800,6 +22147,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Sunday"
 #~ msgstr "Söndag"
+
+#~ msgid "Support"
+#~ msgstr "Kundtjänst"
 
 #, fuzzy
 #~| msgid "Your name"
@@ -21862,6 +22212,11 @@ msgstr "Lägg till på %s"
 #~ msgid "Task contains invalid data: \"%1$s\""
 #~ msgstr "Uppgift innehåller ogiltig information: \"%1$s\""
 
+#~ msgid "Task has been deleted!"
+#~ msgid_plural "Tasks have been deleted!"
+#~ msgstr[0] "Uppgiften har tagits bort!"
+#~ msgstr[1] "Uppgifterna har tagits bort!"
+
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Inbjudan till uppgift. %1$s %2$s %3$s. Tryck [enter] för att öppna"
 
@@ -21872,6 +22227,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Uppgiftspåminnelse. %1$s %2$s %3$s. Tryck [enter] för att öppna"
+
+#~ msgid "Task was already deleted!"
+#~ msgstr "Uppgiften är redan borttagen!"
 
 #~ msgid "Task was modified before, please reload"
 #~ msgstr "Uppgiften ändrades först, ladda om"
@@ -21896,6 +22254,15 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Text"
 #~ msgstr "Text"
+
+#~ msgid ""
+#~ "The %s client lets you store and share your photos, files, documents and "
+#~ "videos, anytime, anywhere. Access any file you save to %s from all your "
+#~ "computers, iPhone, iPad or from within %s itself."
+#~ msgstr ""
+#~ "%s-klienten låter dig lagra och dela dina foton, filer, dokument och "
+#~ "videor; när som helst, var som helst. Kom åt en fil du har sparat till %s "
+#~ "från alla dina datorer, iPhone, iPad, eller från %s."
 
 #~ msgctxt "help"
 #~ msgid "The Drive App"
@@ -22220,8 +22587,14 @@ msgstr "Lägg till på %s"
 #~ "%1$s."
 #~ msgstr "Gränsen för antal deltagare har nåtts. Kontakta presentatören %1$s."
 
+#~ msgid "The link has been removed"
+#~ msgstr "Länken har tagits bort"
+
 #~ msgid "The mandatory field %1$s is not defined."
 #~ msgstr "Det obligatoriska fältet %1$s är inte definierat."
+
+#~ msgid "The message could not be sent."
+#~ msgstr "Meddelandet kunde inte skickas."
 
 #~ msgid ""
 #~ "The message part with sequence ID %1$s could not be found in message %2$s "
@@ -22246,6 +22619,14 @@ msgstr "Lägg till på %s"
 
 #~ msgid "The number of recipients is limited to %1$s recipients per field"
 #~ msgstr "Antal mottagare är begränsat till %1$s mottagare per fält"
+
+#~ msgid "The number of versions is limited to 1 version."
+#~ msgid_plural "The number of versions is limited to %1$d versions."
+#~ msgstr[0] "Antal versioner är begränsat till 1 version."
+#~ msgstr[1] "Antal versioner är begränsat till %1$d versioner."
+
+#~ msgid "The number of versions is not limited"
+#~ msgstr "Antal versioner är inte begränsat"
 
 #~ msgid ""
 #~ "The number on the right side of the E-Mail subject corresponds to the "
@@ -22345,6 +22726,11 @@ msgstr "Lägg till på %s"
 #~ "Serien <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
 #~ "\">upphör aldrig</a>."
 
+#~ msgid "The series ends after one occurrence."
+#~ msgid_plural "The series ends after %1$d occurences."
+#~ msgstr[0] "Serien slutar efter en upprepning."
+#~ msgstr[1] "Serien slutar efter %1$d upprepningar."
+
 #~ msgid "The session parameter is missing."
 #~ msgstr "Sessionsparameter saknas."
 
@@ -22410,11 +22796,26 @@ msgstr "Lägg till på %s"
 #~ "Uppgiften kunde inte sparas. Korta av %1$s och försök igen. Nuvarande "
 #~ "längd %3$d har mer än tillåten längd på %2$d tecken."
 
+#~ msgid "The timeframe is limited to 1 day."
+#~ msgid_plural "The timeframe is limited to %1$d days."
+#~ msgstr[0] "Tidsramen är begränsad till 1 dag."
+#~ msgstr[1] "Tidsramen är begränsad till %1$d dagar."
+
+#~ msgid "The timeframe is not limited"
+#~ msgstr "Tidsramen är inte begränsad"
+
 #~ msgid ""
 #~ "The timezone of this appointment (%1$s) differs from your default "
 #~ "timezone (%2$s)."
 #~ msgstr ""
 #~ "Mötets tidszon (%1$s) är inte samma som din förvalda tidszon (%2$s)."
+
+#~ msgid ""
+#~ "The top navigation area has been redesigned to make accessing modules, "
+#~ "help and settings easier."
+#~ msgstr ""
+#~ "Det översta navigeringsområdet har gjorts om för att göra det lättare att "
+#~ "komma åt moduler, hjälp och inställningar."
 
 #~ msgid ""
 #~ "The two columns on the left side contain the data of the appointment "
@@ -22500,6 +22901,13 @@ msgstr "Lägg till på %s"
 #~ msgstr "Typerna för specificerad informationsursprung stöds inte"
 
 #~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list currently."
+#~ msgstr ""
+#~ "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte "
+#~ "i listan just nu."
+
+#~ msgid ""
 #~ "There are more than %n appointments in the current calendar. Some "
 #~ "features are disabled due to performance reasons."
 #~ msgstr ""
@@ -22513,6 +22921,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "There is no preview for this file type"
 #~ msgstr "Det finns ingen förhandsgranskning för den här filtypen"
+
+#~ msgid "There was an error during authentication."
+#~ msgstr "Ett fel uppstod vid autentisering."
 
 #~ msgid ""
 #~ "There was an issue in authenticating your E-Mail password. This may be "
@@ -22733,6 +23144,13 @@ msgstr "Lägg till på %s"
 #~ msgid "This does not look like an iCal file. Please check the file."
 #~ msgstr "Detta ser inte ut som en iCal fil. Kontrollera filen."
 
+#~ msgid ""
+#~ "This draft was changed outside of this window. To prevent possible loss "
+#~ "of data please continue editing in that other tab or browser."
+#~ msgstr ""
+#~ "Detta utkast ändrades utanför det här fönstret. För att förhindra "
+#~ "dataförlust, fortsätt redigera i den andra fliken eller webbläsaren."
+
 #~ msgid "This field has to be filled"
 #~ msgstr "Detta fält måste fyllas i"
 
@@ -22748,6 +23166,19 @@ msgstr "Lägg till på %s"
 #~ msgstr[1] ""
 #~ "Vissa filer/mappar delas med andra. De kommer inte längre vara "
 #~ "tillgängliga för de inbjudna gästerna."
+
+#~ msgid ""
+#~ "This file (or folder) is shared with others. It won't be available for "
+#~ "them any more."
+#~ msgid_plural ""
+#~ "Some files/folder are shared with others. They won't be available for "
+#~ "them any more."
+#~ msgstr[0] ""
+#~ "Den här filen (eller mappen) delas med andra. Den kommer inte längre vara "
+#~ "tillgänglig för dem."
+#~ msgstr[1] ""
+#~ "Vissa filer/mappar delas med andra. De kommer inte längre vara "
+#~ "tillgängliga för dem."
 
 #~ msgid "This file has been added"
 #~ msgstr "Filen har lagts till"
@@ -22823,12 +23254,6 @@ msgstr "Lägg till på %s"
 #~ "Detta är ett misstänkt meddelande eftersom vi inte kunde verifiera att "
 #~ "det verkligen kommer från %1$s."
 
-#~ msgid "This mail has been added to the portal"
-#~ msgstr "Meddelandet har lagts till i portalen"
-
-#~ msgid "This mail has been sent from %1$s."
-#~ msgstr "Detta meddelande skickades från %1$s."
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Det här kan ta en liten stund"
 
@@ -22864,6 +23289,18 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Detta kan vara phishing eftersom vi inte kunde verifiera att meddelandet "
 #~ "verkligen kommer från %1$s."
+
+#~ msgid ""
+#~ "This release comes with the ability to hold a video or audio chat with "
+#~ "other people. This can be scheduled within a calendar appointment, or "
+#~ "started spontaneously from the toolbar, contacts, halo and other logical "
+#~ "places. To help we have also added a presence indicator to the toolbar."
+#~ msgstr ""
+#~ "Den här utgåvan gör det möjligt att ha video- eller ljudchatt med andra "
+#~ "användare. Detta kan schemaläggas inom ett kalendermöte, eller startas "
+#~ "spontant från verktygsfältet, kontakter, halo och andra logiska platser. "
+#~ "För att hjälpa till har vi också lagt till en närvaroindikator till "
+#~ "verktygsfältet."
 
 #~ msgid ""
 #~ "This task was changed by [changed_by].\n"
@@ -23031,6 +23468,9 @@ msgstr "Lägg till på %s"
 #~ "Denna transaktion kunde inte ångras fullständigt. Vissa komponenter är "
 #~ "troligen inte konsekventa längre. Kör återställningsverktyget."
 
+#~ msgid "This type of link and is unsupported and can't be added."
+#~ msgstr "Den här länktypen stöds inte och kan inte läggas till."
+
 #~ msgid "Though expected, SQL query returned no result."
 #~ msgstr "Även om det var väntat returnerade SQL-frågan inga svar."
 
@@ -23146,6 +23586,9 @@ msgstr "Lägg till på %s"
 #~ "För att fylla det här området, dra och släpp meddelanden över flikens "
 #~ "titel."
 
+#~ msgid "To install %1$s for Windows, download the installation file"
+#~ msgstr "För att installera %1$s för Windows, ladda ned installationsfilen"
+
 #~ msgid ""
 #~ "To invite other participants, enter their names in the field below "
 #~ "Participants. To avoid appointment conflicts, click on Find a free time "
@@ -23245,6 +23688,13 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "För att logga ut, klicka på Systemmenyikonen längst upp till höger i "
 #~ "menyraden. Välj Logga ut."
+
+#~ msgid ""
+#~ "To synchronize your iOS Mail client automatically, scan this code with "
+#~ "your phone's camera:"
+#~ msgstr ""
+#~ "För att synkronisera din iOS Mail-klient automatiskt, skanna den här "
+#~ "koden med din telefonkamera:"
 
 #~ msgid "To track the editing status, enter the current progress."
 #~ msgstr "För att följa redigeringsstatusen, ange aktuella framsteg."
@@ -23598,6 +24048,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Unexpected token %s in .po file %s:%s. Expected one of %s"
 #~ msgstr "Oväntad token %s i .po file %s:%s. Förväntad en av %s"
 
+#~ msgid "Unknown %1$d"
+#~ msgstr "Okänd modul: %1$d"
+
+#~ msgid "Unknown %s."
+#~ msgstr "Okänd modul: %s."
+
 #~ msgid "Unknown AJAX action: %s."
 #~ msgstr "Okänd AJAX-åtgärd: %s."
 
@@ -23647,12 +24103,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Unknown format: %s"
 #~ msgstr "Okänt format: %s"
 
-#~ msgid "Unknown module: %1$d"
-#~ msgstr "Okänd modul: %1$d"
-
-#~ msgid "Unknown module: %s."
-#~ msgstr "Okänd modul: %s."
-
 #~ msgid "Unknown name-value-pair in recurrence string: %1$s=%2$s"
 #~ msgstr "Okänt namn-värde-par i upprepande sträng: %1$s=%2$s"
 
@@ -23679,6 +24129,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Unknown task attribute %d."
 #~ msgstr "Okänt uppgiftsattribut %d."
+
+#~ msgid "Unknown user"
+#~ msgstr "Okänd användare"
 
 #, fuzzy
 #~| msgid "Unknown sender"
@@ -24040,6 +24493,19 @@ msgstr "Lägg till på %s"
 #~ "av filen att raderas"
 
 #~ msgid ""
+#~ "When a file has more than 1 additional version, older versions will be "
+#~ "deleted when a new version is created"
+#~ msgid_plural ""
+#~ "When a file has more than %1$d additional versions, older versions will "
+#~ "be deleted when a new version is created"
+#~ msgstr[0] ""
+#~ "När en fil har fler än 1 ytterligare version kommer äldre versioner att "
+#~ "raderas när en ny version skapas"
+#~ msgstr[1] ""
+#~ "När en fil har fler än %1$d ytterligare versioner kommer äldre versioner "
+#~ "att raderas när en ny version skapas"
+
+#~ msgid ""
 #~ "When executing the downloaded file, an installation wizard will be "
 #~ "launched. Follow the instructions and install the updater. Installs "
 #~ "latest versions of Windows® client software. The Updater automatically "
@@ -24084,6 +24550,17 @@ msgstr "Lägg till på %s"
 #~ msgid "Which app do you want to use on your device?"
 #~ msgstr "Vill du verkligen kasta dina ändringar?"
 
+#~ msgid ""
+#~ "With this release you will notice a new chat bubble icon in the toolbar. "
+#~ "This opens the new chat bar and lets you write messages to any other OX "
+#~ "App Suite user. Chats can be instigated from the chat bar, contacts or "
+#~ "halo."
+#~ msgstr ""
+#~ "Med den här utgåvan kommer du att lägga märke till en ny chattbubbla-ikon "
+#~ "i verktygsfältet. Detta öppnar det nya chattfältet och låter dig skriva "
+#~ "meddelanden till andra användare av OX programsvit. Chattar kan startas "
+#~ "från chattfältet, kontakter eller halo."
+
 #~ msgid "Writing the setting %1$s is not permitted."
 #~ msgstr "Skriva inställningen %1$s är inte tillåten."
 
@@ -24112,12 +24589,31 @@ msgstr "Lägg till på %s"
 #~ msgid "Yes, always move them all"
 #~ msgstr "Ja, flytta alltid allihop"
 
+#~ msgid "Yes, with empty attachment"
+#~ msgstr "Ja, med tom bilaga"
+
+#~ msgid "You"
+#~ msgstr "Du"
+
+#~ msgid ""
+#~ "You are about to discard this message. Do you want to delete the related "
+#~ "draft?"
+#~ msgstr ""
+#~ "Du är på väg att förkasta det här meddelandet. Vill du också radera det "
+#~ "associerade utkastet?"
+
 #~ msgid ""
 #~ "You are currently using %1$s of your %2$s available disk space. You have "
 #~ "%3$s left. "
 #~ msgstr ""
 #~ "Du använder för närvarande %1$s av ditt tillgängliga diskutrymme (%2$s). "
 #~ "Du har %3$s kvar. "
+
+#~ msgid ""
+#~ "You are moving an item out of a shared folder. People will lose access."
+#~ msgstr ""
+#~ "Du flyttar ett objekt ut ur en delad mapp. Folk kommer att förlora "
+#~ "åtkomst."
 
 #~ msgid ""
 #~ "You are not allowed to create appointments in \"%1$s\" owned by %2$s. "
@@ -24182,6 +24678,21 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Du har inte behörighet att lagra denna kontakten i en icke-kontakt-mapp: "
 #~ "mapp-id %1$d i kontext %2$d med användare %3$d"
+
+#~ msgid ""
+#~ "You attached an empty file. It could be, that this file has been deleted "
+#~ "on your hard drive. Send it anyway?"
+#~ msgstr ""
+#~ "Du bifogade en tom fil. Den kanske har tagits bort på din hårddisk. Vill "
+#~ "du skicka den ändå?"
+
+#~ msgid ""
+#~ "You can copy and paste this link in an email, instant messenger or social "
+#~ "network. Please note that anyone with this link can access the share."
+#~ msgstr ""
+#~ "Du kan kopiera och klistra in den här länken i ett meddelande, "
+#~ "snabbmeddelanden eller sociala nätverk. Observera att alla som kommer åt "
+#~ "länken kan komma åt delningen."
 
 #~ msgid ""
 #~ "You can drag and drop files from your computer here to add as attachment."
@@ -24321,6 +24832,9 @@ msgstr "Lägg till på %s"
 #~ msgid "You need write permissions to unlock a document."
 #~ msgstr "Du behöver skrivrättigheter för att låsa upp ett dokument."
 
+#~ msgid "You tentatively accepted this invitation"
+#~ msgstr "Du har preliminärt accepterat den här inbjudan"
+
 #~ msgid ""
 #~ "You will automatically return to the appointment dialog. The selected "
 #~ "start and end time as well as the current participant list will be "
@@ -24346,6 +24860,12 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Your auto forward has been saved"
 #~ msgstr "Din automatiska vidarebefordran har sparats"
+
+#~ msgid "Your browser is not supported!"
+#~ msgstr "Din webbläsare stöds inte!"
+
+#~ msgid "Your browser version is not supported!"
+#~ msgstr "Din webbläsarversion stöds inte!"
 
 #~ msgid ""
 #~ "Your capacity is shared with all members of your group. Your group is "
@@ -24681,6 +25201,18 @@ msgstr "Lägg till på %s"
 #~ msgid "no expiry date"
 #~ msgstr "inget utgångsdatum"
 
+#~ msgid "one day"
+#~ msgstr "en dag"
+
+#~ msgid "one month"
+#~ msgstr "en månad"
+
+#~ msgid "one week"
+#~ msgstr "en vecka"
+
+#~ msgid "one year"
+#~ msgstr "ett år"
+
 #~ msgid "open"
 #~ msgstr "öppna"
 
@@ -24711,6 +25243,9 @@ msgstr "Lägg till på %s"
 #~ msgid "show mail"
 #~ msgstr "visa bild"
 
+#~ msgid "six months"
+#~ msgstr "sex månader"
+
 #~ msgid "status "
 #~ msgstr "status "
 
@@ -24723,6 +25258,9 @@ msgstr "Lägg till på %s"
 #~ msgid "the line length must be a number"
 #~ msgstr "radlängden måste vara ett nummer"
 
+#~ msgid "three months"
+#~ msgstr "tre månader"
+
 #~ msgid "total"
 #~ msgstr "total"
 
@@ -24731,9 +25269,6 @@ msgstr "Lägg till på %s"
 
 #~ msgid "unselect all"
 #~ msgstr "avmarkera alla"
-
-#~ msgid "via"
-#~ msgstr "via"
 
 #~ msgid "weekly"
 #~ msgstr "varje vecka"

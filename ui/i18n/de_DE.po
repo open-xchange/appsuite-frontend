@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 13:49+0100\n"
+"PO-Revision-Date: 2022-04-29 13:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -6346,6 +6346,10 @@ msgstr "Ordner wählen"
 msgid "Create folder"
 msgstr "Ordner anlegen"
 
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Sie können diesen Ordner nicht auswählen."
+
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
 msgstr "Keine Aktion verfügbar"
@@ -8755,6 +8759,14 @@ msgstr ""
 "Wiederhergestellt in Ordner:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"Die PDF-Datei wurde in \"/Drive/Meine Dateien/Dokumente\" gespeichert, da "
+"für den aktuellen Ordner keine Schreibrechte bestehen."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12422,13 +12434,6 @@ msgstr "Code per SMS"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr ""
-"Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
-"authentifizieren."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google-Sicherheitsschlüssel oder kompatibles FIDO-Gerät"
 
@@ -13024,6 +13029,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -16085,6 +16094,11 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr ""
+#~ "Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
+#~ "authentifizieren."
 
 #~ msgid "Password recovery"
 #~ msgstr "Passwort wiederherstellen"
