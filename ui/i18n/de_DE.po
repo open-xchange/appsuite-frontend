@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-25 15:48+0100\n"
+"PO-Revision-Date: 2022-04-29 10:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -5300,6 +5300,10 @@ msgstr ""
 "geben Sie einen Suchbegriff ein, um Ihre Ergebnisse einzugrenzen."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+msgid "User list"
+msgstr "Benutzerliste"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Globale Adressliste"
 
@@ -5892,6 +5896,14 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Weiter"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter your new password."
+msgstr "Bitte geben Sie Ihr neues Passwort ein."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter the same password."
+msgstr "Bitte geben Sie das gleiche Passwort ein."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9854,6 +9866,18 @@ msgid "Message will be sent to all newly invited people"
 msgstr "Nachricht wird an alle neu eingeladenen Personen gesendet"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Sharing folders without permissions"
+msgstr "Freigabe von Ordnern ohne Berechtigungen"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid ""
+"Your are sharing one or more folders for which you do not have permissions. "
+"These folders will not be shared."
+msgstr ""
+"Sie geben einen oder mehrere Ordner frei, für die Sie keine Berechtigung "
+"haben. Diese Ordner werden nicht freigegeben."
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
 msgstr "Möchten Sie wirklich alle Änderungen verwerfen?"
 
@@ -10936,6 +10960,34 @@ msgstr "Das Versenden der Nachricht wurde abgebrochen."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Die E-Mail wurde gesendet"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "E-Mail enthält ausgeblendete externe Bilder"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Diese E-Mail enthält Bilder aus externen Quellen, die derzeit ausgeblendet "
+"sind. Die gesendete E-Mail wird keine Bilder aus externen Quellen enthalten"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "E-Mail kann externe Bilder enthalten"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Diese E-Mail kann Bilder aus externen Quellen enthalten. Die gesendete E-"
+"Mail wird keine Bilder aus externen Quellen enthalten"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "E-Mail ohne externe Bilder verfassen"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -12923,13 +12975,6 @@ msgstr "Code per SMS"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr ""
-"Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
-"authentifizieren."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google-Sicherheitsschlüssel oder kompatibles FIDO-Gerät"
 
@@ -13524,8 +13569,8 @@ msgid "OX Sync App"
 msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -16441,6 +16486,14 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr ""
+#~ "Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
+#~ "authentifizieren."
+
+#~ msgid "MacOS"
+#~ msgstr "MacOS"
 
 #~ msgid "save"
 #~ msgstr "speichern"
@@ -24641,10 +24694,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "low"
 #~ msgstr "niedrig"
-
-#, fuzzy
-#~ msgid "macOS"
-#~ msgstr "MacOS"
 
 #~ msgid "march"
 #~ msgstr "März"
