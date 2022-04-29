@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 10:58+0200\n"
+"PO-Revision-Date: 2022-04-29 13:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -9225,6 +9225,14 @@ msgstr ""
 "Wiederhergestellt in Ordner:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"Die PDF-Datei wurde in \"/Drive/Meine Dateien/Dokumente\" gespeichert, da "
+"für den aktuellen Ordner keine Schreibrechte bestehen."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core

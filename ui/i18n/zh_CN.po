@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-29 12:09+1000\n"
+"PO-Revision-Date: 2022-04-29 13:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5182,6 +5182,12 @@ msgid ""
 msgstr "您已经到达联系人显示限制 %1$d。请输入一个搜寻词以收窄您的结果。"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "User fields"
+msgid "User list"
+msgstr "用户定义"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "全局地址列表"
 
@@ -5750,6 +5756,18 @@ msgstr "请输入与%1$s关联的邮件。您将收到一封电子邮件，其�
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "下一个"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please enter your new password."
+msgstr "请输入您的密码。"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter the password."
+msgid "Please enter the same password."
+msgstr "请输入密码。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -8946,6 +8964,13 @@ msgstr ""
 "%s"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"因为对当前文件夹没有写入权限，所以 PDF 已保存到\"/drive/myfiles/documents\"。"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
@@ -9564,6 +9589,22 @@ msgstr "邀请消息（可选）"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Message will be sent to all newly invited people"
 msgstr "消息将发送给所有新邀请的人"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder permissions"
+msgid "Sharing folders without permissions"
+msgstr "文件夹权限"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "You are moving one or more items that are shared with other people. These "
+#| "people will lose access."
+msgid ""
+"Your are sharing one or more folders for which you do not have permissions. "
+"These folders will not be shared."
+msgstr "您正在移动一个或多个与其他人员共享的项目。这些人将失去访问权限。"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
@@ -10585,6 +10626,34 @@ msgstr "已经取消消息发送。"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "邮件包括隐藏的外部图像"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"此电子邮件包括来自当前隐藏的外部来源之图像。发送的电子邮件将不会包括来自外部"
+"来源的任何图像"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "邮件可能包括外部图像"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"此电子邮件也许包括来自当前隐藏的外部来源之图像。发送的电子邮件将不会包括来自"
+"外部来源的任何图像"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "撰写没有外部图像的邮件"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -12518,11 +12587,6 @@ msgstr "来自通过短信的编码"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "使用与 FIDO2 兼容的设备对您的身份进行身份验证。"
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey、谷歌安全密钥或兼容的 FIDO 设备"
 
@@ -13081,8 +13145,8 @@ msgid "OX Sync App"
 msgstr "OX 同步应用"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -15896,6 +15960,9 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "使用与 FIDO2 兼容的设备对您的身份进行身份验证。"
 
 #~ msgid "save"
 #~ msgstr "保存"

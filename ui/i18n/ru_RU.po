@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-24 19:41+0200\n"
+"PO-Revision-Date: 2022-04-29 13:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5274,6 +5274,12 @@ msgstr ""
 "поисковый запрос, чтобы сузить результаты."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "User fields"
+msgid "User list"
+msgstr "Поля пользователя"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Глобальный список адресов"
 
@@ -5864,6 +5870,18 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Вперед"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please enter your new password."
+msgstr "Введите пароль."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter the password."
+msgid "Please enter the same password."
+msgstr "Пожалуйста, введите пароль."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9152,6 +9170,14 @@ msgstr ""
 "%s"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF был сохранен в \"/drive/myfiles/documents\" из-за отсутствия прав на "
+"запись для текущей папки."
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
@@ -9796,6 +9822,24 @@ msgstr "Сообщение-приглашение (необязательно)"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Message will be sent to all newly invited people"
 msgstr "Сообщение будет отправлено всем вновь приглашенным людям"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder permissions"
+msgid "Sharing folders without permissions"
+msgstr "Разрешения папок"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "You are moving one or more items that are shared with other people. These "
+#| "people will lose access."
+msgid ""
+"Your are sharing one or more folders for which you do not have permissions. "
+"These folders will not be shared."
+msgstr ""
+"Вы перемещаете один или несколько элементов, к которым предоставлен доступ "
+"другим людям. Эти люди потеряют доступ."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
@@ -10855,6 +10899,35 @@ msgstr "Отправка сообщения была отменена."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Сообщение отправлено"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "Письмо содержит скрытые внешние изображения"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Это письмо содержит изображения из внешних источников, которые в настоящее "
+"время скрыты. Отправленное письмо не будет содержать изображений из внешних "
+"источников"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "Письма могут содержать внешние изображения"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Это письмо может содержать изображения из внешних источников. Отправленное "
+"письмо не будет содержать изображений из внешних источников"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "Составлять письма без внешних изображений"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -12835,11 +12908,6 @@ msgstr "Код в текстовом сообщении"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Для аутентификации используйте FIDO2-совместимое устройство."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, ключи безопасности Google или устройство, совместимое с FIDO"
 
@@ -13423,8 +13491,8 @@ msgid "OX Sync App"
 msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -16302,6 +16370,9 @@ msgstr "Пригласить на %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Добавить в %s"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "Для аутентификации используйте FIDO2-совместимое устройство."
 
 #~ msgid "save"
 #~ msgstr "сохранить"
