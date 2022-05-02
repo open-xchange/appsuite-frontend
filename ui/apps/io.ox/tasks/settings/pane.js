@@ -25,8 +25,9 @@ define('io.ox/tasks/settings/pane', [
     'settings!io.ox/tasks',
     'io.ox/core/extensions',
     'io.ox/core/settings/util',
+    'io.ox/core/capabilities',
     'gettext!io.ox/tasks'
-], function (ExtensibleView, settings, ext, util, gt) {
+], function (ExtensibleView, settings, ext, util, capabilities, gt) {
 
     'use strict';
 
@@ -85,6 +86,8 @@ define('io.ox/tasks/settings/pane', [
             id: 'shared-tasks',
             index: 50,
             render: function () {
+                if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
+
                 function openDialog() {
                     require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                         subscribe.open({
@@ -92,6 +95,7 @@ define('io.ox/tasks/settings/pane', [
                             help: 'ox.appsuite.user.sect.tasks.folder.subscribeshared.html',
                             title: gt('Subscribe to shared task folders'),
                             point: 'io.ox/core/folder/subscribe-shared-tasks-folders',
+                            noSync: !capabilities.has('caldav'),
                             sections: {
                                 public: gt('Public tasks folders'),
                                 shared: gt('Shared tasks folders'),

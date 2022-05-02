@@ -79,11 +79,9 @@ Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', asyn
     I.click('Subscribe to shared folder');
     I.waitForText('Shared task folders');
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));
-    I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedFolderName)).find('.checkbox'));
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');
@@ -95,13 +93,9 @@ Scenario('[Z104304] Subscribe shared folder and Unsubscribe shared folder', asyn
     I.waitForText('Shared task folders');
 
     I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="used_for_sync"]' }));
 
     I.click(locate('li').withChild(locate('*').withText(sharedFolderName)).find('.checkbox'));
     I.seeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="subscribed"]' }));
-    I.dontSeeCheckboxIsChecked(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'input[name="used_for_sync"]' }));
-
-    I.click(locate('li').withChild(locate('*').withText(sharedFolderName)).find({ css: 'label' }).withText('Sync via DAV'));
 
     I.click('Save');
     I.waitForDetached('.modal-dialog');
