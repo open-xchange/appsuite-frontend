@@ -222,10 +222,12 @@ define('io.ox/core/locale/meta', function () {
         'dd/MM/yy',
         'dd/MM/yyyy',
         'dd-MM-yyyy',
+        'd-M-yyyy',
         // y M d
         'yyyy/MM/dd',
         'yyyy.MM.dd.',
-        'yyyy-MM-dd'
+        'yyyy-MM-dd',
+        'yyyy-M-d'
     ];
 
     // CLDR/Java -> moment

@@ -182,7 +182,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                     rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
                 });
 
-                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 12.03.2020.');
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 12.3.2020.');
             });
 
             it('Create recurring appointment in a different timezone (+4)', function () {
@@ -201,7 +201,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                     rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
                 });
 
-                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 14.03.2020.');
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 14.3.2020.');
             });
 
             it('Create recurring appointment in a different timezone (without day change)', function () {
@@ -220,7 +220,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                     rrule: 'FREQ=DAILY;UNTIL=20200313T225959Z'
                 });
 
-                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 13.03.2020.');
+                expect(util.getRecurrenceString(event)).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             // All day events
@@ -236,7 +236,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
 
                 var str = util.getRecurrenceString(event);
-                expect(str).to.equal('Täglich. Die Serie endet am 13.03.2020.');
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             it('Recurring all day event of a different timezone (-4)', function () {
@@ -253,7 +253,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
 
                 var str = util.getRecurrenceString(event);
-                expect(str).to.equal('Täglich. Die Serie endet am 13.03.2020.');
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             it('Recurring all day event of a different timezone (+4)', function () {
@@ -270,7 +270,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 });
 
                 var str = util.getRecurrenceString(event);
-                expect(str).to.equal('Täglich. Die Serie endet am 13.03.2020.');
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             // Daily
@@ -295,7 +295,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                 event.set('rrule', 'FREQ=DAILY;UNTIL=20200313T225959Z');
 
                 var str = util.getRecurrenceString(event);
-                expect(str).to.equal('Täglich. Die Serie endet am 13.03.2020.');
+                expect(str).to.equal('Täglich. Die Serie endet am 13.3.2020.');
             });
 
             it('Every day till a specific number of recurrences', function () {
