@@ -130,9 +130,24 @@ define('io.ox/mail/compose/sharing', [
         id: 'password',
         index: 300,
         render: function () {
-            var model = this.sharingModel, passContainer, guid;
+            var model = this.sharingModel,
+                self = this, passContainer, guid;
+
+            function passwordIsEmpty() { return passContainer.find('input').val().trim() === ''; }
+
+            function applyValidationState() {
+                var applyButton = self.dialogNode.closest('.modal-content').find('button[data-action="apply"]');
+                if (passwordIsEmpty() && model.get('usepassword')) {
+                    passContainer.addClass('has-error');
+                    applyButton.prop('disabled', true);
+                } else {
+                    passContainer.removeClass('has-error');
+                    applyButton.prop('disabled', false);
+                }
+            }
 
             function toggleState() {
+                applyValidationState();
                 if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
                 passContainer.find('input').prop('disabled', true);
             }
@@ -146,6 +161,7 @@ define('io.ox/mail/compose/sharing', [
                 )
             );
             passContainer.find('input').attr('id', guid);
+            passContainer.find('input').on('keyup', toggleState);
             model.on('change:usepassword', toggleState);
             toggleState();
         }
