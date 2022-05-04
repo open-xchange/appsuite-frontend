@@ -381,8 +381,9 @@ define('io.ox/mail/compose/main', [
             // space deleted: pause app or remove taskbar item
             if (isMissing) return app.onMissing(e);
             // all other errors
-            require(['io.ox/core/yell'], function (yell) {
+            return require(['io.ox/core/yell']).then(function (yell) {
                 yell(e);
+                return app.quit();
             });
         };
 
@@ -511,17 +512,13 @@ define('io.ox/mail/compose/main', [
                     if (e.code === 'MSGCS-0011') {
                         var num = e.error_params[0] || 20;
                         e.message = gt('You cannot open more than %1$s drafts at the same time.', num);
-                        return app.quit().then(function () {
-                            require(['io.ox/core/yell'], function (yell) {
-                                yell(e);
-                            });
-                        });
                     }
 
                     // custom handlers
-                    app.onError(_.extend({ failRestore: true }, e));
-
-                    def.reject(e);
+                    return $.when(app.onError(_.extend({ failRestore: true }, e)))
+                        .then(function () {
+                            return def.reject(e);
+                        });
                 });
             });
             return def;
