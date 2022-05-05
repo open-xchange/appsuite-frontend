@@ -92,9 +92,9 @@ define([
 
         it('set proper date format', function () {
             var m = moment([2019, 5, 5, 13, 37]);
-            expect(m.format('L')).to.equal('05.06.2019');
+            expect(m.format('L')).to.equal('5.6.2019');
             expect(m.format('LL')).to.equal('5. Juni 2019');
-            expect(m.format('LLL')).to.equal('05.06.2019 13:37');
+            expect(m.format('LLL')).to.equal('5.6.2019 13:37');
             expect(m.format('LT')).to.equal('13:37');
         });
 
@@ -126,11 +126,11 @@ define([
 
         it('returns localeData correctly', function () {
             expect(locale.getLocaleData()).to.deep.equal({
-                date: 'dd.MM.yyyy',
+                date: 'd.M.yyyy',
                 dateFull: 'EEEE, d. MMMM yyyy',
                 dateLong: 'd. MMMM yyyy',
-                dateMedium: 'dd.MM.yyyy',
-                dateShort: 'dd.MM.yyyy',
+                dateMedium: 'd.M.yyyy',
+                dateShort: 'd.M.yyyy',
                 firstDayOfWeek: 'monday',
                 firstDayOfYear: 4,
                 number: '1.234,56',
@@ -151,9 +151,9 @@ define([
         it('resets custom formats correctly', function () {
             locale.resetLocaleData();
             var m = moment([2019, 5, 5, 13, 37]);
-            expect(m.format('L')).to.equal('05.06.2019');
+            expect(m.format('L')).to.equal('5.6.2019');
             expect(m.format('LL')).to.equal('5. Juni 2019');
-            expect(m.format('LLL')).to.equal('05.06.2019 13:37');
+            expect(m.format('LLL')).to.equal('5.6.2019 13:37');
             expect(m.format('LT')).to.equal('13:37');
         });
 
@@ -187,7 +187,7 @@ define([
             ox.once('change:locale:' + id, function () {
                 expect(locale.number(1234.56, 2)).to.equal('1’234.56');
                 var m = moment([2019, 5, 5, 13, 37]);
-                expect(m.format('L')).to.equal('05.06.2019');
+                expect(m.format('L')).to.equal('5.6.2019');
                 done();
             });
             settings.set('language', id);
