@@ -348,7 +348,7 @@ define('io.ox/core/settings/pane', [
                 baton.$el.append(select);
 
                 function getExample() {
-                    return moment().format('dddd, L LT') + '   ' +
+                    return moment().month(0).date(29).hour(9).minute(0).format('dddd, L LT') + '   ' +
                         locale.getDefaultNumberFormat() + '\n' +
                         gt('First day of the week: %1$s', locale.getFirstDayOfWeek());
                 }
