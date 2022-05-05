@@ -267,8 +267,8 @@ define('io.ox/mail/compose/model', [
                     if (/^(reply|replyall)$/.test(data.meta.type)) {
                         //#. %1$s A date
                         //#. %2$s An email address
-                        //#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
-                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL'), mail.from.map(function (sender) {
+                        //#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
+                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL z'), mail.from.map(function (sender) {
                             return mailUtil.formatSender(sender, false);
                         }).join(', ')));
                     } else if (/^forward-inline$/.test(data.meta.type)) {
@@ -288,7 +288,7 @@ define('io.ox/mail/compose/model', [
                             );
                         }
                         header.push(
-                            gt('Date: %1$s', moment(data.meta.date).format('LLL')),
+                            gt('Date: %1$s', moment(data.meta.date).format('LLL z')),
                             //#. %1$s The subject of an email
                             gt('Subject: %1$s', mail.subject)
                         );
