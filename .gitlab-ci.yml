@@ -39,6 +39,8 @@ variables:
   variables:
     build_tasks: dist:build
     build_script: grunt ${build_tasks}
+    KUBERNETES_MEMORY_REQUEST: 1G
+    KUBERNETES_MEMORY_LIMIT: 1G
   script:
     - cd ${PROJECT_PATH}
     - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
@@ -72,6 +74,8 @@ build ui:
     build_script: eval "grunt \$${build_tasks_$$CI_NODE_INDEX}"
     build_tasks_1: lint copy_build compile_po concat uglify:dist_largeFiles less copy_dist
     build_tasks_2: copy_build compile_po concat uglify:dist uglify:dist_i18n version_txt create_i18n_properties copy_dist
+    KUBERNETES_MEMORY_REQUEST: 2.2G
+    KUBERNETES_MEMORY_LIMIT: 2.2G
   before_script:
     - "[ -z \"$VERSION\" ] && export VERSION=$(git describe --match '[0-9]*.[0-9]*.[0-9]*')"
     - echo "Building version $VERSION"
