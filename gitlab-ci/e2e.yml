@@ -26,6 +26,7 @@ run e2e tests:
     KUBERNETES_CPU_LIMIT: 2
     KUBERNETES_CPU_REQUEST: "1.5"
     KUBERNETES_MEMORY_REQUEST: 2G
+    KUBERNETES_MEMORY_LIMIT: 2G
     MIN_SUCCESS: 1
     MAX_RERUNS: 5
     # services configuration
@@ -96,6 +97,7 @@ merge filter report and rerun:
     KUBERNETES_CPU_LIMIT: 2
     KUBERNETES_CPU_REQUEST: "1.5"
     KUBERNETES_MEMORY_REQUEST: 2G
+    KUBERNETES_MEMORY_LIMIT: 2G
     # services configuration
     SERVER: https://appsuite.k3s.os2.oxui.de/appsuite/
     # gitlab config
