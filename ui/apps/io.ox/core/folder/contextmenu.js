@@ -560,7 +560,6 @@ define('io.ox/core/folder/contextmenu', [
         //
 
         properties: (function () {
-
             function handler(e) {
                 e.preventDefault();
                 properties.openDialog(e.data.id);
@@ -569,6 +568,7 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                if (!baton.data['com.openexchange.caldav.url']) return;
                 // check if there is an extension that has something to show in the dialog
                 if (!properties.check(baton.data.id)) return;
                 contextUtils.addLink(this, {
