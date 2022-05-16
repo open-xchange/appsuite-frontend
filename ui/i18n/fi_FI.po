@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:00+0100\n"
+"PO-Revision-Date: 2022-04-29 13:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5308,10 +5308,8 @@ msgid "User name"
 msgstr "Käyttäjätunnus"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Käytä salasanaa"
+msgstr "Aseta salasana uudelleen"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5482,8 +5480,6 @@ msgid "Imprint"
 msgstr "Leimaa"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "Vahvista uusi salasana"
 
@@ -6278,6 +6274,10 @@ msgstr "Valitse kansio"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Luo kansio"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Tätä kansiota ei voi valita."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -8647,6 +8647,14 @@ msgstr ""
 "Palautettu kansioon:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF-tiedosto on tallennettu kohteeseen \"/drive/myfiles/documents\", koska  "
+"nykyiseen kansioon ei ole kirjoitusoikeutta."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12275,11 +12283,6 @@ msgstr "Koodin tekstiviestillä"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Käytä FIDO2-yhteensopivaa laitetta henkilöllisyytesi varmentamiseen."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google Security Keys, tai yhteensopiva FIDO -laite"
 
@@ -12859,6 +12862,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -15877,6 +15884,10 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr ""
+#~ "Käytä FIDO2-yhteensopivaa laitetta henkilöllisyytesi varmentamiseen."
 
 #~ msgid "Rotate left"
 #~ msgstr "Pyöräytä vasemmalle"

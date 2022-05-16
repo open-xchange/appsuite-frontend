@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:07+0100\n"
+"PO-Revision-Date: 2022-04-29 13:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5350,10 +5350,8 @@ msgid "User name"
 msgstr "Meno používateľa"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Použiť heslo"
+msgstr "Obnoviť heslo"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -6323,6 +6321,10 @@ msgstr "Vybrať priečinok"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Vytvoriť priečinok"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Nemôžete vybrať tento priečinok."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -8708,6 +8710,14 @@ msgstr ""
 "Obnovené do priečinka:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF bolo uložené do \"/drive/myfiles/documents\" kvôli chýbajúcemu "
+"oprávneniu zapisovať do aktuálneho priečinka."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12364,11 +12374,6 @@ msgstr "Kód prostredníctvom SMS"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Používať na overenie vašej identity zariadenie kompatibilné s FIDO2."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr ""
 "Bezpečnostné kľúče Yubikey, Google alebo zariadenie kompatibilné s FIDO2"
@@ -12961,6 +12966,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -15994,6 +16003,10 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr ""
+#~ "Používať na overenie vašej identity zariadenie kompatibilné s FIDO2."
 
 #~| msgid "Rotate image"
 #~ msgid "Rotate left"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:00+0100\n"
+"PO-Revision-Date: 2022-04-29 13:35+0200\n"
 "Last-Translator: marko <marko.toom@gmail.com>\n"
 "Language-Team: \n"
 "Language: et_EE\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-POOTLE-MTIME: 1517228807.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -5310,10 +5310,8 @@ msgid "User name"
 msgstr "Kasutajanimi"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Kasuta parooli"
+msgstr "Taasta parool"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5484,10 +5482,8 @@ msgid "Imprint"
 msgstr "Tempel"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Confirm new Password"
 msgid "Confirm new password"
-msgstr "Kinnita uus salasõna"
+msgstr "Kinnita uus parool"
 
 #. While or after requesting a new password you can go back to the initial login page
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
@@ -6279,6 +6275,10 @@ msgstr "Vali kaust"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Lisa uus kaust"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Seda kausta ei saa valida."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -8642,6 +8642,14 @@ msgstr ""
 "Taastatud kausta:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF on salvestatud aadressile \"/drive/myfiles/documents\", kuna praegusele "
+"kaustale ei ole kirjutamisõigust."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12266,11 +12274,6 @@ msgstr "Kood tekstsõnumi kaudu"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Kasuta oma identiteedi autentimiseks FIDO2-ga ühilduvat seadet."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google'i turvavõtmed või ühilduv FIDO seade"
 
@@ -12850,6 +12853,10 @@ msgstr "Aknad"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync klient"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -15873,6 +15880,9 @@ msgstr "Kutsu %s-i"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Lisa %s-is"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "Kasuta oma identiteedi autentimiseks FIDO2-ga ühilduvat seadet."
 
 #~ msgid "Rotate left"
 #~ msgstr "Pööra vasakule"

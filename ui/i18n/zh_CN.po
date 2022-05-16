@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:08+0100\n"
+"PO-Revision-Date: 2022-04-29 13:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5247,10 +5247,8 @@ msgid "User name"
 msgstr "用户名"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "使用密码"
+msgstr "重设密码"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5414,8 +5412,6 @@ msgid "Imprint"
 msgstr "印记"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "确认新密码"
 
@@ -6199,6 +6195,10 @@ msgstr "选择文件夹"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "创建文件夹"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "您不能选择此文件夹。"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -8503,6 +8503,13 @@ msgstr ""
 "恢复到文件夹：\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"因为对当前文件夹没有写入权限，所以 PDF 已保存到\"/drive/myfiles/documents\"。"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12046,11 +12053,6 @@ msgstr "来自通过短信的编码"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "使用与 FIDO2 兼容的设备对您的身份进行身份验证。"
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey、谷歌安全密钥或兼容的 FIDO 设备"
 
@@ -12610,6 +12612,10 @@ msgstr "视窗"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "安卓"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX 同步应用"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -15563,6 +15569,9 @@ msgstr "邀请到 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "在 %s 上添加"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "使用与 FIDO2 兼容的设备对您的身份进行身份验证。"
 
 #~ msgid "Rotate left"
 #~ msgstr "往左旋转"

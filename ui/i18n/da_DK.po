@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 13:53+0100\n"
+"PO-Revision-Date: 2022-04-29 13:33+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #
 #   Naming Conventions
@@ -5321,10 +5321,8 @@ msgid "User name"
 msgstr "Brugernavn"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Brug adgangskode"
+msgstr "Nulstil adgangskode"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -6291,6 +6289,10 @@ msgstr "Vælg mappe"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Opret mappe"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "Du kan ikke vælge denne mappe."
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
@@ -8670,6 +8672,14 @@ msgstr ""
 "Gendannet ind i mappe:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF'en er blevet gemt i \"/drive/myfiles/documents\", da der ikke er "
+"skriveadgang til denne mappe."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12285,11 +12295,6 @@ msgstr "Kode via tekst besked"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Brug en FIDO2-kompatibel enhed til at verificere din identitet."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google Security Keys, eller kompatibel FIDO-enhed"
 
@@ -12871,6 +12876,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync app"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -15889,6 +15898,9 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "Brug en FIDO2-kompatibel enhed til at verificere din identitet."
 
 #~ msgid "Password recovery"
 #~ msgstr "Gendan adgangskode"

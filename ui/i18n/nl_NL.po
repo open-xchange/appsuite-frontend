@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-08 14:05+0100\n"
+"PO-Revision-Date: 2022-04-29 13:37+0200\n"
 "Last-Translator: Tim <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5359,10 +5359,8 @@ msgid "User name"
 msgstr "Gebruikersnaam"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Use password"
 msgid "Reset password"
-msgstr "Gebruik wachtwoord"
+msgstr "Wachtwoord herstellen"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Set password"
@@ -5533,8 +5531,6 @@ msgid "Imprint"
 msgstr "Stempel"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Confirm new Password"
 msgid "Confirm new password"
 msgstr "Nieuw wachtwoord bevestigen"
 
@@ -6337,6 +6333,10 @@ msgstr "Selecteer map"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 msgid "Create folder"
 msgstr "Map aanmaken"
+
+#: apps/io.ox/core/folder/picker.js module:io.ox/core
+msgid "You cannot select this folder."
+msgstr "U kan deze map niet selecteren."
 
 # (Reinout)
 # Elma: links wordt veel vaker gebruikt?
@@ -8738,6 +8738,14 @@ msgstr ""
 "Hersteld naar map:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"De PDF is opgeslagen in \"/drive/myfiles/documents\" omdat er geen "
+"schrijftoegang is voor de huidige map."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -12391,12 +12399,6 @@ msgstr "Code via tekstbericht"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr ""
-"Gebruik een FIDO2 compatibel apparaat om uw identiteit de authenticeren."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google Security Keys of compatibele FIDO apparaat"
 
@@ -12984,6 +12986,10 @@ msgstr "Windows"
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Android"
 msgstr "Android"
+
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+msgid "OX Sync App"
+msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "MacOS"
@@ -16028,6 +16034,10 @@ msgstr "Uitnodigingen voor %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr ""
+#~ "Gebruik een FIDO2 compatibel apparaat om uw identiteit de authenticeren."
 
 #~| msgid "Rotate image"
 #~ msgid "Rotate left"
