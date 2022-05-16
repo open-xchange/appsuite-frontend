@@ -93,6 +93,21 @@ define('io.ox/core/boot/util', [], function () {
                 .find('input, button').prop('readonly', true);
         },
 
+        deepExtend: function (args) {
+            var merge = function (target, source) {
+                target = Object.assign({}, target);
+                Object.keys(source).forEach(function (key) {
+                    if ((!target[key] || target[key] instanceof Object) && source[key] instanceof Object) {
+                        target[key] = merge(target[key], source[key]);
+                    } else {
+                        target[key] = source[key];
+                    }
+                });
+                return target;
+            };
+            return args.filter(function (e) { return e !== undefined; }).reduce(merge);
+        },
+
         gotoSignin: function (hash) {
             var ref = (location.hash || '').replace(/^#/, ''),
                 path = _.url.vars(ox.serverConfig.loginLocation || ox.loginLocation),
