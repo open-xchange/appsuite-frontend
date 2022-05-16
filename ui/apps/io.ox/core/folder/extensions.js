@@ -251,7 +251,7 @@ define('io.ox/core/folder/extensions', [
                 title: isContact ? gt('Shared address books') : gt('Shared task folders'),
                 tooltip: isContact ? gt('Subscribe to address book') : gt('Subscribe to task folder'),
                 point: isContact ? 'io.ox/core/folder/subscribe-shared-address-books' : 'io.ox/core/folder/subscribe-shared-tasks-folders',
-                noSync: isContact && !capabilities.has('carddav'),
+                noSync: isContact ? !capabilities.has('carddav') : !capabilities.has('caldav'),
                 sections: {
                     public: isContact ? gt('Public address books') : gt('Public tasks folders'),
                     shared: isContact ? gt('Shared address books') : gt('Shared tasks folders'),
@@ -850,7 +850,8 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'subscribeShared',
             index: 550,
-            capabilities: ['subscription'],
+            // dialog serves multiple purposes, manage sync via carddav (all folder types) or subscribe/unsubscribe shared or public folders
+            capabilities: ['edit_public_folders || read_create_shared_folders || carddav'],
             draw: extensions.subscribeShared
         }
     );
@@ -1004,6 +1005,8 @@ define('io.ox/core/folder/extensions', [
                 index: 200,
                 id: 'shared',
                 draw: function (baton) {
+                    if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
+
                     if (baton.context !== 'app') return;
 
                     var folder = api.getDefaultFolder(module);
@@ -1111,6 +1114,7 @@ define('io.ox/core/folder/extensions', [
         id: 'shared',
         index: 500,
         draw: function () {
+            if (!capabilities.has('edit_public_folders || read_create_shared_folders || caldav')) return;
             this.link('shared', gt('Subscribe to shared calendar'), function () {
                 require(['io.ox/core/sub/sharedFolders'], function (subscribe) {
                     subscribe.open({

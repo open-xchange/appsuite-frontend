@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-25 19:00+0100\n"
+"PO-Revision-Date: 2022-04-29 13:13+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #
 #   Naming Conventions
@@ -5258,6 +5258,12 @@ msgstr ""
 "søgeterm for at begrænse dit resultat."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "User fields"
+msgid "User list"
+msgstr "Brugerfelter"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Global adresseliste"
 
@@ -5839,6 +5845,18 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Næste"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter your password."
+msgid "Please enter your new password."
+msgstr "Indtast venligst din adgangskode."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Please enter the password."
+msgid "Please enter the same password."
+msgstr "Indtast venligst adgangskode."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9122,6 +9140,14 @@ msgstr ""
 "%s"
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF'en er blevet gemt i \"/drive/myfiles/documents\", da der ikke er "
+"skriveadgang til denne mappe."
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js
 msgid "Save as PDF"
@@ -9750,6 +9776,24 @@ msgstr "Invitationsbesked (valgfri)"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Message will be sent to all newly invited people"
 msgstr "Beskeden vil blive sendt til alle nyligt inviterede folk"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder permissions"
+msgid "Sharing folders without permissions"
+msgstr "Mappetilladelser"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid ""
+#| "You are moving one or more items that are shared with other people. These "
+#| "people will lose access."
+msgid ""
+"Your are sharing one or more folders for which you do not have permissions. "
+"These folders will not be shared."
+msgstr ""
+"Du er ved at flytte en eller flere ting som er delt med andre folk. Disse "
+"folk mister adgang."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
@@ -10804,6 +10848,34 @@ msgstr "Afsendelsen af beskeden blev annulleret."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-mailen er sendt"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "E-mail indeholder skjulte eksterne billeder"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Denne e-mail indeholder billeder fra eksterne kilder som er skjulte. Den "
+"sendte e-mail vil ikke indeholde billeder fra eksterne kilder."
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "E-mail indeholder måske eksterne billeder"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Denne e-mail indeholder måske billeder fra eksterne kilder. Den sendte e-"
+"mail vil ikke indeholde billeder fra eksterne kilder."
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "Lav e-mail uden eksterne billeder"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -12775,11 +12847,6 @@ msgstr "Kode via tekst besked"
 
 #: apps/io.ox/multifactor/settings/views/addMultifactorView.js
 #: module:io.ox/core/boot
-msgid "Use a FIDO2 compatible device to authenticate your identity."
-msgstr "Brug en FIDO2-kompatibel enhed til at verificere din identitet."
-
-#: apps/io.ox/multifactor/settings/views/addMultifactorView.js
-#: module:io.ox/core/boot
 msgid "Yubikey, Google Security Keys, or compatible FIDO device"
 msgstr "Yubikey, Google Security Keys, eller kompatibel FIDO-enhed"
 
@@ -13360,8 +13427,8 @@ msgid "OX Sync App"
 msgstr "OX Sync app"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -16236,6 +16303,9 @@ msgstr "Invitér til %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Tilføj på %s"
+
+#~ msgid "Use a FIDO2 compatible device to authenticate your identity."
+#~ msgstr "Brug en FIDO2-kompatibel enhed til at verificere din identitet."
 
 #~ msgid "save"
 #~ msgstr "gem"

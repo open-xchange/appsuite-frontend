@@ -450,11 +450,16 @@ define('io.ox/core/api/filestorage', [
 
     // add event support
     Events.extend(api);
+
     require(['io.ox/core/folder/api'], function (folderApi) {
+        // remove external file storage when root folder gets deleted
         folderApi.on('remove:infostore', function (data) {
-            var accountId = /.*:\/\/(\d+)/.exec(data.account_id);
-            if (accountId === null || !accountId[1]) return;
-            accountsCache.remove(accountId[1]);
+            var externalAcccountId = /.*:\/\/(\d+)/.exec(data.account_id);
+            if (externalAcccountId === null || !externalAcccountId[1]) return;
+            // root folder might has a '/' suffix
+            var isRootFolder = new RegExp('^' + data.account_id + '/?$').test(data.id);
+            if (!isRootFolder) return;
+            accountsCache.remove(externalAcccountId[1]);
         });
     });
     return api;
