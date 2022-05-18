@@ -32,9 +32,6 @@ define('io.ox/files/settings/pane', [
 
     'use strict';
 
-    // not really relevant for guests (as of today)
-    if (capabilities.has('guest')) return;
-
     // change events
 
     settings.on('change', function () {
