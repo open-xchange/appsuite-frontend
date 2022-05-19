@@ -378,6 +378,7 @@ define('io.ox/mail/compose/main', [
                 var maxResolution = e.error.match(/\d+/)[0];
                 e.message = gt('Image upload denied. Its resolution exceeds maximum allowed value of %1$s megapixels.', Math.floor(maxResolution / 1000000));
             }
+            if (/^(UPL-0017|UPL-0016)$/.test(e.code)) return;
             // space deleted: pause app or remove taskbar item
             if (isMissing) return app.onMissing(e);
             // all other errors
