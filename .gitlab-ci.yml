@@ -81,7 +81,7 @@ build ui:
     - echo "Building version $VERSION"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_PIPELINE_SOURCE == "bug/DOCS-4377_drive_settings_guest"
+    - if: '$CI_PIPELINE_SOURCE == "bug/DOCS-4377_drive_settings_guest"'
     - if: '$CI_COMMIT_REF_NAME =~ /^master/'
       when: always
     - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
@@ -107,7 +107,7 @@ build update-themes:
     - cd ..
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^master/'
-    - if: '$CI_PIPELINE_SOURCE == "bug/DOCS-4377_drive_settings_guest"
+    - if: '$CI_PIPELINE_SOURCE == "bug/DOCS-4377_drive_settings_guest"'
       when: always
     - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
       changes:
