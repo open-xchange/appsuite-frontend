@@ -32,7 +32,7 @@ define('io.ox/files/settings/pane', [
 
     'use strict';
 
-    // change events
+    // change events - test -
 
     settings.on('change', function () {
         settings.saveAndYell();
