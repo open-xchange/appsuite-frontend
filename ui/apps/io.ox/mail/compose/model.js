@@ -263,10 +263,11 @@ define('io.ox/mail/compose/model', [
                 return mailAPI.get({ id: original.originalId, folder: original.originalFolderId }, { cache: !settings.get('features/fixContentType', false) }).then(function (mail) {
                     var header = [];
                     if (/^(reply|replyall)$/.test(data.meta.type)) {
+                        // needed a slightly different fix for OXUIB-1379 since moment version differs and can't be easily updated
                         //#. %1$s A date
                         //#. %2$s An email address
                         //#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
-                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).format('LLL z'), mail.from.map(function (sender) {
+                        header.push(gt('On %1$s %2$s wrote:', moment(data.meta.date).tz(moment.tz.guess()).format('LLL z'), mail.from.map(function (sender) {
                             return mailUtil.formatSender(sender, false);
                         }).join(', ')));
                     } else if (/^forward-inline$/.test(data.meta.type)) {
@@ -286,7 +287,8 @@ define('io.ox/mail/compose/model', [
                             );
                         }
                         header.push(
-                            gt('Date: %1$s', moment(data.meta.date).format('LLL z')),
+                            // needed a slightly different fix for OXUIB-1379 since moment version differs and can't be easily updated
+                            gt('Date: %1$s', moment(data.meta.date).tz(moment.tz.guess()).format('LLL z')),
                             //#. %1$s The subject of an email
                             gt('Subject: %1$s', mail.subject)
                         );
