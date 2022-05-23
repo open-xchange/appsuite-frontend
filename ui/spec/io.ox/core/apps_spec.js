@@ -209,6 +209,7 @@ define([
                     path: 'custom/module/apps/test/main',
                     title: 'Testanwendung'
                 });
+                ui.apps.add(model);
                 const spy = sinon.spy(),
                     def = $.Deferred();
                 model.on('launch', def.resolve);
@@ -230,6 +231,7 @@ define([
                 return def.then(function () {
                     expect(spy.called).to.equal(true);
                     requirejs.undef('custom/module/apps/test/main');
+                    ui.apps.remove(model);
                 });
             });
         });

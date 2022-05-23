@@ -1939,6 +1939,7 @@ define('io.ox/core/desktop', [
     ox.launch = function (id, data) {
         var def = $.Deferred(), loadStart = Date.now();
         if (_.isString(id)) {
+            if (ox.ui.apps.pluck('path').indexOf(id) < 0) return def.reject();
             adaptiveLoader.stop();
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
             ox.load(requirements, data).then(
