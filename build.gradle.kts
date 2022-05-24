@@ -2,11 +2,11 @@ import com.openexchange.build.git.GitExtension
 import com.openexchange.build.git.GitExtension.NewestVersionTagResult.Success
 
 plugins {
-    id("com.openexchange.build.gradle-git") version "3.5.0"
-    id("com.openexchange.build.licensing") version "1.0.4"
-    id("com.openexchange.build.install") version "3.7.0"
-    id("com.openexchange.build.opensuse-build-service-client") version "1.8.0"
-    id("com.openexchange.build.packaging") version "5.7.0" apply false
+    id("com.openexchange.build.gradle-git") version "3.9.0"
+    id("com.openexchange.build.licensing") version "1.0.5"
+    id("com.openexchange.build.install") version "3.7.2"
+    id("com.openexchange.build.opensuse-build-service-client") version "1.9.1"
+    id("com.openexchange.build.packaging") version "5.7.2" apply false
 }
 
 subprojects {
@@ -48,6 +48,9 @@ buildservice {
             }
             create("DebianBuster") {
                 depends("Debian:Buster", "standard")
+            }
+            create("DebianBullseye") {
+                depends("Debian:Bullseye", "standard")
             }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
