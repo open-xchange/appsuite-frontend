@@ -100,6 +100,7 @@ define('io.ox/core/api/snippets', [
             data: snippet
         })
         .done(function (id) {
+            snippet.content = sanitizer.simpleSanitize(snippet.content);
             cache = null;
             collection.add(_({}, snippet, { id: id }));
             api.trigger('refresh.all');
