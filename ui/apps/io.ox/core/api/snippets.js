@@ -33,8 +33,9 @@
 define('io.ox/core/api/snippets', [
     'io.ox/core/http',
     'io.ox/core/event',
+    'io.ox/mail/sanitizer',
     'settings!io.ox/mail'
-], function (http, Events, settings) {
+], function (http, Events, sanitizer, settings) {
 
     'use strict';
 
@@ -72,6 +73,7 @@ define('io.ox/core/api/snippets', [
         })
         .then(
             function success(data) {
+                _(data).each(function (signature) { signature.content = sanitizer.simpleSanitize(signature.content); });
                 cache = _(data).map(fixOutdated);
                 collection.reset(cache);
                 return cache;
@@ -121,6 +123,7 @@ define('io.ox/core/api/snippets', [
         })
         .done(function () {
             cache = null;
+            snippet.content = sanitizer.simpleSanitize(snippet.content);
             collection.add(snippet, { merge: true });
             api.trigger('refresh.all');
         });
@@ -138,6 +141,9 @@ define('io.ox/core/api/snippets', [
                 action: 'get',
                 id: id
             }
+        }).then(function (signature) {
+            signature.content = sanitizer.simpleSanitize(signature.content);
+            return signature;
         });
     };
 
@@ -153,6 +159,9 @@ define('io.ox/core/api/snippets', [
                 action: 'list'
             },
             data: ids
+        }).then(function success(data) {
+            _(data).each(function (signature) { signature.content = sanitizer.simpleSanitize(signature.content); });
+            return data;
         });
     };
 
