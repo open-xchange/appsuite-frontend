@@ -706,14 +706,14 @@ define('io.ox/mail/compose/view', [
         },
 
         setSubject: function (e) {
-            var node = e.target ? $(e.target) : undefined,
-                value = node ? node.val() : e;
+            var isEvent = !!e.target;
+            var value = isEvent ? $(e.target).val() : e;
             // A11y: focus mailbody on enter in subject field
             // 'data-enter-keydown' indicates that enter was pressed when subject had focus
-            if (e.which && e.which === 13 && node.attr('data-enter-keydown')) {
+            if (isEvent && e.which === 13 && $(e.target).attr('data-enter-keydown')) {
                 e.preventDefault();
                 this.editor.focus();
-                node.removeAttr('data-enter-keydown');
+                $(e.target).removeAttr('data-enter-keydown');
             }
             // silent: true is needed only for safari - see bugs 35053 and 65438
             this.model.set('subject', value, { silent: _.device('safari') }).trigger('keyup:subject', value);
