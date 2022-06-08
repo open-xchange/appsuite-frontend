@@ -724,8 +724,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                     deferred.resolve(data, timestamp);
                 }
-            } else {
-                deferred.resolve({}, _.now());
             }
         } else {
             // e.g. plain text
