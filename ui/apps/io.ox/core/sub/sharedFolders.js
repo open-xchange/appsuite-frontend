@@ -38,7 +38,6 @@ define('io.ox/core/sub/sharedFolders', [
 
     function getItemName(descriptor) {
         var folderModel = new api.FolderModel(descriptor);
-        if (!folderModel) return;
 
         var suffix = folderModel.is('drive') && folderModel.is('federated-sharing') && folderModel.getAccountDisplayName()
             ? ' (' + folderModel.getAccountDisplayName() + ')'
