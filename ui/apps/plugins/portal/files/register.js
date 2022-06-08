@@ -26,8 +26,9 @@ define('plugins/portal/files/register', [
     'io.ox/files/api',
     'io.ox/preview/main',
     'io.ox/portal/widgets',
-    'gettext!plugins/portal'
-], function (ext, actionsUtil, api, preview, portalWidgets, gt) {
+    'gettext!plugins/portal',
+    'static/3rd.party/purify.min.js'
+], function (ext, actionsUtil, api, preview, portalWidgets, gt, DOMPurify) {
 
     'use strict';
 
@@ -132,7 +133,7 @@ define('plugins/portal/files/register', [
             } else if ((/(txt|json|md|csv)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
-                    content.html(_.escape(filecontent).replace(/\n/g, '<br>'));
+                    content.html(DOMPurify.sanitize(filecontent).replace(/\n/g, '<br>'));
                 });
             } else if (baton.data.encrypted) {
                 content.addClass('encrypted');
