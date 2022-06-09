@@ -547,14 +547,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEdit: function (e) {
                         e.preventDefault();
-                        var self = this;
+                        if (!this.model) return;
                         e.data = {};
-                        e.data.id = self.model.get('id');
-                        e.data.obj = self.model;
+                        e.data.id = this.model.get('id');
+                        e.data.obj = this.model;
                         e.data.listView = this;
-                        if (e.data.obj !== undefined) {
-                            createExtpointForSelectedFilter(this.$el.parent(), e, config);
-                        }
+                        createExtpointForSelectedFilter(this.$el.parent(), e, config);
                     },
 
                     onEditVacation: function (e) {
