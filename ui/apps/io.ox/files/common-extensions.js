@@ -278,12 +278,7 @@ define('io.ox/files/common-extensions', [
                 var preview = baton.model.supportsPreview();
                 if (preview) {
 
-                    // no clue if we should use double size for retina; impacts network traffic
-                    // var retina = _.device('retina'),
-                    var retina = false,
-                        width = retina ? 400 : 200,
-                        height = retina ? 300 : 150,
-                        url = baton.model.getUrl(preview, { width: width, height: height, scaleType: 'cover' }),
+                    var url = baton.model.getUrl(preview, { width: 200, height: 150, scaleType: 'cover' }),
                         img = $('<img class="dummy-image invisible">').data('retry', 0);
 
                     // fix URL - would be cool if we had just one call for thumbnails ...
