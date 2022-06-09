@@ -66,11 +66,12 @@ Scenario('[C8821] Send mail with Hyperlink', async function ({ I, mail }) {
         I.click(linkText);
     });
     // sometimes it takes a little while to open the link
-    let i = 0;
-    for (i; i < 30 && (await I.grabNumberOfOpenTabs()) < 2; i++) {
+    let times = 0;
+    for (let i = 1; i <= 10 && (await I.grabNumberOfOpenTabs()) < 2; i++) {
         I.wait(0.1);
+        times = i;
     }
-    expect(i + 1, 'number of open tabs is 2 within 1s').to.be.below(10);
+    expect(times, 'number of open tabs is 2 within 1s').to.be.below(10);
 });
 
 Scenario('[C8822] Send Mail with Hyperlink from existing text', function ({ I, mail }) {
