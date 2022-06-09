@@ -116,8 +116,8 @@ define.async('io.ox/core/boot/main', [
         },
 
         propagateSession: function () {
-            if (window.parent) window.parent.postMessage(_.url.hash('session'), '*');
-            if (window.opener) window.opener.postMessage(_.url.hash('session'), '*');
+            if (window.parent) window.parent.postMessage(_.url.hash('session'), window.location.origin);
+            if (window.opener) window.opener.postMessage(_.url.hash('session'), window.location.origin);
             util.debug('Propagated session', _.url.hash('session'));
         }
     };
