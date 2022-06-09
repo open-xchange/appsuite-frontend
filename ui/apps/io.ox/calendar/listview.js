@@ -46,8 +46,7 @@ define('io.ox/calendar/listview', [
     ext.point('io.ox/calendar/listview/item').extend({
         id: 'default',
         draw: function (baton) {
-            var isSmall = false;
-            ext.point('io.ox/calendar/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+            ext.point('io.ox/calendar/listview/item/default').invoke('draw', this, baton);
         }
     });
 
