@@ -29,8 +29,9 @@ define('io.ox/mail/compose/model', [
     'io.ox/mail/sanitizer',
     'io.ox/mail/util',
     'io.ox/core/extensions',
-    'io.ox/core/api/quota'
-], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext, quotaAPI) {
+    'io.ox/core/api/quota',
+    'io.ox/mail/actions/mailQuota'
+], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext, quotaAPI, mailQuota) {
 
     'use strict';
 
@@ -211,13 +212,25 @@ define('io.ox/mail/compose/model', [
             }
         },
 
-        exceedsMailQuota: function () {
-            var actualAttachmentSize = this.get('attachments').reduce(function (memo, model) {
+        exceedsMailQuota: function (files) {
+            function accumulate(attachments) {
+                return attachments.map(function (m) {
+                    if (m.file_size >= 0) return m.file_size;
+                    return 0;
+                })
+                .reduce(function (m, n) { return m + n; }, 0);
+            }
+
+            var attachmentSizeFromDrive = files ? accumulate(files) : 0;
+
+            var actualAttachmentSize = files ? 0 : this.get('attachments').reduce(function (memo, model) {
                 // count only attachments relvant for attachments
                 if (model.get('origin') === 'VCARD') return memo;
                 if (model.get('contentDisposition') === 'INLINE') return memo;
                 return memo + model.getSize();
             }, 0);
+
+            actualAttachmentSize = actualAttachmentSize + attachmentSizeFromDrive;
             actualAttachmentSize = actualAttachmentSize * 2; // the backend needs twice the size of the email to manage the draft
             var mailQuota = quotaAPI.mailQuota.get('quota');
             var use = quotaAPI.mailQuota.get('use');
@@ -351,7 +364,6 @@ define('io.ox/mail/compose/model', [
                     return $.Deferred().reject(data);
                 });
             }
-
             //new/reply/replyall/forward/resend/edit/copy
             var opt = {
                 vcard: !/(edit|copy)/.test(this.type) && settings.get('appendVcard', false)
@@ -367,6 +379,10 @@ define('io.ox/mail/compose/model', [
                 this.prevAttributes = data;
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
+                mailQuota.handleExceedingLimits(self, self.get('attachments'));
+                data.sharedAttachments = self.get('sharedAttachments');
+                return composeAPI.space.update(data.id, data);
+            }).then(function (data) {
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {
