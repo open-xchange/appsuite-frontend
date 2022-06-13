@@ -48,7 +48,7 @@ define('io.ox/core/links', [
     // Generic app
     //
     var appHandler = function (e) {
-        e.preventDefault();
+
         var data = $(this).data(),
             params = _.deserialize(data.all.match(/#.*/)[0]),
             isOffice = /^io.ox\/office\//.test(data.app),
@@ -56,6 +56,9 @@ define('io.ox/core/links', [
             options = isOffice ?
                 { action: 'load', file: { folder_id: data.folder, id: data.id }, params: params } :
                 _(data).pick('folder', 'folder_id', 'id', 'cid');
+
+        if (!ox.ui.apps.get(data.app)) return;
+        e.preventDefault();
 
         if (isOffice && ox.tabHandlingEnabled) {
             return require(['io.ox/core/api/tab'], function (tabApi) {

@@ -23,6 +23,10 @@ run e2e tests:
     CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
     FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
+    KUBERNETES_CPU_LIMIT: 2
+    KUBERNETES_CPU_REQUEST: "1.5"
+    KUBERNETES_MEMORY_REQUEST: 2G
+    KUBERNETES_MEMORY_LIMIT: 2G
     MIN_SUCCESS: 1
     MAX_RERUNS: 5
     # services configuration
@@ -90,6 +94,10 @@ merge filter report and rerun:
     CHROME_ARGS: '--no-sandbox --disable-gpu'
     FILTER_SUITE: ./merged_reports.json
     FILTER_REPORT: filter_report_missing.json
+    KUBERNETES_CPU_LIMIT: 2
+    KUBERNETES_CPU_REQUEST: "1.5"
+    KUBERNETES_MEMORY_REQUEST: 2G
+    KUBERNETES_MEMORY_LIMIT: 2G
     # services configuration
     SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
     # gitlab config
@@ -148,7 +156,7 @@ generate e2e report:
       - ui/build/allure-report
     expire_in: 1 day
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|hotfix-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
       changes:
         - ui/**/*
       when: always
@@ -173,7 +181,7 @@ publish e2e report:
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
     on_stop: remove e2e report
   rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
+    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|hotfix-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
       changes:
         - ui/**/*
       when: always

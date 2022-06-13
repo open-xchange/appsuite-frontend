@@ -34,6 +34,8 @@ upload:
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
     GIT_DEPTH: 3000
+    KUBERNETES_MEMORY_REQUEST: 1G
+    KUBERNETES_MEMORY_LIMIT: 1G
   timeout: 20m
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)
