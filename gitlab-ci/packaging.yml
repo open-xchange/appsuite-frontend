@@ -29,11 +29,13 @@ delete project on obs:
       allow_failure: true
 
 upload:
-  image: gradle:5.6.2-jre8
+  image: gradle:6.9-jre8
   stage: deploy
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
     GIT_DEPTH: 3000
+    KUBERNETES_MEMORY_REQUEST: 1G 
+    KUBERNETES_MEMORY_LIMIT: 1G
   timeout: 20m
   script:
     # only run subtasks for projects which have been build previously (contain some built project files)

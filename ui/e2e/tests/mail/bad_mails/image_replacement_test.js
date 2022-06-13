@@ -122,12 +122,12 @@ Scenario('[OXUIB-39] XSS after loading external images on demand', async ({ I, m
 Scenario('[OXUIB-1355] block external images correctly', async ({ I, mail }) => {
     await Promise.all([
         I.haveSetting('io.ox/mail//allowHtmlImages', false),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_1.eml' }),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_2.eml' }),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_3.eml' }),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_4.eml' }),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_5.eml' }),
-        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/OXUIB-1355_6.eml' })
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_1.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_2.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_3.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_4.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_5.eml' }),
+        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/OXUIB-1355_6.eml' })
     ]);
 
     I.login();
