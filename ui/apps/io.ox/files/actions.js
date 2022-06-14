@@ -316,7 +316,8 @@ define('io.ox/files/actions', [
             // disable for external storages
             if (filestorageApi.isExternal(baton.first())) return false;
             // user needs at least read permissions (user folders created by shares are not downloadable for example)
-            return folderAPI.can('read', baton.first());
+            // system folders cannot be downloaded (although they sometimes have the zippable_folder capability)
+            return folderAPI.can('read', baton.first()) && !folderAPI.is('system', baton.first());
         },
         action: function (baton) {
             require(['io.ox/files/api'], function (api) {
