@@ -649,7 +649,7 @@ define('io.ox/mail/detail/view', [
 
         onChangeSubject: function () {
             var subject = this.$el.find('h1.subject');
-            subject.text(util.getSubject(this.model.get('subject')));
+            subject.text(util.getSubject(this.model.get('subject'), true));
             return subject;
         },
 
