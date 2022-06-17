@@ -31,10 +31,10 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/capabilities',
     'io.ox/calendar/api',
     'io.ox/calendar/util',
-    'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
+    'gettext!io.ox/calendar',
     'less!io.ox/calendar/style'
-], function (ext, actionsUtil, Dropdown, ToolbarView, upload, dropzone, notifications, capabilities, api, util, gt) {
+], function (ext, actionsUtil, Dropdown, ToolbarView, upload, dropzone, notifications, capabilities, api, util, inlineLinks, gt) {
 
     'use strict';
 
@@ -43,85 +43,14 @@ define('io.ox/calendar/toolbar', [
     // define links for classic toolbar
     var point = ext.point('io.ox/calendar/toolbar/links');
 
-    var meta = {
-        //
-        // --- HI ----
-        //
-        'create': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('New appointment'),
-            drawDisabled: true,
-            ref: 'io.ox/calendar/detail/actions/create'
-        },
-        'schedule': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt.pgettext('app', 'Scheduling'),
-            tooltip: gt('Find a free time'),
-            ref: 'io.ox/calendar/actions/freebusy'
-        },
-        'today': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('Today'),
-            ref: 'io.ox/calendar/actions/today'
-        },
-        'edit': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('Edit'),
-            tooltip: gt('Edit appointment'),
-            ref: 'io.ox/calendar/detail/actions/edit'
-        },
-        'changestatus': {
-            prio: 'hi',
-            mobile: 'lo',
-            title: gt('Change status'),
-            tooltip: gt('Change status'),
-            ref: 'io.ox/calendar/detail/actions/changestatus'
-        },
-        'delete': {
-            prio: 'hi',
-            mobile: 'hi',
-            title: gt('Delete'),
-            tooltip: gt('Delete appointment'),
-            ref: 'io.ox/calendar/detail/actions/delete'
-        },
-        //
-        // --- LO ----
-        //
-        'export': {
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Export'),
-            drawDisabled: true,
-            ref: 'io.ox/calendar/detail/actions/export'
-        },
-        'print': {
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Print'),
-            drawDisabled: true,
-            ref: 'io.ox/calendar/detail/actions/print-appointment'
-        },
-        'move': {
-            prio: 'lo',
-            mobile: 'lo',
-            title: gt('Move'),
-            ref: 'io.ox/calendar/detail/actions/move',
-            drawDisabled: true,
-            section: 'file-op'
-        }
-    };
-
     // transform into extensions
 
     var index = 0;
 
-    _(meta).each(function (extension, id) {
-        extension.id = id;
+    _(inlineLinks).each(function (extension) {
         extension.index = (index += 100);
+        delete extension.invoke;
+        delete extension.metadata;
         point.extend(extension);
     });
 
