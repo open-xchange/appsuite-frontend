@@ -326,7 +326,7 @@ define.async('io.ox/mail/accounts/view-form', [
                             if (self.collection) {
                                 self.collection.add([data]);
                             }
-                            if (self.model.isNew()) {
+                            if (!originalModel.id && self.model.isNew()) {
                                 self.success();
                             } else {
                                 notifications.yell('success', gt('Account updated'));
