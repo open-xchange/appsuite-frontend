@@ -39,13 +39,7 @@ define('io.ox/mail/print', [
 
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
-        if (getType() === 'text') {
-            var source = String(data.attachments[0].content || '');
-            // replace images on source level
-            // look if /ajax needs do be replaced
-            source = util.replaceImagePrefix(source);
-            return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
-        }
+        // no longer needed to distinguish by type. content.get can handle html as well as text
         return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
     }
 
