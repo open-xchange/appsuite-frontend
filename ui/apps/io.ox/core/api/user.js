@@ -312,13 +312,16 @@ define('io.ox/core/api/user', [
         return getUser.apply(this, arguments);
     };
 
+    var currentUserChanged = false;
     // make sure this is fast (then vs pipe)
     api.me = function () {
-        return ox.rampup.user ? $.when(ox.rampup.user) : api.get();
+        return ox.rampup.user && !currentUserChanged ? $.when(ox.rampup.user) : api.get();
     };
 
     // reload account API if current user gets changed
     api.on('update:' + _.ecid({ folder_id: 6, id: ox.user_id }), function () {
+        // current user was changed, do not use the rampup data anymore
+        currentUserChanged = true;
         require(['io.ox/core/api/account'], function (accountAPI) {
             accountAPI.reload();
         });
