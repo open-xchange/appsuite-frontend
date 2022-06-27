@@ -97,10 +97,10 @@
   dependencies:
     async "^2.4.1"
 
-"@open-xchange/tinymce@6.0.7":
-  version "6.0.7"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-6.0.7.tgz#497d7b4f493e13749852d63208e19956bdf6ea6d"
-  integrity sha512-x0PSMekLD9uKyLGd7ndDNMj+1qqIZNeB9LNsEz5CMcY8LELeDuDZGS8ZCrSvoj6d/Hi47NgjfwOJra19GzSv5A==
+"@open-xchange/tinymce@6.0.8":
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-6.0.8.tgz#ef10aaea1d159fa3a76177aeab33d7e8a549afe1"
+  integrity sha512-VZLx1oNhzvmJShr5Q5xgTFaT/2vTk2WbIeh+h/mC4xas8VZahQ3hFH4wiuZl4cQ05/0s38/VvlcUa2HMmQ9eRQ==
   dependencies:
     tinymce "^4.8.0"
 
