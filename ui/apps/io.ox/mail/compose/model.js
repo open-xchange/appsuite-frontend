@@ -379,8 +379,7 @@ define('io.ox/mail/compose/model', [
             }.bind(this)).then(function (data) {
                 mailQuota.handleExceedingLimits(self, self.get('attachments'));
                 data.sharedAttachments = self.get('sharedAttachments');
-                return composeAPI.space.update(data.id, data);
-            }).then(function (data) {
+
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {
