@@ -115,7 +115,7 @@ define('io.ox/core/boot/locale', ['io.ox/backbone/mini-views/dropdown', 'gettext
                         $('<span class="caret">')
                     ),
                     list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" data-i18n="Languages" data-i18n-attr="aria-label">'),
-                    label = $('<a href="#" role="button" class="lang-label" id="io-ox-languages-label" data-i18n="Language" data-i18n-attr="text" aria-hidden="true" tabindex="-1">');
+                    label = $('<a href="#" role="button" class="lang-label" id="io-ox-languages-label" data-i18n="Language:" data-i18n-attr="text" aria-hidden="true" tabindex="-1">');
 
                 // Display native select box for locales if there are up to 'maxLang' locales
                 if (count < maxCount && !_.url.hash('language-select') && _.device('!smartphone')) {
@@ -149,7 +149,7 @@ define('io.ox/core/boot/locale', ['io.ox/backbone/mini-views/dropdown', 'gettext
                         $(e.delegateTarget).find('.toggle-text').text(meta.getLocaleName(value)).attr('lang', languageToTag(value));
                     });
 
-                    label.on('click', function (e) { e.preventDefault(); toggle.focus(); });
+                    label.on('click', function (e) { e.preventDefault(); e.stopImmediatePropagation(); dropdown.open(); });
 
                     // init dropdown
                     toggle.dropdown();

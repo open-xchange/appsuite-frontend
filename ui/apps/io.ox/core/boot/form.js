@@ -248,9 +248,9 @@ define('io.ox/core/boot/form', [
 
             var h = lc.header;
             if (h) {
-                if (h.textColor) configCss += '#io-ox-languages :not([role=menuitem]) { color: ' + h.textColor + ' } ';
                 if (h.textColor) configCss += '#login-title-mobile { color: ' + h.textColor + ' !important } ';
-                if (h.linkColor) configCss += '#io-ox-languages a:not([role="menuitem"]),#language-select,.toggle-text,.caret { color: ' + h.linkColor + '} ';
+                if (h.textColor) configCss += '#io-ox-login-header, #io-ox-login-header #io-ox-languages #io-ox-languages-label { color: ' + h.textColor + ' } ';
+                if (h.linkColor) configCss += '#io-ox-login-header a, #io-ox-login-header .toggle-text, #io-ox-login-header .caret { color: ' + h.linkColor + ' }';
             }
 
             var form = lc.form;
@@ -267,8 +267,8 @@ define('io.ox/core/boot/form', [
             var f = lc.footer;
             if (f) {
                 if (f.bgColor) configCss += '#io-ox-login-footer { background: ' + f.bgColor + ' } ';
-                if (f.textColor) configCss += '#io-ox-login-footer * { color: ' + f.textColor + ' } ';
-                if (f.linkColor) configCss += '#io-ox-login-footer > * a { color: ' + f.linkColor + ' } ';
+                if (f.textColor) configCss += '#io-ox-login-footer, #io-ox-login-footer #io-ox-languages #io-ox-languages-label { color: ' + f.textColor + ' } ';
+                if (f.linkColor) configCss += '#io-ox-login-footer a, #io-ox-login-footer .toggle-text, #io-ox-login-footer .caret { color: ' + f.linkColor + ' }';
             }
 
             if (!lc.loginBox || lc.loginBox === 'center') configCss += '#io-ox-login-content { justify-content: center }';
