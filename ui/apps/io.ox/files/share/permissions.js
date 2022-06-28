@@ -982,6 +982,7 @@ define('io.ox/files/share/permissions', [
                 title: title,
                 smartphoneInputFocus: true,
                 hasLinkSupport: false,
+                supportsInvites: true,
                 nested: nested,
                 width: '35.25rem',
                 share: false }, options);
@@ -1086,6 +1087,7 @@ define('io.ox/files/share/permissions', [
 
             permissionsView.listenTo(permissionsView.collection, 'add remove', function () {
                 updateSendNotificationSettings();
+                if (!dialog.$body) return;
                 dialog.$body.find('.file-share-options').toggle(!!permissionsView.collection.findWhere({ new: true }));
             });
 
@@ -1116,15 +1118,19 @@ define('io.ox/files/share/permissions', [
                 .addCancelButton()
                 .addButton({ label: gt('OK'), action: 'ok' });
                 confirmDialog.on('ok', function () {
-                    if (publicLink.hasPublicLink()) {
+                    if (options.hasLinkSupport && !options.share) {
+                        publicLink.removeLink().then(function () {
+                            dialog.close();
+                        });
+                    } else if (!options.hasLinkSupport) {
+                        revokeAllPermissions();
+                    } else if (publicLink.hasPublicLink()) {
                         // Remove all permissions and public link then trigger save.
                         publicLink.removeLink().then(function () {
                             revokeAllPermissions();
                         }).fail(function (err) {
                             console.log(err);
                         });
-                    } else {
-                        revokeAllPermissions();
                     }
                     confirmDialog.close();
                     dialog.pause();
@@ -1132,7 +1138,8 @@ define('io.ox/files/share/permissions', [
                 confirmDialog.on('cancel', function () {
                     dialog.idle();
                 });
-                confirmDialog.$body.append($('<h5>')).text(gt('Do you really want to remove all shares?'));
+                var unshareMessage = options.hasLinkSupport && !options.share ? gt('Do you really want to remove the public link?') : gt('Do you really want to remove all shares?');
+                confirmDialog.$body.append($('<h5>')).text(unshareMessage);
                 confirmDialog.open();
             }
 
@@ -1185,7 +1192,7 @@ define('io.ox/files/share/permissions', [
             //   B. you can invite guests (external contacts) OR
             //   C. you are in a groupware context (internal users and/or groups)
             // )
-            var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
+            var supportsInvites = options.supportsInvites && supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
             if (options.hasLinkSupport || supportsInvites) {
@@ -1203,7 +1210,6 @@ define('io.ox/files/share/permissions', [
             }
 
             if (supportsInvites) {
-
                 /*
                  * extension point for autocomplete item
                  */
@@ -1366,7 +1372,7 @@ define('io.ox/files/share/permissions', [
             if (supportsChanges) {
                 // add action buttons
                 dialog
-                    .addButton({ action: 'abort', label: options.share ? gt('Cancel') : gt('Cancel'), className: 'btn-default' })
+                    .addButton({ action: 'abort', label: gt('Cancel'), className: 'btn-default' })
                     .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
             } else {
                 dialog
@@ -1493,7 +1499,7 @@ define('io.ox/files/share/permissions', [
 
             // add permissions view
             // yep every microsoft browser needs this. edge or ie doesn't matter. No support for "resize: vertical" css attribute
-            if (supportsInvites) {
+            if (supportsChanges && folderModel.supportsInternalSharing()) {
                 dialog.$body.addClass(_.browser.IE ? 'IE11' : '').find('#invite-people-pane').append(
                     permissionsView.$el.busy({
                         empty: false,

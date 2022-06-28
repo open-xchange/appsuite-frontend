@@ -111,7 +111,7 @@ define('io.ox/mail/detail/mobileView', [
         id: 'subject',
         index: INDEX_header += 100,
         draw: function (baton) {
-            var subject = util.getSubject(baton.data);
+            var subject = util.getSubject(baton.data, true);
             this.append(
                 $('<h1 class="subject">').text(subject)
             );

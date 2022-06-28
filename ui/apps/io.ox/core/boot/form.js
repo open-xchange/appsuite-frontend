@@ -248,13 +248,14 @@ define('io.ox/core/boot/form', [
 
             var h = lc.header;
             if (h) {
-                if (h.textColor) configCss += '#io-ox-languages :not([role=menuitem]) { color: ' + h.textColor + '} ';
+                if (h.textColor) configCss += '#io-ox-languages :not([role=menuitem]) { color: ' + h.textColor + ' } ';
+                if (h.textColor) configCss += '#login-title-mobile { color: ' + h.textColor + ' !important } ';
                 if (h.linkColor) configCss += '#io-ox-languages a:not([role="menuitem"]),#language-select,.toggle-text,.caret { color: ' + h.linkColor + '} ';
             }
 
             var form = lc.form;
             if (form) {
-                if (form.header && form.header.textColor) configCss += '#box-form-header, #login-title-mobile { color: ' + form.header.textColor + ' } ';
+                if (form.header && form.header.textColor) configCss += '#box-form-header, { color: ' + form.header.textColor + ' } ';
                 if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
                 if (form.textColor) configCss += '#box-form-body *:not(button) { color: ' + form.textColor + ' } ';
                 if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
@@ -280,7 +281,8 @@ define('io.ox/core/boot/form', [
         }
 
         function getLoginConfiguration(options) {
-            var lc = $.extend(true, getDefaultConfiguration(), sc.loginPage, options);
+            var mobileConfiguration = _.device('smartphone') && sc.loginPage && sc.loginPage.mobile;
+            var lc = util.deepExtend([{}, getDefaultConfiguration(), sc.loginPage, mobileConfiguration, options]);
             lc.header.title = lc.form && lc.form.header && lc.form.header.title || sc.productName;
             lc.logo = lc.logo || getDefaultLogo();
             return lc;

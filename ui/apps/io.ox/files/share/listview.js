@@ -106,7 +106,7 @@ define('io.ox/files/share/listview', [
                     if (shareType === 'invited-people') {
                         action.invite([model]);
                     } else if (shareType === 'public-link') {
-                        action.link([model]);
+                        action.invite([model], { share: false, hasLinkSupport: true, supportsInvites: false });
                     }
                 }
             });

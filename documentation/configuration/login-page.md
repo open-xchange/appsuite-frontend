@@ -140,6 +140,7 @@ The header attributes describe the header of the login box.
 - **title**: The attribute 'title' will be displayed as a string on top of the login box or on mobile devices in the header.
 - **bgColor**: The attribute 'bgColor' sets the background like the css attribute 'background' (color, gradient, image url).
 - **textColor**: The attribute 'textColor' sets the color of the text. Any valid values for css 'color' can be used.
+If the login page gets displayed on a mobile device, the title will be moved from the login box to the header and gets the text color which is defined for the [header](#section-header). It can be overwritten with a mobile specific configuration `loginPage.mobile.header.textColor` (see section [Mobile devices](#mobile-devices)).
 
 <config>button</config>
 The attributes in the button section describe the buttons within the login box.
@@ -202,6 +203,35 @@ header:
     $myProp: "I am a simple text that never changes.",
     $mySecondProp: { en_US: "Welcome", de_DE: "Willkommen" }
 ```
+
+# Mobile devices
+
+If a different configuration for mobile devices is necessary, you can add the section `mobile` to the configuration tree. You can use the same properties in the same structure as the common configuration to overwrite values for mobile specific appearance.
+See mobile section in the following example:
+
+```yaml
+default:
+    host: all
+    loginPage:
+        backgroundImage: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
+        backgroundColor: "radial-gradient(at 33% 50%, #3b6aad, #1f3f6b)"
+        logo: "apps/themes/logo.png"
+        topVignette:
+            transparency: "0.1"
+        header:
+            textColor: "#ffffff"
+        # ... and more properties ...
+        mobile:
+            backgroundColor: "radial-gradient(at 33% 50%, #005500, #003300)"
+            logo: "apps/themes/mobile-logo.png"
+            topVignette:
+                transparency: "0.2"
+            header:
+                textColor: "yellow"
+            # ... and more properties ...
+```
+
+Consider that not all properties will take effect. The original constraints still remain. One example is, that background images are not supported for mobile devices.
 
 # Multi tenancy
 

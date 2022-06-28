@@ -154,7 +154,7 @@ define('io.ox/mail/compose/names', [
                 })
                 .addCancelButton()
                 //#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
-                .addButton({ label: gt('Edit'), action: 'save' })
+                .addButton({ label: gt('Save'), action: 'save' })
                 .on('save', function () {
                     this.view.save();
                     this.view = null;

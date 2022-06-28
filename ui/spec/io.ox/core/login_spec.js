@@ -111,5 +111,61 @@ define([
         it('should return empty custom css', function () {
             expect(util.scopeCustomCss()).to.be.undefined;
         });
+
+        it('should merge objects without changing the original ones', function () {
+            const objA = undefined;
+            const objB = {
+                firstLayer: {
+                    color: 'green',
+                    shape: 'triangle',
+                    secondLayer: {
+                        width: 5,
+                        weight: 200
+                    }
+                }
+            };
+            const objC = {
+                firstLayer: {
+                    shape: 'circle',
+                    secondLayer: {
+                        width: 8,
+                        height: 9
+                    }
+                }
+            };
+
+            expect(util.deepExtend([objA, objB, objC])).to.deep.equal({
+                firstLayer: {
+                    color: 'green',
+                    shape: 'circle',
+                    secondLayer: {
+                        width: 8,
+                        weight: 200,
+                        height: 9
+                    }
+                }
+            });
+
+            expect(objA).to.equal(undefined);
+            expect(objB).to.deep.equal({
+                firstLayer: {
+                    color: 'green',
+                    shape: 'triangle',
+                    secondLayer: {
+                        width: 5,
+                        weight: 200
+                    }
+                }
+            });
+            expect(objC).to.deep.equal({
+                firstLayer: {
+                    shape: 'circle',
+                    secondLayer: {
+                        width: 8,
+                        height: 9
+                    }
+                }
+            });
+        });
     });
 });
