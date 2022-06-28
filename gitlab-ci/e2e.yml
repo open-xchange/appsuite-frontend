@@ -2,7 +2,7 @@
 
 run e2e tests:
   stage: e2e
-  image: registry.gitlab.open-xchange.com/frontend/dev_env/node_puppeteer:latest
+  image: $CI_REGISTRY_IMAGE/e2e:$CI_COMMIT_REF_SLUG
   tags:
     - e2e
     - kubernetes
@@ -14,14 +14,14 @@ run e2e tests:
   variables:
     # e2e configuration
     LAUNCH_URL: http://e2e.test.service:8337/appsuite/
-    PROVISIONING_URL: http://e2e.test.service:8337/
+    PROVISIONING_URL: https://appsuite.k3s.os2.oxui.de/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
     PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
     CONTEXT_ID: $CI_JOB_ID
     CHROME_ARGS: '--no-sandbox --kiosk-printing --disable-web-security'
-    FILTER_SUITE: ./e2e/suites/job$CI_NODE_INDEX.json
+    FILTER_SUITE: ./suites/job$CI_NODE_INDEX.json
     FILTER_REPORT: filter_report_$CI_NODE_INDEX.json
     KUBERNETES_CPU_LIMIT: 2
     KUBERNETES_CPU_REQUEST: "1.5"
@@ -33,24 +33,25 @@ run e2e tests:
     MIN_SUCCESS: 1
     MAX_RERUNS: 5
     # services configuration
-    SERVER: https://appsuite.k3s.os.oxui.de/appsuite/
+    SERVER: https://appsuite.k3s.os2.oxui.de/appsuite/
     # gitlab config
+    GIT_STRATEGY: none
     GIT_DEPTH: "10"
   script:
-    - cd ui
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - mkdir -p ./build/e2e
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./build/e2e/suite.json || rm -f ./build/e2e/suite.json
-    - "[ -f ./build/e2e/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./build/e2e/suite.json $CI_NODE_TOTAL ./e2e/suites
-    - node ./e2e/customRerun.js
+    - mv /e2e/ $CI_PROJECT_DIR
+    - cd e2e
+    - mkdir -p ./output
+    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./output/suite.json || rm -f ./output/suite.json
+    - "[ -f ./output/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./output/suite.json $CI_NODE_TOTAL ./suites
+    - yarn e2e-rerun
   parallel: 20
   # reasonable timeout, enforce better partitioning
   timeout: 30 minutes
   artifacts:
     when: always
     paths:
-      - ui/build/e2e/
+      - e2e/output
     expire_in: 1 day
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
@@ -77,7 +78,7 @@ trigger appsuite-stack deployment pipeline:
 
 merge filter report and rerun:
   stage: merge
-  image: registry.gitlab.open-xchange.com/frontend/dev_env/node_puppeteer:latest
+  image: $CI_REGISTRY_IMAGE/e2e:$CI_COMMIT_REF_SLUG
   dependencies:
     - run e2e tests
   needs:
@@ -88,7 +89,7 @@ merge filter report and rerun:
   variables:
     # e2e configuration
     LAUNCH_URL: http://e2e.test.service:8337/appsuite/
-    PROVISIONING_URL: http://e2e.test.service:8337/
+    PROVISIONING_URL:  https://appsuite.k3s.os2.oxui.de/
     PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
     PROVISIONING_KEYCLOAK_REALM: Appsuite
     PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
@@ -104,24 +105,26 @@ merge filter report and rerun:
     # services configuration
     SERVER: https://appsuite.k3s.os2.oxui.de/appsuite/
     # gitlab config
+    GIT_STRATEGY: none
     GIT_DEPTH: "10"
   script:
-    - cd ui
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
-    - ls build/e2e/filter_report_*.json
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/filter_report_*.json > $FILTER_SUITE
+    - mkdir -p $CI_PROJECT_DIR/e2e
+    - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR/e2e
+    - cd e2e
+    - ls output/filter_report_*.json
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./output/filter_report_*.json > $FILTER_SUITE
     # check if the filter suite file exists, otherwise something went wrong in the run e2e tests jobs
     - "[ -f $FILTER_SUITE ] && fgrep 'title' $FILTER_SUITE > /dev/null"
     # ignore any failing tests
     - yarn e2e -i || true
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./build/e2e/$FILTER_REPORT $FILTER_SUITE > ./build/e2e/filter_report.json
+    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./output/$FILTER_REPORT $FILTER_SUITE > ./output/filter_report.json
   tags:
     - e2e
   artifacts:
     when: always
     paths:
-      - ui/build/
-      - ui/merged_reports.json
+      - e2e/output/
+      - e2e/merged_reports.json
     expire_in: 1 day
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
@@ -145,10 +148,10 @@ generate e2e report:
     - run single test
   script:
     # fail if there are no test results, prevents history from getting lost in some cases
-    - ls ui/build/e2e/*.xml > /dev/null
+    - ls e2e/output/*.xml > /dev/null
     # fetch current version of history
     - curl http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -s | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
-    - allure generate ui/build/e2e/ -o ui/build/allure-report/$CI_PIPELINE_ID
+    - allure generate e2e/output/ -o ui/build/allure-report/$CI_PIPELINE_ID
     # preserve well-known location to bookmark/link to at latest
     - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
     - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
@@ -219,11 +222,11 @@ run single test:
     MIN_SUCCESS: 10
     MAX_RERUNS: 10
   script:
-  - cd ui
-  - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+  - mv /e2e .
+  - cd e2e
   - echo ${CI_COMMIT_REF_NAME#e2e/}
   - unset FILTER_SUITE
-  - node ./e2e/customRerun.js "${CI_COMMIT_REF_NAME#e2e/}"
+  - yarn e2e-rerun "${CI_COMMIT_REF_NAME#e2e/}"
   parallel: 5
   timeout: 60 minutes
   rules:

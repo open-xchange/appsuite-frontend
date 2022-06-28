@@ -189,13 +189,13 @@ Scenario('[C85625] My Shares default sort order', async function ({ I, drive, di
         I.waitForText(folder, undefined, '.breadcrumb-view.toolbar-item');
     }
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
     await Promise.all([
-        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
+        I.haveFile(testFolder, 'media/files/0kb/document.txt'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.rtf'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.odt'),
+        I.haveFile(testFolder, 'media/files/generic/testpresentation.ppsm')
     ]);
     I.login('app=io.ox/files&folder=' + folder);
     drive.waitForApp();
@@ -263,7 +263,7 @@ Scenario('[C45026] Edit shared object with multiple users and modify the permiss
 
     await session('Alice', async () => {
         const folder = await I.grabDefaultFolder('infostore');
-        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+        await I.haveFile(folder, 'media/files/0kb/document.txt');
 
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -375,7 +375,7 @@ Scenario('[C45025] Create shared object with multiple users (external users) wit
 
     await session('Alice', async () => {
         const folder = await I.grabDefaultFolder('infostore');
-        await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+        await I.haveFile(folder, 'media/files/0kb/document.txt');
 
         I.login('app=io.ox/files');
         drive.waitForApp();
@@ -465,7 +465,7 @@ Scenario('[C83277] Create shared object with expiration date', async function ({
     };
 
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
 

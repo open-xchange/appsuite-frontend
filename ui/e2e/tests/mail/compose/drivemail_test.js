@@ -55,18 +55,18 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
 
     // attach image (3720)
     I.say('threshold: not exceeded yet');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForVisible(unchecked, 10);
 
 
     // attach inline image
     I.say('threshold: not exceeded yet (inline images do not count)');
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitForVisible(unchecked, 10);
 
     // attach another image (2387)
     I.say('threshold: exceeded');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-mango.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600-mango.png');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
     I.waitForNetworkTraffic();
@@ -82,7 +82,7 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.uncheckOption(checked);
 
     // add again
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForVisible('.list-container .inline-items .item:nth-child(2)');
     I.checkOption(unchecked);
 });
@@ -105,7 +105,7 @@ Scenario.skip('Checks when saving', async ({ I, mail }) => {
 
     // prepare scenario
     I.say('threshold: exceeded');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
 
@@ -148,7 +148,7 @@ Scenario.skip('Checks when sending', async ({ I, mail, users }) => {
 
     // prepare scenario
     I.say('threshold: exceeded');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
 

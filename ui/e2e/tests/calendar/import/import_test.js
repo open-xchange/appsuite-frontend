@@ -282,7 +282,7 @@ Data(examples).Scenario('Import Calendar data', async ({ I, current, users, dial
     I.wait(0.2);
     I.retry(3).click('Import');
     dialogs.waitForVisible();
-    I.attachFile('.file-input', `e2e/media/imports/calendar/${current.filename}.ics`);
+    I.attachFile('.file-input', `media/imports/calendar/${current.filename}.ics`);
     dialogs.clickButton('Import');
     I.waitForText('Data imported successfully', 30, '.io-ox-alert');
     I.waitToHide('.io-ox-alert');

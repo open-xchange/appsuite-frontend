@@ -345,7 +345,7 @@ Scenario('[C7747] Add an attachment to a Task', async ({ I, tasks }) => {
     tasks.editTask();
     I.click('Expand form');
 
-    I.attachFile('[data-app-name="io.ox/tasks/edit"] input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
+    I.attachFile('[data-app-name="io.ox/tasks/edit"] input[type="file"]', 'media/files/generic/testdocument.odt');
     I.waitForElement('.file.io-ox-core-tk-attachment', 5);
     I.seeNumberOfElements('.file.io-ox-core-tk-attachment', 1);
     tasks.save();
@@ -360,7 +360,7 @@ Scenario('[C7748] Remove an attachment from a Task', async ({ I, tasks }) => {
         testrailName = 'Remove an attachment from a Task',
         taskDefaultFolder = await I.grabDefaultFolder('tasks'),
         task = await I.haveTask({ title: testrailID, folder_id: taskDefaultFolder, note: testrailName });
-    await I.haveAttachment('tasks', { id: task.id, folder: taskDefaultFolder }, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveAttachment('tasks', { id: task.id, folder: taskDefaultFolder }, 'media/files/generic/testdocument.odt');
 
     I.login('app=io.ox/tasks');
     tasks.waitForApp();

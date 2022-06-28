@@ -88,7 +88,7 @@ Scenario('Update channel profile picture and name', async ({ I, chat, dialogs, u
         I.fillField('.ox-chat-popup input[name="title"]', 'Christmas announcements');
         I.click('.contact-photo.empty', dialogs.locators.header);
         I.waitForElement('.contact-photo-upload form input[type="file"][name="file"]', '.edit-picture');
-        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
         dialogs.clickButton('Apply');
         I.waitForDetached('.edit-picture');
         dialogs.clickButton('Save');

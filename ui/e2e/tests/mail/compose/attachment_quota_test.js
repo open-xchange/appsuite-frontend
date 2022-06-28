@@ -47,14 +47,14 @@ Scenario('I can not send too large files as mail attachments', async ({ I, users
     I.fillField('Subject', 'Test');
 
     // add a too large file as attachment
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/files/generic/16MB.dat');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/16MB.dat');
     I.waitForText('The file "16MB.dat" cannot be uploaded because it exceeds the maximum file size of 2 MB', 5, '.io-ox-alert.io-ox-alert-error');
     I.waitForElement('.btn-link.close', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
     I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
 
     // change attachment and send successfully
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
     I.waitForText('DAT', 5, '.inline-items.preview');
     I.waitForDetached('.progress-container', 15, '.share-attachments');
 
@@ -77,10 +77,10 @@ Scenario('I can not send too large accumulated mail attachments', async ({ I, us
     I.fillField('Subject', 'Test');
 
     // add attachments
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
     I.waitForText('DAT', 5, '.inline-items.preview');
     I.waitForDetached('.progress-container', 15, '.share-attachments');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/files/generic/16MB.dat');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/16MB.dat');
 
     I.waitForText('The file "16MB.dat" cannot be uploaded because it exceeds the total attachment size limit of 5 MB', 5, '.io-ox-alert.io-ox-alert-error');
 });
@@ -98,9 +98,9 @@ Scenario('I can not send an email that exceeds the mail max size', async ({ I, u
     I.fillField('Subject', 'Test');
 
     // first attached, second inline
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600-limegreen.png');
     I.waitForDetached('.progress-container', 15, '.share-attachments');
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 3 KB', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
@@ -117,19 +117,19 @@ Scenario('I can not send an email that exceeds the mail max size', async ({ I, u
     I.waitForDetached('.mail-attachment-list span[title="2MB.dat"]');
 
     // first inline, second attached
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600-limegreen.png');
     await within({ frame: '.mce-edit-area iframe' }, async () => {
         I.waitForElement('#tinymce img');
         expect(await I.grabNumberOfVisibleElements('#tinymce img')).to.equal(1);
     });
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 3 KB', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
     I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
 
     // try multiple inline images
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600-mango.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600-mango.png');
     I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 3 KB', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
     I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
@@ -154,15 +154,15 @@ Scenario('I can not use drive if the infoStore limits get exceeded', async ({ I,
     I.fillField('Subject', 'Test');
 
     // attach
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitForDetached('.progress-container', 15, '.share-attachments');
 
     // error for attachment and inline
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600-limegreen.png');
     I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 3 KB', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
     I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600-limegreen.png');
     I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 3 KB', 5, '.io-ox-alert.io-ox-alert-error');
     I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
     I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
@@ -171,9 +171,9 @@ Scenario('I can not use drive if the infoStore limits get exceeded', async ({ I,
     I.checkOption('Use Drive Mail', '.share-attachments');
 
     // attach another
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600-mango.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600-mango.png');
     I.waitForDetached('.progress-container', 15, '.share-attachments');
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
     await within({ frame: '.mce-edit-area iframe' }, async () => {
         I.waitForElement('#tinymce img');
         expect(await I.grabNumberOfVisibleElements('#tinymce img')).to.equal(1);

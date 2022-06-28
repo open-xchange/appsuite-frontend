@@ -36,7 +36,7 @@ After(async ({ users }) => {
 });
 
 const testMails = new DataTable(['testMails']);
-const files = fs.readdirSync(path.join(path.join(global.codecept_dir, 'e2e/media/mails/authenticity')));
+const files = fs.readdirSync(path.join(path.join(global.codecept_dir, 'media/mails/authenticity')));
 /*
   files should contain 81 files which are split into chunks of 9 mails.
   this reduces the overhead of running one test per mail while keeping the
@@ -49,7 +49,7 @@ while (files.length) {
 Data(testMails).Scenario('[C244757] SPF, DKIM, DMARC, DMARC Policy matrix', async function ({ I, users, mail, current }) {
     let [user] = users;
     const mails = current.testMails.map(m => {
-        return I.haveMail({ folder: 'default0/INBOX', path: path.join('e2e/media/mails/authenticity', m) }, { user });
+        return I.haveMail({ folder: 'default0/INBOX', path: path.join('media/mails/authenticity', m) }, { user });
     });
     await Promise.all([
         user.hasConfig('com.openexchange.mail.authenticity.enabled', true),
@@ -138,7 +138,7 @@ Scenario('[C241140] Availability within folders', async function ({ I, users, ma
         user.hasConfig('com.openexchange.mail.authenticity.enabled', true),
         user.hasConfig('com.openexchange.mail.authenticity.authServId', 'mx.recipient.ox'),
         // 1.) Receive a mail with authentication headers, stored to INBOX.
-        I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/authenticity/12-C-SPFpass-DKIMfail-DMARCfail-reject.eml' }, { user })
+        I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/authenticity/12-C-SPFpass-DKIMfail-DMARCfail-reject.eml' }, { user })
     ]);
     I.login('app=io.ox/mail');
     mail.waitForApp();

@@ -251,10 +251,10 @@ Scenario('[C7387] Send mail with attachment from upload', async ({ I, users, mai
         I.pressKey('Enter');
         I.fillField({ css: 'textarea.plain-text' }, '' + testrailID + ' - ' + timestamp);
         I.say('Add attachments', 'blue');
-        addFile(I, 'e2e/media/files/generic/testdocument.odt');
-        addFile(I, 'e2e/media/files/generic/testdocument.rtf');
-        addFile(I, 'e2e/media/files/generic/testpresentation.ppsm');
-        addFile(I, 'e2e/media/files/generic/testspreadsheed.xlsm');
+        addFile(I, 'media/files/generic/testdocument.odt');
+        addFile(I, 'media/files/generic/testdocument.rtf');
+        addFile(I, 'media/files/generic/testpresentation.ppsm');
+        addFile(I, 'media/files/generic/testspreadsheed.xlsm');
         I.say('Send mail and logout', 'blue');
         I.click('Send');
     });
@@ -435,10 +435,10 @@ Scenario('[C8820] Forward attachments', async ({ I, users, mail }) => {
     I.pressKey('Enter');
     I.fillField('Subject', subject);
     I.fillField({ css: 'textarea.plain-text' }, subject);
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testdocument.odt');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testdocument.rtf');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testpresentation.ppsm');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'e2e/media/files/generic/testspreadsheed.xlsm');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'media/files/generic/testpresentation.ppsm');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type=file]', 'media/files/generic/testspreadsheed.xlsm');
     mail.send();
     I.selectFolder('Sent');
     I.waitForVisible({ css: `div[title="${user2.userdata.primaryEmail}"]` });
@@ -682,7 +682,7 @@ Scenario('[C83384] Automatically bcc all messages', async ({ I, mail, users }) =
 
 Scenario('[C101615] Emojis', async ({ I, users, mail }) => {
     let [user] = users;
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101615.eml' }, { user: users[0] });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/C101615.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
     I.selectFolder('Inbox');
     mail.selectMail('😉✌️❤️');
@@ -694,7 +694,7 @@ Scenario('[C101615] Emojis', async ({ I, users, mail }) => {
 
 Scenario('[C101620] Very long TO field', async ({ I, users, mail }) => {
     let [user] = users;
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101620.eml' }, { user: users[0] });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/C101620.eml' }, { user: users[0] });
     I.login('app=io.ox/mail', { user });
     I.selectFolder('Inbox');
     mail.selectMail('Very long TO field');
@@ -742,7 +742,7 @@ Scenario('[C207507] Forgot mail attachment hint', async ({ I, users, mail, dialo
 // TODO: skipped until backend server with feautre support is available
 Scenario.skip('[C273801] Download infected file', async function ({ I, users, dialogs }) {
     let [user] = users;
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/Virus_attached!.eml' }, { user: users[0] });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/Virus_attached!.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');
@@ -764,7 +764,7 @@ Scenario.skip('[C273801] Download infected file', async function ({ I, users, di
 // TODO: skipped until backend server with feautre support is available
 Scenario.skip('[C273802] Download multiple files (one infected)', async function ({ I, users, dialogs }) {
     let [user] = users;
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C273802.eml' }, { user: users[0] });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/C273802.eml' }, { user: users[0] });
     I.haveSetting('io.ox/mail//layout', 'vertical');
     I.login('app=io.ox/mail', { user });
     I.waitForVisible('.io-ox-mail-window');

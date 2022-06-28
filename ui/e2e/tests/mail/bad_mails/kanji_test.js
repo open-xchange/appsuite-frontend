@@ -24,7 +24,7 @@
 
 Scenario('[C101621] Kanji', async function ({ I, users, mail }) {
     const [user] = users;
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/C101621.eml' }, { user });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/C101621.eml' }, { user });
     I.login('app=io.ox/mail');
     I.waitForText('Kanji');
     mail.selectMail('Kanji');

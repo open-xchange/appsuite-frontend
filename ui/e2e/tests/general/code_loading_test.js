@@ -93,7 +93,7 @@ Scenario('[OXUIB-872] XSS using script code as module at app loader', async func
 Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, users, mail }) => {
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/media/mails/OXUIB-1172.eml'
+        path: 'media/mails/OXUIB-1172.eml'
     }, users[0]);
 
     I.login('app=io.ox/mail');

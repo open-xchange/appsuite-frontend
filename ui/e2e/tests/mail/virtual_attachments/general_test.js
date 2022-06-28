@@ -52,9 +52,9 @@ async function prepare() {
         I.pressKey('Enter');
         I.fillField({ css: 'textarea.plain-text' }, 'Yo!');
         I.say('Add attachments');
-        mail.addAttachment('e2e/media/files/generic/testdocument.rtf');
-        mail.addAttachment('e2e/media/files/generic/testdocument.odt');
-        mail.addAttachment('e2e/media/files/generic/testpresentation.ppsm');
+        mail.addAttachment('media/files/generic/testdocument.rtf');
+        mail.addAttachment('media/files/generic/testdocument.odt');
+        mail.addAttachment('media/files/generic/testpresentation.ppsm');
     });
     mail.send();
 }

@@ -1164,8 +1164,8 @@ Scenario('[C7460] Add attachments', async ({ I, calendar }) => {
     // 3. Locate the "Attachments" area and add files as attachments either by the browsers upload dialog or drag&drop from the file manager or desktop
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.rtf');
 
     // Expected Result: Attachments get added to the edit dialog
     I.see('testdocument.odt');
@@ -1247,8 +1247,8 @@ Scenario('[C7459] Remove attachments', async ({ I, calendar }) => {
         startDate: { tzid: 'Europe/Berlin', value: startTime.format('YYYYMMDD[T]HHmmss') },
         endDate:   { tzid: 'Europe/Berlin', value: endTime.format('YYYYMMDD[T]HHmmss') }
     });
-    const updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
+    const updatedAppointment = await I.haveAttachment('calendar', appointment, 'media/files/generic/testdocument.odt');
+    await I.haveAttachment('calendar', updatedAppointment, 'media/files/generic/testdocument.rtf');
 
     // 1. Switch to Calendar
     I.login('app=io.ox/calendar&perspective=week:week');

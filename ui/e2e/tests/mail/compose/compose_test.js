@@ -149,7 +149,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add local file', 'blue');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     // attach from drive
     I.say('📢 add drive file', 'blue');
@@ -160,7 +160,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
 
     // attach inline image
     I.say('📢 add inline image', 'blue');
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 2);
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.waitForVisible('img');
@@ -181,7 +181,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add another local image', 'blue');
     I.waitForElement('.composetoolbar input[type="file"]');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 1);
     I.wait(1); // there still might be a focus event somewhere
 
@@ -205,7 +205,7 @@ Scenario('Compose with inline image, which is removed again', async function ({ 
     mail.newMail();
 
     // attach inline image
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     I.switchTo('.io-ox-mail-compose-window .editor iframe');
     I.waitForElement({ css: 'img' });

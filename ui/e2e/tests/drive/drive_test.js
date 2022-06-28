@@ -37,7 +37,7 @@ Scenario('[C7886] Enable hidden folders and files', async function ({ I, drive }
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await Promise.all([
         I.haveSetting('io.ox/files//showHidden', true),
-        I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat'),
+        I.haveFile(infostoreFolderID, 'media/files/generic/.hiddenfile.dat'),
         I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID })
     ]);
     I.login('app=io.ox/files');
@@ -62,7 +62,7 @@ Scenario('[C7887] Disable hidden folders and files', async function ({ I, drive 
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
     await Promise.all([
         I.haveSetting('io.ox/files//showHidden', false),
-        I.haveFile(infostoreFolderID, 'e2e/media/files/generic/.hiddenfile.dat'),
+        I.haveFile(infostoreFolderID, 'media/files/generic/.hiddenfile.dat'),
         I.haveFolder({ title: '.hiddenfolder', module: 'infostore', parent: infostoreFolderID })
     ]);
     I.login('app=io.ox/files');
@@ -84,9 +84,9 @@ Scenario('[C7887] Disable hidden folders and files', async function ({ I, drive 
 Scenario('[C45046] Upload new version', async function ({ I, drive }) {
     //Generate TXT file for upload
     let timestamp1 = Math.round(+new Date() / 1000).toString();
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp1);
+    await fs.promises.writeFile('output/C45046.txt', timestamp1);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'build/e2e/C45046.txt');
+    await I.haveFile(infostoreFolderID, 'output/C45046.txt');
 
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -98,8 +98,8 @@ Scenario('[C45046] Upload new version', async function ({ I, drive }) {
 
     I.waitForText(timestamp1);
     let timestamp2 = Math.round(+new Date() / 1000).toString();
-    await fs.promises.writeFile('build/e2e/C45046.txt', timestamp2);
-    I.attachFile('.io-ox-viewer input.file-input', 'build/e2e/C45046.txt');
+    await fs.promises.writeFile('output/C45046.txt', timestamp2);
+    I.attachFile('.io-ox-viewer input.file-input', 'output/C45046.txt');
     I.click('Upload', '.modal-dialog');
 
     I.waitForText(timestamp2, 30);
@@ -132,7 +132,7 @@ Scenario('[C45048] Edit description', async function ({ I, drive, dialogs }) {
 });
 
 Scenario('[C45052] Delete file', async function ({ I, users, drive, dialogs }) {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/generic/testdocument.odt');
     I.login('app=io.ox/files', { user: users[0] });
     drive.waitForApp();
 

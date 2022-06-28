@@ -215,7 +215,7 @@ Scenario('Create new group chat', async ({ I, users, chat, dialogs }) => {
 
         I.click('.contact-photo.empty', '.ox-chat-popup .modal-dialog');
         I.waitForElement('.contact-photo-upload form input[type="file"][name="file"]', 3, '.edit-picture');
-        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
         dialogs.clickButton('Apply');
         I.waitForDetached('.edit-picture');
         dialogs.clickButton('Create chat');

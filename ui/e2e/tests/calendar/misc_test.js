@@ -845,7 +845,7 @@ Scenario('[C85743] Special-Use flags', async function ({ I, dialogs }) {
 });
 
 Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I, calendar }) {
-    I.handleDownloads('../../build/e2e');
+    I.handleDownloads();
     const folder = await calendar.defaultFolder();
     const subject = 'Meetup XY';
     const appointment = await I.haveAppointment({
@@ -854,9 +854,9 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
         startDate: { tzid: 'Europe/Berlin', value: moment().set('hour', 13).format('YYYYMMDD[T]HHmmss') },
         endDate:   { tzid: 'Europe/Berlin', value: moment().set('hour', 14).format('YYYYMMDD[T]HHmmss') }
     });
-    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
-    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
+    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'media/files/generic/testdocument.odt');
+    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'media/files/generic/testdocument.rtf');
+    await I.haveAttachment('calendar', updatedAppointment, 'media/files/generic/testspreadsheed.xlsm');
 
     I.login('app=io.ox/calendar&perspective=week:week');
 
@@ -876,7 +876,7 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
 
     I.click('Download', '.dropdown.open');
 
-    I.amInPath('/build/e2e/');
+    I.amInPath('output/downloads');
     I.waitForFile('attachments.zip', 5);
 });
 

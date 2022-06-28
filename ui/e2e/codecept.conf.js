@@ -26,7 +26,7 @@ let testRunContext;
 // please create .env file based on .evn-example
 require('dotenv-defaults').config();
 
-const codeceptDriver = process.env.CODECEPT_DRIVER || 'puppeteer';
+const codeceptDriver = process.env.CODECEPT_DRIVER;
 const requiredEnvVars = ['LAUNCH_URL', 'PROVISIONING_URL', 'CONTEXT_ID'];
 if (codeceptDriver === 'webdriver') requiredEnvVars.push('SELENIUM_HOST');
 
@@ -79,16 +79,16 @@ const helpers = {
         }
     },
     OpenXchange: {
-        require: './e2e/helper',
+        require: './helper',
         mxDomain: process.env.MX_DOMAIN,
         serverURL: process.env.PROVISIONING_URL,
         contextId: process.env.CONTEXT_ID,
         filestoreId: process.env.FILESTORE_ID,
-        smtpServer: process.env.SMTP_SERVER || 'localhost',
-        imapServer: process.env.IMAP_SERVER || 'localhost',
+        smtpServer: process.env.SMTP_SERVER,
+        imapServer: process.env.IMAP_SERVER,
         admin: {
-            login: 'oxadminmaster',
-            password: 'secret'
+            login: process.env.E2E_ADMIN_USER,
+            password: process.env.E2E_ADMIN_PW
         }
     },
     FileSystem: {},
@@ -101,38 +101,38 @@ if (codeceptDriver !== 'puppeteer') delete helpers.Puppeteer;
 if (codeceptDriver !== 'webdriver') delete helpers.WebDriver;
 
 module.exports.config = {
-    tests: './e2e/tests/**/*_test.js',
+    tests: './tests/**/*_test.js',
     timeout: 10000,
-    output: './build/e2e/',
+    output: './output',
     helpers,
     include: {
-        I: './e2e/actor',
-        users: './e2e/users',
-        contexts: './e2e/contexts',
+        I: './actor',
+        users: './users',
+        contexts: './contexts',
         // pageobjects
-        contacts: './e2e/pageobjects/contacts',
-        calendar: './e2e/pageobjects/calendar',
-        chat: './e2e/pageobjects/chat',
-        mail: './e2e/pageobjects/mail',
-        portal: './e2e/pageobjects/portal',
-        drive: './e2e/pageobjects/drive',
-        settings: './e2e/pageobjects/settings',
-        tasks: './e2e/pageobjects/tasks',
-        dialogs: './e2e/pageobjects/dialogs',
+        contacts: './pageobjects/contacts',
+        calendar: './pageobjects/calendar',
+        chat: './pageobjects/chat',
+        mail: './pageobjects/mail',
+        portal: './pageobjects/portal',
+        drive: './pageobjects/drive',
+        settings: './pageobjects/settings',
+        tasks: './pageobjects/tasks',
+        dialogs: './pageobjects/dialogs',
         // widgets
-        autocomplete: './e2e/widgetobjects/contact-autocomplete',
-        contactpicker: './e2e/widgetobjects/contact-picker',
-        mailfilter: './e2e/widgetobjects/settings-mailfilter',
-        search: './e2e/widgetobjects/search',
-        toolbar: './e2e/widgetobjects/toolbar',
-        topbar: './e2e/widgetobjects/topbar'
+        autocomplete: './widgetobjects/contact-autocomplete',
+        contactpicker: './widgetobjects/contact-picker',
+        mailfilter: './widgetobjects/settings-mailfilter',
+        search: './widgetobjects/search',
+        toolbar: './widgetobjects/toolbar',
+        topbar: './widgetobjects/topbar'
     },
     bootstrap: async () => {
         // setup chai
         var chai = require('chai');
         chai.config.includeStack = true;
         // setup axe matchers
-        require('./e2e/axe-matchers');
+        require('./axe-matchers');
 
         // set moment defaults
         // note: no need to require moment-timezone later on. requiring moment is enough
@@ -210,7 +210,7 @@ module.exports.config = {
     plugins: {
         allure: { enabled: true },
         testrail: {
-            require: './e2e/plugins/testrail',
+            require: './plugins/testrail',
             host: process.env.TESTRAIL_HOST || 'https://testrail.local',
             user: process.env.TESTRAIL_USERNAME || 'testuser',
             password: process.env.TESTRAIL_API_KEY || 'testkey',
@@ -219,7 +219,7 @@ module.exports.config = {
             enabled: process.env.TESTRAIL_ENABLED || false
         },
         browserLogReport: {
-            require: './e2e/plugins/browserLogReport',
+            require: './plugins/browserLogReport',
             enabled: true
         },
         filterSuite: {
@@ -233,8 +233,8 @@ module.exports.config = {
         pauseOnFail: {}
     },
     rerun: {
-        minSuccess: process.env.MIN_SUCCESS || 10,
-        maxReruns: process.env.MAX_RERUNS || 10
+        minSuccess: process.env.MIN_SUCCESS,
+        maxReruns: process.env.MAX_RERUNS
     },
     name: 'App Suite Core UI'
 };

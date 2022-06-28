@@ -42,9 +42,9 @@ Scenario('Show all files', ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
-    chat.sendFile('e2e/media/placeholder/800x600.png');
-    chat.sendFile('e2e/media/files/0kb/document.doc');
-    chat.sendFile('e2e/media/files/0kb/spreadsheet.xls');
+    chat.sendFile('media/placeholder/800x600.png');
+    chat.sendFile('media/files/0kb/document.doc');
+    chat.sendFile('media/files/0kb/spreadsheet.xls');
     I.waitForElement(locate('.message-file-container .name').withText('spreadsheet.xls'), 5, '.ox-chat .messages');
 
     I.click('~Close chat', '.ox-chat');

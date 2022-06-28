@@ -170,7 +170,7 @@ Scenario('[OXUIB-497] Presence icon is visible after updating contact picture', 
 
     // Change user photo
     dialogs.waitForVisible();
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty');
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');

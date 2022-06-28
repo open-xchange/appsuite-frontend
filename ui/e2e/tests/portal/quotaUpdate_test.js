@@ -65,7 +65,7 @@ Scenario('[C7495] Quota update', async ({ I, users }) => {
     I.openApp('Drive');
     I.waitForVisible('.io-ox-files-window');
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testspreadsheed.xlsm');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testspreadsheed.xlsm');
 
     I.waitForVisible('~Refresh');
     I.retry(5).click('~Refresh', '#io-ox-appcontrol');

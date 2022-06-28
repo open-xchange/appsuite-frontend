@@ -68,7 +68,7 @@ module.exports = {
 
         I.click('.contact-photo.empty', '.ox-chat-popup .modal-dialog');
         I.waitForElement('.contact-photo-upload form input[type="file"][name="file"]', '.edit-picture');
-        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
         I.click(locate('button').withText('Apply'), '.edit-picture');
         I.waitForDetached('.edit-picture');
     },

@@ -39,12 +39,12 @@ Scenario('[C8404] Find mails based on from/to', async ({ I, users }) => {
 
     await I.haveMail({
         folder: INBOX,
-        path: 'e2e/media/mails/c8404_1.eml'
+        path: 'media/mails/c8404_1.eml'
     }, { USER });
 
     await I.haveMail({
         folder: INBOX,
-        path: 'e2e/media/mails/c8404_2.eml'
+        path: 'media/mails/c8404_2.eml'
     }, { USER });
 
     // 1. Start a new search in mail

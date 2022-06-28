@@ -178,7 +178,7 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     await calendar.addParticipant(users[1].userdata.primaryEmail, false);
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.odt');
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
     I.logout();
@@ -205,10 +205,10 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download');
-    I.amInPath('/build/e2e/downloads/');
+    I.amInPath('/output/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+    I.seeFileContentsEqualReferenceFile('media/files/generic/testdocument.odt');
     I.logout();
     // 5.) User#A: Read the iTIP mail
     I.login('app=io.ox/mail', { user: users[0] });
@@ -229,16 +229,16 @@ Scenario('[C241128] Attachments in iTIP mails', async function ({ I, users, mail
     I.waitForText('Download');
     I.handleDownloads();
     I.click('Download', '.io-ox-sidepopup .attachment-list');
-    I.amInPath('/build/e2e/downloads/');
+    I.amInPath('/output/downloads/');
     I.waitForFile('testdocument.odt', 10);
     I.seeFile('testdocument.odt');
-    I.seeFileContentsEqualReferenceFile('e2e/media/files/generic/testdocument.odt');
+    I.seeFileContentsEqualReferenceFile('media/files/generic/testdocument.odt');
 
 });
 
 Scenario('[C241126] iTIP mails without appointment reference', async function ({ I, mail, calendar }) {
     // 1.) Import the attached mail 'mail3.eml'
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_3.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/c241126_3.eml' });
     // 2.) Read the mail3
     I.login('app=io.ox/mail');
     I.waitForText('Appointment canceled: #1');
@@ -247,7 +247,7 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.waitForText('The appointment "#1" has been canceled by');
     I.waitForText('The appointment could not be found in your calendar.');
     // 3.) Import the attached mail 'mail2.eml'
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_2.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/c241126_2.eml' });
     // 4.) Read the mail2
     I.waitForText('tthamm accepted the invitation: #1');
     mail.selectMail('tthamm accepted the invitation: #1');
@@ -255,7 +255,7 @@ Scenario('[C241126] iTIP mails without appointment reference', async function ({
     I.waitForText('has accepted the invitation to the appointment "#1"');
     I.waitForText('The appointment could not be found in your calendar.');
     // 5.) Import the attached mail 'mail1.eml'
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c241126_1.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/c241126_1.eml' });
     // 6.) Read the mail1
     I.waitForText('New appointment: #1');
     mail.selectMail('New appointment: #1');
@@ -314,7 +314,7 @@ Scenario('[Bug 63767] Error when creating appointment from email', async functio
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.fillField('Subject', 'Going to the pub');
     I.pressKey('Pagedown');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/contact_picture.png');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/contact_picture.png');
     I.click('Create', '.io-ox-calendar-edit-window');
     // there should be no backend error
     I.waitForDetached('.io-ox-calendar-edit-window', 5);

@@ -1235,8 +1235,8 @@ Scenario('[C7413] Create appointment with an attachment', async ({ I, calendar }
     I.say('Add attachments');
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.rtf');
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 

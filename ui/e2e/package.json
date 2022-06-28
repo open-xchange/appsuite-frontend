@@ -1,0 +1,21 @@
+{
+  "name": "@open-xchange/appsuite-ui-e2e-tests",
+  "version": "1.0.0",
+  "description": "e2e tests for App Suite ui",
+  "license": "MIT",
+  "scripts": {
+    "e2e": "codeceptjs run",
+    "e2e-rerun": "node customRerun.js"
+  },
+  "devDependencies": {
+    "@codeceptjs/mock-request": "^0.3.1",
+    "@open-xchange/codecept-helper": "^0.6.2",
+    "dotenv-defaults": "^5.0.2",
+    "puppeteer": "^15.1.1"
+  },
+  "dependencies": {
+    "moment-range": "^4.0.2",
+    "moment-timezone": "^0.5.34",
+    "otpauth": "^8.0.1"
+  }
+}

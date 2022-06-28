@@ -33,7 +33,7 @@ After(async ({ users }) => {
 });
 
 Scenario('[C114352] Create folder in copy/move dialog', async ({ I, drive, dialogs }) => {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/generic/testdocument.odt');
 
     // 1. Go to Drive
     I.login('app=io.ox/files');
@@ -137,7 +137,7 @@ Scenario.skip('[C257247] Restore deleted items', async ({ I, drive, dialogs }) =
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
 
     await Promise.all([
-        I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt'),
+        I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.odt'),
         I.haveFolder({ title: 'testfolder', module: 'infostore', parent: infostoreFolderID })
     ]);
 
@@ -219,9 +219,9 @@ Scenario('[Bug 61823] Drive shows main folder content instead of content from se
     const testFolder1 = await I.haveFolder({ title: 'testFolder1', module: 'infostore', parent: defaultFolder });
     const testFolder2 = await I.haveFolder({ title: 'testFolder2', module: 'infostore', parent: defaultFolder });
 
-    await I.haveFile(defaultFolder, 'e2e/media/files/generic/testdocument.odt');
-    await I.haveFile(testFolder1, 'e2e/media/files/generic/contact_picture.png');
-    await I.haveFile(testFolder2, 'e2e/media/files/generic/testpresentation.ppsm');
+    await I.haveFile(defaultFolder, 'media/files/generic/testdocument.odt');
+    await I.haveFile(testFolder1, 'media/files/generic/contact_picture.png');
+    await I.haveFile(testFolder2, 'media/files/generic/testpresentation.ppsm');
 
     I.login('app=io.ox/files');
     drive.waitForApp();

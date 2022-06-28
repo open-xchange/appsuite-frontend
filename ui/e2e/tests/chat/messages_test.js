@@ -103,7 +103,7 @@ Scenario('Send and view an image', async ({ I, users, chat }) => {
         chat.openChat();
         chat.createPrivateChat(users[1].userdata.email1);
 
-        chat.sendFile('e2e/media/placeholder/800x600.png');
+        chat.sendFile('media/placeholder/800x600.png');
         await checkImage(I);
     });
 
@@ -216,9 +216,9 @@ Scenario('Sending binaries and check max file size', ({ I, users, chat }) => {
     I.login({ user: users[0] });
     chat.openChat();
     chat.createPrivateChat(users[1].userdata.email1);
-    chat.sendFile('e2e/media/files/generic/2MB.dat');
+    chat.sendFile('media/files/generic/2MB.dat');
     I.waitForElement('.message-file-container', 3, '.ox-chat .messages');
-    chat.sendFile('e2e/media/files/generic/16MB.dat');
+    chat.sendFile('media/files/generic/16MB.dat');
     I.waitForElement('.message.user-select-text');
     I.see('The file "16MB.dat" cannot be uploaded because it exceeds the maximum file size of 10 MB');
 });

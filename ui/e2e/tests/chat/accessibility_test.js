@@ -57,7 +57,7 @@ Scenario.skip('Check accessibility of the chat in sticky mode', async (I, contex
         // create a private chat
         chat.createPrivateChat(bob.userdata.email1);
         chat.sendMessage('First message');
-        chat.sendFile('e2e/media/files/0kb/document.doc');
+        chat.sendFile('media/files/0kb/document.doc');
         expect(await I.grabAxeReport()).to.be.accessible;
         I.click('~Close chat', '.ox-chat');
 
@@ -126,7 +126,7 @@ Scenario.skip('Check accessibility of the chat in floating mode', async (I, cont
         I.click('Start conversation');
         I.waitForElement('.ox-chat .controls');
         chat.sendMessage('First message');
-        chat.sendFile('e2e/media/files/0kb/document.doc');
+        chat.sendFile('media/files/0kb/document.doc');
         expect(await I.grabAxeReport()).to.be.accessible;
 
         // create a group chat

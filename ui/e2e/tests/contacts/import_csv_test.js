@@ -288,7 +288,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
         I.clickDropdown('Import');
         dialogs.waitForVisible();
         I.selectOption('Format', type === 'csv' ? 'CSV' : 'VCARD');
-        I.attachFile('.file-input', 'e2e/media/imports/contacts/' + file + '.' + type);
+        I.attachFile('.file-input', 'media/imports/contacts/' + file + '.' + type);
         // click('Import') -> element not interactable
         dialogs.clickButton('Import');
         I.waitForDetached('.modal-dialog');

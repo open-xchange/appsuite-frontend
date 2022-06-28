@@ -173,7 +173,7 @@ Scenario.skip('Update group profile picture and name', async ({ I, dialogs, user
         I.fillField('.ox-chat-popup input[name="title"]', 'Marienkaeferchen');
         I.click('.contact-photo.empty', dialogs.locators.header);
         I.waitForElement('.contact-photo-upload form input[type="file"][name="file"]', '.edit-picture');
-        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+        I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
         dialogs.clickButton('Apply');
         I.waitForDetached('.edit-picture');
         dialogs.clickButton('Save');
