@@ -585,7 +585,6 @@ define('io.ox/calendar/actions', [
             prio: 'hi',
             id: 'edit',
             title: gt('Edit'),
-            tooltip: gt('Edit appointment'),
             ref: 'io.ox/calendar/detail/actions/edit'
         },
         {
@@ -627,7 +626,6 @@ define('io.ox/calendar/actions', [
             mobile: 'lo',
             id: 'delete',
             title: gt('Delete'),
-            tooltip: gt('Delete appointment'),
             ref: 'io.ox/calendar/detail/actions/delete'
         },
         {
@@ -722,6 +720,4 @@ define('io.ox/calendar/actions', [
         action: 'io.ox/calendar/premium/actions/share',
         title: gt('Synchronize calendar')
     });
-
-    return inlineLinks;
 });
