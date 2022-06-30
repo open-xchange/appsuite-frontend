@@ -31,10 +31,10 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/capabilities',
     'io.ox/calendar/api',
     'io.ox/calendar/util',
-    'io.ox/calendar/actions',
     'gettext!io.ox/calendar',
+    'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, actionsUtil, Dropdown, ToolbarView, upload, dropzone, notifications, capabilities, api, util, inlineLinks, gt) {
+], function (ext, actionsUtil, Dropdown, ToolbarView, upload, dropzone, notifications, capabilities, api, util, gt) {
 
     'use strict';
 
@@ -43,14 +43,113 @@ define('io.ox/calendar/toolbar', [
     // define links for classic toolbar
     var point = ext.point('io.ox/calendar/toolbar/links');
 
+    var meta = {
+        //
+        // --- HI ----
+        //
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('New appointment'),
+            drawDisabled: true,
+            ref: 'io.ox/calendar/detail/actions/create'
+        },
+        'schedule': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt.pgettext('app', 'Scheduling'),
+            tooltip: gt('Find a free time'),
+            ref: 'io.ox/calendar/actions/freebusy'
+        },
+        'today': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Today'),
+            ref: 'io.ox/calendar/actions/today'
+        },
+        'edit': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Edit'),
+            tooltip: gt('Edit appointment'),
+            ref: 'io.ox/calendar/detail/actions/edit'
+        },
+        'changestatus': {
+            prio: 'hi',
+            mobile: 'lo',
+            title: gt('Change status'),
+            tooltip: gt('Change status'),
+            ref: 'io.ox/calendar/detail/actions/changestatus'
+        },
+        'delete': {
+            prio: 'hi',
+            mobile: 'hi',
+            title: gt('Delete'),
+            tooltip: gt('Delete appointment'),
+            ref: 'io.ox/calendar/detail/actions/delete'
+        },
+        //
+        // --- LO ----
+        //
+        'move': {
+            prio: 'lo',
+            mobile: 'lo',
+            title: gt('Move'),
+            drawDisabled: true,
+            ref: 'io.ox/calendar/detail/actions/move'
+        },
+        'export': {
+            prio: 'lo',
+            title: gt('Export'),
+            ref: 'io.ox/calendar/detail/actions/export'
+        },
+        'print': {
+            prio: 'lo',
+            title: gt('Print'),
+            ref: 'io.ox/calendar/detail/actions/print-appointment'
+        },
+        'send mail': {
+            prio: 'lo',
+            mobile: 'lo',
+            section: 'participants',
+            sectionTitle: gt('Participant related actions'),
+            title: gt('Send email to all participants'),
+            ref: 'io.ox/calendar/detail/actions/sendmail'
+        },
+        'invite': {
+            prio: 'lo',
+            mobile: 'lo',
+            section: 'participants',
+            sectionTitle: gt('Participant related actions'),
+            title: gt('Invite to new appointment'),
+            ref: 'io.ox/calendar/detail/actions/invite'
+        },
+        'save as distlist': {
+            prio: 'lo',
+            mobile: 'lo',
+            section: 'participants',
+            sectionTitle: gt('Participant related actions'),
+            title: gt('Save as distribution list'),
+            ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+        },
+        'change-organizer': {
+            index: 1000,
+            prio: 'lo',
+            mobile: 'lo',
+            section: 'participants',
+            sectionTitle: gt('Participant related actions'),
+            title: gt('Change organizer'),
+            ref: 'io.ox/calendar/detail/actions/change-organizer'
+        }
+    };
+
     // transform into extensions
 
     var index = 0;
 
-    _(inlineLinks).each(function (extension) {
+    _(meta).each(function (extension, id) {
+        extension.id = id;
         extension.index = (index += 100);
-        delete extension.invoke;
-        delete extension.metadata;
         point.extend(extension);
     });
 
