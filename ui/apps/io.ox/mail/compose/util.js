@@ -23,13 +23,30 @@
 define('io.ox/mail/compose/util', [
     'io.ox/mail/compose/api',
     'io.ox/mail/compose/resize',
+    'io.ox/core/api/quota',
+    'io.ox/core/capabilities',
+    'io.ox/core/yell',
     'settings!io.ox/mail',
-    'settings!io.ox/files'
-], function (composeAPI, resize, settings, fileSettings) {
+    'settings!io.ox/files',
+    'gettext!io.ox/mail'
+], function (composeAPI, resize, quotaAPI, capabilities, yell, settings, fileSettings, gt) {
 
     'use strict';
 
-    return {
+    var accumulate = function (list) {
+        return list.reduce(function (memo, item) {
+            if (!item) return memo;
+            // duck check
+            var model = typeof item.get === 'function' ? item : undefined;
+            if (!model) return memo + (item.file_size >= 0 ? item.file_size : 0);
+            if (model.get('contentDisposition') === 'INLINE') return memo;
+            if (model.get('origin') === 'VCARD') return memo;
+            if (!model.getSize) debugger;
+            return memo + model.getSize();
+        }, 0);
+    };
+
+    var util = {
 
         getGroup: function (data) {
             if (data.origin === 'drive') return 'file';
@@ -146,7 +163,39 @@ define('io.ox/mail/compose/util', [
                     $.txt(opt.text)
                 )
             );
+        },
+
+        handleExceedingLimits: function (model, attachments, files) {
+            var result = {};
+            var sharedAttachments = model.get('sharedAttachments') || {};
+            var isSharingEnabled = !_.device('smartphone') && settings.get('compose/shareAttachments/enabled', false) && capabilities.has('infostore');
+            var needsAction = isSharingEnabled && (util.exceedsMailQuota(attachments, files) || util.exceedsThreshold(attachments));
+
+            if (!needsAction || sharedAttachments.enabled) return;
+
+            // #. %1$s is usually "Drive Mail" (product name; might be customized)
+            result.error = gt('Mail quota limit reached. You have to use %1$s or reduce the mail size in some other way.', settings.get('compose/shareAttachments/name'));
+
+            if (isSharingEnabled && needsAction && !sharedAttachments.enabled) {
+                model.set('sharedAttachments', _.extend({}, sharedAttachments, { enabled: true }));
+            }
+            yell('info', result.error);
+        },
+
+        exceedsMailQuota: function (attachments, files) {
+            var actualAttachmentSize = (accumulate([].concat(attachments, files))) * 2;
+            var mailQuota = quotaAPI.mailQuota.get('quota');
+            var use = quotaAPI.mailQuota.get('use');
+            if (mailQuota === -1 || mailQuota === -1024) return false;
+            return actualAttachmentSize > mailQuota - use;
+        },
+
+        exceedsThreshold: function (attachments) {
+            var threshold = settings.get('compose/shareAttachments/threshold', 0);
+            if (threshold <= 0) return false;
+            var actualAttachmentSize = accumulate([].concat(attachments));
+            return actualAttachmentSize > threshold;
         }
     };
-
+    return util;
 });

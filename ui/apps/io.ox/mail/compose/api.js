@@ -189,6 +189,7 @@ define('io.ox/mail/compose/api', [
                 params: {
                     type: obj.type,
                     vcard: !!opt.vcard,
+                    sharedAttachmentsEnabled: opt.sharedAttachmentsEnabled,
                     originalAttachments: opt.attachments,
                     claim: TOKEN
                 },

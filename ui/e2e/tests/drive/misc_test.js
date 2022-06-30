@@ -214,6 +214,32 @@ Scenario('Logout right before running into error storing data in JSLob', async (
     I.logout();
 });
 
+// TODO: not able to adjust quota with `I.executeScript` approach 😞
+Scenario.skip('Send file via mail while exceeding threshold', async ({ I, drive }) => {
+    const defaultFolder = await I.grabDefaultFolder('infostore');
+    await I.haveFile(defaultFolder, 'media/files/generic/testdocument.odt');
+
+    I.login('app=io.ox/files');
+
+    await I.executeScript(async function () {
+        require(['io.ox/mail/settings.js'], function (mailSettings) {
+            mailSettings.set('compose/shareAttachments/threshold', 100);
+        });
+    });
+
+    drive.waitForApp();
+
+    I.waitForElement(locate('.filename').withText('testdocument.odt'));
+    I.retry(5).click(locate('.filename').withText('testdocument.odt'));
+    I.waitForVisible('~Details');
+    I.clickToolbar('~More actions');
+    I.clickDropdown('Send by email');
+    I.waitForText('Mail quota limit reached.');
+    I.waitForVisible('.active .io-ox-mail-compose [placeholder="To"]', 30);
+    I.waitForFocus('.active .io-ox-mail-compose [placeholder="To"]');
+    I.see('ODT');
+});
+
 Scenario('[Bug 61823] Drive shows main folder content instead of content from selected folder', async ({ I, drive, dialogs }) => {
     const defaultFolder = await I.grabDefaultFolder('infostore');
     const testFolder1 = await I.haveFolder({ title: 'testFolder1', module: 'infostore', parent: defaultFolder });
