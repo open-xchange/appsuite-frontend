@@ -24,14 +24,13 @@ define('io.ox/mail/compose/model', [
     'io.ox/mail/compose/api',
     'io.ox/mail/api',
     'io.ox/core/attachments/backbone',
+    'io.ox/mail/compose/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/mail/sanitizer',
     'io.ox/mail/util',
-    'io.ox/core/extensions',
-    'io.ox/core/api/quota',
-    'io.ox/mail/actions/mailQuota'
-], function (composeAPI, mailAPI, Attachments, settings, gt, sanitizer, mailUtil, ext, quotaAPI, mailQuota) {
+    'io.ox/core/extensions'
+], function (composeAPI, mailAPI, Attachments, composeUtil, settings, gt, sanitizer, mailUtil, ext) {
 
     'use strict';
 
@@ -215,43 +214,12 @@ define('io.ox/mail/compose/model', [
         },
 
         exceedsMailQuota: function (files) {
-            function accumulate(attachments) {
-                return attachments.map(function (m) {
-                    if (m.file_size >= 0) return m.file_size;
-                    return 0;
-                })
-                .reduce(function (m, n) { return m + n; }, 0);
-            }
-
-            var attachmentSizeFromDrive = files ? accumulate(files) : 0;
-
-            var actualAttachmentSize = files ? 0 : this.get('attachments').reduce(function (memo, model) {
-                // count only attachments relvant for attachments
-                if (model.get('origin') === 'VCARD') return memo;
-                if (model.get('contentDisposition') === 'INLINE') return memo;
-                return memo + model.getSize();
-            }, 0);
-
-            actualAttachmentSize = actualAttachmentSize + attachmentSizeFromDrive;
-            actualAttachmentSize = actualAttachmentSize * 2; // the backend needs twice the size of the email to manage the draft
-            var mailQuota = quotaAPI.mailQuota.get('quota');
-            var use = quotaAPI.mailQuota.get('use');
-            if (mailQuota === -1) return false;
-            return mailQuota === -1024 ? false : actualAttachmentSize > mailQuota - use;
+            files = files || this.get('attachments');
+            return composeUtil.exceedsMailQuota(files);
         },
 
         exceedsThreshold: function () {
-            var threshold = settings.get('compose/shareAttachments/threshold', 0);
-
-            if (threshold <= 0) return false;
-
-            var actualAttachmentSize = this.get('attachments').reduce(function (memo, model) {
-                // count only attachments relvant for attachments
-                if (model.get('origin') === 'VCARD') return memo;
-                if (model.get('contentDisposition') === 'INLINE') return memo;
-                return memo + model.getSize();
-            }, 0);
-            return actualAttachmentSize > threshold;
+            return composeUtil.exceedsThreshold(this.get('attachments'));
         },
 
         quoteMessage: (function () {
@@ -367,8 +335,10 @@ define('io.ox/mail/compose/model', [
                 });
             }
             //new/reply/replyall/forward/resend/edit/copy
+            composeUtil.handleExceedingLimits(self, self.get('attachments'));
             var opt = {
-                vcard: !/(edit|copy)/.test(this.type) && settings.get('appendVcard', false)
+                vcard: !/(edit|copy)/.test(this.type) && settings.get('appendVcard', false),
+                sharedAttachmentsEnabled: self.get('sharedAttachments').enabled
             };
 
             return composeAPI.space.add({ type: this.type, original: this.original }, opt).then(function (data) {
@@ -380,9 +350,6 @@ define('io.ox/mail/compose/model', [
 
                 return data.content ? this.quoteMessage(data) : data;
             }.bind(this)).then(function (data) {
-                mailQuota.handleExceedingLimits(self, self.get('attachments'));
-                data.sharedAttachments = self.get('sharedAttachments');
-
                 if (!this.get('attachments') || !this.get('attachments').length) return data;
 
                 return $.when.apply($, this.get('attachments').map(function (attachment) {

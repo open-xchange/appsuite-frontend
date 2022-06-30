@@ -140,6 +140,62 @@ Scenario('I can not send an email that exceeds the mail max size', async ({ I, u
     });
 });
 
+// TODO: not able to adjust quota with `I.executeScript` approach 😞
+Scenario.skip('[OXUIB-1089] I can send a quota exceeding file out of drive by mail', async ({ I, drive }) => {
+    // file size 9462 (4731 * 2)
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/generic/testdocument.odt');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    // adjust quota
+    await I.executeScript(async function () {
+        require(['io.ox/core/api/quota.js'], function (quotaAPI) {
+            quotaAPI.mailQuota.set('quota', 1024);
+        });
+    });
+
+    I.waitForElement(locate('.filename').withText('testdocument.odt'));
+    I.retry(5).click(locate('.filename').withText('testdocument.odt'));
+    I.waitForVisible('~Details');
+    I.clickToolbar('~More actions');
+    I.clickDropdown('Send by email');
+
+    I.waitForText('Mail quota limit reached.');
+
+    I.waitForVisible('.active .io-ox-mail-compose [placeholder="To"]', 30);
+    I.waitForFocus('.active .io-ox-mail-compose [placeholder="To"]');
+    I.see('ODT');
+    I.seeCheckboxIsChecked('.share-attachments [type="checkbox"]');
+});
+
+// TODO: not able to adjust quota with `I.executeScript` approach 😞
+Scenario.skip('[OXUIB-1089] I can send file out of drive by mail', async ({ I, drive }) => {
+    // file size 9462 (4731 * 2)
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/generic/testdocument.odt');
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    // adjust quota
+    await I.executeScript(async function () {
+        require(['io.ox/core/api/quota.js'], function (quotaAPI) {
+            quotaAPI.mailQuota.set('quota', 16 * 1024);
+        });
+    });
+
+    I.waitForElement(locate('.filename').withText('testdocument.odt'));
+    I.retry(5).click(locate('.filename').withText('testdocument.odt'));
+    I.waitForVisible('~Details');
+    I.clickToolbar('~More actions');
+    I.clickDropdown('Send by email');
+
+    I.waitForVisible('.active .io-ox-mail-compose [placeholder="To"]', 30);
+    I.waitForFocus('.active .io-ox-mail-compose [placeholder="To"]');
+    I.see('ODT');
+    I.dontSeeCheckboxIsChecked('.share-attachments [type="checkbox"]');
+});
+
 Scenario('I can not use drive if the infoStore limits get exceeded', async ({ I, users, mail }) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();

@@ -43,9 +43,8 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/strings',
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
-    'io.ox/mail/actions/mailQuota',
     'static/3rd.party/jquery-ui.min.js'
-], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize, mailQuota) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -898,7 +897,7 @@ define('io.ox/mail/compose/extensions', [
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
-                        mailQuota.handleExceedingLimits(model, files);
+                        composeUtil.handleExceedingLimits(model, files);
                         var models = files.map(function (file) {
                             var attachment = new Attachments.Model({ filename: file.filename });
                             composeUtil.uploadAttachment({
