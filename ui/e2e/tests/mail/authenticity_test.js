@@ -36,7 +36,7 @@ After(async ({ users }) => {
 });
 
 const testMails = new DataTable(['testMails']);
-const files = fs.readdirSync(path.join(__dirname, '../../../e2e/media/mails/authenticity'));
+const files = fs.readdirSync(path.join(path.join(global.codecept_dir, 'e2e/media/mails/authenticity')));
 /*
   files should contain 81 files which are split into chunks of 9 mails.
   this reduces the overhead of running one test per mail while keeping the

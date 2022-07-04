@@ -87,7 +87,7 @@ Scenario('Check help window for supposed language', function ({ I, topbar }) {
         'fr_FR': ['help/l10n/fr_FR/ox.appsuite.user.sect.settings.globalsettings.html', 'Français (France)', 'Personnaliser les réglages de base', '~Fermer'],
         'it_IT': ['help/l10n/it_IT/ox.appsuite.user.sect.settings.globalsettings.html', 'Italiano (Italia)', 'Personalizzare le impostazioni di base', '~Chiudi'],
         'ja_JP': ['help/l10n/ja_JP/ox.appsuite.user.sect.settings.globalsettings.html', '日本語 (日本)', '基本設定のカスタマイズ', '~閉じる'],
-        'nl_NL': ['help/l10n/nl_NL/ox.appsuite.user.sect.settings.globalsettings.html', 'Nederlands (Nederland)', 'Aanpassen van de basisinstellingen', '~Sluiten'],
+        'nl_NL': ['help/l10n/nl_NL/ox.appsuite.user.sect.settings.globalsettings.html', 'Nederlands (Nederland)', 'Aanpassen van de Basisinstellingen', '~Sluiten'],
         'pl_PL': ['help/l10n/pl_PL/ox.appsuite.user.sect.settings.globalsettings.html', 'Polski (Polska)', 'Dostosowywanie ustawień podstawowych', '~Zamknij'],
         'tr_TR': ['help/l10n/tr_TR/ox.appsuite.user.sect.settings.globalsettings.html', 'Türkçe (Türkiye)', 'Temel ayarları özelleştirme', '~Kapat'],
         'zh_CN': ['help/l10n/zh_CN/ox.appsuite.user.sect.settings.globalsettings.html', '中文 (简体)', '自定义基本设置', '~关闭'],
