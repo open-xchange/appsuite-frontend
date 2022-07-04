@@ -4,3 +4,5 @@ MAINTAINER Julian Bäume <julian.baeume@open-xchange.com>
 
 COPY build /app/build/
 COPY dist /app/dist/
+
+EXPOSE 8337/tcp

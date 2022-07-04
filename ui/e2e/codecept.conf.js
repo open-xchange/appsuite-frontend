@@ -193,6 +193,18 @@ module.exports.config = {
         if (typeof testRunContext.id !== 'undefined') helperConfig.contextId = testRunContext.id;
         await seleniumReady.catch(err => console.error(err));
 
+        const deadline = +new Date() + 10 * 60 * 1000;
+        while (deadline >= +new Date()) {
+            try {
+                const res = await fetch(process.env.LAUNCH_URL);
+                if (res.ok) break;
+            } catch (e) {
+                console.warn(e.message);
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            console.warn('Launch URL not reachable, trying again');
+        }
+        if (deadline < +new Date()) throw new Error('Launch URL not reachable within deadline');
     },
     teardown: async function () {
 
