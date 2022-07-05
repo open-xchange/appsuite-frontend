@@ -1,0 +1,921 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: open-xchange-guidedtours\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-05-02 12:22+0300\n"
+"Last-Translator: \n"
+"Language-Team: NAME <EMAIL>\n"
+"Language: el_GR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating a new appointment"
+msgstr "Δημιουργία μιας νέας συνάντησης"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New appointments in the toolbar."
+msgstr ""
+"Για να δημιουργήσετε μια νέα συνάντηση, κάντε κλικ στο «Νέες συναντήσεις» "
+"στη γραμμή εργαλείων."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Εισαγωγή των δεδομένων της συνάντησης"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
+msgstr ""
+"Εισαγάγετε το θέμα, τις ημερομηνίες έναρξης και τέλους της συνάντησης. Οι "
+"υπόλοιπες λεπτομέρειες είναι προαιρετικές."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Δημιουργία επαναλαμβανόμενων συναντήσεων"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Για να δημιουργήσετε επαναλαμβανόμενες συναντήσεις, ενεργοποιήστε το "
+"«Επανάληψη». Εμφανίζονται επιλογές για τον ορισμό των παραμέτρων επανάληψης."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "Πρόσκληση άλλων συμμετεχόντων"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Για να προσκαλέσετε άλλους συμμετέχοντες, εισαγάγετε τα ονόματά τους στο "
+"πεδίο «Συμμετέχοντες». Για να αποφύγετε διενέξεις μεταξύ συναντήσεων, κάντε "
+"κλικ στο «Εύρεση ελεύθερου χρόνου» στην επάνω δεξιά πλευρά."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Χρήση της λειτουργίας υπενθυμίσεων"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr ""
+"Για να μην χάσετε τη συνάντηση, χρησιμοποιήστε τη λειτουργία υπενθύμισης."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Adding attachments"
+msgstr "Προσθήκη συνημμένων"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Παρακάτω, μπορείτε να προσθέσετε έγγραφα ως συνημμένα στη συνάντηση."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Δημιουργία της συνάντησης"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr ""
+"Για να δημιουργήσετε τη συνάντηση, κάντε κλικ στο «Δημιουργία» στην κάτω "
+"αριστερή πλευρά."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "Selecting a view"
+msgstr "Επιλογή προβολής"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Για να επιλέξετε μία από τις προβολές, όπως «Ημέρα», «Μήνας» ή «Λίστα», "
+"κάντε κλικ στο «Προβολή» στη γραμμή εργαλείων. Επιλέξτε μια καταχώρηση του "
+"μενού από την ενότητα «Διάταξη»."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Οι προβολές του ημερολογίου"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
+msgstr ""
+"Οι προβολές ημερολογίου εμφανίζουν ένα φύλλο ημερολογίου με τις συναντήσεις "
+"για το επιλεγμένο χρονικό εύρος."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The List view"
+msgstr "Η προβολή «Λίστα»"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The List view shows a list of the appointments in the current folder. If "
+"clicking on an appointment, the appointment's data and some functions are "
+"displayed in the Detail view."
+msgstr ""
+"Η προβολή «Λίστα» εμφανίζει μια λίστα με τις συναντήσεις στον τρέχοντα "
+"φάκελο. Κάνοντας κλικ σε μια συνάντηση, προβάλλονται τα δεδομένα της και "
+"κάποιες λειτουργίες στην προβολή «Λεπτομέρειες»."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Δημιουργία μιας νέας επαφής"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr ""
+"Για να δημιουργήσετε μια νέα επαφή, κάντε κλικ στο «Νέο» > «Προσθήκη επαφής» "
+"στη γραμμή εργαλείων."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Γραμμή πλοήγησης"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Κάντε κλικ σε ένα γράμμα στην αριστερή πλευρά της γραμμής πλοήγησης για να "
+"εμφανίσετε τις αντίστοιχες επαφές από το επιλεγμένο ευρετήριο."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an email to a contact"
+msgstr "Αποστολή email σε μια επαφή"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To send an email to the contact, click on an email address or on Send email "
+"in the toolbar."
+msgstr ""
+"Για να στείλετε ένα email στην επαφή, κάντε κλικ σε μια διεύθυνση email ή "
+"στο «Αποστολή email» στη γραμμή εργαλείων."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Επεξεργασία πολλαπλών επαφών"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Για να επεξεργαστείτε πολλαπλές επαφές ταυτόχρονα, ενεργοποιήστε τα πλαίσια "
+"ελέγχου στην αριστερή πλευρά των επαφών. Εάν τα πλαίσια ελέγχου δεν "
+"εμφανίζονται, κάντε κλικ στο «Προβολή» > «Πλαίσια ελέγχου» στη δεξιά πλευρά "
+"της γραμμής εργαλείων."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Η εφαρμογή Drive"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Καλώς ορίσατε στην εφαρμογή αποθηκευτικού χώρου cloud σας. Αυτή η ξενάγηση "
+"θα σας παρουσιάσει τη νέα σας λύση διαδικτυακού αποθηκευτικού χώρου - ένα "
+"ενιαίο σημείο πρόσβασης για τα αποθηκευμένα αρχεία σας από όλους τους "
+"λογαριασμούς σας. Εδώ μπορείτε να κάνετε μεταφόρτωση και αποθήκευση των "
+"αρχείων σας, να τα κοινοποιείτε και να τα συγχρονίζετε με άλλες συσκευές.  "
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Δένδρο φακέλων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Στα αριστερά, μπορείτε να δείτε το δένδρο φακέλων. Εμφανίζει τη δομή των "
+"φακέλων σας και σας επιτρέπει να μεταβείτε σε συγκεκριμένους φακέλους και "
+"υποφακέλους. Για να διευκολύνουμε τη ζωή σας, έχουμε ήδη συμπεριλάβει "
+"φακέλους για τα Βίντεο, τα Έγγραφα, τις Εικόνες και τη Μουσική σας."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Περιεχόμενο φακέλου"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Κάνοντας κλικ σε έναν φάκελο, εμφανίζονται όλοι οι υποφάκελοι, τα έγγραφα, "
+"τα πολυμέσα και άλλα αρχεία που περιέχει."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Επιλογή προβολής"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr ""
+"Διατίθενται διάφορες προβολές. Επιλέξτε αυτήν που σας αρέσει περισσότερο."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Γραμμή εργαλείων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
+msgstr ""
+"Στο πάνω μέρος, μπορείτε να βρείτε τη γραμμή εργαλείων με πολλές λειτουργίες "
+"και επιπρόσθετες επιλογές. Μπορείτε εύκολα να δημιουργήσετε νέους φακέλους, "
+"νέα αρχεία και πολλά άλλα."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Μεταφόρτωση νέου αρχείου"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Upload, then "
+"choose File in the dropdown menu and select the file you would like to "
+"upload. It is even easier if you just drag and drop files from your local "
+"device into Drive. The uploaded file is now available in Drive on all your "
+"devices."
+msgstr ""
+"Για να μεταφορτώσετε ένα νέο αρχείο από την τοπική σας συσκευή, κάντε κλικ "
+"στο «Μεταφόρτωση» και έπειτα, επιλέξτε «Αρχείο» στο αναδιπλούμενο μενού και "
+"επιλέξτε το αρχείο που θέλετε να μεταφορτώσετε. Είναι ακόμα πιο εύκολο αν "
+"απλά σύρετε και εναποθέσετε αρχεία από την τοπική σας συσκευή στο Drive. Το "
+"μεταφορτωμένο αρχείο θα είναι πλέον διαθέσιμο στο Drive, σε όλες τις "
+"συσκευές σας."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Προεπισκόπηση αρχείων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr ""
+"Κάνοντας κλικ στο εικονίδιο προβολής, εμφανίζεται μια προεπισκόπηση του "
+"επιλεγμένου αρχείου."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Λειτουργία προεπισκόπησης"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
+msgstr ""
+"Από την προεπισκόπηση, μπορείτε επίσης να κάνετε άλλες επιλογές που θα σας "
+"βοηθήσουν να διαχειριστείτε και να εργαστείτε με τα αρχεία σας."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Κοινή χρήση αρχείων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different rights."
+msgstr ""
+"Εδώ μπορείτε να κάνετε κοινή χρήση αρχείων με τους συναδέλφους σας και με "
+"εξωτερικές επαφές. Μπορείτε επίσης να συνεργαστείτε σε ένα έγγραφο και να "
+"ορίσετε διαφορετικά δικαιώματα."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing option - Invite people"
+msgstr "Επιλογή κοινής χρήσης - Πρόσκληση ατόμων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use \"Invited "
+"people only\" if you want to manage access rights and allow recipients to "
+"create and edit files. Internal and external participants are also able to "
+"collaborate with you on documents at the same time."
+msgstr ""
+"Επιλέξτε ανάμεσα στις δύο μεθόδους κοινής χρήσης αρχείων και φακέλων. "
+"Χρησιμοποιήστε το «Μόνο προσκεκλημένα άτομα» αν θέλετε να διαχειριστείτε τα "
+"δικαιώματα πρόσβασης και να επιτρέψετε στους παραλήπτες να δημιουργούν και "
+"να επεξεργάζονται αρχεία. Οι εσωτερικοί και εξωτερικοί συμμετέχοντες μπορούν "
+"επίσης να συνεργαστούν μαζί σας σε έγγραφα, ταυτόχρονα."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing option - Everyone who has the link"
+msgstr "Επιλογή κοινής χρήσης - Όποιος έχει τον σύνδεσμο"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"It is also possible to get a sharing link to let others view or download "
+"your files. You can use an expiration date and password protection if you "
+"like."
+msgstr ""
+"Μπορείτε επίσης να λάβετε έναν σύνδεσμο κοινής χρήσης για να επιτρέψετε σε "
+"άλλα άτομα να κάνουν προβολή ή λήψη των αρχείων σας. Μπορείτε να ορίσετε μια "
+"ημερομηνία λήξης και προστασία με κωδικό πρόσβασης εάν το επιθυμείτε."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "Επεξεργασία εγγράφων"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
+msgstr ""
+"Γνωρίζατε ότι μπορείτε να επεξεργαστείτε έγγραφα κειμένου και υπολογιστικά "
+"φύλλα στο διαδίκτυο; Το Drive θα ενημερώσει αυτόματα το επεξεργασμένο αρχείο "
+"σας, αλλά χάρη στο ιστορικό εκδόσεων, το πρωτότυπο αρχείο παραμένει "
+"διαθέσιμο."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Λεπτομέρειες αρχείου"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
+msgstr ""
+"Η πλαϊνή γραμμή λεπτομερειών αρχείων παρέχει πρόσθετες πληροφορίες για τα "
+"αρχεία σας. Ενεργοποιήστε την επιλογή «Λεπτομέρειες αρχείου» από το "
+"αναδιπλούμενο μενού «Προβολή» και επιλέξτε ένα αρχείο για να δείτε τις "
+"λεπτομέρειες."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Προσθήκη άλλου λογαριασμού"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
+msgstr ""
+"Το Drive σάς επιτρέπει να συνδέεστε με άλλες λύσεις αποθηκευτικού χώρου εάν "
+"διαθέτετε ήδη κάποιο λογαριασμό αποθηκευτικού χώρου cloud που χρησιμοποιείτε "
+"για την αποθήκευση και τον συγχρονισμό των αρχείων σας. Κάντε κλικ στο "
+"αντίστοιχο λογότυπο για να προσπελάσετε τα υπάρχοντα δεδομένα σας."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "Ξενάγηση εφαρμογής Drive.txt"
+
+#. %s is the product name, e.g. OX App Suite
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Καλώς ορίσατε στο %s"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This tour will give you a quick introduction to the product in five steps."
+msgstr ""
+"Αυτή η ξενάγηση παρέχει μια γρήγορη εισαγωγή στο προϊόν, σε πέντε βήματα."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Navigation"
+msgstr "Πλοήγηση"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "All apps can be found in the app menu on the top left."
+msgstr ""
+"Μπορείτε να βρείτε όλες τις εφαρμογές στο μενού εφαρμογών, στην επάνω δεξιά "
+"πλευρά."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Personal settings"
+msgstr "Προσωπικές ρυθμίσεις"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Your personal data can be changed in the account dropdown. You can also sign "
+"out from there."
+msgstr ""
+"Τα προσωπικά σας δεδομένα μπορούν να αλλάξουν στο αναδιπλούμενο μενού "
+"λογαριασμού. Από εκεί, μπορείτε να κάνετε και αποσύνδεση."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Customize the product to your needs in the settings area."
+msgstr "Προσαρμόστε το προϊόν στις ανάγκες σας από την περιοχή ρυθμίσεων."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Help"
+msgstr "Βοήθεια"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"If you need assistance or have further questions, you can use the help app."
+msgstr ""
+"Αν χρειάζεστε βοήθεια ή έχετε περαιτέρω απορίες, μπορείτε να χρησιμοποιήσετε "
+"την εφαρμογή βοήθειας."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Cancel tour"
+msgstr "Ακύρωση ξενάγησης"
+
+#. %s is the "getting started" tour button label
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"You can restart this tour at any time by clicking on the help icon and "
+"choose \"%s\"."
+msgstr ""
+"Μπορείτε να επανεκκινήσετε αυτήν την ξενάγηση ανά πάσα στιγμή κάνοντας κλικ "
+"στο εικονίδιο βοήθειας και επιλέγοντας «%s»."
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/intro.js module:io.ox/tours apps/io.ox/tours/main.js
+msgid "Getting started"
+msgstr "Έναρξη"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new email"
+msgstr "Σύνθεση ενός νέου email"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To compose a new email, click on Compose in the toolbar."
+msgstr ""
+"Για να συνθέσετε ένα νέο email, κάντε κλικ στο «Σύνθεση» στη γραμμή "
+"εργαλείων."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Εισαγωγή του ονόματος του παραλήπτη"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
+msgstr ""
+"Εισαγάγετε το όνομα του παραλήπτη στο πεδίο παραληπτών. Μόλις "
+"πληκτρολογήσετε τα πρώτα γράμματα, εμφανίζονται προτάσεις από τα ευρετήρια. "
+"Για να αποδεχτείτε μια πρόταση παραλήπτη, κάντε κλικ σε αυτήν."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Εισαγωγή του θέματος"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Εισαγάγετε το θέμα στο πεδίο θέματος."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Περισσότερες λειτουργίες"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"Σε αυτήν την περιοχή, μπορείτε να βρείτε πρόσθετες λειτουργίες, π.χ. για την "
+"προσθήκη συνημμένων."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the email text"
+msgstr "Εισαγωγή του κειμένου του email"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the email text into the main area. If the text format was set to HTML "
+"in the options, you can format the email text. To do so select a text part "
+"and then click an icon in the formatting bar."
+msgstr ""
+"Εισαγάγετε το κείμενο του email στην κύρια περιοχή. Αν η μορφή του κειμένου "
+"έχει οριστεί σε HTML στις επιλογές, μπορείτε να μορφοποιήσετε το κείμενο του "
+"email. Για να το κάνετε αυτό, επιλέξετε ένα μέρος του κειμένου και κάντε "
+"κλικ σε ένα εικονίδιο της γραμμής μορφοποίησης."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the email"
+msgstr "Αποστολή του email"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the email, click on Send"
+msgstr "Για να στείλετε το email, κάντε κλικ στο «Αποστολή»"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your emails"
+msgstr "Ταξινόμηση των email σας"
+
+#. Sort is the label of a dropdown menu
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the emails, click on Sort. Select a sort criteria."
+msgstr ""
+"Για να ταξινομήσετε τα email, κάντε κλικ στο «Ταξινόμηση». Επιλέξτε ένα "
+"κριτήριο ταξινόμησης."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views, click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Για να επιλέξετε ανάμεσα στις διάφορες προβολές, κάντε κλικ στο «Προβολή» "
+"στη γραμμή εργαλείων. Επιλέξτε μια καταχώρηση του μενού στη διάταξη."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an email in a separate window"
+msgstr "Άνοιγμα email σε ξεχωριστό παράθυρο"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an email in the list, the email is opened in a "
+"separate window."
+msgstr ""
+"Αν κάνετε διπλό κλικ σε ένα email της λίστας, αυτό θα ανοίξει σε ξεχωριστό "
+"παράθυρο."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading email conversations"
+msgstr "Ανάγνωση συνομιλιών μέσω email"
+
+#. Sort is the label of a dropdown menu, keep this consistent
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If conversations are enabled in the Sort menu, you can collapse or expand an "
+"email in a conversation. To do so, click on a free area in the email "
+"headline."
+msgstr ""
+"Εάν οι συνομιλίες έχουν ενεργοποιηθεί στο μενού «Ταξινόμηση», μπορείτε να "
+"συμπτύξετε ή να επεκτείνετε ένα email σε μια συνομιλία. Για να το κάνετε "
+"αυτό, κάντε κλικ σε μια ελεύθερη περιοχή στην επικεφαλίδα του email."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Halo view"
+msgstr "Προβολή «Halo»"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Για να λάβετε πληροφορίες σχετικά με τον αποστολέα ή τους άλλους παραλήπτες, "
+"ανοίξτε την προβολή «Halo» κάνοντας κλικ σε ένα όνομα."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple emails"
+msgstr "Επεξεργασία πολλαπλών email"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple emails at once, enable the checkboxes on the left "
+"side of the emails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Για να επεξεργαστείτε πολλαπλά email ταυτόχρονα, ενεργοποιήστε τα πλαίσια "
+"ελέγχου στην αριστερή πλευρά των email. Εάν τα πλαίσια ελέγχου δεν "
+"εμφανίζονται, κάντε κλικ στο «Προβολή» > «Πλαίσια ελέγχου» στη δεξιά πλευρά "
+"της γραμμής εργαλείων."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening the email settings"
+msgstr "Άνοιγμα των ρυθμίσεων email"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on Mail on the left side."
+msgstr ""
+"Για να ανοίξετε τις ρυθμίσεις αλληλογραφίας, κάντε κλικ στο εικονίδιο του "
+"μενού «Ρυθμίσεις» στην επάνω δεξιά πλευρά της γραμμής μενού. Επιλέξτε "
+"«Ρυθμίσεις». Κάντε κλικ στο «Αλληλογραφία» στην αριστερή πλευρά."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the email settings, click the Settings menu icon on the upper right "
+"side of the menu bar. Click on Mail on the left side."
+msgstr ""
+"Για να ανοίξετε τις ρυθμίσεις αλληλογραφίας, κάντε κλικ στο εικονίδιο του "
+"μενού «Ρυθμίσεις» στην επάνω δεξιά πλευρά της γραμμής μενού. Κάντε κλικ στο "
+"«Αλληλογραφία» στην αριστερή πλευρά."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Second Factor Authentication"
+msgstr "Ταυτοποίηση δεύτερου παράγοντα"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"You can now add additional verification options to enhance the security of "
+"your account."
+msgstr ""
+"Μπορείτε πλέον να προσθέσετε επιπρόσθετες επιλογές επαλήθευσης, ώστε να "
+"βελτιώσετε την ασφάλεια του λογαριασμού σας."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding verification option"
+msgstr "Προσθήκη επιλογής επαλήθευσης"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Various options for additional verification depends on your installation."
+msgstr ""
+"Οι διάφορες επιλογές πρόσθετης επαλήθευσης εξαρτώνται από την εγκατάστασή "
+"σας."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Adding a code via text message"
+msgstr "Προσθήκη κωδικού μέσω μηνύματος κειμένου"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Selecting the option for a code via text message, for example, will then ask "
+"you for a phone number."
+msgstr ""
+"Η επιλογή για κωδικό μέσω μηνύματος κειμένου, για παράδειγμα, απαιτεί έναν "
+"αριθμό τηλεφώνου."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Authentication Requests"
+msgstr "Αιτήματα ελέγχου ταυτότητας"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Then the next time you log in, you will have to verify your identitity by "
+"entering the number sent to your phone."
+msgstr ""
+"Την επόμενη φορά που θα συνδεθείτε, θα πρέπει να επαληθεύσετε την ταυτότητά "
+"σας εισάγοντας τον αριθμό που απεστάλη στο τηλέφωνό σας."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Removing"
+msgstr "Αφαίρεση"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"Devices can be removed once added if you so choose.  See help for additional "
+"details."
+msgstr ""
+"Μπορείτε να αφαιρέσετε συσκευές μόλις προστεθούν.  Δείτε τη βοήθεια για "
+"περαιτέρω λεπτομέρειες."
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Next"
+msgstr "Επόμενο"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid ""
+"As an additional security feature, you can now require a second method of "
+"authentication, such as a text message, before logging into your account.  "
+"Would you like to see some information on this now?"
+msgstr ""
+"Ως μια επιπλέον λειτουργία ασφαλείας, μπορείτε πλέον να απαιτήσετε μια "
+"δεύτερη μέθοδο ταυτοποίησης, όπως ένα μήνυμα κειμένου, πριν συνδεθείτε στον "
+"λογαριασμό σας.  Θέλετε να δείτε περισσότερες πληροφορίες τώρα;"
+
+#: apps/io.ox/tours/multifactor.js module:io.ox/tours
+msgid "Start tour"
+msgstr "Έναρξη περιήγησης"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "The Portal"
+msgstr "Η Πύλη"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"The Portal informs you about current emails, appointments or social network "
+"news."
+msgstr ""
+"Η Πύλη σάς ενημερώνει για τα τρέχοντα email, συναντήσεις ή ειδήσεις "
+"κοινωνικών δικτύων."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Ανάγνωση των λεπτομερειών"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr ""
+"Για να διαβάσετε τις λεπτομέρειες, κάντε κλικ σε μια καταχώρηση σε ένα "
+"τετράγωνο."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Μεταφορά και εναπόθεση"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr ""
+"Για να αλλάξετε τη διάταξη, σύρετε τον τίτλο ενός τετραγώνου σε μια άλλη "
+"θέση και εναποθέστε τον εκεί."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Κλείσιμο ενός τετραγώνου"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr ""
+"Εάν δεν θέλετε πλέον να εμφανίζεται ένα τετράγωνο, κάντε κλικ στο εικονίδιο "
+"διαγραφής."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Προσαρμογή της πύλης"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Για να εμφανίσετε ξανά ένα τετράγωνο ή περισσότερες πηγές πληροφοριών, κάντε "
+"κλικ στο «Προσαρμογή σελίδας»."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Άνοιγμα των ρυθμίσεων"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the settings, click on the settings icon on the upper right side of "
+"the menu bar."
+msgstr ""
+"Για να ανοίξετε τις ρυθμίσεις, κάντε κλικ στο εικονίδιο ρυθμίσεων στην επάνω "
+"δεξιά πλευρά της γραμμής μενού."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Πώς είναι οργανωμένες οι ρυθμίσεις"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or Mail."
+msgstr ""
+"Οι ρυθμίσεις οργανώνονται σε θέματα. Επιλέξτε το θέμα στην αριστερή πλευρά, "
+"π.χ. Βασικές ρυθμίσεις ή Αλληλογραφία."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Επεξεργασία ρυθμίσεων"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
+msgstr ""
+"Επεξεργαστείτε μια ρύθμιση στη δεξιά πλευρά. Στις περισσότερες περιπτώσεις, "
+"οι αλλαγές ενεργοποιούνται αμέσως."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Άνοιγμα της βοήθειας"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the help, click the help icon on the upper right side of the menu "
+"bar. Select Help. The help for the currently selected app is displayed. To "
+"browse the complete help, click on Start Page or Table Of Contents at the "
+"upper part of the window."
+msgstr ""
+"Για να ανοίξετε τη βοήθεια, κάντε κλικ στο εικονίδιο βοήθειας στην επάνω "
+"δεξιά πλευρά της γραμμής μενού. Επιλέξτε «Βοήθεια». Θα εμφανιστεί η βοήθεια "
+"για την τρέχουσα επιλεγμένη εφαρμογή. Για να περιηγηθείτε στην πλήρη "
+"βοήθεια, κάντε κλικ στο «Σελίδα έναρξης» ή στο «Πίνακας περιεχομένων» στο "
+"επάνω μέρος του παραθύρου."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "Αποσύνδεση"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the System menu icon on the upper right side of the menu "
+"bar. Select Sign out."
+msgstr ""
+"Για να αποσυνδεθείτε, κάντε κλικ στο εικονίδιο του μενού συστήματος στην "
+"επάνω δεξιά πλευρά της γραμμής μενού. Επιλέξτε «Αποσύνδεση»."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the logout icon on the upper right side of the menu bar."
+msgstr ""
+"Για να αποσυνδεθείτε, κάντε κλικ στο εικονίδιο αποσύνδεσης στην επάνω δεξιά "
+"πλευρά της γραμμής μενού."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Δημιουργία μιας νέας εργασίας"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New task in the toolbar."
+msgstr ""
+"Για να δημιουργήσετε μια νέα εργασία, κάντε κλικ στο «Νέα εργασία» στη "
+"γραμμή εργαλείων."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Εισαγωγή των δεδομένων της εργασίας"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Εισαγάγετε το θέμα, την ημερομηνία έναρξης και μια περιγραφή."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Προσθήκη περαιτέρω λεπτομερειών"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr ""
+"Για να προσθέσετε περισσότερες λεπτομέρειες, κάντε κλικ στο «Ανάπτυξη "
+"φόρμας»."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Δημιουργία επαναλαμβανόμενων εργασιών"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Για να δημιουργήσετε επαναλαμβανόμενες εργασίες, ενεργοποιήστε το "
+"«Επανάληψη». Εμφανίζονται επιλογές για τον ορισμό των παραμέτρων επανάληψης."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr ""
+"Για να μην χάσετε την εργασία, χρησιμοποιήστε τη λειτουργία υπενθύμισης."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Εποπτεία της κατάστασης επεξεργασίας"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr ""
+"Για να παρακολουθήσετε την κατάσταση επεξεργασίας, εισαγάγετε την τρέχουσα "
+"πρόοδο."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Για να προσκαλέσετε άλλους συμμετέχοντες, εισαγάγετε τα ονόματά τους στο "
+"πεδίο «Συμμετέχοντες». Μπορείτε να προσθέσετε έγγραφα ως συνημμένα στην "
+"εργασία."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Εισαγωγή στοιχείων χρέωσης"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr ""
+"Για να εισαγάγετε στοιχεία χρέωσης, κάντε κλικ στο «Εμφάνιση λεπτομερειών»."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Δημιουργία της εργασίας"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Για να δημιουργήσετε την εργασία, κάντε κλικ στο «Δημιουργία»."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Ταξινόμηση εργασιών"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To sort the tasks, click on the sort icon above the list. Select a sort "
+"criteria."
+msgstr ""
+"Για να ταξινομήσετε τις εργασίες, κάντε κλικ στο εικονίδιο ταξινόμησης πάνω "
+"από τη λίστα. Επιλέξτε ένα κριτήριο ταξινόμησης."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Επεξεργασία πολλαπλών εργασιών"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Για να επεξεργαστείτε πολλαπλές εργασίες ταυτόχρονα, ενεργοποιήστε τα "
+"πλαίσια ελέγχου στην αριστερή πλευρά των εργασιών. Εάν τα πλαίσια ελέγχου "
+"δεν εμφανίζονται, κάντε κλικ στο «Προβολή» > «Πλαίσια ελέγχου» στη δεξιά "
+"πλευρά της γραμμής εργαλείων."
