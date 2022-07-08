@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 13:16+0200\n"
+"PO-Revision-Date: 2022-07-08 11:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5830,16 +5830,12 @@ msgid "Next"
 msgstr "次へ"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter your password."
 msgid "Please enter your new password."
-msgstr "パスワードを入力してください。"
+msgstr "新しいパスワードを入力してください。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the password."
 msgid "Please enter the same password."
-msgstr "パスワードを入力します。"
+msgstr "同じパスワードを入力してください。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9739,22 +9735,16 @@ msgid "Message will be sent to all newly invited people"
 msgstr "メッセージは新しく招待された人すべてに送信されます。"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder permissions"
 msgid "Sharing folders without permissions"
-msgstr "フォルダー権限"
+msgstr "権限なしのフォルダーを共有"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You are moving one or more items that are shared with other people. These "
-#| "people will lose access."
 msgid ""
 "Your are sharing one or more folders for which you do not have permissions. "
 "These folders will not be shared."
 msgstr ""
-"他の人と共有している一つまたは複数のアイテムを移動しています。共有している人"
-"はアクセスできなくなります。"
+"権限を持たない複数のフォルダーを共有しています。これらのフォルダーは共有され"
+"ません。"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"

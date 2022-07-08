@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 13:19+0200\n"
+"PO-Revision-Date: 2022-07-08 11:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5758,16 +5758,12 @@ msgid "Next"
 msgstr "下一个"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter your password."
 msgid "Please enter your new password."
-msgstr "请输入您的密码。"
+msgstr "请输入您的新密码。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the password."
 msgid "Please enter the same password."
-msgstr "请输入密码。"
+msgstr "请输入一样的密码。"
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9591,20 +9587,14 @@ msgid "Message will be sent to all newly invited people"
 msgstr "消息将发送给所有新邀请的人"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder permissions"
 msgid "Sharing folders without permissions"
-msgstr "文件夹权限"
+msgstr "分享没有权限的文件夹"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You are moving one or more items that are shared with other people. These "
-#| "people will lose access."
 msgid ""
 "Your are sharing one or more folders for which you do not have permissions. "
 "These folders will not be shared."
-msgstr "您正在移动一个或多个与其他人员共享的项目。这些人将失去访问权限。"
+msgstr "您正在移动一个或多个您没有权限的文件夹。这些文件夹将不会被分享。"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"

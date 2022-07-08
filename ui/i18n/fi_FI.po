@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 13:16+0200\n"
+"PO-Revision-Date: 2022-07-08 11:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5836,16 +5836,12 @@ msgid "Next"
 msgstr "Seuraava"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter your password."
 msgid "Please enter your new password."
-msgstr "Syötä salasanasi."
+msgstr "Kirjoita uusi salasanasi."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the password."
 msgid "Please enter the same password."
-msgstr "Anna salasana."
+msgstr "Anna sama salasana."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9758,22 +9754,16 @@ msgid "Message will be sent to all newly invited people"
 msgstr "Viesti lähetetään kaikille uusille kutsutuille"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder permissions"
 msgid "Sharing folders without permissions"
-msgstr "Kansion oikeudet"
+msgstr "Kansioiden jakaminen ilman käyttöoikeuksia"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You are moving one or more items that are shared with other people. These "
-#| "people will lose access."
 msgid ""
 "Your are sharing one or more folders for which you do not have permissions. "
 "These folders will not be shared."
 msgstr ""
-"Olet siirtämässä vähintään yhtä kohdetta, joka on jaettu muiden kanssa. Nämä "
-"ihmiset menettävät pääsyn."
+"Olet jakamassa vähintään yhtä kansiota, joihin sinulla ei ole oikeuksia. "
+"Näitä kansioita ei jaeta."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
