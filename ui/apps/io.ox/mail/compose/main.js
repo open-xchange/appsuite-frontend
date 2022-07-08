@@ -268,6 +268,16 @@ define('io.ox/mail/compose/main', [
             });
         }
     }, {
+        id: 'update-tooltip',
+        index: INDEX += 100,
+        perform: function () {
+            if (!this.model.isEmpty() && this.view.isDirty()) return this.updateTooltip(gt('Save and close'));
+            this.updateTooltip(gt('Close'));
+            this.listenToOnce(this.model, 'before:save', function () {
+                this.updateTooltip(gt('Save and close'));
+            });
+        }
+    }, {
         id: 'finally',
         index: INDEX += 100,
         perform: function (baton) {
@@ -483,6 +493,14 @@ define('io.ox/mail/compose/main', [
             app.failRestore(data.point);
         };
 
+        app.updateTooltip = function (text) {
+            if (!win.floating) return;
+            text = text || gt('Save and close');
+            win.floating.$('.floating-header [data-action="close"]')
+              .attr('aria-label', text)
+              .find('.fa').attr('title', text);
+        };
+
         app.open = function (obj, config) {
             var def = $.Deferred();
             obj = _.extend({}, obj);
@@ -494,13 +512,6 @@ define('io.ox/mail/compose/main', [
             // Set window and toolbars invisible initially
             win.nodes.header.addClass('sr-only');
             win.nodes.body.addClass('sr-only');
-
-            // improve title in compose context
-            if (win.floating) {
-                win.floating.$('.floating-header [data-action="close"]')
-                    .attr('aria-label', gt('Save and close'))
-                    .find('.fa').attr('title', gt('Save and close'));
-            }
 
             win.busy().show(function () {
                 POINT.cascade(app, { data: obj || {}, config: config, win: win }).then(function success() {
