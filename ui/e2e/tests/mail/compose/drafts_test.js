@@ -192,7 +192,7 @@ Scenario('[C114959] Draft can be used as templates', async ({ I, mail, dialogs }
     //I.waitForValue('.mail-compose-fields [data-extension-id="subject"]','[Copy]');
     I.retry(5).seeInField('Subject', '[Copy]');
     //I.seeInField('Subject','[Copy]');
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
 
     //waiting for Modal dialog "Save draft" and click on "Save draft"
     I.waitForText('Save draft', 5, dialogs.locators.header);
