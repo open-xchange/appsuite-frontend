@@ -47,7 +47,7 @@ Scenario('[C7380] Send saved draft mail', async ({ I, users, mail }) => {
     I.fillField('To', users[1].userdata.primaryEmail);
     I.fillField('Subject', '' + testrailId + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForText('Save draft');
     I.click('Save draft');
     I.waitForDetached('.io-ox-mail-compose');
@@ -135,7 +135,7 @@ Scenario('[C7384] Save draft', async ({ I, users, mail, dialogs }) => {
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', '' + testrailid + ' - ' + subject);
     I.fillField({ css: 'textarea.plain-text' }, '' + text);
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     dialogs.waitForVisible();
     dialogs.clickButton('Save draft');
     I.waitForDetached('.modal-dialog');
@@ -417,7 +417,7 @@ Scenario('[C8816] Cancel mail compose', async ({ I, users, mail }) => {
     I.pressKey('Enter');
     I.fillField('Subject', testrailID + ' - ' + timestamp);
     I.fillField({ css: 'textarea.plain-text' }, testrailID + ' - ' + timestamp);
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.see('This email has not been sent. You can save the draft to work on later.');
     I.click('Delete draft');
 });

@@ -136,7 +136,7 @@ Scenario('[C114376] Default font style', async function ({ I, users, mail, dialo
         I.fillField('Subject', 'Testsubject Draft');
         I.pressKey('Tab');
         I.fillField('span', 'Testcontent');
-        I.click('~Save and close', '.io-ox-mail-compose-window');
+        I.click('~Close', '.io-ox-mail-compose-window');
         dialogs.clickButton('Save draft');
         I.waitForDetached('.io-ox-mail-compose-window');
 

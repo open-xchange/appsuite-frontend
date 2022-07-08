@@ -53,7 +53,7 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
 
     // workflow 1: Compose & discard
     mail.newMail();
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
     I.waitForDetached('.io-ox-mail-compose');
 
@@ -78,13 +78,13 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
     text = Array.isArray(text) ? text[0] : text;
     expect(text).to.contain('My unique signature content');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.see('This email has not been sent. You can save the draft to work on later.');
     I.click('Delete draft');
 
@@ -119,7 +119,7 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
         '>  \\n' +
         '> Testcontent'
     ));
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
 });
 
@@ -269,7 +269,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function ({ I
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
     I.fillField('Subject', 'Testsubject #1');
-    I.click(mail.locators.compose.close);
+    I.click('~Save and close', '.io-ox-mail-compose-window');
     dialogs.waitForVisible();
     dialogs.clickButton('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');

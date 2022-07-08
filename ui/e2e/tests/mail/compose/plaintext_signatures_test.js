@@ -131,12 +131,12 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     await selectAndAssertSignature(I, mail, 'First signature above', `some user input\n\n${signatures[0].plaintext}`);
 
     // discard mail
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Compose new mail with signature below correctly placed initially', async function ({ I, mail }) {
+Scenario('Compose new mail with signature below correctly placed initially', async function ({ I }) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -155,7 +155,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.equal(`\n\n${signatures[2].plaintext}`);
 
     // discard mail
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -181,7 +181,7 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     expect(await I.grabTextFrom('.io-ox-mail-window .mail-detail-pane .subject')).to.equal('Test subject');
 
     // reply to that mail
-    I.click('Reply');
+    I.click('~Reply');
     I.waitForVisible('.io-ox-mail-compose textarea.plain-text');
     I.wait(1);
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.match(
@@ -210,12 +210,12 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`));
 
     // discard mail
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with signature below correctly placed initially', async function ({ I, users, mail }) {
+Scenario('Reply to mail with signature below correctly placed initially', async function ({ I, users }) {
     let [user] = users;
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
@@ -245,12 +245,12 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     );
 
     // discard mail
-    I.click(mail.locators.compose.close);
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForVisible('.io-ox-mail-window');
 });
 
 Scenario('Add and replace signatures with special characters', async function ({ I, mail }) {    // at leat one that had to be escaped in a regex
-    // at leat one that had to be escaped in a regex
+    // at least one that had to be escaped in a regex
     const first = 'Very original? ...or clever signature?',
         second = 'Super original and fabulous signature';
 
