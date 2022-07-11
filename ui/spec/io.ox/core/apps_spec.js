@@ -225,6 +225,8 @@ define([
                 const view = new appcontrol.LauncherView({
                     model
                 });
+                // add custom app to the list of allowed apps
+                ox.ui.apps.EditApps.push('custom/module/apps/test/main');
                 const el = view.render().$el;
                 el.click();
                 return def.then(function () {

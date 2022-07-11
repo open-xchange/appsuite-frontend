@@ -1935,10 +1935,19 @@ define('io.ox/core/desktop', [
         };
     }());
 
+    // cheap static list with valid launchable edit apps
+    ox.ui.apps.EditApps = [
+        'io.ox/calendar/edit/main',
+        'io.ox/contacts/edit/main',
+        'io.ox/contacts/distrib/main',
+        'io.ox/tasks/edit/main'
+    ];
+
     // simple launch
     ox.launch = function (id, data) {
         var def = $.Deferred(), loadStart = Date.now();
         if (_.isString(id)) {
+            if (ox.ui.apps.pluck('path').concat(ox.ui.apps.EditApps).indexOf(id) < 0) return def.reject();
             adaptiveLoader.stop();
             var requirements = adaptiveLoader.startAndEnhance(id.replace(/\/main$/, ''), [id]);
             ox.load(requirements, data).then(
