@@ -36,6 +36,12 @@ Provides: open-xchange-appsuite-l10n
 Breaks: open-xchange-l10n-de-de (<< 7.0.1)
 Description: Translation of the OX App Suite HTML5 client (de_DE)
 
+Package: open-xchange-appsuite-l10n-el-gr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-el-gr
+Provides: open-xchange-appsuite-l10n
+Description: Translation of the OX App Suite HTML5 client (el_GR)
+
 Package: open-xchange-appsuite-l10n-en-gb
 Architecture: all
 Depends: ${misc:Depends}, open-xchange-l10n-en-gb
