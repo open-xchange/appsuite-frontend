@@ -287,6 +287,9 @@ define('io.ox/calendar/toolbar', [
             app.getWindow().on('change:perspective change:initialPerspective', function () {
                 _.defer(function () { app.forceUpdateToolbar(getSelection(app)); });
             });
+            // models receive some fields (e.g. attendees) later which could affect the toolbar
+            var update = _.debounce(function () { app.updateToolbar(getSelection(app)); }, 0);
+            app.listView.on('collection:change', update);
         }
     });
 
