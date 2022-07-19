@@ -398,7 +398,7 @@ Scenario('[C7770] Set default signature', async ({ I, users, mail }) => {
         I.wait(0.5);
         I.see('Testsignaturecontent1');
     });
-    I.click(mail.locators.compose.close);
+    I.click('~Save and close', '.io-ox-mail-compose-window');
 
     I.waitForDetached('.io-ox-mail-compose-window');
 

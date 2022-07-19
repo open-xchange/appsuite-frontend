@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 13:15+0200\n"
+"PO-Revision-Date: 2022-07-08 11:18+0200\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es_ES\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5879,16 +5879,12 @@ msgid "Next"
 msgstr "Siguiente"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter your password."
 msgid "Please enter your new password."
-msgstr "Por favor, introduzca su contraseña."
+msgstr "Por favor, introduzca su nueva contraseña."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the password."
 msgid "Please enter the same password."
-msgstr "Por favor, introduzca la contraseña."
+msgstr "Por favor, introduzca la misma contraseña."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9842,22 +9838,16 @@ msgid "Message will be sent to all newly invited people"
 msgstr "El mensaje se enviará a todas las personas recién invitadas"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder permissions"
 msgid "Sharing folders without permissions"
-msgstr "Permisos de carpeta"
+msgstr "Compartición de carpetas sin permisos"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You are moving one or more items that are shared with other people. These "
-#| "people will lose access."
 msgid ""
 "Your are sharing one or more folders for which you do not have permissions. "
 "These folders will not be shared."
 msgstr ""
-"Está moviendo uno o más elementos que se han compartido con otras personas. "
-"Dichas personas perderán el acceso."
+"Está compartiendo una o más carpetas para las que no tiene permisos. Dichas "
+"carpetas no se compartirán."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"

@@ -114,14 +114,14 @@ Scenario.skip('Checks when saving', async ({ I, mail }) => {
     I.waitForVisible(unchecked, 10);
 
     // try to save draft (disabled drive mail)
-    I.click(mail.locators.compose.close);
+    I.click('~Save and close', '.io-ox-mail-compose-window');
     I.waitForText('Save draft');
     I.click('Save draft');
     I.waitForVisible(message);
     I.waitForVisible(checked, 10);
 
     // save draft (enabled drive mail)
-    I.click(mail.locators.compose.close);
+    I.click('~Save and close', '.io-ox-mail-compose-window');
     I.waitForText('Save draft');
     I.click('Save draft');
     I.waitForDetached('.io-ox-mail-compose-window');

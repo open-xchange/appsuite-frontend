@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-04-29 13:13+0200\n"
+"PO-Revision-Date: 2022-07-08 11:17+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #
 #   Naming Conventions
@@ -5847,16 +5847,12 @@ msgid "Next"
 msgstr "Næste"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter your password."
 msgid "Please enter your new password."
-msgstr "Indtast venligst din adgangskode."
+msgstr "Indtast venligst din nye adgangskode."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
-#, fuzzy
-#| msgid "Please enter the password."
 msgid "Please enter the same password."
-msgstr "Indtast venligst adgangskode."
+msgstr "Indtast venligst den samme adgangskode."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -9778,22 +9774,16 @@ msgid "Message will be sent to all newly invited people"
 msgstr "Beskeden vil blive sendt til alle nyligt inviterede folk"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder permissions"
 msgid "Sharing folders without permissions"
-msgstr "Mappetilladelser"
+msgstr "Deling af mapper uden tilladelser"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid ""
-#| "You are moving one or more items that are shared with other people. These "
-#| "people will lose access."
 msgid ""
 "Your are sharing one or more folders for which you do not have permissions. "
 "These folders will not be shared."
 msgstr ""
-"Du er ved at flytte en eller flere ting som er delt med andre folk. Disse "
-"folk mister adgang."
+"Du er ved at dele en eller flere mapper, som du ikke rettigheder til. Disse "
+"mapper vil ikke blive delt."
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to discard all changes?"
