@@ -99,7 +99,7 @@ define('io.ox/core/main/apps', [
         requires: 'infostore',
         refreshable: true,
         searchable: true,
-        settings: capabilities.has('!guest'),
+        settings: true,
         icon: icons['io.ox/files']
     });
     ui.createApp({
