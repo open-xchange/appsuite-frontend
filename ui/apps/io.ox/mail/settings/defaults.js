@@ -58,6 +58,9 @@ define('io.ox/mail/settings/defaults', [], function () {
             // none, fail, fail_trusted, fail_trusted_pass, all, silly
             level: 'fail_trusted',
             domains: ''
+        },
+        'features': {
+            'allowExternalSMTP': true
         }
     };
 

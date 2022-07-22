@@ -97,8 +97,9 @@ define('io.ox/mail/sender', [
                 return getAddresses(options).then(function (addresses, deputyAddresses, primary) {
                     var hash = {};
                     // set "type" at index 2
-                    [].concat(
-                        _.map(addresses, function (address) {
+                    var sender = settings.get('features/allowExternalSMTP', true) ? addresses : [addresses[0]]
+                    ;[].concat(
+                        _.map(sender, function (address) {
                             return address.concat(address[1] === primary[1] ? 'primary' : 'common');
                         }),
                         _.map(deputyAddresses, function (address) {

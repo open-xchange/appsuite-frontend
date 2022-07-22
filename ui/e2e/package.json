@@ -16,6 +16,7 @@
   "dependencies": {
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.34",
-    "otpauth": "^8.0.1"
+    "otpauth": "^8.0.1",
+    "chai-subset": "^1.6.0"
   }
 }

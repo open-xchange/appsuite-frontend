@@ -335,6 +335,11 @@ define('io.ox/mail/accounts/settings', [
         draw: function () {
             if (window.location.protocol !== 'https:') return;
             this.append($('<div class="help-block">').text(gt('Your credentials will be sent over a secure connection only')));
+            if (!mailSettings.get('features/allowExternalSMTP', true)) {
+                this.append($('<div class="smtp-disabled">').text(
+                    gt('External mail accounts are read-only')
+                ));
+            }
         }
     });
 

@@ -26,8 +26,9 @@ define('io.ox/mail/accounts/model', [
     'io.ox/core/api/account',
     'io.ox/core/folder/api',
     'io.ox/backbone/validation',
+    'settings!io.ox/mail',
     'gettext!io.ox/keychain'
-], function (ext, keychainModel, AccountAPI, folderAPI, validation, gt) {
+], function (ext, keychainModel, AccountAPI, folderAPI, validation, mailSettings, gt) {
 
     'use strict';
 
@@ -91,14 +92,14 @@ define('io.ox/mail/accounts/model', [
             ],
             transport_server: {
                 required: function () {
-                    return !this.isHidden() && !this.get('secondary');
+                    return !this.isHidden() && !this.get('secondary') && mailSettings.get('features/allowExternalSMTP', true);
                 },
                 msg: gt('This field is mandatory')
             },
             transport_port: [
                 {
                     required: function () {
-                        return !this.isHidden();
+                        return !this.isHidden() && mailSettings.get('features/allowExternalSMTP', true);
                     },
                     msg: gt('This field is mandatory')
                 },
@@ -148,6 +149,11 @@ define('io.ox/mail/accounts/model', [
             if (data.transport_auth === 'mail') {
                 delete data.transport_login;
                 delete data.transport_password;
+                if (!mailSettings.get('features/allowExternalSMTP', true)) {
+                    delete data.transport_server;
+                    delete data.transport_port;
+                    delete data.transport_auth;
+                }
             }
             return AccountAPI.validate(data, options);
         },
@@ -212,6 +218,14 @@ define('io.ox/mail/accounts/model', [
                 model.attributes = obj;
                 model.attributes.spam_handler = 'NoSpamHandler';
             }
+
+            if (!mailSettings.get('features/allowExternalSMTP', true) && model.get('transport_auth') === 'mail') {
+                model.unset('transport_login', { silent: true });
+                model.unset('transport_password', { silent: true });
+                model.unset('transport_auth', { silent: true });
+                model.unset('transport_port', { silent: true });
+            }
+
             return AccountAPI.create(model.attributes);
         },
 

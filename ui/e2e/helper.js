@@ -22,6 +22,11 @@
 
 const Helper = require('@open-xchange/codecept-helper').helper;
 const { util } = require('@open-xchange/codecept-helper');
+const output = require('codeceptjs/lib/output');
+const chai = require('chai');
+const chaiSubset = require('chai-subset');
+chai.use(chaiSubset);
+const { expect } = chai;
 
 class MyHelper extends Helper {
 
@@ -406,6 +411,51 @@ class MyHelper extends Helper {
             }
         });
         return response.data;
+    }
+
+    /**
+     * @param {object} obj
+     * @param {number} timeout
+     * @param {object} options
+     * @returns
+     */
+    async waitForSetting(obj, timeout = 5, options = {}) {
+        const { httpClient, session } = await util.getSessionForUser(options);
+        const [moduleName] = Object.keys(obj);
+
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function checkSetting() {
+            const data = await httpClient.get('/api/jslob', {
+                params: {
+                    id: moduleName,
+                    action: 'get',
+                    session
+                }
+            }).then(function (res) {
+                if (res.data.error) {
+                    throw new Error({
+                        message: res.data.error
+                    });
+                }
+                return res.data.data;
+            });
+
+            expect(data.tree).to.containSubset(obj[moduleName]);
+        }
+
+        const startTime = Date.now();
+        async function retryPromise(fn, retryDelay = 300) {
+            const start = Date.now();
+            const retry = async () => {
+                if (Date.now() - start > timeout * 1000) return Promise.reject(new Error('Timed out'));
+                await delay(retryDelay);
+                return fn().catch(retry);
+            };
+            return retry();
+        }
+
+        return retryPromise(checkSetting).finally(() => output.say(`Waiting for settings to be saved took ${(Date.now() - startTime) / 1000} seconds`));
     }
 }
 

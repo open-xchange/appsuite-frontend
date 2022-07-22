@@ -95,19 +95,26 @@ define('io.ox/mail/compose/main', [
         perform: function () {
             var model = this.model,
                 config = this.config;
+
+            var setDefaultAddress = function () {
+                return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
+                    model.set('from', address);
+                });
+            };
+            if (!settings.get('features/allowExternalSMTP', true)) return setDefaultAddress();
             if (model.get('from')) return;
 
             return getGranteeAddress().then(function (granteeAddress) {
-                var isGranteeAddress = !_.isEmpty(granteeAddress),
-                    folder = isGranteeAddress ? mailAPI.getDefaultFolder() : config.get('folderId');
+                var isGranteeAddress = !_.isEmpty(granteeAddress);
+                var folder = isGranteeAddress || !settings.get('features/allowExternalSMTP', true)
+                    ? mailAPI.getDefaultFolder()
+                    : config.get('folderId');
                 return accountAPI.getPrimaryAddressFromFolder(folder).then(function (address) {
                     return isGranteeAddress ?
                         model.set({ from: granteeAddress, sender: address }) :
                         model.set({ from: address });
                 }).catch(function () {
-                    return accountAPI.getPrimaryAddressFromFolder(mailAPI.getDefaultFolder()).then(function (address) {
-                        model.set('from', address);
-                    });
+                    return setDefaultAddress();
                 });
             });
 

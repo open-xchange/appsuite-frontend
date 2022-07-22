@@ -201,7 +201,8 @@ define('io.ox/mail/compose/extensions', [
 
             if (_.device('smartphone') || this.addresses.length === 0) return;
 
-            this.addresses.getCommon().forEach(function (model, index, list) {
+            var sender = settings.get('features/allowExternalSMTP', true) ? this.addresses.getCommon() : [this.addresses.find({ type: 'default' })];
+            sender.forEach(function (model, index, list) {
                 if (index === 1 && list.length > 2) self.dropdown.divider();
                 addOption(model);
             });

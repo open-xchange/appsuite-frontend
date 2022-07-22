@@ -30,8 +30,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/core/folder/picker',
     'io.ox/core/capabilities',
     'io.ox/core/settings/util',
+    'settings!io.ox/mail',
     'settings!io.ox/core'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util, coreSettings) {
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util, mailSettings, coreSettings) {
 
     'use strict';
 
@@ -670,7 +671,8 @@ define.async('io.ox/mail/accounts/view-form', [
             }
 
             if (!model.isHidden()) {
-                this.append(serverSettingsIn, serverSettingsOut);
+                this.append(serverSettingsIn);
+                if (mailSettings.get('features/allowExternalSMTP', true)) this.append(serverSettingsOut);
                 view.listenTo(model, 'change:transport_auth', changeTransportAuth);
                 view.listenTo(model, 'change:login', adoptCredentials);
                 //FIXME: is this needed?
