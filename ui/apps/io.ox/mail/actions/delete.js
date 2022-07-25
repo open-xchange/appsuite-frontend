@@ -131,6 +131,7 @@ define('io.ox/mail/actions/delete', [
                         .open();
                 });
             } else {
+                setFocus(baton);
                 api.remove(list, all, shiftDelete).fail(function (e) {
                     // mail quota exceeded? see above
                     if (e.code === 'MSG-0039') return;
