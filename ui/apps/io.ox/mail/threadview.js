@@ -44,7 +44,7 @@ define('io.ox/mail/threadview', [
             this.$el.append(
                 $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
-                        $('<a href="#" role="button" class="back">')
+                        $('<a href="#" role="button" class="back" draggable="false">')
                         .attr('aria-label', gt('Back to list'))
                         .append($('<i class="fa fa-chevron-left" aria-hidden="true">'), $.txt(' '), $.txt(gt('Back')))
                     ),
