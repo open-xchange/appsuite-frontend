@@ -226,7 +226,7 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
     // access combination groupware disables active_sync capability
-    await users[0].hasAccessCombination('groupware');
+    await users[0].hasAccessCombination('webmail');
 
     I.login();
     mail.waitForApp();
@@ -239,11 +239,6 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
         I.click('iPhone or iPad');
 
         I.waitForText('Which application do you want to use?');
-        I.waitForText('OX Drive');
-        I.click('OX Drive');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
-
         // check if button is disabled
         I.waitForText('Which application do you want to use?');
         I.dontSee('Exchange Active Sync');
@@ -260,12 +255,6 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
         I.waitForText('Which device do you want to configure?');
         I.click('iPhone or iPad');
 
-        I.waitForText('Which application do you want to use?');
-        I.waitForText('OX Drive');
-        I.click('OX Drive');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
-
         // check if button is disabled
         I.waitForText('Which application do you want to use?');
         I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Calendar'));
@@ -279,10 +268,10 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
     expect(msg).to.exist;
 
     // enable active_sync again, check if upsell is not offered
-    await users[0].hasAccessCombination('all');
+    await users[0].hasAccessCombination('groupware_premium');
     I.wait(1);
     I.logout();
-    I.login('app=io.ox/mail&cap=caldav,carddav');
+    I.login('app=io.ox/mail');
     mail.waitForApp();
     topbar.connectDeviceWizard();
 
