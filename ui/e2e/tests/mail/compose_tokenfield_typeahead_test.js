@@ -135,9 +135,9 @@ Scenario('Add typeahead suggestion via keyboard', async ({ I, users, mail }) => 
 
     // autocomplete via select second suggestion
     // Workaround: using 'ister' cause sometimes a "mail address token" and not a "label" token get's created
-    await addToken(name, 'ArrowDown,ArrowDown,ArrowDown,Tab', 'ister', { hover: false });
-    await addToken(name, 'ArrowDown,ArrowDown,ArrowDown,Enter', 'ister', { hover: false });
-    await addToken(name, 'ArrowDown,ArrowDown,ArrowDown,Space', 'ister', { hover: false });
+    await addToken(name, 'ArrowDown,ArrowDown,Tab', 'ister', { hover: false });
+    await addToken(name, 'ArrowDown,ArrowDown,Enter', 'ister', { hover: false });
+    await addToken(name, 'ArrowDown,ArrowDown,Space', 'ister', { hover: false });
 
     async function addToken(query, keys, result, options) {
         // enter term, wait for typeahead and hit key
