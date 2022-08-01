@@ -56,6 +56,7 @@ Scenario('Typing notifications will appear and stop on message sent', async ({ I
     });
 
     await session('Alice', async () => {
+        I.waitForNetworkTraffic();
         I.fillField('~Message', message1);
     });
 
