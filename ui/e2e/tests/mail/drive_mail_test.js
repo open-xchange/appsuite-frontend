@@ -197,7 +197,6 @@ Scenario('[C85687] Send drive-mail with expiry date', async ({ I, users, mail, d
     mail.selectMail(subject);
     // Expected Result: Above the content an information is shown that the sender has shared some files with you plus a link to that files
     I.waitForText(`${batman.userdata.given_name} ${batman.userdata.sur_name} has shared the following file with you:`);
-    I.see(batFile);
 
     I.waitForVisible('.mail-detail-frame');
     // Verify the password and expiry date is part of the email
