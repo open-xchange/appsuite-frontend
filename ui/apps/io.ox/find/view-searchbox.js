@@ -28,8 +28,6 @@ define('io.ox/find/view-searchbox', [
 
     var AutocompleteView = Backbone.View.extend({
 
-        _height: {},
-
         initialize: function (props) {
             // app, win, model references
             _.extend(this, props);
@@ -41,16 +39,13 @@ define('io.ox/find/view-searchbox', [
                 tokenfield: new Tokenfield(_.extend(props, { parent: this }))
             };
 
-            // register
-            this.register();
+            this.ui.tokenfield.on('tokenfield:createdtoken tokenfield:removedtoken', _.bind(this._onResize, this));
             return this;
         },
 
         render: function () {
             // render subview
             this.ui.tokenfield.render();
-            // default height
-            this._height.initial = this._height.current = this.$el.outerHeight();
             return this;
         },
 
@@ -70,16 +65,8 @@ define('io.ox/find/view-searchbox', [
         _onResize: function () {
             var self = this;
             _.defer(function () {
-                var current = _.max([self._height.initial, self.$el.height()]),
-                    delta = current - self._height.current;
-                if (!delta) return;
-                self._height.current = current;
-                self.trigger('resize', delta);
+                self.trigger('resize');
             });
-        },
-
-        register: function () {
-            this.ui.tokenfield.on('tokenfield:createdtoken tokenfield:removedtoken', _.bind(this._onResize, this));
         },
 
         isEmpty: function () {

@@ -23,19 +23,6 @@
 .window-container {
 
     /**
-     *  io-ox-find (generic-toolbar)
-     *     search-box
-     *         form-group has-feedback
-     *             tokenfield-placeholder OR tokenfield (search-field)
-     *                 token
-     *                 actions (form-control-feedback)
-     *
-     *     search-box-filter
-     *         ul (classic-toolbar)
-     *             lif (dropdown)
-     */
-
-    /**
      *  GENERAL
      */
     .io-ox-find {
@@ -45,7 +32,7 @@
         @action-color: #767676;
 
         padding: 4px 8px;
-        line-height: 20px;
+        line-height: 0;
         z-index: 10;
 
         .search-box {
@@ -63,6 +50,10 @@
                 &:before { font-size: 16px; }
             }
 
+            .form-group {
+                margin-bottom: 0;
+            }
+
             .tokenfield-placeholder {
                 padding-left: @placeholder-padding;
             }
@@ -72,7 +63,7 @@
                 padding-left: @placeholder-padding - 3;
                 padding-right: 9px;
                 // 30px but works with text zoom
-                height: 2.14285714em;
+                min-height: 2.14285714em;
 
                 .token {
 
@@ -133,7 +124,6 @@
         }
 
         .search-box-filter {
-            float: left;
             padding-left: 8px;
 
             & > .classic-toolbar {
@@ -141,6 +131,10 @@
                 .dropdown .conflicting, .dropdown.conflicting a {
                     color: #a4a4a4;
                     pointer-events: none;
+                }
+
+                li {
+                    height: 31px;
                 }
             }
         }
@@ -157,7 +151,8 @@
         }
         .search-box-filter { display: none; }
         flex: 0 1 auto;
-        height: 2.5rem;
+        height: auto;
+        min-height: 2.5rem;
     }
 
     /**
@@ -180,11 +175,10 @@
             //top: managed by backbone view
             position: absolute;
             width: 100vw;
+            display: flex;
 
             .search-box {
-                float: left;
-                width: 100%;
-                max-width: 550px;
+                min-width: 550px;
 
                 // switch visibility
                 .action {
@@ -196,8 +190,11 @@
             .search-box-filter {
                 display: block;
                 .classic-toolbar {
-                    // max-width (.search-box) + padding (.io-ox-find)
-                    width: calc(~"100% - 566px");
+                    align-items: center;
+                    height: 100%;
+                    width: auto;
+                    position: relative !important;
+                    border: none;
                 }
             }
         }
