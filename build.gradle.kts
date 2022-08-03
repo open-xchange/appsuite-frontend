@@ -43,9 +43,6 @@ buildservice {
         }
         name = "frontend-$extension"
         repositories {
-            create("DebianStretch") {
-                depends("Debian:Stretch", "standard")
-            }
             create("DebianBuster") {
                 depends("Debian:Buster", "standard")
             }
