@@ -23,7 +23,7 @@
 /// <reference path="../../steps.d.ts" />
 
 const { expect } = require('chai');
-const jitsiHost = 'https://meet.k3s.os.oxui.de';
+const jitsiHost = 'https://mock-jitsi.k3s.os2.oxui.de/';
 
 Feature('Switchboard > Jitsi');
 
