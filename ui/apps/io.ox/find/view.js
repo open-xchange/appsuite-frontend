@@ -116,6 +116,10 @@ define('io.ox/find/view', [
 
             this.listenTo(options.app, 'view:disable', this.disable);
             this.listenTo(options.app, 'view:enable', this.enable);
+
+            this.initialFolderTreeOffset = this.$el.closest('.window-sidepanel').find('.folder-tree').offset().top;
+            this.initialWindowOffset = this.$el.closest('.window-container').find('.window-body').offset().top;
+            this.initialOuterHeight = this.$el.outerHeight();
         },
 
         disable: function () {
@@ -153,7 +157,7 @@ define('io.ox/find/view', [
             // replaces stub
             this.ui.searchbox.render();
             this.ui.facets.render();
-            this.register();
+            this.ui.searchbox.on('resize', _.bind(this._onResize, this));
             return this;
         },
 
@@ -241,22 +245,15 @@ define('io.ox/find/view', [
             }, 150);
         },
 
-        _onResize: function (delta) {
-            var box = this.$el,
-                facets = this.ui.facets.$el.find('ul'),
-                tree = this.$el.closest('.window-sidepanel').find('.folder-tree'),
+        _onResize: function () {
+            var tree = this.$el.closest('.window-sidepanel').find('.folder-tree'),
                 winbody = this.$el.closest('.window-container').find('.window-body');
 
-            box.outerHeight(box.outerHeight() + delta);
-            facets.outerHeight(facets.outerHeight() + delta);
-            tree.offset({ top: tree.offset().top + delta });
-            if (this.app.isActive()) {
-                winbody.offset({ top: winbody.offset().top + delta });
-            }
-        },
+            var treeOffset = this.initialFolderTreeOffset + this.$el.outerHeight() - this.initialOuterHeight;
+            var windowOffset = this.initialWindowOffset + (this.app.isActive() ? this.$el.outerHeight() : 0);
 
-        register: function () {
-            this.ui.searchbox.on('resize', _.bind(this._onResize, this));
+            tree.offset({ top: treeOffset });
+            winbody.offset({ top: windowOffset });
         },
 
         setFocus: function () {

@@ -84,24 +84,13 @@ define('io.ox/find/view-facets', [
 
             this.setElement(this.parent.$el.find('.search-box-filter'));
 
-            this.register();
-        },
-
-        register: function () {
-            this.listenTo(this.app.model.manager, 'active', $.proxy(this.redraw, this));
+            this.listenTo(this.app.model.manager, 'active', $.proxy(this.render, this));
             this.listenTo(this.app, 'find:config-updated', $.proxy(this.render, this));
-        },
-
-        redraw: function () {
-            this.render();
         },
 
         render: function () {
             this.reset();
-            // container node
             ext.point('io.ox/find/facets/toolbar').invoke('draw', this.$el, this.baton);
-            // adjust height by parents height (maybe tokenfield has morge than on line visible)
-            this.$el.find('ul.classic-toolbar').outerHeight(this.$el.parent().outerHeight());
             this.$el.find('ul.classic-toolbar > li > a:not(:first)').attr('tabindex', -1);
             return this;
         },
