@@ -65,8 +65,6 @@ Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, sett
     I.selectOption('#transport_auth', 'None');
     I.wait(1);
     dialogs.clickButton('Save');
-    I.retry(10).waitForText('Ignore Warnings', 12);
-    dialogs.clickButton('Ignore Warnings');
     I.waitForDetached('.modal');
     I.click('~Mail');
     mail.waitForApp();
