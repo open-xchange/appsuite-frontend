@@ -373,8 +373,9 @@ define('io.ox/core/main/appcontrol', [
         draw: function () {
             var logo,
                 logoFileName = settings.get('logoFileName', 'logo.png'),
-                action = settings.get('logoAction', false),
+                action,
                 updateLogo = function () {
+                    action = settings.get('logoAction', false);
                     // prevent multiple button wrappings of the logo, also removes the button when there is no action anymore
                     if (logo.parent().hasClass('logo-btn')) {
                         logo.parent().replaceWith(logo);
@@ -399,12 +400,13 @@ define('io.ox/core/main/appcontrol', [
                         var autoStart = settings.get('autoStart');
                         if (action === 'autoStart') {
                             if (autoStart === 'none') return;
+                            action = autoStart;
                         }
                         logo.wrap(
                             $('<button type="button" class="logo-btn btn btn-link">').on('click', function () {
                                 // works like a generic capability/requirement check, if this returns true then the app can be launched (similar to how quicklaunchers handle this)
-                                if (!ox.ui.apps.get(autoStart.replace(/\/main$/, ''))) return;
-                                ox.launch(autoStart);
+                                if (!ox.ui.apps.get(action.replace(/\/main$/, ''))) return;
+                                ox.launch(action);
                             })
                         );
                     }
