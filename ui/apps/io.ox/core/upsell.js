@@ -116,7 +116,7 @@ define('io.ox/core/upsell', [
             }
 
             function isEnabledOrHas(cap) {
-                var condition = cap.replace(/([^&|]) ([^&|])/gi, '$1 && $2');
+                var condition = cap.replace(/([^&|]) ([^&|])/gi, '$1 && $2').replace(capabilities.whitelistRegex, '');
                 if (ox.debug && /,/.test(condition)) return !!console.error('You can\'t use a comma in a condition use space instead.');
                 condition = condition.replace(/[\w:-]+/ig, function (match) {
                     match = match.toLowerCase();
@@ -151,7 +151,7 @@ define('io.ox/core/upsell', [
                 // example: 'a', 'b || c' -> 'a || b || c'
                 // example: 'a b && c' -> 'a && b && c'
                 // example: 'a,b' -> invalid
-                var condition = _(arguments).flatten().join(' || ').replace(/([^&|]) ([^&|])/gi, '$1 && $2');
+                var condition = _(arguments).flatten().join(' || ').replace(/([^&|]) ([^&|])/gi, '$1 && $2').replace(capabilities.whitelistRegex, '');
                 if (ox.debug && /,/.test(condition)) return !!console.error('You can\'t use a comma in a condition use space instead.');
                 condition = condition.replace(/[a-z0-9_:-]+/ig, function (match) {
                     match = match.toLowerCase();
