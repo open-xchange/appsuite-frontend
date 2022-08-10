@@ -112,7 +112,6 @@ module.exports.config = {
         // pageobjects
         contacts: './pageobjects/contacts',
         calendar: './pageobjects/calendar',
-        chat: './pageobjects/chat',
         mail: './pageobjects/mail',
         portal: './pageobjects/portal',
         drive: './pageobjects/drive',
