@@ -230,48 +230,6 @@ Scenario('[J2] Create call from call history and check call history after hang u
     });
 });
 
-Scenario('Create appointment with jitsi conference', async ({ I, users, calendar }) => {
-
-    const [user1, user2] = users;
-    let meetingURL;
-
-    await session('userA', async () => {
-        I.login('app=io.ox/calendar', { user: user1 });
-        calendar.newAppointment();
-        I.fillField('Subject', 'Appointment with Jitsi conference');
-        I.selectOption('conference-type', 'Jitsi Meeting');
-        I.waitForVisible('.fa.fa-video-camera');
-        I.waitForText(jitsiHost, 5, '.conference-view');
-        await calendar.addParticipant(user2.get('name'));
-        I.click('Create');
-    });
-
-    await session('userB', async () => {
-        I.login('app=io.ox/calendar', { user: user2 });
-        calendar.waitForApp();
-        I.waitForVisible('.appointment');
-        I.click('.appointment');
-        I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        waitAndSwitchTab();
-        meetingURL = await I.grabCurrentUrl();
-    });
-
-    await session('userA', async () => {
-        I.waitForVisible('.appointment');
-        I.click('.appointment');
-        I.waitForVisible('.io-ox-sidepopup');
-        I.waitForVisible('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        I.waitForEnabled('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        I.retry(3).click('.io-ox-sidepopup .action-button-rounded .btn[data-action="join"]');
-        waitAndSwitchTab();
-        let url = await I.grabCurrentUrl();
-        expect(meetingURL).to.be.equal(url);
-    });
-});
-
 Scenario('[OXUIB-443] Zoom settings are not shown when only jitsi is enabled', ({ I, settings }) => {
 
     I.login('app=io.ox/settings');
