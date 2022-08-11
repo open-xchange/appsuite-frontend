@@ -330,7 +330,7 @@ define('io.ox/core/main/topbar_right', [
             if (capabilities.has('guest')) return;
 
             var type = settings.get('user/hidedomainpart', false) ? 'email-localpart' : 'email',
-                container, node;
+                container, node, nameNode;
 
             container = $('<li class="user">').append(
                 $('<a href="#" data-name="user-picture" class="action" tabindex="-1">')
@@ -339,7 +339,7 @@ define('io.ox/core/main/topbar_right', [
                     node = $('<div class="user-picture-container" aria-hidden="true">')
                 ),
                 $('<div class="text-container">').append(
-                    $('<div class="name">').append(userAPI.getTextNode(ox.user_id, { type: 'name' })),
+                    nameNode = $('<div class="name">').append(userAPI.getTextNode(ox.user_id, { type: 'name' })),
                     $('<div class="mail">').append(userAPI.getTextNode(ox.user_id, { type: type }))
                 )
             );
@@ -357,6 +357,7 @@ define('io.ox/core/main/topbar_right', [
             // via my contact data
             userAPI.on('reset:image:' + ox.user_id + ' update:image:' + ox.user_id, updatePicture);
             userAPI.on('update', updatePicture);
+            userAPI.on('update', updateName);
 
             function updatePicture() {
                 var $initials;
@@ -374,6 +375,10 @@ define('io.ox/core/main/topbar_right', [
                 userAPI.me().then(function (data) {
                     $initials.append(contactsUtil.getInitials(data));
                 });
+            }
+
+            function updateName() {
+                nameNode.empty().append(userAPI.getTextNode(ox.user_id, { type: 'name' }));
             }
 
             this.$ul.append(container);

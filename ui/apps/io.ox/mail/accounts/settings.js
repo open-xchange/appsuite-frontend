@@ -47,7 +47,7 @@ define('io.ox/mail/accounts/settings', [
         });
 
         myView.dialog = new ModalDialog({
-            width: '43.75rem',
+            width: _.device('smartphone') ? '' : '43.75rem',
             maximize: '31.25rem',
             async: true,
             point: 'io.ox/settings/accounts/mail/settings/detail/dialog',
