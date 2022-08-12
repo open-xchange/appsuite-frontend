@@ -209,7 +209,7 @@ define('io.ox/participants/add', [
                 }).flatten().compact().value();
             }
 
-            if (!_.isEmpty(list)) this.collection.add(list);
+            if (!_.isEmpty(list)) this.collection.add(contactsUtil.checkDuplicateMails(list, this.collection));
 
             if (!_.isEmpty(distlists)) {
                 _.each(distlists, function (item) {
@@ -270,10 +270,10 @@ define('io.ox/participants/add', [
                             } else if (!member.folder_id || !member.user_id || member.field !== 'email1') {
                                 member.type = 5;
                             }
-                            self.options.collection.add(calendarUtil.createAttendee(member));
+                            self.options.collection.add(contactsUtil.checkDuplicateMails(calendarUtil.createAttendee(member), self.options.collection));
                             return;
                         }
-                        self.options.collection.add(member);
+                        self.options.collection.add(contactsUtil.checkDuplicateMails(member, self.options.collection));
                     },
                     processRaw: self.options.processRaw,
                     useGABOnly: self.options.useGABOnly,
