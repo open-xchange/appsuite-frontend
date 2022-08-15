@@ -89,7 +89,7 @@ define('io.ox/mail/actions', [
     }
 
     function setFocus(baton) {
-        if (baton.e.clientX && baton.e.clientY) return;
+        if (baton && baton.e && baton.e.clientX && baton.e.clientY) return;
         $('.io-ox-mail-window .list-item[tabindex="0"]').trigger('focus');
     }
 
