@@ -887,13 +887,17 @@ define('io.ox/contacts/addressbook/popup', [
         '    <% } else if (item.label) { %>' +
         '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users" aria-hidden="true"></i></div>' +
         '    <% } else if (item.image) { %>' +
-        '      <div class="contact-picture image" data-original="<%= item.image %>" aria-hidden="true"></div>' +
+        '      <div class="contact-picture image" data-original="<%- item.image %>" aria-hidden="true"></div>' +
         '    <% } else { %>' +
-        '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
+        '      <div class="contact-picture initials <%- item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
         '    <% } %>' +
         '    <div class="name">' +
-        '       <%= item.full_name_html || item.email || "\u00A0" %>' +
-        '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
+        '      <% if (item.full_name_html) { %>' +
+        '        <%= item.full_name_html %>' +
+        '      <% } else { %>' +
+        '        <%- item.email || "\u00A0" %>' +
+        '      <% } %>' +
+        '      <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
         '    </div>' +
         '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
         '  </div>' +
