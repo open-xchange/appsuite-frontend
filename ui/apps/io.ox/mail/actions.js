@@ -257,7 +257,7 @@ define('io.ox/mail/actions', [
         },
         action: function (baton) {
             var list = _.isArray(baton.data) ? baton.data : [baton.data];
-            api.archive(list).then(function () { setFocus(baton); });
+            api.archive(folderAPI.ignoreSentItems(list)).then(function () { setFocus(baton); });
         }
     });
 
