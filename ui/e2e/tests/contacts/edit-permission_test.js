@@ -77,7 +77,7 @@ Scenario('[C7365] Edit permission ', async ({ I, contacts, users, dialogs }) => 
     I.click('.folder-arrow', '~Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Share / Permissions');
+    I.clickDropdown('Permissions');
     dialogs.waitForVisible();
     I.waitForText('Author', 5, locate('.permission.row').withAttr({ 'aria-label': `${secondUserName}, Internal user.` }));
     dialogs.clickButton('Close');
@@ -107,7 +107,7 @@ Scenario('[C7365] Edit permission ', async ({ I, contacts, users, dialogs }) => 
     I.see('Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Share / Permissions');
+    I.clickDropdown('Permissions');
     dialogs.waitForVisible();
     I.waitForText('Viewer', 5, locate('.permission.row').withAttr({ 'aria-label': `${secondUserName}, Internal user.` }));
     dialogs.clickButton('Close');
@@ -138,7 +138,7 @@ Scenario('[C7365] Edit permission ', async ({ I, contacts, users, dialogs }) => 
     I.see('Shared address books');
     I.selectFolder(`${sharedUserName}: Contacts`);
     I.openFolderMenu(`${sharedUserName}: Contacts`);
-    I.clickDropdown('Share / Permissions');
+    I.clickDropdown('Permissions');
     dialogs.waitForVisible();
     I.waitForText('Reviewer', 5, locate('.permission.row').withAttr({ 'aria-label': `${secondUserName}, Internal user.` }));
     dialogs.clickButton('Close');

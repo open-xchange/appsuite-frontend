@@ -492,7 +492,7 @@ define('io.ox/core/folder/contextmenu', [
                     data: { app: baton.app, id: id },
                     enabled: true,
                     handler: invite,
-                    text: (showInvitePeople || hasLinkSupport) ? gt('Share / Permissions') : gt('Permissions')
+                    text: model.isShareable() ? gt('Share / Permissions') : gt('Permissions')
                 });
             };
         }()),

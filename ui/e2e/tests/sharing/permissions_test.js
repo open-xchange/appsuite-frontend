@@ -333,3 +333,103 @@ Scenario('[DOCS-3066] Sharing link area is visible for decrypted files and invis
     I.waitForDetached('.modal-dialog');
 
 });
+
+Scenario('[OXUIB-1830] Without share_links and invite_guests capabilities the user is able to share to internal users only', async function ({ I, users, drive, dialogs }) {
+    const [user] = users;
+
+    const folder = await I.grabDefaultFolder('infostore');
+    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
+    await Promise.all([
+        I.haveFile(testFolder, 'media/files/0kb/document.txt'),
+        user.hasConfig('com.openexchange.capability.share_links', false),
+        user.hasConfig('com.openexchange.capability.invite_guests', false)
+    ]);
+
+    I.wait(3);
+
+    I.login('app=io.ox/files');
+    drive.waitForApp();
+
+    I.waitForText('Testfolder', 5, '.file-list-view');
+    I.rightClick(locate('.filename').withText('Testfolder'), '.file-list-view');
+    I.clickDropdown('Share / Permissions');
+    I.waitForText('Share folder "Testfolder', 5, '.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog .invite-people');
+    I.dontSeeElement('.share-permissions-dialog .access-select');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.share-permissions-dialog');
+
+    I.doubleClick(locate('.folder-label').withText('My files'), '.private-drive-folders');
+    I.waitForText('Testfolder', 5, '.private-drive-folders');
+    I.rightClick(locate('.folder-label').withText('Testfolder'), '.private-drive-folders');
+    I.clickDropdown('Permissions');
+    I.waitForText('Permissions for folder "Testfolder', 5, '.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog .invite-people');
+    I.dontSeeElement('.share-permissions-dialog .access-select');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.share-permissions-dialog');
+
+    I.waitForElement(locate('.filename').withText('document.txt'), 5, '.file-list-view');
+    I.rightClick(locate('.filename').withText('document.txt'), '.file-list-view');
+    I.clickDropdown('Share / Permissions');
+    I.waitForText('Share file "document.txt', 5, '.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog .invite-people');
+    I.dontSeeElement('.share-permissions-dialog .access-select');
+});
+
+Scenario('[OXUIB-1830] Viewers do not see sharing options in the context menu', async function ({ I, users, drive, dialogs }) {
+    const [user, guest] = users;
+
+    const folder = await I.grabDefaultFolder('infostore');
+    const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
+    await I.haveFile(testFolder, 'media/files/0kb/document.txt');
+
+    I.login('app=io.ox/files', { user });
+    drive.waitForApp();
+
+    I.waitForText('Testfolder', 5, '.file-list-view');
+    I.rightClick(locate('.filename').withText('Testfolder'), '.file-list-view');
+    I.clickDropdown('Share / Permissions');
+    I.waitForText('Share folder "Testfolder', 5, '.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog');
+    I.waitForElement('.share-permissions-dialog .invite-people');
+    I.click('.twitter-typeahead .tt-input');
+    I.waitForFocus('.twitter-typeahead .tt-input');
+    I.fillField('.twitter-typeahead .tt-input', guest.userdata.email1);
+    I.pressKey('Enter');
+    I.waitForText(guest.userdata.display_name);
+    dialogs.clickButton('Share');
+    I.waitForDetached('.share-permissions-dialog');
+
+    I.logout();
+
+    I.login('app=io.ox/files', { user: guest });
+    drive.waitForApp();
+
+    I.waitForText('Shared files', 5, '.public-drive-folders');
+    I.doubleClick(locate('.folder-label').withText('Shared files'), '.public-drive-folders');
+    I.waitForText(user.userdata.display_name, 5, '.public-drive-folders');
+    I.click(locate('.folder-label').withText(user.userdata.display_name), '.public-drive-folders');
+    I.waitForText('Testfolder', 5, '.file-list-view');
+    I.rightClick(locate('.filename').withText('Testfolder'), '.file-list-view');
+    I.waitForElement('.dropdown-menu');
+    I.waitForText('Add to favorites');
+    I.dontSee('Share / Permissions');
+    I.pressKey('Escape');
+
+    I.rightClick(locate('.folder-label').withText(user.userdata.display_name), '.public-drive-folders');
+    I.waitForElement('.dropdown-menu');
+    I.waitForText('Add to favorites');
+    I.dontSee('Share / Permissions');
+    I.pressKey('Escape');
+
+    I.doubleClick(locate('.filename').withText('Testfolder'), '.file-list-view');
+    I.waitForElement(locate('.filename').withText('document.txt'), 5, '.file-list-view');
+    I.rightClick(locate('.filename').withText('document.txt'), '.file-list-view');
+    I.waitForElement('.dropdown-menu');
+    I.waitForText('View');
+    I.dontSee('Share / Permissions');
+});

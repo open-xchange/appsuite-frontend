@@ -153,7 +153,7 @@ Scenario('[C8377] Invite a person', async ({ I, users, drive, dialogs }) => {
         I.waitForElement(locate('.filename').withText('Music').inside('.list-view'));
         I.doubleClick(locate('.filename').withText('Music').inside('.list-view'));
         I.openFolderMenu('Music');
-        I.clickDropdown('Share / Permissions');
+        I.clickDropdown('Permissions');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 2, '.permissions-view');
         I.click('Close');
@@ -185,7 +185,7 @@ Scenario('[C8377] Invite a person', async ({ I, users, drive, dialogs }) => {
         I.waitForText(publicFolderName, 5, '.list-view');
         I.selectFolder(publicFolderName);
         I.openFolderMenu(publicFolderName);
-        I.clickDropdown('Share / Permissions');
+        I.clickDropdown('Permissions');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');
     });
@@ -231,7 +231,7 @@ Scenario('[C8378] Invite a group', async ({ I, users, drive, dialogs }) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[i] });
         drive.waitForApp();
         I.openFolderMenu(folderName);
-        I.clickDropdown('Share / Permissions');
+        I.clickDropdown('Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');
@@ -390,7 +390,7 @@ Scenario('[C8386] Uninvite a group', async ({ I, users, drive, dialogs }) => {
         I.login('app=io.ox/files&folder=' + folder, { user: users[1] });
         drive.waitForApp();
         I.openFolderMenu(folderName);
-        I.clickDropdown('Share / Permissions');
+        I.clickDropdown('Permissions');
         dialogs.waitForVisible();
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.see('Viewer', '.permissions-view .row .role');

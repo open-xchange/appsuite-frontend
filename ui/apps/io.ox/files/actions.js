@@ -803,7 +803,6 @@ define('io.ox/files/actions', [
 
     // folder based actions
     new Action('io.ox/files/actions/invite', {
-        capabilities: 'invite_guests || share_links',
         collection: '!multiple',
         matches: function (baton) {
             return util.isShareable('invite', baton) || util.isShareable('link', baton);
