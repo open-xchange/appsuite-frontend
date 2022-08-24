@@ -57,6 +57,7 @@ build e2e image:
       --dockerfile ui/e2e/Dockerfile
       --destination $CI_REGISTRY_IMAGE/e2e:$TAG_NAME
       --push-retry 3
+      --force
   rules:
     - changes:
         - ui/e2e/**/*
