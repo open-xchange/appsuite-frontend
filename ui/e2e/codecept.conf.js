@@ -102,7 +102,7 @@ if (codeceptDriver !== 'webdriver') delete helpers.WebDriver;
 
 module.exports.config = {
     tests: './tests/**/*_test.js',
-    timeout: 10000,
+    timeout: 120,
     output: './output',
     helpers,
     include: {
