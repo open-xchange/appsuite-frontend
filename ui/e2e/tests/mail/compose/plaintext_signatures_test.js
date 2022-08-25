@@ -131,12 +131,12 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     await selectAndAssertSignature(I, mail, 'First signature above', `some user input\n\n${signatures[0].plaintext}`);
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click(mail.locators.compose.close);
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Compose new mail with signature below correctly placed initially', async function ({ I }) {
+Scenario('Compose new mail with signature below correctly placed initially', async function ({ I, mail }) {
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
         signature.id = response.data;
@@ -155,7 +155,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     expect(await grabValueFrom(I, '.io-ox-mail-compose textarea.plain-text')).to.equal(`\n\n${signatures[2].plaintext}`);
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click(mail.locators.compose.close);
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -210,12 +210,12 @@ Scenario('Reply to mail with plaintext signature above correctly placed and chan
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp(`^some user input\\n\\n${signatures[0].plaintext}\\n\\n(>[^\\n]*(\\n)?)+$`));
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click(mail.locators.compose.close);
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
 
-Scenario('Reply to mail with signature below correctly placed initially', async function ({ I, users }) {
+Scenario('Reply to mail with signature below correctly placed initially', async function ({ I, users, mail }) {
     let [user] = users;
     for (let signature of signatures) {
         var response = await I.haveSnippet(signature);
@@ -245,7 +245,7 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     );
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click(mail.locators.compose.close);
     I.waitForVisible('.io-ox-mail-window');
 });
 

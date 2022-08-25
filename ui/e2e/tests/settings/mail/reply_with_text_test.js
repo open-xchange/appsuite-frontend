@@ -53,7 +53,7 @@ Scenario('[C7776] Insert the original email text to a reply', async ({ I, users,
     I.waitForElement('.io-ox-mail-compose textarea');
     I.seeInField('textarea', '> This is simple plain text!');
 
-    I.click('~Close', '.io-ox-mail-compose-window');
+    I.click(mail.locators.compose.close);
     I.logout();
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail/settings/compose', { user });
