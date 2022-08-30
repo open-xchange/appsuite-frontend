@@ -642,6 +642,9 @@ define('io.ox/mail/detail/content', [
                 content.setAttribute('role', 'complementary');
                 content.setAttribute('aria-label', data.subject);
 
+                // CSS handling for malformatted mails
+                if (baton.data && baton.data.from && baton.data.from[0] && baton.data.from[0][1] && baton.data.from[0][1].match(/@paypal.[a-zA-Z]*$/)) content.style.height = 0; // see Bug OXUIB-1827 (2022-08-29)
+
                 // process content
                 ext.point('io.ox/mail/detail/content-general').invoke('process', content, baton);
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
