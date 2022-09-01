@@ -183,6 +183,8 @@ define('io.ox/settings/personalData/settings/pane', [
                 var self = this;
                 this.status = options.status;
                 this.status.on('change:status', this.render.bind(this));
+                // save this so it isn't overwritten when the selectbox is used
+                this.maxSupportedFileSize = self.model.get('maxFileSize');
                 // create one model for each submodule
                 // makes it easier to use checkbox miniviews later on since data is not nested anymore
                 this.models = {};
@@ -198,7 +200,7 @@ define('io.ox/settings/personalData/settings/pane', [
                 this.$el.removeClass('disabled').empty();
 
                 var self = this, checkboxes,
-                    supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.model.get('maxFileSize'); });
+                    supportedFilesizes = _(filesizelimits).filter(function (value) { return value <= self.maxSupportedFileSize; });
 
                 // data selection
                 this.$el.append(

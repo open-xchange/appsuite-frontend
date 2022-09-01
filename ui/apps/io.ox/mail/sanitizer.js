@@ -43,6 +43,8 @@ define('io.ox/mail/sanitizer', [
                     var prefix = rule.cssText.indexOf('.mail-detail-content ') > -1 ? '' : '.mail-detail-content ',
                         // clear url paths from css when image loading is disabled
                         text = config.noImages ? rule.cssText.replace(urlDetectionRule, '') : rule.cssText;
+                    // exception for styles applied directly to body element since this cannot be simply prefixed
+                    if (rule.cssText.startsWith('body')) return text.replace(/^body/g, 'body' + prefix);
                     return prefix + text;
                 // media rules
                 case 4:

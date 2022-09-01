@@ -823,7 +823,7 @@ define('io.ox/tasks/edit/view-template', [
                 app.view.baton.attachmentList.baton.attachmentList.addFile(fileData);
             });
             // ensure file representatives are visible
-            app.view.$('.expand-link').trigger('click');
+            if (app.view.baton.parentView.collapsed) app.view.$('.expand-link').trigger('click');
         }
     });
 });

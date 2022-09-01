@@ -511,6 +511,17 @@ define('io.ox/core/tk/contenteditable-editor', [
                         $(this).toggleClass('mce-btn-group-visible-xs', $(this).has('.mce-widget:not([data-hidden])').length > 0);
                     });
 
+                    var storedCursorPosition;
+                    ed.on('paste', function () {
+                        storedCursorPosition = getCursorPosition(ed);
+                    });
+                    ed.on('BeforeSetContent', function (o) {
+                        if (!o.paste) return;
+                        // the paste plugin in the 4.x tinymce stream does change the scroll-top position
+                        // we need to manually keep track of the position and restoring it when a string is pasted
+                        // for more details, see OXUIB-1703
+                        getCursorPosition(ed).scrollable.scrollTop(storedCursorPosition.top - storedCursorPosition.pos);
+                    });
                     ed.on('SetContent', function (o) {
                         if (!o.paste) return;
                         setTimeout(throttledScrollOnEnter, 0, ed);

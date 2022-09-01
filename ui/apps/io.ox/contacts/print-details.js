@@ -38,7 +38,7 @@ define('io.ox/contacts/print-details', [
             birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
             businessAddress: postalAddress.format(data, 'business'),
             homeAddress: postalAddress.format(data, 'home'),
-            otherAdress: postalAddress.format(data, 'other')
+            otherAddress: postalAddress.format(data, 'other')
         };
     }
 
