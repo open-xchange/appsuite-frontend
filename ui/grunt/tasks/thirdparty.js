@@ -170,7 +170,7 @@ module.exports = function (grunt) {
                         expand: true,
                         src: [
                             // see io.ox/core/locale/meta for the list of locales
-                            '{bg,ca,cs,da,de,de-AT,de-CH,en,en-GB,en-AU,en-CA,en-DE,en-IE,en-NZ,en-SG,en-ZA,' +
+                            '{bg,ca,cs,da,de,de-AT,de-CH,el,en,en-GB,en-AU,en-CA,en-DE,en-IE,en-NZ,en-SG,en-ZA,' +
                             'es,es-MX,es-AR,es-BO,es-CL,es-CO,es-CR,es-DO,es-EC,es-SV,es-GT,es-HN,es-NI,es-PA,es-PY,es-PE,es-PR,es-US,' +
                             'et,fi,fr,fr-CA,fr-CH,fr-BE,hu,it,it-CH,lv,nl,nl-BE,nb,pl,pt,ru,ro,sk,sv,tr,ja,zh}/ca-gregorian.json'
                         ],

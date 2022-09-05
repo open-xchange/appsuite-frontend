@@ -6899,11 +6899,6 @@ typescript@^3.8.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
   integrity sha512-kdMjTiekY+z/ubJCATUPlRDl39vXYiMV9iyeMuEuXZh2we6zz80uovNN2WlAxmmdE/Z/YQe+EbOEXB5RHEED3w==
 
-u2f-api@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-1.0.11.tgz#240940ed3eb3e85842cb2959cf42ec9dada6dcec"
-  integrity sha512-WxOasq8nJmyAISE7cSIm1X2gW7V0/4JfHH4dIVGLNr3s/D4h7IWyFfIEmxuDYHhQxRRZev+96xFmM5tXpvnQMg==
-
 ua-parser-js@0.7.22:
   version "0.7.22"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.22.tgz#960df60a5f911ea8f1c818f3747b99c6e177eae3"
