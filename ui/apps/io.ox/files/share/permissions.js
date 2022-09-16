@@ -1050,7 +1050,7 @@ define('io.ox/files/share/permissions', [
             dialog.$('.modal-content').addClass(supportsPersonalShares(objModel) ? 'supports-personal-shares' : '');
 
             permissionsView.setPermissionPreSelectionView(permissionPreSelection);
-            if (options.hasLinkSupport) {
+            if (options.hasLinkSupport && (capabilities.has('invite_guests') || capabilities.has('share_links'))) {
                 var baton = new ext.Baton({ view: dialog, model: dialogConfig });
                 ext.point(POINT_DIALOG + '/share-settings').invoke('draw', dialog.$body, publicLink.model, baton);
             }
