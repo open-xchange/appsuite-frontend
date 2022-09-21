@@ -255,7 +255,7 @@ define('io.ox/core/boot/form', [
 
             var form = lc.form;
             if (form) {
-                if (form.header && form.header.textColor) configCss += '#box-form-header, { color: ' + form.header.textColor + ' } ';
+                if (form.header && form.header.textColor) configCss += '#box-form-header { color: ' + form.header.textColor + ' } ';
                 if (form.header && form.header.bgColor) configCss += '#box-form-header { background: ' + form.header.bgColor + ' } ';
                 if (form.textColor) configCss += '#box-form-body *:not(button) { color: ' + form.textColor + ' } ';
                 if (form.linkColor) configCss += '#box-form a { color: ' + form.linkColor + ' } ';
