@@ -722,7 +722,15 @@ define('io.ox/mail/util', [
 
                 return attachments;
             };
-        }())
+        }()),
+
+        // CSS handling for malformatted mails
+        fixMalformattedMails: function (content, senders) {
+            // see Bug OXUIB-1827 (2022-08-29)
+            if (senders.find(function (sender) { return /@(\w+\.)?paypal\.[a-z]+$/i.test(sender); })) {
+                Array.from(content.querySelectorAll('p')).forEach(function (el) { el.style.height = 'auto'; });
+            }
+        }
     };
     return that;
 });

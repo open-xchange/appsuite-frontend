@@ -314,14 +314,17 @@ define('io.ox/mail/compose/model', [
 
                     var unquoted = /^forward-inline$/.test(data.meta.type) && settings.get('forwardunquoted', false);
                     if (data.contentType === 'text/html') {
+                        var blockquote = $('<blockquote type="cite">').append(
+                            header.map(function (line) {
+                                if (!line) return '<div><br></div>';
+                                return $('<div>').text(line);
+                            }),
+                            data.content
+                        );
+                        var sender = mailAddress(mail.from)[1];
+                        mailUtil.fixMalformattedMails(blockquote.get(0), [sender]);
                         data.content = mailUtil.getDefaultStyle().node.get(0).outerHTML
-                            + $('<blockquote type="cite">').append(
-                                header.map(function (line) {
-                                    if (!line) return '<div><br></div>';
-                                    return $('<div>').text(line);
-                                }),
-                                data.content
-                            ).prop(unquoted ? 'innerHTML' : 'outerHTML');
+                            + blockquote.prop(unquoted ? 'innerHTML' : 'outerHTML');
                     } else if (data.contentType === 'text/plain') {
                         var indent = unquoted ? '' : '> ';
                         data.content = '\n' +
