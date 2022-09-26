@@ -53,6 +53,13 @@
 
     .hard-conflict { margin: 1em 0 0 0; }
 
+    .disabled, .disabled:hover, .disabled label {
+        color: @link-disabled-color;
+        cursor: not-allowed;
+    }
+
+    button.disabled { opacity: 1; }
+
     .color-picker-dropdown {
         display: inline-block;
     }
