@@ -849,6 +849,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
 
             var self = this,
+                isNew = !this.model.id,
                 picker = new ColorPicker({
                     model: this.model,
                     attribute: 'color',
@@ -857,17 +858,24 @@ define('io.ox/calendar/edit/extensions', [
                 toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
                 menu = $('<ul class="dropdown-menu">'),
                 pickedColor = $('<span class="picked-color" aria-hidden="true">'),
-                pickedColorLabel = $('<span class="sr-only">'),
-                dropdown = new Dropdown({
-                    smart: true,
-                    className: 'color-picker-dropdown dropdown',
-                    $toggle: toggle.append(pickedColor, pickedColorLabel),
-                    $ul: menu,
-                    margin: 24,
-                    model: this.model,
-                    carret: true,
-                    allowUndefined: true
-                });
+                pickedColorLabel = $('<span class="sr-only">');
+
+            // Check if user neither has organizer rights nor is creating a new appointment where no right information are available
+            if (!calendarUtil.hasOrganizerRights(this.model) && !isNew) {
+                toggle.addClass('disabled').prop('disabled', true);
+                picker.model.set('color', calendarUtil.DISABLED_COLOR);
+            }
+
+            var dropdown = new Dropdown({
+                smart: true,
+                className: 'color-picker-dropdown dropdown',
+                $toggle: toggle.append(pickedColor, pickedColorLabel),
+                $ul: menu,
+                margin: 24,
+                model: this.model,
+                carret: true,
+                allowUndefined: true
+            });
             //#. showed inside a color picker. Used if an appointment should not have a custom color
             dropdown.option('color', '', gt('Use calendar color'), { radio: true });
             dropdown.$ul.find('[data-name="color"]').addClass('folder-default-color');
@@ -880,6 +888,9 @@ define('io.ox/calendar/edit/extensions', [
                 if (!self.model.get('color')) {
                     // try to get the folder color
                     var color = calendarUtil.getFolderColor(folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model());
+
+                    // Check if user neither has organizer rights nor is creating a new appointment where no right information are available
+                    if (!calendarUtil.hasOrganizerRights(self.model) && !isNew) color = calendarUtil.DISABLED_COLOR;
 
                     pickedColor.css({ 'background-color': color });
                     if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;
@@ -958,7 +969,7 @@ define('io.ox/calendar/edit/extensions', [
                 onChangeFolder = function () {
                     // force true boolean
                     var disabled = !!(folderAPI.pool.getModel(this.model.get('folder')).is('public') || isNotOrganizer || isException);
-                    checkboxView.$el.toggleClass('disabled', disabled).find('input').attr('aria-disabled', disabled).prop('disabled', disabled ? 'disabled' : null);
+                    checkboxView.$el.toggleClass('disabled', disabled).find('input').prop('disabled', disabled ? 'disabled' : null);
                     // if checkbox is disabled this means attendeePrivileges must be set to DEFAULT because MODIFY is not supported. Would cause error on save otherwised
                     // no changes if you are not the organizer or if this is an exception. We need to leave the value as is
                     if (disabled && !(isNotOrganizer || isException)) this.model.set('attendeePrivileges', 'DEFAULT');

@@ -136,6 +136,8 @@ define('io.ox/calendar/util', [
             { label: gt('dark gray'), value: '#6B6B6B' }
         ],
 
+        DISABLED_COLOR: '#C5C5C5',
+
         PRIVATE_EVENT_COLOR: '#616161',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
@@ -1052,6 +1054,10 @@ define('io.ox/calendar/util', [
             });
         },
 
+        hasOrganizerRights: function (model) {
+            return model.hasFlag('organizer') || model.hasFlag('organizer_on_behalf');
+        },
+
         getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
                 eventColor = eventModel.get('color'),
@@ -1074,7 +1080,7 @@ define('io.ox/calendar/util', [
             //     return 'color-label-' + folderColor;
             // }
 
-            if (!eventModel.hasFlag('organizer') && !eventModel.hasFlag('organizer_on_behalf')) return folderColor;
+            if (!this.hasOrganizerRights(eventModel)) return folderColor;
 
             // set color of appointment. if color is 0, then use color of folder
             return !eventColor ? folderColor : eventColor;
