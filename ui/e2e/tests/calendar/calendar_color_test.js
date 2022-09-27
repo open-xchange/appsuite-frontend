@@ -26,7 +26,10 @@ const moment = require('moment');
 Feature('Calendar');
 
 Before(async function ({ users }) {
-    await users.create();
+    await Promise.all([
+        users.create(),
+        users.create()
+    ]);
 });
 
 After(async function ({ users }) {
@@ -154,4 +157,125 @@ Scenario('Changing calendar color should change appointment color that uses cale
     expect(folderColor, 'folderColor equals darkGreen').equal(darkGreen);
     expect(appointmentOneColor, 'appointment one color equals darkRed').be.oneOf([darkRed, 'rgb(188, 56, 56)']);
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').be.oneOf([darkGreen, 'rgb(49, 93, 34)']);
+});
+
+Scenario('Check appointment colors of appointments the user got invited to', async function ({ I, users, calendar, dialogs }) {
+    I.login('app=io.ox/calendar&perspective="week:workweek"');
+    const greyColor = 'rgb(197, 197, 197)';
+    const blueColor = 'rgb(207, 230, 255)';
+
+    calendar.newAppointment();
+    I.fillField('Subject', 'Test Appointment');
+    I.fillField(calendar.locators.starttime, '12:00 PM');
+    I.fillField('Add contact/resource', users[1].userdata.primaryEmail);
+    I.checkOption('attendeePrivileges');
+    I.retry(5).click('Appointment color', '.color-picker-dropdown');
+    I.click({ css: 'a[title="green"]' });
+    I.click('Create');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+
+    I.logout();
+
+    I.login('app=io.ox/calendar&perspective="week:workweek"', { user: users[1] });
+
+    I.waitForText('Test Appointment');
+    I.click('~Test Appointment');
+    I.waitForText('Accept', 5, '.io-ox-sidepopup');
+    I.click('Accept', '.io-ox-sidepopup');
+    I.click('Edit', '.io-ox-sidepopup');
+    I.waitForElement({ css: 'button.disabled' }, 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
+    I.waitForElement('.picked-color', 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
+    const color = await I.grabCssPropertyFrom('.picked-color', 'background-color');
+    expect(color).be.equal(greyColor);
+    I.click('Discard', '.io-ox-calendar-edit-window');
+    I.waitForText('Discard changes');
+    dialogs.clickButton('Discard changes');
+    I.waitForDetached('.modal-dialog');
+    I.waitForDetached('.io-ox-calendar-edit-window');
+    I.click('~Close', '.io-ox-sidepopup');
+    I.waitForDetached('.io-ox-sidepopup');
+
+    const appointmentColor = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
+    expect(appointmentColor).be.equal(blueColor);
+});
+
+Scenario('Check appointment colors of public calendar appointments the user got invited to', async function ({ I, users, calendar, dialogs }) {
+    const redColor = 'rgb(245, 170, 170)';
+    const greenColor = 'rgb(175, 221, 160)';
+
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar&perspective="week:workweek"', { user: users[0] });
+
+        I.say('Create a new public calendar that gets shared with user B');
+        I.waitForText('Add new calendar', 5, '.folder-tree');
+        I.click('Add new calendar', '.folder-tree');
+        I.clickDropdown('Personal calendar');
+        dialogs.waitForVisible();
+        I.waitForText('Add as public calendar', 5, dialogs.locators.body);
+        I.checkOption('Add as public calendar', dialogs.locators.body);
+        dialogs.clickButton('Add');
+        I.waitForDetached('.modal-dialog');
+        I.say('Grant permission to user b');
+        I.click(locate('.folder-arrow').inside('~Public calendars'));
+        I.rightClick('~New calendar');
+        I.wait(0.2); // wait for listeners
+        I.clickDropdown('Share / Permissions');
+        dialogs.waitForVisible();
+        I.waitForElement('.form-control.tt-input', 5);
+        I.fillField('.form-control.tt-input', users[1].get('primaryEmail'));
+        I.pressKey('Enter');
+        I.click({ css: 'button[title="Current role"]' }, '.supports-personal-shares');
+        I.clickDropdown('Author');
+        dialogs.clickButton('Save');
+        I.waitForDetached('.modal-dialog');
+
+        I.say('Create a new appointment in the public calendar and invite user B');
+        I.clickToolbar('New appointment');
+        I.waitForText('Appointments in public calendars');
+        dialogs.clickButton('Create in public calendar');
+        I.waitForDetached('.modal-dialog');
+        I.waitForVisible('.io-ox-calendar-edit-window');
+        I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
+        I.fillField('Subject', 'Test Appointment');
+        I.fillField(calendar.locators.starttime, '12:00 PM');
+        I.fillField('Add contact/resource', users[1].userdata.primaryEmail);
+        I.retry(5).click('Appointment color', '.color-picker-dropdown');
+        I.click('.color-picker-dropdown.open a[title="red"]');
+        I.click('Create');
+        I.waitForDetached('.io-ox-calendar-edit-window');
+    });
+
+    await session('Bob', async () => {
+        I.login('app=io.ox/calendar&perspective="week:workweek"', { user: users[1] });
+
+        I.waitForText('Test Appointment');
+
+        I.say('Check appointment');
+        I.click('~Test Appointment');
+        I.waitForText('Accept', 5, '.io-ox-sidepopup');
+        I.click('Accept', '.io-ox-sidepopup');
+        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForDetached('.io-ox-sidepopup');
+        I.wait(0.2);
+
+        const appointmentColorBefore = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
+        expect(appointmentColorBefore).be.equal(redColor);
+
+        I.click('~Test Appointment');
+        I.waitForText('Edit', 5, '.io-ox-sidepopup');
+        I.click('Edit', '.io-ox-sidepopup');
+        I.waitForElement('.picked-color', 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
+        const color = await I.grabCssPropertyFrom('.picked-color', 'background-color');
+        expect(color).be.equal(redColor);
+        I.click('.picked-color', '.io-ox-calendar-edit-window .color-picker-dropdown');
+        I.click('.color-picker-dropdown.open a[title="green"]');
+        I.click('Save', '.io-ox-calendar-edit-window');
+        I.waitForDetached('.io-ox-calendar-edit-window');
+        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForDetached('.io-ox-sidepopup');
+        I.wait(0.2);
+
+        const appointmentColorAfter = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
+        expect(appointmentColorAfter).be.equal(greenColor);
+    });
 });
