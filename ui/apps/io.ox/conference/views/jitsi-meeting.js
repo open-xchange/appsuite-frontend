@@ -91,6 +91,8 @@ define('io.ox/conference/views/jitsi-meeting', [
         },
 
         createMeeting: function () {
+            if (this.appointment.get('conferences')[0]) return;
+
             var meeting = api.createJitsiMeeting();
             this.appointment.set('conferences', [{
                 uri: meeting.joinURL,
