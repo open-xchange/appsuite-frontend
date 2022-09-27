@@ -141,7 +141,7 @@ define('io.ox/mail/compose/actions/extensions', [
         if (baton.view.editor.getMode() === 'html') {
             mailContent += $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature,.io-ox-hint').text();
         } else {
-            mailContent += baton.view.editor.getContent().replace(/^>.*\n/gm, '');
+            mailContent += baton.view.editor.getContent().replace(/^>.*(\n|$)/gm, '');
         }
 
         var detectedString = new RegExp('(' + words + ')', 'i').exec(mailContent);
