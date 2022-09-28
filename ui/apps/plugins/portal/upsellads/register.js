@@ -22,10 +22,11 @@
 
 define('plugins/portal/upsellads/register', [
     'io.ox/core/extensions',
+    'io.ox/mail/sanitizer',
     'gettext!plugins/portal',
     'settings!plugins/upsell',
     'less!plugins/portal/upsellads/style'
-], function (ext, gt, settings) {
+], function (ext, sanitizer, gt, settings) {
 
     'use strict';
 
@@ -62,6 +63,8 @@ define('plugins/portal/upsellads/register', [
         }
 
         type = fromAd.type;
+
+        fromAd.text = sanitizer.simpleSanitize(fromAd.text);
 
         if (!type || type === 'text-only') {
             toTarget.append(

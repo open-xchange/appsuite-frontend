@@ -108,3 +108,45 @@ Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, 
         expect(classes || '').to.not.contain('deep-link-app');
     });
 });
+
+Scenario('[XSS] [OXUIB-1933] No malicious code execution when portal app with upsell ad gets loaded', async function ({ I, users, portal }) {
+
+    const script = `require(['io.ox/core/yell'], function (yell) {
+                        yell('error', 'XSS23')
+                    })`;
+
+    await Promise.all([
+        users[0].context.hasCapability('upsell'),
+        I.haveSetting('plugins/upsell//ads', {
+            xssad: {
+                slides: {
+                    en_US: {
+                        slide1: {
+                            type: 'text-only',
+                            text: `XSS <script>${script}</script> XSS`
+                        }
+                    }
+                }
+            }
+        }),
+        I.haveSetting('io.ox/portal//widgets/user', {
+            upsellads_0: {
+                color: 'default',
+                enabled: true,
+                id: 'upsellads_0',
+                index: 1,
+                inverse: false,
+                plugin: 'plugins/portal/upsellads/register',
+                props: {
+                    ad: 'xssad'
+                },
+                userWidget: true
+            }
+        })
+    ]);
+
+    I.login('app=io.ox/portal');
+    portal.waitForApp();
+    I.waitForDetached('#io-ox-refresh-icon .fa-spin', 20);
+    I.dontSee('XSS23');
+});
