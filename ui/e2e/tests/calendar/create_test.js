@@ -672,6 +672,22 @@ Scenario('[C274516] Follow up should also propose a future date for appointments
     I.see('Whole day', '.io-ox-sidepopup');
 });
 
+Scenario('[OXUIB-1849] Remove invalid links form appointments when deleting video conference', async ({ I, calendar, users }) => {
+    await users[0].context.hasCapability('switchboard');
+
+    I.login('app=io.ox/calendar');
+    calendar.newAppointment();
+
+    I.selectOption('conference-type', 'Jitsi Meeting');
+    I.waitForText('Copy to location field', 10, '.io-ox-calendar-edit-window.active .conference-view');
+    I.click('Copy to location field', '.io-ox-calendar-edit-window.active .conference-view');
+    I.waitForValue('.io-ox-calendar-edit-window.active [name="location"]', 'Jitsi Meeting: https://meet.jit.si/ox-', 5);
+
+    I.say('Removing Jitsi link form location');
+    I.selectOption('conference-type', 'None');
+    I.dontSeeInField('.io-ox-calendar-edit-window.active [name="location"]', '.');
+});
+
 Scenario('[C274515] Attendees are not allowed to change their own permission status', async ({ I, users, calendar }) => {
     const SIDEPOPUP = locate({ css: '.io-ox-calendar-main .io-ox-sidepopup' }).as('Sidepopup');
     const testrailID = 'C274515';
