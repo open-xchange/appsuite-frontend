@@ -40,6 +40,15 @@ define('io.ox/conference/views/conference-select', [
             this.$col = $('<div class="col-xs-12">');
         },
         removeConference: function () {
+            var location = this.appointment.get('location');
+            var conferences = this.appointment.get('conferences');
+            if (location && conferences) {
+                var conference = conferences.find(
+                    function (conference) { return location.search(conference.uri) > -1; }
+                );
+                if (conference) this.appointment.set('location', '');
+            }
+
             this.appointment.set('conferences', []);
         },
         onChangeType: function () {
