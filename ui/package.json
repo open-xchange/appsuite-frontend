@@ -79,7 +79,7 @@
     "jwt-decode": "^3.1.2",
     "mark.js": "^8.11.1",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.34",
+    "moment-timezone": "^0.5.37",
     "patch-package": "^6.4.7",
     "pdfjs-dist": "2.10.377",
     "qrcode": "^1.4.4",
