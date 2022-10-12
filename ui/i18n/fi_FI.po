@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-27 19:07+0200\n"
+"PO-Revision-Date: 2022-10-12 10:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1232,26 +1232,30 @@ msgid "Print"
 msgstr "Tulosta"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "Osallistujaan liittyvät toiminnot"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "Lähetä postia kaikille osallistujille"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "Kutsu uuteen tapaamiseen"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Tallenna jakelulistana"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "Muuta järjestäjä"
 
@@ -4178,7 +4182,7 @@ msgstr "%1$s, %2$s ja %3$d ja muut kirjoittavat ..."
 
 #: apps/io.ox/conference/api.js module:io.ox/switchboard
 #: apps/io.ox/conference/extensions.js module:io.ox/conference
-#: apps/io.ox/conference/views/zoom-meeting.js
+#: apps/io.ox/conference/views/zoom-util.js
 msgid "Join Zoom meeting"
 msgstr "Liity Zoom-kokoukseen"
 
@@ -4204,6 +4208,14 @@ msgstr "Jitsi-kokous"
 msgid "Conference"
 msgstr "Konferenssi"
 
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid ""
+"The appointment description might contain outdated information from a "
+"previous zoom conference that needs to be deleted manually."
+msgstr ""
+"Tapaamisen kuvaus saattaa sisältää vanhentuneita tietoja aiemmasta zoom-"
+"kokouksesta, joka on poistettava manuaalisesti."
+
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 #: apps/io.ox/conference/views/zoom-meeting.js
 msgid "Link:"
@@ -4217,32 +4229,6 @@ msgstr "Kopioi sijaintikenttään"
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 msgid "Jitsi Meeting: %1$s"
 msgstr "Jitsi-kokous: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Kokouksen salasana: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Mobiilipikavalinta (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Kokoustunniste: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Soittosalasana: %1$s"
-
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Valitse sijaintisi mukaan"
 
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -4310,6 +4296,32 @@ msgstr ""
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 msgid "New meeting"
 msgstr "Uusi kokous"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Kokouksen salasana: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Mobiilipikavalinta (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Kokoustunniste: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Soittosalasana: %1$s"
+
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Valitse sijaintisi mukaan"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -5242,6 +5254,12 @@ msgstr ""
 "rajata tuloksia hakusanan avulla."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "User fields"
+msgid "User list"
+msgstr "Käyttäjän kentät"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Yleinen osoiteluettelo"
 
@@ -5408,7 +5426,6 @@ msgstr "Koti"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Viestin"
 
@@ -5524,6 +5541,14 @@ msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
 "Joitakin yhteystietoja ei voitu lisätä, koska niillä ei ole kelpaavaa "
 "sähköpostikenttää."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr ""
+"Joitakin yhteystietoja ei voitu lisätä, koska niiden sähköpostiosoite on jo "
+"listassa."
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5828,6 +5853,14 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Seuraava"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter your new password."
+msgstr "Kirjoita uusi salasanasi."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter the same password."
+msgstr "Anna sama salasana."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6894,8 +6927,8 @@ msgstr "Portaali"
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/core/whatsnew/meta.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/invitations/register.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
@@ -7660,7 +7693,6 @@ msgstr "Päivitysväli"
 msgid "Default app after sign in"
 msgstr "Oletussovellus kirjautumisen jälkeen"
 
-#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
 msgstr "Hallinnoi selaimen toimintoja"
@@ -8660,11 +8692,6 @@ msgid "%1$s Usability"
 msgstr "%1$s käytettävyys"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
-msgctxt "app"
-msgid "OX Drive"
-msgstr "OX Drive"
-
-#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
 "%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
 "sharing dialogs have also been simplified and search performance was "
@@ -9096,6 +9123,14 @@ msgstr ""
 "Palautettu kansioon:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"PDF-tiedosto on tallennettu kohteeseen \"/drive/myfiles/documents\", koska  "
+"nykyiseen kansioon ei ole kirjoitusoikeutta."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -9701,6 +9736,12 @@ msgstr "Valtuudet  %1$s \"%2$s\""
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove shares"
 msgstr "Poista jaettuja kohteita"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "Haluatko varmasti poistua keskustelusta?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
@@ -10469,6 +10510,17 @@ msgstr "Poista viesti"
 msgid "The appointment has been added to your calendar"
 msgstr "Tapaaminen on lisätty kalenteriisi"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Sähköpostikiintiö on täynnä. Sinun on käytettävä %1$s tai pienennettävä "
+"viestin kokoa jollakin muulla tavalla."
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Muistuta minua"
@@ -10708,16 +10760,6 @@ msgid ""
 "attachment file size."
 msgstr "Liite on liian suuri. Käytä %1$s tai pienennä tiedoston kokoa."
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"Sähköpostikiintiö on täynnä. Sinun on käytettävä %1$s tai pienennettävä "
-"viestin kokoa jollakin muulla tavalla."
-
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
@@ -10787,6 +10829,35 @@ msgstr "Viestien lähettäminen on peruttu."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Sähköposti lähetetty"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "Sähköposti sisältää piilotettuja ulkoisia kuvia"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Tämä sähköpostiviesti sisältää kuvia ulkoisista lähteistä, jotka ovat tällä "
+"hetkellä piilotettuja. Lähetetty sähköpostiviesti ei sisällä kuvia "
+"ulkoisista lähteistä"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "Sähköposti saattaa sisältää ulkoisia kuvia"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Tämä sähköpostiviesti voi sisältää kuvia ulkoisista lähteistä. Lähetetty "
+"sähköpostiviesti ei sisällä kuvia ulkoisista lähteistä"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "Sähköpostin luominen ilman ulkoisia kuvia"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -10946,10 +11017,22 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "Tämä viesti on lähetetty toisen henkilön puolesta."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Tallenna ja sulje"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Uusi viesti"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr ""
+"Kuvan lataus estetty. Sen resouutio ylittää sallitun %2$s pikselin "
+"enimmäisarvon."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -10974,16 +11057,12 @@ msgid "Restore draft"
 msgstr "Palauta luonnos"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Tallenna ja sulje"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "Et voi avata enempää kuin %1$s luonnosta yhtä aikaa."
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "%1$s %2$s kirjoitti:"
@@ -13310,14 +13389,14 @@ msgstr ""
 "Skannaa tämä koodi puhelimen kameralla synkronoidaksesi sähköpostin, "
 "kalenterin ja osoitteistosi Exchange Active Syncin avulla:"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -13339,8 +13418,8 @@ msgid "OX Sync App"
 msgstr "OX Sync App"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -14301,6 +14380,12 @@ msgstr ""
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from device"
 msgstr "Kirjaudu ulos laitteelta"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/core/onboarding
+msgctxt "native app"
+msgid "OX Sync"
+msgstr "OX-synkronointi"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
@@ -15310,8 +15395,8 @@ msgid "Shared Appointments"
 msgstr "Jaetut tapaamiset"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Chat history"
-msgstr "Keskusteluhistoria"
+msgid "Recent conversations"
+msgstr "Tuoreimmat keskustelut"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -16217,6 +16302,13 @@ msgstr "Kutsu %s:in"
 msgid "Add on %s"
 msgstr "%s lisää"
 
+#~ msgctxt "app"
+#~ msgid "OX Drive"
+#~ msgstr "OX Drive"
+
+#~ msgid "Chat history"
+#~ msgstr "Keskusteluhistoria"
+
 #~ msgid "save"
 #~ msgstr "tallenna"
 
@@ -16712,9 +16804,6 @@ msgstr "%s lisää"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Tehtävä oli jo poistettu!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Tuoreimmat keskustelut"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Lataa %s %s :lle heti"

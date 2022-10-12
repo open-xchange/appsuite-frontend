@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-24 21:35+0300\n"
+"PO-Revision-Date: 2022-10-12 11:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1231,26 +1231,30 @@ msgid "Print"
 msgstr "Yazdır"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "Katılımcıyı ilgilendiren eylemler"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "Tüm katılımcılara e-posta gönder"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "Yeni randevuya davet et"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Dağıtım listesi olarak kaydet"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "Organizatörü değiştir"
 
@@ -4185,7 +4189,7 @@ msgstr "%1$s, %2$s ve %3$d kişi daha yazıyor..."
 
 #: apps/io.ox/conference/api.js module:io.ox/switchboard
 #: apps/io.ox/conference/extensions.js module:io.ox/conference
-#: apps/io.ox/conference/views/zoom-meeting.js
+#: apps/io.ox/conference/views/zoom-util.js
 msgid "Join Zoom meeting"
 msgstr "Zoom toplantısına katıl"
 
@@ -4211,6 +4215,14 @@ msgstr "Jitsi toplantısı"
 msgid "Conference"
 msgstr "Konferans"
 
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid ""
+"The appointment description might contain outdated information from a "
+"previous zoom conference that needs to be deleted manually."
+msgstr ""
+"Randevu açıklaması, önceki bir Zoom görüşmesinden kalan eski bilgileri "
+"içeriyor olabilir ve bunları elle silmeniz gerekebilir."
+
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 #: apps/io.ox/conference/views/zoom-meeting.js
 msgid "Link:"
@@ -4224,32 +4236,6 @@ msgstr "Konum alanına kopyala"
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 msgid "Jitsi Meeting: %1$s"
 msgstr "Jitsi toplantısı: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Toplantı parolası: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Tek dokunuş mobil (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "Toplantı ID'si: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Telefon parolası: %1$d"
-
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Konuma göre telefonla ara"
 
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -4319,6 +4305,32 @@ msgstr ""
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 msgid "New meeting"
 msgstr "Yeni toplantı"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Toplantı parolası: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Tek dokunuş mobil (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "Toplantı ID'si: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Telefon parolası: %1$d"
+
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Konuma göre telefonla ara"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -5251,6 +5263,12 @@ msgstr ""
 "arama terimi girin."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "User fields"
+msgid "User list"
+msgstr "Kullanıcı alanları"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Genel adresi listesi"
 
@@ -5417,7 +5435,6 @@ msgstr "Ev"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Mesajlaşma"
 
@@ -5529,6 +5546,12 @@ msgstr "Geçerli bir e-posta alanı olmadığı için %1$s kişi olarak ekleneme
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr "Geçerli e-posta alanları olmadığı için bazı kişiler eklenemedi."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr "E-posta adresleri zaten listede bulunan bazı kişiler eklenmedi."
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5837,6 +5860,14 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Sonraki"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter your new password."
+msgstr "Lütfen yeni parolanızı yazın."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter the same password."
+msgstr "Lütfen aynı parolayı yazın."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6905,8 +6936,8 @@ msgstr "Portal"
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/core/whatsnew/meta.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/invitations/register.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
@@ -7673,7 +7704,6 @@ msgstr "Yenileme aralığı"
 msgid "Default app after sign in"
 msgstr "Giriş sonrası varsayılan uygulama"
 
-#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
 msgstr "Tarayıcı izinlerini yönet"
@@ -8669,11 +8699,6 @@ msgid "%1$s Usability"
 msgstr "%1$s kullanılabilirliği"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
-msgctxt "app"
-msgid "OX Drive"
-msgstr "OX Drive"
-
-#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
 "%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
 "sharing dialogs have also been simplified and search performance was "
@@ -9107,6 +9132,14 @@ msgstr ""
 "Klasöre geri yüklendi:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"Geçerli klasöre yazma izniniz olmadığı için PDF dosyası \"/drive/myfiles/"
+"documents\" klasörüne kaydedildi."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -9710,6 +9743,12 @@ msgstr "\"%2$s\" %1$s izinleri"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove shares"
 msgstr "Paylaşımları kaldır"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "Sohbetten ayrılmak istiyor musunuz?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
@@ -10473,6 +10512,17 @@ msgstr "E-postayı sil"
 msgid "The appointment has been added to your calendar"
 msgstr "Randevu takviminize eklendi"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"E-posta kotasını aştınız. Ya %1$s kullanmalı ya da e-posta boyutunu "
+"azaltmalısınız."
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Anımsat"
@@ -10716,16 +10766,6 @@ msgstr ""
 "Ek dosya boyutu çok büyük. Ya %1$s kullanmalı ya da ek dosya boyutunu "
 "azaltmalısınız."
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"E-posta kotasını aştınız. Ya %1$s kullanmalı ya da e-posta boyutunu "
-"azaltmalısınız."
-
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
@@ -10796,6 +10836,34 @@ msgstr "İletinin gönderimi iptal edildi."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "E-posta gönderildi"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "E-posta gizli dış görseller içeriyor"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Bu e-posta, şu anda gizli olan dış kaynaklardan gelen görseller içeriyor. "
+"Gönderdiğiniz e-posta dış kaynaklardan gelen görselleri içermeyecek."
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "E-posta dış görseller içeriyor olabilir"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Bu e-posta dış kaynaklardan gelen görseller içeriyor olabilir. Gönderdiğiniz "
+"e-posta dış kaynaklardan gelen görselleri içermeyecek"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "Dış görseller olmadan e-posta oluştur"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -10955,10 +11023,22 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "Bu e-posta başka birinin adına gönderildi."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Kaydet ve kapat"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Oluştur"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr ""
+"Resim yükleme reddedildi. Çözünürlüğü, izin verilen maksimum %1$s megapiksel "
+"değerini aşıyor."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -10982,16 +11062,12 @@ msgid "Restore draft"
 msgstr "Taslağı geri yükle"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Kaydet ve kapat"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "Aynı anda en fazla %1$s taslak açabilirsiniz."
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "%1$s tarihinde %2$s yazdı:"
@@ -13318,14 +13394,14 @@ msgstr ""
 "E-posta, takvim ve adres defterinizi Exchange Active Sync ile senkronize "
 "etmek için bu kodu telefonunuzun kamerasına okutun:"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -13347,8 +13423,8 @@ msgid "OX Sync App"
 msgstr "OX Sync Uygulaması"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -14316,6 +14392,12 @@ msgstr ""
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Sign out from device"
 msgstr "Cihazdan çıkış yap"
+
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/core/onboarding
+msgctxt "native app"
+msgid "OX Sync"
+msgstr "OX Sync"
 
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
@@ -15327,8 +15409,8 @@ msgid "Shared Appointments"
 msgstr "Paylaşılan randevular"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Chat history"
-msgstr "Sohbet geçmişi"
+msgid "Recent conversations"
+msgstr "Son yazışmalar"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -16232,6 +16314,13 @@ msgstr "%s etkinliğine davet et"
 msgid "Add on %s"
 msgstr "%s üzerine ekle"
 
+#~ msgctxt "app"
+#~ msgid "OX Drive"
+#~ msgstr "OX Drive"
+
+#~ msgid "Chat history"
+#~ msgstr "Sohbet geçmişi"
+
 #~ msgid "save"
 #~ msgstr "kaydet"
 
@@ -16716,9 +16805,6 @@ msgstr "%s üzerine ekle"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Bu görev daha önce silinmiş."
-
-#~ msgid "Recent conversations"
-#~ msgstr "Son yazışmalar"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "%s %s sürümünü indirin"

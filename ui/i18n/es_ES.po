@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-11-28 11:41+0100\n"
+"PO-Revision-Date: 2022-10-12 10:56+0200\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es_ES\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1237,26 +1237,30 @@ msgid "Print"
 msgstr "Imprimir"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "Acciones relacionadas con el participante"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "Enviar correo a todos los participantes"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "Invitar a nueva cita"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Guardar como lista de distribución"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "Cambiar organizador"
 
@@ -2562,8 +2566,8 @@ msgstr ""
 msgid ""
 "Automatically apply appointment changes received via email to your calendar"
 msgstr ""
-"Aplicar automáticamente los cambios en citas recibidos por correo a su"
-" calendario"
+"Aplicar automáticamente los cambios en citas recibidos por correo a su "
+"calendario"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 msgid "Only from known senders"
@@ -4206,7 +4210,7 @@ msgstr "%1$s, %2$s y otros %3$d están escribiendo ..."
 
 #: apps/io.ox/conference/api.js module:io.ox/switchboard
 #: apps/io.ox/conference/extensions.js module:io.ox/conference
-#: apps/io.ox/conference/views/zoom-meeting.js
+#: apps/io.ox/conference/views/zoom-util.js
 msgid "Join Zoom meeting"
 msgstr "Unirse a reunión de Zoom"
 
@@ -4232,6 +4236,14 @@ msgstr "Reunión de Jitsi"
 msgid "Conference"
 msgstr "Conferencia"
 
+#: apps/io.ox/conference/views/conference-select.js module:io.ox/switchboard
+msgid ""
+"The appointment description might contain outdated information from a "
+"previous zoom conference that needs to be deleted manually."
+msgstr ""
+"La descripción de la cita podría contener información desactualizada de una "
+"conferencia de Zoom anterior que debería borrarse manualmente."
+
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 #: apps/io.ox/conference/views/zoom-meeting.js
 msgid "Link:"
@@ -4245,32 +4257,6 @@ msgstr "Copiar al campo de ubicación"
 #: apps/io.ox/conference/views/jitsi-meeting.js module:io.ox/switchboard
 msgid "Jitsi Meeting: %1$s"
 msgstr "Reunión de Jitsi: %1$s"
-
-#. %1$s contains a password
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting password: %1$s"
-msgstr "Contraseña de reunión: %1$s"
-
-#. Zoom offers a special number to automatically provide the meeting ID and passcode
-#. German: "Schnelleinwahl mobil"
-#. %1$s is the country, %2$s contains the number
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "One tap mobile (%1$s): %2$s"
-msgstr "Móvil con un toque (%1$s): %2$s"
-
-#. %1$s contains a numeric zoom meeting ID
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Meeting-ID: %1$s"
-msgstr "ID de reunión: %1$s"
-
-#. %1$s contains a numeric dialin passcode
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial-in passcode: %1$d"
-msgstr "Código de acceso telefónico: %1$d"
-
-#: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
-msgid "Dial by your location"
-msgstr "Marcar según su ubicación"
 
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -4341,6 +4327,32 @@ msgstr ""
 #: apps/io.ox/conference/views/zoom-meeting.js module:io.ox/switchboard
 msgid "New meeting"
 msgstr "Nueva reunión"
+
+#. %1$s contains a password
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting password: %1$s"
+msgstr "Contraseña de reunión: %1$s"
+
+#. Zoom offers a special number to automatically provide the meeting ID and passcode
+#. German: "Schnelleinwahl mobil"
+#. %1$s is the country, %2$s contains the number
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "One tap mobile (%1$s): %2$s"
+msgstr "Móvil con un toque (%1$s): %2$s"
+
+#. %1$s contains a numeric zoom meeting ID
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Meeting-ID: %1$s"
+msgstr "ID de reunión: %1$s"
+
+#. %1$s contains a numeric dialin passcode
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial-in passcode: %1$d"
+msgstr "Código de acceso telefónico: %1$d"
+
+#: apps/io.ox/conference/views/zoom-util.js module:io.ox/switchboard
+msgid "Dial by your location"
+msgstr "Marcar según su ubicación"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 msgid "Contacts have been moved"
@@ -4628,9 +4640,9 @@ msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"Para añadir contactos manualmente, simplemente indique una dirección de"
-" correo válida (por ejemplo, john.doe@example.com o \"John Doe\" <"
-"jd@example.com>)"
+"Para añadir contactos manualmente, simplemente indique una dirección de "
+"correo válida (por ejemplo, john.doe@example.com o \"John Doe\" <jd@example."
+"com>)"
 
 #: apps/io.ox/contacts/distrib/main.js module:io.ox/contacts
 msgid "Distribution List"
@@ -5277,6 +5289,12 @@ msgstr ""
 "un término de búsqueda para limitar los resultados."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Users"
+msgid "User list"
+msgstr "Usuarios"
+
+#: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
 msgstr "Lista global de direcciones"
 
@@ -5443,7 +5461,6 @@ msgstr "Casa"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Mensajería"
 
@@ -5554,13 +5571,22 @@ msgstr "Edad: %1$d"
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "%1$s could not be added as the contact has no valid email field."
 msgstr ""
-"%1$s no se pudo agregar ya que el contacto no tiene un campo de correo válido."
+"%1$s no se pudo agregar ya que el contacto no tiene un campo de correo "
+"válido."
 
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
-"Algunos contactos no se pudieron agregar porque no tienen un campo de correo"
-" válido."
+"Algunos contactos no se pudieron agregar porque no tienen un campo de correo "
+"válido."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr ""
+"Algunos contactos no se pudieron agregar porque sus direcciones de correo ya "
+"están en la lista."
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5869,6 +5895,14 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Siguiente"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter your new password."
+msgstr "Por favor, introduzca su nueva contraseña."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Please enter the same password."
+msgstr "Por favor, introduzca la misma contraseña."
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -6767,7 +6801,6 @@ msgid "Create folder"
 msgstr "Crear carpeta"
 
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#| msgid "You cannot move items to this folder"
 msgid "You cannot select this folder."
 msgstr "No se puede seleccionar esta carpeta."
 
@@ -6947,8 +6980,8 @@ msgstr "Portal"
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/main/apps.js module:io.ox/core
 #: apps/io.ox/core/pim/actions.js apps/io.ox/core/viewer/views/toolbarview.js
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/core/whatsnew/meta.js apps/io.ox/files/settings/pane.js
+#: module:io.ox/files apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/invitations/register.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings apps/io.ox/settings/personalData/settings/pane.js
 msgctxt "app"
@@ -7723,7 +7756,6 @@ msgstr "Intervalo de actualización"
 msgid "Default app after sign in"
 msgstr "Aplicación predeterminada después de iniciar sesión"
 
-#. Opens a native browser popup to decide if this applications/website is allowed to show notifications
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage browser permissions now"
 msgstr "Administrar ahora permisos del navegador"
@@ -8736,11 +8768,6 @@ msgid "%1$s Usability"
 msgstr "Usabilidad de %1$s"
 
 #: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
-msgctxt "app"
-msgid "OX Drive"
-msgstr "OX Drive"
-
-#: apps/io.ox/core/whatsnew/meta.js module:io.ox/core
 msgid ""
 "%1$s now offers the ability to Drag & Drop desktop folders into %1$s. The "
 "sharing dialogs have also been simplified and search performance was "
@@ -9177,6 +9204,14 @@ msgstr ""
 "Restaurado en carpeta:\n"
 "\n"
 "%s"
+
+#: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
+msgid ""
+"The PDF has been saved to \"/drive/myfiles/documents\" due to not having "
+"write access for the current folder."
+msgstr ""
+"El PDF se ha guardado en \"/drive/myfiles/documents\" dado que no se tiene "
+"permiso de escritura en la carpeta actual."
 
 #: apps/io.ox/files/actions/save-as-pdf.js module:io.ox/files
 #: apps/io.ox/files/contextmenu.js module:io.ox/core
@@ -9783,6 +9818,12 @@ msgstr "Permisos para %1$s \"%2$s\""
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove shares"
 msgstr "Eliminar elementos compartidos"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "¿De verdad quiere salir de la conversación?"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
@@ -10485,7 +10526,8 @@ msgstr "El adjunto cargado supera el tamaño máximo de correo de %1$s"
 msgid ""
 "The file cannot be uploaded because it exceeds the maximum email size of %1$s"
 msgstr ""
-"El fichero no se puede cargar porque supera el tamaño máximo de correo de %1$s"
+"El fichero no se puede cargar porque supera el tamaño máximo de correo de "
+"%1$s"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
 msgid "Saving attachment ..."
@@ -10562,6 +10604,17 @@ msgstr "Borrar correo"
 #: apps/io.ox/mail/actions/ical.js module:io.ox/mail
 msgid "The appointment has been added to your calendar"
 msgstr "La cita se ha añadido a su calendario"
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Se alcanzó el límite de la cuota de correo. Debe usar %1$s o reducir el "
+"tamaño del correo de alguna otra forma."
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
@@ -10646,8 +10699,8 @@ msgstr "Desactivar categorías"
 msgid ""
 "It may take some time until mails are assigned to the default categories."
 msgstr ""
-"Puede pasar cierto tiempo hasta que los correos se asignen a las categorías"
-" predeterminadas."
+"Puede pasar cierto tiempo hasta que los correos se asignen a las categorías "
+"predeterminadas."
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -10808,16 +10861,6 @@ msgstr ""
 "Tamaño de fichero adjunto demasiado grande. Debe utilizar %1$s o reducir el "
 "tamaño del fichero adjunto."
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"Se alcanzó el límite de la cuota de correo. Debe usar %1$s o reducir el "
-"tamaño del correo de alguna otra forma."
-
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
@@ -10888,6 +10931,34 @@ msgstr "El envío del mensaje ha sido cancelado."
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The email has been sent"
 msgstr "El correo se ha enviado"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail contains hidden external images"
+msgstr "El correo contiene imágenes externas ocultas"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email contains images from external sources that are currently hidden. "
+"The sent email will not contain any images from external sources"
+msgstr ""
+"Este correo contiene imágenes de fuentes externas que actualmente están "
+"ocultas. El correo enviado no contendrá imágenes de fuentes externas."
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Mail may contain external images"
+msgstr "El correo puede contener imágenes externas"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid ""
+"This email may contain images from external sources. The sent email will not "
+"contain any images from external sources"
+msgstr ""
+"Este correo puede contener imágenes de fuentes externas. El correo enviado "
+"no contendrá imágenes de fuentes externas."
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+msgid "Compose mail without external images"
+msgstr "Redactar correo sin imágenes externas"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply to mailing list"
@@ -11047,10 +11118,22 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "Este correo fue enviado en nombre de otra persona."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Guardar y cerrar"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Redactar"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr ""
+"Carga de imagen denegada. Su resolución supera el valor máximo permitido de "
+"%1$s megapixels."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -11075,16 +11158,12 @@ msgid "Restore draft"
 msgstr "Restaurar borrador"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Guardar y cerrar"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "No puede abrir más de %1$s borradores al mismo tiempo."
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "El %1$s %2$s escribió:"
@@ -13434,14 +13513,14 @@ msgstr ""
 "Escanee este código con la cámara de su teléfono para sincronizar su correo, "
 "calendario y libreta de direcciones mediante Exchange Active Sync:"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Mail"
 msgstr "OX Mail"
 
-#: apps/io.ox/onboarding/settings/defaults.js module:io.ox/core/onboarding
-#: apps/io.ox/onboarding/util.js
+#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
+#: apps/io.ox/settings/security/sessions/settings/pane.js
 msgctxt "native app"
 msgid "OX Drive"
 msgstr "OX Drive"
@@ -13463,8 +13542,8 @@ msgid "OX Sync App"
 msgstr "Aplicación OX Sync"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "MacOS"
-msgstr "MacOS"
+msgid "macOS"
+msgstr "macOS"
 
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 msgid "Apple Mail"
@@ -14442,6 +14521,12 @@ msgstr ""
 msgid "Sign out from device"
 msgstr "Cerrar sesión en el dispositivo"
 
+#: apps/io.ox/settings/security/sessions/settings/pane.js
+#: module:io.ox/core/onboarding
+msgctxt "native app"
+msgid "OX Sync"
+msgstr "OX Sync"
+
 #. headline for general settings
 #. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
 #: apps/io.ox/settings/security/settings/pane.js module:io.ox/mail
@@ -15186,8 +15271,8 @@ msgid ""
 "E-Mails will appear in a new window. These windows can be maximized, "
 "minimized and closed."
 msgstr ""
-"Los correos aparecerán en una nueva ventana. Estas ventanas se pueden"
-" maximizar, minimizar y cerrar."
+"Los correos aparecerán en una nueva ventana. Estas ventanas se pueden "
+"maximizar, minimizar y cerrar."
 
 #: apps/io.ox/tours/whats-new.js module:io.ox/core
 msgid ""
@@ -15465,8 +15550,8 @@ msgid "Shared Appointments"
 msgstr "Citas compartidas"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
-msgid "Chat history"
-msgstr "Historial de conversaciones"
+msgid "Recent conversations"
+msgstr "Conversaciones recientes"
 
 #: apps/plugins/halo/mail/register.js module:plugins/halo
 msgid "Received mails"
@@ -16298,11 +16383,11 @@ msgid ""
 "Follow the instructions in the email and then return to the widget to "
 "complete account setup."
 msgstr ""
-"Por favor, revise su bandeja de entrada para comprobar si existe un correo de"
-" confirmación.\n"
+"Por favor, revise su bandeja de entrada para comprobar si existe un correo "
+"de confirmación.\n"
 "\n"
-"Siga las instrucciones del correo y vuelva al widget para "
-"completar la configuración de la cuenta."
+"Siga las instrucciones del correo y vuelva al widget para completar la "
+"configuración de la cuenta."
 
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Post a status update"
@@ -16375,6 +16460,13 @@ msgstr "Invitar a %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Añadir a %s"
+
+#~ msgctxt "app"
+#~ msgid "OX Drive"
+#~ msgstr "OX Drive"
+
+#~ msgid "Chat history"
+#~ msgstr "Historial de conversaciones"
 
 #~ msgid "save"
 #~ msgstr "guardar"
@@ -16887,9 +16979,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "La tarea ya había sido borrada"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Conversaciones recientes"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Descargar %s para %s ahora"
@@ -26957,9 +27046,6 @@ msgstr "Añadir a %s"
 #~ msgstr ""
 #~ "Use las teclas arriba y abajo para cambiar la hora. Termine la selección "
 #~ "presionando la tecla ESC."
-
-#~ msgid "Users"
-#~ msgstr "Usuarios"
 
 #~ msgid "Userstore"
 #~ msgstr "Almacén de usuarios"
