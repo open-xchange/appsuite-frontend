@@ -3864,8 +3864,8 @@
     },
     "jshint": {
       "version": "2.5.0",
-      "from": "git://github.com/Open-Xchange-Frontend/jshint.git#0ffee4a9ae1480198aff523ef2a84a4802201956",
-      "resolved": "git://github.com/Open-Xchange-Frontend/jshint.git#0ffee4a9ae1480198aff523ef2a84a4802201956",
+      "from": "https://github.com/Open-Xchange-Frontend/jshint.git#0ffee4a9ae1480198aff523ef2a84a4802201956",
+      "resolved": "https://github.com/Open-Xchange-Frontend/jshint.git#0ffee4a9ae1480198aff523ef2a84a4802201956",
       "dependencies": {
         "shelljs": {
           "version": "0.1.4",
@@ -4029,13 +4029,13 @@
     },
     "shared-grunt-config": {
       "version": "0.6.7",
-      "from": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#83ff1f4fafe186bfea0a4a0a8ff14fc0dafc6d3c",
-      "resolved": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#83ff1f4fafe186bfea0a4a0a8ff14fc0dafc6d3c",
+      "from": "https://github.com/Open-Xchange-Frontend/shared-grunt-config.git#83ff1f4fafe186bfea0a4a0a8ff14fc0dafc6d3c",
+      "resolved": "https://github.com/Open-Xchange-Frontend/shared-grunt-config.git#83ff1f4fafe186bfea0a4a0a8ff14fc0dafc6d3c",
       "dependencies": {
         "appserver": {
-          "version": "0.5.0",
-          "from": "https://registry.npmjs.org/appserver/-/appserver-0.5.0.tgz",
-          "resolved": "https://registry.npmjs.org/appserver/-/appserver-0.5.0.tgz",
+          "version": "0.5.4",
+          "from": "https://registry.npmjs.org/appserver/-/appserver-0.5.4.tgz",
+          "resolved": "https://registry.npmjs.org/appserver/-/appserver-0.5.4.tgz",
           "dependencies": {
             "connect": {
               "version": "2.13.1",

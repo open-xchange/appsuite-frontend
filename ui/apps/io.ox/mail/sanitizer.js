@@ -45,8 +45,14 @@ define('io.ox/mail/sanitizer', [
         return data;
     }
 
+    // used for non mail related sanitizing (for example used in rss feeds)
+    function simpleSanitize(str) {
+        return DOMPurify.sanitize(str, _.extend({}, defaultOptions, { WHOLE_DOCUMENT: false }));
+    }
+
     return {
         sanitize: sanitize,
+        simpleSanitize: simpleSanitize,
         isEnabled: isEnabled
     };
 });

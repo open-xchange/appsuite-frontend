@@ -22,8 +22,9 @@
 */
 define('io.ox/core/api/snippets',
     ['io.ox/core/http',
-     'io.ox/core/event'
-    ], function (http, Events) {
+     'io.ox/core/event',
+     'io.ox/mail/sanitizer'
+    ], function (http, Events, sanitizer) {
 
     'use strict';
 
@@ -47,6 +48,7 @@ define('io.ox/core/api/snippets',
         })
         .then(
             function success(data) {
+                _(data).each(function (signature) { signature.content = sanitizer.simpleSanitize(signature.content); });
                 cache = _(data).map(function (sig) {
                     // robustness: snippet migration
                     sig.misc = $.extend({ insertion: 'below'}, sig.misc || {});
@@ -77,6 +79,7 @@ define('io.ox/core/api/snippets',
         })
         .done(function () {
             cache = null;
+            snippet.content = sanitizer.simpleSanitize(snippet.content);
             api.trigger('refresh.all');
         });
     };
@@ -98,6 +101,7 @@ define('io.ox/core/api/snippets',
         })
         .done(function () {
             cache = null;
+            snippet.content = sanitizer.simpleSanitize(snippet.content);
             api.trigger('refresh.all');
         });
     };
@@ -114,6 +118,9 @@ define('io.ox/core/api/snippets',
                 action: 'get',
                 id: id
             }
+        }).then(function (signature) {
+            signature.content = sanitizer.simpleSanitize(signature.content);
+            return signature;
         });
     };
 
@@ -129,6 +136,9 @@ define('io.ox/core/api/snippets',
                 action: 'list'
             },
             data: ids
+        }).then(function success(data) {
+            _(data).each(function (signature) { signature.content = sanitizer.simpleSanitize(signature.content); });
+            return data;
         });
     };
 
