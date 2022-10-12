@@ -23,9 +23,10 @@
 define('io.ox/contacts/util', [
     'io.ox/core/util',
     'io.ox/core/extensions',
+    'io.ox/core/yell',
     'settings!io.ox/contacts',
     'gettext!io.ox/contacts'
-], function (util, ext, settings, gt) {
+], function (util, ext, yell, settings, gt) {
 
     'use strict';
 
@@ -291,7 +292,7 @@ define('io.ox/contacts/util', [
 
         getMail: function (obj) {
             // get the first mail address
-            return obj ? (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').trim().toLowerCase() : '';
+            return obj ? (obj.email1 || obj.email2 || obj.email3 || obj.mail || obj.email || '').trim().toLowerCase() : '';
         },
 
         getJob: function (obj) {
@@ -469,6 +470,23 @@ define('io.ox/contacts/util', [
                 });
             }
             return dist;
+        },
+
+        checkDuplicateMails: function (newAdditions, participantCollection, options) {
+            options = options || { yell: true };
+            function getParticipantMail(participant) {
+                if (participant instanceof Backbone.Model) participant = participant.toJSON();
+                return participant.field && participant[participant.field] ? participant[participant.field] : that.getMail(participant);
+            }
+
+            if (!Array.isArray(newAdditions)) newAdditions = [newAdditions];
+
+            var mailAddresses = participantCollection.map(getParticipantMail);
+            var validAdditions = newAdditions.filter(function (participant) {
+                return !mailAddresses.includes(getParticipantMail(participant));
+            });
+            if (options.yell && newAdditions.length !== validAdditions.length) yell('warning', gt('Some contacts could not be added because their email address is already in the list.'));
+            return validAdditions;
         }
     };
 

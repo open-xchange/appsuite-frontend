@@ -60,6 +60,15 @@ Provides:      open-xchange-appsuite-l10n
 %description   de-de
 Translation of the OX App Suite HTML5 client (de_DE)
 
+%package       el-gr
+Group:         Applications/Productivity
+Summary:       Translation of the OX App Suite HTML5 client (el_GR)
+Requires:      open-xchange-l10n-el-gr
+Provides:      open-xchange-appsuite-l10n
+
+%description   el-gr
+Translation of the OX App Suite HTML5 client (el_GR)
+
 %package       en-gb
 Group:         Applications/Productivity
 Summary:       Translation of the OX App Suite HTML5 client (en_GB)
@@ -316,6 +325,10 @@ cp -rv --preserve=mode ./* "%{buildroot}/"
 %files de-de
 %defattr(-,root,root)
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-de-de.properties
+
+%files el-gr
+%defattr(-,root,root)
+/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-el-gr.properties
 
 %files en-gb
 %defattr(-,root,root)
