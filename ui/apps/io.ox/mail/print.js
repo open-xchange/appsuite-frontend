@@ -21,9 +21,8 @@ define('io.ox/mail/print',
 
     'use strict';
 
-    var regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        // TODO: add setting (html OR text)
-        type = 'html';
+    // TODO: add setting (html OR text)
+    var type = 'html';
 
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
