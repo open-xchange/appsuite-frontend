@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-10-12 10:58+0200\n"
+"PO-Revision-Date: 2022-10-19 11:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -6477,7 +6477,7 @@ msgstr "Arkistoi vanhat viestit"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Empty trash"
-msgstr "Tyhjennä roskat"
+msgstr "Tyhjennä roskakori"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -10268,7 +10268,7 @@ msgstr "Lähetetyt viestit"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
 msgid "Deleted messages"
-msgstr "Hylätyt viestit"
+msgstr "Poistetut viestit"
 
 #. Drafts folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -13848,7 +13848,7 @@ msgstr "Suojaus"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Active clients"
-msgstr "Aktiiviset asiakkaat"
+msgstr "Aktiiviset istunnot"
 
 #: apps/io.ox/settings/main.js module:io.ox/core
 msgid "Application Passwords"
