@@ -132,7 +132,7 @@ define('io.ox/multifactor/views/totpProvider', [
             index: INDEX += 100,
             id: 'header',
             render: function () {
-                var label = $('<label for="authentication">').append('Authentication Code:')
+                var label = $('<label for="authentication">').append(gt('Authentication Code:'))
                 .append('<br>');
                 this.$body.append(label);
             }
