@@ -220,10 +220,11 @@ define('io.ox/core/folder/api', [
         },
 
         supportsInternalSharing: function () {
+            if (this.is('system')) return false;
             // drive: always enabled
             if (this.is('drive')) return true;
             // mail: no longer check gab. With ldap folder support we can have users while not having a gab. Check folder capability (bit 0), see Bug 47229
-            if (this.is('mail')) return this.can('change:permissions');
+            if (this.is('mail')) return this.can('change:permissions') && !account.isExternal(this.get('account_id'));
             // contacts, calendar, tasks
             if (this.is('calendar') && this.is('private') && !this.supportsShares()) return false;
             if (this.is('public')) return capabilities.has('edit_public_folders');

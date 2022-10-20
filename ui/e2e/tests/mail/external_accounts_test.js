@@ -83,3 +83,21 @@ Scenario('[OXUIB-225] Password recovery for account passwords after password cha
     I.waitForText('Inbox');
     I.dontSeeElement('.modal-dialog');
 });
+
+Scenario('[OXUIB-1966] Permissions dialog is disabled for external and secondary accounts', async ({ I, mail, users }) => {
+    const additionalAccount = await users.create();
+    await I.haveMailAccount({ additionalAccount, name: 'My External', extension: 'ext' });
+    I.login();
+    mail.waitForApp();
+    I.waitForText('My External');
+    I.rightClick('My External');
+    I.waitForElement('.dropdown.open .dropdown-menu');
+    I.dontSee('Permission', '.dropdown.open .dropdown-menu');
+    I.pressKey('Escape');
+    I.waitForDetached('.dropdown.open .dropdown-menu');
+    I.click('.folder-arrow', '~My External');
+    I.waitForText('Inbox', 5, '~My External');
+    I.rightClick('Inbox', '~My External');
+    I.waitForElement('.dropdown.open .dropdown-menu');
+    I.dontSee('Permission', '.dropdown.open .dropdown-menu');
+});
