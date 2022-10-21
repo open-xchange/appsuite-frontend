@@ -54,7 +54,7 @@ define('plugins/portal/upsellads/register',
 
         type = fromAd.type;
 
-        fromAd.text = sanitizer.simpleSanitize(fromAd.text)
+        fromAd.text = sanitizer.simpleSanitize(fromAd.text);
 
         if (!type || type === 'text-only') {
             toTarget.append(
