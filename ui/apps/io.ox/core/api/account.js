@@ -234,7 +234,7 @@ define('io.ox/core/api/account', [
         return _(typeHash)
             .chain()
             .map(function (value, key) {
-                if (accountId !== undefined && key.indexOf('default' + accountId) === -1) return false;
+                if (accountId !== undefined && key.indexOf(accountId) === -1) return false;
                 return value === type ? key : false;
             })
             .compact()

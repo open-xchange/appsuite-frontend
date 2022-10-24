@@ -756,9 +756,9 @@ define('io.ox/mail/api', [
                 collection.reset([]);
             });
         },
-        'clear remove:mail': function () {
+        'clear remove:mail': function (data) {
             // reset trash folder
-            var trashId = accountAPI.getFoldersByType('trash');
+            var trashId = accountAPI.getFoldersByType('trash', data.account_id);
             _(trashId).each(function (id) {
                 folderAPI.list(id, { cache: false });
                 _(pool.getByFolder(id)).invoke('expire');
