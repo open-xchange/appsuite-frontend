@@ -361,7 +361,7 @@ define('io.ox/files/actions', [
             if (list.length === 0) return;
             ox.registry.call('mail-compose', 'open', {
                 attachments: list.map(function (file) {
-                    return { origin: 'drive', id: file.id, folder_id: file.folder_id };
+                    return { origin: 'drive', id: file.id, folder_id: file.folder_id, file_size: file.file_size };
                 })
             });
         }

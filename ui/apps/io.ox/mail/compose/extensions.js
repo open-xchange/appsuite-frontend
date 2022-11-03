@@ -897,6 +897,7 @@ define('io.ox/mail/compose/extensions', [
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));
+                        composeUtil.handleExceedingLimits(model, files);
                         var models = files.map(function (file) {
                             var attachment = new Attachments.Model({ filename: file.filename });
                             composeUtil.uploadAttachment({

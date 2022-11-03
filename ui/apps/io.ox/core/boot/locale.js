@@ -94,7 +94,7 @@ define('io.ox/core/boot/locale', ['io.ox/backbone/mini-views/dropdown', 'gettext
             selectedLocale = id;
         },
 
-        render: function () {
+        render: function (dropup) {
 
             var locales = meta.getSupportedLocales(),
                 node = $('#io-ox-languages'),
@@ -107,12 +107,13 @@ define('io.ox/core/boot/locale', ['io.ox/backbone/mini-views/dropdown', 'gettext
 
                 util.debug('Render locales', locales);
 
+                var caret = $('<span class="caret">');
                 var changeByUser = this.changeByUser.bind(this),
                     defaultLocale = meta.getValidDefaultLocale(),
                     toggle = $('<a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">').append(
                         $('<span class="sr-only" data-i18n="Language:" data-i18n-attr="text">'),
                         $('<span class="toggle-text">').attr('lang', languageToTag(defaultLocale)).text(meta.getLocaleName(defaultLocale)),
-                        $('<span class="caret">')
+                        dropup ? caret.css('transform', 'rotate(180deg)') : caret
                     ),
                     list = $('<ul id="io-ox-language-list" class="dropdown-menu" role="menu" data-i18n="Languages" data-i18n-attr="aria-label">'),
                     label = $('<a href="#" role="button" class="lang-label" id="io-ox-languages-label" data-i18n="Language:" data-i18n-attr="text" aria-hidden="true" tabindex="-1">');
@@ -122,7 +123,8 @@ define('io.ox/core/boot/locale', ['io.ox/backbone/mini-views/dropdown', 'gettext
 
                     var dropdown = new Dropdown({
                         $ul: list,
-                        $toggle: toggle
+                        $toggle: toggle,
+                        dropup: dropup
                     });
 
                     node.append(

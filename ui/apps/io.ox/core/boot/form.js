@@ -193,6 +193,7 @@ define('io.ox/core/boot/form', [
             function getNodes(bucket) {
                 return bucket.sorting.split(',').map(function (str) {
                     if (standardNodes[str]) return standardNodes[str].clone(true, true);
+                    if (!str.length) return undefined;
                     return $('<div class="composition-element">').append(
                         str.match(/(\$[a-zA-Z]+|[^$]+)/g).map(function (match) {
                             if (standardNodes[match]) return standardNodes[match].clone(true, true);
@@ -272,6 +273,9 @@ define('io.ox/core/boot/form', [
             }
 
             if (!lc.loginBox || lc.loginBox === 'center') configCss += '#io-ox-login-content { justify-content: center }';
+
+            var localeIsDropUp = lc.header.sorting.indexOf('$language') === -1;
+            locale.render(localeIsDropUp);
 
             //apply styles from server configuration (login page)
             $('head').append($('<style data-src="login-page-configuration" type="text/css">').text(util.scopeCustomCss(configCss, '#io-ox-login-screen')));
@@ -369,8 +373,6 @@ define('io.ox/core/boot/form', [
         if (_.url.hash('token')) {
             ox.on('language', redeem);
         }
-
-        locale.render();
 
         // set language select to link color defined by the given configuration
         var lc = getLoginConfiguration();
