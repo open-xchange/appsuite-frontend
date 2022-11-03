@@ -92,24 +92,34 @@ define('io.ox/mail/sanitizer', [
                     }, '');
                 }
                 break;
-            case 'IMG':
-                if (config.noImages && currentNode.getAttribute) {
-                    var src = String(currentNode.getAttribute('src') || '').trim();
-                    if (!src) break;
-                    // data:image are embedded images -> don't block it
-                    if (/^data:image/i.test(src)) break;
-                    // mail attachment used as inline image -> don't block it
-                    // the path is a bit tricky and quite unpredictable because it might differ from ox.root
-                    // ox.root might be /appsuite but inline images start with /ajax/image/... *sigh*
-                    // we could also assume that any path starting with '/' must be an inline image
-                    // but let's cover the typical patterns (/api/image/... or /appsuite/api/image/... /ajax/image/...)
-                    if (/^(\/\w+)*\/image\/mail\/picture/i.test(src)) break;
-                    // clear url paths from inline css when image loading is disabled
-                    currentNode.setAttribute('src', '');
-                    // mark mail as modified (to show blocked images button)
-                    if (config.mail) config.mail.modified = 1;
+            case 'IMG': {
+                var src = String(currentNode.getAttribute('src') || '').trim();
+                if (!src) break;
+                // data:image are embedded images -> don't block it
+                if (/^data:image/i.test(src)) break;
+                // mail attachment used as inline image -> don't block it
+                // the path is a bit tricky and quite unpredictable because it might differ from ox.root
+                // ox.root might be /appsuite but inline images start with /ajax/image/... *sigh*
+                // we could also assume that any path starting with '/' must be an inline image
+                // but let's cover the typical patterns (/api/image/... or /appsuite/api/image/... /ajax/image/...)
+                if (/^(\/\w+)*\/image\/mail\/picture/i.test(src)) break;
+
+                // check for external images with insecure http path
+                if (src.match(/^http:\/\//i)) {
+                    // rewrite all src urls to https per default to avoid mixed-content downgrade (Bug OXUIB-1943)
+                    currentNode.setAttribute('src', src.replace(/^http:\/\//i, 'https://'));
+                    // mark mail as modified and use "2" to mark rewritten src urls
+                    if (config.mail) config.mail.modified = 2;
+                    break;
                 }
+
+                if (!config.noImages) break;
+                // clear url paths from inline css when image loading is disabled
+                currentNode.setAttribute('src', '');
+                // mark mail as modified with "1" to show blocked images button
+                if (config.mail) config.mail.modified = 1;
                 break;
+            }
             default:
                 if (config.noImages && currentNode.hasAttribute && currentNode.hasAttribute('style')) {
                     // clear url paths from inline css when image loading is disabled

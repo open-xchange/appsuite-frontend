@@ -828,17 +828,33 @@ define('io.ox/mail/common-extensions', [
             }
 
             function draw(model) {
-
-                // nothing to do if message is unchanged
-                if (model.get('modified') !== 1) return this.find('.external-images').remove();
-
-                this.append(
-                    $('<div class="notification-item external-images">').append(
-                        $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
-                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam')),
-                        $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
-                    )
-                );
+                var modified = model.get('modified') || 0;
+                switch (modified) {
+                    case 0:
+                        // nothing to do, return here and remove potential button
+                        return this.find('.external-images').remove();
+                    case 1:
+                        // external images were blocked, show button and info
+                        this.append(
+                            $('<div class="notification-item external-images">').append(
+                                $('<button type="button" class="btn btn-default btn-sm">').text(gt('Show images')),
+                                $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam')),
+                                $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
+                            )
+                        );
+                        break;
+                    case 2:
+                        // external images were blocked, show button and info
+                        this.append(
+                            $('<div class="notification-item external-images">').append(
+                                $('<div class="comment">').text(gt('External images in this email will be loaded over a secure connection. Some images might not be displayed correctly.')),
+                                $('<button type="button" class="close">').attr('title', gt('Close')).append('<i class="fa fa-times" aria-hidden="true">')
+                            )
+                        );
+                        break;
+                    default:
+                        break;
+                }
             }
 
             return function (baton) {
