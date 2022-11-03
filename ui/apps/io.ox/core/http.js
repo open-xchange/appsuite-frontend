@@ -407,17 +407,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     };
 
     var isUnreachable = function (xhr) {
-        if (!xhr) {
-            return false;
-        }
+        if (!xhr) return false;
         // server is still reachable since abort is triggered by the ui
-        if (xhr.statusText === 'abort') {
-            return false;
-        }
-        if (xhr.status === 0) {
-            return true;
-        }
-        return isLoss(xhr.status);
+        if (xhr.statusText === 'abort') return false;
+        // browsers report a status of 0 in case of XMLHttpRequest errors
+        if (xhr.status === 0) return true;
+        // request timeout, service unavailable, gateway timeout
+        return /^(408|503|504)$/.test(xhr.status);
     };
 
     // error log
