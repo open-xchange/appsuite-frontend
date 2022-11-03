@@ -33,6 +33,8 @@ define('io.ox/core/capabilities', function () {
 
     var api = {
 
+        whitelistRegex: /[^a-z0-9_:\-./&|!()]/ig,
+
         get: function (id) {
             if (arguments.length === 0) {
                 return capabilities;
@@ -48,7 +50,7 @@ define('io.ox/core/capabilities', function () {
         has: function () {
 
             // you can pass separate arguments as arrays and if two operands are not connected by an operator an && is automatically inserted
-            var str = _(arguments).flatten().join(' && ').replace(/([^&|]) ([^&|])/gi, '$1 && $2').toLowerCase(),
+            var str = _(arguments).flatten().join(' && ').replace(/([^&|]) ([^&|])/gi, '$1 && $2').replace(api.whitelistRegex, '').toLowerCase(),
                 condition = str.replace(/[a-z0-9_:\-./]+/ig, function (match) {
                     return api.isDisabled(match) ? false : (match in capabilities);
                 });
