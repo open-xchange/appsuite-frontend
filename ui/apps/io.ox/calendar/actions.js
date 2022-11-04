@@ -458,7 +458,16 @@ define('io.ox/calendar/actions', [
 
         var data = baton.first(),
             appointment = api.reduce(data),
-            def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
+            def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder),
+            confirm = function () {
+                $(baton.e.target).addClass('disabled');
+                util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
+                    if (e) yell(e);
+                }).always(function () {
+                    // always unlock the button
+                    $(baton.e.target).removeClass('disabled');
+                });
+            };
 
         def.always(function (folder) {
 
@@ -479,10 +488,8 @@ define('io.ox/calendar/actions', [
                 }
             }
 
-            if (accept) {
-                // default reminder
-                appointment.alarms = util.getDefaultAlarms(data);
-            }
+            // default reminder
+            if (accept) appointment.alarms = util.getDefaultAlarms(data);
 
             // check if only one appointment or the whole series should be accepted
             // treat exceptions as part of the series and offer to accept the series as a whole
@@ -493,14 +500,8 @@ define('io.ox/calendar/actions', [
                 (data.folder ? api.get({ folder: data.folder, id: data.seriesId }) : $.when()).always(function (seriesMaster) {
                     $(baton.e.target).removeClass('disabled');
                     // error when trying to request series master -> we can only accept this exception
-                    if (seriesMaster && seriesMaster.error) {
-                        $(baton.e.target).addClass('disabled');
-                        util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
-                            if (e) yell(e);
-                            $(baton.e.target).removeClass('disabled');
-                        });
-                        return;
-                    }
+                    if (seriesMaster && seriesMaster.error) return confirm();
+
                     new ModalDialog({
                         title: gt('Change appointment status'),
                         width: 600
@@ -524,21 +525,15 @@ define('io.ox/calendar/actions', [
                                 appointment.id = data.seriesId;
                             }
                         }
-                        $(baton.e.target).addClass('disabled');
-                        util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
-                            if (e) yell(e);
-                            $(baton.e.target).removeClass('disabled');
-                        });
+
+                        confirm();
                     })
                     .open();
                 });
                 return;
             }
-            $(baton.e.target).addClass('disabled');
-            util.confirmWithConflictCheck(appointment, { checkConflicts: true }).fail(function (e) {
-                if (e) yell(e);
-                $(baton.e.target).removeClass('disabled');
-            });
+
+            confirm();
         });
     }
 
