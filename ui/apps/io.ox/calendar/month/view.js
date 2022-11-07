@@ -220,7 +220,7 @@ define('io.ox/calendar/month/view', [
                 tbody
             );
 
-            if (_.device('firefox') || _.device('ie && ie <= 11')) this.$('tbody tr').css('height', (100 / this.$('tbody tr').length + '%'));
+            this.$('tbody tr').css('height', (Math.floor(100 / this.$('tbody tr').length) + '%'));
 
             if (_.device('smartphone')) {
                 this.$el.css('min-height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
