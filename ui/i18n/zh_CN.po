@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-07-08 11:22+0200\n"
+"PO-Revision-Date: 2022-11-08 13:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -611,7 +611,6 @@ msgid "Delete"
 msgstr "删除"
 
 #. Used as a button label to enter the "edit mode"
-#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -622,12 +621,11 @@ msgstr "删除"
 #: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
-#: module:io.ox/core/boot apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/main.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -1227,26 +1225,30 @@ msgid "Print"
 msgstr "打印"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "参与者相关动作"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "向所有参与者发送电子邮件"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "邀请到新约会"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "保存为通讯组列表"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "更改组织者"
 
@@ -1628,6 +1630,7 @@ msgstr "编辑约会"
 msgid "Create appointment"
 msgstr "创建约会"
 
+#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1648,7 +1651,7 @@ msgstr "创建约会"
 #: apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/multifactor/settings/views/editMultifactorView.js
@@ -5352,7 +5355,6 @@ msgstr "首页"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "即时通讯软件"
 
@@ -5463,6 +5465,12 @@ msgstr "由于联系人没有有效的电子邮件字段, 无法添加%1$s。"
 #: apps/io.ox/contacts/util.js module:io.ox/contacts
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr "无法添加某些联系人, 因为它们没有有效的电子邮件字段。"
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr "因为有些联系人已经在名单里，所以不能被添加。"
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -9558,6 +9566,12 @@ msgid "Remove shares"
 msgstr "移除共享"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "您真的想要离开聊天吗？"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
 msgstr "您真的否要移除所有共享？"
 
@@ -10311,6 +10325,15 @@ msgstr "删除邮件"
 msgid "The appointment has been added to your calendar"
 msgstr "此约会已添加到您的日历"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/util.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr "达到邮件限额，你必须使用 %1$s 或减少邮件体积。"
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "提醒我"
@@ -10541,14 +10564,6 @@ msgid ""
 "Attachment file size too large. You have to use %1$s or reduce the "
 "attachment file size."
 msgstr "附件文件太大，你必须使用 %1$s 或减少附件文件体积。"
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr "达到邮件限额，你必须使用 %1$s 或减少邮件体积。"
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -10799,10 +10814,20 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "此邮件已以别人之名发送。"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "保存并关闭"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "撰写"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr "图像上传被拒绝。其分辨率超过%1$s百万像素的最大允许值。"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -10824,16 +10849,12 @@ msgid "Restore draft"
 msgstr "还原草稿"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "保存并关闭"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "您不能同时打开超过 %1$s 草稿。"
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "在 %1$s %2$s 写道:"

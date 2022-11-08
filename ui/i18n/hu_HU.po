@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-07-08 11:19+0200\n"
+"PO-Revision-Date: 2022-11-08 13:34+0100\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -613,7 +613,6 @@ msgid "Delete"
 msgstr "Törlés"
 
 #. Used as a button label to enter the "edit mode"
-#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -624,12 +623,11 @@ msgstr "Törlés"
 #: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
-#: module:io.ox/core/boot apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/main.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -1235,26 +1233,30 @@ msgid "Print"
 msgstr "Nyomtatás"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "Résztvevőhöz kapcsolódó művelet"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "Levél küldése minden résztvevőnek"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "Meghívás új találkozóra"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Mentés terjesztési listaként"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "Szervező megváltoztatása"
 
@@ -1646,6 +1648,7 @@ msgstr "Találkozó szerkesztése"
 msgid "Create appointment"
 msgstr "Találkozó létrehozása"
 
+#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1666,7 +1669,7 @@ msgstr "Találkozó létrehozása"
 #: apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/multifactor/settings/views/editMultifactorView.js
@@ -5441,7 +5444,6 @@ msgstr "Otthon"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Üzenetküldés"
 
@@ -5558,6 +5560,14 @@ msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
 "Egyes névjegyeket nem lehetett hozzáadni, mivel nem rendelkeznek érvényes e-"
 "mail mezővel."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr ""
+"Egyes névjegyeket nem lehetett hozzáadni, mert az e-mail címük már szerepel "
+"a listán."
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -9770,6 +9780,12 @@ msgid "Remove shares"
 msgstr "Megosztások eltávolítása"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "Valóban el akarja hagyni a csevegést?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
 msgstr "Valóban el akarja távolítani az összes megosztást?"
 
@@ -10550,6 +10566,17 @@ msgstr "Levél törlése"
 msgid "The appointment has been added to your calendar"
 msgstr "A találkozó hozzáadva a naptárához"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/util.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Elérte a levélkvóta korlátját. A(z) %1$s szolgáltatást kell használnia, vagy "
+"más módon csökkentenie kell a levélméretet."
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Emlékeztessen"
@@ -10792,16 +10819,6 @@ msgid ""
 msgstr ""
 "A melléklet mérete túl nagy. Vagy a(z) %1$s szolgáltatást használja vagy "
 "csökkentenie kell a melléklet méretét."
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"Elérte a levélkvóta korlátját. A(z) %1$s szolgáltatást kell használnia, vagy "
-"más módon csökkentenie kell a levélméretet."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -11055,10 +11072,22 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "Ezt a levelet egy másik személy nevében küldték."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Mentés és bezárás"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Levélírás"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr ""
+"A képfeltöltés megtagadva. A felbontás meghaladja a maximálisan megengedett "
+"%1$s megapixelt."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -11082,16 +11111,12 @@ msgid "Restore draft"
 msgstr "Piszkozat visszaállítása"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Mentés és bezárás"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "Egyidejűleg %1$s piszkozatnál több nem nyitható meg."
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "%1$s -kor, %2$s ezt írta:"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-08-15 12:52+0200\n"
+"PO-Revision-Date: 2022-11-08 13:37+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5543,6 +5543,14 @@ msgstr ""
 "Några kontakter kunde inte läggas till, eftersom de saknar giltigt e-"
 "postfält."
 
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr ""
+"Några kontakter kunde inte läggas till, eftersom deras e-postadress redan "
+"finns i listan."
+
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Distribution list with %1$d entry"
@@ -10536,6 +10544,17 @@ msgstr "Radera meddelande"
 msgid "The appointment has been added to your calendar"
 msgstr "Mötet har lagts till i din kalender"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/util.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"E-postkvotens gräns har nåtts. Du måste använda %1$s eller reducera "
+"meddelandestorleken på annat sätt."
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Påminn mig"
@@ -10775,16 +10794,6 @@ msgid ""
 msgstr ""
 "Bilagans filstorlek är för stor. Du måste använda %1$s eller reducera "
 "filstorleken för bilagan."
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"E-postkvotens gräns har nåtts. Du måste använda %1$s eller reducera "
-"meddelandestorleken på annat sätt."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as

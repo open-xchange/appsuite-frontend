@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-07-08 11:17+0200\n"
+"PO-Revision-Date: 2022-11-08 13:29+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #
 #   Naming Conventions
@@ -619,7 +619,6 @@ msgid "Delete"
 msgstr "Slet"
 
 #. Used as a button label to enter the "edit mode"
-#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/main.js apps/io.ox/calendar/toolbar.js
@@ -630,12 +629,11 @@ msgstr "Slet"
 #: apps/io.ox/core/deputy/dialog.js apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/main.js
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
-#: apps/io.ox/mail/actions.js apps/io.ox/mail/compose/names.js
-#: apps/io.ox/mail/main.js apps/io.ox/multifactor/factorRenderer.js
-#: module:io.ox/core/boot apps/io.ox/portal/settings/pane.js
-#: module:io.ox/portal apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/main.js
+#: apps/io.ox/mail/actions.js apps/io.ox/mail/main.js
+#: apps/io.ox/multifactor/factorRenderer.js module:io.ox/core/boot
+#: apps/io.ox/portal/settings/pane.js module:io.ox/portal
+#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/main.js
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
 #: apps/plugins/administration/groups/settings/pane.js
 #: apps/plugins/administration/groups/settings/toolbar.js
@@ -1237,26 +1235,30 @@ msgid "Print"
 msgstr "Udskriv"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/chat/extensions/register.js module:io.ox/chat
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/chat/extensions/register.js
+#: module:io.ox/chat
 msgid "Participant related actions"
 msgstr "Deltagerrelaterede handlinger"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Send email to all participants"
 msgstr "Send e-mail til alle deltagere"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
 msgid "Invite to new appointment"
 msgstr "Invitér til ny aftale"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
-#: apps/io.ox/calendar/freetime/main.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/freetime/main.js apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Gem som distributionsliste"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/change-organizer.js
+#: apps/io.ox/calendar/toolbar.js
 msgid "Change organizer"
 msgstr "Skift den ud der har organiseret"
 
@@ -1646,6 +1648,7 @@ msgstr "Redigér aftale"
 msgid "Create appointment"
 msgstr "Opret aftale"
 
+#. 'Edit' as button text of a modal dialog to confirm to edit your shown name.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Flickr photo stream.
 #. 'Create' or 'Edit' as button text to confirm to create or edit a Tumblr feed
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1666,7 +1669,7 @@ msgstr "Opret aftale"
 #: apps/io.ox/files/share/share-settings.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
-#: apps/io.ox/mail/categories/edit.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/multifactor/settings/views/editMultifactorView.js
@@ -5429,7 +5432,6 @@ msgstr "Hjemme"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
 
@@ -5542,6 +5544,14 @@ msgstr "%1$s kunne ikke tilføjes, da kontaken ikke har et gyldigt e-mail-felt."
 msgid "Some contacts could not be added as they have no valid email field."
 msgstr ""
 "Nogle kontakter kunne ikke tilføjes da de ikke har et gyldigt e-mail-felt."
+
+#: apps/io.ox/contacts/util.js module:io.ox/contacts
+msgid ""
+"Some contacts could not be added because their email address is already in "
+"the list."
+msgstr ""
+"Nogle kontakter kunne ikke tilføjes, da deres e-mail-adresser allerede er på "
+"listen."
 
 #. %1$d is a number of members in distribution list
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -9745,6 +9755,12 @@ msgid "Remove shares"
 msgstr "Fjern delinger"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to leave the chat?"
+msgid "Do you really want to remove the public link?"
+msgstr "Vil du forlade chatten?"
+
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Do you really want to remove all shares?"
 msgstr "Vil du virkelig fjerne alle delinger?"
 
@@ -10526,6 +10542,17 @@ msgstr "Slet e-mail"
 msgid "The appointment has been added to your calendar"
 msgstr "Aftalen er blevet tilføjet din kalender"
 
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/actions/mailQuota.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/extensions.js
+#: apps/io.ox/mail/compose/sharing.js apps/io.ox/mail/compose/util.js
+msgid ""
+"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
+"some other way."
+msgstr ""
+"Kvota på e-mail nået. Du bliver nødt til at bruge %1$s, eller reducere e-"
+"mail'ens størrelse."
+
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Remind me"
 msgstr "Påmind mig"
@@ -10764,16 +10791,6 @@ msgid ""
 msgstr ""
 "Vedhæftet fil er for stor.  Du bliver nødt til at bruge %1$s, eller reducere "
 "filens størrelse."
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/sharing.js
-msgid ""
-"Mail quota limit reached. You have to use %1$s or reduce the mail size in "
-"some other way."
-msgstr ""
-"Kvota på e-mail nået. Du bliver nødt til at bruge %1$s, eller reducere e-"
-"mail'ens størrelse."
 
 #. Detection phrases: These are phrases with a "|" as delimiter to detect if someone had the intent to attach a file to a mail, but forgot to do so.
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
@@ -11025,10 +11042,21 @@ msgid "This mail has been sent on behalf of another person."
 msgstr "Denne e-mail blev sendt på vegne af en anden person."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid "Save and close"
+msgstr "Gem og luk"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Skriv"
+
+#: apps/io.ox/mail/compose/main.js module:io.ox/mail
+msgid ""
+"Image upload denied. Its resolution exceeds maximum allowed value of %1$s "
+"megapixels."
+msgstr ""
+"Billedoverførsel afvist. Opløsningen er større end loftet på %2$s megapixels."
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid ""
@@ -11053,16 +11081,12 @@ msgid "Restore draft"
 msgstr "Gendan klade"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
-msgid "Save and close"
-msgstr "Gem og luk"
-
-#: apps/io.ox/mail/compose/main.js module:io.ox/mail
 msgid "You cannot open more than %1$s drafts at the same time."
 msgstr "Du kan ikke åbne flere end %1$s udkast på samme tid."
 
 #. %1$s A date
 #. %2$s An email address
-#. Example: On January 8, 2019 2:23 PM richard@open-xchange.com wrote:
+#. Example: On 05/21/2022 2:37 PM CEST richard@open-xchange.com wrote:
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
 msgid "On %1$s %2$s wrote:"
 msgstr "D. %1$s %2$s skrev:"
