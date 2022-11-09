@@ -233,11 +233,12 @@ define('io.ox/core/boot/load', [
             columns.search += ',662';
         }
 
-        if (mailSettings.get('features/authenticity', false)) {
-            columns.unseen += ',664';
-            columns.all += ',664';
-            columns.search += ',664';
-        }
+        // don't add authenticity_preview column here as it is potentially slow, too (see  https://jira.open-xchange.com/browse/OXUIB-2009)
+        // if (mailSettings.get('features/authenticity', false)) {
+        //     columns.unseen += ',664';
+        //     columns.all += ',664';
+        //     columns.search += ',664';
+        // }
 
         if (coreSettings.get('autoStart') !== 'io.ox/mail/main') return;
 
