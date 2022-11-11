@@ -110,7 +110,7 @@ define('plugins/portal/tumblr/register', [
                     if (post.title) {
                         titles.push(
                             $('<li class="paragraph">').append(
-                                $('<span class="bold">').html(post.title), $.txt('')
+                                $('<span class="bold">').text(post.title), $.txt('')
                             )
                         );
                     }
