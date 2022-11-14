@@ -75,10 +75,10 @@ define('io.ox/core/capabilities', function () {
     // via local.conf?
     if (ox.cap) cap = ox.cap.split(/\s*[, ]\s*/);
     // via cookie?
-    if (cookie) cap = cap.concat(cookie.split(/\s*[, ]\s*/));
+    if (cookie) cap = cap.concat(cookie.replace(/[^a-z0-9_:\-./,]/g, '').split(/\s*[, ]\s*/));
     // via URL parameter?
     var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
-    if (hash.cap) cap = cap.concat(hash.cap.split(/\s*[, ]\s*/));
+    if (hash.cap) cap = cap.concat(hash.cap.replace(/[^a-z0-9_:\-./,]/g, '').split(/\s*[, ]\s*/));
 
     _(cap).each(function (id) {
         if (id[0] === '-') {

@@ -20,10 +20,11 @@ define('io.ox/mail/detail/content',
      'io.ox/core/emoji/util',
      'io.ox/core/extensions',
      'io.ox/core/capabilities',
+     'io.ox/mail/sanitizer',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/mail/detail/links'
-    ], function (api, coreUtil, emoji, ext, capabilities, settings, gt) {
+    ], function (api, coreUtil, emoji, ext, capabilities, sanitizer, settings, gt) {
 
     'use strict';
 
@@ -499,7 +500,7 @@ define('io.ox/mail/detail/content',
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'content plain-text noI18n';
-                    content.innerHTML = beautifyText(baton.source);
+                    content.innerHTML = sanitizer.simpleSanitize(beautifyText(baton.source));
                     if (!baton.processedEmoji) {
                         emoji.processEmoji(baton.source, function (text, lib) {
                             baton.processedEmoji = !lib.loaded;

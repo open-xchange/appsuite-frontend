@@ -21,20 +21,13 @@ define('io.ox/mail/print',
 
     'use strict';
 
-    var regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        // TODO: add setting (html OR text)
-        type = 'html';
+    // TODO: add setting (html OR text)
+    var type = 'html';
 
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
-        if (type === 'text') {
-            var source = String(data.attachments[0].content || '');
-            // replace images on source level
-            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
-            return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
-        } else {
-            return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
-        }
+        // no longer needed to distinguish by type. content.get can handle html as well as text
+        return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;
     }
 
     function getList(data, field) {
