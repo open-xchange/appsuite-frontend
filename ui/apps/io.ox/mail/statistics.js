@@ -25,13 +25,15 @@ define('io.ox/mail/statistics', [
     'io.ox/core/api/account',
     'io.ox/core/extensions',
     'io.ox/backbone/views/modal',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'static/3rd.party/chart.min.js'
-], function (api, accountAPI, ext, ModalDialog, gt, Chart) {
+], function (api, accountAPI, ext, ModalDialog, settings, gt, Chart) {
 
     'use strict';
 
     var INDEX = 100;
+    var mailFetchLimit = settings.get('mailfetchlimit', 1000);
 
     ext.point('io.ox/mail/statistics').extend({
         id: 'folder-statistic-from',
@@ -64,6 +66,7 @@ define('io.ox/mail/statistics', [
     });
 
     var COLUMNS = '603,604,610,661',
+        LIMIT = '0,' + (mailFetchLimit - 1),
         WIDTH = _.device('smartphone') ? 280 : 500,
         HEIGHT = _.device('smartphone') ? 150 : 200;
 
@@ -108,7 +111,7 @@ define('io.ox/mail/statistics', [
             var cid = JSON.stringify(options);
 
             if (!hash[cid] || hash[cid].state() === 'rejected') {
-                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS }, false);
+                hash[cid] = api.getAll({ folder: options.folder, columns: COLUMNS, limit: LIMIT }, false);
             }
 
             return hash[cid].promise();
@@ -252,7 +255,10 @@ define('io.ox/mail/statistics', [
                         node = this.$body.addClass('statistics');
                     app.folder.getData().done(function (data) {
                         var baton = ext.Baton({ data: data, app: app, folder: app.folder.get(), statistics: statistics });
-                        self.$title.text(gt('Statistics') + ' - ' + baton.data.title);
+                        var title = gt('Statistics') + ' - ' + baton.data.title;
+                        // #. %1$d is the amount of mails that get included into the mail statistics (example: 1000)
+                        if (baton.data.total > mailFetchLimit) title += ' - ' + gt('Most recent mails (%1$d)', mailFetchLimit);
+                        self.$title.text(title);
                         ext.point('io.ox/mail/statistics').invoke('draw', node, baton);
                     });
                 })
