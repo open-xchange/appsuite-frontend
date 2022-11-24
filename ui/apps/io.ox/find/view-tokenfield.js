@@ -139,7 +139,7 @@ define('io.ox/find/view-tokenfield', [
                 delimiter: '',
                 // typeahead options
                 maxResults: 20,
-                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
                 autoselect: true,
                 // TODO: would be nice to move to control
                 source: app.getSuggestions,

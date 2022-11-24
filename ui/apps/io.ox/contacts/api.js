@@ -1104,7 +1104,7 @@ define('io.ox/contacts/api', [
     api.autocomplete = (function () {
 
         // should be >= 1!
-        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
+        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 2)),
             // used to increase the limit stepwise for incomplete responses (limit === length)
             factor = Math.max(2, settings.get('search/limitIncreaseFactor', 4)),
             // use these fields for local lookups

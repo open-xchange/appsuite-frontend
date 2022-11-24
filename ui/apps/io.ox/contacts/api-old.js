@@ -1097,7 +1097,7 @@ define('io.ox/contacts/api-old', [
     api.autocomplete = (function () {
 
         // should be >= 1!
-        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 3)),
+        var minLength = Math.max(1, settings.get('search/minimumQueryLength', 2)),
             // use these fields for local lookups
             fields = settings.get('search/autocompleteFields', 'display_name,email1,email2,email3,first_name,last_name').split(',');
 

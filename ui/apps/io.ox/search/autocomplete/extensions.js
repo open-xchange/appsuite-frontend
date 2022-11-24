@@ -67,7 +67,7 @@ define('io.ox/search/autocomplete/extensions', [
                 delimiter: '',
                 // typeahead options
                 maxResults: 20,
-                minLength: Math.max(1, settings.get('search/minimumQueryLength', 1)),
+                minLength: Math.max(1, settings.get('search/minimumQueryLength', 2)),
                 autoselect: true,
                 source: baton.app.apiproxy.search,
                 reduce: function (data) {
