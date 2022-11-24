@@ -123,7 +123,9 @@ define('io.ox/settings/security/appPasswords/settings/addPassword', [
                     (spinner = $('<div>').busy())
                 );
                 getApplicationOptions().then(function (apps) {
+                    apps.unshift({ label: gt('Choose an application'), value: '' });
                     var selector = util.compactSelect('scope', gt('Application'), baton.model, apps, { width: 6 });
+                    selector.find('option[value=""]').prop({ disabled: true });
                     placeholder.replaceWith(selector);
                     spinner.remove();
                 }, function () {
