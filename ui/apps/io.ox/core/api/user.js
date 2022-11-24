@@ -323,7 +323,11 @@ define('io.ox/core/api/user', [
         // current user was changed, do not use the rampup data anymore
         currentUserChanged = true;
         require(['io.ox/core/api/account'], function (accountAPI) {
-            accountAPI.reload();
+            accountAPI.reload().then(function () {
+                // Trigger an update of the primary account (displayname might be updated). This updates the mails sender collection
+                ox.trigger('account:update', 0);
+
+            });
         });
     });
 
