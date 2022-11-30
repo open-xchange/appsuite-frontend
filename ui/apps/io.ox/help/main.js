@@ -91,6 +91,7 @@ define('io.ox/help/main', [
                 closable: true,
                 title: gt('Online help')
             }));
+            win.addClass('inline-help');
             win.nodes.main.append(iframe);
             win.show();
         };
@@ -102,7 +103,7 @@ define('io.ox/help/main', [
             function onEscape(e) {
                 if (e.which !== 27) return;
                 e.preventDefault();
-                $('.inline-help').find('[data-action="cancel"]').click();
+                $('.inline-help').find('[data-action="cancel"], [data-action="close"]').click();
             }
 
             function onShiftTab(e) {
