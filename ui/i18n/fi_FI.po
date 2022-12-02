@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 14:26+0100\n"
+"PO-Revision-Date: 2022-12-02 13:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -5246,9 +5246,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 #, fuzzy
-#| msgid "User fields"
 msgid "User list"
-msgstr "Käyttäjän kentät"
+msgstr "Käyttäjälista"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
@@ -13056,6 +13055,10 @@ msgstr ""
 "Suojasit tilisi kaksivaiheisella vahvistuksella. Kirjoita Authenticator App-"
 "sovelluksesta saamasi vahvistuskoodi."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Todennuskoodi:"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16300,9 +16303,23 @@ msgstr "Kutsu %s:in"
 msgid "Add on %s"
 msgstr "%s lisää"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Tapaamisen kuvaus saattaa sisältää vanhentuneita tietoja aiemmasta zoom-"
+#~ "kokouksesta, joka on poistettava manuaalisesti."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Käytä FIDO2-yhteensopivaa laitetta henkilöllisyytesi varmentamiseen."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX-synkronointi"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Tuoreimmat keskustelut"
 
 #~ msgid "save"
 #~ msgstr "tallenna"
@@ -16799,9 +16816,6 @@ msgstr "%s lisää"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Tehtävä oli jo poistettu!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Tuoreimmat keskustelut"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Lataa %s %s :lle heti"

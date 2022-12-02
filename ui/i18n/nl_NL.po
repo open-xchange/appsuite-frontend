@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:35+0100\n"
+"PO-Revision-Date: 2022-12-02 14:17+0100\n"
 "Last-Translator: Tim <tim@workshop-chapina.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13008,7 +13008,7 @@ msgid ""
 "file. Be sure to save this in a secure location."
 msgstr ""
 "Dit is uw herstelcode. Schrijf deze alstublieft op, druk deze af of sla het "
-"bestand op. Verzeker uzelf van een veilige locatie."
+"bestand op. Bewaar deze op een veilige locatie."
 
 #. this is a file name that stores the a long recovery code
 #: apps/io.ox/multifactor/settings/views/backupStringRegistrationView.js
@@ -13185,6 +13185,10 @@ msgid ""
 msgstr ""
 "U heeft uw account beveiligd met Twee Factor Authenticatie. Geef alstublieft "
 "de verificatiecode uit de Authenticator App."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Authenticatiecode:"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -16459,9 +16463,24 @@ msgstr "Uitnodigingen voor %s"
 msgid "Add on %s"
 msgstr "Toegevoegd  op %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "De omschrijving van de afspraak kan mogelijk verouderde informatie "
+#~ "bevatten vanuit een vorige zoom conferentie welke handmatig verwijderd "
+#~ "moet worden."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Gebruik een FIDO2 compatibel apparaat om uw identiteit de authenticeren."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Recente conversaties"
 
 #~ msgid "save"
 #~ msgstr "opslaan"
@@ -16970,9 +16989,6 @@ msgstr "Toegevoegd  op %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Taak is reeds verwijderd!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Recente conversaties"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Download nu de %s client voor %s"

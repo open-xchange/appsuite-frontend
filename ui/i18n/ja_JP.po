@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:35+0100\n"
+"PO-Revision-Date: 2022-12-02 13:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13022,6 +13022,10 @@ msgstr ""
 "お使いのアカウントが２ステップ検証でセキュリティ保護されました。認証アプリか"
 "ら検証コードを入力してください。"
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "認証コード"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16257,8 +16261,22 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "予定の説明には、以前のZoom会議からの古い情報が含まれている可能性があり、手"
+#~ "動で削除する必要があります。"
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr "FIDO2対応デバイスを利用して認証してください。"
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX 同期"
+
+#~ msgid "Recent conversations"
+#~ msgstr "最近のスレッド"
 
 #~ msgid "save"
 #~ msgstr "保存"
@@ -16754,9 +16772,6 @@ msgstr "%s に追加"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "タスクは既に削除されています。"
-
-#~ msgid "Recent conversations"
-#~ msgstr "最近のスレッド"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "%s (%s 用) を今すぐダウンロード"

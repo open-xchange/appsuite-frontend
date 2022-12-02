@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:35+0100\n"
+"PO-Revision-Date: 2022-12-02 13:37+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -13133,6 +13133,10 @@ msgstr ""
 "Jūsu konts ir aizsargāts ar divpakāpju verifikāciju.  Lūdzu ievadiet "
 "verifikācijas kodu no autentifikācijas aplikācijas."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Autentifikācijas kods:"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16380,8 +16384,22 @@ msgstr "Uzaicināt %s"
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Mītiņa aprakstā var būt novecojusi informācija no iepriekšējās "
+#~ "attālinātās konferences, kas jāizdzēš manuāli."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr "Identitātes autorizēšanai izmantot FIDO2 saderīgu ierīci."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX sinhronizācija"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Nesnās sarunas"
 
 #~ msgid "save"
 #~ msgstr "saglabāt"
@@ -16909,9 +16927,6 @@ msgstr "Pievienot %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Uzdevums ir jau izdzēsts!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Nesnās sarunas"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Lejupielādēt %s priekš %s tūlīt"
