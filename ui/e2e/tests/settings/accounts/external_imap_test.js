@@ -37,10 +37,24 @@ Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, sett
     await users.create(users.getRandom(), secondContext);
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
     const [internalUser, externalUser] = users;
+    const mailDomain = externalUser.get('primaryEmail').replace(/.*@/, '');
     // using a workaround to test auto detection on e2e.os.oxui.de
     // TODO: change back to proper value when e2e backend has the correct domain entries
     const automagicDomain = 'e2e.os.oxui.de';
     const automagicAddress = `${externalUser.userdata.imapLogin}@${automagicDomain}`;
+
+    function fillAccountConfig() {
+        dialogs.waitForVisible();
+        I.fillField('Account name', externalUser.userdata.primaryEmail);
+        I.fillField('Email address', externalUser.userdata.primaryEmail);
+        I.fillField('#transport_server', mailDomain);
+        I.fillField('#mail_server', mailDomain);
+        I.fillField('#password', externalUser.userdata.password);
+        I.fillField('#transport_port', '25');
+        I.selectOption('#transport_auth', 'None');
+        I.wait(1);
+        dialogs.clickButton('Save');
+    }
     I.login({ user: internalUser });
     mail.waitForApp();
     I.click('Add mail account');
@@ -51,22 +65,22 @@ Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, sett
     dialogs.clickButton('Add');
     I.retry(10).waitForText('Ignore Warnings', 12);
     dialogs.clickButton('Ignore Warnings');
-    I.retry(10).waitForDetached('.modal', 12);
-    I.openApp('Settings');
-    settings.waitForApp();
-    settings.select('Accounts');
-    I.waitForVisible(`~Edit ${automagicAddress}`);
-    I.retry(10).click(`~Edit ${automagicAddress}`);
-    dialogs.waitForVisible();
-    I.fillField('Account name', externalUser.userdata.primaryEmail);
-    I.fillField('Email address', externalUser.userdata.primaryEmail);
-    I.fillField('#transport_server', automagicDomain);
-    I.fillField('#password', externalUser.userdata.password);
-    I.selectOption('#transport_auth', 'None');
-    I.wait(1);
-    dialogs.clickButton('Save');
-    I.waitForDetached('.modal');
-    I.click('~Mail');
+    if (I.see('Configure manually')) {
+        dialogs.clickButton('Configure manually');
+        fillAccountConfig();
+        I.retry(10).waitForText('Ignore Warnings', 12);
+        dialogs.clickButton('Ignore Warnings');
+    } else {
+        I.retry(10).waitForDetached('.modal', 12);
+        I.openApp('Settings');
+        settings.waitForApp();
+        settings.select('Accounts');
+        I.waitForVisible(`~Edit ${automagicAddress}`);
+        I.retry(10).click(`~Edit ${automagicAddress}`);
+        fillAccountConfig();
+        I.waitForDetached('.modal');
+        I.click('~Mail');
+    }
     mail.waitForApp();
     mail.newMail();
     I.fillField('To', externalUser.userdata.primaryEmail);
