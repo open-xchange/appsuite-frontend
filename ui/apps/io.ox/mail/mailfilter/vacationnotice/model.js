@@ -26,6 +26,10 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
 
     var DAY = 24 * 60 * 60 * 1000;
 
+    function getDefaultRange() {
+        return { dateFrom: +moment().startOf('day'), dateUntil: +moment().endOf('day').add(1, 'week') };
+    }
+
     var VacationNoticeModel = Backbone.Model.extend({
 
         parse: function (response) {
@@ -70,26 +74,24 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             // position
             attr.position = data.position;
 
-            this.parseTime(attr, data.test);
+            this.parseTest(attr, data.test);
 
             return attr;
         },
 
-        parseTime: function (attr, test) {
+        parseTest: function parseTest(attr, test) {
 
-            if (_(test).size() === 2) {
-                // we do have a time frame
-                _(test.tests).each(parseTest);
-                attr.activateTimeFrame = true;
+            if (test.id === 'allof') {
+                _(test.tests).each(function (test) { parseTest(attr, test); });
             } else if (test.id === 'currentdate') {
                 // we do have just start or end date
-                parseTest(test);
+                parseCurrentDateTest(test);
                 attr.activateTimeFrame = true;
             } else {
-                _.extend(attr, this.getDefaultRange());
+                _.extend(attr, getDefaultRange());
             }
 
-            function parseTest(test) {
+            function parseCurrentDateTest(test) {
 
                 function utcOffset(t) {
                     return moment(t).format('Z').replace(':', '');
@@ -108,9 +110,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             }
         },
 
-        getDefaultRange: function () {
-            return { dateFrom: +moment().startOf('day'), dateUntil: +moment().endOf('day').add(1, 'week') };
-        },
+        getDefaultRange: getDefaultRange,
 
         toJSON: function () {
 
