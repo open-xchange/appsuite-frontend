@@ -213,6 +213,21 @@ Scenario('[OXUIB-2065] Vacation notice button with vacationDomains setting', asy
                 addresspart: 'domain',
                 headers: ['from'],
                 values: [mxDomain, 'example.com']
+            }, {
+                id: 'allof',
+                tests: [{
+                    zone: '+0200',
+                    id: 'currentdate',
+                    comparison: 'ge',
+                    datepart: 'date',
+                    datevalue: [moment().subtract(1, 'day').valueOf()]
+                }, {
+                    zone: '+0200',
+                    id: 'currentdate',
+                    comparison: 'le',
+                    datepart: 'date',
+                    datevalue: [moment().add(7, 'days').valueOf()]
+                }]
             }]
         },
         actioncmds: [{
@@ -232,28 +247,33 @@ Scenario('[OXUIB-2065] Vacation notice button with vacationDomains setting', asy
     I.waitForText('Vacation notice ...');
     I.click('Vacation notice ...', '.io-ox-mail-settings');
 
-    const nextWeekStart = moment().add(7, 'days').startOf('week');
+    const nextWeekStart = moment().utc().add(7, 'days').startOf('week');
+    const yesterday = moment().utc().subtract(1, 'day').startOf('day');
 
     I.waitForText('Send vacation notice during this time only');
     I.checkOption('Send vacation notice during this time only');
     I.dontSee('3 days');
-    I.fillField('Start', moment().subtract(1, 'day').format('l'));
+    I.fillField('Start', yesterday.format('l'));
     I.pressKey('Enter');
-    I.fillField('End', moment().add(2, 'days').format('l'));
+    I.fillField('End', yesterday.clone().add(3, 'days').startOf('day').format('l'));
     I.pressKey('Enter');
-    I.see('3 days');
+    const diffDays = Math.round(yesterday.clone().add(3, 'days').endOf('day').diff(yesterday) / 1000 / 60 / 60 / 24);
+    I.see(`${diffDays} days`);
     I.click('Apply changes');
-    I.waitForDetached('.modal:not(.io-ox-settings-main)');
+    I.waitForDetached('.modal');
 
     I.openApp('Mail');
+    // TODO: there is something wrong with event handling here,
+    // so we need to refresh the page to get the correct state
+    I.refreshPage();
 
     I.waitForText('Your vacation notice is active');
     I.click('Your vacation notice is active');
-    I.waitForText('3 days');
+    I.waitForText(`${diffDays} days`);
 
     I.fillField('Start', nextWeekStart.format('l'));
     I.pressKey('Enter');
-    I.fillField('End', nextWeekStart.add(2, 'days').format('l'));
+    I.fillField('End', nextWeekStart.clone().add(2, 'days').format('l'));
     I.pressKey('Enter');
     I.see('3 days');
     I.click('Apply changes');
