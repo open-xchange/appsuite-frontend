@@ -70,26 +70,25 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             // position
             attr.position = data.position;
 
-            this.parseTime(attr, data.test);
+            this.parseTest(attr, data.test);
 
             return attr;
         },
 
-        parseTime: function (attr, test) {
+        parseTest: function (attr, test) {
 
-            if (_(test).size() === 2) {
-                // we do have a time frame
-                _(test.tests).each(parseTest);
-                attr.activateTimeFrame = true;
+            if (test.id === 'allOf') {
+                var parseTest = this.parseTest;
+                _(test.tests).each(function (test) { parseTest(attr, test); });
             } else if (test.id === 'currentdate') {
                 // we do have just start or end date
-                parseTest(test);
+                parseCurrentDateTest(test);
                 attr.activateTimeFrame = true;
             } else {
                 _.extend(attr, this.getDefaultRange());
             }
 
-            function parseTest(test) {
+            function parseCurrentDateTest(test) {
 
                 function utcOffset(t) {
                     return moment(t).format('Z').replace(':', '');
