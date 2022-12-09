@@ -45,12 +45,12 @@ Scenario('[C7838] Edit primary mail account', async ({ I, mail, settings, dialog
     I.seeAttributesOnElements('input[name="primary_address"]', { disabled: true });
     I.seeAttributesOnElements('select[name="mail_protocol"]', { disabled: true });
     I.seeAttributesOnElements('input[name="mail_server"]', { disabled: true });
-    I.seeAttributesOnElements('select[name="mail_secure"]', { disabled: true });
+    I.dontSeeElement('select[name="mail_secure"]');
     I.seeAttributesOnElements('input[name="mail_port"]', { disabled: true });
     I.seeAttributesOnElements('input[name="login"]', { disabled: true });
     I.seeAttributesOnElements('input[id="password"]', { disabled: true });
     I.seeAttributesOnElements('input[name="transport_server"]', { disabled: true });
-    I.seeAttributesOnElements('select[name="transport_secure"]', { disabled: true });
+    I.dontSeeElement('select[name="transport_secure"]');
     I.seeAttributesOnElements('input[name="transport_port"]', { disabled: true });
     I.seeAttributesOnElements('select[name="transport_auth"]', { disabled: true });
     I.seeAttributesOnElements('input[name="transport_login"]', { disabled: true });
