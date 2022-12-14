@@ -743,6 +743,7 @@ html.macos .preview-right, html.ios {
         display: inline-block;
         margin-left: @default-padding / 2;
         float: right;
+        padding: 2px;
     }
 
     &.visible-selection.has-focus .selected {
@@ -1052,6 +1053,7 @@ html.macos .preview-right, html.ios {
         font-size: 14px;
         color: rgba(0, 0, 0, 0.5);
         .fa:before { content: @flag-icon-unset; }
+        .fa { padding: 4px; }
     }
     &.flagged .flag {
         .smartphone & {
