@@ -90,7 +90,7 @@
     "tinymce": "4.9.10",
     "typeahead.js": "0.10.5",
     "u2f-api": "1.0.11",
-    "underscore": "^1.13.3",
+    "underscore": "^1.13.6",
     "unorm": "1.6.0",
     "velocity-animate": "1.5.2"
   },
