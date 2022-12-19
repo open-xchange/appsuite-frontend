@@ -31,7 +31,7 @@
     "grunt-require-gettext": "^0.8.1",
     "helper-glob": "^0.1.0",
     "open-xchange-shared-grunt-config": "^0.15.0-pre3",
-    "underscore": "^1.8.3"
+    "underscore": "^1.13.6"
   },
   "devDependencies": {
     "eslint-plugin-license-header": "^0.2.0",
