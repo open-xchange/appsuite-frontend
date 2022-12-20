@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:36+0100\n"
+"PO-Revision-Date: 2022-12-02 13:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -13153,6 +13153,10 @@ msgstr ""
 "Zabezpečili ste svoj účet dvojkrokovým overením. Prosím, zadajte overovací "
 "kód z aplikácie Authenticator."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Autentifikačný kód:"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16420,9 +16424,23 @@ msgstr "Pozvať na %s"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Popis schôdzky môže obsahovať zastarané informácie z predchádzajúceho "
+#~ "hovoru cez Zoom, ktoré je potrebné manuálne odstrániť."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Používať na overenie vašej identity zariadenie kompatibilné s FIDO2."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Nedávne konverzácie"
 
 #~ msgid "save"
 #~ msgstr "uložiť"
@@ -16954,9 +16972,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Úloha už bola zmazaná!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Nedávne konverzácie"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Stiahnite si teraz %s za %s"

@@ -55,7 +55,7 @@ define('io.ox/contacts/widgets/canvasresize', ['io.ox/core/tk/image-util'], func
     function createCanvas(width, height) {
         // disable offscreenCanvas on current Chrome due to
         // https://bugs.chromium.org/p/chromium/issues/detail?id=1012036
-        var badChromeVersion = _.browser.chrome && _.browser.chrome >= 77;
+        var badChromeVersion = typeof _ !== 'undefined' && _.browser.chrome && _.browser.chrome >= 77;
         if (!badChromeVersion && self.OffscreenCanvas) return new self.OffscreenCanvas(width, height);
         var canvas = document.createElement('canvas');
         canvas.width = width;

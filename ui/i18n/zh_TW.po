@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:37+0100\n"
+"PO-Revision-Date: 2022-12-02 13:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10674,8 +10674,7 @@ msgstr "郵件中可能包含隱藏的外部圖片"
 msgid ""
 "This email contains images from external sources that are currently hidden. "
 "The sent email will not contain any images from external sources"
-msgstr ""
-"此郵件包含來自外部來源的隱藏圖片。寄出時將不包含任何來自外部來源的圖片。"
+msgstr "此郵件包含來自外部來源的隱藏圖片。寄出時將不包含任何來自外部來源的圖片"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Mail may contain external images"
@@ -10686,7 +10685,7 @@ msgid ""
 "This email may contain images from external sources. The sent email will not "
 "contain any images from external sources"
 msgstr ""
-"此郵件可能有包含來自外部來源的圖片。寄出時將不包含任何來自外部來源的圖片。"
+"此郵件可能有包含來自外部來源的圖片。寄出時將不包含任何來自外部來源的圖片"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Compose mail without external images"
@@ -12839,6 +12838,10 @@ msgid ""
 "You secured your account with 2-Step Verification. Please enter the "
 "verification code from the Authenticator App."
 msgstr "您使用兩階段驗證方式保護帳號。請輸入驗證程式中的驗證碼。"
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "驗證碼："
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -16014,8 +16017,20 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr "約會的描述可能包含來自先前 Zoom 會議當中的過時資訊，需要手動刪除。"
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr "請使用 FIDO2 相容裝置來驗證身分。"
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "近期對話"
 
 #~ msgid "save"
 #~ msgstr "儲存"
@@ -16470,9 +16485,6 @@ msgstr "新增至 %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "工作已被刪除！"
-
-#~ msgid "Recent conversations"
-#~ msgstr "近期對話"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "立刻下載 %2$s 的 %1$s"

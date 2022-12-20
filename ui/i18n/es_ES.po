@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:30+0100\n"
+"PO-Revision-Date: 2022-12-02 13:32+0100\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es_ES\n"
@@ -5280,10 +5280,8 @@ msgstr ""
 "un término de búsqueda para limitar los resultados."
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Users"
 msgid "User list"
-msgstr "Usuarios"
+msgstr "Código de Autenticación:"
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 msgid "Global address list"
@@ -13175,6 +13173,12 @@ msgstr ""
 "Ha asegurado su cuenta con verificación en 2 pasos. Por favor, introduzca el "
 "código de verificación de la aplicación Authenticator."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+#, fuzzy
+#| msgid "Authentication"
+msgid "Authentication Code:"
+msgstr "Autentificación"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16459,9 +16463,23 @@ msgstr "Invitar a %s"
 msgid "Add on %s"
 msgstr "Añadir a %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "La descripción de la cita podría contener información desactualizada de "
+#~ "una conferencia de Zoom anterior que debería borrarse manualmente."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Usar un dispositivo compatible con FIDO2 para autenticar su identidad."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Conversaciones recientes"
 
 #~ msgid "save"
 #~ msgstr "guardar"
@@ -16974,9 +16992,6 @@ msgstr "Añadir a %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "La tarea ya había sido borrada"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Conversaciones recientes"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Descargar %s para %s ahora"

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:29+0100\n"
+"PO-Revision-Date: 2022-12-02 13:26+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -10866,7 +10866,7 @@ msgid ""
 "The sent email will not contain any images from external sources"
 msgstr ""
 "Denne e-mail indeholder billeder fra eksterne kilder som er skjulte. Den "
-"sendte e-mail vil ikke indeholde billeder fra eksterne kilder."
+"sendte e-mail vil ikke indeholde billeder fra eksterne kilder"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Mail may contain external images"
@@ -10878,7 +10878,7 @@ msgid ""
 "contain any images from external sources"
 msgstr ""
 "Denne e-mail indeholder måske billeder fra eksterne kilder. Den sendte e-"
-"mail vil ikke indeholde billeder fra eksterne kilder."
+"mail vil ikke indeholde billeder fra eksterne kilder"
 
 #: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Compose mail without external images"
@@ -13072,6 +13072,10 @@ msgid ""
 msgstr ""
 "Du har sikret din konto med tofaktorgodkendelse. Indtast venligst "
 "verifikationskoden fra app'en til godkendelse."
+
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Godkendelseskode:"
 
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
@@ -16318,8 +16322,22 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Denne aftalebeskrivelse indeholder muligvis gamle oplysninger fra et "
+#~ "tidligere Zoom-opkald, som skal slettes manuelt."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr "Brug en FIDO2-kompatibel enhed til at verificere din identitet."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Samtaler for nyligt"
 
 #~ msgid "save"
 #~ msgstr "gem"
@@ -16812,9 +16830,6 @@ msgstr "Tilføj på %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Opgaven var allerede slettet!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Samtaler for nyligt"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Hent %s for %s nu"

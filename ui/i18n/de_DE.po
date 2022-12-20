@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:29+0100\n"
+"PO-Revision-Date: 2022-12-02 13:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -13225,6 +13225,10 @@ msgstr ""
 "Sie haben Ihr Konto mit der Zwei-Faktor-Authentifizierung gesichert. Bitte "
 "geben Sie den Bestätigungscode der Authenticator-App ein."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Authentifizierungscode:"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16518,10 +16522,24 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Die Terminbeschreibung kann veraltete Informationen aus einer früheren "
+#~ "Zoom-Konferenz enthalten, die manuell gelöscht werden müssen."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Verwenden Sie ein FIDO2-kompatibles Gerät, um Ihre Identität zu "
 #~ "authentifizieren."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Kürzlicher E-Mail-Austausch"
 
 #~ msgid "MacOS"
 #~ msgstr "MacOS"
@@ -17066,9 +17084,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Public channel"
 #~ msgstr "Öffentlicher Kanal"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Kürzlicher E-Mail-Austausch"
 
 #~ msgid "Enter message here"
 #~ msgstr "Nachricht hier eingeben"

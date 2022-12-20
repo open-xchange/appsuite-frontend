@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:35+0100\n"
+"PO-Revision-Date: 2022-12-02 13:40+0100\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -13179,6 +13179,10 @@ msgstr ""
 "Konto zostało zabezpieczone za pomocą weryfikacji 2-etapowej. Wpisz kod "
 "weryfikacyjny wysłany do aplikacji do uwierzytelniania."
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "Kod uwierzytelniający:"
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -16441,10 +16445,24 @@ msgstr "Zaproś na %s"
 msgid "Add on %s"
 msgstr "Dodaj w serwisie %s"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr ""
+#~ "Opis spotkania może zawierać nieaktualne informacje z poprzedniej "
+#~ "konferencji Zoom, które należy ręcznie usunąć."
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr ""
 #~ "Aby uwierzytelnić swoją tożsamość, użyj urządzenia zgodnego ze standardem "
 #~ "FIDO2."
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX Sync"
+
+#~ msgid "Recent conversations"
+#~ msgstr "Ostatnie konwersacje"
 
 #~ msgid "save"
 #~ msgstr "zapisz"
@@ -16972,9 +16990,6 @@ msgstr "Dodaj w serwisie %s"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "Zadanie zostało już usunięte!"
-
-#~ msgid "Recent conversations"
-#~ msgstr "Ostatnie konwersacje"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "Pobierz już teraz %s dla systemu %s"

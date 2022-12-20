@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-11-08 13:37+0100\n"
+"PO-Revision-Date: 2022-12-02 13:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -12802,6 +12802,10 @@ msgid ""
 "verification code from the Authenticator App."
 msgstr "您通过两步验证保护您的帐户。 请输入身份验证器应用程序中的验证码。"
 
+#: apps/io.ox/multifactor/views/totpProvider.js module:io.ox/core/boot
+msgid "Authentication Code:"
+msgstr "认证码："
+
 #: apps/io.ox/multifactor/views/u2fProvider.js module:io.ox/core/boot
 msgid ""
 "You secured your account with 2-Step Verification. Please use your "
@@ -15972,8 +15976,20 @@ msgstr "邀请到 %s"
 msgid "Add on %s"
 msgstr "在 %s 上添加"
 
+#~ msgid ""
+#~ "The appointment description might contain outdated information from a "
+#~ "previous zoom conference that needs to be deleted manually."
+#~ msgstr "约会描述可能包括来自需要手动删除的先前Zoom会议的过时信息。"
+
 #~ msgid "Use a FIDO2 compatible device to authenticate your identity."
 #~ msgstr "使用与 FIDO2 兼容的设备对您的身份进行身份验证。"
+
+#~ msgctxt "native app"
+#~ msgid "OX Sync"
+#~ msgstr "OX 同步"
+
+#~ msgid "Recent conversations"
+#~ msgstr "最近交谈"
 
 #~ msgid "save"
 #~ msgstr "保存"
@@ -16412,9 +16428,6 @@ msgstr "在 %s 上添加"
 
 #~ msgid "Task was already deleted!"
 #~ msgstr "任务已经删除！"
-
-#~ msgid "Recent conversations"
-#~ msgstr "最近交谈"
 
 #~ msgid "Download %s for %s now"
 #~ msgstr "立刻下载 %s（为  %s）"
