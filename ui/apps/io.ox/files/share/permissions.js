@@ -488,11 +488,12 @@ define('io.ox/files/share/permissions', [
                 this.limit = this.options.limit || 100;
 
                 this.collection = new Permissions();
-                this.listenTo(this.collection, 'reset', this.renderEntities);
+                this.listenTo(this.collection, 'reset', function () { this.renderEntitiesChunk(); }.bind(this));
                 this.listenTo(this.collection, 'add', this.renderEntity);
                 this.listenTo(this.collection, 'revert', this.onReset);
+                this.listenTo(this.collection, 'remove', this.onRemove);
 
-                this.$el.on('scroll', _.debounce(this.onScroll.bind(this), 50));
+                this.$el.on('scroll', this.onScroll.bind(this));
                 this.initialPermissions = this.model.getPermissions().length;
             },
 
@@ -500,24 +501,34 @@ define('io.ox/files/share/permissions', [
                 return this.collection.length !== this.initialPermissions;
             },
 
-            onScroll: function () {
+            // can be triggered by container or view (depends which one is scrollable)
+            onScroll: _.debounce(function (e) {
+                e.stopPropagation();
                 // all drawn already
                 if (this.limit >= this.collection.length) return;
 
-                var $list = this.$el,
+                var $list = $(e.target),
                     height = $list.outerHeight(),
                     scrollTop = $list[0].scrollTop,
                     scrollHeight = $list[0].scrollHeight,
                     bottom = scrollTop + height;
                 if (bottom / scrollHeight < 0.80) return;
                 var defer = window.requestAnimationFrame || window.setTimeout;
-                defer(this.renderEntities.bind(this));
+                defer(function () { this.renderEntitiesChunk(); }.bind(this));
+            }, 50),
+
+            onRemove: function () {
+                // fill gap
+                var chunksize = 1;
+                this.offset--;
+                this.renderEntitiesChunk(chunksize);
             },
+
 
             onReset: function () {
                 this.offset = 0;
                 this.$el.empty();
-                this.renderEntities();
+                this.renderEntitiesChunk();
             },
 
             render: function () {
@@ -534,14 +545,16 @@ define('io.ox/files/share/permissions', [
                 this.permissionPreSelection = view;
             },
 
-            renderEntities: function () {
+            renderEntitiesChunk: function (chunksize) {
+                chunksize = chunksize || this.limit;
+                if (this.offset >= this.collection.length) return this.$el.idle();
                 this.$el.busy({ immediate: true });
                 this.$el.append(
-                    this.collection.slice(this.offset, this.offset + this.limit).map(function (model) {
+                    this.collection.slice(this.offset, this.offset + chunksize).map(function (model) {
                         return new PermissionEntityView({ model: model, parentModel: this.model }).render().$el;
                     }, this)
                 );
-                this.offset = this.offset + this.limit;
+                this.offset = this.offset + chunksize;
                 this.$el.idle();
                 return this;
             },
@@ -1431,6 +1444,9 @@ define('io.ox/files/share/permissions', [
                     });
                 });
             });
+
+            // scroll happens on dialog body so call onScroll handler manually
+            dialog.$body.on('scroll', function (e) { permissionsView.onScroll(e); });
 
             dialog.on('abort', function () {
                 if (permissionsView.hasChanges() || publicLink.hasChanges()) {
