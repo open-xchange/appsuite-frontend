@@ -799,6 +799,12 @@ define('io.ox/files/api', [
                 if (String(params.sort) === '5') {
                     folders = _(folders).sortBy('last_modified');
                 }
+                // sort by folder_name client-side
+                if (String(params.sort) === '702') {
+                    folders = _.sortBy(folders, function (folder) {
+                        return folder.folder_name.toLowerCase();
+                    });
+                }
                 if (params.order === 'desc') folders.reverse();
                 // get remaining limit for files
                 var split = params.limit.split(/,/),
