@@ -23,8 +23,9 @@
 define('io.ox/core/api/mailfilter', [
     'io.ox/core/http',
     'io.ox/core/event',
-    'io.ox/core/capabilities'
-], function (http, Events, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/api/jobs'
+], function (http, Events, capabilities, jobsAPI) {
 
     'use strict';
 
@@ -124,12 +125,11 @@ define('io.ox/core/api/mailfilter', [
                     data: data
                 });
             },
-
-            apply: function (params) {
-                return http.GET({
+            apply: function (params, longRunningJobCallback) {
+                return jobsAPI.enqueue(http.GET({
                     module: 'mailfilter/v2',
-                    params: _.extend({ action: 'apply' }, params)
-                });
+                    params: _.extend({ action: 'apply', allow_enqueue: true }, params)
+                }), longRunningJobCallback);
             }
         };
 
