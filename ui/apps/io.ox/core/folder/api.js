@@ -1019,8 +1019,33 @@ define('io.ox/core/folder/api', [
         if (!options.silent) api.trigger('before:update before:update:' + id, id, model);
 
         // build data object
-        var data = { folder: changes },
-            successCallback = function (newId) {
+        var data = { folder: changes };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
+
+        return jobsAPI.enqueue(http.PUT({
+            module: 'folders',
+            params: {
+                action: 'update',
+                id: id,
+                timezone: 'UTC',
+                tree: tree(id),
+                cascadePermissions: options.cascadePermissions,
+                ignoreWarnings: options.ignoreWarnings,
+                // special parameter for long running operations (drive folder move/copy)
+                allow_enqueue: options.enqueue
+            },
+            data: data,
+            appendColumns: false
+        }))
+        .done(function () {
+            var data = model.toJSON();
+            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
+        })
+        .then(
+            function (newId) {
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
@@ -1045,8 +1070,7 @@ define('io.ox/core/folder/api', [
                                 return newId;
                             });
                 }
-            },
-            failCallback = function (error) {
+            }, function (error) {
                 //get fresh data for the model (the current ones are wrong since we applied the changes early to be responsive)
                 api.get(id, { cache: false });
                 if (error && error.code && error.code === 'FLD-0018') {
@@ -1056,48 +1080,7 @@ define('io.ox/core/folder/api', [
                     api.trigger('update:fail', error, id);
                 }
                 throw error;
-            };
-
-        if (options.notification && !_.isEmpty(options.notification)) {
-            data.notification = options.notification;
-        }
-
-        return http.PUT({
-            module: 'folders',
-            params: {
-                action: 'update',
-                id: id,
-                timezone: 'UTC',
-                tree: tree(id),
-                cascadePermissions: options.cascadePermissions,
-                ignoreWarnings: options.ignoreWarnings,
-                // special parameter for long running operations (drive folder move/copy)
-                allow_enqueue: options.enqueue
-            },
-            data: data,
-            appendColumns: false
-        })
-        .done(function () {
-            var data = model.toJSON();
-            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
-        })
-        .then(
-            function success(result) {
-                if (result && options.enqueue && (result.code === 'JOB-0003' || result.job)) {
-                    // long running job. Add to jobs list and return here
-                    //#. %1$s: Folder name
-                    jobsAPI.addJob({
-                        module: 'folders',
-                        action: 'update',
-                        done: false,
-                        showIn: model.get('module'),
-                        id: result.job || result.data.job,
-                        successCallback: successCallback,
-                        failCallback: failCallback });
-                    return result;
-                }
-                return successCallback(result);
-            }, failCallback
+            }
         );
     }
 
@@ -1386,15 +1369,16 @@ define('io.ox/core/folder/api', [
 
         api.trigger('before:clear', id);
 
-        return http.PUT({
+        return jobsAPI.enqueue(http.PUT({
             module: 'folders',
             appendColumns: false,
             params: {
                 action: 'clear',
-                tree: tree(id)
+                tree: tree(id),
+                allow_enqueue: true
             },
             data: [id]
-        })
+        }))
         .done(function () {
             if ((api.pool.models[id] && api.pool.models[id].is('trash')) || account.is('trash', id)) {
                 // clear collections

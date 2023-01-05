@@ -21,12 +21,14 @@
  */
 
 define('io.ox/core/api/jobs', [
-    'io.ox/core/http'
-], function (http) {
+    'io.ox/core/http',
+    'io.ox/core/yell',
+    'gettext!io.ox/core'
+], function (http, yell, gt) {
 
     'use strict';
 
-    var longRunningJobs = {}, jobTimer;
+    var longRunningJobs = {}, jobTimer, timerInterval = 2000;
 
     // A failsafe iterator that doesn't break the iteration when one callback throws an error.
     // This is important, because callbacks after a thrown error would not be invoked anymore.
@@ -91,7 +93,7 @@ define('io.ox/core/api/jobs', [
                         });
                     });
                 });
-            }, 2000);
+            }, timerInterval);
         },
         get: function (id) {
             if (!id) {
@@ -141,6 +143,27 @@ define('io.ox/core/api/jobs', [
                     }, job));
                 });
             });
+        },
+        enqueue: function (request, callback) {
+            var def = $.Deferred();
+            callback = callback || function () { yell('info', gt('This action may take a some time.')); };
+
+            request.then(function (response) {
+                // if we have a long running job execute the callback and add the job to the list.
+                if (response && (response.code === 'JOB-0003' || response.job)) {
+                    callback();
+                    api.addJob({
+                        done: false,
+                        id: response.job || response.data.job,
+                        successCallback: def.resolve,
+                        failCallback: def.reject
+                    });
+                    return;
+                }
+                // no long running job? resolve right away
+                def.resolve(response);
+            }, def.reject);
+            return def;
         },
         cancelJob: function (ids) {
             ids = [].concat(ids);
