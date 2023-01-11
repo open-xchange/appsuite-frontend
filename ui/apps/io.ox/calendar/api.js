@@ -56,13 +56,13 @@ define('io.ox/calendar/api', [
             // post request responses are arrays with data and timestamp
             response = response.data || response;
 
+            _(response.deleted).each(removeFromPool);
+
             _(response.created).each(function (event) {
                 if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
                 api.trigger('process:create', event);
                 api.trigger('process:create:' + util.cid(event), event);
             });
-
-            _(response.deleted).each(removeFromPool);
 
             _(response.updated).each(function (event) {
                 if (isRecurrenceMaster(event)) {
