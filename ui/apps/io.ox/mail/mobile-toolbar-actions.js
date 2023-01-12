@@ -150,7 +150,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
     };
 
     mobile.addAction(points.listView, meta, ['compose']);
-    mobile.addAction(points.multiselect, meta, ['compose', 'delete', 'forward', 'move', 'archive']);
+    mobile.addAction(points.multiselect, meta, ['compose', 'delete', 'forward', 'spam', 'nospam', 'flag', 'unflag', 'mark-read', 'mark-unread', 'move', 'archive']);
     mobile.addAction(points.threadView, meta, ['compose']);
     mobile.addAction(points.detailView, meta, ['reply', 'reply-all', 'delete', 'forward', 'mark-read', 'mark-unread', 'spam', 'flag', 'unflag', 'nospam', 'copy', 'color']);
     mobile.createToolbarExtensions(points);
