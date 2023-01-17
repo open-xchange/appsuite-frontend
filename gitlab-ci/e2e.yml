@@ -181,7 +181,7 @@ publish e2e report:
     - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
     - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
     - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
-    - docker cp ui/build/e2e/filter_report.json reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/ || true
+    - docker cp e2e/output/filter_report.json reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/ || true
   environment:
     name: reports/$CI_COMMIT_REF_SLUG
     url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
