@@ -452,6 +452,12 @@ define.async('io.ox/mail/accounts/view-form', [
             //
             // Incoming (IMAP/POP3)
             //
+
+
+            // OXUIB-2096: Hide 'Connection security' settings if primary or secondary account or if set to false
+            var showMailSecurity = !is('primary', 'secondary') || model.get('mail_secure');
+            var showTransportSecurity = !is('primary', 'secondary') || model.get('transport_secure');
+
             var serverSettingsIn = $('<fieldset class="data_incoming">').append(
                 $('<legend class="sectiontitle">').text(gt('Incoming server')),
                 $('<form class="form-horizontal">').append(
@@ -470,7 +476,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         )
                     ),
                     // secure
-                    group(
+                    showMailSecurity && group(
                         label('mail_secure', gt('Connection security')),
                         $('<div class="col-sm-3">').append(
                             new mini.SelectView({ list: optionsConnectionSecurity, model: view.selectionModel, id: 'mail_secure' }).render().$el
@@ -529,7 +535,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         )
                     ),
                     // secure
-                    group(
+                    showTransportSecurity && group(
                         label('transport_secure', gt('Connection security')),
                         $('<div class="col-sm-3">').append(
                             new mini.SelectView({ list: optionsConnectionSecurity, model: view.selectionModel, id: 'transport_secure' }).render().$el

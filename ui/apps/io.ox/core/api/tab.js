@@ -63,7 +63,9 @@ define('io.ox/core/api/tab', [
     function disable() {
         util.debugSession('TabSession: disable TabAPI');
         for (var key in api) {
-            if (Object.prototype.hasOwnProperty.call(api, key)) {
+            if (Object.prototype.hasOwnProperty.call(api, key)
+                && key !== 'openBlank' // openBlank must stay available also with a disabled tabAPI
+            ) {
                 api[key] = $.noop;
             }
         }
