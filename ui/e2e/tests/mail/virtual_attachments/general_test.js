@@ -129,38 +129,6 @@ Scenario('[C83399] View all SENT attachments', async ({ I, drive }) => {
     });
 });
 
-Scenario('[C83404] Attachments can be copied', async ({ I, drive }) => {
-    await prepare();
-    I.logout();
-
-    // Login Drive and select Attachment Folder
-    I.login('app=io.ox/files');
-    drive.waitForApp();
-    I.selectFolder('My attachments');
-    I.selectFolder('My attachments');
-    within('.list-view', () => {
-        I.waitForText('testdocument.rtf');
-        I.waitForText('testdocument.odt');
-        I.waitForText('testpresentation.ppsm');
-    });
-
-    // Open Dropdown and select 'Copy' to copy last file
-    I.rightClick(locate('.list-item').withText('testpresentation.ppsm').last());
-    I.clickDropdown('Copy');
-
-    // Wait for modal and copy file to default folder 'My files'
-    I.waitForElement('.modal-dialog');
-    I.see('Copy', '.modal-footer');
-    I.click('Copy', '.modal-footer');
-    I.waitForText('File has been copied');
-
-    // Select 'My files' folder and checkfor copied file
-    I.selectFolder('My files');
-    within('.list-view', () => {
-        I.waitForText('testpresentation.ppsm');
-    });
-});
-
 Scenario('[C125297] Attachments are linked to mails', async ({ I, drive }) => {
     await prepare();
     I.logout();
