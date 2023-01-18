@@ -43,7 +43,6 @@ Scenario('[C125352] No mail oauth service available', function ({ I, mail }) {
     I.seeElement('.add-mail-account-password');
 });
 
-// TODO: enable "I.waitForText('My External')" again once MWB-1299 was fixed
 Scenario('[OXUIB-225] Password recovery for account passwords after password change', async ({ I, dialogs, users }) => {
     await I.haveMailAccount({ name: 'My External', extension: 'ext' });
 
@@ -65,21 +64,21 @@ Scenario('[OXUIB-225] Password recovery for account passwords after password cha
     users[0].userdata.password = 'secret2';
 
     I.login();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     dialogs.waitForVisible();
     dialogs.clickButton('Remind me again');
     I.waitToHide('.modal-dialog');
 
     I.refreshPage();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     dialogs.waitForVisible();
     dialogs.clickButton('Remove passwords');
     I.waitToHide('.modal-dialog');
 
     I.refreshPage();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     I.dontSeeElement('.modal-dialog');
 });
