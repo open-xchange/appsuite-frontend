@@ -41,7 +41,7 @@ Scenario('[C101618] Link with position: fixed; should not cover the whole UI', a
         I.haveSetting('io.ox/mail//allowHtmlImages', true),
         I.haveMail({
             folder: 'default0/INBOX',
-            path: 'e2e/media/mails/c101618.eml'
+            path: 'media/mails/c101618.eml'
         })
     ]);
 

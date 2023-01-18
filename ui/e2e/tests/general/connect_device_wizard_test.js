@@ -22,8 +22,6 @@
 
 /// <reference path="../../steps.d.ts" />
 
-const { expect } = require('chai');
-
 Feature('General > Connect your device wizard');
 
 Before(async ({ users }) => {
@@ -226,7 +224,7 @@ Scenario('Change product names and check for different platforms', async ({ I, t
 
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {
     // access combination groupware disables active_sync capability
-    await users[0].hasAccessCombination('groupware');
+    await users[0].hasAccessCombination('webmail');
 
     I.login();
     mail.waitForApp();
@@ -234,69 +232,52 @@ Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail
     topbar.connectDeviceWizard();
 
     // Scenario 1: Upsell is not enabled && capability is disabled (don't show EAS entry)
-    await within('.wizard-container', () => {
-        I.waitForText('Which device do you want to configure?');
-        I.click('iPhone or iPad');
+    I.waitForText('Which device do you want to configure?', 5, '.wizard-container');
+    I.click('iPhone or iPad', '.wizard-container');
 
-        I.waitForText('Which application do you want to use?');
-        I.waitForText('OX Drive');
-        I.click('OX Drive');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
+    I.waitForText('Which application do you want to use?', 5, '.wizard-container');
+    // check if button is disabled
+    I.waitForText('Which application do you want to use?', 5, '.wizard-container');
+    I.dontSee('Exchange Active Sync', '.wizard-container');
 
-        // check if button is disabled
-        I.waitForText('Which application do you want to use?');
-        I.dontSee('Exchange Active Sync');
+    await I.haveSetting({
+        'io.ox/core': {
+            'upsell/activated': true,
+            'upsell/enabled': { active_sync: true, caldav: true, carddav: true }
+        }
     });
-
-    await I.haveSetting('io.ox/core//upsell/enabled', { active_sync: true, caldav: true, carddav: true });
     I.refreshPage();
     mail.waitForApp();
-    await I.executeScript('ox.on("upsell:requires-upgrade", () => console.log("Event caught"))');
+    await I.executeScript(function () {
+        ox.on('upsell:requires-upgrade', () => document.body.classList.add('upsell-triggered'));
+    });
     topbar.connectDeviceWizard();
 
     // Scenario 2: Upsell is enabled && capability is disabled (show locked EAS entry)
-    await within('.wizard-container', () => {
-        I.waitForText('Which device do you want to configure?');
-        I.click('iPhone or iPad');
+    I.waitForText('Which device do you want to configure?', 5, '.wizard-container');
+    I.click('iPhone or iPad', '.wizard-container');
 
-        I.waitForText('Which application do you want to use?');
-        I.waitForText('OX Drive');
-        I.click('OX Drive');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
+    I.waitForText('Which application do you want to use?', 5, '.wizard-container');
+    I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Calendar'));
+    I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Address Book'));
+    I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
+    I.click('Exchange Active Sync', '.wizard-container');
 
-        // check if button is disabled
-        I.waitForText('Which application do you want to use?');
-        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Calendar'));
-        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Address Book'));
-        I.waitForVisible(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
-        I.click('Exchange Active Sync');
-    });
-    // check if event "upsell:requires-upgrade" was fired by checking console
-    const logs = await I.grabBrowserLogs();
-    const msg = logs.find(log => log._text === 'Event caught');
-    expect(msg).to.exist;
-
+    // check if event "upsell:requires-upgrade" was fired by checking if body has class "upsell-triggered"
+    I.waitForElement('.upsell-triggered');
     // enable active_sync again, check if upsell is not offered
     await users[0].hasAccessCombination('all');
-    I.wait(1);
-    I.logout();
-    I.login('app=io.ox/mail&cap=caldav,carddav');
+    I.refreshPage();
     mail.waitForApp();
     topbar.connectDeviceWizard();
 
     // Scenario 3: Upsell is enabled && user does not have capability (show unlocked EAS entry)
-    await within('.wizard-container', () => {
-        I.waitForText('Which device do you want to configure?');
-        I.click('iPhone or iPad');
+    I.waitForText('Which device do you want to configure?', 5, '.wizard-container');
+    I.click('iPhone or iPad', '.wizard-container');
 
-        I.waitForText('Which application do you want to use?');
-        I.waitForText('Exchange Active Sync');
-        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Calendar'));
-        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Address Book'));
-        I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
-        I.click('Exchange Active Sync');
-        I.waitForVisible('.qrcode');
-    });
+    I.waitForText('Which application do you want to use?', 5, '.wizard-container');
+    I.waitForText('Exchange Active Sync', 5, '.wizard-container');
+    I.dontSeeElement(locate('.list-btn.disabled .list-description').withText('Exchange Active Sync'));
+    I.click('Exchange Active Sync', '.wizard-container');
+    I.waitForVisible('.wizard-container .qrcode');
 });

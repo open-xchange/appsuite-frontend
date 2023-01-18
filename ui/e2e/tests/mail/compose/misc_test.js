@@ -121,7 +121,7 @@ Scenario('[Bug 62794] no drag and drop of pictures while composing a new mail', 
     mail.newMail();
     I.waitForElement('.editor iframe');
 
-    await I.dropFiles('e2e/media/files/generic/contact_picture.png', '.io-ox-mail-compose .editor .inplace-dropzone');
+    await I.dropFiles('media/files/generic/contact_picture.png', '.io-ox-mail-compose .editor .inplace-dropzone');
 
     within({ frame: '.editor iframe' }, () => {
         I.waitForElement('body img');
@@ -144,7 +144,7 @@ Scenario('[C271752] Reduce image size for image attachments in mail compose', as
     I.say('📢 add local file', 'blue');
 
     // attach Image
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/1030x1030.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForDetached('.io-ox-fileselection');
 
     // switch Image size

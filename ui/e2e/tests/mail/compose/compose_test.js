@@ -78,13 +78,13 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
     text = Array.isArray(text) ? text[0] : text;
     expect(text).to.contain('My unique signature content');
     I.see('VCF', '.io-ox-mail-compose .mail-attachment-list');
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
     I.fillField('Subject', 'Test');
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.see('This email has not been sent. You can save the draft to work on later.');
     I.click('Delete draft');
 
@@ -119,7 +119,7 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
         '>  \\n' +
         '> Testcontent'
     ));
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.dontSee('This email has not been sent. You can save the draft to work on later.');
 });
 
@@ -149,7 +149,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add local file', 'blue');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     // attach from drive
     I.say('📢 add drive file', 'blue');
@@ -160,7 +160,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
 
     // attach inline image
     I.say('📢 add inline image', 'blue');
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 2);
     within({ frame: '.io-ox-mail-compose-window .editor iframe' }, () => {
         I.waitForVisible('img');
@@ -181,7 +181,7 @@ Scenario('Compose mail with different attachments', async function ({ I, users, 
     // upload local file via the hidden input in the toolbar
     I.say('📢 add another local image', 'blue');
     I.waitForElement('.composetoolbar input[type="file"]');
-    I.attachFile('.composetoolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600.png');
     I.waitNumberOfVisibleElements('.attachments .inline-items > li', 1);
     I.wait(1); // there still might be a focus event somewhere
 
@@ -205,7 +205,7 @@ Scenario('Compose with inline image, which is removed again', async function ({ 
     mail.newMail();
 
     // attach inline image
-    I.attachFile('.tinymce-toolbar input[type="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
 
     I.switchTo('.io-ox-mail-compose-window .editor iframe');
     I.waitForElement({ css: 'img' });
@@ -299,7 +299,7 @@ Scenario('Compose with drivemail attachment and edit draft', async function ({ I
     });
     I.waitForText('Use Drive Mail');
     I.checkOption('Use Drive Mail');
-    I.seeNumberOfVisibleElements('.inline-items > li', 1);
+    I.seeNumberOfVisibleElements('.inline-items.preview > li', 1);
 
     I.fillField('To', user.get('primaryEmail'));
     I.fillField('Subject', 'Testsubject #3');

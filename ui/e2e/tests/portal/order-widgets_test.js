@@ -38,7 +38,7 @@ Scenario('[C7493] Order widgets', async function ({ I, portal }) {
     portal.waitForApp();
 
     // check position before
-    I.waitForText('Inbox', '.widgets .widget:nth-child(1) h2');
+    I.waitForText('Inbox', 5, '.widgets .widget:nth-child(1) h2');
     I.see('Appointments', '.widgets .widget:nth-child(2) h2');
 
     // second widget before first widget
@@ -55,7 +55,7 @@ Scenario('[C7473] Drag some portal-tiles', async function ({ I, portal }) {
     portal.waitForApp();
 
     // check position before
-    I.waitForText('Inbox', '.widgets .widget:nth-child(1) h2');
+    I.waitForText('Inbox', 5, '.widgets .widget:nth-child(1) h2');
     I.see('Appointments', '.widgets .widget:nth-child(2) h2');
     I.see('My tasks', '.widgets .widget:nth-child(3) h2');
     I.see('Birthdays', '.widgets .widget:nth-child(4) h2');

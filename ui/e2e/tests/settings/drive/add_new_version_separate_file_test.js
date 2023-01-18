@@ -35,7 +35,7 @@ After(async ({ users }) => {
 Scenario('[C283261] Adding files with identical names - Add separate file', async ({ I, settings, drive }) => {
 
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.rtf');
     await I.haveSetting('io.ox/files//showDetails', true);
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/io.ox/files']);
@@ -49,7 +49,7 @@ Scenario('[C283261] Adding files with identical names - Add separate file', asyn
     I.clickToolbar('Upload');
     I.waitForText('File');
     I.click('File');
-    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'media/files/generic/testdocument.rtf');
 
     //Verify there's no new version of the file
     I.waitForText('testdocument.rtf');

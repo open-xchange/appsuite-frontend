@@ -37,7 +37,7 @@ Scenario('[C101617] Mail with <strike> element </strike>', async ({ I, mail }) =
         I.haveSetting('io.ox/mail//features/registerProtocolHandler', false),
         I.haveMail({
             folder: 'default0/INBOX',
-            path: 'e2e/media/mails/c101617.eml'
+            path: 'media/mails/c101617.eml'
         })
     ]);
 

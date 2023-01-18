@@ -43,9 +43,8 @@ Scenario('[C125352] No mail oauth service available', function ({ I, mail }) {
     I.seeElement('.add-mail-account-password');
 });
 
-// TODO: enable "I.waitForText('My External')" again once MWB-1299 was fixed
 Scenario('[OXUIB-225] Password recovery for account passwords after password change', async ({ I, dialogs, users }) => {
-    await I.haveMailAccount({ name: 'My External', extension: 'ext' });
+    await I.haveMailAccount({ name: 'My External' });
 
     I.login();
     // Check for the external account being registered
@@ -65,28 +64,28 @@ Scenario('[OXUIB-225] Password recovery for account passwords after password cha
     users[0].userdata.password = 'secret2';
 
     I.login();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     dialogs.waitForVisible();
     dialogs.clickButton('Remind me again');
     I.waitToHide('.modal-dialog');
 
     I.refreshPage();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     dialogs.waitForVisible();
     dialogs.clickButton('Remove passwords');
     I.waitToHide('.modal-dialog');
 
     I.refreshPage();
-    //I.waitForText('My External');
+    I.waitForText('My External');
     I.waitForText('Inbox');
     I.dontSeeElement('.modal-dialog');
 });
 
 Scenario('[OXUIB-1966] Permissions dialog is disabled for external and secondary accounts', async ({ I, mail, users }) => {
     const additionalAccount = await users.create();
-    await I.haveMailAccount({ additionalAccount, name: 'My External', extension: 'ext' });
+    await I.haveMailAccount({ additionalAccount, name: 'My External' });
     I.login();
     mail.waitForApp();
     I.waitForText('My External');

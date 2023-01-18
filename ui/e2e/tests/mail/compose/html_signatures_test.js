@@ -140,7 +140,7 @@ Scenario('Compose new mail with signature above correctly placed and changed', a
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div>$`));
 
     // // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
@@ -168,7 +168,7 @@ Scenario('Compose new mail with signature below correctly placed initially', asy
     });
 
     //discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -224,7 +224,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', asyn
     await selectAndAssertSignature(I, mail, 'First signature above', new RegExp('^' + someUserInput + `<div class="io-ox-signature">${signatures[0].content}</div><blockquote type="cite">.*</blockquote>$`));
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.click('Delete draft');
     I.waitForVisible('.io-ox-mail-window');
 });
@@ -260,7 +260,7 @@ Scenario('Reply to mail with signature below correctly placed initially', async 
     });
 
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForVisible('.io-ox-mail-window');
 });
 
@@ -335,7 +335,7 @@ Scenario('[C265555] Change the Signature', async ({ I, mail, dialogs }) => {
     I.fillField('To', 'foo@bar');
     I.fillField('Subject', 'test subject');
 
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     dialogs.waitForVisible();
     dialogs.clickButton('Save draft');
     I.waitForDetached('.modal-dialog');

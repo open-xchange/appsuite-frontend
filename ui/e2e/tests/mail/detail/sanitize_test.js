@@ -34,8 +34,8 @@ After(async function ({ users }) {
 
 Scenario('[C101624] Parsing CSS in HTML mails', async function ({ I }) {
 
-    await I.haveMail({ folder: 'default0/INBOX', path:   'e2e/media/mails/c101624_1.eml' });
-    await I.haveMail({ folder: 'default0/INBOX', path:   'e2e/media/mails/c101624_2.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path:   'media/mails/c101624_1.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path:   'media/mails/c101624_2.eml' });
 
     I.login('app=io.ox/mail');
     I.waitForVisible('.io-ox-mail-window .list-view');

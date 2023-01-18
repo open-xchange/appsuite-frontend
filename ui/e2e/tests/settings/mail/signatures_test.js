@@ -60,7 +60,7 @@ Scenario('[OXUIB-384] Image signature', async ({ I, dialogs }) => {
     I.waitForVisible('.contenteditable-editor iframe');
     I.wait(0.5);
 
-    I.attachFile('[data-name="image"] input[type="file"][name="file"]', 'e2e/media/images/ox_logo.png');
+    I.attachFile('[data-name="image"] input[type="file"][name="file"]', 'media/images/ox_logo.png');
     I.wait(0.5);
     await within({ frame: '.io-ox-signature-dialog iframe' }, async () => {
         // insert some text
@@ -398,7 +398,7 @@ Scenario('[C7770] Set default signature', async ({ I, users, mail }) => {
         I.wait(0.5);
         I.see('Testsignaturecontent1');
     });
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
 
     I.waitForDetached('.io-ox-mail-compose-window');
 

@@ -33,7 +33,7 @@ After(async ({ users }) => {
 });
 const iframeLocator = '.io-ox-mail-compose-window .editor iframe';
 const editor = locate('.io-ox-mail-compose-window .editor iframe');
-const taskbaritem = locate('.taskbar-button');
+const taskbaritem = locate('li').withChild('.taskbar-button');
 
 Scenario('[RD001] Refresh draft folder on change', async function ({ I, mail }) {
     const mailSubject = 'RD001';

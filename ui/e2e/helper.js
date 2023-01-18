@@ -378,25 +378,25 @@ class MyHelper extends Helper {
 
     /**
      * user (optional) - a user object as returned by provisioning helper, default is the "first" user
-     * extension (optional) - optional extension added to the mail address ("ext" will be translated to: $user.primary+ext@mailDomain)
      * name - name of the account
      * transport_auth (optional) - transport authentication, default: 'none'
+     * externalUser (optional) - a user object as returned by provisioning helper, default is a new user
      */
-    async haveMailAccount({ user, extension, name, transport_auth }) {
+    async haveMailAccount({ user, name, transport_auth, externalUser }) {
         if (!user) user = inject().users[0];
+        if (!externalUser) externalUser = await inject().users.create();
         if (!transport_auth) transport_auth = 'none';
 
         const { httpClient, session } = await util.getSessionForUser({ user });
-        const mailDomain = user.get('primaryEmail').replace(/.*@/, '');
-        const imapServer = user.get('imapServer') === 'localhost' ? mailDomain : user.get('imapServer');
-        const smtpServer = user.get('smtpServer') === 'localhost' ? mailDomain : user.get('smtpServer');
+        const imapServer = externalUser.get('imapServer');
+        const smtpServer = externalUser.get('smtpServer');
         const account = {
             name,
-            primary_address: `${user.get('primaryEmail').replace(/@.*/, '')}${extension ? '+' + extension : ''}@${mailDomain}`,
-            login: user.get('imapLogin'),
-            password: user.get('password'),
-            mail_url: `${user.get('imapSchema')}${imapServer}:${user.get('imapPort')}`,
-            transport_url: `${user.get('smtpSchema')}${smtpServer}:${user.get('smtpPort')}`,
+            primary_address: externalUser.get('primaryEmail'),
+            login: externalUser.get('imapLogin'),
+            password: externalUser.get('password'),
+            mail_url: `${externalUser.get('imapSchema')}${imapServer}:${externalUser.get('imapPort')}`,
+            transport_url: `${externalUser.get('smtpSchema')}${smtpServer}:${externalUser.get('smtpPort')}`,
             transport_auth
         };
         const response = await httpClient.put('/appsuite/api/account', account, {
@@ -405,6 +405,9 @@ class MyHelper extends Helper {
                 session: session
             }
         });
+        if (response.data.error && !response.data.data) {
+            throw new Error(response.data.error_desc);
+        }
         return response.data;
     }
 }

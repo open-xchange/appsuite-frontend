@@ -77,7 +77,7 @@ Scenario('[C8374] Public files: Add a file', ({ I, drive }) => {
 // A better title would be something like: Public files: Moving files to root folder not possible
 Scenario('[C8375] Public files: Move a file', async ({ I, drive, dialogs }) => {
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -258,7 +258,7 @@ Scenario('[C8381] Lock a file', async ({ I, users, drive }) => {
     // 2. "More"-->"Lock" (File is locked for you)
     // 3. Verify with other user
     var folder = await I.haveFolder(sharedFolder('C8381', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     drive.waitForApp();
     I.waitForElement(locate('.filename').withText('document.txt').inside('.list-view'));
@@ -279,7 +279,7 @@ Scenario('[C8382] Delete a file', async ({ I, users, drive }) => {
     // 1. Select a file
     // 2. Delete it (File removed)
     var folder = await I.haveFolder(sharedFolder('C8382', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     drive.waitForApp();
     I.waitForText('document.txt', 1, '.file-list-view');
@@ -299,7 +299,7 @@ Scenario('[C8383] Unlock a file', async ({ I, users, drive }) => {
     // 2. "More"-- > "Unlock" (File is unlocked)
     // 3. Verify with another user
     var folder = await I.haveFolder(sharedFolder('C8383', await I.grabDefaultFolder('infostore'), users), { user: users[0] });
-    var data = await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    var data = await I.haveFile(folder, 'media/files/0kb/document.txt');
     await I.haveLockedFile(data);
     I.login('app=io.ox/files&folder=' + folder, { user: users[0] });
     drive.waitForApp();
@@ -475,7 +475,7 @@ Scenario('[C8388] Delete a folder', async ({ I, drive, dialogs }) => {
         I.selectFolder(f);
         I.waitForEnabled('.folder-tree .contextmenu-control[title*="' + f + '"]');
         I.openFolderMenu(f);
-        I.waitForText('Add new folder', '.dropdown.open .dropdown-menu');
+        I.waitForText('Add new folder', 5, '.dropdown.open .dropdown-menu');
         I.dontSee('Delete', '.dropdown.open .dropdown-menu');
         I.pressKey('Escape');
     });

@@ -34,7 +34,7 @@ After(async ({ users }) => {
 Scenario('[C7481] Add a file', async ({ I, users, portal }) => {
     // Add a file to portal
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.odt');
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');

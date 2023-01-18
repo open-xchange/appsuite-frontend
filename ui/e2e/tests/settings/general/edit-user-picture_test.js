@@ -102,7 +102,7 @@ Scenario('User can upload/remove picture', async function ({ I, mail, dialogs })
     dialogs.waitForVisible();
 
     // 1. add user image (2.2 MB)
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty');
     dialogs.clickButton('Apply');
     I.waitForDetached('.edit-picture');
@@ -148,7 +148,7 @@ Scenario('User can upload/remove picture (standalone version)', async function (
     // 1. add user image (2.2 MB)
     editPhotoStandalone();
     dialogs.waitForVisible();
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty', 3);
     dialogs.clickButton('Apply');
 
@@ -161,7 +161,7 @@ Scenario('User can upload/remove picture (standalone version)', async function (
     // 2. update user image (2.2 MB)
     editPhotoStandalone();
     dialogs.waitForVisible();
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600-limegreen.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600-limegreen.png');
     I.waitForInvisible('.edit-picture.empty', 3);
     let listenerID = I.registerNodeRemovalListener(NODES.TOPBAR);
     dialogs.clickButton('Apply');
@@ -216,7 +216,7 @@ Scenario('User can rotate her/his picture', async function ({ I, mail, dialogs }
     dialogs.waitForVisible();
 
     // 1. add user image (2.2 MB)
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
     I.waitForInvisible('.edit-picture.empty');
     expect(await getBackgroundImage(NODES.EDIT)).to.not.be.empty;
     // rotate (portrait to landscape)

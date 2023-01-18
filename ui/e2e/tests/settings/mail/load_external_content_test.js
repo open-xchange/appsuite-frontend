@@ -38,7 +38,7 @@ Scenario.skip('[7817] Pre-loading external content', async ({ I, users }) => {
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/tests/settings/mail/test_external_image.eml'
+        path: 'tests/settings/mail/test_external_image.eml'
     }, { u });
 
     I.login('app=io.ox/settings&folder=virtual/settings/security', { u });

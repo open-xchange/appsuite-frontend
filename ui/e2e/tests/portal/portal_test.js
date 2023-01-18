@@ -75,7 +75,7 @@ Scenario('[C7471] Open items via portal-tile', async function ({ I, users }) {
     await I.haveContact(contact, { user: users[0] });
     //Upload File to Infostore
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.odt');
 
     //Create Appointment
     const appointmentDefaultFolder = await I.grabDefaultFolder('calendar', { user: users[0] });
@@ -346,7 +346,7 @@ Scenario('[C7478] Add user data widget', async function ({ I, users, portal }) {
 
 Scenario('[C7480] Add recently changed files widget', async function ({ I, users }) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.odt');
     I.haveSetting('io.ox/portal//widgets/user', '{}');
     I.login('app=io.ox/portal', { user: users[0] });
     I.waitForElement('.io-ox-portal .header .add-widget', 5);

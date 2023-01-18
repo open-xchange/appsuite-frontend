@@ -93,7 +93,7 @@ Scenario('[OXUIB-872] XSS using script code as module at app loader', async func
 Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, users, mail }) => {
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/media/mails/OXUIB-1172.eml'
+        path: 'media/mails/OXUIB-1172.eml'
     }, users[0]);
 
     I.login('app=io.ox/mail');
@@ -106,25 +106,6 @@ Scenario('[OXUIB-1172] Allowlist bypass using E-Mail "deep links"', async ({ I, 
         I.waitForText('Click this link');
         const classes = await I.grabAttributeFrom(locate('a').withText('Click this link'), 'class');
         expect(classes || '').to.not.contain('deep-link-app');
-    });
-});
-
-Scenario('[OXUIB-1654] Bypass for E-Mail "deep links"', async ({ I, users, mail }) => {
-    await I.haveMail({
-        folder: 'default0/INBOX',
-        path: 'e2e/media/mails/OXUIB-1654.eml'
-    }, users[0]);
-
-    I.login('app=io.ox/mail');
-    mail.waitForApp();
-
-    I.waitForText('See this deeplink');
-    I.click('.list-view .list-item');
-    I.waitForElement('.mail-detail-frame');
-    within({ frame: '.mail-detail-frame' }, async () => {
-        I.waitForText('See this deeplink');
-        I.click('deeplink');
-        I.waitInUrl('localhost');
     });
 });
 

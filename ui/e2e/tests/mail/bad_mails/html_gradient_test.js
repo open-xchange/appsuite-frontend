@@ -27,7 +27,7 @@ Scenario('[C101616] HTML gradient', async function ({ I, users, mail }) {
     await Promise.all([
         I.haveMail({
             folder: 'default0/INBOX',
-            path: 'e2e/media/mails/C101616.eml'
+            path: 'media/mails/C101616.eml'
         }, { user }),
         I.haveSetting('io.ox/mail//allowHtmlImages', true)
     ]);

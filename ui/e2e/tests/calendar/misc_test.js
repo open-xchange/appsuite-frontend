@@ -845,7 +845,7 @@ Scenario('[C85743] Special-Use flags', async function ({ I, dialogs }) {
 });
 
 Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I, calendar }) {
-    I.handleDownloads('../../build/e2e');
+    I.handleDownloads();
     const folder = await calendar.defaultFolder();
     const subject = 'Meetup XY';
     const appointment = await I.haveAppointment({
@@ -854,9 +854,9 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
         startDate: { tzid: 'Europe/Berlin', value: moment().set('hour', 13).format('YYYYMMDD[T]HHmmss') },
         endDate:   { tzid: 'Europe/Berlin', value: moment().set('hour', 14).format('YYYYMMDD[T]HHmmss') }
     });
-    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'e2e/media/files/generic/testdocument.odt');
-    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testdocument.rtf');
-    await I.haveAttachment('calendar', updatedAppointment, 'e2e/media/files/generic/testspreadsheed.xlsm');
+    let updatedAppointment = await I.haveAttachment('calendar', appointment, 'media/files/generic/testdocument.odt');
+    updatedAppointment = await I.haveAttachment('calendar', updatedAppointment, 'media/files/generic/testdocument.rtf');
+    await I.haveAttachment('calendar', updatedAppointment, 'media/files/generic/testspreadsheed.xlsm');
 
     I.login('app=io.ox/calendar&perspective=week:week');
 
@@ -876,6 +876,43 @@ Scenario('[C274517] Download multiple attachments (as ZIP)', async function ({ I
 
     I.click('Download', '.dropdown.open');
 
-    I.amInPath('/build/e2e/');
+    I.amInPath('output/downloads');
     I.waitForFile('attachments.zip', 5);
+});
+
+Scenario('OXUIB-1278 Events from different timezones displayed on wrong day', async ({ I, users }) => {
+
+    // create appointment
+    await I.haveAppointment({
+        folder: `cal://0/${await I.grabDefaultFolder('calendar')}`,
+        summary: 'Pacific time',
+        startDate: { value: '20220105T193000', tzid: 'America/Los_Angeles' },
+        endDate: { value: '20220105T200000', tzid: 'America/Los_Angeles' },
+        attendees: [{ entity: users[0].userdata.id }]
+    });
+
+    // America timezone -> Event should be on january 5th
+    await I.haveSetting('io.ox/core//timezone', 'America/Los_Angeles');
+    I.login(['app=io.ox/calendar&perspective=month']);
+    I.waitForText('Scheduling');
+    I.waitForText('Today');
+    I.executeScript(function () {
+        // january 2022
+        ox.ui.App.getCurrentApp().setDate(1643379200000);
+    });
+    I.waitForText('Pacific time');
+    I.see('Pacific time', '#\\32 022-1-5');
+    I.logout();
+
+    // Asia Timezone -> Event should be on january 6th
+    await I.haveSetting('io.ox/core//timezone', 'Asia/Hong_Kong');
+    I.login(['app=io.ox/calendar&perspective=month']);
+    I.waitForText('Scheduling');
+    I.waitForText('Today');
+    I.executeScript(function () {
+        // january 2022
+        ox.ui.App.getCurrentApp().setDate(1643379200000);
+    });
+    I.waitForText('Pacific time');
+    I.see('Pacific time', '#\\32 022-1-6');
 });

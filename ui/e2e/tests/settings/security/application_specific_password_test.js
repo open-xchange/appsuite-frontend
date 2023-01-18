@@ -208,7 +208,7 @@ Scenario.skip('Add and use application password', async ({ I, users, calendar, c
     await I.haveContact({ folder_id: contactfolder, first_name: 'Tester', last_name: 'OX' });
 
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
 
     // Login to settings
     I.login(['app=io.ox/settings', 'folder=virtual/settings/appPasswords']);

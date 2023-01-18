@@ -143,13 +143,6 @@ test ui:
         - ui/**/*
       when: always
 
-
-run e2e tests:
-  extends: .default_cache
-  # don't change the cache, just pull should be up-to-date due to previous build jobs
-  cache:
-    policy: pull
-
 build help:
   extends: .build ui plugin
   variables:

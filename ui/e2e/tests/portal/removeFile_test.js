@@ -35,7 +35,7 @@ Scenario('[C7486] Remove a file', async ({ I, users, portal, dialogs }) => {
 
     // Add a file to drive
     const infostoreFolderID = await I.grabDefaultFolder('infostore', { user: users[0] });
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.odt');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.odt');
 
     // clear the portal settings
     await I.haveSetting('io.ox/portal//widgets/user', '{}');

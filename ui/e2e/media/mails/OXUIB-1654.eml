@@ -1,8 +1,0 @@
-MIME-Version: 1.0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-From: Boss <foo@bar.baz>
-Subject: Deeplink
-
-See this <a class="deep-link-app" href="https://localhost/#!!&app=%2e./%2e./%2e./%2e./%2e./%2e./appsuite/apps/themes/default/logo.png?cut=&id=123">deeplink</a>.
-

@@ -38,7 +38,7 @@ Scenario('adds an malicious attachment to a contact', async function ({ I, conta
     await I.haveAttachment(
         'contacts',
         { id, folder },
-        { name: 'e2e/media/files/><img src=x onerror=alert(123)>', content: '<img src=x onerror=alert(123)>' }
+        { name: 'media/files/><img src=x onerror=alert(123)>', content: '<img src=x onerror=alert(123)>' }
     );
 
     I.login('app=io.ox/contacts');

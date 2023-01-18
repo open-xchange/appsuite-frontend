@@ -124,7 +124,7 @@ Scenario('Create appointment and switch timezones', async function ({ I, dialogs
 
     I.click('~Calendar', '.leftside');
     I.click('~Favorite timezones', '.leftside');
-    I.waitForText('Asia/Tokyo', '.rightside li');
+    I.waitForText('Asia/Tokyo', 5, '.rightside li');
 
     // remove extra timezone
     I.click('.rightside li a[data-action="delete"]');

@@ -44,12 +44,12 @@ Scenario('[C8402] Search in different folders', async ({ I, users }) => {
 
     await I.haveMail({
         folder: INBOX,
-        path: 'e2e/media/mails/c8402_1.eml'
+        path: 'media/mails/c8402_1.eml'
     }, { USER });
 
     await I.haveMail({
         folder: SUBFOLDER,
-        path: 'e2e/media/mails/c8402_2.eml'
+        path: 'media/mails/c8402_2.eml'
     }, { USER });
 
     // 1. Login

@@ -39,7 +39,7 @@ Scenario('[7773] Contact collection when reading mail', async ({ I, users }) => 
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/tests/settings/mail/test.eml'
+        path: 'tests/settings/mail/test.eml'
     }, { user });
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mail', { user });

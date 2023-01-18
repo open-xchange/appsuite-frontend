@@ -40,7 +40,7 @@ Scenario('[C104271] Export and re-import vCard', async function ({ I, users, con
     // This test also covers '[C104272] Export and re-import CSV'
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
-    I.handleDownloads('../../build/e2e');
+    I.handleDownloads();
 
     // add full new contact with dummy data
     I.say('Creating contact');
@@ -182,7 +182,7 @@ Scenario('[C104271] Export and re-import vCard', async function ({ I, users, con
         I.clickDropdown('Import');
         dialogs.waitForVisible();
         I.selectOption('Format', type === 'csv' ? 'CSV' : 'VCARD');
-        I.attachFile('.file-input', 'build/e2e/' + file + '.' + type);
+        I.attachFile('.file-input', 'output/downloads/' + file + '.' + type);
         I.waitForText(file + '.' + type, 5, '.filename');
         dialogs.clickButton('Import');
         I.waitForDetached('.modal-dialog');
@@ -197,7 +197,7 @@ Scenario('[C104271] Export and re-import vCard', async function ({ I, users, con
         I.checkOption(type === 'csv' ? 'CSV' : 'vCard');
         dialogs.clickButton('Export');
         I.waitForDetached('.modal-dialog');
-        I.amInPath('/build/e2e/');
+        I.amInPath('output/downloads');
         I.waitForFile(file + '.' + type, 5);
     }
 

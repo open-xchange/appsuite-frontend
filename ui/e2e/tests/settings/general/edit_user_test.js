@@ -130,7 +130,7 @@ Scenario('[C208269] Edit users contact information', async ({ I, dialogs }) => {
     I.click('.contact-photo', '.io-ox-contacts-edit-window');
     dialogs.waitForVisible();
     I.waitForVisible('.edit-picture');
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/images/ox_logo.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/images/ox_logo.png');
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
     // takes an unknown moment until the image appears
