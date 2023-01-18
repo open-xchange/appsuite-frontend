@@ -203,7 +203,7 @@ Scenario('[C7451] Edit yearly series via doubleclick', async ({ I, calendar }) =
     I.waitForVisible('.io-ox-calendar-edit-window');
     I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
     I.wait(0.5); // gently wait for listeners
-    await calendar.setDate('startDate', time.add(1, 'day'));
+    await calendar.setDate('startDate', time.startOf('week').add(10, 'hours'));
 
     I.click('Save');
     I.waitForDetached('.io-ox-calendar-edit-window');
