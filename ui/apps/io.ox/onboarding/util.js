@@ -33,8 +33,10 @@ define('io.ox/onboarding/util', [
     var titles = {
         'windows': {
             'title': gt('Windows'),
-            'drive': productNames.drive,
-            'mailsync': gt('Mail')
+            'mailsync': gt('Mail'),
+            'addressbook': gt('Address Book'),
+            'calendar': gt('Calendar'),
+            'drive': productNames.drive
         },
         'android': {
             'title': gt('Android'),
@@ -87,13 +89,7 @@ define('io.ox/onboarding/util', [
     ]);
 
     var appList = new Backbone.Collection([
-        {
-            'title': productNames.drive,
-            'icon': 'fa-cloud',
-            'app': 'drive',
-            'platform': 'windows',
-            'cap': 'infostore drive'
-        },
+        // Windows
         {
             'title': gt('Mail'),
             'icon': 'fa-envelope-o',
@@ -101,6 +97,28 @@ define('io.ox/onboarding/util', [
             'platform': 'windows',
             'cap': 'webmail'
         },
+        {
+            'title': gt('Address Book'),
+            'icon': 'fa-users',
+            'app': 'addressbook',
+            'platform': 'windows',
+            'cap': 'carddav'
+        },
+        {
+            'title': gt('Calendar'),
+            'icon': 'fa-calendar',
+            'app': 'calendar',
+            'platform': 'windows',
+            'cap': 'caldav'
+        },
+        {
+            'title': productNames.drive,
+            'icon': 'fa-cloud',
+            'app': 'drive',
+            'platform': 'windows',
+            'cap': 'infostore drive'
+        },
+        // Android
         {
             'title': gt('Email with Android Mail'),
             'icon': 'fa-envelope',
@@ -151,6 +169,7 @@ define('io.ox/onboarding/util', [
             'platform': 'android',
             'cap': 'carddav caldav'
         },
+        // macOS
         {
             'title': gt('Email with Apple Mail'),
             'icon': 'fa-envelope',
@@ -179,6 +198,7 @@ define('io.ox/onboarding/util', [
             'platform': 'macos',
             'cap': 'drive'
         },
+        // iOS
         {
             'title': gt('Email with iOS Mail'),
             'icon': 'fa-envelope',
