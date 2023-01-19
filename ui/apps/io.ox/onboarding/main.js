@@ -105,8 +105,30 @@ define('io.ox/onboarding/main', [
     //all available setup scenarios
     var scenarios = {
         'windows': {
-            'drive': function () { return new views.DownloadView({ link: settings.get('windows/driveapp/url') }); },
-            'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); }
+            'mailsync': function () {
+                return new views.MailSyncView({
+                    userData: config.userData,
+                    expanded: true,
+                    config: getMailConfig()
+                });
+            },
+            'addressbook': function () {
+                return new views.SyncView({
+                    description: gt('To synchronize Address Book, please enter the following settings in your CardDav client:'),
+                    config: getContactsConfig()
+                });
+            },
+            'calendar': function () {
+                return new views.SyncView({
+                    description: gt('To synchronize Calendar, please enter the following settings in your CalDav client:'),
+                    config: getCalendarConfig()
+                });
+            },
+            'drive': function () {
+                return new views.DownloadView({
+                    link: settings.get('windows/driveapp/url')
+                });
+            }
         },
         'android': {
             'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); },
