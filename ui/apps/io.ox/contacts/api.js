@@ -1123,17 +1123,11 @@ define('io.ox/contacts/api', [
         }
 
         // get from local cache
-        function get(query, options) {
+        function get(query) {
             var key = getHashKey(query), def = search.cache[key], words = query.split(' ');
 
             // cache miss
             if (!def) return;
-
-            if (def._incomplete) {
-                // raise limit by factor x when cached data is incomplete and request again
-                options.limit = def._limit + (options.limit * factor);
-                return;
-            }
 
             // local lookup:
             return def.then(function (data) {
@@ -1153,8 +1147,12 @@ define('io.ox/contacts/api', [
         function add(query, def, options) {
             var key = getHashKey(query);
             search.cache[key] = def.then(function (data) {
-                // add some custom props to adjust limits for incomplete data
-                _.extend(search.cache[key], { _limit: options.limit, _incomplete: data.length === options.limit });
+                // if incomplete data set
+                if (data.length === options.limit) {
+                    // raise limit by factor x when cached data is incomplete and request again
+                    options.limit += options.limit * factor;
+                    return lookup(query, options);
+                }
 
                 return _(data).map(function (item) {
                     // prepare simple array for fast lookups
@@ -1166,6 +1164,26 @@ define('io.ox/contacts/api', [
                     return item;
                 });
             });
+        }
+
+        function lookup(query, options) {
+            // add query to cache
+            add(query, http.GET({
+                module: 'addressbooks',
+                params: {
+                    action: 'autocomplete',
+                    // we just look for the shortest word
+                    query: getHashKey(query),
+                    admin: options.admin,
+                    email: options.email,
+                    sort: options.sort,
+                    columns: options.columns,
+                    right_hand_limit: options.limit
+                }
+            }), options);
+
+            // use local lookup! first query might exceed minimum length
+            return get(query, options);
         }
 
         // escape words for regex
@@ -1186,23 +1204,7 @@ define('io.ox/contacts/api', [
             var cache = options.cache && get(query, options);
             if (cache) return cache;
 
-            // add query to cache
-            add(query, http.GET({
-                module: 'addressbooks',
-                params: {
-                    action: 'autocomplete',
-                    // we just look for the shortest word
-                    query: getHashKey(query),
-                    admin: options.admin,
-                    email: options.email,
-                    sort: options.sort,
-                    columns: options.columns,
-                    right_hand_limit: options.limit
-                }
-            }), options);
-
-            // use local lookup! first query might exceed minimum length
-            return get(query, options);
+            return lookup(query, options);
         }
 
         // export cache for debugging/clearing
