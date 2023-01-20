@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-12-02 13:44+0100\n"
+"PO-Revision-Date: 2023-01-20 09:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -5628,6 +5628,12 @@ msgstr "Kişi eki kaydedildi"
 msgid "Saved attachment"
 msgstr "Ek kaydedildi"
 
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+#, fuzzy
+#| msgid "Refreshing calendar might take some time..."
+msgid "This action may take a some time."
+msgstr "Takvimin yenilenmesi biraz zaman alabilir..."
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
 msgstr "Ön izlemeyi aç/kapat"
@@ -7100,8 +7106,8 @@ msgid ""
 "You forgot to sign out last time. Always use the sign-out button when you "
 "finished your work."
 msgstr ""
-"Geçen sefer çıkış yapmayı unuttunuz. Çalışmanızı bitirince her zaman \"çıkış"
-"\" düğmesini kullanın."
+"Geçen sefer çıkış yapmayı unuttunuz. Çalışmanızı bitirince her zaman "
+"\"çıkış\" düğmesini kullanın."
 
 #. %1$s is the product name
 #: apps/io.ox/core/main/topbar_right.js module:io.ox/core
@@ -9916,8 +9922,8 @@ msgstr ""
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
-"Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
-"\" ?"
+"Do you really want to change the file extension from  \".%1$s\" to \"."
+"%2$s\" ?"
 msgstr ""
 "Dosya uzantısını \".%1$s\" yerine \".%2$s\" olarak değiştirmek istiyor "
 "musunuz?"
@@ -12569,6 +12575,11 @@ msgstr "Saat başına e-posta (%)"
 #: apps/io.ox/mail/statistics.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Statistics"
 msgstr "İstatistikler"
+
+#. %1$d is the amount of mails that get included into the mail statistics (example: 1000)
+#: apps/io.ox/mail/statistics.js module:io.ox/mail
+msgid "Most recent mails (%1$d)"
+msgstr "En son e-postalar (%1$d)"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Back to list"
