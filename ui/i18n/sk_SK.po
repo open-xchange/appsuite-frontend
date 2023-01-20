@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 09:05+0100\n"
+"PO-Revision-Date: 2023-01-20 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -13477,6 +13477,22 @@ msgstr "Neúplné nastavenie."
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Pripojte svoje zariadenie"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"Ak chcete synchronizovať Adresár kontaktov, prosím, zadajte vo vašom "
+"klientovi CardDav nasledovné nastavenie:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"Ak chcete synchronizovať Kalendár, prosím, zadajte vo vašom klientovi CalDav "
+"nasledovné nastavenie:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

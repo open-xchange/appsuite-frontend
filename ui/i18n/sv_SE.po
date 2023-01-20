@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 09:05+0100\n"
+"PO-Revision-Date: 2023-01-20 12:11+0100\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -13401,6 +13401,22 @@ msgstr "Ofullständig konfiguration."
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Anslut din enhet"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"För att synkronisera Adressboken, använd följande inställningar i din "
+"CardDav-klient:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"För att synkronisera Kalendern, använd följande inställningar i din CalDav-"
+"klient:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

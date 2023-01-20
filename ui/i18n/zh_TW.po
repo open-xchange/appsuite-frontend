@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 09:07+0100\n"
+"PO-Revision-Date: 2023-01-20 12:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -13146,6 +13146,18 @@ msgstr "設定不完整。"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "連結您的裝置"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr "若要同步通訊錄，請在您的 CardDav 客戶端輸入下列設定："
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr "若要同步行事曆，請在您的 CalDav 客戶端輸入下列設定："
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

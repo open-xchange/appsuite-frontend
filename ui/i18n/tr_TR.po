@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 09:06+0100\n"
+"PO-Revision-Date: 2023-01-20 12:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: tr_TR\n"
@@ -13376,6 +13376,22 @@ msgstr "Eksik yapılandırma."
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Cihazınızı bağlayın"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"Adres defterini senkronize etmek için lütfen CardDav istemcinize aşağıdaki "
+"ayarları girin:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"Takvimi senkronize etmek için lütfen CalDav istemcinize aşağıdaki ayarları "
+"girin:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

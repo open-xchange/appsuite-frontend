@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 08:53+0100\n"
+"PO-Revision-Date: 2023-01-20 11:26+0100\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es_ES\n"
@@ -13494,6 +13494,22 @@ msgstr "Configuración incompleta"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Conecte su dispositivo"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"Para sincronizar la Libreta de direcciones, por favor introduzca los "
+"siguientes ajustes en su cliente CardDav:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"Para sincronizar el Calendario, por favor introduzca los siguientes ajustes "
+"en su cliente CalDav:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

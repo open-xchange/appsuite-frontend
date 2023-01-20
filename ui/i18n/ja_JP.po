@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 08:57+0100\n"
+"PO-Revision-Date: 2023-01-20 12:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13338,6 +13338,20 @@ msgstr "構成は完了していません。"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "デバイスの接続"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"アドレス帳を同期するには、CardDavクライアントに次の設定を入力してください。"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"カレンダーを同期するには、CardDavクライアントに次の設定を入力してください。"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

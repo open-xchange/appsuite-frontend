@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 09:06+0100\n"
+"PO-Revision-Date: 2023-01-20 12:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -13111,6 +13111,18 @@ msgstr "未完成设置。"
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "连接您的装置"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr "要同步地址簿，请在您的 CardDav 客户端中输入以下设置："
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr "要同步日历，请在您的 CalDav 客户端中输入以下设置："
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""

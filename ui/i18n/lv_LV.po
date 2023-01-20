@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 08:58+0100\n"
+"PO-Revision-Date: 2023-01-20 12:04+0100\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -13448,6 +13448,22 @@ msgstr "Nepabeigta konfigurēšana."
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your device"
 msgstr "Pieslēgt ierīci"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Address Book, please enter the following settings in your "
+"CardDav client:"
+msgstr ""
+"Lai sinhronizētu savu adrešu grāmatu, lūdzu savā CardDav klienta aplikācijā "
+"ievadiet sekojošus iestatījumus:"
+
+#: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
+msgid ""
+"To synchronize Calendar, please enter the following settings in your CalDav "
+"client:"
+msgstr ""
+"Lai sinhronizētu savu kalendāru, lūdzu savā CalDav klienta aplikācijā "
+"ievadiet sekojošus iestatījumus:"
 
 #: apps/io.ox/onboarding/main.js module:io.ox/core/onboarding
 msgid ""
