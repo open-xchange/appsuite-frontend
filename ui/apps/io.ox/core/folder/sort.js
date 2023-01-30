@@ -20,7 +20,7 @@
  *
  */
 
-define('io.ox/core/folder/sort', ['io.ox/core/extensions', 'io.ox/core/api/account'], function (ext, account) {
+define('io.ox/core/folder/sort', ['io.ox/core/extensions', 'io.ox/core/api/account', 'settings!io.ox/core'], function (ext, account, settings) {
 
     'use strict';
 
@@ -69,6 +69,18 @@ define('io.ox/core/folder/sort', ['io.ox/core/extensions', 'io.ox/core/api/accou
             array.unshift.apply(array, _(head).compact());
 
             baton.data = array;
+        }
+    });
+
+    point.extend({
+        id: 'my-files',
+        sort: function (baton) {
+            // sort folders below "My files"; otherwise standard folders appear first unsorted
+            // sort folders of "Public files" as well (id: '15')
+            if (baton.id !== settings.get('folder/infostore') && baton.id !== '15') return;
+            baton.data = baton.data.sort(function (a, b) {
+                return a.title.localeCompare(b.title);
+            });
         }
     });
 
