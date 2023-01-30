@@ -561,7 +561,8 @@ Scenario('[C8390] Folder tree', async ({ I, drive }) => {
     I.pressKey('ArrowDown');
     I.pressKey('ArrowRight');
     I.waitForText('Templates', 2, '.folder-tree');
-    for (let i = 0; i <= 4; i++) { I.pressKey('ArrowDown'); }
+    I.pressKey('ArrowDown');
+    I.pressKey('ArrowDown');
     I.pressKey('ArrowRight');
     I.waitForElement('.file-list-view.complete');
     I.waitForText('subfolder_1', 2, '.folder-tree');
