@@ -282,20 +282,45 @@ define('io.ox/mail/compose/main', [
         index: INDEX += 100,
         perform: function (baton) {
             var win = baton.win;
-            // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
-            win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
+            var recipientsActions = this.view.$el.find('.recipient-actions');
+            var typeahead = this.view.$el.find('.mail-input .twitter-typeahead');
+            var mailInput = this.view.$el.find('.mail-input');
+            var tokenfield = this.view.$el.find('.tokenfield');
+            var tokenfields = this.view.$el.find('.mail-input>.tokenfield>input.tokenfield');
 
-            // clear max width for tokenfields to accommodate new max width
-            this.view.$el.find('.mail-input>.tokenfield>input.tokenfield').each(function () {
-                var tokenfield = $(this).data('bs.tokenfield'),
-                    attr = $(this).closest('[data-extension-id]').data('extension-id');
-                delete tokenfield.maxTokenWidth;
-                // trigger redraw
-                baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
-            });
+            function calculateTokenfieldWidth() {
+                // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
+                var actionsWidth;
+                var inputWidth;
+                if (_.device('smartphone')) {
+                    actionsWidth = recipientsActions.width();
+                    inputWidth = typeahead.width();
+                } else {
+                    actionsWidth = 50;
+                    inputWidth = mailInput.width();
+                    tokenfield.css('padding-right', actionsWidth);
+                }
+
+                // clear max width for tokenfields to accommodate new max width
+                tokenfields.each(function () {
+                    var tokenfield = $(this).data('bs.tokenfield');
+                    var attr = $(this).closest('[data-extension-id]').data('extension-id');
+                    tokenfield.maxTokenWidth = inputWidth - actionsWidth;
+                    // trigger redraw
+                    baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
+                });
+            }
+
+            if (!_.device('smartphone')) {
+                var floating = baton.win.app.attributes.window.floating;
+                floating.listenTo(floating.model, 'change:mode', calculateTokenfieldWidth);
+            }
+
             // Set window and toolbars visible again
             win.nodes.header.removeClass('sr-only');
             win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0).trigger('scroll');
+            calculateTokenfieldWidth();
+
             win.idle();
             $(window).trigger('resize');  // Needed for proper initial resizing in editors
             win.setTitle(this.model.get('subject') || gt('Compose'));
