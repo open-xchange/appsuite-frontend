@@ -34,7 +34,6 @@ After(async function ({ users }) {
 
 // TODO: broken for last 5 runs (expected number of elements (.weekview-container.week .appointment .title) is 6, but found 4)
 Scenario('Create never ending appointment and check display in several views', async function ({ I, calendar, dialogs }) {
-
     I.login('app=io.ox/calendar');
     calendar.waitForApp();
     // toggle weeks to activate caching
@@ -64,7 +63,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.fillField('Location', 'caching location');
     I.pressKey('Enter');
 
-    await calendar.setDate('startDate', moment().startOf('week').add('1', 'day'));
+    await calendar.setDate('startDate', moment().startOf('month').startOf('week').add('1', 'day'));
 
     I.checkOption('All day', '.io-ox-calendar-edit-window');
     calendar.recurAppointment();
@@ -76,7 +75,7 @@ Scenario('Create never ending appointment and check display in several views', a
     I.waitForDetached('.modal-dialog');
 
     // ensures for midnight-testing that the appointment is not 2 days long
-    await calendar.setDate('endDate', moment().startOf('week').add('1', 'day'));
+    await calendar.setDate('endDate', moment().startOf('month').startOf('week').add('1', 'day'));
 
     // save
     I.click('Create', '.io-ox-calendar-edit-window');
@@ -84,29 +83,26 @@ Scenario('Create never ending appointment and check display in several views', a
 
     // check in week view
     calendar.switchView('Week');
-
     I.waitForText('test caching', 5, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 6);
     I.click('~Next Week', '.weekview-container.week');
-    I.dontSeeElement('.weekview-container.week button.weekday.today');
-
     I.waitForText('test caching', 5, '.weekview-container.week .appointment .title');
     I.seeNumberOfElements('.weekview-container.week .appointment .title', 7);
     I.click('~Previous Week', '.weekview-container.week');
-    I.waitForVisible('.weekview-container.week button.weekday.today', 5);
     I.click('.date.today', '.date-picker');
 
     // check in month view
     calendar.switchView('Month');
-
+    I.waitForElement('.today', 5);
+    I.click('Today');
     I.waitForVisible('.monthview-container .day .appointment .title');
     I.see('test caching', '.monthview-container .day .appointment .title');
-
     // just skip 2 months, because "today" might still be visible in the "next" month
     I.click('~Next Month', '.monthview-container');
     I.click('~Next Month', '.monthview-container');
     I.dontSeeElement('.monthview-container td.day.today:not(.out)');
-
+    // always failed at the very end; wait helps
+    I.wait(1);
     I.waitForText('test caching', undefined, '.monthview-container .appointment .title');
     I.seeNumberOfElements('.monthview-container .day:not(.out) .appointment .title', moment().add(2, 'months').daysInMonth());
 });

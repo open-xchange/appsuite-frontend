@@ -109,10 +109,12 @@ define('io.ox/calendar/month/view', [
         },
 
         onClickControl: function (e) {
-            var target = $(e.currentTarget),
-                date = this.model.get('date').clone();
-            date[target.hasClass('next') ? 'add' : 'subtract'](1, 'month');
-            this.model.set('date', date);
+            var target = $(e.currentTarget);
+            if (target.hasClass('today')) {
+                this.opt.view.setStartDate();
+            } else {
+                this.opt.view.setStartDate(target.hasClass('next') ? 'next' : 'previous');
+            }
         }
 
     });
