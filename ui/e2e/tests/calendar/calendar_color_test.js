@@ -159,7 +159,7 @@ Scenario('Changing calendar color should change appointment color that uses cale
     expect(appointmentTwoColor, 'appointment two color equals darkGreen').be.oneOf([darkGreen, 'rgb(49, 93, 34)']);
 });
 
-Scenario('Check appointment colors of appointments the user got invited to', async function ({ I, users, calendar, dialogs }) {
+Scenario('Check appointment colors of appointments the user got invited to', async function ({ I, users, calendar }) {
     I.login('app=io.ox/calendar&perspective="week:workweek"');
     const greyColor = 'rgb(197, 197, 197)';
     const blueColor = 'rgb(207, 230, 255)';
@@ -188,9 +188,6 @@ Scenario('Check appointment colors of appointments the user got invited to', asy
     const color = await I.grabCssPropertyFrom('.picked-color', 'background-color');
     expect(color).be.equal(greyColor);
     I.click('Discard', '.io-ox-calendar-edit-window');
-    I.waitForText('Discard changes');
-    dialogs.clickButton('Discard changes');
-    I.waitForDetached('.modal-dialog');
     I.waitForDetached('.io-ox-calendar-edit-window');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
@@ -277,5 +274,49 @@ Scenario('Check appointment colors of public calendar appointments the user got 
 
         const appointmentColorAfter = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
         expect(appointmentColorAfter).be.equal(greenColor);
+    });
+});
+
+Scenario('[OXUIB-2166] Check appointment colors when participant makes a change', async function ({ I, users, calendar }) {
+    const greyColor = 'rgb(197, 197, 197)';
+    const greenColor = 'rgb(157, 213, 138)';
+
+    await session('Alice', async () => {
+        I.login('app=io.ox/calendar&perspective="week:workweek"');
+
+        calendar.newAppointment();
+        I.fillField('Subject', 'Test Appointment');
+        I.fillField(calendar.locators.starttime, '12:00 PM');
+        I.fillField('Add contact/resource', users[1].userdata.primaryEmail);
+        I.checkOption('attendeePrivileges');
+        I.retry(5).click('Appointment color', '.color-picker-dropdown');
+        I.click({ css: 'a[title="green"]' });
+        I.click('Create');
+        I.waitForDetached('.io-ox-calendar-edit-window');
+    });
+
+    await session('Bob', async () => {
+        I.login('app=io.ox/calendar&perspective="week:workweek"', { user: users[1] });
+
+        I.waitForText('Test Appointment');
+        I.click('~Test Appointment');
+        I.waitForText('Edit', 5, '.io-ox-sidepopup');
+        I.click('Edit', '.io-ox-sidepopup');
+        I.waitForElement({ css: 'button.disabled' }, 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
+        I.waitForElement('.picked-color', 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
+        const color = await I.grabCssPropertyFrom('.picked-color', 'background-color');
+        expect(color).be.equal(greyColor);
+        expect(color).be.equal(greyColor);
+        I.fillField('.io-ox-calendar-edit-window textarea[name="description"]', 'I make changes...');
+        I.click('Save', '.io-ox-calendar-edit-window');
+        I.waitForDetached('.io-ox-calendar-edit-window');
+        I.click('~Close', '.io-ox-sidepopup');
+        I.waitForDetached('.io-ox-sidepopup');
+    });
+
+    await session('Alice', async () => {
+        I.click('~Test Appointment');
+        const color = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
+        expect(color).be.equal(greenColor);
     });
 });
