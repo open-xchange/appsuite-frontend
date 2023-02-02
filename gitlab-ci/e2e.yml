@@ -1,8 +1,18 @@
 ---
+include:
+  - project: 'sre/ci-building-blocks'
+    ref: 'main'
+    file:
+      - '/base.yml'
+      - '/publish/e2e-codeceptjs-allure-report.yml'
+
+variables:
+  ALLURE_PUBLISH_REPORT: "true"
 
 run e2e tests:
   stage: e2e
   image: $CI_REGISTRY_IMAGE/e2e:$CI_COMMIT_REF_SLUG
+  extends: .allure-base
   tags:
     - e2e
     - kubernetes
@@ -38,10 +48,9 @@ run e2e tests:
     GIT_STRATEGY: none
     GIT_DEPTH: "10"
   script:
-    - mv /e2e/ $CI_PROJECT_DIR
-    - cd e2e
+    - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
     - mkdir -p ./output
-    - wget http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/filter_report.json -q -O ./output/suite.json || rm -f ./output/suite.json
+    - mc cp $REPORT_PATH/filter_report.json ./output/suite.json || rm -f ./output/suite.json
     - "[ -f ./output/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./output/suite.json $CI_NODE_TOTAL ./suites
     - yarn e2e-rerun
@@ -51,7 +60,7 @@ run e2e tests:
   artifacts:
     when: always
     paths:
-      - e2e/output
+      - output/
     expire_in: 1 day
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
@@ -108,9 +117,8 @@ merge filter report and rerun:
     GIT_STRATEGY: none
     GIT_DEPTH: "10"
   script:
-    - mkdir -p $CI_PROJECT_DIR/e2e
-    - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR/e2e
-    - cd e2e
+    - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
+    - mkdir -p ./output
     - ls output/filter_report_*.json
     - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./output/filter_report_*.json > $FILTER_SUITE
     # check if the filter suite file exists, otherwise something went wrong in the run e2e tests jobs
@@ -123,8 +131,8 @@ merge filter report and rerun:
   artifacts:
     when: always
     paths:
-      - e2e/output/
-      - e2e/merged_reports.json
+      - output/
+      - merged_reports.json
     expire_in: 1 day
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
@@ -137,80 +145,10 @@ merge filter report and rerun:
     when:
       - runner_system_failure
 
-generate e2e report:
-  stage: report
-  image: registry.gitlab.open-xchange.com/frontend/dev_env/allure:latest
-  variables:
-    GIT_STRATEGY: none
-  dependencies:
-    - run e2e tests
-    - merge filter report and rerun
-    - run single test
-  script:
-    # fail if there are no test results, prevents history from getting lost in some cases
-    - ls e2e/output/*.xml > /dev/null
-    # fetch current version of history
-    - curl http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/history.tar -s | tar x &>/dev/null && mv ui/build/allure-report/history ui/build/e2e/ || echo "No history found"
-    - allure generate e2e/output/ -o ui/build/allure-report/$CI_PIPELINE_ID
-    # preserve well-known location to bookmark/link to at latest
-    - cp -r ui/build/allure-report/$CI_PIPELINE_ID/history ui/build/allure-report/
-    - tar cf ui/build/allure-report/history.tar ui/build/allure-report/history &>/dev/null || echo "No history found"
-    - rm -rf ui/build/allure-report/history/
-  artifacts:
-    when: always
-    paths:
-      - ui/build/allure-report
-    expire_in: 1 day
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
-      changes:
-        - ui/**/*
-      when: always
-
-publish e2e report:
-  stage: cleanup
-  variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    GIT_STRATEGY: none
-  dependencies:
-    - generate e2e report
-    - merge filter report and rerun
-  script:
-    # fail if there is no history being generated. Prevents empty reports from being "published".
-    - ls ui/build/allure-report/history.tar > /dev/null
-    - docker cp ui/build/allure-report/. reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG
-    - docker exec reports rm -f /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
-    - docker exec reports ln -sf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID /usr/share/nginx/html/$CI_COMMIT_REF_SLUG/latest
-    - docker cp e2e/output/filter_report.json reports:/usr/share/nginx/html/$CI_COMMIT_REF_SLUG/ || true
-  environment:
-    name: reports/$CI_COMMIT_REF_SLUG
-    url: http://reports.ui.cloud.open-xchange.com/$CI_COMMIT_REF_SLUG/$CI_PIPELINE_ID/
-    on_stop: remove e2e report
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
-      changes:
-        - ui/**/*
-      when: always
-
-remove e2e report:
-  stage: cleanup
-  dependencies: []
-  variables:
-    DOCKER_HOST: docker.ui.cloud.open-xchange.com
-    GIT_STRATEGY: none
-  script:
-    - docker exec reports rm -rf /usr/share/nginx/html/$CI_COMMIT_REF_SLUG
-  environment:
-    name: reports/$CI_COMMIT_REF_SLUG
-    action: stop
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(release-.*|feature\/.*|bug\/.*|e2e\/.*)$/'
-      changes:
-        - ui/**/*
-      when: manual
-      allow_failure: true
-    - if: '$CI_COMMIT_REF_NAME =~ /^(develop|master-?.*|poc\/.*)$/'
-      when: never
+allure report:
+  extends: .allure report
+  after_script:
+    - mc cp output/filter_report.json $REPORT_PATH/filter_report.json || true
 
 run single test:
   extends: run e2e tests

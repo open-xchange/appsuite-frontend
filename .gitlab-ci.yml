@@ -19,7 +19,7 @@ stages:
   - deploy
   - e2e
   - merge
-  - report
+  - publish
   - cleanup
 
 variables:
