@@ -331,7 +331,7 @@ define('io.ox/mail/api', [
         if (model) {
             isComplete = !!model.get('attachments');
             // check for cache hit
-            if (useCache && !obj.src && isComplete && isDefaultView) return $.when(model.toJSON());
+            if (useCache && !obj.src && isComplete && isDefaultView && !obj.decrypt) return $.when(model.toJSON());
         }
 
         // set view if needed
