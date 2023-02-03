@@ -43,7 +43,7 @@ variables:
     KUBERNETES_MEMORY_LIMIT: 1G
   script:
     - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - yarn --non-interactive --no-progress --cache-folder ../.yarn-cache
     - echo ${build_script}
     - eval "${build_script}"
     - "[ -z \"$PACKAGE_NAME\" ] && export PACKAGE_NAME=${PROJECT_PATH}"
