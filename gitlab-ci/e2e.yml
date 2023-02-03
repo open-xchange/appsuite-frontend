@@ -149,6 +149,14 @@ allure report:
   extends: .allure report
   after_script:
     - mc cp output/filter_report.json $REPORT_PATH/filter_report.json || true
+  rules:
+    - if: $S3_CONFIG && $ALLURE_PUBLISH_REPORT
+      exists:
+      - codecept.conf.*
+      - e2e/codecept.conf.*
+      changes:
+        - ui/**/*
+      when: always
 
 run single test:
   extends: run e2e tests
