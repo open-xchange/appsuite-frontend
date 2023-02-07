@@ -1899,3 +1899,66 @@ Scenario('[OXUIB-182] Choose correct start time on time change dates', function 
     changeDate(summerTimeChangeDate);
     changeDate(winterTimeChangeDate);
 });
+
+Scenario('Run in autocomplete limit', async ({ I, users, calendar }) => {
+    await Promise.all([
+        users.create(),
+        users.create(),
+        users.create(),
+        users.create()
+    ]);
+
+    await Promise.all([
+        I.executeSoapRequest('OXUserService', 'change', {
+            ctx: { id: users[1].context.id },
+            usrdata: {
+                id: users[1].get('id'),
+                given_name: 'Marion'
+            },
+            auth: users[1].context.admin
+        }),
+        I.executeSoapRequest('OXUserService', 'change', {
+            ctx: { id: users[2].context.id },
+            usrdata: {
+                id: users[2].get('id'),
+                given_name: 'Marvin'
+            },
+            auth: users[2].context.admin
+        }),
+        I.executeSoapRequest('OXUserService', 'change', {
+            ctx: { id: users[3].context.id },
+            usrdata: {
+                id: users[3].get('id'),
+                given_name: 'Markus'
+            },
+            auth: users[3].context.admin
+        }),
+        I.executeSoapRequest('OXUserService', 'change', {
+            ctx: { id: users[4].context.id },
+            usrdata: {
+                id: users[4].get('id'),
+                given_name: 'Margot'
+            },
+            auth: users[4].context.admin
+        })
+    ]);
+
+    I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+
+    I.executeScript(function () {
+        require(['settings!io.ox/core', 'io.ox/contacts/settings.js'], function (coreSettings, contactsSettings) {
+            coreSettings.set('autocompleteApiLimit', 1);
+            contactsSettings.set('search', { minimumQueryLength: 2 });
+        });
+    });
+
+    calendar.newAppointment();
+    await I.throttleNetwork('2G');
+
+    I.waitForVisible('.add-participant.tt-input');
+    I.waitForEnabled('.add-participant.tt-input');
+    I.fillField('.add-participant.tt-input', 'marv');
+    I.seeInField('.add-participant.tt-input', 'marv');
+    I.waitForText('Marvin');
+});

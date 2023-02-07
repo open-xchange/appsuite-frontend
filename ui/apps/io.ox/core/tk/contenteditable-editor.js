@@ -298,38 +298,62 @@ define('io.ox/core/tk/contenteditable-editor', [
             // Safari behaves strange here and gives a boundingClientRect with 0 for all properties
             rect = _.device('safari') ? range.getClientRects()[0] : range.getBoundingClientRect(),
             top = rect ? rect.top : 0,
+            bottom = rect ? rect.bottom : 0,
             composeFieldsHeight = scrollable.find('.mail-compose-fields').height(),
             footerHeight = scrollable.parents('.window-container-center').find('.window-footer').outerHeight(),
             marginBottom = scrollable.find('.contenteditable-editor').css('margin-bottom') || '0px',
             editorBottomMargin = parseInt(marginBottom.replace('px', ''), 10) || 0,
-            bottom = scrollable.height() - footerHeight - editorBottomMargin * 2;
+            borderBottom = scrollable.height() - footerHeight - editorBottomMargin;
 
-        // for empty lines we get no valid rect
-        if (top === 0) {
-            if (selection.modify) {
-                // copy the selection prior to changing it
-                var prevRange = selection.getRangeAt(0).cloneRange();
-                selection.modify('extend', 'backward', 'character');
-                range = selection.getRangeAt(0);
-                rect = range.getBoundingClientRect();
-                top = rect.top + rect.height;
-                // restore selection to previous state
-                selection.removeAllRanges();
-                selection.addRange(prevRange);
-            } else {
-                var container = range.commonAncestorContainer;
-                top = $(container).offset().top + container.clientHeight;
+        var pos,
+            endPosition = 'bottom';
+
+        if (selection.type === 'Range') {
+            if (previousRect === undefined) previousRect = rect;
+            // Selection end cursor at the top
+            if (rect.top !== previousRect.top) {
+                pos = top - scrollable.scrollTop() + composeFieldsHeight;
+                endPosition = 'top';
             }
+            // Selection end cursor at the bottom
+            if (rect.bottom !== previousRect.bottom) {
+                pos = bottom - scrollable.scrollTop() + composeFieldsHeight;
+                endPosition = 'bottom';
+            }
+            previousRect = rect;
+        } else {
+            // for empty lines we get an invalid rect
+            if (top === 0) {
+                if (selection.modify) {
+                    // copy the selection prior to changing it
+                    var prevRange = selection.getRangeAt(0).cloneRange();
+                    selection.modify('extend', 'backward', 'character');
+                    range = selection.getRangeAt(0);
+                    rect = range.getBoundingClientRect();
+                    top = rect.top + rect.height;
+                    bottom = rect.bottom + rect.height;
+                    // restore selection to previous state
+                    selection.removeAllRanges();
+                    selection.addRange(prevRange);
+                } else {
+                    var container = range.commonAncestorContainer;
+                    top = $(container).offset().top + container.clientHeight;
+                }
+            }
+            pos = top - scrollable.scrollTop() + composeFieldsHeight;
         }
-        var pos = top - scrollable.scrollTop() + composeFieldsHeight;
 
-        return { pos: pos, top: top, bottom: bottom, scrollable: scrollable };
+        var fontSize = parseInt($(ed.selection.getEnd()).css('font-size'), 10);
+        var scrollPosition = (endPosition === 'bottom' ? bottom : top) - (scrollable.height() / 2) + composeFieldsHeight;
+
+        return { pos: pos, top: top, borderBottom: borderBottom, scrollable: scrollable, fontSize: fontSize, scrollPosition: scrollPosition };
     }
 
     var duration = 300,
         easing = 'swing',
         throttledScrollOnCursorUp = _.throttle(scrollOnCursorUp, duration),
-        throttledScrollOnEnter = _.throttle(scrollOnEnter, duration);
+        throttledScrollOnEnter = _.throttle(scrollOnEnter, duration),
+        previousRect;
 
     // This is to keep the caret visible at all times, otherwise the fixed menubar may hide it.
     // See Bug #56677
@@ -337,16 +361,16 @@ define('io.ox/core/tk/contenteditable-editor', [
         var cursorPosition = getCursorPosition(ed);
 
         // Scroll to cursor position (If you manually set this to something else, it doesn't feel native)
-        if (cursorPosition.top > 0 && cursorPosition.pos < 0) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
+        if (cursorPosition.top > 0 && cursorPosition.pos < cursorPosition.fontSize * 3) cursorPosition.scrollable.animate({ scrollTop: cursorPosition.scrollPosition }, duration, easing);
         // Scroll whole window to the top, if cursor reaches top of the editable area
-        if (cursorPosition.top < 16) cursorPosition.scrollable.animate({ scrollTop: 0 }, duration, easing);
+        if (cursorPosition.top < cursorPosition.fontSize * 3) cursorPosition.scrollable.animate({ scrollTop: 0 }, duration, easing);
     }
 
     function scrollOnEnter(ed) {
         var cursorPosition = getCursorPosition(ed);
 
-        if (cursorPosition.pos >= cursorPosition.bottom) {
-            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.top }, duration, easing);
+        if (cursorPosition.pos >= cursorPosition.borderBottom) {
+            cursorPosition.scrollable.animate({ scrollTop: cursorPosition.scrollPosition }, duration, easing);
         }
     }
 

@@ -35,6 +35,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/attachments/view',
     'io.ox/mail/compose/util',
     'io.ox/mail/util',
+    'io.ox/core/api/account',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'settings!io.ox/core',
@@ -44,7 +45,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/mail/compose/resize-view',
     'io.ox/mail/compose/resize',
     'static/3rd.party/jquery-ui.min.js'
-], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
+], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, accountAPI, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -893,7 +894,11 @@ define('io.ox/mail/compose/extensions', [
                         multiselect: true,
                         createFolderButton: false,
                         extension: 'io.ox/mail/mobile/navbar',
-                        uploadButton: true
+                        uploadButton: true,
+                        filter: function (file) {
+                            var metaData = file['com.openexchange.file.storage.mail.mailMetadata'];
+                            return !file.folder_id.match(/^maildrive:\/\/0/) || !(metaData && accountAPI.is('drafts', metaData.folder));
+                        }
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));

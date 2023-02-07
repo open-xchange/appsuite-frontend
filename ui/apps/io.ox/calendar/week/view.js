@@ -1647,8 +1647,10 @@ define('io.ox/calendar/week/view', [
                     date.startOf('day');
                     break;
                 case 'workweek':
-                    // settings independent, assume week from Mon-Sun
-                    date.startOf('isoWeek').add((6 + settings.get('workweekStart')) % 7, 'days');
+                    // we always want to start on a date before or at the start date, so subtract days until we meet the day the workweek starts
+                    // don't use startOf week or iso week here. Work week view is completely independent from that.
+                    // use 7 + in modulo to avoid negative modulo ( -1 % 7 is -1 in js and not 6. But we want to go back 6 days and not go one day to the future)
+                    date.subtract((7 + date.day() - settings.get('workweekStart')) % 7, 'days').startOf('day');
                     break;
                 default:
                 case 'week':

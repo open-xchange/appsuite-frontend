@@ -25,8 +25,9 @@ define('plugins/portal/tumblr/register', [
     'io.ox/portal/feed',
     'gettext!io.ox/portal',
     'io.ox/backbone/views/modal',
-    'settings!io.ox/portal'
-], function (ext, Feed, gt, ModalDialog, settings) {
+    'settings!io.ox/portal',
+    'static/3rd.party/purify.min.js'
+], function (ext, Feed, gt, ModalDialog, settings, DOMPurify) {
 
     'use strict';
 
@@ -110,7 +111,7 @@ define('plugins/portal/tumblr/register', [
                     if (post.title) {
                         titles.push(
                             $('<li class="paragraph">').append(
-                                $('<span class="bold">').html(post.title), $.txt('')
+                                $('<span class="bold">').text(post.title), $.txt('')
                             )
                         );
                     }
@@ -176,12 +177,8 @@ define('plugins/portal/tumblr/register', [
                         }
                     },
                     postBody = function () {
-                        var strippedHtml = post.body
-                            .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
-                            .replace(/<img.+?src=['"]([^'"]+)['"].*?>/i, '<img src="$1">');
-                        if (post.type === 'chat') {
-                            strippedHtml = strippedHtml.replace(/\n/g, '<br />');
-                        }
+                        var strippedHtml = DOMPurify.sanitize(post.body, { ALLOW_DATA_ATTR: false, ALLOWED_TAGS: ['img', 'br'], ALLOWED_ATTR: ['src', 'alt'] });
+
                         return $('<div class="post-body">').html(strippedHtml);
                     },
                     postQuote = function () {

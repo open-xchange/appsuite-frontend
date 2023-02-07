@@ -20,7 +20,10 @@
  *
  */
 
-define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
+define('io.ox/core/api/import', [
+    'io.ox/core/http',
+    'io.ox/core/api/jobs'
+], function (http, jobsAPI) {
 
     'use strict';
 
@@ -30,19 +33,19 @@ define('io.ox/core/api/import', ['io.ox/core/http'], function (http) {
         if ('FormData' in window) {
             var formData = new FormData();
             formData.append('file', data.file);
-            return http.UPLOAD({
+            return jobsAPI.enqueue(http.UPLOAD({
                 module: 'import',
                 params: { action: data.type, folder: data.folder, ignoreUIDs: data.ignoreUIDs, allow_enqueue: true },
                 data: formData,
                 fixPost: true
-            });
+            }), data.longRunningJobCallback);
         }
-        return http.FORM({
+        return jobsAPI.enqueue(http.FORM({
             module: 'import',
             action: data.type,
             form: data.form,
             params: { folder: data.folder, ignoreUIDs: data.ignoreUIDs, allow_enqueue: true }
-        });
+        }), data.longRunningJobCallback);
     }
 
     /**

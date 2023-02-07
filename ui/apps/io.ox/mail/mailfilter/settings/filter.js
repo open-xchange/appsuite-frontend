@@ -468,6 +468,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 api.apply({ folderId: id, id: self.model.id }).then(function () {
                                     return mailAPI.expunge(id);
                                 }).fail(function (response) {
+                                    rule.empty().text(gt('Apply'));
                                     notifications.yell('error', response.error);
                                 }).then(function () {
                                     // applied rule might have moved mails into folders or changed mails
