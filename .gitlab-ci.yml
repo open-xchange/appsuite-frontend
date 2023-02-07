@@ -8,7 +8,6 @@ workflow:
 
 include:
   - local: "/gitlab-ci/docker.yml"
-  - local: "/gitlab-ci/preview_apps.yml"
   - local: "/gitlab-ci/documentation.yml"
   - local: "/gitlab-ci/packaging.yml"
   - local: "/gitlab-ci/e2e.yml"
