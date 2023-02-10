@@ -192,38 +192,3 @@ Scenario('[C110281] Vacation notice is time zone capable', async function ({ I, 
     I.see('Vacation subject', '.mail-detail-pane');
 
 });
-
-Scenario('[OXUIB-2065] Vacation notice button with vacationDomains setting', async ({ I, mail, users }) => {
-    const mxDomain = () => users[0].get('primaryEmail').split('@')[1];
-    await users[0].hasConfig('com.openexchange.mail.filter.vacationDomains', `${mxDomain()},example.org`);
-
-    // seems the setting doesn't really have an effect,
-    // so we just create a filter rule using API
-    // otherwise, it can be created via UI at this point
-    await I.haveMailFilterRule({
-        rulename: 'Abwesenheitsbenachrichtigung',
-        active: true,
-        flags: ['vacation'],
-        test: {
-            id: 'allof',
-            tests: [{
-                id: 'address',
-                comparison: 'is',
-                addresspart: 'domain',
-                headers: ['from'],
-                values: [mxDomain, 'example.com']
-            }]
-        },
-        actioncmds: [{
-            id: 'vacation',
-            days: '7',
-            addresses: [users[0].get('primaryEmail')],
-            subject: 'I am on vacation',
-            text: 'Please contact me later'
-        }]
-    });
-
-    I.login('app=io.ox/mail');
-    mail.waitForApp();
-    I.waitForText('Your vacation notice is active');
-});
