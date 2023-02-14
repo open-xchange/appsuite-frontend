@@ -160,19 +160,20 @@ allure report:
 
 run single test:
   extends: run e2e tests
-  needs: []
+  needs: ["build e2e image"]
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e.test.service
   variables:
     MIN_SUCCESS: 10
     MAX_RERUNS: 10
+    E2E_TEST_PATTERN: "${CI_COMMIT_REF_NAME#e2e/}"
   script:
   - mv /e2e .
   - cd e2e
-  - echo ${CI_COMMIT_REF_NAME#e2e/}
+  - echo ${E2E_TEST_PATTERN}
   - unset FILTER_SUITE
-  - yarn e2e-rerun "${CI_COMMIT_REF_NAME#e2e/}"
+  - yarn e2e-rerun "$E2E_TEST_PATTERN"
   parallel: 5
   timeout: 60 minutes
   rules:
