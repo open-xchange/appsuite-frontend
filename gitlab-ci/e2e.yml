@@ -5,6 +5,7 @@ include:
     file:
       - '/base.yml'
       - '/publish/e2e-codeceptjs-allure-report.yml'
+      - '/deploy/auto-deploy-helm.yml'
 
 variables:
   ALLURE_PUBLISH_REPORT: "true"

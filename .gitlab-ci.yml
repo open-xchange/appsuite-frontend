@@ -24,6 +24,7 @@ stages:
 variables:
     # only fetch last 10 commits, much faster clones
   GIT_DEPTH: "10"
+  OX_COMPONENT: "frontend-core"
 
 .default_cache:
   cache:
