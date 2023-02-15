@@ -168,10 +168,9 @@ run single test:
   variables:
     MIN_SUCCESS: 10
     MAX_RERUNS: 10
-    E2E_TEST_PATTERN: "${CI_COMMIT_REF_NAME#e2e/}"
+    E2E_TEST_PATTERN: "@smoketest"
   script:
-  - mv /e2e .
-  - cd e2e
+  - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
   - echo ${E2E_TEST_PATTERN}
   - unset FILTER_SUITE
   - yarn e2e-rerun "$E2E_TEST_PATTERN"
@@ -180,3 +179,11 @@ run single test:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^e2e\//'
       when: always
+
+deploy helm chart:
+  extends: .auto-deploy-helm-chart
+  rules:
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      changes:
+        - ui/**/*
+      when: on_success
