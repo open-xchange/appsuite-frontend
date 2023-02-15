@@ -169,8 +169,7 @@ run single test:
     MAX_RERUNS: 10
     E2E_TEST_PATTERN: "${CI_COMMIT_REF_NAME#e2e/}"
   script:
-  - mv /e2e .
-  - cd e2e
+  - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
   - echo ${E2E_TEST_PATTERN}
   - unset FILTER_SUITE
   - yarn e2e-rerun "$E2E_TEST_PATTERN"
