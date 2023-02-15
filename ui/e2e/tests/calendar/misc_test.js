@@ -75,6 +75,7 @@ Scenario('[C207509] Year view', async ({ I, calendar }) => {
 
     const resizeAndCheckStyle = (width, style) => {
         I.resizeWindow(width, 1000);
+        I.waitForElement(`.year-view .month-container[style*="${style}"]`);
         I.seeNumberOfVisibleElements(`.year-view .month-container[style*="${style}"]`, 12);
     };
 
