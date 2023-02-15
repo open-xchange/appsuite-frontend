@@ -403,7 +403,8 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
     // click on the first .appointment and edit it
-    I.click('.appointment');
+    I.waitForVisible({ xpath: '(//div[@class="appointment-content"])[1]' });
+    I.click({ xpath: '(//div[@class="appointment-content"])[1]' });
     I.waitForVisible('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
@@ -1271,9 +1272,10 @@ Scenario('[C7459] Remove attachments', async ({ I, calendar }) => {
     // 3. At the edit dialog, locate the Attachments area and remove one or more attachments from the appointment
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
-
+    I.waitForElement({ xpath: '//div[div[text()="testdocument.odt"]]' });
     // Expected Result: The attachments are not longer shown at the edit dialog
-    I.click({ css: 'a[title="Remove attachment"]' }, locate('div.file').withDescendant(locate('div').withText('testdocument.odt')));
+    I.click({ css: 'a[title="Remove attachment"]' }, { xpath: '//div[div[text()="testdocument.odt"]]' });
+    I.waitForDetached(locate('div.file').withDescendant(locate('div').withText('testdocument.odt')));
     I.dontSee('testdocument.odt', '.io-ox-calendar-edit-window');
     I.see('testdocument.rtf', '.io-ox-calendar-edit-window');
     I.click({ css: 'a[title="Remove attachment"]' }, locate('div.file').withDescendant(locate('div').withText('testdocument.rtf')));
