@@ -205,7 +205,7 @@ Scenario('[C163026] Change from display name when sending a mail', async ({ I, u
     I.waitForVisible('.name-overwrite-view .checkbox input[type="checkbox"]', 5);
     I.click('.name-overwrite-view .checkbox input[type="checkbox"]', dialogs.locators.body);
     I.fillField('.modal-body input[title="Custom name"]', name);
-    dialogs.clickButton('Edit');
+    dialogs.clickButton('Save');
     I.waitForDetached('.modal-dialog');
 
     // check custom name
