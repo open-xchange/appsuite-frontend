@@ -187,7 +187,7 @@ Scenario('Check appointment colors of appointments the user got invited to', asy
     I.waitForElement('.picked-color', 5, '.io-ox-calendar-edit-window .color-picker-dropdown');
     const color = await I.grabCssPropertyFrom('.picked-color', 'background-color');
     expect(color).be.equal(greyColor);
-    I.click('Discard', '.io-ox-calendar-edit-window');
+    I.click('Discard changes', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
