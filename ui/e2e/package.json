@@ -12,7 +12,7 @@
     "@codeceptjs/mock-request": "^0.3.1",
     "@open-xchange/codecept-helper": "^0.6.2",
     "dotenv-defaults": "^5.0.2",
-    "puppeteer": "15.5.0"
+    "puppeteer": "19.7.1"
   },
   "dependencies": {
     "moment-range": "^4.0.2",
