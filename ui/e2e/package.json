@@ -8,6 +8,7 @@
     "e2e-rerun": "node customRerun.js"
   },
   "devDependencies": {
+    "@codeceptjs/allure-legacy": "^1.0.2",
     "@codeceptjs/mock-request": "^0.3.1",
     "@open-xchange/codecept-helper": "^0.6.2",
     "dotenv-defaults": "^5.0.2",
