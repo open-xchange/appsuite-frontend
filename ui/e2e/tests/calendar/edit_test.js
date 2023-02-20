@@ -387,7 +387,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
     // click on the second .appointment and edit it
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
@@ -404,7 +404,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
     // click on the first .appointment and edit it
     I.click('.appointment');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
@@ -422,7 +422,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
     I.click('~Close', '.io-ox-sidepopup');
 
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
     I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
 
 });
