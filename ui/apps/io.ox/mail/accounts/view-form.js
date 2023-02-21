@@ -44,8 +44,8 @@ define.async('io.ox/mail/accounts/view-form', [
         ],
 
         serverTypePorts = {
-            'imap': { common: '143', secure: '993' },
-            'pop3': { common: '110', secure: '995' }
+            'imap': { common: 143, secure: 993 },
+            'pop3': { common: 110, secure: 995 }
         },
 
         optionsRefreshRatePop = [
@@ -77,8 +77,8 @@ define.async('io.ox/mail/accounts/view-form', [
         ],
 
         portDefaults = {
-            mail_port: '143',
-            transport_port: '587'
+            mail_port: 143,
+            transport_port: 587
         },
 
         //conditional defaults

@@ -170,7 +170,7 @@ define('io.ox/mail/accounts/model', [
 
                     // compare all attributes
                     _(model.pick(keys)).each(function (value, key) {
-                        if (!_.isEqual(value, account[key])) changes[key] = value;
+                        if (value !== null && value !== undefined && !_.isEqual(value, account[key])) changes[key] = value;
                     });
 
                     // don't send transport_login/password if transport_auth is mail
