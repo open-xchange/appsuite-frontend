@@ -70,11 +70,11 @@ define('io.ox/mail/print',
 
             print.smart({
 
-                get: function (obj) {
+                get: function (obj, index) {
                     // is an embedded email?
                     if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
                     // fetch normal message
-                    return api.get(_.extend({ view: selection.view, unseen: true, decrypt: isDecrypted(selection) }, obj));
+                    return api.get(_.extend({ view: selection[index].view, unseen: true, decrypt: isDecrypted(selection) }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,
