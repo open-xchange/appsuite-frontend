@@ -106,3 +106,5 @@ Note: This chapter is not about changing AppSuite icons which are used in the ap
 AppSuite ships with a standard set of icons containing a favicon and a set of touch icons which are mainly used by iOS and Android devices. These icons are used as default for all devices and browsers as long as you don't deliver your own icons with your theme. To provide your own icons, put them into your theme's directory, e.g. `apps/themes/icons/theme-name`.
 
 **Attention**: Safari and Internet Explorer do not support dynamic changes to the favicon for a webpage. This means, the default icon will be shown even if a custom favicon is provided within a custom theme. To enable the right favicon for a theme on Safari and IE, the overall standard favicon.ico located under `apps/themes/icons/default` on the web server must be replaced with a custom version.
+
+Remember that images in OX App Suite are served by the web server and not by the application server. This means that images need to be packaged separately (for dedicated web servers) and installed in `/var/www/appsuite/` (or similar, depending on the target platform) instead of `/opt/open-xchange/appsuite/`.
