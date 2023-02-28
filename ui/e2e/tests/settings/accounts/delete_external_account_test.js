@@ -35,10 +35,7 @@ After(async function ({ users }) {
 Scenario('[C7840] Delete external mail account', async ({ I, mail, settings, dialogs }) => {
     await I.haveSetting('io.ox/mail//messageFormat', 'text');
 
-    await I.haveMailAccount({
-        name: 'External',
-        extension: 'ext'
-    });
+    await I.haveMailAccount({ name: 'External' });
 
     I.login();
     mail.waitForApp();

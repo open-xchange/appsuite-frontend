@@ -38,7 +38,7 @@ Scenario('[C7799] Filter mail on mailing list', async ({ I, users, mail, mailfil
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/media/mails/c7799.eml'
+        path: 'media/mails/c7799.eml'
     }, { user });
 
     I.login('app=io.ox/settings&folder=virtual/settings/io.ox/mailfilter');

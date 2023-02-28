@@ -32,7 +32,7 @@ After(async function ({ users }) {
     await users.removeAll();
 });
 
-Scenario('Hide and show Help topics based on user capabilities', async function ({ I, users, contacts, topbar }) {
+Scenario('Hide and show Help topics based on user capabilities', async function ({ I, users, mail, topbar }) {
 
     const checkIfDisplayNone = async (capability) => {
         I.waitForElement(`.listitem.cap-${capability}`);
@@ -44,65 +44,64 @@ Scenario('Hide and show Help topics based on user capabilities', async function 
     // Disable calendar
     await users[0].hasModuleAccess({ calendar: false });
 
-    I.login('app=io.ox/contacts', { user: users[0] });
+    I.login();
 
-    contacts.waitForApp();
+    mail.waitForApp();
 
     //open help window
     topbar.help();
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, async () => {
-        I.wait(1);
-        I.waitForText('Start Page');
-        I.click('Start Page');
-        I.waitForElement('li.listitem.cap-tasks');
-        I.scrollTo('.listitem.cap-tasks');
-        I.waitForText('Tasks');
-        await checkIfDisplayNone('calendar');
-    });
+    I.switchTo({ frame: '.inline-help-iframe' });
+    I.wait(1);
+    I.waitForText('Start Page');
+    I.click('Start Page');
+    I.waitForElement('li.listitem.cap-tasks');
+    I.scrollTo('.listitem.cap-tasks');
+    I.waitForText('Tasks');
+    await checkIfDisplayNone('calendar');
+    I.switchTo();
 
     // additionally disable tasks
     await users[0].hasModuleAccess({ tasks: false });
     I.refreshPage();
-    contacts.waitForApp();
+    mail.waitForApp();
 
     // open help window
     topbar.help();
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, async () => {
-        I.wait(1);
-        I.waitForText('Start Page');
-        I.click('Start Page');
-        I.waitForElement('li.listitem.cap-infostore');
-        I.scrollTo('li.listitem.cap-infostore');
-        I.waitForText('Drive');
+    I.switchTo({ frame: '.inline-help-iframe' });
+    I.wait(1);
+    I.waitForText('Start Page');
+    I.click('Start Page');
+    I.waitForElement('li.listitem.cap-infostore');
+    I.scrollTo('li.listitem.cap-infostore');
+    I.waitForText('Drive');
 
-        await checkIfDisplayNone('calendar');
-        await checkIfDisplayNone('tasks');
-    });
+    await checkIfDisplayNone('calendar');
+    await checkIfDisplayNone('tasks');
 
+    I.switchTo();
     // additionally disable drive
     await users[0].hasModuleAccess({ infostore: false });
 
     //close help
     I.refreshPage();
-    contacts.waitForApp();
+    mail.waitForApp();
 
     //open help window
     topbar.help();
 
     // Check if help shows info about disabled capability
-    await within({ frame: '.inline-help-iframe' }, async () => {
-        I.wait(1);
-        I.waitForText('Start Page');
-        I.click('Start Page');
+    I.switchTo({ frame: '.inline-help-iframe' });
 
-        await checkIfDisplayNone('calendar');
-        await checkIfDisplayNone('tasks');
-        await checkIfDisplayNone('infostore');
-    });
+    I.wait(1);
+    I.waitForText('Start Page');
+    I.click('Start Page');
 
-    I.logout();
+    await checkIfDisplayNone('calendar');
+    await checkIfDisplayNone('tasks');
+    await checkIfDisplayNone('infostore');
+
 });

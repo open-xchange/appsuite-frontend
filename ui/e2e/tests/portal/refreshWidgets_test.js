@@ -52,7 +52,7 @@ async function addMail(I, user, wave) {
 
 async function addFile(I, user, wave, name) {
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, `e2e/media/files/generic/${name}`);
+    await I.haveFile(infostoreFolderID, `media/files/generic/${name}`);
 }
 
 function check(I, count) {

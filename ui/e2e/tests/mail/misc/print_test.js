@@ -33,7 +33,7 @@ After(async ({ users }) => {
 });
 
 Scenario('[C44997] Print a E-Mail', async ({ I, mail }) => {
-    await I.haveMail({ folder: 'default0/INBOX', path: 'e2e/media/mails/c44997.eml' });
+    await I.haveMail({ folder: 'default0/INBOX', path: 'media/mails/c44997.eml' });
 
     // 1. Go to Mail -> Compose
     I.login('app=io.ox/mail');

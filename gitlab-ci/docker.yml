@@ -25,6 +25,46 @@ build ui docker image:
         - ui/**/*
       when: on_success
 
+build e2e image:
+  image:
+    name: gcr.io/kaniko-project/executor:v1.8.0-debug
+    entrypoint: [""]
+  stage: build
+  script:
+    - |
+      # Building image with kaniko...
+      tee /kaniko/.docker/config.json <<EOF &> /dev/null
+      {
+        "auths": {
+          "registry.dev.oxui.de": {
+            "auth": "$(echo -n deploy:${HCLOUD_REGISTRY_PASSWORD} | base64)"
+          },
+          "registry-cache.dev.oxui.de": {
+            "auth": "$(echo -n deploy:${HCLOUD_REGISTRY_PASSWORD} | base64)"
+          },
+          "$CI_REGISTRY": {
+            "auth": "$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)"
+          }
+        }
+      }
+      EOF
+    - >
+      /kaniko/executor
+      --registry-mirror registry-proxy.k3s.os2.oxui.de
+      --registry-mirror dockerio-cache.open-xchange.com
+      --verbosity=error
+      --context ui/e2e/
+      --dockerfile ui/e2e/Dockerfile
+      --destination $CI_REGISTRY_IMAGE/e2e:$TAG_NAME
+      --push-retry 3
+      --force
+  rules:
+    - changes:
+        - ui/e2e/**/*
+      exists:
+        - ui/e2e/Dockerfile
+      variables:
+        TAG_NAME: "$CI_COMMIT_REF_SLUG"
 
 .tag docker image: &add_tag
   stage: deploy

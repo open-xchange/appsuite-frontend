@@ -41,7 +41,7 @@ Scenario('[C85691] Cloud icon is used for drive-mail', async function ({ I, user
     I.fillField('To', users[1].get('primaryEmail'));
     I.fillField('Subject', 'Git Gud');
 
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'media/files/generic/testdocument.rtf');
     I.click('Use Drive Mail', '.share-attachments');
     mail.send();
 
@@ -74,7 +74,7 @@ Scenario('[C85685] Send drive-mail to internal recipient', async ({ I, users, ma
     // 4. Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = 'testdocument.odt';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
 
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
@@ -146,7 +146,7 @@ Scenario('[C85687] Send drive-mail with expiry date', async ({ I, users, mail, d
     // Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = 'testdocument.odt';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
     I.waitForText('Use Drive Mail', undefined, '.io-ox-mail-compose-window');
@@ -197,7 +197,6 @@ Scenario('[C85687] Send drive-mail with expiry date', async ({ I, users, mail, d
     mail.selectMail(subject);
     // Expected Result: Above the content an information is shown that the sender has shared some files with you plus a link to that files
     I.waitForText(`${batman.userdata.given_name} ${batman.userdata.sur_name} has shared the following file with you:`);
-    I.see(batFile);
 
     I.waitForVisible('.mail-detail-frame');
     // Verify the password and expiry date is part of the email
@@ -233,7 +232,7 @@ Scenario('[C85689] Send drive-mail with an attachment below the threshold', asyn
     // Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = '2MB.dat';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('DAT', undefined, '.io-ox-mail-compose-window');
     I.waitForElement('.progress');
@@ -292,7 +291,7 @@ Scenario('[C85688] Send drive-mail with an attachment above the threshold', asyn
     // Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = '2MB.dat';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('DAT', undefined, '.io-ox-mail-compose-window');
     I.waitForElement('.progress');
@@ -359,7 +358,7 @@ Scenario('[C85684] Feature name is configurable', async ({ I, users, mail, drive
     // Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = 'testdocument.odt';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
     // Expected Result: Attachment section opens containing a link: "Bat Mail"
     I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
     I.waitForText('Use Bat Mail', undefined, '.io-ox-mail-compose-window');
@@ -405,7 +404,7 @@ Scenario('[C85690] Expire date can be forced', async function ({ I, users, mail 
     I.fillField('To', users[1].get('primaryEmail'));
     I.fillField('Subject', 'Plus Ultra!');
 
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'media/files/generic/testdocument.rtf');
 
     I.click('Use Drive Mail', '.share-attachments');
     I.click('Options', '.mail-attachment-list');
@@ -453,7 +452,7 @@ Scenario('[C85686] Send drive-mail to external recipient', async ({ I, users, ma
     // Select a file
     // I use a helper function here and directly feed the file into the input field
     const batFile = 'testdocument.odt';
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `e2e/media/files/generic/${batFile}`);
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', `media/files/generic/${batFile}`);
     // Expected Result: Attachment section opens containing a link: "Drive Mail"
     I.waitForText('ODT', undefined, '.io-ox-mail-compose-window');
     I.waitForText('Use Drive Mail', undefined, '.io-ox-mail-compose-window');

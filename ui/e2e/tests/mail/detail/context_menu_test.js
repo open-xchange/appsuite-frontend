@@ -87,7 +87,7 @@ Scenario('[C248438] Context menu can be opened by right click', async ({ I, user
     I.waitForInvisible('.io-ox-busy');
     I.seeInField('subject', 'Re: ' + subject);
     // discard mail
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
 
 
     // // Shift-F10 (view source again)

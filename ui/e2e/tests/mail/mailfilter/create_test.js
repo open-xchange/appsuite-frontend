@@ -579,7 +579,7 @@ Scenario('[C274412] Filter mail by size', async function ({ I, users, mail, dial
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 1 total. Right click for more options.', 30);
@@ -605,7 +605,7 @@ Scenario('[C274412] Filter mail by size', async function ({ I, users, mail, dial
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 2 total. Right click for more options.', 30);
@@ -631,7 +631,7 @@ Scenario('[C274412] Filter mail by size', async function ({ I, users, mail, dial
     I.fillField('Subject', 'C274412');
     I.fillField({ css: 'textarea.plain-text' }, 'This is a test');
     I.seeInField({ css: 'textarea.plain-text' }, 'This is a test');
-    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'e2e/media/files/generic/2MB.dat');
+    I.attachFile('.io-ox-mail-compose-window .composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
 
     mail.send();
     I.waitForElement('~Sent, 3 total. Right click for more options.', 30);

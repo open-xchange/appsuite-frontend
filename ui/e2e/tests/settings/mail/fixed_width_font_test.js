@@ -39,7 +39,7 @@ Scenario('[C7774] Fixed-font for plain-text mails', async ({ I, users }) => {
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/tests/settings/mail/plain_text.eml'
+        path: 'tests/settings/mail/plain_text.eml'
     }, { user });
 
     I.login('app=io.ox/mail', { user });

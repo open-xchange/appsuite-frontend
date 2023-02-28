@@ -81,7 +81,7 @@ define('io.ox/mail/compose/view', [
     ext.point(POINT + '/mailto').extend({
         id: 'mailto',
         index: 100,
-        setup: extensions.mailto
+        setup: _.once(extensions.mailto)
     });
 
     ext.point(POINT + '/header').extend(

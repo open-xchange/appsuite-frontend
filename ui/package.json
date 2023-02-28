@@ -9,7 +9,6 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "grunt dev",
-    "e2e": "codeceptjs run",
     "test": "grunt copy:specs karma:continuous",
     "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js"
   },
@@ -17,13 +16,10 @@
     "node": ">=10.0.0"
   },
   "devDependencies": {
-    "@codeceptjs/mock-request": "^0.3.0",
     "@open-xchange/appserver": "^0.8.0-pre1",
-    "@open-xchange/codecept-helper": "^0.6.2",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
     "chai": "^4.3.4",
-    "codeceptjs": "3.0.5",
     "dotenv-defaults": "^3.0.0",
     "eslint": "^6.2.2",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
@@ -56,7 +52,6 @@
     "mocha": "8.1.3",
     "moment-range": "^4.0.2",
     "otpauth": "^6.0.4",
-    "puppeteer": "^5.5.0",
     "sinon": "^9.0.3",
     "sinon-chai": "^3.3.0",
     "testrail-api": "1.3.5",
@@ -100,7 +95,6 @@
     "velocity-animate": "1.5.2"
   },
   "resolutions": {
-    "@pollyjs/adapter-puppeteer": "^5.1.1",
     "@pollyjs/core": "^5.1.1",
     "ansi-regex": "^5.0.1",
     "getobject": "^1.0.2",

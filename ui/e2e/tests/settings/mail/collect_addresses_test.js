@@ -40,7 +40,7 @@ Scenario('[7772] Contact collection when sending mail', async ({ I }) => {
     I.checkOption('Automatically collect contacts in the folder "Collected addresses" while sending');
 
     I.openApp('Mail');
-    I.waitForText('Compose', '.classic-toolbar');
+    I.waitForText('Compose', 5, '.classic-toolbar');
     I.retry(5).clickToolbar('Compose');
 
     I.waitForFocus('[placeholder="To"]');

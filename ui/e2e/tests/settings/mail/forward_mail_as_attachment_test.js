@@ -39,7 +39,7 @@ Scenario('[C7778] Forwarding mail inline/attachment', async ({ I, users, mail })
     await I.haveSetting('io.ox/mail//attachments/layout/detail/open', true);
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/tests/settings/mail/test.eml'
+        path: 'tests/settings/mail/test.eml'
     }, { user });
 
     I.login('app=io.ox/mail', { user });
@@ -55,7 +55,7 @@ Scenario('[C7778] Forwarding mail inline/attachment', async ({ I, users, mail })
     I.wait(0.5);
 
     I.waitToHide('Saving');
-    I.click('~Save and close', '.io-ox-mail-compose-window');
+    I.click('~Close', '.io-ox-mail-compose-window');
     I.waitForDetached('.io-ox-mail-compose-window');
     I.logout();
 

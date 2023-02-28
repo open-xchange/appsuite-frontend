@@ -37,7 +37,7 @@ Scenario.skip('Authenticity', async ({ I }) => {
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/media/mails/C244757-hasNoDMARC_hasFailedSPF_hasFailedDKIM_noDomainMatch.eml'
+        path: 'media/mails/C244757-hasNoDMARC_hasFailedSPF_hasFailedDKIM_noDomainMatch.eml'
     });
 
     await I.haveSetting('io.ox/mail//features/authenticity', 'fail_suspicious_neutral_trusted');

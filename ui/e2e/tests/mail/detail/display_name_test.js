@@ -39,7 +39,7 @@ Scenario('[Bug 67245] Forwarded mails from external clients without a displaynam
 
     await I.haveMail({
         folder: 'default0/INBOX',
-        path: 'e2e/media/mails/Bug_67245.eml'
+        path: 'media/mails/Bug_67245.eml'
     }, users[0]);
 
     I.login('app=io.ox/mail');

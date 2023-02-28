@@ -60,13 +60,13 @@ Scenario('[C8364] Upload new file', ({ I, drive }) => {
     I.waitForText('File');
     I.click('File');
     // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
-    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/0kb/document.txt');
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'media/files/0kb/document.txt');
     I.waitForText('document.txt');
 });
 
 // Note: This is not accessible H4 and textarea does not have a label
 Scenario('[C8366] Edit description', async ({ I, drive, dialogs }) => {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
 
@@ -119,7 +119,7 @@ const checkIfFoldersExist = (I, layout) => {
 };
 
 Scenario('[C8368] View change @bug', async ({ I, drive }) => {
-    await I.haveFile(await I.grabDefaultFolder('infostore'), 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(await I.grabDefaultFolder('infostore'), 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     checkIfFoldersExist(I);
@@ -154,13 +154,13 @@ const searchFor = (I, query) => {
 
 Scenario('[C8369] Search', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
     await Promise.all([
-        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
+        I.haveFile(testFolder, 'media/files/0kb/document.txt'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.rtf'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.odt'),
+        I.haveFile(testFolder, 'media/files/generic/testpresentation.ppsm')
     ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -177,7 +177,7 @@ Scenario('[C8369] Search', async ({ I, drive }) => {
 
 Scenario('[C8371] Delete file', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.waitForText('document.txt', undefined, '.file-list-view');
@@ -225,10 +225,10 @@ Scenario('[C45040] Sort files', async ({ I, drive }) => {
     const folder = await I.grabDefaultFolder('infostore');
     const testFolder = await I.haveFolder({ title: 'Testfolder', module: 'infostore', parent: folder });
     await Promise.all([
-        I.haveFile(testFolder, 'e2e/media/files/0kb/document.txt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.rtf'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testdocument.odt'),
-        I.haveFile(testFolder, 'e2e/media/files/generic/testpresentation.ppsm')
+        I.haveFile(testFolder, 'media/files/0kb/document.txt'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.rtf'),
+        I.haveFile(testFolder, 'media/files/generic/testdocument.odt'),
+        I.haveFile(testFolder, 'media/files/generic/testpresentation.ppsm')
     ]);
     I.login('app=io.ox/files');
     drive.waitForApp();
@@ -270,7 +270,7 @@ Scenario('[C45040] Sort files', async ({ I, drive }) => {
 
 Scenario('[C45041] Select files', async ({ I, drive }) => {
     const testFolder = await I.haveFolder({ title: 'Selecttest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
-        filePath = 'e2e/media/files/0kb/',
+        filePath = 'media/files/0kb/',
         files = await readdir(filePath);
 
     await I.haveFolder({ title: 'Subfolder', module: 'infostore', parent: testFolder });
@@ -302,7 +302,7 @@ Scenario('[C45042] Filter files', async ({ I, drive }) => {
     // to a group.
 
     const testFolder = await I.haveFolder({ title: 'Filtertest', module: 'infostore', parent: await I.grabDefaultFolder('infostore') }),
-        filePath = 'e2e/media/files/0kb/',
+        filePath = 'media/files/0kb/',
         files = await readdir(filePath);
 
     files.forEach((name) => {
@@ -357,7 +357,7 @@ Scenario('[Bug 63288] Cancel upload does not work in drive', async ({ I, drive }
     // slow down network so we can click the cancel upload button
     await I.throttleNetwork('2G');
     // the input field is created on demand when Upload files is clicked. This click also closes the dropdown
-    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'e2e/media/files/generic/2MB.dat');
+    I.attachFile({ css: '[aria-label="Drive toolbar. Use cursor keys to navigate."] .dropdown input[name=file]' }, 'media/files/generic/2MB.dat');
     I.waitForText('Cancel');
     I.click('Cancel');
     // reset network speed

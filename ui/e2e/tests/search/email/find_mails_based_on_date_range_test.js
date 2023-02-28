@@ -41,12 +41,12 @@ Scenario('[C8405] Find mails based on a date range', async ({ I, users }) => {
 
     await I.haveMail({
         folder: INBOX,
-        path: 'e2e/media/mails/c8405_2016.eml'
+        path: 'media/mails/c8405_2016.eml'
     }, { USER });
 
     await I.haveMail({
         folder: INBOX,
-        path: 'e2e/media/mails/c8405_2017.eml'
+        path: 'media/mails/c8405_2017.eml'
     }, { USER });
 
     // 1. Switch to Mail

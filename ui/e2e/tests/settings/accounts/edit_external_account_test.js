@@ -37,7 +37,7 @@ Scenario('[C7839] Edit external mail account', async ({ I, mail, settings, dialo
 
     const { data: {
         primary_address
-    } } = await I.haveMailAccount({ name: 'External', extension: 'ext' });
+    } } = await I.haveMailAccount({ name: 'External' });
 
     I.login();
     mail.waitForApp();

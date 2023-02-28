@@ -84,7 +84,7 @@ Scenario.skip('[C273805] - Download infected file', async function ({ I }) {
 
     };
     const contactResponse = await I.haveContact(contact);
-    await I.haveAttachment('contacts', { id: contactResponse.id, folder: contact.folder_id }, 'e2e/media/mails/Virus_attached!.eml');
+    await I.haveAttachment('contacts', { id: contactResponse.id, folder: contact.folder_id }, 'media/mails/Virus_attached!.eml');
     I.login('app=io.ox/contacts');
     I.waitForElement('.vgrid-cell.contact');
     I.selectFolder('Contacts');

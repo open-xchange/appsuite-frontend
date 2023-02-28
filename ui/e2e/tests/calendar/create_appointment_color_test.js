@@ -115,3 +115,27 @@ Scenario('[C264519] Create appointments with colors in public folder', async fun
         .map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
     expect(appointmentColors).to.deep.equal(['rgba(55, 107, 39, 1)', 'rgba(57, 109, 123, 1)']);
 });
+
+Scenario('[OXUIB-1143] Keep contact preview when changing appointment color', async function ({ I, users, mail }) {
+    const user = users[0];
+    await I.haveMail({
+        attachments: [{
+            content: 'Hello world!',
+            content_type: 'text/html',
+            disp: 'inline'
+        }],
+        from: [[user.get('display_name'), user.get('primaryEmail')]],
+        subject: 'First mail!',
+        to: [[users[0].get('display_name'), users[0].get('primaryEmail')]]
+    }, { user });
+    I.login('app=io.ox/mail', { user: user });
+    mail.waitForApp();
+    mail.selectMailByIndex(0);
+    I.click('.person-link.person-from');
+    I.waitForElement('[data-action="io.ox/contacts/actions/invite"]', 3);
+    I.click('[data-action="io.ox/contacts/actions/invite"]');
+    I.waitForElement('.color-picker-dropdown.dropdown', 3);
+    I.click('.color-picker-dropdown.dropdown');
+    I.click('[data-value="#C5C5C5"]');
+    I.seeElement('.io-ox-halo');
+});

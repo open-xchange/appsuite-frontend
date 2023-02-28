@@ -67,7 +67,7 @@ Scenario('[C114951] Disabled links in spam mail folders', async function ({ I, u
 
     await I.haveMail({
         folder: 'default0/INBOX/Spam',
-        path: 'e2e/media/mails/C114951.eml'
+        path: 'media/mails/C114951.eml'
     });
 
     const defaultFolder = await I.grabDefaultFolder('mail');
@@ -80,7 +80,7 @@ Scenario('[C114951] Disabled links in spam mail folders', async function ({ I, u
 
     await I.haveMail({
         folder: 'default0/INBOX/Phishing',
-        path: 'e2e/media/mails/C114951.eml'
+        path: 'media/mails/C114951.eml'
     });
 
     I.login(['app=io.ox/mail']);

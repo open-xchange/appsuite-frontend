@@ -64,7 +64,7 @@ Scenario('[C244799] Set new default reminder for all-day appointments', async fu
     I.click('Create');
     I.waitForDetached('.io-ox-calendar-edit');
 
-    I.waitForText('subject', '.appointment-content');
+    I.waitForText('subject', 5, '.appointment-content');
     I.click('subject', '.appointment-content');
 
     I.waitForVisible(locate('li > a').withText('Edit').inside('.io-ox-sidepopup'));

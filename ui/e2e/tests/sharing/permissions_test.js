@@ -188,7 +188,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function ({ I, u
     // the test case also shares with an external user, this is left out for now.
 
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.waitForText('document.txt', 5, '.file-list-view');
@@ -197,7 +197,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function ({ I, u
     I.clickToolbar('~View');
     drive.waitForViewer();
     I.waitForEnabled({ css: '.io-ox-viewer input.file-input' });
-    I.attachFile('.io-ox-viewer input.file-input', 'e2e/media/files/0kb/document.txt');
+    I.attachFile('.io-ox-viewer input.file-input', 'media/files/0kb/document.txt');
     dialogs.waitForVisible();
     dialogs.clickButton('Upload');
     I.waitForText('Versions (2)');
@@ -285,7 +285,7 @@ Scenario('[C73919] Copy a shared file to another folder', async function ({ I, u
 Scenario('[DOCS-3066] Sharing link area is visible for decrypted files and invisible for encrypted files on click details view "This file is shared with others"', async function ({ I, users, drive, dialogs }) {
 
     const folder = await I.grabDefaultFolder('infostore');
-    await I.haveFile(folder, 'e2e/media/files/0kb/document.txt');
+    await I.haveFile(folder, 'media/files/0kb/document.txt');
     I.login('app=io.ox/files');
     drive.waitForApp();
     I.waitForText('document.txt', 5, '.file-list-view');

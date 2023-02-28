@@ -36,9 +36,9 @@ Scenario('[C8365] Version history', async ({ I, drive }) => {
     var fs = require('fs');
 
     let timestamp1 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C8365.txt', `timestamp1: ${timestamp1}`);
+    await fs.promises.writeFile('output/C8365.txt', `timestamp1: ${timestamp1}`);
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'build/e2e/C8365.txt');
+    await I.haveFile(infostoreFolderID, 'output/C8365.txt');
     await I.haveSetting('io.ox/files//showDetails', true);
 
     I.login('app=io.ox/files');
@@ -49,9 +49,9 @@ Scenario('[C8365] Version history', async ({ I, drive }) => {
 
     //Upload new version
     let timestamp2 = Math.round(+new Date() / 1000);
-    await fs.promises.writeFile('build/e2e/C8365.txt', `timestamp2: ${timestamp2}`);
+    await fs.promises.writeFile('output/C8365.txt', `timestamp2: ${timestamp2}`);
     I.waitForElement('.file-input');
-    I.attachFile('.file-input', 'build/e2e/C8365.txt');
+    I.attachFile('.file-input', 'output/C8365.txt');
     I.click('Upload', '.modal-dialog');
 
     //Verify there's new version of the file

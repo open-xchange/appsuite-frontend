@@ -156,6 +156,7 @@ define('io.ox/calendar/list/view', [
                         // we use lfo here and wait for a folder api call. This might cause some ugly race conditions. The appointmentModel might be updated by a list or refresh call in the meantime, just make sure it's a fully featured model
                         if (appointmentModel.get('attendees')) {
                             self.drawAppointment(appointmentModel, { noFolderCheck: result && result.error });
+                            self.app.listView.trigger('toolbar:update');
                             return;
                         }
                         api.get(obj).then(function (fullModel) {

@@ -311,7 +311,7 @@ Scenario('[C7358] Remove contact picture', async function ({ I, search, contacts
 
     dialogs.waitForVisible();
     I.waitForVisible('.edit-picture');
-    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'e2e/media/placeholder/800x600.png');
+    I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600.png');
     dialogs.clickButton('Apply');
     I.waitForDetached('.modal-dialog');
 
@@ -364,7 +364,7 @@ Scenario('[C7363] Add files to a contact', async function ({ I, contacts }) {
     I.clickToolbar('Edit');
     I.waitForVisible('[data-app-name="io.ox/contacts/edit"]');
     I.waitForEnabled({ css: 'input.file-input[type="file"]' });
-    I.attachFile({ css: 'input.file-input[type="file"]' }, 'e2e/media/files/generic/contact_picture.png');
+    I.attachFile({ css: 'input.file-input[type="file"]' }, 'media/files/generic/contact_picture.png');
     I.waitForElement(locate().withText('contact_picture.png').inside('.attachment'));
     I.click('Save');
     I.waitForInvisible('[data-app-name="io.ox/contacts/edit"]');

@@ -141,7 +141,7 @@ Scenario('[C288516] Export data from contacts module', async ({ I, settings }) =
 // runs up to 6 minutes
 Scenario('[C288517] Export data from files module', async ({ I, settings }) =>{
     const infostoreFolderID = await I.grabDefaultFolder('infostore');
-    await I.haveFile(infostoreFolderID, 'e2e/media/files/generic/testdocument.rtf');
+    await I.haveFile(infostoreFolderID, 'media/files/generic/testdocument.rtf');
 
     I.login(['app=io.ox/settings', 'folder=virtual/settings/personaldata']);
     settings.waitForApp();

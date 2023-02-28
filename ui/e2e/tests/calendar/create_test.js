@@ -99,9 +99,7 @@ Scenario('Fullday appointments', async ({ I, calendar }) => {
     calendar.deleteAppointment();
 });
 
-//See Bug 64409
-// TODO: shaky (element (~Start time) is not in DOM or there is no element(~Start time) with value "9:52 AM" after 30 sec)
-Scenario('Enter start time and press enter key', ({ I, calendar }) => {
+Scenario('[C64409] Enter start time and press enter key', ({ I, calendar }) => {
     I.login('app=io.ox/calendar');
 
     calendar.waitForApp();
@@ -761,7 +759,6 @@ Scenario('[C274484] Attendees can change the appointment', async ({ I, users, ca
     I.waitForText(timestamp, 5, SIDEPOPUP);
 });
 
-// TODO: shaky, failed at least once (10 runs on 2019-11-28)
 Scenario('[C7428] Create appointment with internal participants', async ({ I, users, calendar }) => {
     const subject = 'Einkaufen';
     const location = 'Wursttheke';
@@ -1182,8 +1179,8 @@ Scenario('[C7413] Create appointment with an attachment', async ({ I, calendar }
     I.say('Add attachments');
     I.pressKey('Pagedown');
     I.see('Attachments', '.io-ox-calendar-edit-window');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.odt');
-    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'e2e/media/files/generic/testdocument.rtf');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.odt');
+    I.attachFile('.io-ox-calendar-edit-window input[type="file"]', 'media/files/generic/testdocument.rtf');
     I.click('Create', '.io-ox-calendar-edit-window');
     I.waitForDetached('.io-ox-calendar-edit-window', 5);
 
