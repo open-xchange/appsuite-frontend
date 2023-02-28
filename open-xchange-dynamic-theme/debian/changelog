@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.6.3-52) stable; urgency=medium
+
+  * Build for patch 2023-02-23 (6217)
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Wed, 22 Feb 2023 10:08:06 +0000
+
 open-xchange-dynamic-theme (7.6.3-51) stable; urgency=medium
 
   * Build for patch 2022-10-14 (6182)
