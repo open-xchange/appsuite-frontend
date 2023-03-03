@@ -41,7 +41,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('Create appointment with all fields', async ({ I, calendar, dialogs }) => {
+Scenario('Create appointment with all fields @smoketest', async ({ I, calendar, dialogs }) => {
     const data = { subject: 'test title', location: 'test location' };
 
     I.login('app=io.ox/calendar');
