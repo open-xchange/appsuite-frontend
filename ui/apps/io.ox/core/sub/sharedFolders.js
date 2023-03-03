@@ -287,7 +287,7 @@ define('io.ox/core/sub/sharedFolders', [
                 dialog: dialog
             }).render().$el;
 
-            if (sectionTitle === 'private') {
+            if (/^(private|hidden)$/.test(sectionTitle)) {
                 newItem.find('[name="subscribed"]').prop('disabled', true).attr('data-state', 'manual');
             }
             elements.push(newItem);
