@@ -196,6 +196,7 @@ run single test:
     - kubectl annotate namespace $NAMESPACE janitor/ttl=7d
 
 deploy helm chart:
+  needs: ["build ui docker image"]
   extends: .auto-deploy-helm-chart
   rules:
     - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
