@@ -191,6 +191,10 @@ run single test:
     - if: '$CI_COMMIT_REF_NAME =~ /^e2e\//'
       when: always
 
+.customize-k8s:
+  script:
+    - kubectl annotate namespace $NAMESPACE janitor/ttl=7d
+
 deploy helm chart:
   extends: .auto-deploy-helm-chart
   rules:
