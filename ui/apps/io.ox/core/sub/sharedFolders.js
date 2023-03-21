@@ -231,15 +231,13 @@ define('io.ox/core/sub/sharedFolders', [
                     var el = this.$el.closest('.list-group-item'),
                         input = el.find('input[name="' + properties + '"]');
 
-                    if (!this.model.get('subscribed')) {
-                        input.prop('disabled', true).attr('data-state', 'manual');
-                        el.addClass('disabled');
-                    } else {
-                        input.prop('disabled', false);
-                        el.removeClass('disabled');
-                    }
+                    el.toggleClass('disabled', !this.model.get('subscribed'));
 
                     this.$input.prop('checked', this.setValue());
+
+                    // sync checkbox is protected? We are finished
+                    if (preparedValueFalse.protected === 'true') return;
+                    input.prop('disabled', !this.model.get('subscribed')).attr('data-state', this.model.get('subscribed') ? '' : 'manual');
                 }
             });
 
@@ -289,7 +287,7 @@ define('io.ox/core/sub/sharedFolders', [
                 dialog: dialog
             }).render().$el;
 
-            if (sectionTitle === 'private') {
+            if (/^(private|hidden)$/.test(sectionTitle)) {
                 newItem.find('[name="subscribed"]').prop('disabled', true).attr('data-state', 'manual');
             }
             elements.push(newItem);

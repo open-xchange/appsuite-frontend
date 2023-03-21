@@ -805,13 +805,11 @@ define('io.ox/calendar/edit/extensions', [
                 toggle = $('<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').text(gt('Appointment color')),
                 menu = $('<ul class="dropdown-menu">'),
                 pickedColor = $('<span class="picked-color" aria-hidden="true">'),
-                pickedColorLabel = $('<span class="sr-only">');
+                pickedColorLabel = $('<span class="sr-only">'),
+                showAsDisabled = !calendarUtil.hasOrganizerRights(this.model) && !isNew;
 
             // Check if user neither has organizer rights nor is creating a new appointment where no right information are available
-            if (!calendarUtil.hasOrganizerRights(this.model) && !isNew) {
-                toggle.addClass('disabled').prop('disabled', true);
-                picker.model.set('color', calendarUtil.DISABLED_COLOR);
-            }
+            if (showAsDisabled) toggle.addClass('disabled').prop('disabled', true);
 
             var dropdown = new Dropdown({
                 smart: true,
@@ -832,12 +830,12 @@ define('io.ox/calendar/edit/extensions', [
 
             function onChangeColor() {
                 var colorLabel = gt('none');
-                if (!self.model.get('color')) {
-                    // try to get the folder color
-                    var color = calendarUtil.getFolderColor(folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model());
-
+                if (!self.model.get('color') || showAsDisabled) {
+                    var color;
                     // Check if user neither has organizer rights nor is creating a new appointment where no right information are available
-                    if (!calendarUtil.hasOrganizerRights(self.model) && !isNew) color = calendarUtil.DISABLED_COLOR;
+                    if (showAsDisabled) color = calendarUtil.DISABLED_COLOR;
+                    // try to get the folder color
+                    else color = calendarUtil.getFolderColor(folderAPI.pool.getModel(self.model.get('folder')) || new Backbone.Model());
 
                     pickedColor.css({ 'background-color': color });
                     if (_(calendarUtil.colors).findWhere({ value: color })) colorLabel = _(calendarUtil.colors).findWhere({ value: color }).label;

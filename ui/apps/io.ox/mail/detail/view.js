@@ -486,6 +486,11 @@ define('io.ox/mail/detail/view', [
                         .on('resize', { iframe: $(this) }, onWindowResize)
                         .on('dragover drop', false)
                         .trigger('resize');
+                    // safety trigger. Some browsers have issues with css rules in iframes and are slow when applying them. make sure we have the right height
+                    _.delay(function () {
+                        resizing = 0;
+                        $(this.contentWindow).trigger('resize');
+                    }.bind(this), 100);
                 }.bind(this));
             });
 
