@@ -26,8 +26,9 @@ define('io.ox/wizards/upsell', [
     'io.ox/backbone/mini-views',
     'settings!plugins/upsell',
     'gettext!io.ox/wizards',
+    'static/3rd.party/purify.min.js',
     'less!io.ox/wizards/upsell'
-], function (ext, wizards, miniViews, settings, gt) {
+], function (ext, wizards, miniViews, settings, gt, DOMPurify) {
 
     'use strict';
 
@@ -146,7 +147,7 @@ define('io.ox/wizards/upsell', [
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<div class="upsell-product-name">').text(p.get('title')),
                         $('<span class="upsell-product-price">').text(printPrice(p)),
-                        $('<div class="upsell-product-description">').html(p.get('description'))
+                        $('<div class="upsell-product-description">').html(DOMPurify.sanitize(p.get('description')))
                     )
                 );
             });
