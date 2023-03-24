@@ -132,17 +132,6 @@ define('io.ox/onboarding/main', [
         },
         'android': {
             'mailsync': function () { return new views.MailSyncView({ userData: config.userData, expanded: true, config: getMailConfig() }); },
-            'mailapp': function () {
-                if (_.device('android')) {
-                    return new views.MobileDownloadView({
-                        app: settings.get('android/mailapp'),
-                        title: util.productNames.mail,
-                        storeIcon: getStoreIcon('android'),
-                        iconClass: 'mailapp playstore'
-                    });
-                }
-                return new views.DownloadQrView({ title: util.titles.android.mailapp, url: settings.get('android/mailapp/url') });
-            },
             'driveapp': function () {
                 if (_.device('android')) {
                     return new views.MobileDownloadView({
@@ -212,17 +201,6 @@ define('io.ox/onboarding/main', [
                     description: gt('Please scan this code with your phone\'s camera:'),
                     config: getMailConfig()
                 });
-            },
-            'mailapp': function () {
-                if (_.device('ios')) {
-                    return new views.MobileDownloadView({
-                        app: settings.get('ios/mailapp'),
-                        title: util.productNames.mail,
-                        storeIcon: getStoreIcon('ios'),
-                        iconClass: 'mailapp appstore'
-                    });
-                }
-                return new views.DownloadQrView({ title: util.titles.ios.mailapp, url: settings.get('ios/mailapp/url') });
             },
             'driveapp': function () {
                 if (_.device('ios')) {
