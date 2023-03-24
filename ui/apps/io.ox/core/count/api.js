@@ -79,7 +79,13 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
         api.queue = api.queue.slice(chunkSize, api.queue.length);
         api.trigger('sync', data);
         if (url === 'debug') return console.debug('count', data);
-        $.post({ url: url, contentType: 'application/json', data: JSON.stringify(data), timeout: 10000 }).fail(function (xhr) {
+        $.post({
+            url: url,
+            dataType: 'text', // disable automatic content-type detection
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            timeout: 10000 }
+        ).fail(function (xhr) {
             // stop in case of 403 Forbidden (which means we have an invalid API token)
             if (xhr.status === 403) {
                 api.trigger('forbidden');
@@ -94,7 +100,6 @@ define('io.ox/core/count/api', ['io.ox/core/uuids', 'settings!io.ox/core'], func
             // reschedule data for retransmission in case switchboard is not available
             api.trigger('fail', data);
             [].push.apply(api.queue, data);
-
         });
     }
 
