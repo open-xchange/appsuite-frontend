@@ -129,20 +129,12 @@ Scenario('Generate QR codes for app downloads', async ({ I, topbar, mail }) => {
         I.waitForText('Which device do you want to configure?');
         I.waitForText('Android');
         I.click('Android');
-        I.waitForText('Email with OX Mail');
-        I.click('Email with OX Mail');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
         I.waitForText('OX Drive');
         I.click('OX Drive');
         I.waitForVisible('.qrcode');
         I.click('.progress-step-one');
         I.waitForText('iPhone or iPad');
         I.click('iPhone or iPad');
-        I.waitForText('Email with OX Mail');
-        I.click('Email with OX Mail');
-        I.waitForVisible('.qrcode');
-        I.click('Back');
         I.waitForText('OX Drive');
         I.click('OX Drive');
         I.waitForVisible('.qrcode');
@@ -156,20 +148,14 @@ Scenario('Change product names and check for different platforms', async ({ I, t
         users.create()
     ]);
 
-    const [user1, user2, user3] = users;
-    const customMailApp = 'Awesome Mail App';
+    const [user1] = users;
     const customDriveApp = 'Awesome Drive App';
 
-    const checkAppNames = async (mailAppName, driveAppName) => {
+    const checkAppNames = async (driveAppName) => {
         await within('.wizard-container', () => {
             I.waitForText('Which device do you want to configure?');
             I.waitForText('Android');
             I.click('Android');
-            I.waitForText(mailAppName);
-            I.click(mailAppName);
-            I.waitForText(mailAppName, 5, '.progress-steps');
-            I.waitForText(`To install ${mailAppName}`);
-            I.click('Back');
             I.waitForText(driveAppName);
             I.click(driveAppName);
             I.waitForText(driveAppName, 5, '.progress-steps');
@@ -177,49 +163,23 @@ Scenario('Change product names and check for different platforms', async ({ I, t
             I.click('.progress-step-one');
             I.waitForText('iPhone');
             I.click('iPhone');
-            I.waitForText(mailAppName);
             I.waitForText(driveAppName);
         });
     };
-    await session('Alice', async () => {
-        await I.haveSetting({
-            'io.ox/onboarding': {
-                'productNames/mail': customMailApp
-            }
-        }, { user: user1 });
-
-        I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user1 });
-        mail.waitForApp();
-        topbar.connectDeviceWizard();
-        await checkAppNames(customMailApp, 'OX Drive');
-    });
 
     await session('Bob', async () => {
         await I.haveSetting({
             'io.ox/onboarding': {
                 'productNames/drive': customDriveApp
             }
-        }, { user: user2 });
+        }, { user: user1 });
 
-        I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user2 });
+        I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user1 });
         mail.waitForApp();
         topbar.connectDeviceWizard();
-        await checkAppNames('OX Mail', customDriveApp);
+        await checkAppNames(customDriveApp);
     });
 
-    await session('Charlie', async () => {
-        await I.haveSetting({
-            'io.ox/onboarding': {
-                'productNames/mail': customMailApp,
-                'productNames/drive': customDriveApp
-            }
-        }, { user: user3 });
-
-        I.login('app=io.ox/mail&cap=mobile_mail_app', { user: user3 });
-        mail.waitForApp();
-        topbar.connectDeviceWizard();
-        await checkAppNames(customMailApp, customDriveApp);
-    });
 });
 
 Scenario('Connect your device wizards supports upsell', async ({ I, topbar, mail, users }) => {

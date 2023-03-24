@@ -127,14 +127,6 @@ define('io.ox/onboarding/util', [
             'cap': 'webmail'
         },
         {
-            //#. 1$s product name of mail application, e.g. OX Mail
-            'title': gt('Email with %1$s', productNames.mail),
-            'icon': 'fa-envelope-o',
-            'app': 'mailapp',
-            'platform': 'android',
-            'cap': 'mobile_mail_app'
-        },
-        {
             'title': gt('Address Book'),
             'icon': 'fa-users',
             'app': 'addressbook',
@@ -205,14 +197,6 @@ define('io.ox/onboarding/util', [
             'app': 'mailsync',
             'platform': 'ios',
             'cap': 'webmail'
-        },
-        {
-            //#. 1$s product name of mail application, e.g. OX Mail
-            'title': gt('Email with %1$s', productNames.mail),
-            'icon': 'fa-envelope-o',
-            'app': 'mailapp',
-            'platform': 'ios',
-            'cap': 'mobile_mail_app'
         },
         {
             'title': gt('Address Book'),
