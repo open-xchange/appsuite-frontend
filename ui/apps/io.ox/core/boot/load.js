@@ -33,8 +33,9 @@ define('io.ox/core/boot/load', [
     'io.ox/core/manifests',
     'io.ox/core/sockets',
     'io.ox/core/locale',
+    'static/3rd.party/purify.min.js',
     'io.ox/core/moment'
-], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale) {
+], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale, DOMPurify) {
 
     'use strict';
 
@@ -169,7 +170,14 @@ define('io.ox/core/boot/load', [
     function loadUserTheme() {
         // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
         _.device.cache = {};
-        var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
+
+        // see OXUIB-2282
+        function getSanitizedTheme(theme) {
+            if (theme === DOMPurify.sanitize(theme)) return theme;
+            return 'default';
+        }
+
+        var theme = getSanitizedTheme(_.url.hash('theme') || coreSettings.get('theme')),
             loadTheme = themes.set(theme);
 
         util.debug('Load UI > require [core/main] and set theme', theme);
