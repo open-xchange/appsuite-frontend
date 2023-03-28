@@ -247,10 +247,11 @@ define('io.ox/core/main/logout', [
     });
 
     function getLogoutLocation() {
-        var location = capabilities.has('guest') ?
-            settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
-            settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
-        return _.url.vars(location || ox.logoutLocation || '');
+        // sanitize, see OXUIB-2285
+        var location = capabilities.has('guest')
+            ? settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
+            : settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
+        return _.url.vars(encodeURIComponent(location || ox.logoutLocation || ''));
 
     }
 

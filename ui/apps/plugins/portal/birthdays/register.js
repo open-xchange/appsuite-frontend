@@ -164,8 +164,9 @@ define('plugins/portal/birthdays/register', [
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
+                // sanitize, see OXUIB-2285
                 // add buy-a-gift
-                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'));
+                var url = $.trim(_.sanitize.option(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/')));
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
