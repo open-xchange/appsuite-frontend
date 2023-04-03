@@ -683,6 +683,15 @@ define('io.ox/mail/compose/extensions', [
 
                 list = view.collection.filter(function (a) {
                     return a.get('disp') === 'attachment';
+                }).filter(function (a) {
+                    if (a.get('contentDisposition') === 'INLINE') {
+                        var space = baton.model.get('id'),
+                            url = mailAPI.getUrl(_.extend({ space: space }, a), 'view').replace('?', '\\?'),
+                            containsServerReplacedURL = new RegExp('<img[^>]*src="' + url + '"[^>]*>').test(baton.model.get('content')),
+                            containsClientReplacedURL = new RegExp('<img[^>]*src="[^"]*' + a.get('id') + '"[^>]*>').test(baton.model.get('content'));
+                        return containsServerReplacedURL || containsClientReplacedURL;
+                    }
+                    return true;
                 })
 
                 .map(function (model) {
