@@ -169,6 +169,7 @@ remove allure report:
       changes:
         - ui/**/*
       when: manual
+      allow_failure: true
 
 run single test:
   extends: run e2e tests
