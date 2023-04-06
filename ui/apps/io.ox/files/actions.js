@@ -610,7 +610,7 @@ define('io.ox/files/actions', [
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
             // anonymous guests just have one folder so no valid target folder (see bug 42621)
-            capabilities: '!guest && !anonymous',
+            capabilities: '!anonymous',
             // different collection checks for move and copy
             collection: (type === 'move' ? 'some && delete' : 'some && items && read'),
             matches: function (baton) {
