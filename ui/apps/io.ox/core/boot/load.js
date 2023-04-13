@@ -33,9 +33,8 @@ define('io.ox/core/boot/load', [
     'io.ox/core/manifests',
     'io.ox/core/sockets',
     'io.ox/core/locale',
-    'static/3rd.party/purify.min.js',
     'io.ox/core/moment'
-], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale, DOMPurify) {
+], function (themes, gettext, ext, config, util, session, http, coreSettings, capabilities, manifests, socket, locale) {
 
     'use strict';
 
@@ -173,7 +172,7 @@ define('io.ox/core/boot/load', [
 
         // see OXUIB-2282
         function getSanitizedTheme(theme) {
-            if (theme === DOMPurify.sanitize(theme)) return theme;
+            if (theme === _.sanitize.option(theme)) return theme;
             return 'default';
         }
 
