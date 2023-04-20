@@ -34,6 +34,11 @@ define('plugins/portal/oxdriveclients/register', [
     // workaround, see OXUIB-795
     linkTo['Mac OS'] = linkTo.MacOS || linkTo['Mac OS'];
 
+    // sanitize, see OXUIB-2285
+    for (var os in linkTo) {
+        if (encodeURI(linkTo[os]) !== linkTo[os]) linkTo[os] = undefined;
+    }
+
     function getPlatform() {
         var isAndroid = _.device('android'),
             isIOS = _.device('ios'),
