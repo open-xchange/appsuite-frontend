@@ -32,6 +32,11 @@ define('plugins/portal/reddit/register', [
     var drawPlugin = function (index) {
         if (!index) index = 100;
 
+        // sanitize, see OXUIB-2285
+        function sanitizeUriComponent(key) {
+            return encodeURIComponent(key) === key ? key : '';
+        }
+
         var mp = new MediaPlayer(),
             apiUrl = {
                 'new': 'http://www.reddit.com/r/##subreddit##/new.json?sort=new',
@@ -45,7 +50,7 @@ define('plugins/portal/reddit/register', [
                 mp.addFeed({
                     id: 'reddit-' + v.subreddit.replace(/[^a-z0-9]/g, '_') + '-' + v.mode.replace(/[^a-z0-9]/g, '_'),
                     description: v.subreddit,
-                    url: apiUrl[v.mode].split('##subreddit##').join(v.subreddit) + '&jsonp=',
+                    url: apiUrl[v.mode].split('##subreddit##').join(sanitizeUriComponent(v.subreddit)) + '&jsonp=',
                     index: index++
                 });
             }

@@ -30,7 +30,12 @@ define('plugins/portal/tumblr/register', [
 
     'use strict';
 
-    var API_KEY = settings.get('apiKeys/tumblr'),
+    // sanitize, see OXUIB-2285
+    function sanitizeKey(key) {
+        return _.sanitize.option(key) === key ? key : undefined;
+    }
+
+    var API_KEY = sanitizeKey(settings.get('apiKeys/tumblr')),
         apiUrl = ['https://api.tumblr.com/v2/blog/', '/posts/?api_key=' + API_KEY + '&notes_info=&filter='];
 
     if (_.isUndefined(API_KEY)) {
