@@ -219,7 +219,7 @@ module.exports.config = {
         }, 500);
     },
     plugins: {
-        allure: { enabled: true },
+        allure: { enabled: true, require: '@codeceptjs/allure-legacy' },
         testrail: {
             require: './plugins/testrail',
             host: process.env.TESTRAIL_HOST || 'https://testrail.local',
