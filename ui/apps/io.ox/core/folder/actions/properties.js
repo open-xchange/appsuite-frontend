@@ -121,7 +121,7 @@ define('io.ox/core/folder/actions/properties', [
                 var usedForSync = model.get('used_for_sync') || {};
                 if (!usedForSync || usedForSync.value !== 'true') return false;
                 // for tasks also check if the capability is enabled and the folder is private
-            } else if (!(model.get('module') === 'tasks' && capabilities.has('caldav') && this.model.is('private'))) return false;
+            } else if (!(model.get('module') === 'tasks' && capabilities.has('caldav') && model.is('private'))) return false;
 
             return model.get('com.openexchange.caldav.url');
         },
@@ -136,7 +136,7 @@ define('io.ox/core/folder/actions/properties', [
         requires: function (model) {
             var provider = model.get('com.openexchange.calendar.provider');
             if (provider !== 'ical') return false;
-            var config = this.model.get('com.openexchange.calendar.config');
+            var config = model.get('com.openexchange.calendar.config');
             if (!config || !config.uri) return false;
             return true;
         },
