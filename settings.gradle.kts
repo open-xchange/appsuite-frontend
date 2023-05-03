@@ -3,7 +3,7 @@ rootProject.name = "frontend-core"
 pluginManagement {
     repositories {
         maven {
-            url = uri("https://artifactory.open-xchange.com/artifactory/libs-release")
+            url = uri("https://artifactory.production.cloud.oxoe.io/artifactory/libs-release")
         }
     }
 }

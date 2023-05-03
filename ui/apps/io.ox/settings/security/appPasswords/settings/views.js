@@ -82,7 +82,7 @@ define('io.ox/settings/security/appPasswords/settings/views', [
                         lastDevice = gt('Mobile Mail');
                         break;
                     default:
-                        lastDevice = this.model.get('LastDevice');
+                        lastDevice = _.escape(this.model.get('LastDevice'));
                 }
             }
             var div = $('<div class = "appLoginDiv">')

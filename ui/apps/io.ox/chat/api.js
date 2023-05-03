@@ -76,7 +76,7 @@ define('io.ox/chat/api', [
         return getJwtFromSwitchboard().then(function (jwt) {
             // fallback to _.extend for backwards compatibility, hello IE11
             var ObjectAssign = Object.assign || _.extend;
-            opt = ObjectAssign({ headers: { 'Authorization': 'Bearer ' + jwt } }, opt);
+            opt = ObjectAssign({ headers: { 'Authorization': 'Bearer ' + jwt }, dataType: 'json' }, opt);
             return $.ajax(opt);
         }).catch(function (res) {
             if (res.status !== 401) throw res;

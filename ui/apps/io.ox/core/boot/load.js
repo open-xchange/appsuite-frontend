@@ -169,7 +169,14 @@ define('io.ox/core/boot/load', [
     function loadUserTheme() {
         // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
         _.device.cache = {};
-        var theme = _.sanitize.option(_.url.hash('theme')) || coreSettings.get('theme') || 'default',
+
+        // see OXUIB-2282
+        function getSanitizedTheme(theme) {
+            if (theme === _.sanitize.option(theme)) return theme;
+            return 'default';
+        }
+
+        var theme = getSanitizedTheme(_.url.hash('theme') || coreSettings.get('theme')),
             loadTheme = themes.set(theme);
 
         util.debug('Load UI > require [core/main] and set theme', theme);

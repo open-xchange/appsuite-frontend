@@ -112,7 +112,7 @@ define('io.ox/files/actions', [
                 var extendedFileList =  _.map(fileList, function (file) {
                     // normalize with drag&drop: for a file upload, the filepicker does not provide a path,
                     // in contrast to the more modern drag & drop behavior were a path is always provided
-                    var normalizedPath = file.webkitRelativePath === '' ? String('/' + file.name) : file.webkitRelativePath;
+                    var normalizedPath = file.webkitRelativePath || String('/' + file.name);
                     return {
                         file: file,
                         fullPath: normalizedPath,
