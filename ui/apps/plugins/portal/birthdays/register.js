@@ -126,7 +126,8 @@ define('plugins/portal/birthdays/register',
                 );
             } else {
                 // add buy-a-gift
-                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/')),
+                // sanitize, see OXUIB-2285
+                var url = $.trim(_.sanitize.option(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/'))),
                     now = new date.Local();
                 if (url !== 'none' && url !== '') {
                     $list.append(

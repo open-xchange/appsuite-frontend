@@ -31,17 +31,19 @@ define('io.ox/core/relogin', [
     }
 
     function getLoginLocation() {
+        // sanitize, see OXUIB-2285
         var location = capabilities.has('guest') ?
             settings.get('customLocations/guestLogin') || ox.serverConfig.guestLoginLocation :
             settings.get('customLocations/login') || ox.serverConfig.loginLocation;
-        return _.url.vars(location || ox.loginLocation || '');
+        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
     }
 
     function getLogoutLocation() {
+        // sanitize, see OXUIB-2285
         var location = capabilities.has('guest') ?
             settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
             settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
-        return _.url.vars(location || ox.logoutLocation || '');
+        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
     }
 
     function gotoLoginLocation() {
