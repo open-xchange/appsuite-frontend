@@ -354,7 +354,13 @@ $(window).load(function () {
                     }
                 }
 
-                var theme = _.sanitize.option(_.url.hash('theme')) || settings.get('theme') || 'default';
+                // see OXUIB-2282
+                function getSanitizedTheme(theme) {
+                    if (theme === _.sanitize.option(theme)) return theme;
+                    return 'default';
+                }
+
+                var theme = getSanitizedTheme(_.url.hash('theme') || settings.get('theme'));
 
                 $('html').toggleClass('high-contrast', settings.get('highcontrast', false));
 
