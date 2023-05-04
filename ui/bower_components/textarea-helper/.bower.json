@@ -1,0 +1,14 @@
+{
+  "name": "textarea-helper",
+  "homepage": "https://github.com/Codecademy/textarea-helper",
+  "version": "0.3.1",
+  "_release": "0.3.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.3.1",
+    "commit": "9a2e263f3004be5dd5849d7ddfdd1112bd2ac503"
+  },
+  "_source": "https://github.com/Codecademy/textarea-helper.git",
+  "_target": "0.3.1",
+  "_originalSource": "https://github.com/Codecademy/textarea-helper.git"
+}
