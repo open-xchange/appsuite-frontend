@@ -1,0 +1,33 @@
+{
+  "name": "bootstrap-accessibility-plugin",
+  "homepage": "https://github.com/paypal/bootstrap-accessibility-plugin",
+  "authors": [
+    "PayPal Accessibility Team"
+  ],
+  "description": "A plugin that provides accessibility features for Bootstrap3 components",
+  "main": "plugins/js/bootstrap-accessibility.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "Bootstrap",
+    "Accessibility"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "_release": "5d5908aebd",
+  "_resolution": {
+    "type": "commit",
+    "commit": "5d5908aebdd26963b7f5322ae5b623a83b912862"
+  },
+  "_source": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git",
+  "_target": "5d5908aebdd26963b7f5322ae5b623a83b912862",
+  "_originalSource": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git"
+}

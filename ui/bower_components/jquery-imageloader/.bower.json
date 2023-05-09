@@ -1,0 +1,12 @@
+{
+  "name": "jquery-imageloader",
+  "homepage": "https://github.com/beatak/jquery-imageloader",
+  "_release": "3e616c19ad",
+  "_resolution": {
+    "type": "commit",
+    "commit": "3e616c19ad3bb32e4e62679a348f8b18a80790d2"
+  },
+  "_source": "https://github.com/beatak/jquery-imageloader.git",
+  "_target": "3e616c19ad3bb32e4e62679a348f8b18a80790d2",
+  "_originalSource": "https://github.com/beatak/jquery-imageloader.git"
+}

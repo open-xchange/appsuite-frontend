@@ -1,0 +1,20 @@
+{
+  "name": "bootstrap-datepicker",
+  "main": [
+    "js/bootstrap-datepicker.js",
+    "css/datepicker.css"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.1",
+    "bootstrap": ">=3.0 <4.0"
+  },
+  "homepage": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker",
+  "_release": "1cba48a2b7",
+  "_resolution": {
+    "type": "commit",
+    "commit": "1cba48a2b711d4288f641a5a15e6508b8e3b2bde"
+  },
+  "_source": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git",
+  "_target": "1cba48a2b711d4288f641a5a15e6508b8e3b2bde",
+  "_originalSource": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git"
+}
