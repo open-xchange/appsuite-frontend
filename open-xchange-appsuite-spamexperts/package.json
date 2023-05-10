@@ -11,10 +11,10 @@
   "dependencies": {
   },
   "optionalDependencies": {
-    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
     "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.4.1"
   },
   "devDependencies": {
+    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
     "grunt-contrib-connect": "^0.7.1"
