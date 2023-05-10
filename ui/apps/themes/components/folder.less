@@ -351,6 +351,8 @@
 .smartphone {
     .folder-tree {
 
+        &.visible-selection-smartphone { padding-left: 0; }
+
         padding-left: 20px;
 
         // custom mobile values
@@ -361,9 +363,6 @@
 
         .folder {
             line-height: @mobile-line-height;
-        }
-        .folder-icon {
-            float: left;
         }
         .folder-node {
             height: @mobile-height;
@@ -386,7 +385,6 @@
                 font-size: @mobile-label-size;
             }
             .folder-label > div {
-                max-width: 320px;
                 .ellipsis();
             }
             .folder-buttons {

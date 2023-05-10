@@ -40,52 +40,6 @@ define('io.ox/files/filepicker', [
 
     'use strict';
 
-    // local module code - shared with or used by every `FilePicker` instance -----------------------------------
-
-    //      - user story DOCS-589 :: User can see image preview in file picker.
-    //      - for later use, in case of providing previews for every file/mine-type and not only for image types as with #DOCS-589.
-    //
-    // /**
-    //  *
-    //  * @constructor PreviewStore
-    //  *  sub typed key value store for caching jquerified preview images
-    //  *  in order to not always having them requested via the backend.
-    //  */
-    // function PreviewStore() {
-    //     var
-    //         store       = this,
-    //         registry    = {},
-    //
-    //       //$emptyImage = $('<img src="" width="auto" height="auto" />'),
-    //
-    //         isPreviewImage = function ($previewImage) {
-    //             return ($previewImage && $previewImage[0] && $previewImage[0].nodeName && ($previewImage[0].nodeName.toLowerCase() === 'img'));
-    //         };
-    //
-    //     store.get = function (previewType, previewKey) {
-    //         var
-    //             type = registry[String(previewType)],
-    //             $img = (type && type[String(previewKey)]);
-    //
-    //         return ($img && $img.clone()); // return a clone of the stored jquerified image object.
-    //     };
-    //     store.put = function (previewType, previewKey, $previewImage) {
-    //         var $img;
-    //         if (previewType && previewKey && isPreviewImage($previewImage = $($previewImage))) {
-    //
-    //             $img = $previewImage;
-    //
-    //             previewType = String(previewType);
-    //             previewKey = String(previewKey);
-    //
-    //             var type = registry[previewType] || (registry[previewType] = {});
-    //
-    //             type[previewKey] = $previewImage.clone(); // store a clone of the valid jquerified image object.
-    //         }
-    //         return $img; // return same valid jquerified image reference.
-    //     };
-    // }
-
     function isFileTypeDoc(mimeType, fileModel) {
         return filesAPI.Model.prototype.isWordprocessing.call((fileModel || null), mimeType);
     }
@@ -124,26 +78,6 @@ define('io.ox/files/filepicker', [
     function isFileTypeImage(mimeType, fileModel) {
         return filesAPI.Model.prototype.isImage.call((fileModel || null), mimeType);
     }
-
-    // function isMimetypeImage(mimetype) {
-    //     return REGX__MIMETYPE_IMAGE.test(mimetype);
-    // }
-
-    // function getImageType(fileObject) {
-    //     var imageType;
-    //
-    //     return ({
-    //         gif: 'GIF',
-    //         png: 'PNG',
-    //         jpg: 'JPG',
-    //         jpeg: 'JPG',
-    //         unknown: 'Unknown Image Type'
-    //     }[
-    //         ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.file_mimetype)) && imageType[1]) ||
-    //         ((imageType = REGX__IMAGE_EXTENSION.exec(fileObject.filetype)) && imageType[1]) ||
-    //         'unknown'
-    //     ]);
-    // }
 
     var
         //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/),
@@ -210,7 +144,6 @@ define('io.ox/files/filepicker', [
     }
 
     function appendFileInfoToPreviewPane($previewPane, $fileinfo, model) {
-        //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject, fileModel] : ', $previewPane, $fileinfo, fileObject, fileModel);
 
         if (model) {
             var
@@ -241,7 +174,6 @@ define('io.ox/files/filepicker', [
      * @param fileObject
      */
     function renderImagePreview($previewPane, fileObject, fileModel/*, previewStore*/) {
-        //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
@@ -262,7 +194,6 @@ define('io.ox/files/filepicker', [
     }
 
     function renderNonImagePreview($previewPane, fileObject, fileModel/*, previewStore*/) {
-        //console.log('+++ renderNonImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
@@ -320,10 +251,8 @@ define('io.ox/files/filepicker', [
             navbar = $('<div class="mobile-navbar">'),
             pcContainer = $('<div class="picker-pc-container">'),
             pages = new PageController({ appname: 'filepicker', toolbar: toolbar, navbar: navbar, container: pcContainer, disableAnimations: true }),
-            containerHeight = $(window).height() - 200,
             hub = _.extend({}, Backbone.Events),
             currentFolder,
-            //previewStore = new PreviewStore(),
             $previewPane,
             isAllowPreviewPane = !_.device('smartphone');
 
@@ -343,6 +272,16 @@ define('io.ox/files/filepicker', [
                 extension: options.extension
             })
         });
+
+        if (_.device('smartphone')) {
+            var folderTree = pages.getPage('folderTree');
+            folderTree.on('pageshow', function () {
+                var modalWidth = folderTree.width();
+                folderTree.find('.folder-label').each(function setLabelWidth(index, label) {
+                    label.style.maxWidth = modalWidth - label.offsetLeft - 20 + 'px';
+                });
+            });
+        }
 
         pages.setBackbuttonRules({
             'fileList': 'folderTree'
@@ -393,7 +332,6 @@ define('io.ox/files/filepicker', [
         // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
         //
         function handleFileSelectionChange(event, fileId, fileObject) {
-            //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
             if (!$previewPane) {
                 $previewPane = createPreviewPane(filesPane);
             }
@@ -406,8 +344,6 @@ define('io.ox/files/filepicker', [
                 renderImagePreview($previewPane, fileObject, fileModel/*, previewStore*/);
             } else {
                 renderNonImagePreview($previewPane, fileObject, fileModel/*, previewStore*/);
-
-                //deletePreviewPane();
             }
         }
 
@@ -609,6 +545,8 @@ define('io.ox/files/filepicker', [
         }
 
         function onResize() {
+            if (_.device('smartphone')) return;
+
             var height = $(window).height() - 200;
             pcContainer.css('height', height)
                 .find('.modal-body').css('height', height);
@@ -619,7 +557,7 @@ define('io.ox/files/filepicker', [
             addClass: 'zero-padding add-infostore-file',
             button: options.primaryButtonText,
             alternativeButton: options.uploadButton ? options.uploadButtonText : null,
-            height: _.device('desktop') ? 350 : containerHeight,
+            height: _.device('smartphone') ? undefined : 350,
             module: 'infostore',
             persistent: 'folderpopup/filepicker',
             root: '9',
@@ -687,7 +625,7 @@ define('io.ox/files/filepicker', [
                     pages.getPage('fileList').append(filesPane);
                     pages.getPage('folderTree').append(dialog.$body);
 
-                    pcContainer.css('height', containerHeight + 'px');
+                    dialog.el.classList.remove('maximize');
                     pcContainer.append(navbar, toolbar);
                     pcContainer.insertAfter(dialog.$header, container);
                     $(window).on('resize', onResize);

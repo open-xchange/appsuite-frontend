@@ -180,7 +180,7 @@
         height: 350px;
 
         .io-ox-fileselection {
-             li.file {
+            li.file {
                 font-size: @font-size-touch;
                 outline: 0;
                 line-height: 40px;
@@ -339,7 +339,7 @@
 
                 .name {
                     .ellipsis();
-                     padding-left: 0.5em;
+                    padding-left: 0.5em;
                 }
 
                 &.selected {
@@ -351,7 +351,7 @@
             }
 
             .touch &.multiselect li.file {
-                 .checkbox-inline {
+                .checkbox-inline {
                     display: block;
                     height: 20px;
                     background: transparent;
@@ -573,5 +573,6 @@
     .folder-tree {
         width: 33%;
         min-width: inherit;
+        .smartphone & { width: 100%; }
     }
 }
