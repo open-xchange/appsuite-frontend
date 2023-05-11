@@ -127,7 +127,7 @@ define('plugins/portal/birthdays/register',
             } else {
                 // Don't use customLocations if users can overwrite it. Those are only supposed to be changed by administrators, in which case they can be trusted
                 // add buy-a-gift
-                var url = !settings.isConfigurable('customLocations/buy-a-gift') && settings.get('customLocations/buy-a-gift') || 'http://www.amazon.com/';
+                var url = !settings.isConfigurable('customLocations/buy-a-gift') && settings.get('customLocations/buy-a-gift') || 'http://www.amazon.com/',
                     now = new date.Local();
                 if (url !== 'none' && url !== '') {
                     $list.append(
