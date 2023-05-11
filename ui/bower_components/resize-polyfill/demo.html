@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Resize-polyfill</title>
+  <style type="text/css">
+    .demo-no-polyfill-wrapper textarea,
+    .resize-polyfill-wrapper textarea {
+      border: 1px solid #BFBFBF;
+      resize: both;
+      min-height: 50px;
+    }
+    textarea {
+      padding: 0;
+    }
+  </style>
+
+</head>
+<body>
+  <div style="float:left; width:33.3%">
+    <h3>Before</h3>
+    <div class="demo-no-polyfill-wrapper">
+     <textarea>I am TEXTAREA.</textarea>
+    </div>
+
+    <br />
+
+    <div class="demo-no-polyfill-wrapper"
+         style="width: 250px; height: 60px; background: #B00B1E; color: #FFF">
+     I am DIV
+    </div>
+  </div>
+
+  <div style="float:left; width:33.3%">
+    <h3>After</h3>
+<!-- ******* -->
+<!-- 1. Make sure textarea have parent element! -->
+<!-- ******* -->
+    <div>
+     <textarea class="resize-me">I am TEXTAREA.</textarea>
+    </div>
+
+    <br />
+
+    <div class="resize-me"
+         style="width: 250px; height: 60px; background: #B00B1E; color: #FFF">
+     I am DIV
+    </div>
+  </div>
+
+  <div style="float:left; width:33.3%">
+    <h3>After (force=true)</h3>
+    <div class="force-polyfill">
+     <textarea>I am TEXTAREA.</textarea>
+    </div>
+
+    <br />
+
+    <div class="force-polyfill"
+         style="width: 250px; height: 60px; background: #B00B1E; color: #FFF">
+     I am DIV
+    </div>
+  </div>
+
+
+  <div id="info" style="background:#AFA; clear: both; border-top: 20px solid #FFF; text-align:center;">
+    Resize handler added: 
+  </div>
+<!-- ******* -->
+<!-- 2. attach lib/polyfill-resize.js -->
+<!-- ******* -->
+  <script type="text/javascript" src="lib/polyfill-resize.js"></script>
+  <script>
+// *******
+// 3. call two following lines. Pick any selector/className instead of .resize-me
+// *******
+    var el = document.getElementsByClassName('resize-me');
+    resizeHandlerPolyfill(el);
+// end.
+
+
+    // for demo purposes
+    el = document.getElementsByClassName('force-polyfill');
+    resizeHandlerPolyfill(el, true);
+    document.getElementById('info').innerHTML += resizeHandlerPolyfill(false);
+  </script>
+</body>
+</html>

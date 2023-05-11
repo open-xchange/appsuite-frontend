@@ -1,0 +1,38 @@
+{
+  "name": "BigScreen",
+  "description": "A simple library for using the JavaScript Fullscreen API.",
+  "main": "bigscreen.min.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "demo",
+    "node_modules",
+    "test"
+  ],
+  "keywords": [
+    "fullscreen",
+    "video"
+  ],
+  "authors": [
+    "Brad Dougherty <me@brad.is> (https://brad.is)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bdougherty/BigScreen.git"
+  },
+  "homepage": "https://github.com/bdougherty/BigScreen",
+  "version": "2.0.5",
+  "_release": "2.0.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.5",
+    "commit": "cff46bbe26029a473961e08dc9929fe20d846164"
+  },
+  "_source": "https://github.com/bdougherty/BigScreen.git",
+  "_target": "2.0.5",
+  "_originalSource": "bigscreen"
+}

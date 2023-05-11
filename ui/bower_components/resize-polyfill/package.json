@@ -1,0 +1,19 @@
+{
+  "name": "resize-polyfill",
+  "version": "1.1.1",
+  "description": "Polyfill for Textarea resize handler for IE, Edge, Safari, etc",
+  "main": "lib/polyfill-resize.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CezaryDanielNowak/css-resize-polyfill.git"
+  },
+  "author": "Cezary Daniel Nowak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CezaryDanielNowak/css-resize-polyfill/issues"
+  },
+  "homepage": "https://github.com/CezaryDanielNowak/css-resize-polyfill#readme"
+}

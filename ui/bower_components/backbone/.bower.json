@@ -1,0 +1,30 @@
+{
+  "name": "backbone",
+  "main": "backbone.js",
+  "dependencies": {
+    "underscore": ">=1.8.3"
+  },
+  "ignore": [
+    "docs",
+    "examples",
+    "test",
+    "*.yml",
+    "*.html",
+    "*.ico",
+    "*.md",
+    "CNAME",
+    ".*",
+    "karma.*",
+    "component.json",
+    "package.json"
+  ],
+  "homepage": "https://github.com/jashkenas/backbone",
+  "_release": "fda02db428",
+  "_resolution": {
+    "type": "commit",
+    "commit": "fda02db428c464badb12010c990622ee91f28a48"
+  },
+  "_source": "https://github.com/jashkenas/backbone.git",
+  "_target": "fda02db428c464badb12010c990622ee91f28a48",
+  "_originalSource": "https://github.com/jashkenas/backbone.git"
+}

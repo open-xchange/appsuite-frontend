@@ -1,0 +1,24 @@
+{
+  "name": "pdfjs-dist",
+  "version": "2.3.200",
+  "main": [
+    "build/pdf.js",
+    "build/pdf.worker.js"
+  ],
+  "ignore": [],
+  "keywords": [
+    "Mozilla",
+    "pdf",
+    "pdf.js"
+  ],
+  "homepage": "https://github.com/mozilla/pdfjs-dist",
+  "_release": "2.3.200",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.3.200",
+    "commit": "10e9edd1bf61dd812a861f00434850d8b77ec8dd"
+  },
+  "_source": "https://github.com/mozilla/pdfjs-dist.git",
+  "_target": "2.3.200",
+  "_originalSource": "pdfjs-dist"
+}
