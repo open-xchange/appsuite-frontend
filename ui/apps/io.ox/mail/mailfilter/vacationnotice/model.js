@@ -79,10 +79,9 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             return attr;
         },
 
-        parseTest: function (attr, test) {
+        parseTest: function parseTest(attr, test) {
 
             if (test.id === 'allof') {
-                var parseTest = this.parseTest;
                 _(test.tests).each(function (test) { parseTest(attr, test); });
             } else if (test.id === 'currentdate') {
                 // we do have just start or end date
