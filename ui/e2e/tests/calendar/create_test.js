@@ -1848,21 +1848,21 @@ Scenario('[C7426] Create appointment with internal and external participants', a
 
 });
 
-Scenario('[OXUIB-182] Choose correct start time on time change dates', function ({ I, calendar }) {
+Scenario('[OXUIB-182] Choose correct start time on time change dates', async function ({ I, calendar }) {
     // last sunday of march
     const summerTimeChangeDate = moment().month('March').endOf('month').startOf('week');
     // last sunday of October
     const winterTimeChangeDate = moment().month('October').endOf('month').startOf('week');
 
-    const startTimeslot = locate('.page.current .day .timeslot').at(21);
-    const endTimeslot = locate('.page.current .day .timeslot').at(24);
+    const startTimeslot = locate('.page.current .day .timeslot').at(21).as('start timeslot');
+    const endTimeslot = locate('.page.current .day .timeslot').at(24).as('end timeslot');
 
-    const changeDate = (date) => {
-        //click the right month in date-picker
+    const changeDate = date => {
+        // click the right month in date-picker
         I.click('.switch-mode');
         I.click(locate('.month.switch-mode')
-                .inside('.date-picker')
-                .withAttr({ 'data-value': `${date.month()}` })
+     .inside('.date-picker')
+     .withAttr({ 'data-value': `${date.month()}` })
         );
         I.waitForText(date.format('MMMM'), 5, '.switch-mode');
         I.click(`.date[aria-label^="${date.format('M/DD')}"]`, '.date-picker');
@@ -1870,27 +1870,33 @@ Scenario('[OXUIB-182] Choose correct start time on time change dates', function 
         I.waitForVisible(startTimeslot);
         I.waitForEnabled(startTimeslot);
         I.doubleClick(startTimeslot);
-        verifyTime('10:00 AM', '11:00 AM');
+
+        I.waitForVisible('~Start time');
+        I.waitForVisible('~End time');
+        // verify the correct start time
+        I.seeInField('~Start time', '10:00 AM');
+        I.seeInField('~End time', '11:00 AM');
+        I.click('Discard');
+        I.waitForDetached(calendar.editWindow);
+
         I.waitForVisible(startTimeslot);
         I.waitForEnabled(startTimeslot);
         I.waitForVisible(endTimeslot);
-        I.wait(0.2);
-        I.scrollTo(endTimeslot);
+        I.wait(0.2); // This is needed for scrollTo to work
+        I.scrollTo(locate('.page.current .day .timeslot').at(19));
         I.dragAndDrop(startTimeslot, endTimeslot);
-        verifyTime('10:00 AM', '12:00 PM');
-    };
 
-    const verifyTime = (startTime, endTime) => {
-        I.waitForVisible(calendar.locators.starttime);
-        I.waitForVisible(calendar.locators.endtime);
+        I.waitForVisible('~Start time');
+        I.waitForVisible('~End time');
         // verify the correct start time
-        I.seeInField(calendar.locators.starttime, startTime);
-        I.seeInField(calendar.locators.endtime, endTime);
+        I.seeInField('~Start time', '10:00 AM');
+        I.seeInField('~End time', '12:00 PM');
         I.click('Discard');
-        I.waitForDetached('.io-ox-calendar-edit-window');
+        I.waitForDetached(calendar.editWindow);
     };
 
-    I.login('app=io.ox/calendar&perspective=week:week');
+    await I.haveSetting('io.ox/calendar//layout', 'week:week');
+    I.login('app=io.ox/calendar');
 
     calendar.waitForApp();
     changeDate(summerTimeChangeDate);
