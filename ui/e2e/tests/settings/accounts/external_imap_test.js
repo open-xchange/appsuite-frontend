@@ -51,8 +51,6 @@ Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, dial
     I.fillField('Your mail address', externalUser.get('primaryEmail'));
     I.fillField('Your password', externalUser.userdata.password);
     dialogs.clickButton('Add');
-    I.retry(10).waitForText('Ignore Warnings', 12);
-    dialogs.clickButton('Ignore Warnings');
     dialogs.clickButton('Configure manually');
 
     dialogs.waitForVisible();
@@ -66,9 +64,9 @@ Scenario('[C7836] Add custom mail account (IMAP)', async ({ I, users, mail, dial
     I.wait(1);
     dialogs.clickButton('Save');
 
+    I.waitToHide('.modal-dialog');
     I.retry(10).waitForText('Ignore Warnings', 12);
     dialogs.clickButton('Ignore Warnings');
-    I.waitToHide('.modal-dialog');
     mail.newMail();
     I.fillField('To', externalUser.userdata.primaryEmail);
     I.fillField('Subject', 'Howdee yihaa!');
