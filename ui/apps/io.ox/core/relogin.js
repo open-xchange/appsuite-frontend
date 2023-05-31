@@ -114,7 +114,11 @@ define('io.ox/core/relogin', [
         var location = capabilities.has('guest')
             ? settings.get('customLocations/guestLogin') || ox.serverConfig.guestLoginLocation
             : settings.get('customLocations/login') || ox.serverConfig.loginLocation;
-        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
+
+        if (location && location.match(/^https:\/\/.*$|^\/.*$/)) {
+            return _.url.vars(location);
+        }
+        return _.url.vars(ox.loginLocation || '');
     }
 
     function getLogoutLocation() {
@@ -122,7 +126,11 @@ define('io.ox/core/relogin', [
         var location = capabilities.has('guest')
             ? settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
             : settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
-        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
+
+        if (location && location.match(/^https:\/\/.*$|^\/.*$/)) {
+            return _.url.vars(location);
+        }
+        return _.url.vars(ox.logoutLocation || '');
     }
 
     function gotoLoginLocation() {

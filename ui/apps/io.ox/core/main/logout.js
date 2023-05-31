@@ -252,7 +252,10 @@ define('io.ox/core/main/logout', [
             ? settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
             : settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
 
-        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
+        if (location && location.match(/^https:\/\/.*$|^\/.*$/)) {
+            return _.url.vars(location);
+        }
+        return _.url.vars(ox.logoutLocation || '');
     }
 
     function needsReload(target) {
