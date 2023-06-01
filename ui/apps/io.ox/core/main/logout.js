@@ -247,12 +247,15 @@ define('io.ox/core/main/logout', [
     });
 
     function getLogoutLocation() {
-        // sanitize, see OXUIB-2285
+        // Don't use customLocations if users can overwrite it. Those are only supposed to be changed by administrators, in which case they can be trusted
         var location = capabilities.has('guest')
-            ? settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
-            : settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
+            ? !settings.isConfigurable('customLocations/guestLogout') && settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
+            : !settings.isConfigurable('customLocations/logout') && settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
 
-        return _.url.vars(encodeURIComponent(location) === location ? location : ox.logoutLocation || '');
+        if (location && location.match(/^https:\/\/.*$|^\/.*$/)) {
+            return _.url.vars(location);
+        }
+        return _.url.vars(ox.logoutLocation || '');
     }
 
     function needsReload(target) {
