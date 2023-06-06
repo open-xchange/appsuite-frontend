@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-guidedtours",
-  "version": "7.6.3-52",
+  "version": "7.6.3-53",
   "dependencies": {
   },
   "optionalDependencies": {
@@ -8,8 +8,9 @@
     "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.5.1"
   },
   "devDependencies": {
+    "grunt-contrib-connect": "^0.7.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
-    "grunt-contrib-connect": "^0.7.1"
+    "shared-grunt-config": "git+https://github.com/open-xchange-frontend/shared-grunt-config.git#eb8e922128547c6b2f947e83b1bd6e084029c6f2"
   }
 }

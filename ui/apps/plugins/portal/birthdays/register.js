@@ -125,13 +125,14 @@ define('plugins/portal/birthdays/register',
                     $('<div>').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
+                // Don't use customLocations if users can overwrite it. Those are only supposed to be changed by administrators, in which case they can be trusted
                 // add buy-a-gift
-                var url = $.trim(settings.get('customLocations/buy-a-gift', 'http://www.amazon.com/')),
+                var url = !settings.isConfigurable('customLocations/buy-a-gift') && settings.get('customLocations/buy-a-gift') || 'http://www.amazon.com/',
                     now = new date.Local();
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
-                            $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
+                            $('<a>', { href: url.trim(), target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
                             $.txt(' '),
                             $('<i class="fa fa-external-link">')
                         )

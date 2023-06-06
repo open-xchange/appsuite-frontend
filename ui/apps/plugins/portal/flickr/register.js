@@ -22,7 +22,12 @@ define('plugins/portal/flickr/register',
 
     'use strict';
 
-    var API_KEY = settings.get('apiKeys/flickr'),
+    // sanitize, see OXUIB-2285
+    function sanitizeKey(key) {
+        return _.sanitize.option(key) === key ? key : undefined;
+    }
+
+    var API_KEY = sanitizeKey(settings.get('apiKeys/flickr')),
         // order of elements is the crucial factor of presenting the image in the sidepopups
         imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'],
         sizes = 'l m n o q s sq t z'.split(' '),

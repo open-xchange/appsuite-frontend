@@ -1,0 +1,17 @@
+{
+  "name": "BigScreen",
+  "version": "2.0.4",
+  "main": "bigscreen.js",
+  "description": "A simple library for using the JavaScript Fullscreen API.",
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/bdougherty/BigScreen",
+  "_release": "2.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.4",
+    "commit": "15950a3da3a24bd9ca2024c55d5ea67731d0a7ce"
+  },
+  "_source": "https://github.com/bdougherty/BigScreen.git",
+  "_target": "2.0.4",
+  "_originalSource": "bigscreen"
+}

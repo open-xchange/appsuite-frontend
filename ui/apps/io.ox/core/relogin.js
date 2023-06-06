@@ -31,16 +31,14 @@ define('io.ox/core/relogin', [
     }
 
     function getLoginLocation() {
-        var location = capabilities.has('guest') ?
-            settings.get('customLocations/guestLogin') || ox.serverConfig.guestLoginLocation :
-            settings.get('customLocations/login') || ox.serverConfig.loginLocation;
+        // Don't use customLocations if users can overwrite it. Those are only supposed to be changed by administrators, in which case they can be trusted
+        var location = capabilities.has('guest') ? !settings.isConfigurable('customLocations/guestLogin') && settings.get('customLocations/guestLogin') || ox.serverConfig.guestLoginLocation : !settings.isConfigurable('customLocations/login') && settings.get('customLocations/login') || ox.serverConfig.loginLocation;
         return _.url.vars(location || ox.loginLocation || '');
     }
 
     function getLogoutLocation() {
-        var location = capabilities.has('guest') ?
-            settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation :
-            settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
+        // Don't use customLocations if users can overwrite it. Those are only supposed to be changed by administrators, in which case they can be trusted
+        var location = capabilities.has('guest') ? !settings.isConfigurable('customLocations/guestLogout') && settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation : !settings.isConfigurable('customLocations/logout') && settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
         return _.url.vars(location || ox.logoutLocation || '');
     }
 
