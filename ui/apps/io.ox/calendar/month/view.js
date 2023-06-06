@@ -382,8 +382,12 @@ define('io.ox/calendar/month/view', [
             if (!startMoment.isSame(endMoment)) endMoment.subtract(1, 'millisecond');
 
             if (_.device('smartphone')) {
-                var node = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty();
-                return this.renderAppointmentIndicator(node);
+                do {
+                    var node = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el).empty();
+                    this.renderAppointmentIndicator(node);
+                    startMoment.add(1, 'day').startOf('day');
+                } while (startMoment.isSameOrBefore(endMoment));
+                return;
             }
 
             // draw across multiple days
