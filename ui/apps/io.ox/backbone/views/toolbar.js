@@ -139,6 +139,7 @@ define('io.ox/backbone/views/toolbar', [
             } else {
                 util.addBackdrop($dropdown);
             }
+            $dropdown.on('dispose', function () { $ul.remove(); });
 
             // metrics support
             $ul.on('click', 'a', this.track.bind(this));

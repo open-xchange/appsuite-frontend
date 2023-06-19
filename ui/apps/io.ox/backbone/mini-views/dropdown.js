@@ -485,6 +485,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         dispose: function () {
             // remove overlay if dropdown code is removed
             if (this.$overlay) this.$overlay.remove();
+            if (this.$ul) this.$ul.remove();
             AbstractView.prototype.dispose.call(this, arguments);
         }
 
