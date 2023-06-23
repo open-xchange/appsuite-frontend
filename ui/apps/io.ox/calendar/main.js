@@ -524,6 +524,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 node.on('pagebeforeshow', function () {
+                    var perspectives = ['week:day', 'week:workweek', 'week:week', 'month', 'list', 'year'];
                     _.url.hash('perspective', item);
                     if (!views[item]) return;
                     views[item].trigger('show');
@@ -531,6 +532,7 @@ define('io.ox/calendar/main', [
                     // trigger change perspective so toolbar is redrawn (no more lost today button)
                     app.getWindow().trigger('change:perspective', views[item]);
                     if (_.device('!smartphone')) settings.set('viewView', item);
+                    if (_.find(views, function (view, viewName) { return perspectives.indexOf(item) > perspectives.indexOf(viewName); })) views[item].refresh(false);
                 });
                 node.on('pageshow', function () {
                     // update the indicator arrows after the page is visible, otherwise we get wrong calculations
