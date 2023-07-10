@@ -329,7 +329,7 @@ define('io.ox/mail/compose/sharing', [
                 })
                 .on('cancel', function () {
                     // revert to previous attributes
-                    self.sharingModel.clear().set(previousAttr);
+                    self.sharingModel.clear({ silent: true }).set(previousAttr);
                 })
                 .open();
             });
