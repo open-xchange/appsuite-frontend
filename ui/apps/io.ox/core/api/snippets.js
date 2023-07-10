@@ -66,7 +66,9 @@ define('io.ox/core/api/snippets', [
         return http.GET({
             module: 'snippet',
             params: {
-                action: 'all'
+                action: 'all',
+                // Make sure we only get signatures in 7.x.x, to prevent issues with OXUI-1284 (text templates)
+                type: 'signature'
             },
             // See: bug 62222, OXUIB-823
             timeout: opt.timeout
