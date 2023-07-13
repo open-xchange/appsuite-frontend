@@ -84,6 +84,9 @@ define('io.ox/mail/sanitizer', [
                 currentNode.innerHTML = '';
                 break;
             case 'STYLE':
+                // Fix wrong style node comments. Inside style nodes the language is css, still some mails use html <!-- --> syntax to comment out css
+                currentNode.innerHTML = currentNode.innerHTML.replaceAll('<!--', '/*').replaceAll('-->', '*/');
+
                 // add a class namespace to style nodes so that they overrule our stylesheets without !important
                 // if not for IE support we could just use a namespacerule here oh joy. Instead we have to parse every rule...
                 if (currentNode.sheet && currentNode.sheet.cssRules) {
