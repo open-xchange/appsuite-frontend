@@ -1,0 +1,134 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>5.8.2. Adding a condition</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.8. Using E-Mail Filters">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.8.1. Creating new rules">
+<link rel="next" href="ox.appsuite.user.sect.email.mailfilter.action.html" title="5.8.3. Adding an action">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.create.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.mailfilter.action.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+		<span class="phrase">E-Mail</span>
+		
+		
+		
+	</h1>
+<h2 class="sr-only">Using E-Mail Filters</h2>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.condition">
+<div class="titlepage"><div><div><h3 class="title">5.8.2. Adding a condition</h3></div></div></div>
+<a class="indexterm" name="id-1.6.15.11.2"></a><a class="indexterm" name="id-1.6.15.11.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.condition">A condition helps to define the E-Mail messages to which the action should be applied. You can set one or multiple conditions.</p>
+<div class="task" id="ox.appsuite.user.task.email.mailfilter.condition">
+<p class="title">How to add a condition in the <span class="guilabel"><strong>Create new rule</strong></span> window:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p role="presentation">Click on <span class="guibutton"><strong>Add condition</strong></span>. Make a selection from the drop-down menu. Note the following: <ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">In order to use an E-Mail part that is not contained in the list, select <span class="guibutton"><strong>Header</strong></span>. Enter a header entry in the Name input field. You can read an E-Mail's header by displaying the source data.</p></li>
+<li class="listitem"><p role="presentation">In order to consider the <span class="guibutton"><strong>BCC</strong></span> part, select <span class="guibutton"><strong>Envelope - To</strong></span>. Envelope includes the E-Mail recipients entered in the <span class="guibutton"><strong>To</strong></span>, <span class="guibutton"><strong>CC</strong></span> or <span class="guibutton"><strong>BCC</strong></span> field.</p></li>
+<li class="listitem"><p role="presentation">In order to use a part of the E-Mail content in the condition, select <span class="guibutton"><strong>Content</strong></span>.</p></li>
+<li class="listitem"><p role="presentation">In order to use the date of receipt in the condition, select <span class="guibutton"><strong>Current Date</strong></span>.</p></li>
+</ul>
+						</p></li>
+<li class="step"><p role="presentation">Select a criterion from the drop-down next to the E-Mail part. Enter an argument in the input field.</p></li>
+<li class="step">
+<p role="presentation">You can add additional conditions. You can then specify whether one or all conditions are to be met in order to process the actions. To do so, click on <span class="guibutton"><strong>Apply rule if all conditions are met</strong></span>.</p>
+<p role="presentation">As soon as there is a condition, you can create nested conditions. To do so, click on <span class="guibutton"><strong>Add condition</strong></span>. Select <span class="guibutton"><strong>Nested condition</strong></span>.</p>
+<p role="presentation">To delete a condition, click the <span class="guibutton"><strong>Delete</strong></span> icon <span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.email.mailfilter.condition.delete"><img src="../../images/appsuite_user_icon_trash.png"></span> next to the condition.</p>
+</li>
+</ol></div>
+</div>
+<p id="ox.appsuite.user.example.email.mailfilter.condition">Example: The following details are used for the condition: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">Email part "Subject"</p></li>
+<li class="listitem"><p role="presentation">Criterion "Is exactly"</p></li>
+<li class="listitem"><p role="presentation">Argument "minutes"</p></li>
+</ul>
+<p> In this case it would be verified whether the subject of an email exactly matches the argument "minutes". Further examples of how to filter email messages using the subject: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">Criterion: "contains"</p>
+<p role="presentation">The condition is met if the subject contains the characters in the argument.</p>
+<p role="presentation">Example: The argument is "minutes". </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem"><p role="presentation">The condition is also met for the subject "meeting minutes".</p></li>
+</ul>
+<p role="presentation">
+						</p>
+</li>
+<li class="listitem">
+<p role="presentation">Criterion: "matches"</p>
+<p role="presentation">The condition is met if the subject exactly matches the characters in the argument. The character string can contain wildcards.</p>
+<p role="presentation">Example: The argument is "minutes*". The "*" character is a wildcard for any characters. </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem"><p role="presentation">The condition is not met for the subject "meeting minutes".</p></li>
+</ul>
+<p role="presentation">
+						</p>
+</li>
+<li class="listitem">
+<p role="presentation">Criterion: "Regex"</p>
+<p role="presentation">The condition is met if the subject contains the characters provided by the regular expression in the argument. Regular expressions allow complex requests. More information can be found on respective sites on the Web. The following, very simple regular expression should give an insight to the topic.</p>
+<p role="presentation">Example: The argument is "organi(z|s)ation". The expression "(z|s)" stands for either the "z" or the "s" character. </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem"><p role="presentation">The condition is also met for the subject "organisation".</p></li>
+<li class="listitem"><p role="presentation">The condition is not met for the subject "Organic".</p></li>
+</ul>
+<p role="presentation">
+						</p>
+</li>
+</ul>
+<p>
+			</p>
+<p id="ox.appsuite.user.related.email.mailfilter.condition">
+				</p>
+<p class="title">Superordinated action:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+							<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Creating new rules</a>
+						</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+							<a class="xref" href="ox.appsuite.user.sect.guard.email.incoming.html">Encrypting incoming E-Mail messages by using a filter rule</a>
+						</p></li>
+</ul>
+<p>
+				</p>
+<p class="title">Related topics:</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+							<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.action.html">Adding an action</a>
+						</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">
+							<a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the email source</a>
+						</p></li>
+</ul>
+<p>
+			</p>
+<p id="ox.appsuite.user.parent.email.mailfilter.condition">Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.manage.source.html">Showing the email source</a>
+			</p>
+</div>
+          </div>
+        </body>
+</html>
