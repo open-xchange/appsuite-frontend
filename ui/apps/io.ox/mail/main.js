@@ -664,6 +664,9 @@ define('io.ox/mail/main', [
                 // no thread support in drafts/sent folders. This breaks caching (Sent folders get incomplete threads). See OXUIB-853
                 if (accountAPI.is('sent|drafts', folder)) options.thread = false;
 
+                // defense against broken settings, unsupported folders should always return thread=false
+                if (app.folder.get() === 'virtual/all-unseen') options.thread = false;
+
                 // ignore unavailable sort options
                 var isUnavailable =
                     (!settings.get('features/flag/color') && options.sort === 102) ||
@@ -731,6 +734,8 @@ define('io.ox/mail/main', [
         'isThreaded': function (app) {
             app.isThreaded = function () {
                 if (app.listView.loader.mode === 'search') return false;
+                // defense against broken settings, unsupported folders should always return thread=false
+                if (app.folder.get() === 'virtual/all-unseen') return false;
                 return app.props.get('thread');
             };
         },
