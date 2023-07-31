@@ -143,12 +143,6 @@ define('io.ox/portal/widgets', [
                     userWidget: true,
                     index: 4
                 },
-                twitter_0: {
-                    plugin: 'plugins/portal/twitter/register',
-                    color: 'default',
-                    userWidget: true,
-                    index: 5
-                },
                 linkedin_0: {
                     plugin: 'plugins/portal/linkedin/register',
                     color: 'default',

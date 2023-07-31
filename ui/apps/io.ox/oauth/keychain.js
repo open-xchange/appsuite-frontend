@@ -168,7 +168,7 @@ define.async('io.ox/oauth/keychain', [
             newAccount.enableScopes(scopes);
 
             return newAccount.save().then(function (account) {
-                // needed for some portal plugins (xing, twitter, for example)
+                // needed for some portal plugins (xing, etc.)
                 self.trigger('create', account);
                 ox.trigger('refresh-portal');
                 notifications.yell('success', gt('Account added successfully'));
