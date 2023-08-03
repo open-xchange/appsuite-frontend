@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>12.2.3. How can external recipients read an encrypted E-Mail?</title>
+<link rel="stylesheet" type="text/css" href="../../../help/help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="User Guide">
+<link rel="up" href="ox.appsuite.user.sect.guard.email.html" title="12.2. Encrypting E-Mail Conversations">
+<link rel="prev" href="ox.appsuite.user.sect.guard.email.send.html" title="12.2.2. Sending encrypted E-Mail messages">
+<link rel="next" href="ox.appsuite.user.sect.guard.email.incoming.html" title="12.2.4. Encrypting incoming E-Mail messages by using a filter rule">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
+      <link rel="stylesheet" type="text/css" href="../../../help/bootstrap.min.css"​/> 
+      <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="../../../help/jquery.min.js"></script> 
+    
+       <script src="../../../help/bootstrap.min.js"></script> 
+    </head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.guard.email.send.html">Prev</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.guard.email.incoming.html">Next</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">Encrypting Data with <span class="phrase">Guard</span>
+</h1>
+<h2 class="sr-only">Encrypting E-Mail Conversations</h2>
+<div class="sect2" id="ox.appsuite.user.sect.guard.email.external">
+<div class="titlepage"><div><div><h3 class="title">12.2.3. How can external recipients read an encrypted E-Mail?</h3></div></div></div>
+<p id="ox.appsuite.user.concept.guard.email.external">You can also send encrypted E-Mail messages to external recipients who are not groupware users. When adding an external recipient, Guard checks whether a public key is available for this E-Mail address. Depending on the result, Guard uses different procedures for sending the encrypted E-Mail: </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p role="presentation">If there is a public key for the recipient: </p>
+<ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p role="presentation">The message will be sent encrypted using this key. The recipient can read the message with his/her private key.</p></li></ul>
+</li>
+<li class="listitem">
+<p role="presentation">If there is no public key for the recipient: </p>
+<ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p role="presentation">If the external user already has a guest account, he/she will receive an email with the link to the login page of his/her guest account. When having logged in, he/she can read the encrypted email on the guest page. He/she can send an encrypted reply from this page.</p></li>
+<li class="listitem">
+<p role="presentation">If there is no guest account, a guest account will be created. The external recipient will receive an email with a link to a guest page and an automatically created password. The user logs in to the guest page. Then he/she can create an own password.</p>
+<p role="presentation">Depending on the configuration, the automatically created password and the link to the guest page will be sent in separate emails.</p>
+</li>
+<li class="listitem"><p role="presentation">Depending on the configuration, guest account email messages will be deleted from the server after a specific number of days.</p></li>
+</ul>
+<p role="presentation"> The external recipient can send an encrypted reply to the encrypted email. It is not possible to add additional recipients though.</p>
+</li>
+</ul>
+<p>
+        </p>
+<p class="title">Related topics:</p>
+<ul class="itemizedlist" id="ox.appsuite.user.related.guard.email.external" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.read.html">Reading encrypted E-Mail messages</a>
+            </p>
+<p role="presentation">
+              <a class="xref" href="ox.appsuite.user.sect.guard.email.send.html">Sending encrypted E-Mail messages</a>
+            </p>
+</li></ul>
+<p>
+      </p>
+<p id="ox.appsuite.user.parent.guard.email.external">Parent topic: <a class="xref" href="ox.appsuite.user.sect.guard.email.html">Encrypting E-Mail Conversations</a></p>
+</div>
+          </div>
+        </body>
+</html>
