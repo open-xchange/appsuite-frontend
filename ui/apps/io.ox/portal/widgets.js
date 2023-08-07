@@ -106,6 +106,23 @@ define('io.ox/portal/widgets', [
             widgets[id].draggable = draggable;
         });
 
+        // Upgrade or downgrade widgets from previous/later versions
+        // this is needed, as we don't have migrations for the settings
+        var needsSave = false;
+        for (var widget in widgets) {
+            var manifestManager = require('io.ox/core/manifests').manager;
+            var plugin = widgets[widget].plugin;
+            if (!plugin || manifestManager.plugins[plugin]) continue;
+            if (manifestManager.plugins[plugin.replace('plugins/portal/', 'pe/portal/plugins/')]) {
+                widgets[widget].plugin = plugin.replace('plugins/portal/', 'pe/portal/plugins/');
+                needsSave = true;
+            } else if (manifestManager.plugins[plugin.replace('pe/portal/plugins/', 'plugins/portal/')]) {
+                widgets[widget].plugin = plugin.replace('pe/portal/plugins/', 'plugins/portal/');
+                needsSave = true;
+            }
+        }
+        if (needsSave) settings.set('widgets/user', widgets).save();
+
         // no widgets configured (first start)
         if (_.isEmpty(widgets) && !userWidgets) {
 
