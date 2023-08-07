@@ -533,6 +533,8 @@ define('io.ox/mail/compose/view', [
                 baton.config.set('desktop', false);
                 baton.config.set('toolbar', false);
             });
+            // prevent sync of final `setContent('')` in `clean`
+            view.on('clean:before', function () { view.stopListening(baton.editor, 'change', view.syncMail); });
         }
     }, {
         id: 'content',
@@ -812,6 +814,7 @@ define('io.ox/mail/compose/view', [
             // clean up editors
             for (var id in this.editorHash) {
                 this.editorHash[id].then(function (editor) {
+                    this.trigger('clean:before');
                     editor.setContent('');
                     editor.destroy();
                 });
