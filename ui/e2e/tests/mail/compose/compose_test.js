@@ -83,10 +83,15 @@ Scenario('Compose and discard with/without prompts', async function ({ I, users,
 
     // workflow 4: Compose with subject, then discard
     mail.newMail();
-    I.fillField('Subject', 'Test');
+    I.fillField('Subject', 'Test deleted draft');
     I.click('~Close', '.io-ox-mail-compose-window');
     I.see('This email has not been sent. You can save the draft to work on later.');
     I.click('Delete draft');
+    I.selectFolder('Trash');
+    I.triggerRefresh();
+    I.waitForNetworkTraffic();
+    I.dontSee('Test deleted draft');
+    I.selectFolder('Inbox');
 
     // workflow 5: Compose with to, subject, some text, then send
     mail.newMail();
