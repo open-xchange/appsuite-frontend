@@ -633,9 +633,10 @@ define('io.ox/calendar/main', [
         },
 
         'listview-checkboxes': function (app) {
-            if (_.device('smartphone')) app.listControl.$el.toggleClass('toolbar-top-visible', app.props.get('checkboxes'));
-            else app.listControl.$('.select-all').toggle(app.props.get('checkboxes'));
+            app.listControl.$el.toggleClass('toolbar-top-visible', app.props.get('checkboxes'));
             app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+            if (_.device('smartphone')) return;
+            app.listControl.$('.select-all').toggle(app.props.get('checkboxes'));
         },
 
         /*
@@ -692,15 +693,11 @@ define('io.ox/calendar/main', [
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-            function toggleTopbar(value) {
-                app.listControl.$el.toggleClass('toolbar-top-visible', value);
-            }
+
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
-                if (value) toggleTopbar(true);
-                app.listControl.$('.select-all').toggle('value', function () {
-                    if (!value) toggleTopbar(false);
-                });
+                app.listControl.$('.select-all').toggle(value);
+                app.listControl.$el.toggleClass('toolbar-top-visible', value);
             });
         },
 
