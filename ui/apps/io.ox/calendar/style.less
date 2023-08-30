@@ -45,21 +45,23 @@
         }
 
         .info {
+            display: flex;
+            align-items: baseline;
             height: 1.875rem;
             text-align: left;
             font-size: 20px;
             color: #333;
             text-decoration: none;
-            line-height: 34px;
             max-width: none;
             padding: 0;
             border: 0;
-            vertical-align: baseline;
             margin-right: 16px;
             margin-left: 2px;
 
             .ellipsis();
             font-weight: bold;
+
+            .cw { margin-left: 4px; }
         }
         .info[disabled] {
             opacity: 1;
