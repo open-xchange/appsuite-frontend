@@ -423,7 +423,7 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         columns: columns,
                         right_hand_limit: limit,
                         sort: 607,
-                        order: 'desc'
+                        order: 'asc'
                     },
                     data: data
                 });
