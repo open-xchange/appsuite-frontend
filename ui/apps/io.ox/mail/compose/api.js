@@ -211,8 +211,9 @@ define('io.ox/mail/compose/api', [
             return http.GET({ url: 'api/mail/compose' });
         },
 
-        remove: function (id, data) {
-            return http.DELETE({ url: 'api/mail/compose/' + id, params: { clientToken: TOKEN } }).then(function (data) {
+        remove: function (id, data, parameters) {
+            var params = _.extend({ clientToken: TOKEN, harddelete: true }, parameters || {});
+            return http.DELETE({ url: 'api/mail/compose/' + id, params: params }).then(function (data) {
                 if (data && data.success) return data;
                 return $.Deferred().reject({ action: 'remove', error: 'unknown', id: id });
             }).done(function (result) {
