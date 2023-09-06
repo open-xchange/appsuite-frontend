@@ -26,8 +26,9 @@ define.async('io.ox/switchboard/api', [
     'io.ox/contacts/util',
     'io.ox/core/http',
     'io.ox/core/uuids',
-    'settings!io.ox/switchboard'
-], function (io, userAPI, contactsUtil, http, uuids, settings) {
+    'settings!io.ox/switchboard',
+    'io.ox/core/capabilities'
+], function (io, userAPI, contactsUtil, http, uuids, settings, capabilities) {
 
     'use strict';
 
@@ -113,7 +114,7 @@ define.async('io.ox/switchboard/api', [
     };
 
     function reconnect() {
-
+        if (!capabilities.has('switchboard')) return $.Deferred().resolve();
         return http.GET({
             module: 'token',
             params: { action: 'acquireToken' }
@@ -198,7 +199,7 @@ define.async('io.ox/switchboard/api', [
     function resetRetryDelay() {
         retryDelay = 4;
     }
-
+    if (!capabilities.has('switchboard')) return $.Deferred().resolve(api);
     return userAPI.get().then(function (data) {
         api.userId = api.trim(data.email1 || data.email2 || data.email3);
         // create a simple heuristic based on domain
