@@ -58,7 +58,7 @@ define('io.ox/switchboard/presence', [
 
         getPresence: function (userId) {
             userId = api.trim(userId);
-            if (!users[userId]) {
+            if (!users[userId] && api.socket) {
                 this.addUser(userId, 'offline');
                 api.socket.emit('presence-get', userId, function (data) {
                     exports.changePresence(userId, data);
@@ -169,10 +169,13 @@ define('io.ox/switchboard/presence', [
         }
     }
 
+    if (!api.socket) return exports;
     // respond to events
+
     api.socket.on('presence-change', function (userId, presence) {
         exports.changePresence(userId, presence);
     });
+
 
     api.socket.on('connect', function () {
         // emit own presence from user settings on connect

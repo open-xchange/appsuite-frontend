@@ -31,6 +31,7 @@ define('io.ox/contacts/view-detail', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/util',
     'io.ox/core/capabilities',
+    'io.ox/switchboard/presence',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'io.ox/core/tk/attachments',
@@ -41,7 +42,7 @@ define('io.ox/contacts/view-detail', [
     'io.ox/backbone/views/action-dropdown',
     'static/3rd.party/purify.min.js',
     'less!io.ox/contacts/style'
-], function (ext, util, api, actions, model, pViews, pModel, BreadcrumbView, coreUtil, capabilities, gt, settings, attachments, http, postalAddress, actionsUtil, ToolbarView, ActionDropdownView, DOMPurify) {
+], function (ext, util, contactsAPI, actions, contactsModel, pViews, pModel, BreadcrumbView, coreUtil, capabilities, presence, gt, settings, attachments, http, postalAddress, actionsUtil, ToolbarView, ActionDropdownView, DOMPurify) {
 
     'use strict';
 
@@ -118,7 +119,7 @@ define('io.ox/contacts/view-detail', [
         index: (INDEX += 100),
         id: 'inline-actions',
         draw: function (baton) {
-            if (api.looksLikeResource(baton.data)) return;
+            if (contactsAPI.looksLikeResource(baton.data)) return;
             if (hideAddressBook()) return;
             this.append(
                 new ToolbarView({ point: 'io.ox/contacts/links/inline', inline: true })
@@ -174,7 +175,7 @@ define('io.ox/contacts/view-detail', [
 
     ext.point('io.ox/contacts/detail/photo').extend({
         draw: function (baton) {
-            this.append(api.getContactPhoto(baton.data, { size: 120 }));
+            this.append(contactsAPI.getContactPhoto(baton.data, { size: 120 }));
         }
     });
 
@@ -254,6 +255,159 @@ define('io.ox/contacts/view-detail', [
             }
         }
     );
+
+    // add to contact detail view
+    ext.point('io.ox/contacts/detail/summary').extend({
+        index: 400,
+        id: 'actions',
+        draw: function (baton) {
+            if (contactsAPI.looksLikeResource(baton.data)) return;
+            var $actions = $('<div class="action-button-rounded">');
+            ext.point('io.ox/contacts/detail/actions').invoke('draw', $actions, baton.clone());
+            if (capabilities.has('switchboard')) this.append(presence.getPresenceString(baton.data.email1));
+            this.append($actions);
+        }
+    });
+
+    ext.point('io.ox/contacts/detail/actions').extend(
+        {
+            id: 'email',
+            index: 100,
+            draw: function (baton) {
+                if (!capabilities.has('webmail')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/send', 'fa-envelope', gt('Email'), baton)
+                );
+            }
+        },
+        {
+            id: 'chat',
+            index: 120,
+            draw: function (baton) {
+                if (!capabilities.has('chat')) return;
+                if (_.device('smartphone || !maintab')) return;
+                this.append(
+                    createButton('io.ox/chat/actions/start-chat-from-contacts', 'fa-comment', gt('Chat'), baton)
+                );
+            }
+        },
+        {
+            id: 'call',
+            index: 300,
+            draw: function (baton) {
+                var $ul = $('<ul class="dropdown-menu">');
+                ext.point('io.ox/contacts/detail/actions/call').invoke('draw', $ul, baton.clone());
+                // check only for visible items (not dividers, etc)
+                var hasOptions = $ul.children('[role="presentation"]').length > 0;
+                this.append(
+                    $('<div class="dropdown">').append(
+                        $('<button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
+                        .prop('disabled', !hasOptions)
+                        .append(
+                            $('<div class="icon-container">').append($.icon('fa-phone', false, 'call-icon')),
+                            $.txt(gt.pgettext('verb', 'Call')),
+                            hasOptions ? $('<i class="fa fa-caret-down" aria-hidden="true">') : $()
+                        ),
+                        $ul
+                    )
+                );
+            }
+        },
+
+        {
+            id: 'invite',
+            index: 400,
+            draw: function (baton) {
+                if (!capabilities.has('calendar')) return;
+                this.append(
+                    createButton('io.ox/contacts/actions/invite', 'fa-calendar-plus-o', gt('Invite'), baton)
+                );
+            }
+        }
+    );
+
+    function createButton(action, icon, label, baton) {
+        // do not change the initial baton as it is reused
+        baton = baton.clone();
+        baton.data = [].concat(baton.data);
+        var $button = $('<button type="button" class="btn btn-link">')
+            .prop('disabled', true)
+            .on('click', { baton: baton }, function (e) {
+                actionsUtil.invoke(action, e.data.baton);
+            })
+            .append(
+                $('<div class="icon-container">').append($.icon(icon)),
+                $.txt(label)
+            );
+        actionsUtil.checkAction(action, baton).then(function () {
+            $button.prop('disabled', false);
+        });
+        return $button;
+    }
+
+    function createConferenceItem(type, title, baton) {
+        var disabled = contactsAPI.isMyself(baton.data.email1) || (!contactsAPI.isOnline() && type === 'zoom');
+        return $('<li role="presentation">').append(
+            $('<a href="#">').text(title)
+                .toggleClass('disabled', disabled)
+            .on('click', baton.data, function (e) {
+                e.preventDefault();
+                if (!disabled) actionsUtil.invoke('io.ox/switchboard/call-user', ext.Baton({ type: type, data: [e.data] }));
+            })
+        );
+    }
+
+    ext.point('io.ox/contacts/detail/actions/call').extend(
+        {
+            id: 'zoom',
+            index: 100,
+            draw: function (baton) {
+                if (!contactsAPI.online) return;
+                if (!contactsAPI.supports('zoom')) return;
+                if (!contactsAPI.isGAB(baton)) return;
+                this.append(createConferenceItem('zoom', gt('Call via Zoom'), baton));
+            }
+        },
+        {
+            id: 'jitsi',
+            index: 200,
+            draw: function (baton) {
+                if (!contactsAPI.online) return;
+                if (!contactsAPI.supports('jitsi')) return;
+                if (!contactsAPI.isGAB(baton)) return;
+                this.append(createConferenceItem('jitsi', gt('Call via Jitsi'), baton));
+            }
+        },
+        {
+            id: 'phone',
+            index: 300,
+            draw: function (baton) {
+                var numbers = phoneFields.map(function (field) {
+                    var number = baton.data[field];
+                    if (!number) return $();
+                    return $('<li role="presentation">').append(
+                        $('<a>').attr('href', 'callto:' + number).append(
+                            $('<small>').text(contactsModel.fields[field]),
+                            $('<br>'),
+                            $.txt(number)
+                        )
+                    );
+                });
+                if (!numbers.length) return;
+                this.append(
+                    $('<li class="divider" role="separator">'),
+                    numbers
+                );
+            }
+        }
+    );
+
+    var phoneFields = [
+        'telephone_company', 'telephone_business1', 'telephone_business2',
+        'cellular_telephone1', 'cellular_telephone2',
+        'telephone_home1', 'telephone_home2', 'telephone_other'
+    ];
+
 
     // var name =
 
@@ -398,7 +552,7 @@ define('io.ox/contacts/view-detail', [
         if (!build) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(model.fields[id]),
+                $('<dt>').text(contactsModel.fields[id]),
                 $('<dd>').append(_.isString(build) ? $.txt(build) : build)
             );
         };
@@ -409,7 +563,7 @@ define('io.ox/contacts/view-detail', [
         if (!value) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(label || model.fields[id]),
+                $('<dt>').text(label || contactsModel.fields[id]),
                 $('<dd>').text(value)
             );
         };
@@ -427,7 +581,7 @@ define('io.ox/contacts/view-detail', [
         if (!address) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(model.fields[id]),
+                $('<dt>').text(contactsModel.fields[id]),
                 $('<dd>').append(
                     $('<a>').attr('href', 'mailto:' + address).text(address)
                         .on('click', { email: address, display_name: name }, clickMail)
@@ -441,11 +595,11 @@ define('io.ox/contacts/view-detail', [
         if (!number) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(label || model.fields[id]),
+                $('<dt>').text(label || contactsModel.fields[id]),
                 $('<dd>').append(
                     $('<a>').attr({
                         href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number,
-                        'aria-label': label || model.fields[id]
+                        'aria-label': label || contactsModel.fields[id]
                     }).text(number)
                 )
             );
@@ -457,7 +611,7 @@ define('io.ox/contacts/view-detail', [
         if (!text) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(model.fields.note),
+                $('<dt>').text(contactsModel.fields.note),
                 _.nltobr(text, $('<dd class="note">'))
             );
         };
@@ -775,7 +929,7 @@ define('io.ox/contacts/view-detail', [
                 if (baton.data.mark_as_distributionlist) return;
 
                 var section = $('<section class="block hidden">'),
-                    hasPendingAttachments = !!api.pendingAttachments[_.ecid(baton.data)];
+                    hasPendingAttachments = !!contactsAPI.pendingAttachments[_.ecid(baton.data)];
 
                 if (hasPendingAttachments) {
                     var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
@@ -908,7 +1062,7 @@ define('io.ox/contacts/view-detail', [
                 // make sure we have a baton
                 baton = ext.Baton.ensure(baton);
 
-                var node = $.createViewContainer(baton.data, api)
+                var node = $.createViewContainer(baton.data, contactsAPI)
                     .on('redraw', { view: this, data: baton.data, baton: baton }, redraw)
                     .addClass('contact-detail view')
                     .attr({
