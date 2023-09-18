@@ -225,7 +225,7 @@ define('io.ox/wizards/upsell', [
             baton.confirm = { node: $cart };
 
             $this.append(
-                $('<div class="upsell-disclaimer">').html(shop.disclaimer.en_US)
+                $('<div class="upsell-disclaimer">').html(DOMPurify.sanitize(shop.disclaimer.en_US))
             );
         }
     });
