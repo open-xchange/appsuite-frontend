@@ -225,7 +225,7 @@ define('io.ox/wizards/upsell', [
             baton.confirm = { node: $cart };
 
             $this.append(
-                $('<div class="upsell-disclaimer">').html(shop.disclaimer.en_US)
+                $('<div class="upsell-disclaimer">').html(DOMPurify.sanitize(shop.disclaimer.en_US))
             );
         }
     });
@@ -245,7 +245,9 @@ define('io.ox/wizards/upsell', [
             });
             idList = _(cartContents).pluck('id').join(',');
 
-            $.ajax(link.replace('OXUPSELLCART', idList).replace('OXUPSELLCONTEXT', ox.context_id).replace('OXUPSELLUSER', ox.user_id));
+            $.ajax(link.replace('OXUPSELLCART', idList).replace('OXUPSELLCONTEXT', ox.context_id).replace('OXUPSELLUSER', ox.user_id),
+                // treat any response as plain text, to avoid accidentally executing potentially malicious script type responses
+                { dataType: 'text' });
 
             $activation.append(
                 $('<p>').text(gt('The following products will be activated now:')),
