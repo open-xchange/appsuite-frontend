@@ -436,7 +436,7 @@ define('io.ox/core/folder/node', [
                     this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
                         this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw" aria-hidden="true"></i></div>') : [],
                         this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw" aria-hidden="true"></i></div>'),
-                        $('<div class="folder-label">').append(this.$.label = $('<div role="presentation">').text(this.getTitle())),
+                        this.$.label = $('<div class="folder-label truncate">').text(this.getTitle()),
                         this.$.counter = $('<div class="folder-counter">'),
                         this.$.buttons = $('<div class="folder-buttons">')
                     ),
