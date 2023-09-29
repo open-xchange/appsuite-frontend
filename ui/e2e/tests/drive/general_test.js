@@ -205,16 +205,17 @@ Scenario('[C45039] Breadcrumb navigation', async ({ I, drive }) => {
     await I.haveFolder({ title: 'subsubfolder2', module: 'infostore', parent: subFolder });
     I.login('app=io.ox/files&folder=' + subsubFolder);
     drive.waitForApp();
-    I.waitForText('subfolder3', 5, '.breadcrumb-view');
-    I.retry(5).click({ xpath: '//div[text()="subfolder3"][@role="presentation"]' });
+    I.waitForElement({ xpath: '//a[text()="subfolder3"][@role="button"]' });
+    I.click({ xpath: '//a[text()="subfolder3"][@role="button"]', preventScroll: true });
     drive.waitForApp();
     I.waitForText('subsubfolder1', 5, '.list-view');
     I.waitForText('subsubfolder2', 5, '.list-view');
-    I.retry(5).click({ xpath: '//div[text()="subsubfolder2"][@role="presentation"]' });
+    I.waitForElement({ xpath: '//div[text()="subsubfolder2"]' });
+    I.click({ xpath: '//div[text()="subsubfolder2"]', preventScroll: true });
     I.click('Drive', '.breadcrumb-view');
     drive.waitForApp();
-    I.waitForElement({ xpath: '//div[@role="presentation"][text()="Public files"]' });
-    I.retry(5).doubleClick({ xpath: '//div[text()="Public files"][@role="presentation"]' });
+    I.waitForElement({ xpath: '//div[text()="Public files"]' });
+    I.doubleClick({ xpath: '//div[text()="Public files"]', preventScroll: true });
 });
 
 const checkFileOrder = (I, files) => {

@@ -204,10 +204,46 @@
         color: #333!important;
     }
 
+    .folder.section > .folder-node .folder-icon { display:none }
+
     .folder-tree .folder-node {
+
+        position: relative;
+
         .folder-arrow {
             width: 2.5rem;
+            padding-left: 16px;
+            &.invisible { display: none; }
         }
+
+        .folder-icon {
+            padding-left: 16px;
+            width: 2.5rem;
+
+            display: flex;
+            align-items: center;
+            color: var(--folder-icon);
+            margin-inline-end: 4px;
+            font-size: 18px;
+
+            .color-label {
+                width: 1rem;
+                height: 1rem;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                background-clip: border-box;
+                border-radius: @border-radius-small;
+
+                &.selected:before {
+                    display: block;
+                    font-family: 'FontAwesome';
+                    content: '\f00c';
+                    text-align: center;
+                    font-size: 13px;
+                    line-height: 16px;
+                }
+            }
+        }
+
         .folder-label {
             position: relative;
 

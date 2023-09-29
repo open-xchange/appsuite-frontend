@@ -1293,7 +1293,7 @@ define('io.ox/core/folder/extensions', [
                 if (!/^calendar$/.test(baton.data.module)) return;
 
                 var self = this,
-                    folderLabel = this.find('.folder-label'),
+                    folderIcon = this.find('.folder-icon'),
                     app = ox.ui.apps.get('io.ox/calendar');
 
                 if (!app) return;
@@ -1302,13 +1302,16 @@ define('io.ox/core/folder/extensions', [
 
                 require(['io.ox/calendar/util'], function (util) {
                     var folderColor = util.getFolderColor(baton.data),
-                        target = folderLabel.find('.color-label'),
+                        target = folderIcon.find('.color-label'),
                         colorName = util.getColorName(folderColor);
 
-                    //#. Will be used as aria lable for the screen reader to tell the user which color/category the appointment within the calendar has.
+                    //#. Will be used as aria label for the screen reader to tell the user which color/category the appointment within the calendar has.
                     if (colorName) baton.view.addA11yDescription(gt('Category') + ': ' + colorName);
 
-                    if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
+                    if (target.length === 0) {
+                        folderIcon.find('i.fa').hide();
+                        target = $('<div class="color-label" aria-hidden="true">');
+                    }
                     target.toggleClass('selected', app.folders.isSelected(baton.data.id));
                     target.css({
                         'background-color': folderColor,
@@ -1316,7 +1319,7 @@ define('io.ox/core/folder/extensions', [
                     });
                     target.off('click', toggleFolder).on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                     self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
-                    folderLabel.prepend(target);
+                    folderIcon.prepend(target);
                 });
             }
         },
