@@ -54,8 +54,10 @@ define('io.ox/tours/intro', [
             .waitFor('.launcher-dropdown')
             .on('wait', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', true); })
             .on('hide', function () { $('#io-ox-launcher .dropdown-toggle').click(); $('#io-ox-launcher').attr('forceOpen', false); })
-            .end()
-            .step({ back: false, noAutoAlign: true })
+            .end();
+
+        if (ext.point('io.ox/core/appcontrol/right').isEnabled('account')) {
+            tour.step({ back: false, noAutoAlign: true })
             .title(gt('Personal settings'))
             .content(gt('Your personal data can be changed in the account dropdown. You can also sign out from there.'))
             .hotspot('#io-ox-topbar-account-dropdown-icon .contact-picture', { top: 20, left: 20 })
@@ -64,6 +66,7 @@ define('io.ox/tours/intro', [
             .on('wait', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', true); })
             .on('hide', function () { $('#io-ox-topbar-account-dropdown-icon .dropdown-toggle').click(); $('#io-ox-topbar-account-dropdown-icon').attr('forceOpen', false); })
             .end();
+        }
 
         // single item or dropdown
         if (ext.point('io.ox/core/appcontrol/right/settings').list().length > 1) {

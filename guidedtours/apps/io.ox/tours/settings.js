@@ -22,9 +22,10 @@
 
 define('io.ox/tours/settings', [
     'io.ox/core/tk/wizard',
+    'io.ox/core/extensions',
     'settings!io.ox/core',
     'gettext!io.ox/tours'
-], function (Tour, settings, gt) {
+], function (Tour, ext, settings, gt) {
 
     'use strict';
 
@@ -69,7 +70,7 @@ define('io.ox/tours/settings', [
             })
             .end();
 
-        if (settings.get('features/dedicatedLogoutButton', false) !== true) {
+        if (settings.get('features/dedicatedLogoutButton', false) !== true && ext.point('io.ox/core/appcontrol/right').isEnabled('account')) {
             // dropdown menu entry
             tour.step()
                 .title(gt('Signing out'))
@@ -85,8 +86,7 @@ define('io.ox/tours/settings', [
                     $('#topbar-account-dropdown:visible').dropdown('toggle');
                 })
                 .end();
-
-        } else {
+        } else if (settings.get('features/dedicatedLogoutButton', false) === true) {
             // dedicatedLogoutButton: top bar entry
             tour.step()
                 .title(gt('Signing out'))

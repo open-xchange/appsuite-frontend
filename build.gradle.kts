@@ -24,7 +24,7 @@ licensing {
     }
 }
 
-val backendBranch = "master"
+val backendBranch = "OXPORT-124"
 
 buildservice {
     url = "https://buildapi.open-xchange.com"
@@ -52,6 +52,9 @@ buildservice {
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
                 depends("backend-${backendBranch}", "RHEL7")
+            }
+            create("RHEL8") {
+                depends("backend-${backendBranch}", "RHEL8")
             }
         }
         prjconf.set("OX-Sign-ID: release-team@open-xchange.com")
