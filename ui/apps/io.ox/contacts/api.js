@@ -1021,6 +1021,10 @@ define('io.ox/contacts/api', [
             })
             .done(function () {
                 api.trigger('refresh.all');
+                if (action !== 'update') return;
+                list.forEach(function (contact) {
+                    api.trigger('move', _.ecid(contact), { folder_id: targetFolderId });
+                });
             });
     };
 
