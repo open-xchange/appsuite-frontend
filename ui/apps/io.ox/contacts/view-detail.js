@@ -885,7 +885,7 @@ define('io.ox/contacts/view-detail', [
 
             this.append(
                 $('<div class="clearfix">'),
-                new BreadcrumbView({ folder: id, app: baton.app, display: 'block', label: gt('Saved in:'), disable: ['2', '3'] }).render().$el
+                new BreadcrumbView({ folder: id, display: 'block', label: gt('Saved in:'), disable: ['2', '3'] }).render().$el
             );
         }
     });
