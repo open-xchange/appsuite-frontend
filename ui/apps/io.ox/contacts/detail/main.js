@@ -38,11 +38,13 @@ define('io.ox/contacts/detail/main', [
             app.showContact = function (contact) {
                 api.get(contact).done(function (data) {
 
-                    var baton = ext.Baton({ data: data }),
+                    var baton = ext.Baton({ data: data, app: app }),
                         title = util.getFullName(data),
-                        label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details');
+                        label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details'),
+                        containerNode = $('<div class="f6-target detail-view-container" role="region" tabindex="-1">').attr('aria-label', label);
 
                     app.setTitle(title);
+                    app.right = containerNode;
                     api.on('delete:' + _.ecid(data), function () {
                         app.quit();
                     });
@@ -53,7 +55,7 @@ define('io.ox/contacts/detail/main', [
                     });
 
                     app.getWindowNode().addClass('detail-view-app').append(
-                        $('<div class="f6-target detail-view-container" role="region" tabindex="-1">').attr('aria-label', label).append(
+                        containerNode.append(
                             detailView.draw(baton)
                         )
                     );
