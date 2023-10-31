@@ -45,10 +45,14 @@ After(async ({ users }) => {
 Scenario('[C274425] Month label in Calendar week view', async function ({ I, calendar }) {
     I.login('app=io.ox/calendar&perspective=week:week');
     calendar.waitForApp();
+
     I.retry(5).executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2019-05-01"))');
-    expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('April - May 2019 CW 18');
+    I.waitForText('April - May 2019', 5, '.weekview-container .header .info');
+    I.waitForText('CW 18', 5, '.weekview-container .header .info');
+
     I.executeScript('ox.ui.apps.get("io.ox/calendar").setDate(new moment("2020-01-01"))');
-    expect(await I.grabTextFrom('.weekview-container .header .info')).to.equal('December 2019 - January 2020 CW 1');
+    I.waitForText('December 2019 - January 2020', 5, '.weekview-container .header .info');
+    I.waitForText('CW 1', 5, '.weekview-container .header .info');
 });
 
 Scenario('[C207509] Year view', async ({ I, calendar }) => {
