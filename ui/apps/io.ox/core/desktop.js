@@ -1907,7 +1907,10 @@ define('io.ox/core/desktop', [
 
         return function (req, data) {
             assert(arguments.length <= 1 || arguments.length === 2 && !_.isFunction(data), 'ox.load does not support callback params.');
-            if (/\.\./.test(decodeURI(req))) throw new Error('module names must not contain relative paths');
+            if (/\.(\n)*\./.test(decodeURI(req))) {
+                console.error('module names must not contain relative paths');
+                throw new Error('module names must not contain relative paths');
+            }
 
             def = $.Deferred();
             launched = data && data.launched ? data.launched : $.Deferred().resolve();
