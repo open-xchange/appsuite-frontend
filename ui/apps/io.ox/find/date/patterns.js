@@ -65,6 +65,10 @@ define('io.ox/find/date/patterns', [
             if (!self.regex.test(value)) return;
             // add
             base = moment(value, getFormat(value));
+
+            // invalid date = NaN, show error.
+            if (isNaN(base.diff(base, 'days'))) return;
+
             baton.data.matched.push({
                 id: self.id,
                 start: base.clone(),
@@ -99,6 +103,10 @@ define('io.ox/find/date/patterns', [
             // autofix
             left = moment(list[0].value, list[0].format);
             right = moment(list[1].value, list[1].format);
+
+            // if either date is invalid, show error.
+            if (isNaN(left.diff(right, 'days'))) return;
+
             autofix = left.diff(right, 'days') > 0;
             // add
             baton.data.matched.push({
