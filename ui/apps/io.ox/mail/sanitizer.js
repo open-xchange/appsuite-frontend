@@ -99,8 +99,17 @@ define('io.ox/mail/sanitizer', [
                 if (config.noImages && currentNode.getAttribute) {
                     var src = String(currentNode.getAttribute('src') || '').trim();
                     if (!src) break;
+                    // inline, base64 encoded SVG breaks MW parsing of mails (see OXUIB-2552)
+                    // Remove the inline image and show a broken-image-link icon instead
+                    if (/^data:image\/svg\+xml/i.test(src)) {
+                        currentNode.setAttribute('src', ox.base + '/apps/themes/default/broken_image.png');
+                        currentNode.setAttribute('style', 'width: 16px !important');
+                        currentNode.setAttribute('data-ref', 'svg-fallback');
+                        break;
+                    }
                     // data:image are embedded images -> don't block it
                     if (/^data:image/i.test(src)) break;
+
                     // mail attachment used as inline image -> don't block it
                     // the path is a bit tricky and quite unpredictable because it might differ from ox.root
                     // ox.root might be /appsuite but inline images start with /ajax/image/... *sigh*

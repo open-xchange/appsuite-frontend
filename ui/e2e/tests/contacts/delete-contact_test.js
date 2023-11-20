@@ -32,6 +32,67 @@ After(async function ({ users }) {
     await users.removeAll();
 });
 
+Scenario('Single, multiple and in detail app', async function ({ I, contacts }) {
+    const defaultFolder = await I.grabDefaultFolder('contacts');
+    await Promise.all([
+        I.haveSetting('io.ox/contacts//showCheckboxes', true),
+        I.haveContact({ first_name: 'Brian', last_name: 'Johnson', folder_id: defaultFolder }),
+        I.haveContact({ first_name: 'Phil', last_name: 'Rudd', folder_id: defaultFolder }),
+        I.haveContact({ first_name: 'Cliff', last_name: 'Williams', folder_id: defaultFolder }),
+        I.haveContact({ first_name: 'Angus', last_name: 'Young', folder_id: defaultFolder }),
+        I.haveContact({ first_name: 'Stevie', last_name: 'Young', folder_id: defaultFolder })
+
+    ]);
+
+    I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+
+    // aspect: single delete (Johnson)
+    contacts.selectContact('Johnson, Brian');
+    I.clickToolbar('~Delete contact');
+    I.waitForText('Do you really want to delete this contact?');
+    I.click('Delete', '.modal-dialog');
+    I.waitForNetworkTraffic();
+    I.waitForText('Rudd', '.contact-detail');
+    I.dontSee('Johnson, Brian');
+
+    // aspect: multi delete (Rudd, Williams)
+    I.click(locate('[aria-label="Williams, Cliff"] .vgrid-cell-checkbox').as('[aria-label="Williams, Cliff"] .vgrid-cell-checkbox'));
+
+    I.see('2 items selected');
+    I.clickToolbar('~Delete contact');
+    I.waitForText('Do you really want to delete these items?');
+    I.click('Delete', '.modal-dialog');
+    I.waitForNetworkTraffic();
+    I.dontSee('Rudd, Phil');
+    I.dontSee('Williams, Cliff');
+
+    // aspect: detail window delete (Young brothers)
+    I.doubleClick('Young, Angus');
+    I.waitForVisible('.io-ox-contacts-detail-window[data-window-nr="1"]');
+    I.click('Minimize');
+    I.waitForInvisible('.io-ox-contacts-detail-window[data-window-nr="1"]');
+    I.doubleClick('Young, Stevie');
+    I.waitForText('Saved in', 5, '.io-ox-contacts-detail-window');
+    I.waitForText('Delete', 5, '.io-ox-contacts-detail-window[data-window-nr="2"]');
+    I.click('Delete', '.io-ox-contacts-detail-window[data-window-nr="2"]');
+    I.waitForText('Do you really want to delete this contact?');
+    I.click('Delete', '.modal-dialog');
+    I.waitForNetworkTraffic();
+    I.waitForDetached('.io-ox-contacts-detail-window[data-window-nr="2"]');
+    I.dontSee('Young, Stevie');
+
+    I.click('~Young, Angus', '#io-ox-taskbar');
+    I.waitForText('Saved in', 5, '.io-ox-contacts-detail-window');
+    I.waitForText('Delete', 5, '.io-ox-contacts-detail-window[data-window-nr="1"]');
+    I.click('Delete', '.io-ox-contacts-detail-window[data-window-nr="1"]');
+    I.waitForText('Do you really want to delete this contact?');
+    I.click('Delete', '.modal-dialog');
+    I.waitForNetworkTraffic();
+    I.waitForDetached('.io-ox-contacts-detail-window[data-window-nr="1"]');
+    I.dontSee('Young, Stevie');
+});
+
 Scenario('[C7366] Multiple contacts', async function ({ I, search, contacts, dialogs }) {
     const testrailID = 'C7366';
     const contact = {

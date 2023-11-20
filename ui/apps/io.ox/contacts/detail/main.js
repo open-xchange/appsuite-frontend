@@ -34,26 +34,47 @@ define('io.ox/contacts/detail/main', [
     var NAME = 'io.ox/contacts/detail';
 
     ox.ui.App.mediator(NAME, {
+
+        'events': function (app) {
+            app.model = new Backbone.Model();
+
+            // draw/redraw (other changes handled by detailView itself)
+            app.listenTo(app.model, 'change:folder', function (model) {
+                var data = model.toJSON(),
+                    id = data.id,
+                    folder = data.folder;
+                app.showContact({ id: id, folder: folder });
+            });
+
+            // update folder in model
+            app.listenTo(api, 'move', onMove);
+            function onMove(e, ecid, data) {
+                if (ecid !== _.ecid(app.model.toJSON())) return;
+                app.model.set('folder', data.folder_id);
+            }
+
+            app.listenTo(api, 'delete', onDelete);
+            function onDelete(e, data) {
+                if (_.ecid(data) !== _.ecid(app.model.toJSON())) return;
+                app.stopListening(api, 'delete', onDelete);
+                app.stopListening(api, 'move', onMove);
+                app.quit();
+            }
+        },
+
         'show-contact': function (app) {
             app.showContact = function (contact) {
                 api.get(contact).done(function (data) {
 
-                    var baton = ext.Baton({ data: data }),
+                    var baton = ext.Baton({ data: data, app: app }),
                         title = util.getFullName(data),
-                        label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details');
+                        label = data.mark_as_distributionlist ? gt('Distribution List Details') : gt('Contact Details'),
+                        containerNode = $('<div class="f6-target detail-view-container" role="region" tabindex="-1">').attr('aria-label', label);
 
                     app.setTitle(title);
-                    api.on('delete:' + _.ecid(data), function () {
-                        app.quit();
-                    });
-                    app.on('quit', function () {
-                        api.off('delete:' + _.ecid(data), function () {
-                            app.quit();
-                        });
-                    });
-
-                    app.getWindowNode().addClass('detail-view-app').append(
-                        $('<div class="f6-target detail-view-container" role="region" tabindex="-1">').attr('aria-label', label).append(
+                    app.right = containerNode;
+                    app.getWindowNode().addClass('detail-view-app').empty().append(
+                        containerNode.append(
                             detailView.draw(baton)
                         )
                     );
@@ -117,7 +138,8 @@ define('io.ox/contacts/detail/main', [
             if (cid !== undefined) {
                 // called from contacts app
                 obj = _.cid(cid);
-                app.setState({ folder: obj.folder_id, id: obj.id });
+                app.model.set({ id: obj.id, folder: obj.folder_id });
+                app.setState({ id: obj.id, folder: obj.folder_id });
                 app.showContact(obj);
                 return;
             }
