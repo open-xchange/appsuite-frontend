@@ -888,14 +888,14 @@ define('io.ox/files/share/permissions', [
 
             var typeTranslations = {
                 0: gt('Invited people only'),
-                1: gt('Anyone with the link and invited people')
+                1: gt('Anyone with the public link and invited people')
             };
 
             // link-only case
             if (!supportsPersonal) {
                 typeTranslations = {
                     0: gt('Listed people only'),
-                    1: gt('Anyone with the link and listed people')
+                    1: gt('Anyone with the public link and listed people')
                 };
             }
 

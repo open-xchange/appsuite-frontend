@@ -44,7 +44,7 @@ Scenario('[C45021] Generate simple link for sharing', async function ({ I, drive
     drive.shareItem();
     dialogs.waitForVisible();
     I.waitForText('Invited people only', 5);
-    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
@@ -92,7 +92,7 @@ Scenario('[C252159] Generate link for sharing including subfolders', async funct
     I.click('Share');
     dialogs.waitForVisible();
     I.waitForText('Invited people only', 5);
-    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
@@ -120,7 +120,7 @@ Scenario('[C45022] Generate simple link for sharing with password', async functi
 
     I.clickToolbar('Share');
     dialogs.waitForVisible();
-    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.selectOption('.form-group select', 'Anyone with the public link and invited people');
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
     let link = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     link = Array.isArray(link) ? link[0] : link;
@@ -178,7 +178,7 @@ Scenario('[C85625] My Shares default sort order', async function ({ I, drive, di
         I.retry(5).click(locate('li.list-item').withText(item));
         drive.shareItem(file);
         dialogs.waitForVisible();
-        I.selectOption('.form-group select', 'Anyone with the link and invited people');
+        I.selectOption('.form-group select', 'Anyone with the public link and invited people');
         I.waitForNetworkTraffic();
         dialogs.clickButton('Share');
         I.waitForDetached('.modal-dialog');
@@ -473,7 +473,7 @@ Scenario('[C83277] Create shared object with expiration date', async function ({
     I.waitForText('Share', locators.toolbar);
     I.clickToolbar('Share');
     dialogs.waitForVisible();
-    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.selectOption('.form-group select', 'Anyone with the public link and invited people');
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
     let link = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
     I.click('.settings-button');
