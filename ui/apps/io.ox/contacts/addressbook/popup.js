@@ -567,6 +567,7 @@ define('io.ox/contacts/addressbook/popup', [
                     this.index = response.index;
                     this.search('');
                     this.idle();
+                    this.toggleSelectButton();
                     this.defAddresses.resolve(response);
                 }
 
@@ -638,6 +639,12 @@ define('io.ox/contacts/addressbook/popup', [
                 this.listenTo(this.listView, 'selection:add', this.store.add);
                 this.listenTo(this.listView, 'selection:remove', this.store.remove);
 
+                this.toggleSelectButton = function () {
+                    var selectButton = this.$footer.find('[data-action="select"]');
+                    if (!selectButton) return;
+                    selectButton.prop('disabled', this.store.getIds().length === 0);
+                };
+                var contactDialog = this;
                 function createStore() {
                     var hash = {}, selection = {};
                     return {
@@ -650,15 +657,18 @@ define('io.ox/contacts/addressbook/popup', [
                         },
                         add: function (list) {
                             _(list).each(function (id) { selection[id] = true; });
+                            contactDialog.toggleSelectButton();
                         },
                         remove: function (list) {
                             list = [].concat(list);
                             _(list).each(function (id) {
                                 delete selection[id];
                             });
+                            contactDialog.toggleSelectButton();
                         },
                         clear: function () {
                             selection = {};
+                            contactDialog.toggleSelectButton();
                         },
                         getIds: function () {
                             return _(selection).keys();

@@ -665,9 +665,10 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     buildDialog(options, model, this.$('.modal-header'), this.$('.modal-content'), this.$('.modal-body')).then(function () {
                         // triggers focus and fixes "compact" class
                         self.idle();
-                    }, function () {
-                        self.$('.modal-footer [data-action="select"]').attr('disabled', 'disabled');
-                    });
+                        var selectedContacts = model.get('selectedContacts');
+                        self.$('.modal-footer [data-action="select"]').prop('disabled', selectedContacts.length === 0);
+                        selectedContacts.on('add remove reset', function () { self.$('.modal-footer [data-action="select"]').prop('disabled', selectedContacts.length === 0); });
+                    }, function () { self.$('.modal-footer [data-action="select"]').prop('disabled', true); });
                 })
                 .addCancelButton()
                 //#. Context: Add selected contacts; German "Auswählen", for example
