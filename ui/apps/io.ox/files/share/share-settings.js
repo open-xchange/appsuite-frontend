@@ -46,7 +46,8 @@ define('io.ox/files/share/share-settings', [
         index: INDEX += 100,
         draw: function () {
             this.append(
-                $('<h5></h5>').text(gt('Link options'))
+                //#. options for a public link to a shared folder or file"
+                $('<h5></h5>').text(gt('Public link options'))
             );
         }
     });

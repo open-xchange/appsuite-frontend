@@ -63,7 +63,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.waitForDetached('.address-picker');
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Invited people only');
-        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+        I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
@@ -121,7 +121,7 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
         I.click({ css: '.folder-tree [title="Actions for Contacts"]' });
         I.clickDropdown('Share / Permissions');
         dialogs.waitForVisible();
-        I.waitForText('Anyone with the link and invited people', 5);
+        I.waitForText('Anyone with the public link and invited people', 5);
         I.selectOption('Who can access this folder?', 'Invited people only');
         I.dontSee('Copy link');
         dialogs.clickButton('Save');

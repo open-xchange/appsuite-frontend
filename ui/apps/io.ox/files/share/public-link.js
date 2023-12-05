@@ -170,6 +170,15 @@ define('io.ox/files/share/public-link', [
                 })
                 .done(function () {
                     model.set('url', null);
+                })
+                .fail(function (error) {
+                    yell(error);
+                    if (error && error.code === 'SHR-0023') {
+                        // link does not exist -> make sure the model reflects that (otherwise wa have broken disabled states in the options menu etc)
+                        // refresh the guest group (id = int max value)
+                        groupApi.refreshGroup(2147483647);
+                        model.set('url', null);
+                    }
                 });
         },
 
