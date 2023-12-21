@@ -574,9 +574,13 @@ define('io.ox/mail/compose/extensions', [
 
         optionsmenu: (function () {
             return function (baton) {
-                var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">').attr('aria-label', gt('Options')).append(
-                    $($.icon('fa-bars', false, 'bars')).attr('title', gt('Options'))
-                );
+                var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">')
+                    .attr('aria-label', gt('Options'))
+                    .append(
+                        $('<div aria-hidden="true">')
+                            .attr('title', gt('Options'))
+                            .append($.icon('fa-bars', false, 'bars'))
+                    );
                 var dropdown = new Dropdown({
                     tagName: 'li',
                     attributes: {
@@ -871,8 +875,10 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
                         .attr('aria-label', gt('Add local file'))
                         .append(
-                            $($.icon('fa-paperclip', false, 'paperclip'))
-                                .attr('title', gt('Add local file')))
+                            $('<div aria-hidden="true">')
+                                .attr('title', gt('Add local file'))
+                                .append($.icon('fa-paperclip', false, 'paperclip'))
+                        )
                         .on('click', function () {
                             //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
                             //in file picker dialog - other browsers still seem to work)
@@ -925,8 +931,9 @@ define('io.ox/mail/compose/extensions', [
                     $('<a href="#" role="button" tabindex="-1">')
                         .attr('aria-label', gt('Add from Drive'))
                         .append(
-                            $($.icon('fa-cloud', false, 'cloud'))
-                            .attr('title', gt('Add from Drive'))
+                            $('<div aria-hidden="true">')
+                                .attr('title', gt('Add from Drive'))
+                                .append($.icon('fa-cloud', false, 'cloud'))
                         )
                         .on('click', openFilePicker.bind(this, baton.model))
                 );
@@ -939,8 +946,9 @@ define('io.ox/mail/compose/extensions', [
             var parent = this,
                 floatingView = baton.app.get('window').floating,
                 node = $('<a href="#" role="button" tabindex="0">')
-                    .append($.icon('fa-font', false, 'font'))
-                    .on('click', function () {
+                    .append(
+                        $('<div aria-hidden="true">').append($.icon('fa-font', false, 'font'))
+                    ).on('click', function () {
                         if (parent.hasClass('disabled')) return;
                         baton.config.set('toolbar', !baton.config.get('toolbar'));
                     });
@@ -952,7 +960,7 @@ define('io.ox/mail/compose/extensions', [
                 var value = baton.config.get('toolbar');
                 floatingView.$el.toggleClass('no-toolbar', !value);
                 node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar'));
-                node.find('i').attr('title', value ? gt('Hide toolbar') : gt('Show toolbar'));
+                node.find('div').attr('title', value ? gt('Hide toolbar') : gt('Show toolbar'));
                 parent.toggleClass('checked', value);
                 floatingView.onResize();
             }
