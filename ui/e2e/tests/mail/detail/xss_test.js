@@ -51,7 +51,7 @@ function getTestMail(user, content) {
 Scenario('double quoted urls are escaped properly', async function ({ I, users, mail }) {
     // See Bug 57692
     let [user] = users;
-    await I.haveMail(getTestMail(user, '<p><a href="http://qwe&quot;-alert(document.domain)-&quot;">XSSME</a></p>'));
+    await I.haveMail(getTestMail(user, '<p><a href="http://qwe&quot;-alert(document.domain)-&quot;">XSS_ME</a></p>'));
     I.login('app=io.ox/mail');
     mail.waitForApp();
     // click on first email
@@ -59,17 +59,15 @@ Scenario('double quoted urls are escaped properly', async function ({ I, users, 
     I.waitForElement('.mail-detail-frame');
 
     I.switchTo({ frame: '.mail-detail-frame' });
-    I.waitForText('XSSME');
-
-    let href = await I.grabAttributeFrom(locate('a').withText('XSSME'), 'href');
-    href = href instanceof Array && href.length === 1 ? href[0] : href;
-    expect(href).to.equal('http://qwe%22-alert%28document.domain%29-%22/');
+    I.waitForText('XSS_ME');
+    const link = await I.grabHTMLFrom(locate('p').withDescendant(locate('a').withText('XSS_ME')).as('link'));
+    expect(link).to.equal('<a target="_blank" href="http://qwe%22-alert(document.domain)-%22" rel="noopener">XSS_ME</a>');
 });
 
 Scenario('urls should not be double encoded', async function ({ I, users, mail }) {
     // See Bug 58333
     let [user] = users;
-    await I.haveMail(getTestMail(user, '<p><a href="http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test">XSSME</a></p>'));
+    await I.haveMail(getTestMail(user, '<p><a href="http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test">XSS_ME</a></p>'));
     I.login('app=io.ox/mail');
     mail.waitForApp();
     // click on first email
@@ -77,9 +75,9 @@ Scenario('urls should not be double encoded', async function ({ I, users, mail }
     I.waitForElement('.mail-detail-frame');
 
     I.switchTo({ frame: '.mail-detail-frame' });
-    I.waitForText('XSSME');
+    I.waitForText('XSS_ME');
 
-    let href = await I.grabAttributeFrom(locate('a').withText('XSSME'), 'href');
+    let href = await I.grabAttributeFrom(locate('a').withText('XSS_ME'), 'href');
     href = href instanceof Array && href.length === 1 ? href[0] : href;
     expect(href).to.equal('http://localhost/?test=ajlksd89123jd9hnasdf%3D&action=test');
 });
