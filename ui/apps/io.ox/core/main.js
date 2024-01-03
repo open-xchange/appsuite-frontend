@@ -1083,6 +1083,10 @@ define('io.ox/core/main',
 
         var getAutoLaunchDetails = function (str) {
             var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
+            if (/\.(\n)*\./.test(app)) {
+                console.error('app names must not contain relative paths');
+                return { app: undefined };
+            }
             return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
         };
 
