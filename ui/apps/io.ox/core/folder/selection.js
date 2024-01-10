@@ -251,13 +251,23 @@ define('io.ox/core/folder/selection', [], function () {
 
         check: function (nodes) {
             if (this.view.disposed) return $();
-            return nodes.addClass('selected').attr({ 'aria-selected': true, tabindex: 0 });
+            var width = this.view.$el.width();
+            return nodes.addClass('selected')
+            .attr({ 'aria-selected': true, tabindex: 0 })
+            .find('.folder-label:first').each(function () {
+                // special handling for settings for now
+                if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
+                var left = $(this).position().left, maxWidth = width - left - 76;
+                $(this).css('max-width', Math.max(maxWidth, 80));
+            })
+            .end();
         },
 
         uncheck: function (items) {
             items = items || this.getItems();
             items.filter('.selected')
-                .removeClass('selected').attr({ 'aria-selected': false, tabindex: -1 });
+                .removeClass('selected').attr({ 'aria-selected': false, tabindex: -1 })
+                .find('.folder-label').css('max-width', 'initial');
             return this;
         },
 

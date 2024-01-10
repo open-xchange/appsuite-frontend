@@ -133,7 +133,6 @@
     .folder-node {
 
         height: @height;
-        display: flex;
 
         a.account-link {
             padding: 0 8px;
@@ -146,7 +145,6 @@
             display: inline-block;
             padding-left: @default-padding;
             width: @indentation;
-            flex-shrink: 0;
         }
 
         .folder-label, .folder-counter, .folder-options, .folder-buttons, .account-link {
@@ -155,14 +153,12 @@
             -webkit-font-smoothing: antialiased;
             margin: 0 @default-padding 0 0;
             vertical-align: top;
-            &:empty, &:last-child { margin: 0; }
+            &:empty { margin: 0; }
         }
         .folder-options { margin-right: 0; }
 
         .folder-label {
-            flex: 1;
             font-size: @fontSize;
-            min-width: 40px;
             &:first-child { // needed when arrows are hidden
                 margin-left: @default-padding;
             }
@@ -173,9 +169,6 @@
             font-weight: @bold;
             display: none;
             vertical-align: top;
-            border-radius: var(--default-radius);
-            min-width: 24px;
-            text-align: center;
         }
 
         &.show-counter .folder-counter {
@@ -392,7 +385,8 @@
             .folder-label, .folder-counter, .folder-options {
                 font-size: @mobile-label-size;
             }
-            .folder-label {
+            .folder-label > div {
+                max-width: 320px;
                 .ellipsis();
             }
             .folder-buttons {
@@ -402,7 +396,7 @@
         }
         li[data-id="virtual/settings"] {
             .folder-node {
-                .folder-label {
+                .folder-label > div {
                     max-width: 280px;
                 }
             }
