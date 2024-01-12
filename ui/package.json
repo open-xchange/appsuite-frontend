@@ -100,6 +100,7 @@
     "getobject": "^1.0.2",
     "glob-parent": "^5.1.2",
     "lodash": "^4.17.21",
+    "minimist": "^1.2.8",
     "set-value": "^4.0.1",
     "socket.io-parser": "^3.3.2",
     "underscore": "^1.12.1",
