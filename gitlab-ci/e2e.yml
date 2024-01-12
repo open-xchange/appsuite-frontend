@@ -5,6 +5,7 @@ include:
     file:
       - '/base.yml'
       - '/publish/e2e-codeceptjs-allure-report.yml'
+      - '/deploy/auto-deploy-helm.yml'
 
 variables:
   ALLURE_PUBLISH_REPORT: "true"
@@ -50,9 +51,6 @@ run e2e tests:
   script:
     - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
     - mkdir -p ./output
-    - mc cp $REPORT_PATH/filter_report.json ./output/suite.json || rm -f ./output/suite.json
-    - "[ -f ./output/suite.json ] || runOnly=true npx codeceptjs run -o '{ \"plugins\": { \"filterSuite\": { \"suite\": [], \"report\": \"suite.json\" } } }'"
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/partition.js')" ./output/suite.json $CI_NODE_TOTAL ./suites
     - yarn e2e-rerun
   parallel: 20
   # reasonable timeout, enforce better partitioning
@@ -85,66 +83,6 @@ trigger appsuite-stack deployment pipeline:
     - if: '$CI_COMMIT_REF_SLUG == "develop"'
       when: always
 
-merge filter report and rerun:
-  stage: merge
-  image: $CI_REGISTRY_IMAGE/e2e:$CI_COMMIT_REF_SLUG
-  dependencies:
-    - run e2e tests
-  needs:
-    - run e2e tests
-  services:
-    - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-      alias: e2e.test.service
-  variables:
-    # e2e configuration
-    LAUNCH_URL: http://e2e.test.service:8337/appsuite/
-    PROVISIONING_URL:  https://appsuite.k3s.os2.oxui.de/
-    PROVISIONING_KEYCLOAK_URL: https://idp.k3s.os.oxui.de
-    PROVISIONING_KEYCLOAK_REALM: Appsuite
-    PROVISIONING_KEYCLOAK_USER: $KEYCLOAK_ADMIN_USER
-    PROVISIONING_KEYCLOAK_PASS: $KEYCLOAK_ADMIN_PASSWORD
-    CONTEXT_ID: $CI_JOB_ID
-    CHROME_ARGS: '--no-sandbox --disable-gpu'
-    FILTER_SUITE: ./merged_reports.json
-    FILTER_REPORT: filter_report_missing.json
-    KUBERNETES_CPU_LIMIT: 2
-    KUBERNETES_CPU_REQUEST: "1.5"
-    KUBERNETES_MEMORY_REQUEST: 2G
-    KUBERNETES_MEMORY_LIMIT: 2G
-    # services configuration
-    SERVER: https://appsuite.k3s.os2.oxui.de/appsuite/
-    # gitlab config
-    GIT_STRATEGY: none
-    GIT_DEPTH: "10"
-  script:
-    - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
-    - mkdir -p ./output
-    - ls output/filter_report_*.json
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./output/filter_report_*.json > $FILTER_SUITE
-    # check if the filter suite file exists, otherwise something went wrong in the run e2e tests jobs
-    - "[ -f $FILTER_SUITE ] && fgrep 'title' $FILTER_SUITE > /dev/null"
-    # ignore any failing tests
-    - yarn e2e -i || true
-    - node -e "require('@open-xchange/codecept-helper/src/plugins/filterSuite/merge')" ./output/$FILTER_REPORT $FILTER_SUITE > ./output/filter_report.json
-  tags:
-    - e2e
-  artifacts:
-    when: always
-    paths:
-      - output/
-      - merged_reports.json
-    expire_in: 1 day
-  rules:
-    - if: '$CI_COMMIT_REF_NAME =~ /^(poc|e2e)\//'
-      when: never
-    - changes:
-        - ui/**/*
-      when: always
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-
 allure report:
   extends: .allure report
   after_script:
@@ -158,23 +96,50 @@ allure report:
         - ui/**/*
       when: always
 
+remove allure report:
+  extends: .remove allure report
+  rules:
+    - if: $S3_CONFIG && $ALLURE_PUBLISH_REPORT
+      exists:
+      - codecept.conf.*
+      - e2e/codecept.conf.*
+      changes:
+        - ui/**/*
+      when: manual
+      allow_failure: true
+
 run single test:
   extends: run e2e tests
-  needs: []
+  needs: ["build e2e image"]
   services:
     - name: $CI_REGISTRY_IMAGE:develop
       alias: e2e.test.service
   variables:
     MIN_SUCCESS: 10
     MAX_RERUNS: 10
+    E2E_TEST_PATTERN: "@smoketest"
   script:
-  - mv /e2e .
-  - cd e2e
-  - echo ${CI_COMMIT_REF_NAME#e2e/}
+  - mv /e2e/* /e2e/.env.defaults $CI_PROJECT_DIR
+  - echo ${E2E_TEST_PATTERN}
   - unset FILTER_SUITE
-  - yarn e2e-rerun "${CI_COMMIT_REF_NAME#e2e/}"
+  - yarn e2e-rerun "$E2E_TEST_PATTERN"
   parallel: 5
   timeout: 60 minutes
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^e2e\//'
       when: always
+
+.customize-k8s:
+  script:
+    - kubectl annotate namespace $NAMESPACE janitor/ttl=3d
+
+deploy helm chart:
+  needs: ["build ui docker image"]
+  extends: .auto-deploy-helm-chart
+  rules:
+    - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
+      variables:
+        TAG_NAME: $CI_COMMIT_REF_SLUG
+      changes:
+        - ui/**/*
+      when: on_success

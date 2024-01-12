@@ -41,7 +41,6 @@ define('io.ox/mail/compose/util', [
             if (!model) return memo + (item.file_size >= 0 ? item.file_size : 0);
             if (model.get('contentDisposition') === 'INLINE') return memo;
             if (model.get('origin') === 'VCARD') return memo;
-            if (!model.getSize) debugger;
             return memo + model.getSize();
         }, 0);
     };
