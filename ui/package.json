@@ -102,6 +102,7 @@
     "lodash": "^4.17.21",
     "minimatch": "^3.0.5",
     "minimist": "^1.2.8",
+    "semver": "^5.7.2",
     "set-value": "^4.0.1",
     "socket.io-parser": "^3.4.3",
     "underscore": "^1.12.1",
