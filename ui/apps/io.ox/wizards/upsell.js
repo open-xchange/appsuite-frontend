@@ -120,7 +120,7 @@ define('io.ox/wizards/upsell', [
             _(products).each(function (p) {
                 var guid = _.uniqueId('form-control-label-');
                 $products.append(
-                    $('<div class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + p.id)).append(
+                    $('<div class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + p.id, { ALLOW_DATA_ATTR: false })).append(
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<label class="upsell-product-name">').attr('for', guid).append(
                             new miniViews.CheckboxView({ name: 'inCart', model: p, id: guid }).render().$el,
@@ -143,11 +143,11 @@ define('io.ox/wizards/upsell', [
             /* draw detail view pane */
             _(products).each(function (p) {
                 $details.append(
-                    $('<div class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + p.id)).append(
+                    $('<div class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + p.id, { ALLOW_DATA_ATTR: false })).append(
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<div class="upsell-product-name">').text(p.get('title')),
                         $('<span class="upsell-product-price">').text(printPrice(p)),
-                        $('<div class="upsell-product-description">').html(DOMPurify.sanitize(p.get('description')))
+                        $('<div class="upsell-product-description">').html(DOMPurify.sanitize(p.get('description'), { ALLOW_DATA_ATTR: false }))
                     )
                 );
             });
@@ -198,7 +198,7 @@ define('io.ox/wizards/upsell', [
 
             _(cartContents).each(function (prod) {
                 $cart.append(
-                    $('<tr class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + prod.id)).append(
+                    $('<tr class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + prod.id, { ALLOW_DATA_ATTR: false })).append(
                         $('<td class="upsell-product-name">').text(prod.get('title')),
                         $('<td class="upsell-product-price">').text(_.printf(priceFormat, prod.get('price').toFixed(2)))
                     )
@@ -225,7 +225,7 @@ define('io.ox/wizards/upsell', [
             baton.confirm = { node: $cart };
 
             $this.append(
-                $('<div class="upsell-disclaimer">').html(DOMPurify.sanitize(shop.disclaimer.en_US))
+                $('<div class="upsell-disclaimer">').html(DOMPurify.sanitize(shop.disclaimer.en_US, { ALLOW_DATA_ATTR: false }))
             );
         }
     });
