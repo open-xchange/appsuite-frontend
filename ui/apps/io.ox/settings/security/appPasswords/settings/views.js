@@ -55,7 +55,7 @@ define('io.ox/settings/security/appPasswords/settings/views', [
             );
         },
         renderTitle: function (app) {
-            var appTitle = DOMPurify.sanitize(app);
+            var appTitle = DOMPurify.sanitize(app, { ALLOW_DATA_ATTR: false });
             return this.makeTitle(appTitle)
                 .addClass('appPermDiv');
         },
