@@ -218,10 +218,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     var drawDropdown = function (activeValue, values, options) {
         var active = values[activeValue] || activeValue;
-        if (options.caret) {
-            active = active + '<b class="caret">';
-        }
-
 
         function getOptions() {
             return options.sort ?
@@ -243,7 +239,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 });
         }
 
-        var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
+        var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">')
+                .text(active)
+                .append(options.caret ? '<b class="caret">' : $()),
             $ul = $('<ul class="dropdown-menu" role="menu">').append(
                 getOptions()
             );
