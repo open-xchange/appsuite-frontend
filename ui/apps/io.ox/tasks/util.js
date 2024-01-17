@@ -223,7 +223,7 @@ define('io.ox/tasks/util', [
                 }
 
                 // prevent malicious code here
-                return sanitizer.simpleSanitize(note);
+                return sanitizer.simpleSanitize(note, { FORBID_ATTR: ['data-target', 'data-toggle'] });
             },
 
             //change status number to status text. format enddate to presentable string
