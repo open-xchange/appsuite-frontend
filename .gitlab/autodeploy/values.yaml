@@ -1,0 +1,9 @@
+image:
+  repository: $CI_REGISTRY_IMAGE
+  tag: $TAG_NAME
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: gitlab-registry-credentials
+
+hostname: "${PREVIEW_APP_NAME}.${KUBE_INGRESS_BASE_DOMAIN}"

@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: preview-app-virtual-service
+spec:
+  gateways:
+    - istio-system/sre-default-gateway
+  hosts:
+    - ${PREVIEW_APP_NAME}.${KUBE_INGRESS_BASE_DOMAIN}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      name: appserver
+      route:
+        - destination:
+            host: $OX_COMPONENT
+            port:
+              number: 80
