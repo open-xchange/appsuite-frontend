@@ -8,7 +8,6 @@ workflow:
 
 include:
   - local: "/gitlab-ci/docker.yml"
-  - local: "/gitlab-ci/preview_apps.yml"
   - local: "/gitlab-ci/documentation.yml"
   - local: "/gitlab-ci/packaging.yml"
   - local: "/gitlab-ci/e2e.yml"
@@ -25,6 +24,7 @@ stages:
 variables:
     # only fetch last 10 commits, much faster clones
   GIT_DEPTH: "10"
+  OX_COMPONENT: "frontend-core"
 
 .default_cache:
   cache:
@@ -43,7 +43,7 @@ variables:
     KUBERNETES_MEMORY_LIMIT: 1G
   script:
     - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress --cache-folder ../.yarn-cache
+    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
     - echo ${build_script}
     - eval "${build_script}"
     - "[ -z \"$PACKAGE_NAME\" ] && export PACKAGE_NAME=${PROJECT_PATH}"
