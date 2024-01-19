@@ -1152,7 +1152,7 @@ define('io.ox/contacts/api', [
             var key = getHashKey(query);
             search.cache[key] = def.then(function (data) {
                 // if incomplete data set
-                if (data.length === options.limit) {
+                if (data.length >= options.limit) {
                     // raise limit by factor x when cached data is incomplete and request again
                     options.limit += options.limit * factor;
                     return lookup(query, options);
