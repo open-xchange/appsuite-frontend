@@ -103,7 +103,7 @@ Scenario('[C265694] Hidden parent folder hierarchy for anonymous guest users', a
     I.click('Share');
     dialogs.waitForVisible();
     I.waitForText('Invited people only', 5);
-    I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
+    I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
     I.waitForText('Copy link', 5);
     I.click('Copy link');
 

@@ -387,7 +387,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
     // click on the second .appointment and edit it
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
@@ -404,7 +404,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
 
     // click on the first .appointment and edit it
     I.click('.appointment');
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
 
     I.waitForText('Edit', undefined, '.io-ox-sidepopup');
     I.click('Edit');
@@ -422,7 +422,7 @@ Scenario('[C234679] Exceptions changes on series modification', async ({ I, cale
     I.click('~Close', '.io-ox-sidepopup');
 
     I.click({ xpath: '(//div[@class="appointment-content"])[2]' });
-    I.waitForVisible('.io-ox-sidepopup');
+    I.waitForElement('.io-ox-sidepopup');
     I.waitForText('Changedsubject', undefined, '.io-ox-sidepopup');
 
 });
@@ -1089,32 +1089,33 @@ Scenario('[C7455] Edit appointment by changing the timeframe', async ({ I, calen
         folder: await calendar.defaultFolder(),
         summary: 'Dinner for one',
         startDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(12, 'hours').format('YYYYMMDD[T]HHmm00') },
-        endDate:   { tzid: 'Europe/Berlin', value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00') }
+        endDate: { tzid: 'Europe/Berlin', value: moment().startOf('day').add(13, 'hours').format('YYYYMMDD[T]HHmm00') }
     });
 
     I.login('app=io.ox/calendar&perspective=week:day');
     calendar.waitForApp();
 
     I.waitForVisible('.appointment');
-    I.scrollTo('.page.current .timeslot:nth-child(23)');
+    I.waitForText('Dinner for one');
+    I.scrollTo('.page.current .timeslot:nth-child(20)');
     I.dragAndDrop('.appointment .resizable-n', '.day .timeslot:nth-child(23)');
     I.waitForVisible('.appointment:not(.resizing) .appointment-content');
     I.waitForDetached('.appointment.io-ox-busy');
     I.wait(0.1);
-    I.retry(5).click('.appointment');
+    I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 – 1:00 PM');
     I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
-    I.scrollTo('.page.current .timeslot:nth-child(28)');
+    I.scrollTo('.page.current .timeslot:nth-child(25)');
     I.dragAndDrop('.appointment .resizable-s', '.day .timeslot:nth-child(28)');
     I.waitForVisible('.page.current .appointment:not(.resizing) .appointment-content');
     I.waitForDetached('.appointment.io-ox-busy');
     I.wait(0.1);
-    I.retry(5).click('.appointment');
+    I.click('.appointment');
     I.waitForVisible('.io-ox-sidepopup');
     I.waitForText('11:00 – 2:00 PM');
-    I.retry(5).click('~Close', '.io-ox-sidepopup');
+    I.click('~Close', '.io-ox-sidepopup');
     I.waitForDetached('.io-ox-sidepopup');
 
     calendar.switchView('Week');
