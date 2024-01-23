@@ -131,7 +131,7 @@ run single test:
 
 .customize-k8s:
   script:
-    - kubectl annotate namespace $NAMESPACE janitor/ttl=3d
+    - kubectl annotate --overwrite namespace $NAMESPACE janitor/ttl=3d
 
 deploy helm chart:
   needs: ["build ui docker image"]
