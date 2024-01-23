@@ -51,8 +51,8 @@ Scenario('[OXUI-700] for guest users with password', async ({ I, users, dialogs 
     I.clickToolbar('Share');
 
     dialogs.waitForVisible();
-    I.selectOption('.form-group select', 'Anyone with the public link and invited people');
-    I.waitForText('Anyone with the public link and invited people');
+    I.selectOption('.form-group select', 'Anyone with the link and invited people');
+    I.waitForText('Anyone with the link and invited people');
     I.waitForText('Copy link');
     I.wait(0.2);
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');

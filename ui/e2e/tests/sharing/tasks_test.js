@@ -75,7 +75,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.clickDropdown('Share');
         dialogs.waitForVisible();
         I.waitForText('Invited people only', 5);
-        I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
@@ -134,7 +134,7 @@ Scenario.skip('[C104304] tasks using “Permisions” dialog and sharing link', 
         I.clickDropdown('Share');
         dialogs.waitForVisible();
         I.waitForText('Invited people only', 5);
-        I.selectOption('Who can access this folder?', 'Anyone with the public link and invited people');
+        I.selectOption('Who can access this folder?', 'Anyone with the link and invited people');
         I.waitForText('Copy link', 5);
         dialogs.clickButton('Cancel');
         I.waitForDetached('.modal-dialog');
