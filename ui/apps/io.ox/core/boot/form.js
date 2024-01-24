@@ -301,7 +301,7 @@ define('io.ox/core/boot/form', [
                     'sorting': '$spacer,$copyright,Version $version,$privacy,$imprint,$spacer',
                     '$privacy': 'https://www.open-xchange.com/privacy/',
                     '$imprint': 'https://www.open-xchange.com/legal/',
-                    'copyright': '(c) $year OX Software GmbH'
+                    'copyright': '(c) $year Open-Xchange GmbH'
                 }
             };
         }
