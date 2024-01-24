@@ -5,7 +5,7 @@
  *
  * Licensed under the MPL License [http://www.nihilogic.dk/licenses/mpl-license.txt]
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2016 Open-Xchange GmbH, Germany. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
