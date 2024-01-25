@@ -120,10 +120,10 @@
     soap "^0.36.0"
     underscore "^1.9.1"
 
-"@open-xchange/codecept-horizontal-scaler@^0.1.0":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-horizontal-scaler/-/codecept-horizontal-scaler-0.1.2.tgz#d085299ffa87efb28f132271a9d7aa18a05279c2"
-  integrity sha512-NjVgO6GT12Q2ZA8bn9IbkMYZmhtcBmdBv0L1yHkw8aK3JBx4wj/xvAknLlQubNba74/ZC6DijewOA/nsrTWl+w==
+"@open-xchange/codecept-horizontal-scaler@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-horizontal-scaler/-/codecept-horizontal-scaler-0.1.4.tgz#f175d91cf83f722303733e7f0d6999d2ae193f1b"
+  integrity sha512-aI4GncVJ8WYG56blW8SJRffOqUka54tKXlm6qqcNGL0eIQ900m8VbM6IvKl9m+UMNB3pFDPd7D8KeBV/n6vpUA==
   dependencies:
     axios "^1.3.3"
     jsonwebtoken "^9.0.0"
