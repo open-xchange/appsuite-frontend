@@ -1,0 +1,56 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":dependencyDashboard",
+    ":ignoreModulesAndTests",
+    "group:monorepos",
+    "group:recommended",
+    "replacements:all",
+    "workarounds:all"
+  ],
+  "autoApprove": true,
+  "npm": {
+    "minimumReleaseAge": "3 days"
+  },
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "configMigration": true,
+  "ignoreDeps": [
+    "bootstrap",
+    "typeahead.js",
+    "tinymce",
+    "socket.io-client",
+    "font-awesome",
+    "@open-xchange/bootstrap-datepicker",
+    "@open-xchange/bootstrap-tokenfield",
+    "@open-xchange/codecept-horizontal-scaler",
+    "@open-xchange/hopscotch",
+    "@open-xchange/jquery-touch-events",
+    "@open-xchange/tinymce"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "pin",
+        "digest"
+      ],
+      "enabled": false
+    },
+    {
+      "matchDepTypes": [
+        "devDependencies",
+        "optionalDependencies"
+      ],
+      "enabled": false
+    },
+    {
+      "dependencyDashboardApproval": true,
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ]
+    }
+  ]
+}
