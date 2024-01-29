@@ -12,7 +12,7 @@
   },
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "less": "1.7.3"
+    "less": "1.7.5"
   },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
