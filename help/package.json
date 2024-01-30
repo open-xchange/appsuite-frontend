@@ -9,7 +9,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "bootstrap": "^3.4.1",
-    "jquery": "^3.2.1"
+    "jquery": "^3.7.1"
   },
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
