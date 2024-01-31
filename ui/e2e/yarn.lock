@@ -120,10 +120,10 @@
     soap "^0.36.0"
     underscore "^1.9.1"
 
-"@open-xchange/codecept-horizontal-scaler@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-horizontal-scaler/-/codecept-horizontal-scaler-0.1.4.tgz#f175d91cf83f722303733e7f0d6999d2ae193f1b"
-  integrity sha512-aI4GncVJ8WYG56blW8SJRffOqUka54tKXlm6qqcNGL0eIQ900m8VbM6IvKl9m+UMNB3pFDPd7D8KeBV/n6vpUA==
+"@open-xchange/codecept-horizontal-scaler@^0.1.4":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-horizontal-scaler/-/codecept-horizontal-scaler-0.1.6.tgz#08946d1c8dde3403de3bb9ca71f379545c1904d0"
+  integrity sha512-LKMKupx7KDjAhs/bS3cCCHhQ850U3PIob8z0+JY8sCklDmqhHDITGF4XtyXlaFl88SHhXcwLEThSbOCfXCaOTw==
   dependencies:
     axios "^1.3.3"
     jsonwebtoken "^9.0.0"
@@ -2195,16 +2195,21 @@ moment-range@^4.0.2:
     es6-symbol "^3.1.0"
 
 moment-timezone@^0.5.34:
-  version "0.5.43"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.43.tgz#3dd7f3d0c67f78c23cd1906b9b2137a09b3c4790"
-  integrity sha512-72j3aNyuIsDxdF1i7CEgV2FfxM1r6aaqJyLB2vwb33mXYyoyLly+F1zbWqhA3/bVIoJ4szlUoMbUnVdid32NUQ==
+  version "0.5.44"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.44.tgz#a64a4e47b68a43deeab5ae4eb4f82da77cdf595f"
+  integrity sha512-nv3YpzI/8lkQn0U6RkLd+f0W/zy/JnoR5/EyPz/dNkPTBjA2jNLCVxaiQ8QpeLymhSZvX0wCL5s27NQWdOPwAw==
   dependencies:
     moment "^2.29.4"
 
-moment@^2.24.0, moment@^2.29.4:
+moment@^2.24.0:
   version "2.29.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
+moment@^2.29.4:
+  version "2.30.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
+  integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
 morgan@^1.9.1:
   version "1.10.0"
