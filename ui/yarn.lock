@@ -523,6 +523,11 @@ async@^3.1.0:
   resolved "https://registry.yarnpkg.com/async/-/async-3.2.0.tgz#b3a2685c5ebb641d3de02d161002c60fc9f85720"
   integrity sha512-TR2mEZFVOj2pLStYxLht7TyfuRzaydfpxr3k9RpHIzMgw7A64dzsdqCxH1WJyQdoe8T10nDXd9wnEigmiuHIZw==
 
+async@^3.2.3:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.2.5.tgz#ebd52a8fdaf7a2289a24df399f8d8485c8a46b66"
+  integrity sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==
+
 async@~0.2.9:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
@@ -2666,12 +2671,12 @@ grunt-cli@~1.4.2:
     nopt "~4.0.1"
     v8flags "~3.2.0"
 
-grunt-contrib-clean@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-clean/-/grunt-contrib-clean-2.0.0.tgz#3be7ca480da4b740aa5e9d863e2f7e8b24f8a68b"
-  integrity sha512-g5ZD3ORk6gMa5ugZosLDQl3dZO7cI3R14U75hTM+dVLVxdMNJCPVmwf9OUt4v4eWgpKKWWoVK9DZc1amJp4nQw==
+grunt-contrib-clean@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/grunt-contrib-clean/-/grunt-contrib-clean-2.0.1.tgz#062e8019d31bfca35af8929a2ee1063c6c46dd2d"
+  integrity sha512-uRvnXfhiZt8akb/ZRDHJpQQtkkVkqc/opWO4Po/9ehC2hPxgptB9S6JHDC/Nxswo4CJSM0iFPT/Iym3cEMWzKA==
   dependencies:
-    async "^2.6.1"
+    async "^3.2.3"
     rimraf "^2.6.2"
 
 grunt-contrib-concat@1.0.1:
@@ -6154,7 +6159,7 @@ underscore.string@~3.3.5:
     sprintf-js "^1.0.3"
     util-deprecate "^1.0.2"
 
-underscore@>=1.4.3, underscore@>=1.8.3, underscore@^1.12.1, underscore@^1.13.6, underscore@^1.8.3, underscore@^1.9.1:
+underscore@>=1.4.3, underscore@>=1.8.3, underscore@^1.13.6, underscore@^1.8.3, underscore@^1.9.1:
   version "1.13.6"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.6.tgz#04786a1f589dc6c09f761fc5f45b89e935136441"
   integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
