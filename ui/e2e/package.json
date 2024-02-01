@@ -11,7 +11,7 @@
     "@codeceptjs/allure-legacy": "^1.0.2",
     "@codeceptjs/mock-request": "^0.3.1",
     "@open-xchange/codecept-helper": "^0.6.2",
-    "@open-xchange/codecept-horizontal-scaler": "^0.1.4",
+    "@open-xchange/codecept-horizontal-scaler": "0.1.4",
     "dotenv-defaults": "^5.0.2",
     "puppeteer": "14.3.0"
   },
