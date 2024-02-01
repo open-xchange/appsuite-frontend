@@ -13,7 +13,7 @@
     "minimumReleaseAge": "3 days"
   },
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": false
   },
   "configMigration": true,
   "ignoreDeps": [
@@ -24,6 +24,7 @@
     "font-awesome",
     "@open-xchange/bootstrap-datepicker",
     "@open-xchange/bootstrap-tokenfield",
+    "@open-xchange/codecept-horizontal-scaler",
     "@open-xchange/hopscotch",
     "@open-xchange/jquery-touch-events",
     "@open-xchange/tinymce"
