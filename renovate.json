@@ -31,18 +31,22 @@
   ],
   "packageRules": [
     {
-      "enabled": false,
       "matchUpdateTypes": [
-        "pin"
-      ]
+        "pin",
+        "digest"
+      ],
+      "enabled": false
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "prPriority": -1
     },
     {
       "dependencyDashboardApproval": true,
       "matchUpdateTypes": [
         "major",
         "minor",
-        "patch",
-        "digest"
+        "patch"
       ]
     }
   ]
