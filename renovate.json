@@ -47,12 +47,7 @@
         "major",
         "minor",
         "patch"
-      ],
-      "force": {
-        "constraints": {
-          "node": ">=10 <15"
-        }
-      }
+      ]
     }
   ]
 }
