@@ -28,14 +28,19 @@
     "@open-xchange/jquery-touch-events",
     "@open-xchange/tinymce"
   ],
-  "packageRules": [ 
+  "packageRules": [
+    {
+      "enabled": false,
+      "matchUpdateTypes": [
+        "pin"
+      ]
+    },
     {
       "dependencyDashboardApproval": true,
       "matchUpdateTypes": [
         "major",
         "minor",
         "patch",
-        "pin",
         "digest"
       ]
     }
