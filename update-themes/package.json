@@ -33,6 +33,6 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre3"
   },
   "devDependencies": {
-    "eslint-plugin-license-header": "^0.2.0"
+    "eslint-plugin-license-header": "^0.6.0"
   }
 }
