@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "appserver": "^0.7.0",
-    "eslint-plugin-license-header": "^0.2.0",
+    "eslint-plugin-license-header": "^0.6.0",
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0"
   }
