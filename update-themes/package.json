@@ -20,7 +20,7 @@
     "underscore": "^1.9.2"
   },
   "optionalDependencies": {
-    "eslint": "^6.0.0",
+    "eslint": "^8.0.0",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
     "grunt-bump": "^0.8.0",
     "grunt-check-dependencies": "^1.0.0",

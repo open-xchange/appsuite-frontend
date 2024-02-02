@@ -14,7 +14,7 @@
   "license": "AGPL-3.0-or-later",
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
-    "eslint": "^6.0.1",
+    "eslint": "^8.0.0",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
     "grunt": "^1.0.4",
     "grunt-bump": "^0.8.0",
