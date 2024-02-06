@@ -975,10 +975,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-cldr-dates-modern@36.0.0:
-  version "36.0.0"
-  resolved "https://registry.yarnpkg.com/cldr-dates-modern/-/cldr-dates-modern-36.0.0.tgz#a70071e1a9a0f7a4614990dd01ba519a656ca6dc"
-  integrity sha512-YiUBgo0AqBVWMbZEtw2YFk6/YagcvGmcpARejeqXe9R2ZZvv7Ek40idaoIXEjBb0wKVtJ1cYBFpMChEC0CBbqQ==
+cldr-dates-modern@44.1.0:
+  version "44.1.0"
+  resolved "https://registry.yarnpkg.com/cldr-dates-modern/-/cldr-dates-modern-44.1.0.tgz#5cd2aadcfe4efeea611ab60c5f7f22343bb2864b"
+  integrity sha512-3WwvbtEEInhyswCDtdESaCZa6EDoGgnlTaqSro7DFUT4v9sJ4waCz6y4CVnH+GAUCmQ0DFO19NfjRhipjrrS/g==
 
 clean-css@2.0.x:
   version "2.0.8"
