@@ -90,6 +90,65 @@ Scenario('[C114339] Flag an E-Mail with Starred flag on an alternative client (f
     I.dontSee(colorFlag);
 });
 
+Scenario('[OXUIB-2703] Order of star flagged', async ({ I, mail, users }) => {
+    const from = [['You', users[0].get('primaryEmail')]];
+    const to = [['Me', users[0].get('primaryEmail')]];
+
+    await Promise.all([
+        I.haveSetting('io.ox/core//autoStart', 'none'),
+        I.haveMail({ subject: 'Lorem #1', from, to }),
+        I.haveMail({ subject: 'Lorem #2', from, to }),
+        I.haveMail({ subject: 'Lorem #3', from, to }),
+        I.haveMail({ subject: 'Lorem #4', from, to }),
+        I.haveMail({ subject: 'Lorem #5', from, to }),
+        I.haveMail({ subject: 'Lorem #6', from, to }),
+        I.haveMail({ subject: 'Lorem #7', from, to }),
+        I.haveMail({ subject: 'Lorem #8', from, to }),
+        I.haveMail({ subject: 'Lorem #9', from, to })
+    ]);
+
+
+    I.login();
+    I.executeScript(() => require('settings!io.ox/mail').set('features/flag', { color: false, star: true }));
+    I.waitForInvisible('#background-loader');
+    I.openApp('Mail');
+    mail.waitForApp();
+    I.waitForText('No message selected');
+
+    // fill cache
+    I.click('Sort', '.list-view-control');
+    I.clickDropdown('Flag');
+
+    I.click('Sort', '.list-view-control');
+    I.clickDropdown('Subject');
+
+    mail.selectMail('Lorem #4');
+    I.clickToolbar('[data-action="io.ox/mail/actions/flag"]:not(.disabled)');
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+
+    mail.selectMail('Lorem #5');
+    I.clickToolbar('[data-action="io.ox/mail/actions/flag"]:not(.disabled)');
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+
+    I.click('Sort', '.list-view-control');
+    I.clickDropdown('Flag');
+
+    // check if flagged mails listed last
+    mail.selectMailByIndex(7);
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+    mail.selectMailByIndex(8);
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+
+    I.click('Sort', '.list-view-control');
+    I.clickDropdown('Ascending');
+
+    // check if flagged mails listed first
+    mail.selectMailByIndex(0);
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+    mail.selectMailByIndex(1);
+    I.waitForElement('.mail-item .list-item.selected .flag [title="Flagged"]');
+});
+
 // --------------------------------------------------------------------------
 
 function getUtils() {
