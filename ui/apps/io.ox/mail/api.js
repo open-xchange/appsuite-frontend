@@ -837,6 +837,7 @@ define('io.ox/mail/api', [
         });
         return update(list, { flags: api.FLAGS.FLAGGED, value: value }).done(function () {
             unsetSorted(list, 651);
+            unsetSorted(list, 660);
             folderAPI.reload(list);
         });
     };
