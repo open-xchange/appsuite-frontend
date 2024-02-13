@@ -39,7 +39,7 @@
     },
     {
       "matchDepTypes": ["devDependencies"],
-      "prPriority": -1
+      "enabled": false
     },
     {
       "dependencyDashboardApproval": true,
