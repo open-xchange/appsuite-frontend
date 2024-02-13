@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -252,7 +252,7 @@ define('io.ox/core/main/logout', [
             ? !settings.isConfigurable('customLocations/guestLogout') && settings.get('customLocations/guestLogout') || ox.serverConfig.guestLogoutLocation
             : !settings.isConfigurable('customLocations/logout') && settings.get('customLocations/logout') || ox.serverConfig.logoutLocation;
 
-        if (location && location.match(/^https:\/\/.*$|^\/.*$/)) {
+        if (location && location.match(/^https?:\/\/.*$|^\/.*$/)) {
             return _.url.vars(location);
         }
         return _.url.vars(ox.logoutLocation || '');

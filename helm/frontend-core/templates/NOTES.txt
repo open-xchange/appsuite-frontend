@@ -1,0 +1,1 @@
+Preview app successfully deployed to https://{{ .Values.hostname }}

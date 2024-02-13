@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -69,20 +69,20 @@ define('plugins/portal/upsellads/register', [
         if (!type || type === 'text-only') {
             toTarget.append(
                 $('<div class="text upsell-full">').append(
-                    $('<div class="overflow-container">').html(fromAd.text)
+                    $('<div class="overflow-container">').text(fromAd.text)
                 )
             );
 
         } else if (type === 'text-top') {
             toTarget.append(
-                $('<div class="text upsell-top">').html(fromAd.text),
+                $('<div class="text upsell-top">').text(fromAd.text),
                 $('<div class="image upsell-bottom">').css({ 'background-image': 'url(' + fromAd.image + ')' })
             );
 
         } else if (type === 'text-bottom') {
             toTarget.append(
                 $('<div class="image upsell-top">').css({ 'background-image': 'url(' + fromAd.image + ')' }),
-                $('<div class="text upsell-bottom">').html(fromAd.text)
+                $('<div class="text upsell-bottom">').text(fromAd.text)
             );
 
         } else if (type === 'image-only') {
@@ -145,4 +145,7 @@ define('plugins/portal/upsellads/register', [
             adInterval[ad] = setInterval(function () { return nextAd(content, ad, slides); }, intervalDuration);
         }
     });
+
+    // make this testable with unit tests
+    return { addContent: addContent };
 });

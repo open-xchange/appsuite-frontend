@@ -4,6 +4,7 @@
     "globals": {
         "staticGt": true
     },
+    "ignorePatterns": ["node_modules"],
     "rules": {
         "license-header/header": ["error", "./license-header"]
     },

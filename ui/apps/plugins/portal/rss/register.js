@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -109,8 +109,7 @@ define('plugins/portal/rss/register', [
         draw: (function () {
 
             function drawItem(item) {
-                var $body = $('<div class="text-body noI18n">').html(sanitizer.simpleSanitize(item.body));
-
+                var $body = $('<div class="text-body noI18n">').html(sanitizer.simpleSanitize(item.body, { ALLOW_DATA_ATTR: false }));
                 // add target to a tags
                 $body.find('a').attr({ target: '_blank', rel: 'noopener' });
                 // allow images from https sources

@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ Scenario('[C104305] Calendar folders using “Permissions” dialog and sharing 
         I.waitForElement(locate('.permissions-view .row').at(2));
         I.waitForText('Viewer', 10, '.permissions-view');
         I.waitForText('Invited people only');
-        I.selectOption('Who can access this calendar?', 'Anyone with the link and invited people');
+        I.selectOption('Who can access this calendar?', 'Anyone with the public link and invited people');
         I.waitForText('Copy link', 5);
         I.click('Copy link');
         I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');

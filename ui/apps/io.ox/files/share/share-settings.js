@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -46,7 +46,8 @@ define('io.ox/files/share/share-settings', [
         index: INDEX += 100,
         draw: function () {
             this.append(
-                $('<h5></h5>').text(gt('Link options'))
+                //#. options for a public link to a shared folder or file"
+                $('<h5></h5>').text(gt('Public link options'))
             );
         }
     });

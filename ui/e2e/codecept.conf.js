@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -219,7 +219,7 @@ module.exports.config = {
         }, 500);
     },
     plugins: {
-        allure: { enabled: true },
+        allure: { enabled: true, require: '@codeceptjs/allure-legacy' },
         testrail: {
             require: './plugins/testrail',
             host: process.env.TESTRAIL_HOST || 'https://testrail.local',
@@ -234,9 +234,9 @@ module.exports.config = {
             enabled: true
         },
         filterSuite: {
-            enabled: true,
-            require: '@open-xchange/codecept-helper/src/plugins/filterSuite',
-            suite: process.env.FILTER_SUITE || [],
+            enabled: process.env.CI && (process.env.SUITE_SERVICE_URL || process.env.FILTER_SUITE),
+            require: '@open-xchange/codecept-horizontal-scaler',
+            suiteFilePath: process.env.FILTER_SUITE,
             filter: process.env.runOnly === 'true' ? () => false : undefined,
             report: process.env.FILTER_REPORT || 'filter_report.json'
         },

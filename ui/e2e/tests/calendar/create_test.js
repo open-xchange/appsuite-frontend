@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('Create appointment with all fields', async ({ I, calendar, dialogs }) => {
+Scenario('Create appointment with all fields @smoketest', async ({ I, calendar, dialogs }) => {
     const data = { subject: 'test title', location: 'test location' };
 
     I.login('app=io.ox/calendar');

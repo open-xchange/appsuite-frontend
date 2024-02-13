@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ Scenario('[C7781] Default sender address', async ({ I, users, mail }) => {
     const user = users[0];
 
     await I.haveSetting('io.ox/mail//features/registerProtocolHandler', false);
-    await I.haveAnAlias('urbi@orbi.it', { user });
+    await user.hasAlias('urbi@orbi.it');
     I.login('app=io.ox/mail');
     mail.newMail();
     I.click(`<${user.get('primaryEmail')}>`, '.mail-input');

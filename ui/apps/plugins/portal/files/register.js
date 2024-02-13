@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,8 +26,9 @@ define('plugins/portal/files/register', [
     'io.ox/files/api',
     'io.ox/preview/main',
     'io.ox/portal/widgets',
+    'io.ox/mail/sanitizer',
     'gettext!plugins/portal'
-], function (ext, actionsUtil, api, preview, portalWidgets, gt) {
+], function (ext, actionsUtil, api, preview, portalWidgets, sanitizer, gt) {
 
     'use strict';
 
@@ -114,7 +115,7 @@ define('plugins/portal/files/register', [
             if (_.isEmpty(filename)) {
                 //old 'description only files'
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
-                content.html(_.escape(baton.data.description).replace(/\n/g, '<br>'));
+                content.html(sanitizer.simpleSanitize(baton.data.description, { ALLOW_DATA_ATTR: false }).replace(/\n/g, '<br>'));
             } else if ((/(png|jpe?g|gif|bmp)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id, version: baton.data.version };
                 options = { width: 300, height: 300, scaleType: 'cover' };
@@ -132,7 +133,7 @@ define('plugins/portal/files/register', [
             } else if ((/(txt|json|md|csv)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
-                    content.html(_.escape(filecontent).replace(/\n/g, '<br>'));
+                    content.html(sanitizer.simpleSanitize(filecontent, { ALLOW_DATA_ATTR: false }).replace(/\n/g, '<br>'));
                 });
             } else if (baton.data.encrypted) {
                 content.addClass('encrypted');

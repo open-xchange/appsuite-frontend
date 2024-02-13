@@ -1,6 +1,6 @@
 /*
  *
- * @copyright Copyright (c) OX Software GmbH, Germany <info@open-xchange.com>
+ * @copyright Copyright (c) Open-Xchange GmbH, Germany <info@open-xchange.com>
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -51,7 +51,7 @@ Scenario('[OXUIB-645] XSS using script code as module at app loader', async func
     I.click('Close');
     I.click(locate('.list-item').withText('OXUIB-645.js'));
     drive.shareItem(true);
-    I.selectOption('Who can access this file?', 'Anyone with the link and invited people');
+    I.selectOption('Who can access this file?', 'Anyone with the public link and invited people');
     I.waitForNetworkTraffic();
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
     let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');
@@ -77,7 +77,7 @@ Scenario('[OXUIB-872] XSS using script code as module at app loader', async func
     I.click('Close');
     I.click(locate('.list-item').withText('OXUIB-872.js'));
     drive.shareItem(true);
-    I.selectOption('Who can access this file?', 'Anyone with the link and invited people');
+    I.selectOption('Who can access this file?', 'Anyone with the public link and invited people');
     I.waitForNetworkTraffic();
     I.waitForElement('button[aria-label="Copy to clipboard"]:not([data-clipboard-text=""])');
     let url = await I.grabAttributeFrom('button[aria-label="Copy to clipboard"]', 'data-clipboard-text');

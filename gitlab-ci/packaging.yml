@@ -33,7 +33,7 @@ upload:
   stage: deploy
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
-    GIT_DEPTH: 3000
+    GIT_DEPTH: 300
     KUBERNETES_MEMORY_REQUEST: 1G 
     KUBERNETES_MEMORY_LIMIT: 1G
   timeout: 40m
