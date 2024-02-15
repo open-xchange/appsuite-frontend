@@ -233,6 +233,7 @@ img {
     height: auto;
     margin-bottom: 2em;
     border: 0;
+    max-width: 100%;
 }
 
 @media print {
