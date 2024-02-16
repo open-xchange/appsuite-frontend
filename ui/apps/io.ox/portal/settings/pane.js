@@ -33,7 +33,6 @@ define('io.ox/portal/settings/pane', [
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/settings/util',
-    'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/portal/style'
 ], function (ext, ExtensibleView, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown, util) {
 

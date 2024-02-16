@@ -33,9 +33,7 @@ define('io.ox/participants/add', [
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
     'settings!io.ox/contacts',
-    'io.ox/backbone/mini-views/addresspicker',
-    // need jquery-ui for scrollParent
-    'static/3rd.party/jquery-ui.min.js'
+    'io.ox/backbone/mini-views/addresspicker'
 ], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, calendarUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
 
     'use strict';
