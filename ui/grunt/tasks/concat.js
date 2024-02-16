@@ -54,6 +54,7 @@ module.exports = function (grunt) {
                             'src/browser.js',
                             'src/plugins.js',
                             'src/jquery.plugins.js',
+                            'build/static/3rd.party/jquery-ui-scrollparent.js',
 
                             'node_modules/blankshield/blankshield.js',
                             // add bootstrap JavaScript
@@ -149,6 +150,7 @@ module.exports = function (grunt) {
                             'src/browser.js',
                             'src/plugins.js',
                             'src/jquery.plugins.js',
+                            'build/static/3rd.party/jquery-ui-scrollparent.js',
 
                             'node_modules/blankshield/blankshield.js',
                             // add bootstrap JavaScript
