@@ -38,7 +38,10 @@
       "enabled": false
     },
     {
-      "matchDepTypes": ["devDependencies"],
+      "matchDepTypes": [
+        "devDependencies",
+        "optionalDependencies"
+      ],
       "enabled": false
     },
     {
