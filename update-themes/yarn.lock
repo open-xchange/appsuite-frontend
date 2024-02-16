@@ -1426,12 +1426,12 @@ grunt-contrib-clean@2.0.1:
     async "^3.2.3"
     rimraf "^2.6.2"
 
-grunt-contrib-concat@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-concat/-/grunt-contrib-concat-1.0.1.tgz#61509863084e871d7e86de48c015259ed97745bd"
-  integrity sha1-YVCYYwhOhx1+ht5IwBUlntl3Rb0=
+grunt-contrib-concat@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/grunt-contrib-concat/-/grunt-contrib-concat-2.1.0.tgz#9ac62117a18b48d1bfccb3eef46c960bbd163d75"
+  integrity sha512-Vnl95JIOxfhEN7bnYIlCgQz41kkbi7tsZ/9a4usZmxNxi1S2YAIOy8ysFmO8u4MN26Apal1O106BwARdaNxXQw==
   dependencies:
-    chalk "^1.0.0"
+    chalk "^4.1.2"
     source-map "^0.5.3"
 
 grunt-contrib-copy@^1.0.0:
