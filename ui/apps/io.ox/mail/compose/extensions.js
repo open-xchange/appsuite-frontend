@@ -43,8 +43,7 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/attachments/backbone',
     'io.ox/core/strings',
     'io.ox/mail/compose/resize-view',
-    'io.ox/mail/compose/resize',
-    'static/3rd.party/jquery-ui.min.js'
+    'io.ox/mail/compose/resize'
 ], function (mailAPI, sender, mini, Dropdown, ext, actionsUtil, Tokenfield, dropzone, capabilities, attachmentQuota, util, AttachmentView, composeUtil, mailUtil, accountAPI, settings, gt, coreSettings, contactSettings, Attachments, strings, ResizeView, imageResize) {
 
     var POINT = 'io.ox/mail/compose';
