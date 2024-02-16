@@ -28,8 +28,7 @@ define('io.ox/mail/compose/sharing', [
     'io.ox/core/yell',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
-    'settings!io.ox/core',
-    'static/3rd.party/jquery-ui.min.js'
+    'settings!io.ox/core'
 ], function (ExtensibleView, mini, Dropdown, ext, yell, gt, mailSettings, coreSettings) {
 
     var getTimeOption = function (seed) {

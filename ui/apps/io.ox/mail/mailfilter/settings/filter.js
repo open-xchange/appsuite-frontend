@@ -36,7 +36,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/core/folder/picker',
     'io.ox/mail/api',
-    'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
 ], function (ext, api, mailfilterModel, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS, picker, mailAPI) {
 

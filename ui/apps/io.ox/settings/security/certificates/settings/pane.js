@@ -26,8 +26,7 @@ define('io.ox/settings/security/certificates/settings/pane', [
     'io.ox/core/api/certificate',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/settings/security/certificates/settings/certificate-view',
-    'io.ox/backbone/mini-views/listutils',
-    'static/3rd.party/jquery-ui.min.js'
+    'io.ox/backbone/mini-views/listutils'
 ], function (ext, gt, api, ListView, certificateViews, listUtils) {
 
     'use strict';

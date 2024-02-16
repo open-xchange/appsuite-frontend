@@ -71,7 +71,11 @@ module.exports = function (grunt) {
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js'],
+                        src: [
+                            // file is unused in core
+                            'jquery-ui.min.js',
+                            'jquery-ui-scrollparent.js'
+                        ],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },
