@@ -32,8 +32,7 @@ define('io.ox/core/tk/tokenfield', [
     'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
-    'less!io.ox/core/tk/tokenfield',
-    'static/3rd.party/jquery-ui.min.js'
+    'less!io.ox/core/tk/tokenfield'
 ], function (ext, Typeahead, pModel, pViews, contactAPI, http, util, contactsUtil, gt) {
 
     'use strict';

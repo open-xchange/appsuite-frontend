@@ -30,9 +30,7 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/util',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
-    'less!io.ox/calendar/edit/style',
-    // need jquery-ui for scrollParent
-    'static/3rd.party/jquery-ui.min.js'
+    'less!io.ox/calendar/edit/style'
 ], function (ext, AppointmentModel, api, EditView, notifications, folderAPI, util, gt, settings) {
 
     'use strict';
