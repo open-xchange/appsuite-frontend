@@ -31,6 +31,8 @@ define('io.ox/mail/actions/attachmentQuota', [
 
     function accumulate(attachmentCollection, type) {
         return attachmentCollection.map(function (m) {
+            var file = m.get('origin').file;
+            if (file) return file.size;
             if (m.get('contentDisposition') !== type) return 0;
             if (m.get('size') >= 0) return m.get('size');
             if (m.get('origin')) return (m.get('origin').file || {}).size || 0;
