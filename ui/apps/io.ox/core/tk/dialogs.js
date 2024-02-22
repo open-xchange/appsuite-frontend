@@ -637,7 +637,13 @@ define('io.ox/core/tk/dialogs', [
                 // see bug 41822
                 '.io-ox-dialog-sidepopup-toggle'
             ].join(', ');
-            return target.closest(whiteList).length > 0 || target.is('html') || !document.contains(target.get(0));
+
+            // blocklist needed to handle removed elements [OXUIB-2713]
+            var blockList = [
+                'td[role=gridcell]'
+            ].join(', ');
+
+            return target.closest(whiteList).length > 0 || target.is('html') || (!document.contains(target.get(0)) && target.closest(blockList).length === 0);
         }
 
         if (target.hasClass('apptitle')) {
