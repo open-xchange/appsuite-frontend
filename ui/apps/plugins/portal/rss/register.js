@@ -21,8 +21,9 @@ define('plugins/portal/rss/register',
      'io.ox/rss/api',
      'io.ox/core/date',
      'io.ox/core/tk/dialogs',
+     'io.ox/mail/sanitizer',
      'gettext!io.ox/portal'
-    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, sanitizer, gt) {
 
     'use strict';
 
@@ -95,7 +96,7 @@ define('plugins/portal/rss/register',
             function drawItem(item) {
 
                 var publishedDate = new date.Local(item.date).format(date.DATE),
-                    $body = $('<div class="text-body noI18n">').html(item.body);
+                    $body = $('<div class="text-body noI18n">').html(sanitizer.simpleSanitize(item.body, { ALLOW_DATA_ATTR: false }));
 
                 // add target to a tags
                 $body.find('a').attr({ target: '_blank', rel: 'noopener' });
