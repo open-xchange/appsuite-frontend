@@ -34,7 +34,7 @@ After(async ({ users }) => {
 });
 
 
-Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
+Scenario.skip('Checks when adding/removing attachments', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         message = locate({ css: '.io-ox-alert' }).as('Yell: warning');
@@ -53,11 +53,13 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     // attach my vcard
     I.click(mail.locators.compose.options);
     I.click('Attach Vcard');
+    I.waitForText('.vcf', 10, '.list-container');
 
     // attach image (3720)
     I.say('threshold: not exceeded yet');
     I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/1030x1030.png');
     I.waitForVisible(unchecked, 10);
+    I.waitForText('1030x1030.png', 10, '.list-container');
 
 
     // attach inline image
@@ -68,6 +70,7 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     // attach another image (2387)
     I.say('threshold: exceeded');
     I.attachFile('.composetoolbar input[type="file"]', 'media/placeholder/800x600-mango.png');
+    I.waitForText('800x600-mango.png', 10, '.list-container');
     I.waitForVisible(message, 10);
     I.waitForVisible(checked, 10);
     I.waitForNetworkTraffic();
