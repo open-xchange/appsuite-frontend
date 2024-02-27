@@ -33,6 +33,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
+
 Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
@@ -77,8 +78,11 @@ Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     I.checkOption(checked);
 
     // remove all file attachments
-    I.click('.list-container .remove:last-child');
-    I.click('.list-container .remove:last-child');
+    I.waitForElement('.list-container .inline-items > :nth-child(3)');
+    I.click('.remove', '.list-container .inline-items > :nth-child(3)');
+    I.waitForDetached('.list-container .inline-items > :nth-child(3)');
+    I.click('.remove', '.list-container .inline-items > :nth-child(2)');
+    I.waitForDetached('.list-container .inline-items > :nth-child(2)');
     I.uncheckOption(checked);
 
     // add again
