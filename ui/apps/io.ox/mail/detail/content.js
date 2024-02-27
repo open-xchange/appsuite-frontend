@@ -603,7 +603,8 @@ define('io.ox/mail/detail/content', [
                     } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type) && settings.get('allowHtmlMessages', true)) {
                         // add images if text
                         baton.source += '\n!(api/image/mail/picture?' +
-                            $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +
+                            $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 })
+                              .replace(/\(/g, '%28').replace(/\)/g, '%29') +
                             ')\n';
                     }
                 });
