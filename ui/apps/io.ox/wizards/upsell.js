@@ -193,7 +193,7 @@ define('io.ox/wizards/upsell', [
 
             _(cartContents).each(function (prod) {
                 $cart.append(
-                    $('<tr class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + p.id, { ALLOW_DATA_ATTR: false })).append(
+                    $('<tr class="upsell-product">').addClass(DOMPurify.sanitize('upsell-product-' + prod.id, { ALLOW_DATA_ATTR: false })).append(
                         $('<td class="upsell-product-name">').text(prod.get('title')),
                         $('<td class="upsell-product-price">').text(_.printf(priceFormat, prod.get('price').toFixed(2)))
                     )
