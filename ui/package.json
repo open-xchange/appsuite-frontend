@@ -19,7 +19,7 @@
     "@open-xchange/appserver": "^0.8.0-pre1",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
-    "chai": "^4.3.4",
+    "chai": "^4.4.1",
     "dotenv-defaults": "^3.0.0",
     "eslint": "^6.2.2",
     "eslint-config-open-xchange-appsuite": "^0.4.0",
