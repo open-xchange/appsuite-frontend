@@ -96,6 +96,8 @@ allure report:
       changes:
         - ui/**/*
       when: always
+  tags:
+    - openstack
 
 remove allure report:
   extends: .remove allure report
@@ -108,6 +110,9 @@ remove allure report:
         - ui/**/*
       when: manual
       allow_failure: true
+  tags:
+    - openstack
+    - kubernetes
 
 run single test:
   extends: run e2e tests
@@ -144,3 +149,6 @@ deploy helm chart:
       changes:
         - ui/**/*
       when: on_success
+  tags:
+    - kubernetes
+    - openstack

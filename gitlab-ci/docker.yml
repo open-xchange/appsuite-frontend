@@ -68,6 +68,7 @@ build e2e image:
         TAG_NAME: "$CI_COMMIT_REF_SLUG"
   tags:
     - openstack
+    - kubernetes
 
 .tag docker image: &add_tag
   stage: deploy
