@@ -18,6 +18,7 @@ build ui docker image:
   needs:
     - build ui
   tags:
+    - openstack
     - docker
   rules:
     - if: '$CI_COMMIT_REF_NAME !~ /^e2e\//'
@@ -65,11 +66,14 @@ build e2e image:
         - ui/e2e/Dockerfile
       variables:
         TAG_NAME: "$CI_COMMIT_REF_SLUG"
+  tags:
+    - openstack
 
 .tag docker image: &add_tag
   stage: deploy
   dependencies: [] # none
   tags:
+    - openstack
     - docker
   script:
     - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
