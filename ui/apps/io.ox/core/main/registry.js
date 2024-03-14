@@ -27,7 +27,15 @@ define('io.ox/core/main/registry', [
 
         var hash = {
             'mail-compose': 'io.ox/mail/compose/main',
-            'client-onboarding': 'io.ox/onboarding/clients/wizard'
+            'client-onboarding': 'io.ox/onboarding/clients/wizard',
+            // used by savepoints
+            'io.ox/mail/compose': 'io.ox/mail/compose/main',
+            'io.ox/calendar/edit': 'io.ox/calendar/edit/main',
+            'io.ox/calendar/freetime': 'io.ox/calendar/freetime/main',
+            'io.ox/contacts/distrib': 'io.ox/contacts/distrib/main',
+            'io.ox/contacts/edit': 'io.ox/contacts/edit/mains',
+            'io.ox/editor': 'io.ox/editor/main',
+            'io.ox/tasks/edit': 'io.ox/tasks/edit/main'
         };
 
         var custom = {};
