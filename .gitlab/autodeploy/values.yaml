@@ -3,6 +3,13 @@ image:
   tag: $TAG_NAME
   pullPolicy: Always
 
+resources:
+  limits:
+    memory: 1G
+  requests:
+    memory: 1G
+    cpu: 500m
+
 imagePullSecrets:
   - name: gitlab-registry-credentials
 

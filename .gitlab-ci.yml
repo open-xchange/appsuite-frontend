@@ -54,6 +54,7 @@ variables:
   stage: build
   tags:
     - kubernetes
+    - openstack
   artifacts:
     expire_in: 2hours
     paths:
@@ -132,6 +133,7 @@ test ui:
     - build ui
   tags:
     - kubernetes
+    - openstack
   artifacts:
     reports:
       junit: ui/build/reports/unit/*/result.xml

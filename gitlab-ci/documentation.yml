@@ -18,6 +18,7 @@ build documentation:
     - cp -r /documentation/dist/* doku/$VERSION
   dependencies: []
   tags:
+    - openstack
     - kubernetes
   artifacts:
     paths:
@@ -51,6 +52,7 @@ deploy documentation:
   needs:
     - build documentation
   tags:
+    - openstack
     - shell
     - documentation
   allow_failure: true

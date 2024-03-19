@@ -17,6 +17,7 @@ delete project on obs:
     - echo ${CI_COMMIT_REF_SLUG} | grep -e "^master" -e "^release" && export OBS_PROJECT=frontend-${CI_COMMIT_REF_NAME} || export OBS_PROJECT=frontend-${CI_COMMIT_REF_SLUG}
     - osc rdelete -r ${OBS_PROJECT} -m "GitLab CI environment stopped"
   tags:
+    - openstack
     - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME
@@ -34,7 +35,7 @@ upload:
   variables:
     OBS_PROJECT_EXT: $CI_COMMIT_REF_SLUG
     GIT_DEPTH: 300
-    KUBERNETES_MEMORY_REQUEST: 1G 
+    KUBERNETES_MEMORY_REQUEST: 1G
     KUBERNETES_MEMORY_LIMIT: 1G
   timeout: 40m
   script:
@@ -43,6 +44,7 @@ upload:
     - test -n "$TASKS" && export TASKS="$TASKS wait4Project"
     - gradle --no-daemon $TASKS
   tags:
+    - openstack
     - kubernetes
   environment:
     name: packages/$CI_COMMIT_REF_NAME

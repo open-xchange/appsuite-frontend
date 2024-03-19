@@ -113,7 +113,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     }
                 }
             }).done(function (editor) {
-                var str = DOMPurify.sanitize(signature.content);
+                var str = DOMPurify.sanitize(signature.content, { ALLOW_DATA_ATTR: false });
                 editor.show();
                 if (signature.content && !looksLikeHTML(str)) str = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
                 editor.setContent(str);
@@ -272,7 +272,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 // now convert line breaks to <br>
                 .replace(/\n+/g, '<br>');
         }
-        return DOMPurify.sanitize(str);
+        return DOMPurify.sanitize(str, { ALLOW_DATA_ATTR: false });
     }
 
     function fnImportSignatures(e) {

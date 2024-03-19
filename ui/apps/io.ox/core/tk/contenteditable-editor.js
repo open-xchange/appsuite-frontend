@@ -78,9 +78,9 @@ define('io.ox/core/tk/contenteditable-editor', [
         draw: function (ed) {
             var sanitizeAttributes = function (e) {
                 if (!e.content) return;
-                // aways cast to String (See Bug 66936) - since this is handed over to tinyMCE
+                // always cast to String (See Bug 66936) - since this is handed over to tinyMCE
                 // we have no choice but making this a String
-                e.content = DOMPurify.sanitize(e.content) + '';
+                e.content = DOMPurify.sanitize(e.content, { ALLOW_DATA_ATTR: false }) + '';
             };
             // see bug 48231 and 50849
             ed.on('PastePreProcess', sanitizeAttributes);
