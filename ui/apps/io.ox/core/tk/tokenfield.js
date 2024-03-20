@@ -164,6 +164,7 @@ define('io.ox/core/tk/tokenfield', [
                         };
                     });
                 },
+                autoselectTopSuggestion: false,
                 // autoselect also when enter was hit before dropdown was drawn
                 delayedautoselect: false,
                 // tokenfield default
@@ -343,8 +344,10 @@ define('io.ox/core/tk/tokenfield', [
 
                     // if we dont have a model already, check if the topmost suggestion fits to our current input
                     var topSuggestion = self.hiddenapi.dropdown.getDatumForTopSuggestion();
-                    if (!e.attrs.model && topSuggestion && e.attrs.value === topSuggestion.value && topSuggestion.raw && topSuggestion.raw.model) {
+                    var selectTop = (topSuggestion && (e.attrs.value === topSuggestion.value)) || self.options.autoselectTopSuggestion;
+                    if (!e.attrs.model && selectTop && topSuggestion && topSuggestion.raw && topSuggestion.raw.model) {
                         e.attrs.model = topSuggestion.raw.model;
+                        e.attrs.value = topSuggestion.raw.value;
                         e.attrs.label = e.attrs.model.getDisplayName({ isMail: self.options.isMail });
                     }
 
