@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 11:19+0100\n"
+"PO-Revision-Date: 2024-03-21 14:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-POOTLE-MTIME: 1410268670.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -611,8 +611,7 @@ msgstr "Online-Hilfe: %1$s"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Delete"
 msgstr "Löschen"
 
@@ -2233,7 +2232,6 @@ msgstr "Fehler: Termine konnten nicht geladen werden"
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Erneut versuchen"
 
@@ -3607,7 +3605,7 @@ msgstr "Antwort an alle per Chat"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Chat"
 msgstr "Chat"
 
@@ -4181,7 +4179,6 @@ msgstr "%1$s hat eine Datei hochgeladen"
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Antworten"
 
@@ -4415,8 +4412,7 @@ msgid "Send email"
 msgstr "E-Mail senden"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/contacts/view-detail.js
 msgid "Invite"
 msgstr "Einladen"
 
@@ -5440,9 +5436,8 @@ msgstr "Telefon"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Email"
 msgstr "E-Mail"
 
@@ -5610,6 +5605,20 @@ msgstr[1] "Verteilerliste mit %1$d Einträgen"
 msgid "Private contact"
 msgstr "Privater Kontakt"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
+msgctxt "verb"
+msgid "Call"
+msgstr "Anrufen"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Zoom"
+msgstr "Über Zoom anrufen"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Jitsi"
+msgstr "Über Jitsi anrufen"
+
 #. %1$s is a map service, like "Google Maps"
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5684,7 +5693,7 @@ msgid "Saved attachment"
 msgstr "Anhang wurde gespeichert"
 
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-msgid "This action may take a some time."
+msgid "This action may take some time."
 msgstr "Dieser Vorgang kann einige Zeit in Anspruch nehmen."
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
@@ -9805,16 +9814,16 @@ msgid "Invited people only"
 msgstr "Nur eingeladene Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and invited people"
-msgstr "Jeder mit dem Link und eingeladene Personen"
+msgid "Anyone with the public link and invited people"
+msgstr "Jeder mit dem öffentlichen Link und eingeladene Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Listed people only"
 msgstr "Nur aufgeführte Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and listed people"
-msgstr "Jeder mit dem Link und aufgeführte Personen"
+msgid "Anyone with the public link and listed people"
+msgstr "Jeder mit dem öffentlichen Link und aufgeführte Personen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
@@ -9923,9 +9932,10 @@ msgstr "Jeder im Internet mit dem Link kann den Kalender anzeigen."
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "Jeder im Internet mit dem Link kann den Ordner anzeigen."
 
+#. options for a public link to a shared folder or file"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Link options"
-msgstr "Link-Optionen"
+msgid "Public link options"
+msgstr "Optionen für öffentlichen Link"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "One day"
@@ -13662,11 +13672,6 @@ msgstr "iPhone oder iPad"
 msgid "Email with Android Mail"
 msgstr "E-Mails über Android Mail"
 
-#. 1$s product name of mail application, e.g. OX Mail
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "Email with %1$s"
-msgstr "E-Mails über %1$s"
-
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -14674,12 +14679,6 @@ msgid "Connect"
 msgstr "Verbinden"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/extensions.js
-msgctxt "verb"
-msgid "Call"
-msgstr "Anrufen"
-
-#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Hang up"
 msgstr "Auflegen"
 
@@ -14706,14 +14705,6 @@ msgstr "Beschäftigt"
 #: apps/io.ox/switchboard/presence.js
 msgid "Invisible"
 msgstr "Nicht sichtbar"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Zoom"
-msgstr "Über Zoom anrufen"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Jitsi"
-msgstr "Über Jitsi anrufen"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -16166,100 +16157,6 @@ msgstr "Unbekannter Fehler beim Prüfen des tumblr-Blog."
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid ""
-"This widget is currently offline because the twitter rate limit exceeded."
-msgstr ""
-"Dieses Widget ist derzeit offline, da das Twitter-Limit überschritten wurde."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/util.js
-msgid "An internal error occurred"
-msgstr "Es trat ein interner Fehler auf"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Could not load new Tweets."
-msgstr "Neue Tweets konnten nicht geladen werden."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "No Tweets yet."
-msgstr "Noch keine Tweets."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter reported the following errors:"
-msgstr "Twitter meldete folgende Fehler:"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Authorize your account again"
-msgstr "Ihr Konto erneut autorisieren"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "You have reauthorized this %s account."
-msgstr "Sie haben das %s-Konto neu autorisiert."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "Beim erneuten Autorisieren des %s-Kontos trat ein Fehler auf."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry later."
-msgstr "Versuchen Sie es später erneut."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter"
-msgstr "Twitter"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Press [enter] to jump to the twitter feed."
-msgstr "Durch Drücken der Eingabetaste öffnen Sie den Twitter-Feed."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Add your account"
-msgstr "Fügen Sie Ihr Konto hinzu"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorited"
-msgstr "Bevorzugt"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorite"
-msgstr "Favoriten"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet this to your followers?"
-msgstr "An Ihre Follower weiterleiten (Retweet)?"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet"
-msgstr "Retweet"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted"
-msgstr "Weitergeleitet (Retweet)"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted by %s"
-msgstr "Weitergeleitet (Retweet) von %s"
-
-#. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Follow"
-msgstr "Folgen"
-
-#. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Unfollow"
-msgstr "Entfolgen"
-
-#. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Following"
-msgstr "Folge ich"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Are you sure you want to delete this Tweet?"
-msgstr "Wollen Sie diesen Tweet wirklich löschen?"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Passwort ändern und abmelden"
@@ -16547,6 +16444,81 @@ msgstr "Einladen zu %s"
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
 
+#~ msgid "Link options"
+#~ msgstr "Link-Optionen"
+
+#~ msgid "Email with %1$s"
+#~ msgstr "E-Mails über %1$s"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr ""
+#~ "Dieses Widget ist derzeit offline, da das Twitter-Limit überschritten "
+#~ "wurde."
+
+#~ msgid "An internal error occurred"
+#~ msgstr "Es trat ein interner Fehler auf"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "Neue Tweets konnten nicht geladen werden."
+
+#~ msgid "No Tweets yet."
+#~ msgstr "Noch keine Tweets."
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter meldete folgende Fehler:"
+
+#~ msgid "Authorize your account again"
+#~ msgstr "Ihr Konto erneut autorisieren"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "Sie haben das %s-Konto neu autorisiert."
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "Beim erneuten Autorisieren des %s-Kontos trat ein Fehler auf."
+
+#~ msgid "Retry later."
+#~ msgstr "Versuchen Sie es später erneut."
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "Durch Drücken der Eingabetaste öffnen Sie den Twitter-Feed."
+
+#~ msgid "Add your account"
+#~ msgstr "Fügen Sie Ihr Konto hinzu"
+
+#~ msgid "Favorited"
+#~ msgstr "Bevorzugt"
+
+#~ msgid "Favorite"
+#~ msgstr "Favoriten"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "An Ihre Follower weiterleiten (Retweet)?"
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweeted"
+#~ msgstr "Weitergeleitet (Retweet)"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "Weitergeleitet (Retweet) von %s"
+
+#~ msgid "Follow"
+#~ msgstr "Folgen"
+
+#~ msgid "Unfollow"
+#~ msgstr "Entfolgen"
+
+#~ msgid "Following"
+#~ msgstr "Folge ich"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "Wollen Sie diesen Tweet wirklich löschen?"
+
 #~ msgid ""
 #~ "The appointment description might contain outdated information from a "
 #~ "previous zoom conference that needs to be deleted manually."
@@ -16716,7 +16688,6 @@ msgstr "Zu %s hinzufügen"
 #~ "an jeden anderen OX App Suite-Benutzer Nachrichten senden. Chats können "
 #~ "im Chat-Fenster, in den Kontakten oder der Halo-Ansicht gestartet werden."
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "E-Mail von %1$s, %2$s"
 
