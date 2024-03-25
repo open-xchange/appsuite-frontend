@@ -22,7 +22,9 @@ Obsoletes:      open-xchange-appsuite-saml < %{version}
 
 # Turn off automatic python bytecompilation after install step to keep files
 # section intact
-%undefine py_auto_byte_compile
+%if 0%{?rhel_version} && 0%{?rhel_version} <= 800
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+%endif
 
 %description
 
