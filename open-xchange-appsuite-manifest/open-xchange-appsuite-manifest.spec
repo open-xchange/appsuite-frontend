@@ -20,6 +20,10 @@ Requires:       open-xchange-appsuite-l10n-en-us
 Provides:       open-xchange-appsuite-saml = %{version}
 Obsoletes:      open-xchange-appsuite-saml < %{version}
 
+# Turn off automatic python bytecompilation after install step to keep files
+# section intact
+%undefine py_auto_byte_compile
+
 %description
 
 This package contains the manifest for installation on the backend.
