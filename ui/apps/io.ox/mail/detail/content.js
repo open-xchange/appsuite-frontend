@@ -754,6 +754,7 @@ define('io.ox/mail/detail/content', [
             }
 
             function replaceImage(str) {
+                if (str === '!(blocked)') return '<img src width="50" height="50">';
                 return '<img src="' + str.substr(2, str.length - 3) + '" alt="">';
             }
 

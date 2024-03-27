@@ -143,6 +143,12 @@ define('io.ox/mail/sanitizer', [
         options = _.extend({}, defaultOptions, options);
         if (_.isObject(mail)) options.mail = mail;
 
+        if (data.content_type === 'text/plain' && options.noImages) {
+            var regImage = /^!\([^)]+\)$/gm;
+            data.content = data.content.replace(regImage, '!(blocked)');
+            mail.modified = 1;
+        }
+
         if (data.content_type !== 'text/html') return data;
         // See bug 66936, ensure sanitize returns a string
         data.content = (DOMPurify.sanitize(data.content, options) + '');
