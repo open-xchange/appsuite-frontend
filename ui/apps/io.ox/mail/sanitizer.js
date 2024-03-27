@@ -139,9 +139,19 @@ define('io.ox/mail/sanitizer', [
         return true;
     }
 
+    var regImage = /^!\([^)]+\)$/gm;
+
     function sanitize(data, options, mail) {
         options = _.extend({}, defaultOptions, options);
         if (_.isObject(mail)) options.mail = mail;
+
+        if (options.noImages && !!data.content && data.content_type === 'text/plain') {
+            var sanitizedMail = data.content.replace(regImage, '');
+            if (sanitizedMail.length !== data.content.length) {
+                data.content = sanitizedMail;
+                mail.modified = 1;
+            }
+        }
 
         if (data.content_type !== 'text/html') return data;
         // See bug 66936, ensure sanitize returns a string
