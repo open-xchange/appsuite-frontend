@@ -637,8 +637,9 @@ define('io.ox/core/desktop',
             return this.getSavePoints().then(function (data) {
                 return $.when.apply($,
                     _(data).map(function (obj) {
+                        if (!ox.registry.get(obj.module)) return false;
                         adaptiveLoader.stop();
-                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
+                        var requirements = adaptiveLoader.startAndEnhance(obj.module, [ox.registry.get(obj.module)]);
                         return ox.load(requirements).pipe(function (m) {
                             return m.getApp().launch().then(function () {
                                 // update unique id

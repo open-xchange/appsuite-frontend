@@ -28,6 +28,7 @@ define('io.ox/core/main',
      'io.ox/core/folder/api',
      'settings!io.ox/core',
      'gettext!io.ox/core',
+     'io.ox/core/main/registry',
      'io.ox/core/relogin'
     ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, folderAPI, settings, gt) {
 
