@@ -1484,7 +1484,16 @@ define('io.ox/core/main',
     (function ()  {
 
         var hash = {
-            'mail-compose': 'io.ox/mail/write/main'
+            'mail-compose': 'io.ox/mail/write/main',
+            // used by savepoints
+            'io.ox/mail/write': 'io.ox/mail/write/main',
+            'io.ox/mail/compose': 'io.ox/mail/compose/main',
+            'io.ox/calendar/edit': 'io.ox/calendar/edit/main',
+            'io.ox/calendar/freetime': 'io.ox/calendar/freetime/main',
+            'io.ox/contacts/distrib': 'io.ox/contacts/distrib/main',
+            'io.ox/contacts/edit': 'io.ox/contacts/edit/main',
+            'io.ox/editor': 'io.ox/editor/main',
+            'io.ox/tasks/edit': 'io.ox/tasks/edit/main'
         };
 
         var custom = {};
