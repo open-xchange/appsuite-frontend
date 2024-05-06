@@ -20,6 +20,12 @@ Requires:       open-xchange-appsuite-l10n-en-us
 Provides:       open-xchange-appsuite-saml = %{version}
 Obsoletes:      open-xchange-appsuite-saml < %{version}
 
+# Turn off automatic python bytecompilation after install step to keep files
+# section intact
+%if 0%{?rhel_version} && 0%{?rhel_version} <= 800
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+%endif
+
 %description
 
 This package contains the manifest for installation on the backend.

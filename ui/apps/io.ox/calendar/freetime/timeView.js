@@ -64,7 +64,7 @@ define('io.ox/calendar/freetime/timeView', [
                         $.txt(' '),
                         $('<span class="cw">').text(
                             //#. %1$d = Calendar week
-                            gt('CW %1$d', moment(baton.model.get('startDate')).isoWeek())
+                            gt('CW %1$d', moment(baton.model.get('startDate')).format('w'))
                             // only makes sense when date range is week
                         ).toggle(baton.model.get('dateRange') === 'week'),
                         $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')

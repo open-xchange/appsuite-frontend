@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 11:17+0100\n"
+"PO-Revision-Date: 2024-03-21 14:39+0100\n"
 "Last-Translator: Robert Kratky <robert@workshop-chapina.com>\n"
 "Language-Team: Czech <>\n"
 "Language: cs_CZ\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Language: cs\n"
 "X-Source-Language: en\n"
 
@@ -609,8 +609,7 @@ msgstr "Nápověda online: %1$s"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Delete"
 msgstr "Smazat"
 
@@ -2213,7 +2212,6 @@ msgstr "Chyba: Nepodařilo se načíst schůzky"
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Zkusit znovu"
 
@@ -3577,7 +3575,7 @@ msgstr "Odpovědět všem přes rozhovor"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Chat"
 msgstr "Rozhovor"
 
@@ -4149,7 +4147,6 @@ msgstr "%1$s nahrál(a) soubor"
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Odpovědět"
 
@@ -4378,8 +4375,7 @@ msgid "Send email"
 msgstr "Poslat e-mail"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/contacts/view-detail.js
 msgid "Invite"
 msgstr "Pozvat"
 
@@ -5263,7 +5259,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 #, fuzzy
-#| msgid "Users"
 msgid "User list"
 msgstr "Uživatelé"
 
@@ -5401,9 +5396,8 @@ msgstr "Telefon"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Email"
 msgstr "E-mail"
 
@@ -5573,6 +5567,20 @@ msgstr[2] "Distribuční seznam se %1$d položkami"
 msgid "Private contact"
 msgstr "Soukromý kontakt"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
+msgctxt "verb"
+msgid "Call"
+msgstr "Volat"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Zoom"
+msgstr "Zavolat přes Zoom"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Jitsi"
+msgstr "Zavolat přes Jitsi"
+
 #. %1$s is a map service, like "Google Maps"
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5647,10 +5655,8 @@ msgid "Saved attachment"
 msgstr "Uložena příloha"
 
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-#| msgid "This may take some seconds"
-msgid "This action may take a some time."
-msgstr "Může to několik sekund trvat"
+msgid "This action may take some time."
+msgstr "Tato akce může chvilku trvat."
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
@@ -9718,16 +9724,16 @@ msgid "Invited people only"
 msgstr "Jen pozvaní"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and invited people"
-msgstr "Kdokoliv s odkazem nebo pozvaní lidé"
+msgid "Anyone with the public link and invited people"
+msgstr "Kdokoliv s veřejným odkazem a pozvaní lidé"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Listed people only"
 msgstr "Jen uvedení lidé"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and listed people"
-msgstr "Kdokoliv s odkazem nebo uvedení lidé"
+msgid "Anyone with the public link and listed people"
+msgstr "Kdokoliv s veřejným odkazem a uvedení lidé"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
@@ -9773,7 +9779,6 @@ msgstr "Odstranit sdílené"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
-#| msgid "Do you really want to leave the chat?"
 msgid "Do you really want to remove the public link?"
 msgstr "Opravdu chcete rozhovor opustit?"
 
@@ -9838,9 +9843,10 @@ msgstr "Kalendář může zobrazit kdokoliv na internetu, kdo má odkaz."
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "Složku může zobrazit kdokoliv na internetu, kdo má odkaz."
 
+#. options for a public link to a shared folder or file"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Link options"
-msgstr "Možnosti odkazu"
+msgid "Public link options"
+msgstr "Možnosti pro veřejný odkaz"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "One day"
@@ -13525,11 +13531,6 @@ msgstr "iPhone nebo iPad"
 msgid "Email with Android Mail"
 msgstr "Zprávy v Android Mail"
 
-#. 1$s product name of mail application, e.g. OX Mail
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "Email with %1$s"
-msgstr "Zprávy v %1$s"
-
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -14511,12 +14512,6 @@ msgid "Connect"
 msgstr "Připojit"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/extensions.js
-msgctxt "verb"
-msgid "Call"
-msgstr "Volat"
-
-#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Hang up"
 msgstr "Zavěsit"
 
@@ -14543,14 +14538,6 @@ msgstr "Obsazeno"
 #: apps/io.ox/switchboard/presence.js
 msgid "Invisible"
 msgstr "Neviditelný"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Zoom"
-msgstr "Zavolat přes Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Jitsi"
-msgstr "Zavolat přes Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -15991,101 +15978,6 @@ msgstr "Neznámá chyba při načítání blogu tumblr."
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid ""
-"This widget is currently offline because the twitter rate limit exceeded."
-msgstr ""
-"Tento prvek je v tuto chvíli odpojený, protože byl překročen limit četnosti "
-"zpráv z twitteru."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/util.js
-msgid "An internal error occurred"
-msgstr "Došlo k interní chybě"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Could not load new Tweets."
-msgstr "Nepodařilo se načíst nové tweety."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "No Tweets yet."
-msgstr "Zatím žádné tweety."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter reported the following errors:"
-msgstr "Twitter hlásil následující chyby:"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Authorize your account again"
-msgstr "Autorizujte znovu svůj účet"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "You have reauthorized this %s account."
-msgstr "Znovu jste autorizovali účet %s."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "Při opětovné autorizaci účtu %s došlo k chybě."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry later."
-msgstr "Zkusit později znovu."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter"
-msgstr "Twitter"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Press [enter] to jump to the twitter feed."
-msgstr "Stisknutím [Enter] skočíte na kanál Twitter."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Add your account"
-msgstr "Přidat váš účet"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorited"
-msgstr "Označené jaké oblíbené"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorite"
-msgstr "Oblíbené"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet this to your followers?"
-msgstr "Retweetovat těm, kdo vás sledují?"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet"
-msgstr "Retweet"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted"
-msgstr "Retweetované"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted by %s"
-msgstr "Retweetoval(a) %s"
-
-#. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Follow"
-msgstr "Sledovat"
-
-#. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Unfollow"
-msgstr "Přestat sledovat"
-
-#. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Following"
-msgstr "Sleduji"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Are you sure you want to delete this Tweet?"
-msgstr "Opravdu chcete smazat tento tweet?"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Změnit heslo a odhlásit se"
@@ -16369,6 +16261,81 @@ msgstr "Pozvat na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Přidat do %s"
+
+#~ msgid "Link options"
+#~ msgstr "Možnosti odkazu"
+
+#~ msgid "Email with %1$s"
+#~ msgstr "Zprávy v %1$s"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr ""
+#~ "Tento prvek je v tuto chvíli odpojený, protože byl překročen limit "
+#~ "četnosti zpráv z twitteru."
+
+#~ msgid "An internal error occurred"
+#~ msgstr "Došlo k interní chybě"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "Nepodařilo se načíst nové tweety."
+
+#~ msgid "No Tweets yet."
+#~ msgstr "Zatím žádné tweety."
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter hlásil následující chyby:"
+
+#~ msgid "Authorize your account again"
+#~ msgstr "Autorizujte znovu svůj účet"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "Znovu jste autorizovali účet %s."
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "Při opětovné autorizaci účtu %s došlo k chybě."
+
+#~ msgid "Retry later."
+#~ msgstr "Zkusit později znovu."
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "Stisknutím [Enter] skočíte na kanál Twitter."
+
+#~ msgid "Add your account"
+#~ msgstr "Přidat váš účet"
+
+#~ msgid "Favorited"
+#~ msgstr "Označené jaké oblíbené"
+
+#~ msgid "Favorite"
+#~ msgstr "Oblíbené"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "Retweetovat těm, kdo vás sledují?"
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweeted"
+#~ msgstr "Retweetované"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "Retweetoval(a) %s"
+
+#~ msgid "Follow"
+#~ msgstr "Sledovat"
+
+#~ msgid "Unfollow"
+#~ msgstr "Přestat sledovat"
+
+#~ msgid "Following"
+#~ msgstr "Sleduji"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "Opravdu chcete smazat tento tweet?"
 
 #~ msgid ""
 #~ "The appointment description might contain outdated information from a "

@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 11:18+0100\n"
+"PO-Revision-Date: 2024-03-21 14:39+0100\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #
 #   Naming Conventions
@@ -613,8 +613,7 @@ msgstr "On-line-hjælp: %1$s"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Delete"
 msgstr "Slet"
 
@@ -2224,7 +2223,6 @@ msgstr "Fejl: Kunne ikke indlæse aftaler"
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Prøv igen"
 
@@ -3579,7 +3577,7 @@ msgstr "Svar alle via chat"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Chat"
 msgstr "Chat"
 
@@ -4146,7 +4144,6 @@ msgstr "%1$s overførte en fil"
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "Svar"
 
@@ -4378,8 +4375,7 @@ msgid "Send email"
 msgstr "Send e-mail"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/contacts/view-detail.js
 msgid "Invite"
 msgstr "Invitér"
 
@@ -5262,7 +5258,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 #, fuzzy
-#| msgid "User fields"
 msgid "User list"
 msgstr "Brugerfelter"
 
@@ -5399,9 +5394,8 @@ msgstr "Telefon"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Email"
 msgstr "E-mail"
 
@@ -5564,6 +5558,20 @@ msgstr[1] "Distributionsliste med %1$d felter"
 msgid "Private contact"
 msgstr "Privat kontakt"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
+msgctxt "verb"
+msgid "Call"
+msgstr "Ring"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Zoom"
+msgstr "Ring med Zoom"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Jitsi"
+msgstr "Ring med Jitsi"
+
 #. %1$s is a map service, like "Google Maps"
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5638,10 +5646,8 @@ msgid "Saved attachment"
 msgstr "Gemte vedhæftning"
 
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-#| msgid "This may take some seconds"
-msgid "This action may take a some time."
-msgstr "Dette kan tage nogle sekunder"
+msgid "This action may take some time."
+msgstr "Denne handling kan tage noget tid."
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
@@ -9707,16 +9713,16 @@ msgid "Invited people only"
 msgstr "Kun inviterede folk"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and invited people"
-msgstr "Alle med linket og inviterede folk"
+msgid "Anyone with the public link and invited people"
+msgstr "Alle med det offentlige link og inviterede folk"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Listed people only"
 msgstr "Kun folk som er listet"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and listed people"
-msgstr "Alle med linket og folk som er listet"
+msgid "Anyone with the public link and listed people"
+msgstr "Alle med det offentlige link og folk som er listet"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
@@ -9762,7 +9768,6 @@ msgstr "Fjern delinger"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
-#| msgid "Do you really want to leave the chat?"
 msgid "Do you really want to remove the public link?"
 msgstr "Vil du forlade chatten?"
 
@@ -9827,9 +9832,10 @@ msgstr "Alle på internettet med et link kan se kalenderen."
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "Alle på internettet med et link kan se mappen."
 
+#. options for a public link to a shared folder or file"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Link options"
-msgstr "Indstillinger for link"
+msgid "Public link options"
+msgstr "Indstillinger for offentligt link"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "One day"
@@ -13505,11 +13511,6 @@ msgstr "iPhone eller iPad"
 msgid "Email with Android Mail"
 msgstr "E-mail med Android Mail"
 
-#. 1$s product name of mail application, e.g. OX Mail
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "Email with %1$s"
-msgstr "E-mail med %1$s"
-
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -14493,12 +14494,6 @@ msgid "Connect"
 msgstr "Forbind"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/extensions.js
-msgctxt "verb"
-msgid "Call"
-msgstr "Ring"
-
-#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Hang up"
 msgstr "Lig på"
 
@@ -14525,14 +14520,6 @@ msgstr "Optaget"
 #: apps/io.ox/switchboard/presence.js
 msgid "Invisible"
 msgstr "Usynlig"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Zoom"
-msgstr "Ring med Zoom"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Jitsi"
-msgstr "Ring med Jitsi"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -15970,101 +15957,6 @@ msgstr "Ukendt fejl imens tumblr blog blev tjekket."
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid ""
-"This widget is currently offline because the twitter rate limit exceeded."
-msgstr ""
-"Denne widget er ikke til rådighed i øjeblikket, fordi Twitters "
-"forbrugsgrænse er overskredet."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/util.js
-msgid "An internal error occurred"
-msgstr "Der opstod en intern fejl"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Could not load new Tweets."
-msgstr "Kunne ikke indlæse nye tweets."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "No Tweets yet."
-msgstr "Endnu ingen tweets."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter reported the following errors:"
-msgstr "Twitter rapporterede følgende fejl:"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Authorize your account again"
-msgstr "Godkend din konto igen"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "You have reauthorized this %s account."
-msgstr "Du har re-godkendt denne %s konto."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "Der gik noget galt med at re-godkende denne %s konto."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry later."
-msgstr "Prøv igen senere."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter"
-msgstr "Twitter"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Press [enter] to jump to the twitter feed."
-msgstr "Tast [enter] for at gå til Twitter-strømmen."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Add your account"
-msgstr "Tilføj din konto"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorited"
-msgstr "Farvoritiserede"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorite"
-msgstr "Favorit"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet this to your followers?"
-msgstr "Tweet dette igen til dine følgere?"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet"
-msgstr "Retweet"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted"
-msgstr "Retweet"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted by %s"
-msgstr "Retweeted af %s"
-
-#. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Follow"
-msgstr "Følg"
-
-#. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Unfollow"
-msgstr "Følg ikke"
-
-#. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Following"
-msgstr "Følger"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Are you sure you want to delete this Tweet?"
-msgstr "Er du sikker på du vil slette denne tweet?"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "Ændr adgangskode og log ud"
@@ -16349,6 +16241,81 @@ msgstr "Invitér til %s"
 msgid "Add on %s"
 msgstr "Tilføj på %s"
 
+#~ msgid "Link options"
+#~ msgstr "Indstillinger for link"
+
+#~ msgid "Email with %1$s"
+#~ msgstr "E-mail med %1$s"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr ""
+#~ "Denne widget er ikke til rådighed i øjeblikket, fordi Twitters "
+#~ "forbrugsgrænse er overskredet."
+
+#~ msgid "An internal error occurred"
+#~ msgstr "Der opstod en intern fejl"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "Kunne ikke indlæse nye tweets."
+
+#~ msgid "No Tweets yet."
+#~ msgstr "Endnu ingen tweets."
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter rapporterede følgende fejl:"
+
+#~ msgid "Authorize your account again"
+#~ msgstr "Godkend din konto igen"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "Du har re-godkendt denne %s konto."
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "Der gik noget galt med at re-godkende denne %s konto."
+
+#~ msgid "Retry later."
+#~ msgstr "Prøv igen senere."
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "Tast [enter] for at gå til Twitter-strømmen."
+
+#~ msgid "Add your account"
+#~ msgstr "Tilføj din konto"
+
+#~ msgid "Favorited"
+#~ msgstr "Farvoritiserede"
+
+#~ msgid "Favorite"
+#~ msgstr "Favorit"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "Tweet dette igen til dine følgere?"
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweeted"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "Retweeted af %s"
+
+#~ msgid "Follow"
+#~ msgstr "Følg"
+
+#~ msgid "Unfollow"
+#~ msgstr "Følg ikke"
+
+#~ msgid "Following"
+#~ msgstr "Følger"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "Er du sikker på du vil slette denne tweet?"
+
 #~ msgid ""
 #~ "The appointment description might contain outdated information from a "
 #~ "previous zoom conference that needs to be deleted manually."
@@ -16485,7 +16452,6 @@ msgstr "Tilføj på %s"
 #~ msgid "Manual"
 #~ msgstr "Manuelt"
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "E-mail fra %1$s om %2$s"
 
@@ -16565,17 +16531,14 @@ msgstr "Tilføj på %s"
 #~ msgid "Send link"
 #~ msgstr "Send URL"
 
-#, c-format
 #~ msgid "Sharing link created for %1$d item"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "Delings-link lavet for %1$d element"
 #~ msgstr[1] "Delings-link lavet for %1$d elementer"
 
-#, c-format
 #~ msgid "Sharing link created for file \"%1$s\""
 #~ msgstr "Delings-link dannet for filen \"%1$s\""
 
-#, c-format
 #~ msgid "Sharing link created for folder \"%1$s\""
 #~ msgstr "Delings-link dannet for mappen \"%1$s\""
 

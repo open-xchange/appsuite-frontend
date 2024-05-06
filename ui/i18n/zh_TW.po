@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 12:13+0100\n"
+"PO-Revision-Date: 2024-03-21 14:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -605,8 +605,7 @@ msgstr "線上說明：%1$s"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Delete"
 msgstr "刪除"
 
@@ -2194,7 +2193,6 @@ msgstr "錯誤: 約會載入失敗"
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "蟲試"
 
@@ -3532,7 +3530,7 @@ msgstr "透過聊天回覆所有人"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Chat"
 msgstr "聊天"
 
@@ -4096,7 +4094,6 @@ msgstr "%1$s 上傳了一個檔案"
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "回覆"
 
@@ -4324,8 +4321,7 @@ msgid "Send email"
 msgstr "寄送郵件"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/contacts/view-detail.js
 msgid "Invite"
 msgstr "邀請"
 
@@ -5202,7 +5198,6 @@ msgstr "有超過 %1$d 位連絡人可顯示，請輸入搜尋詞彙來減少結
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 #, fuzzy
-#| msgid "User fields"
 msgid "User list"
 msgstr "用戶定義欄位"
 
@@ -5338,9 +5333,8 @@ msgstr "電話"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Email"
 msgstr "電子郵件"
 
@@ -5500,6 +5494,20 @@ msgstr[1] "包含 %1$d 筆記錄的通訊清單"
 msgid "Private contact"
 msgstr "私人聯絡人"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
+msgctxt "verb"
+msgid "Call"
+msgstr "撥號"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Zoom"
+msgstr "使用 Zoom 通話"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Jitsi"
+msgstr "使用 Jitsi 通話"
+
 #. %1$s is a map service, like "Google Maps"
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5574,10 +5582,8 @@ msgid "Saved attachment"
 msgstr "已儲存附件"
 
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-#| msgid "This may take some seconds"
-msgid "This action may take a some time."
-msgstr "這可能需要幾秒鐘.."
+msgid "This action may take some time."
+msgstr "這個動作可能需要一些時間。"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
@@ -9549,16 +9555,16 @@ msgid "Invited people only"
 msgstr "僅受邀成員"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and invited people"
-msgstr "任何收到連結的人和受邀請的人"
+msgid "Anyone with the public link and invited people"
+msgstr "任何收到公開連結的人與受邀請的人員"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Listed people only"
 msgstr "僅列出的成員"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and listed people"
-msgstr "任何收到連結或受邀的成員"
+msgid "Anyone with the public link and listed people"
+msgstr "任何收到公開連結的人與列出的人員"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
@@ -9604,7 +9610,6 @@ msgstr "移除分享"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
-#| msgid "Do you really want to leave the chat?"
 msgid "Do you really want to remove the public link?"
 msgstr "您真的要離開聊天嗎？"
 
@@ -9667,9 +9672,10 @@ msgstr "網路上任何擁有此連結的人都可以檢視行事曆。"
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "網路上任何擁有此連結的人都可以檢視資料夾。"
 
+#. options for a public link to a shared folder or file"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Link options"
-msgstr "連結選項"
+msgid "Public link options"
+msgstr "公開鏈結選項"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "One day"
@@ -13253,11 +13259,6 @@ msgstr "iPhone 或 iPad"
 msgid "Email with Android Mail"
 msgstr "使用 Android Mail 郵寄"
 
-#. 1$s product name of mail application, e.g. OX Mail
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "Email with %1$s"
-msgstr "使用 %1$s 郵寄"
-
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -14218,12 +14219,6 @@ msgid "Connect"
 msgstr "連線"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/extensions.js
-msgctxt "verb"
-msgid "Call"
-msgstr "撥號"
-
-#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Hang up"
 msgstr "掛斷"
 
@@ -14250,14 +14245,6 @@ msgstr "忙碌中"
 #: apps/io.ox/switchboard/presence.js
 msgid "Invisible"
 msgstr "隱身"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Zoom"
-msgstr "使用 Zoom 通話"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Jitsi"
-msgstr "使用 Jitsi 通話"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -15675,99 +15662,6 @@ msgstr "檢查 tumblr 部落格時發生未知錯誤。"
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid ""
-"This widget is currently offline because the twitter rate limit exceeded."
-msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/util.js
-msgid "An internal error occurred"
-msgstr "發生內部錯誤"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Could not load new Tweets."
-msgstr "無法載入新推文。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "No Tweets yet."
-msgstr "尚無推文。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter reported the following errors:"
-msgstr "Twitter 回報下列問題:"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Authorize your account again"
-msgstr "重新授權您的帳號"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "You have reauthorized this %s account."
-msgstr "您已重新授權 %s 帳號。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "重新授權 %s 帳號時發生某些錯誤。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry later."
-msgstr "稍後再試。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter"
-msgstr "Twitter"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Press [enter] to jump to the twitter feed."
-msgstr "按 [Enter] 以跳至 Twitter 資訊來源。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Add your account"
-msgstr "新增您的帳號"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorited"
-msgstr "已加入最愛"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorite"
-msgstr "最愛"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet this to your followers?"
-msgstr "轉推這則推文給你的關注者？"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet"
-msgstr "推送"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted"
-msgstr "轉推"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted by %s"
-msgstr "由 %s 轉推"
-
-#. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Follow"
-msgstr "關注"
-
-#. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Unfollow"
-msgstr "取消關注"
-
-#. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Following"
-msgstr "關注"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Are you sure you want to delete this Tweet?"
-msgstr "確定要刪除此 Tweet 嗎？"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "更改密碼並登出"
@@ -16040,6 +15934,79 @@ msgstr "邀請至 %s"
 msgid "Add on %s"
 msgstr "新增至 %s"
 
+#~ msgid "Link options"
+#~ msgstr "連結選項"
+
+#~ msgid "Email with %1$s"
+#~ msgstr "使用 %1$s 郵寄"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
+
+#~ msgid "An internal error occurred"
+#~ msgstr "發生內部錯誤"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "無法載入新推文。"
+
+#~ msgid "No Tweets yet."
+#~ msgstr "尚無推文。"
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter 回報下列問題:"
+
+#~ msgid "Authorize your account again"
+#~ msgstr "重新授權您的帳號"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "您已重新授權 %s 帳號。"
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "重新授權 %s 帳號時發生某些錯誤。"
+
+#~ msgid "Retry later."
+#~ msgstr "稍後再試。"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "按 [Enter] 以跳至 Twitter 資訊來源。"
+
+#~ msgid "Add your account"
+#~ msgstr "新增您的帳號"
+
+#~ msgid "Favorited"
+#~ msgstr "已加入最愛"
+
+#~ msgid "Favorite"
+#~ msgstr "最愛"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "轉推這則推文給你的關注者？"
+
+#~ msgid "Retweet"
+#~ msgstr "推送"
+
+#~ msgid "Retweeted"
+#~ msgstr "轉推"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "由 %s 轉推"
+
+#~ msgid "Follow"
+#~ msgstr "關注"
+
+#~ msgid "Unfollow"
+#~ msgstr "取消關注"
+
+#~ msgid "Following"
+#~ msgstr "關注"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "確定要刪除此 Tweet 嗎？"
+
 #~ msgid ""
 #~ "The appointment description might contain outdated information from a "
 #~ "previous zoom conference that needs to be deleted manually."
@@ -16162,7 +16129,6 @@ msgstr "新增至 %s"
 #~ "聊天列，並讓您能夠發出訊息給其他 OX App Suite 使用者。可從聊天列、聯絡人"
 #~ "或 halo 發起聊天。"
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "來自 %1$s 的郵件: %2$s"
 
@@ -16239,17 +16205,14 @@ msgstr "新增至 %s"
 #~ msgid "Send link"
 #~ msgstr "傳送鏈結"
 
-#, c-format
 #~ msgid "Sharing link created for %1$d item"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "已針對 %1$d 個項目建立共享連結"
 #~ msgstr[1] "已針對 %1$d 個項目建立共享連結"
 
-#, c-format
 #~ msgid "Sharing link created for file \"%1$s\""
 #~ msgstr "已為檔案 \"%1$s\" 建立共享鏈結"
 
-#, c-format
 #~ msgid "Sharing link created for folder \"%1$s\""
 #~ msgstr "已為資料夾 \"%1$s\" 建立共享鏈結"
 

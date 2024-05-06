@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-01-20 12:04+0100\n"
+"PO-Revision-Date: 2024-03-21 14:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -607,8 +607,7 @@ msgstr "オンライン  ヘルプ：%1$s"
 #: apps/plugins/administration/groups/settings/toolbar.js
 #: apps/plugins/administration/resources/settings/pane.js
 #: apps/plugins/administration/resources/settings/toolbar.js
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-#: apps/plugins/portal/xing/actions.js
+#: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Delete"
 msgstr "削除"
 
@@ -2212,7 +2211,6 @@ msgstr "エラー：予定の読み込みに失敗しました。"
 #: apps/io.ox/core/main/autologout.js apps/io.ox/files/listview.js
 #: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "再試行"
 
@@ -3558,7 +3556,7 @@ msgstr "チャットで全員に返信"
 
 #: apps/io.ox/chat/extensions/register.js module:io.ox/chat
 #: apps/io.ox/chat/settings/pane.js apps/io.ox/chat/views/launcher.js
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Chat"
 msgstr "チャット"
 
@@ -4127,7 +4125,6 @@ msgstr "%1$sアップロードされたファイル"
 #: apps/io.ox/chat/views/message.js module:io.ox/chat
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/contextmenu.js
 #: apps/io.ox/switchboard/wall.js module:io.ox/switchboard
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Reply"
 msgstr "返信"
 
@@ -4358,8 +4355,7 @@ msgid "Send email"
 msgstr "メールを送信"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js apps/io.ox/switchboard/extensions.js
-#: module:io.ox/switchboard
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/contacts/view-detail.js
 msgid "Invite"
 msgstr "招待"
 
@@ -5241,7 +5237,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/enterprisepicker/dialog.js module:io.ox/contacts
 #, fuzzy
-#| msgid "Users"
 msgid "User list"
 msgstr "ユーザー"
 
@@ -5377,9 +5372,8 @@ msgstr "電話"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/settings/personalData/settings/pane.js module:io.ox/core
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 msgid "Email"
 msgstr "メール"
 
@@ -5547,6 +5541,20 @@ msgstr[1] "メンバー数 %1$d名の連絡先グループ"
 msgid "Private contact"
 msgstr "プライベート連絡先"
 
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
+msgctxt "verb"
+msgid "Call"
+msgstr "通話"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Zoom"
+msgstr "Zoomによる通話"
+
+#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+msgid "Call via Jitsi"
+msgstr "Jitsiによる通話"
+
 #. %1$s is a map service, like "Google Maps"
 #. %1$s is a app name like calendar or drive (product name; might be customized)
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
@@ -5621,10 +5629,8 @@ msgid "Saved attachment"
 msgstr "保存された添付ファイル"
 
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
-#| msgid "This may take some seconds"
-msgid "This action may take a some time."
-msgstr "この処理には数秒かかる場合があります。"
+msgid "This action may take some time."
+msgstr "この処理にはしばらくかかる場合があります。"
 
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "Toggle preview"
@@ -9668,16 +9674,16 @@ msgid "Invited people only"
 msgstr "招待された人のみ"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and invited people"
-msgstr "リンクのある人および招待された人"
+msgid "Anyone with the public link and invited people"
+msgstr "パブリックリンクのある人および招待された人"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Listed people only"
 msgstr "リストされた人のみ"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Anyone with the link and listed people"
-msgstr "リンクのある人およびリストされた人"
+msgid "Anyone with the public link and listed people"
+msgstr "パブリックリンクのある人およびリストされた人"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Who can access this file?"
@@ -9723,7 +9729,6 @@ msgstr "共有を削除"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
-#| msgid "Do you really want to leave the chat?"
 msgid "Do you really want to remove the public link?"
 msgstr "チャットを退出しますか？"
 
@@ -9788,9 +9793,10 @@ msgstr "インターネット上のリンクのある人はカレンダーを閲
 msgid "Anyone on the internet with the link can view the folder."
 msgstr "インターネット上のリンクのある人はフォルダーを閲覧できます。"
 
+#. options for a public link to a shared folder or file"
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
-msgid "Link options"
-msgstr "リンクオプション"
+msgid "Public link options"
+msgstr "パブリックリンクオプション"
 
 #: apps/io.ox/files/share/share-settings.js module:io.ox/files
 msgid "One day"
@@ -13451,11 +13457,6 @@ msgstr "iPhone または iPad"
 msgid "Email with Android Mail"
 msgstr "Androidメールでメール"
 
-#. 1$s product name of mail application, e.g. OX Mail
-#: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
-msgid "Email with %1$s"
-msgstr "%1$sでメール"
-
 #: apps/io.ox/onboarding/util.js module:io.ox/core/onboarding
 #: apps/io.ox/settings/security/sessions/settings/pane.js module:io.ox/core
 msgid "Exchange Active Sync"
@@ -14438,12 +14439,6 @@ msgid "Connect"
 msgstr "接続します"
 
 #: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
-#: apps/io.ox/switchboard/extensions.js
-msgctxt "verb"
-msgid "Call"
-msgstr "通話"
-
-#: apps/io.ox/switchboard/call/outgoing.js module:io.ox/switchboard
 msgid "Hang up"
 msgstr "切る"
 
@@ -14470,14 +14465,6 @@ msgstr "通話中"
 #: apps/io.ox/switchboard/presence.js
 msgid "Invisible"
 msgstr "非表示"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Zoom"
-msgstr "Zoomによる通話"
-
-#: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
-msgid "Call via Jitsi"
-msgstr "Jitsiによる通話"
 
 #: apps/io.ox/switchboard/extensions.js module:io.ox/switchboard
 #: apps/io.ox/switchboard/settings/pane.js
@@ -15909,101 +15896,6 @@ msgstr "Tumblr ブログの確認中に不明なエラーが発生しました�
 msgid "Tumblr"
 msgstr "Tumblr"
 
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid ""
-"This widget is currently offline because the twitter rate limit exceeded."
-msgstr ""
-"ツイッターの回数制限を越えたため、このウィジェットは現在オフラインになってい"
-"ます。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/util.js
-msgid "An internal error occurred"
-msgstr "内部エラーが発生しました"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Could not load new Tweets."
-msgstr "新規ツイートを読み込めませんでした。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "No Tweets yet."
-msgstr "ツイートは今のところありません。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter reported the following errors:"
-msgstr "Twitter が次のエラーを報告しました:"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Authorize your account again"
-msgstr "アカウントを再認証してくてください"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "You have reauthorized this %s account."
-msgstr "この %s アカウントを再認証しました。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Something went wrong reauthorizing the %s account."
-msgstr "%s アカウントの再認証中にエラーが発生しました。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Retry later."
-msgstr "後で再試行"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Twitter"
-msgstr "Twitter"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Press [enter] to jump to the twitter feed."
-msgstr "Twitter フィードにアクセスするには、[enter] キーを押してください。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Add your account"
-msgstr "アカウントを追加"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorited"
-msgstr "お気に入り"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Favorite"
-msgstr "お気に入りに登録"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet this to your followers?"
-msgstr "フォロワーにリツイートしますか?"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweet"
-msgstr "リツイート"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted"
-msgstr "リツイートされました"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Retweeted by %s"
-msgstr "%s さんがリツイート"
-
-#. twitter: Follow this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Follow"
-msgstr "フォロー"
-
-#. twitter: Stop following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Unfollow"
-msgstr "アンフォロー"
-
-#. twitter: already following this person
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Following"
-msgstr "フォロー"
-
-#: apps/plugins/portal/twitter/util.js module:plugins/portal
-msgid "Are you sure you want to delete this Tweet?"
-msgstr "このツイートを削除しますか？"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Change password and sign out"
 msgstr "パスワードを変更しログアウト"
@@ -16286,6 +16178,81 @@ msgstr "%s に招待"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#~ msgid "Link options"
+#~ msgstr "リンクオプション"
+
+#~ msgid "Email with %1$s"
+#~ msgstr "%1$sでメール"
+
+#~ msgid ""
+#~ "This widget is currently offline because the twitter rate limit exceeded."
+#~ msgstr ""
+#~ "ツイッターの回数制限を越えたため、このウィジェットは現在オフラインになって"
+#~ "います。"
+
+#~ msgid "An internal error occurred"
+#~ msgstr "内部エラーが発生しました"
+
+#~ msgid "Could not load new Tweets."
+#~ msgstr "新規ツイートを読み込めませんでした。"
+
+#~ msgid "No Tweets yet."
+#~ msgstr "ツイートは今のところありません。"
+
+#~ msgid "Twitter reported the following errors:"
+#~ msgstr "Twitter が次のエラーを報告しました:"
+
+#~ msgid "Authorize your account again"
+#~ msgstr "アカウントを再認証してくてください"
+
+#~ msgid "You have reauthorized this %s account."
+#~ msgstr "この %s アカウントを再認証しました。"
+
+#~ msgid "Something went wrong reauthorizing the %s account."
+#~ msgstr "%s アカウントの再認証中にエラーが発生しました。"
+
+#~ msgid "Retry later."
+#~ msgstr "後で再試行"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Press [enter] to jump to the twitter feed."
+#~ msgstr "Twitter フィードにアクセスするには、[enter] キーを押してください。"
+
+#~ msgid "Add your account"
+#~ msgstr "アカウントを追加"
+
+#~ msgid "Favorited"
+#~ msgstr "お気に入り"
+
+#~ msgid "Favorite"
+#~ msgstr "お気に入りに登録"
+
+#~ msgid "Retweet this to your followers?"
+#~ msgstr "フォロワーにリツイートしますか?"
+
+#~ msgid "Retweet"
+#~ msgstr "リツイート"
+
+#~ msgid "Retweeted"
+#~ msgstr "リツイートされました"
+
+#~ msgid "Retweeted by %s"
+#~ msgstr "%s さんがリツイート"
+
+#~ msgid "Follow"
+#~ msgstr "フォロー"
+
+#~ msgid "Unfollow"
+#~ msgstr "アンフォロー"
+
+#~ msgid "Following"
+#~ msgstr "フォロー"
+
+#~ msgid "Are you sure you want to delete this Tweet?"
+#~ msgstr "このツイートを削除しますか？"
+
 #~ msgid ""
 #~ "The appointment description might contain outdated information from a "
 #~ "previous zoom conference that needs to be deleted manually."
@@ -16422,7 +16389,6 @@ msgstr "%s に追加"
 #~ "ジを書き込むことができます。チャットは、チャットバー、連絡先、またはハロか"
 #~ "ら行うことができます。"
 
-#, c-format
 #~ msgid "Mail from %1$s, %2$s"
 #~ msgstr "%1$s からのメール: %2$s"
 
@@ -16503,17 +16469,14 @@ msgstr "%s に追加"
 #~ msgid "Send link"
 #~ msgstr "リンクを送信"
 
-#, c-format
 #~ msgid "Sharing link created for %1$d item"
 #~ msgid_plural "Sharing link created for %1$d items"
 #~ msgstr[0] "%1$dつのアイテム用に共有リンクが作成されました。"
 #~ msgstr[1] "%1$dつのアイテム用に共有リンクが作成されました。"
 
-#, c-format
 #~ msgid "Sharing link created for file \"%1$s\""
 #~ msgstr "ファイル\"%1$s\"用に共有リンクが作成されました。"
 
-#, c-format
 #~ msgid "Sharing link created for folder \"%1$s\""
 #~ msgstr "ファイル用に共有リンクが作成されました。\"\"%1$s\\"
 

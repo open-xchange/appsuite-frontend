@@ -146,7 +146,7 @@ define('io.ox/core/api/jobs', [
         },
         enqueue: function (request, callback) {
             var def = $.Deferred();
-            callback = callback || function () { yell('info', gt('This action may take a some time.')); };
+            callback = callback || function () { yell('info', gt('This action may take some time.')); };
 
             request.then(function (response) {
                 // if we have a long running job execute the callback and add the job to the list.

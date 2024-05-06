@@ -849,8 +849,9 @@ define('io.ox/core/desktop', [
                 spaces = options.spaces || [];
             return $.when.apply($,
                 _([].concat(list, spaces)).map(function (obj) {
+                    if (!ox.registry.get(obj.module)) return false;
                     adaptiveLoader.stop();
-                    var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
+                    var requirements = adaptiveLoader.startAndEnhance(obj.module, [ox.registry.get(obj.module)]);
                     return ox.load(requirements).then(function (m) {
                         var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                         if (obj.cid) app.cid = obj.cid;
