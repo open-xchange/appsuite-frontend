@@ -33,7 +33,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('Checks when adding/removing attachments', async ({ I, mail }) => {
+Scenario('Checks when adding/removing attachments', async ({ I, mail }) => {
     const checked = locate({ css: '.share-attachments [name="enabled"]:checked' }).as('Drive mail: checked'),
         unchecked = locate({ css: '.share-attachments [name="enabled"]' }).as('Drive mail: unchecked'),
         message = locate({ css: '.io-ox-alert' }).as('Yell: warning');
