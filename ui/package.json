@@ -83,7 +83,7 @@
     "moment-timezone": "^0.5.37",
     "patch-package": "^6.4.7",
     "pdfjs-dist": "2.10.377",
-    "qrcode": "1.5.1",
+    "qrcode": "1.4.4",
     "requirejs": "2.3.6",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "2.4.0",
