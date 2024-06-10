@@ -87,7 +87,10 @@ define('io.ox/core/pdf/pdfdocument', [
             cMapUrl: ox.abs + ox.root + '/apps/pdfjs-dist/cmaps/',
 
             // Specifies if CMaps are binary packed.
-            cMapPacked: true
+            cMapPacked: true,
+
+            // Important to be false to prevent CVE-2024-4367
+            isEvalSupported: false
         };
 
         // detecting the worker automatically nor longer works, specify the workerSrc property manually
@@ -238,6 +241,9 @@ define('io.ox/core/pdf/pdfdocument', [
          *
          *  @param {Boolean} params.cMapPacked
          *   Specifies if the Adobe CMaps are binary packed.
+         *
+         *  @param {Boolean} params.isEvalSupported
+         *   Important to be false to prevent CVE-2024-4367
          */
         PDFJSLib.getDocument(params).promise.then(function (document) {
             var error = true;
