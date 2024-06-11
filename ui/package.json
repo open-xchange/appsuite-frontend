@@ -8,7 +8,10 @@
   },
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "dev": "grunt dev",
+    "dev": "grunt default connect test watch",
+    "dev:clean": "grunt clean default connect test watch",
+    "build": "grunt default",
+    "build:clean": "grunt clean default",
     "test": "grunt copy:specs karma:continuous",
     "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js"
   },
