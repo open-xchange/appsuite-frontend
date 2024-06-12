@@ -36,7 +36,7 @@ The price format is given as format string to provide maximum flexibility. '%s' 
 The target is the URL that is called after shopping is completed.
 The values OXUPSELLCART, OXUPSELLCONTEXT and OXUPSELLUSER are replaced by the wizard with a comma-separated list of the ids of items bought, the buyer's context ID and their user ID.
 
-The disclaimer can be internationalized like texts for upsell widgets and bubbles.
+The disclaimer can be internationalized like texts for upsell widgets.
 The same possibilities and restrictions apply.
 
 Products shown can also be country-specific.
