@@ -52,7 +52,6 @@ deploy documentation:
   needs:
     - build documentation
   tags:
-    - openstack
     - shell
     - documentation
   allow_failure: true
