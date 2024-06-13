@@ -1135,8 +1135,6 @@ define('io.ox/files/share/permissions', [
                         publicLink.removeLink().then(function () {
                             dialog.close();
                         });
-                    } else if (!options.hasLinkSupport) {
-                        revokeAllPermissions();
                     } else if (publicLink.hasPublicLink()) {
                         // Remove all permissions and public link then trigger save.
                         publicLink.removeLink().then(function () {
@@ -1144,6 +1142,8 @@ define('io.ox/files/share/permissions', [
                         }).fail(function (err) {
                             console.log(err);
                         });
+                    } else if (!options.hasLinkSupport || (options.hasLinkSupport && options.share)) {
+                        revokeAllPermissions();
                     }
                     confirmDialog.close();
                     dialog.pause();
