@@ -224,7 +224,7 @@ define('plugins/portal/upsell/register',
 
 # Making all of it work
 
-The configuration for the upsell widget, upsell bubbles and the upsell wizard is done in YAML instead of JavaScript, assuming that most users of this feature are not developers but from marketing or sales departments.
+The configuration for the upsell widget and the upsell wizard is done in YAML instead of JavaScript, assuming that most users of this feature are not developers but from marketing or sales departments.
 They will probably need starting help from a sysadmin, though, as by default, the whole upsell process is disabled two-fold:
 
 The configuration file is not deployed.

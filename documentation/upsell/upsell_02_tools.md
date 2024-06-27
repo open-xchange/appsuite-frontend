@@ -78,32 +78,3 @@ For additional information see article about [Portal Widgets]({{ site.baseurl }}
 # Guided tour
 
 In order to cross-/upsell right from the beginning, the guided tour can be used to walk the end user trough the OX App Suite UI as well as show/point out upsell/cross-sell opportunities (trigger).
-
-# Bubbles
-
-Bubbles are little popups based on hopscotch, similar to the guided tours.
-They show up after a given amount of time and point to a defined UI element to display some text.
-Clicking on them can start the upsell wizard (unless you click "cancel", of course).
-
-```yaml
- plugins/upsell//bubbles:
-   skipFirstLogin: true
-   repeatInMilliseconds: 900000
-   repeatPerLogins: 1
-   bubbles:
-     en_US:
-       bubble1:
-         app: 'io.ox/portal'
-         content: "Did you know...?"
-         startDate: '2013-07-01'
-         endDate: '2019-06-31'
-```
-
-Upsell bubbles appear after the amount of time in repeatInMilliseconds has passed.
-They can be set up not to bother the first time user (skipFirstLogin) and only to show up repeatPerLogins-times every login.
-
-As with upsell widgets, they can be internationalized, this example only contains a version for American English (en_US).
-The name must match the user locality exactly.
-
-You can have several bubbles but each bubble needs to point to one application.
-Moreover, each bubble can be set up to be valid only during a certain time span (or from a date, or to a date), but this can be omitted.
