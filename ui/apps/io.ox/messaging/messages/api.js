@@ -20,10 +20,12 @@
  *
  */
 
-//TODO: split into packages for services, accounts and messages
 define('io.ox/messaging/messages/api', ['io.ox/core/http'], function (http) {
 
     'use strict';
+
+    // DEPRECATED: `io.ox/messaging/accounts/api.js`, pending removal with 7.10.6-49.
+    if (ox.debug) console.warn('`io.ox/messaging/messages/api.js` is deprecated, pending removal with 7.10.6-49.');
 
     var api = {
         all: function (folder) {
