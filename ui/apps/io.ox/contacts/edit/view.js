@@ -202,7 +202,11 @@ define('io.ox/contacts/edit/view', [
 
         renderTextField: function (name) {
             return this.renderField(name, function (guid) {
-                return new common.InputView({ name: name, model: this.model, id: guid, validate: false }).render().$el;
+                // Certain file exchange formats allow line breaks, which would be stripped by InputView
+                var containsLinebreak = (this.model.get(name) || '').indexOf('\n') > -1;
+                return containsLinebreak
+                    ? new common.TextView({ name: name, model: this.model, id: guid, validate: false }).render().$el
+                    : new common.InputView({ name: name, model: this.model, id: guid, validate: false }).render().$el;
             });
         },
 
