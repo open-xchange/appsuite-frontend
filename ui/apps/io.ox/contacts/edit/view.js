@@ -188,7 +188,9 @@ define('io.ox/contacts/edit/view', [
             if (!this.isRemovable(name)) return $();
             return $('<div class="col-xs-2">').append(
                 $('<button type="button" class="btn btn-link remove">')
-                    .attr('title', gt('Remove field'))
+                    // #. Used to indicate which optional field will be removed from a contact.
+                    // #. %1$s - The field to be removed, e.g. "Nickname"
+                    .attr('title', gt('Remove %1$s', View.i18n[name]))
                     .attr('data-remove', name)
                     .append(this.renderRemoveIcon())
             );
