@@ -49,6 +49,9 @@ buildservice {
             create("DebianBullseye") {
                 depends("Debian:Bullseye", "standard")
             }
+            create("DebianBookworm") {
+                depends("Debian:Bookworm", "standard")
+            }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
                 depends("backend-${backendBranch}", "RHEL7")
