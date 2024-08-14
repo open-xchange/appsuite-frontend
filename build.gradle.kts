@@ -43,11 +43,11 @@ buildservice {
         }
         name = "frontend-$extension"
         repositories {
-            create("DebianBuster") {
-                depends("Debian:Buster", "standard")
-            }
             create("DebianBullseye") {
                 depends("Debian:Bullseye", "standard")
+            }
+            create("DebianBookworm") {
+                depends("Debian:Bookworm", "standard")
             }
             create("RHEL7") {
                 // TODO go down to the base RHEL 7 repository
