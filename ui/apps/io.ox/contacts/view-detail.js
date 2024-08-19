@@ -164,8 +164,8 @@ define('io.ox/contacts/view-detail', [
 
             this.addClass('distribution-list').append(
                 $('<div class="contact-header">').append(
-                    $('<h1 class="fullname">').text(util.getFullName(baton.data)),
-                    $('<h2>').text(desc)
+                    $('<h2 class="fullname">').text(util.getFullName(baton.data)),
+                    $('<h3>').text(desc)
                 )
             );
         }
@@ -201,7 +201,7 @@ define('io.ox/contacts/view-detail', [
             index: 100,
             id: 'fullname',
             draw: function (baton) {
-                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h1 class="fullname"' },
+                var options = { html: util.getFullNameWithFurigana(baton.data), tagName: 'h2 class="fullname"' },
                     node = coreUtil.renderPersonalName(options, baton.data);
                 // a11y: headings must not be empty
                 if (!node.text()) return;
@@ -218,8 +218,8 @@ define('io.ox/contacts/view-detail', [
                 if (!country) return;
                 var flag = flags[postalAddress.getCountryCode(country)];
                 if (!flag) return;
-                // h1.fullname maybe missing (a11y: headings must not be empty)
-                this.find('h1.fullname').append($.txt(' ' + flag));
+                // h2.fullname maybe missing (a11y: headings must not be empty)
+                this.find('h2.fullname').append($.txt(' ' + flag));
             }
         },
         {
@@ -227,7 +227,7 @@ define('io.ox/contacts/view-detail', [
             id: 'private_flag',
             draw: function (baton) {
                 if (_.device('smartphone') || !baton.data.private_flag) return;
-                this.find('h1.fullname').append($('<div class="sr-only">').attr('aria-label', gt('Private contact')), $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')));
+                this.find('h2.fullname').append($('<div class="sr-only">').attr('aria-label', gt('Private contact')), $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')));
             }
         },
         {
@@ -238,7 +238,7 @@ define('io.ox/contacts/view-detail', [
                 if (!value) return;
                 // a11y: headings must not be empty
                 this.append(
-                    $('<h2 class="business hidden-xs">').text(value)
+                    $('<h3 class="business hidden-xs">').text(value)
                 );
             }
         },
@@ -250,7 +250,7 @@ define('io.ox/contacts/view-detail', [
                 if (!value) return;
                 // a11y: headings must not be empty
                 this.append(
-                    $('<h2 class="location hidden-xs">').text(value)
+                    $('<h3 class="location hidden-xs">').text(value)
                 );
             }
         }

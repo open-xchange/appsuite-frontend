@@ -159,7 +159,7 @@ Scenario('[C208269] Edit users contact information', async ({ I, dialogs }) => {
     I.click(listItem);
 
     // check picture
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText(lastname).as('Detail view heading'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText(lastname).as('Detail view heading'));
     I.waitForVisible('.contact-photo', 1);
     image = await I.grabBackgroundImageFrom('.contact-detail .contact-photo');
     expect(image).not.to.match(/fallback/);

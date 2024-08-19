@@ -26,7 +26,7 @@ module.exports = {
 
     TITLE_SELECTOR: '.contact-detail .fullname',
 
-    SUBTITLE_SELECTOR: '.contact-detail .contact-header h2',
+    SUBTITLE_SELECTOR: '.contact-detail .contact-header h3',
 
     uniqueName: function (testrailID) {
         const timestamp = Math.round(+new Date() / 1000);

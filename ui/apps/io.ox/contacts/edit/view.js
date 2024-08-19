@@ -125,9 +125,9 @@ define('io.ox/contacts/edit/view', [
 
         renderContactSummary: function () {
 
-            var $h1 = $('<h1>'),
-                $h2 = $('<h2 class="business hidden-xs">'),
-                $h3 = $('<h2 class="location hidden-xs">');
+            var $h1 = $('<h2>'),
+                $h2 = $('<h3 class="business hidden-xs">'),
+                $h3 = $('<h3 class="location hidden-xs">');
 
             this.listenTo(this.model, 'change:title change:first_name change:last_name change:company change:yomiFirstName change:yomiLastName change:yomiCompany', updateName);
             this.listenTo(this.model, 'change:company change:department change:position', updateBusiness);
