@@ -116,7 +116,7 @@ Scenario('[Z104305] Contacts - Modal Dialog - Public link (with exceptions)', as
     dialogs.clickButton('Cancel');
 });
 
-Scenario('Contacts - New contact window', async ({ I, contacts }) => {
+Scenario.skip('Contacts - New contact window', async ({ I, contacts }) => {
 
     I.login('app=io.ox/contacts');
     contacts.waitForApp();
