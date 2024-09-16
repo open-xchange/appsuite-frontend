@@ -50,9 +50,8 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             var signature = this.getSignature();
             this.$body.append(
                 $('<div class="form-group">').append(
-                    $('<label for="signature-name" class="sr-only">').text(gt('Signature name')),
-                    $('<input id="signature-name" type="text" class="form-control">')
-                        .attr('placeholder', gt('Signature name'))
+                    $('<label for="signature-name">').text(gt('Signature name')),
+                    $('<input id="signature-name" type="text" class="form-control" maxlength="80">')
                         .val(signature.displayname)
                         .on('change', this.validateName.bind(this))
                 )
@@ -130,6 +129,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
 
             this.$body.append(
                 $('<div class="form-group">').append(
+                    $('<label for="signature-position">').text(gt('Signature Position')),
                     $('<select id="signature-position" class="form-control">')
                         .append(
                             $('<option value="above">').text(gt('Add signature above quoted text')),

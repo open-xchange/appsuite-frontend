@@ -93,7 +93,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
         I.say('folder_with_dlist:' + type);
         importCSV('folder_with_dlist', type);
         waitClick(locate('.vgrid-cell .fullname').withText('My list'));
-        I.waitForElement(locate('.contact-detail h1.fullname').withText('My list'));
+        I.waitForElement(locate('.contact-detail h2.fullname').withText('My list'));
         I.see('Distribution list with 2 entries');
         I.see('martin.heiland@open-xchange.com');
         I.see('markus.wagner@open-xchange.com');
@@ -107,7 +107,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     I.say('[C104277] Import Outlook vCard');
     importCSV('outlook_2013_en', 'vcf');
     selectListItem('Wurst');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
     await hasContactImage();
     I.see('Boss', { css: 'dd' });
     I.see('Open-Xchange GmbH', { css: 'dd' });
@@ -122,7 +122,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     I.say('[C104275] Import emClient vCard');
     importCSV('emclient_7', 'vcf');
     selectListItem('Wurst');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
     await hasContactImage();
     I.see('Cheffe', { css: 'dd' });
     I.see('Meine Notizen\n\nÜberall umbrüche', { css: '.note' });
@@ -159,7 +159,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     for (const suffix of ['contact', 'contacts']) {
         importCSV('macos_1011_' + suffix, 'vcf');
         selectListItem('Wurst');
-        I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+        I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
         await hasContactImage();
         I.see('1/1/2016', { css: 'dd' });
         I.see('+49 111 11111', { css: 'dd a' });
@@ -174,7 +174,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
 
     // check other contact
     selectListItem('Person');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Person'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Person'));
     I.see('+23 232323', { css: 'dd a' });
     I.click('.select-all');
     deleteSelectedContacts();
@@ -186,7 +186,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     for (const suffix of ['contact', 'contacts']) {
         importCSV('thunderbird_45_' + suffix, 'vcf');
         selectListItem('Wurst');
-        I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+        I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
         I.see('Boss', { css: 'dd' });
         I.see('IT', { css: 'dd' });
         I.see('Orga', { css: 'dd' });
@@ -200,13 +200,13 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     // check other contacts
     // #1
     selectListItem('Some Guy', '.first_name');
-    I.waitForElement(locate('.contact-detail h1 .first_name').withText('Some Guy'));
+    I.waitForElement(locate('.contact-detail h2 .first_name').withText('Some Guy'));
     // #2
     selectListItem('foo@example.com', '.display_name');
-    I.waitForElement(locate('.contact-detail h1 .display_name').withText('foo@example.com'));
+    I.waitForElement(locate('.contact-detail h2 .display_name').withText('foo@example.com'));
     // #3
     selectListItem('bar@example.com', '.display_name');
-    I.waitForElement(locate('.contact-detail h1 .display_name').withText('bar@example.com'));
+    I.waitForElement(locate('.contact-detail h2 .display_name').withText('bar@example.com'));
     I.click('.select-all');
     deleteSelectedContacts();
 
@@ -218,7 +218,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     for (const suffix of ['contact', 'contacts']) {
         importCSV('outlookcom_2016_' + suffix, 'csv');
         selectListItem('Wurst');
-        I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+        I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
         I.see('Some notes\n\nFor Hans', { css: '.note' });
         I.see('hans@example.com', { css: 'dd a' });
         I.see('+11 111 1111', { css: 'dd a' });
@@ -229,7 +229,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     }
 
     selectListItem('Person');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Person'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Person'));
     I.see('foo@bar.example.com', { css: 'dd a' });
     I.click('.select-all');
     deleteSelectedContacts();
@@ -241,7 +241,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     for (const suffix of ['contact', 'contacts']) {
         importCSV('google_2016_' + suffix, 'vcf');
         selectListItem('Wurst');
-        I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+        I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
         I.see('Some notes for\n\nHans Würst!', { css: '.note' });
         I.see('Boss', { css: 'dd' });
         I.see('Open-Xchange GmbH', { css: 'dd' });
@@ -254,7 +254,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     }
 
     selectListItem('Other');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Other'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Other'));
     I.see('some@body.example.com', { css: 'dd a' });
     I.click('.select-all');
     deleteSelectedContacts();
@@ -266,7 +266,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     for (const suffix of ['contact', 'contacts']) {
         importCSV('yahoo_2016_' + suffix, 'vcf');
         selectListItem('Wurst');
-        I.waitForElement(locate('.contact-detail h1 .last_name').withText('Wurst'));
+        I.waitForElement(locate('.contact-detail h2 .last_name').withText('Wurst'));
         I.see('Some notes\n\nfor this contäct!', { css: '.note' });
         I.see('Cheffe', { css: 'dd' });
         I.see('Open-Xchange', { css: 'dd' });
@@ -277,7 +277,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     }
 
     selectListItem('Karlo');
-    I.waitForElement(locate('.contact-detail h1 .last_name').withText('Karlo'));
+    I.waitForElement(locate('.contact-detail h2 .last_name').withText('Karlo'));
     I.click('.select-all');
     deleteSelectedContacts();
 
@@ -298,7 +298,7 @@ Scenario('[C104269] Import App Suite CSV', async ({ I, contacts, dialogs }) => {
     function selectListItem(text, selector) {
         selector = selector || '.last_name';
         waitClick(locate('.vgrid-cell ' + selector).withText(text));
-        I.waitForElement(locate('.contact-detail h1 ' + selector).withText(text));
+        I.waitForElement(locate('.contact-detail h2 ' + selector).withText(text));
     }
 
     function waitClick(arg) {
