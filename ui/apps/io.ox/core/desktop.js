@@ -1773,17 +1773,32 @@ define('io.ox/core/desktop', [
                     id: 'form',
                     index: 300,
                     draw: function (baton) {
+                        var labels = {
+                            //#. Only japanese translation needed
+                            'io.ox/mail': gt('Type keywords to search for mails'),
+                            //#. Only japanese translation needed
+                            'io.ox/calendar': gt('Type keywords to search for appointments'),
+                            //#. Only japanese translation needed
+                            'io.ox/tasks': gt('Type keywords to search for tasks'),
+                            //#. Only japanese translation needed
+                            'io.ox/contacts': gt('Type keywords to search for contacts'),
+                            //#. Only japanese translation needed
+                            'io.ox/files': gt('Type keywords to search for files')
+                        };
                         // share data
                         _.extend(baton.data, {
-                            label: gt('Search'),
-                            id: _.uniqueId('search')
+                            label: ox.locale === 'ja_JP' ? labels[this.name] || gt('Type keywords to search') : gt('Search'),
+                            id: _.uniqueId('search'),
+                            inputId: _.uniqueId('search-input')
                             // guid:  _.uniqueId('form-control-description-')
                         });
                         // search box form
                         baton.$.group = $('<div class="form-group has-feedback">').append(
+                            ox.locale === 'ja_JP' ? $('<label class="control-label" for="">').attr('for', baton.data.id).text(baton.data.label) : '',
                             $('<input type="text" class="form-control has-feedback search-field tokenfield-placeholder f6-target">').attr({
-                                'aria-labelledby': baton.data.id,
-                                placeholder: baton.data.label + '...'
+                                'aria-labelledby': ox.locale === 'ja_JP' ? baton.data.id : '',
+                                placeholder:  gt('Search') + '...',
+                                'id': baton.data.inputId
                             })
                         );
                         // add to searchbox area
