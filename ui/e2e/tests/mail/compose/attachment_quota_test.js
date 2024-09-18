@@ -85,6 +85,71 @@ Scenario('I can not send too large accumulated mail attachments', async ({ I, us
     I.waitForText('The file "16MB.dat" cannot be uploaded because it exceeds the total attachment size limit of 5 MB', 5, '.io-ox-alert.io-ox-alert-error');
 });
 
+Scenario('I can send multiple files up to maximum attachment limit', async ({ I, users, mail }) => {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    await I.executeScript(function () {
+        require('settings!io.ox/core').set('properties', { attachmentQuota: 6 * 1024 * 1024 });
+    });
+
+    mail.newMail();
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Test');
+
+    // add a too large file as attachment
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
+
+    // try adding a too large file as attachment to make sure it will not be accepted.
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/16MB.dat');
+    I.waitForText('The file "16MB.dat" cannot be uploaded because it exceeds the total attachment size limit of 6 MB', 5, '.io-ox-alert.io-ox-alert-error');
+    I.waitForElement('.btn-link.close', 5, '.io-ox-alert.io-ox-alert-error');
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
+
+    // After reaching the maximum quota, we try to upload a large file again to check that the file is still not accepted
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/16MB.dat');
+    I.waitForText('The file "16MB.dat" cannot be uploaded because it exceeds the total attachment size limit of 6 MB', 5, '.io-ox-alert.io-ox-alert-error');
+    I.waitForElement('.btn-link.close', 5, '.io-ox-alert.io-ox-alert-error');
+    I.click('.btn-link.close', '.io-ox-alert.io-ox-alert-error');
+    I.waitForDetached('.io-ox-alert.io-ox-alert-error', 5);
+
+    // change attachment and send successfully
+    I.attachFile('.composetoolbar input[type="file"]', 'media/files/generic/2MB.dat');
+    I.waitForText('DAT', 5, '.inline-items.preview');
+    I.waitForDetached('.progress-container', 20, '.share-attachments');
+
+    // send mail successfully
+    mail.send();
+    I.waitForElement('.list-item.selectable.unread', 30, '.list-view.mail-item');
+});
+
+Scenario('I can send multiple inline images up to maximum attachment limit', async ({ I, users, mail }) => {
+    I.login('app=io.ox/mail');
+    mail.waitForApp();
+    await I.executeScript(function () {
+        require('settings!io.ox/mail').set('attachments/layout/compose/large', 'list');
+        require('settings!io.ox/mail').set('compose/maxMailSize', 5 * 1024);
+    });
+
+    mail.newMail();
+    I.fillField('To', users[0].get('primaryEmail'));
+    I.fillField('Subject', 'Test');
+
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600-limegreen.png');
+    await within({ frame: '.mce-edit-area iframe' }, async () => {
+        I.waitForElement('#tinymce img');
+        I.dontSee('The file cannot be uploaded because it exceeds the maximum email size of 5 KB');
+    });
+
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600-mango.png');
+    await within({ frame: '.mce-edit-area iframe' }, async () => {
+        I.waitForElement('#tinymce img');
+        I.dontSee('The file cannot be uploaded because it exceeds the maximum email size of 5 KB');
+    });
+
+    I.attachFile('.tinymce-toolbar input[type="file"]', 'media/placeholder/800x600.png');
+    I.waitForText('The file cannot be uploaded because it exceeds the maximum email size of 5 KB', 5, '.io-ox-alert.io-ox-alert-error');
+});
+
 Scenario('I can not send an email that exceeds the mail max size', async ({ I, users, mail }) => {
     I.login('app=io.ox/mail');
     mail.waitForApp();
