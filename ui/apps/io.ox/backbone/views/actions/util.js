@@ -569,14 +569,14 @@ define('io.ox/backbone/views/actions/util', [
         $ul.css(pos);
     }
 
-    $.fn.addActionTooltip = function (title) {
-        if (_.device('smartphone')) return $(this);
+    $.fn.addActionTooltip = function (title, options) {
+        if (_.device('smartphone')) return $(this).attr({ 'aria-label': title });
         return $(this)
             .attr({
                 'data-original-title': title,
                 // tooltip removes title attribute, therefore we always add aria-label for screen reader support
                 'aria-label': title,
-                'data-placement': 'bottom',
+                'data-placement': options.placement || 'bottom',
                 'data-animation': 'false',
                 'data-container': 'body'
             })

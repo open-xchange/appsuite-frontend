@@ -128,7 +128,7 @@ define('io.ox/backbone/views/toolbar', [
                     util.createDropdownToggle()
                         .attr('data-action', 'more')
                         .append($.icon('fa-bars'))
-                        .addActionTooltip(_.device('smartphone') ? gt('Actions') : gt('More actions')),
+                        .addActionTooltip(_.device('smartphone') ? (gt('Actions'), { placement: 'top' }) : (gt('More actions'), { placement: 'top' })),
                     $ul
                 );
             // close tooltip when opening the dropdown

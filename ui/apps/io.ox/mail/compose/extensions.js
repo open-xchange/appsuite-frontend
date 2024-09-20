@@ -575,10 +575,9 @@ define('io.ox/mail/compose/extensions', [
         optionsmenu: (function () {
             return function (baton) {
                 var a = $('<a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">')
-                    .attr('aria-label', gt('Options'))
+                    .addActionTooltip(gt('Options'), { placement: 'top' })
                     .append(
                         $('<div aria-hidden="true">')
-                            .attr('title', gt('Options'))
                             .append($.icon('fa-bars', false, 'bars'))
                     );
                 var dropdown = new Dropdown({
@@ -873,10 +872,9 @@ define('io.ox/mail/compose/extensions', [
                     fileInput,
                     // local file
                     $('<a href="#" role="button" data-toggle="dropdown" tabindex="-1">')
-                        .attr('aria-label', gt('Add local file'))
                         .append(
                             $('<div aria-hidden="true">')
-                                .attr('title', gt('Add local file'))
+                                .addActionTooltip(gt('Add local file'), { placement: 'top' })
                                 .append($.icon('fa-paperclip', false, 'paperclip'))
                         )
                         .on('click', function () {
@@ -929,10 +927,9 @@ define('io.ox/mail/compose/extensions', [
 
                 this.append(
                     $('<a href="#" role="button" tabindex="-1">')
-                        .attr('aria-label', gt('Add from Drive'))
+                        .addActionTooltip(gt('Add from Drive'), { placement: 'top' })
                         .append(
                             $('<div aria-hidden="true">')
-                                .attr('title', gt('Add from Drive'))
                                 .append($.icon('fa-cloud', false, 'cloud'))
                         )
                         .on('click', openFilePicker.bind(this, baton.model))
@@ -957,10 +954,11 @@ define('io.ox/mail/compose/extensions', [
             update();
             baton.config.on('change:toolbar', update);
             function update() {
-                var value = baton.config.get('toolbar');
+                var value = baton.config.get('toolbar') && baton.config.get('editorMode') !== 'text';
+                var mode = baton.config.get('editorMode') === 'text';
+                var text = value ? gt('Hide toolbar') : gt('Show toolbar');
                 floatingView.$el.toggleClass('no-toolbar', !value);
-                node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar'));
-                node.find('div').attr('title', value ? gt('Hide toolbar') : gt('Show toolbar'));
+                node.attr('aria-label', value ? gt('Hide toolbar') : gt('Show toolbar')).addActionTooltip(mode ? '' : text, { placement: 'top' });
                 parent.toggleClass('checked', value);
                 floatingView.onResize();
             }
