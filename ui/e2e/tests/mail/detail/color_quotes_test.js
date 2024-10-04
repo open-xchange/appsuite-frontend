@@ -35,12 +35,43 @@ After(async ({ users }) => {
 });
 
 Scenario('[C7819] Color quotes on reply', async ({ I, users, mail }) => {
-
-    var icke = users[0].userdata.email1;
+    const icke = users[0].get('email1');
+    const options = { rules: { 'aria-allowed-role': { enabled: false } } };
 
     await I.haveMail({
         attachments: [{
-            content: '<p>Level 0</p><blockquote type="cite"><p>Level 1</p><blockquote type="cite"><p>Level 2</p><blockquote type="cite"><p>Level 3</p></blockquote></blockquote></blockquote>',
+            content: `
+          <p>Level 0</p>
+          <blockquote type="cite">
+            <p>Level 1</p>
+            <blockquote type="cite">
+              <p>Level 2</p>
+              <blockquote type="cite">
+                <p>Level 3</p>
+                <blockquote type="cite">
+                  <p>Level 4</p>
+                  <blockquote type="cite">
+                    <p>Level 5</p>
+                    <blockquote type="cite">
+                      <p>Level 6</p>
+                      <blockquote type="cite">
+                        <p>Level 7</p>
+                        <blockquote type="cite">
+                          <p>Level 8</p>
+                          <blockquote type="cite">
+                            <p>Level 9</p>
+                            <blockquote type="cite">
+                              <p>Level 10</p>
+                            </blockquote>
+                          </blockquote>
+                        </blockquote>
+                      </blockquote>
+                    </blockquote>
+                  </blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>`,
             content_type: 'text/html',
             disp: 'inline'
         }],
@@ -49,25 +80,13 @@ Scenario('[C7819] Color quotes on reply', async ({ I, users, mail }) => {
         to: [['Icke', icke]]
     });
 
-    I.login('app=io.ox/mail');
-    mail.waitForApp();
+    await I.login('app=io.ox/mail');
 
     // wait for first email
-    mail.selectMail('RE: Color quotes on reply');
-
+    await mail.selectMail('RE: Color quotes on reply');
     I.waitForElement('.mail-detail-frame');
-    within({ frame: '.mail-detail-frame' }, async function () {
-        let rule = await I.grabCssPropertyFrom('blockquote', 'color');
-        rule = Array.isArray(rule) ? rule : [rule];
-        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
-        expect(rule).to.equal('rgba(85, 85, 85, 1)');
-        rule = await I.grabCssPropertyFrom('blockquote blockquote', 'color');
-        rule = Array.isArray(rule) ? rule : [rule];
-        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
-        expect(rule).to.equal('rgba(40, 63, 115, 1)');
-        rule = await I.grabCssPropertyFrom('blockquote blockquote blockquote', 'color');
-        rule = Array.isArray(rule) ? rule : [rule];
-        [rule] = rule.map(c => c.indexOf('rgba') === 0 ? c : c.replace('rgb', 'rgba').replace(')', ', 1)'));
-        expect(rule).to.equal('rgba(221, 8, 128, 1)');
+    await within({ frame: '.mail-detail-frame' }, async function () {
+        I.waitForText('Level 10');
+        expect(await I.grabAxeReport(undefined, options)).to.be.accessible;
     });
 });
