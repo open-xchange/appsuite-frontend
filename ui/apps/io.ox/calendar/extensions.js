@@ -95,15 +95,22 @@ define('io.ox/calendar/extensions', [
                 if (!folder.module) folderAPI.once('after:flat:event', addColors.bind(this, this, model));
 
                 if (util.isPrivate(model) && ox.user_id !== (model.get('createdBy') || {}).entity && !folderAPI.is('private', folder)) {
-                    this.addClass('private disabled');
-                } else {
-                    var conf = util.getConfirmationStatus(model);
-                    if (util.isPrivate(model)) this.addClass('private');
-                    this.addClass(util.getShownAsClass(model) + ' ' + util.getConfirmationClass(conf) + ' ' + util.getStatusClass(model));
-
-                    addModifyClass(this, model);
-                    if (incomplete) folderModel.once('change', addModifyClass.bind(undefined, this, model));
+                    this.addClass('private');
                 }
+
+                if (util.isPrivate(model)) this.addClass('private');
+
+                if (util.hasParticipationStatus(model)) {
+                    var conf = util.getConfirmationStatus(model);
+                    this.addClass(util.getConfirmationClass(conf));
+                }
+
+                this.addClass(util.getShownAsClass(model));
+                this.addClass(util.getStatusClass(model));
+
+                addModifyClass(this, model);
+                if (incomplete) folderModel.once('change', addModifyClass.bind(undefined, this, model));
+
                 if (skipLocation) {
                     contentNode.append(
                         util.returnIconsByType(model).type,

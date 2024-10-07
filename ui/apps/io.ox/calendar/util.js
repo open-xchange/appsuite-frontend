@@ -1320,6 +1320,12 @@ define('io.ox/calendar/util', [
             return that.hasFlag(data, 'private') || (!strict && that.hasFlag(data, 'confidential'));
         },
 
+        hasParticipationStatus: function (model) {
+            if (!model) return;
+            var flags = model instanceof Backbone.Model ? model.get('flags') : model.flags;
+            return flags.indexOf('organizer') > -1 || flags.indexOf('attendee') > -1;
+        },
+
         returnIconsByType: function (obj) {
             var icons = {
                 type: [],

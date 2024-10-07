@@ -633,10 +633,9 @@ define('io.ox/calendar/main', [
         },
 
         'listview-checkboxes': function (app) {
-            app.listControl.$el.toggleClass('toolbar-top-visible', app.props.get('checkboxes'));
-            app.listView.toggleCheckboxes(app.props.get('checkboxes'));
             if (_.device('smartphone')) return;
             app.listControl.$('.select-all').toggle(app.props.get('checkboxes'));
+            app.listView.toggleCheckboxes(app.props.get('checkboxes'));
         },
 
         /*
@@ -693,11 +692,13 @@ define('io.ox/calendar/main', [
          */
         'change:checkboxes': function (app) {
             if (_.device('smartphone')) return;
-
             app.props.on('change:checkboxes', function (model, value) {
+                console.log('change:checkboxes');
                 app.listView.toggleCheckboxes(value);
-                app.listControl.$('.select-all').toggle(value);
-                app.listControl.$el.toggleClass('toolbar-top-visible', value);
+                if (value) app.listControl.$el.toggleClass('toolbar-top-visible', true);
+                app.listControl.$('.select-all').toggle('value', function () {
+                    if (!value) app.listControl.$el.toggleClass('toolbar-top-visible', false);
+                });
             });
         },
 
