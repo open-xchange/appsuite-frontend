@@ -189,20 +189,42 @@ define('io.ox/core/main/appcontrol', [
         }
     });
 
+    ext.point('io.ox/core/appcontrol/customQuickLaunchers').extend({
+        id: 'testQuickLauncher',
+        draw: function () {
+            var icon = $('<div class="icon">')
+                .append($.icon('fa-question', '', ''))
+                .addActionTooltip('Test Quick Launcher');
+
+            return $('<button>').attr({
+                tabindex: '-1',
+                type: 'button',
+                class: 'btn btn-link lcell',
+                'aria-label': 'Test Quick Launcher'
+            }).append(
+                $('<div class="lcell">').append(
+                    icon
+                ).on('click', function () {
+                    window.open('blank.html');
+                })
+            );
+        }
+    });
+
     var api = {
         quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
             var n = settings.get('apps/quickLaunchCount', 3);
             if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLaunchLimit, ox.ui.apps.forLauncher().length, n);
+            return Math.min(this.quickLaunchLimit, Math.max(ox.ui.apps.forLauncher().length, this.getQuickLauncherDefaults().length), n);
         },
         getQuickLauncherDefaults: function () {
-            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
+            return 'io.ox/mail/main,io.ox/calendar/main,io.ox/core/appcontrol/customQuickLaunchers/testQuickLauncher,io.ox/files/main';
 
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
+                list = String(settings.get('apps/someInvalidKey', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
                 str = _.chain(list).filter(function (o) {
                     if (o.indexOf('customQuickLaunchers') !== -1) return o;
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));

@@ -29,10 +29,14 @@ define('io.ox/core/api/apps', [
 
     'use strict';
 
+    // var defaultList = [
+    //     'io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
+    //     'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
+    //     'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
+    // ];
+
     var defaultList = [
-        'io.ox/mail', 'io.ox/calendar', 'io.ox/contacts',
-        'io.ox/files', 'io.ox/portal', 'io.ox/tasks',
-        'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet', 'io.ox/office/portal/presentation'
+        'io.ox/mail'
     ];
 
     // move app to defaultList, once it is out of prototype state
