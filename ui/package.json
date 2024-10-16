@@ -13,13 +13,15 @@
     "build": "grunt default",
     "build:clean": "grunt clean default",
     "test": "grunt copy:specs karma:continuous",
-    "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js"
+    "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js",
+    "version": "auto-changelog -p -l 100 -b 100 --starting-version 7.10.6-0 --template keepachangelog-ox && git add CHANGELOG.md"
   },
   "engines": {
     "node": ">=10.0.0"
   },
   "devDependencies": {
     "@open-xchange/appserver": "^0.8.0-pre1",
+    "@open-xchange/auto-changelog": "^2.4.4",
     "@open-xchange/shared-grunt-config": "^0.15.0-pre5",
     "assemble-less": "^0.7.0",
     "chai": "^4.4.1",
