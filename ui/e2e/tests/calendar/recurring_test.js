@@ -21,6 +21,8 @@
  */
 
 const moment = require('moment');
+const assert = require('assert');
+const { util } = require('@open-xchange/codecept-helper');
 
 Feature('Calendar > Create');
 
@@ -32,6 +34,21 @@ Before(async function ({ users }) {
 After(async function ({ users }) {
     await users.removeAll();
 });
+
+async function updateAppointment(appointment, changes, options) {
+    const { httpClient, session } = await util.getSessionForUser(options);
+    const params = {
+        action: 'update',
+        session,
+        folder: appointment.folder,
+        id: appointment.id,
+        timestamp: appointment.timestamp
+    };
+    if (appointment.recurrenceId) params.recurrenceId = appointment.recurrenceId;
+    const response = await httpClient.put('/api/chronos', { event: changes }, { params });
+    assert.strictEqual(response.data.error, undefined, JSON.stringify(response.data));
+    return response;
+}
 
 Scenario('Create recurring appointments with one participant', async function ({ I, users, calendar, dialogs }) {
 
@@ -340,5 +357,117 @@ Scenario('[Bug 62034] Appointment series ends one day to early', async function 
     I.click('Create');
 
     I.waitNumberOfVisibleElements('.list-item.selectable.appointment', 4);
+});
+
+Scenario.skip('Confirm series should only appear for eligible exceptions', async ({ I, calendar, users, dialogs }) => {
+    await Promise.all([
+        I.haveSetting({
+            'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+            'io.ox/calendar': { showCheckboxes: true, layout: 'list' }
+        }),
+        I.haveSetting({
+            'io.ox/core': { autoOpenNotification: false, showDesktopNotifications: false },
+            'io.ox/calendar': { showCheckboxes: true, layout: 'list' }
+        }, { user: users[1] })
+    ]);
+
+    //Create Appointment
+    const time = moment().startOf('day').add(16, 'hours');
+    const format = 'YYYYMMDD[T]HHmmss';
+    const appointment = await I.haveAppointment({
+        summary: 'test appointment',
+        folder: await calendar.defaultFolder(),
+        startDate: { tzid: 'Europe/Berlin', value: time.format(format) },
+        endDate: { tzid: 'Europe/Berlin', value: moment(time).add(1, 'hour').format(format) },
+        rrule: 'FREQ=DAILY;COUNT=5',
+        attendees: [
+            { partStat: 'NEEDS-ACTION', entity: users[0].userdata.id, uri: `mailto:${users[0].userdata.primaryEmail}` },
+            { partStat: 'NEEDS-ACTION', entity: users[1].userdata.id, uri: `mailto:${users[1].userdata.primaryEmail}` }
+        ]
+    });
+
+    // no promise all, causes concurrent modification issues
+    await updateAppointment({
+        id: appointment.id,
+        folder: appointment.folder,
+        recurrenceId: `Europe/Berlin:${moment(time).add(2, 'days').format(format)}`,
+        timestamp: appointment.lastModified
+    },
+    {
+        startDate: { tzid: 'Europe/Berlin', value: moment(time).add(2, 'days').add(1, 'hour').format(format) },
+        endDate: { tzid: 'Europe/Berlin', value: moment(time).add(2, 'days').add(2, 'hour').format(format) }
+    });
+    await updateAppointment({
+        id: appointment.id,
+        folder: appointment.folder,
+        recurrenceId: `Europe/Berlin:${moment(time).add(3, 'days').format(format)}`,
+        timestamp: appointment.lastModified + 100
+    },
+    {
+        summary: 'edited test appointment'
+    });
+
+    // prepare exception
+    await I.login('app=io.ox/calendar', { user: users[1] });
+
+    calendar.waitForApp();
+    I.waitNumberOfVisibleElements('.list-item.selectable.appointment', 5);
+    I.click(locate('.appointment').withText('test appointment').inside('.list-view').at(5).as('5th occurrence of test appointment'));
+    I.waitForText('Decline', 5, '.rightside .calendar-detail-pane');
+    I.click('Decline', '.rightside .calendar-detail-pane');
+
+    dialogs.waitForVisible();
+    dialogs.clickButton('Change appointment');
+    I.waitForDetached('.modal-dialog');
+
+    I.waitForElement(`.rightside .participant.declined a[title="${users[1].userdata.primaryEmail}"]`);
+    I.logout();
+
+    // check all appointments
+    await I.login('app=io.ox/calendar');
+    calendar.waitForApp();
+    I.waitNumberOfVisibleElements('.list-item.selectable.appointment', 5);
+
+    I.click(locate('.appointment').withText('test appointment').inside('.list-view').at(1).as('1st occurrence of test appointment'));
+    I.waitForText('Accept', 5, '.rightside .calendar-detail-pane');
+    I.click('Accept', '.rightside .calendar-detail-pane');
+
+    dialogs.waitForVisible();
+    I.waitForText('Change appointment');
+    I.waitForText('Change series');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.click(locate('.appointment').withText('test appointment').inside('.list-view').at(2).as('2nd occurrence of test appointment'));
+    I.waitForText('Accept', 5, '.rightside .calendar-detail-pane');
+    I.click('Accept', '.rightside .calendar-detail-pane');
+
+    dialogs.waitForVisible();
+    I.waitForText('Change appointment');
+    I.waitForText('Change series');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
+
+    I.click(locate('.appointment').withText('test appointment').inside('.list-view').at(3).as('3rd occurrence of test appointment'));
+    I.waitForText('Accept', 5, '.rightside .calendar-detail-pane');
+    I.click('Accept', '.rightside .calendar-detail-pane');
+
+    I.waitForElement(`.rightside .participant.accepted a[title="${users[0].userdata.primaryEmail}"]`);
+
+    I.click(locate('.appointment').withText('edited test appointment').inside('.list-view').as('edited test appointment (formerly 4th occurrence of test appointment)'));
+    I.waitForElement('.rightside [data-action="participate/yes"]');
+    I.click('.rightside [data-action="participate/yes"]');
+
+    I.waitForElement(`.rightside .participant.accepted a[title="${users[0].userdata.primaryEmail}"]`);
+
+    I.click(locate('.appointment').withText('test appointment').inside('.list-view').at(5).as('5th occurrence of test appointment'));
+    I.waitForText('Accept', 5, '.rightside .calendar-detail-pane');
+    I.click('Accept', '.rightside .calendar-detail-pane');
+
+    dialogs.waitForVisible();
+    I.waitForText('Change appointment');
+    I.waitForText('Change series');
+    dialogs.clickButton('Cancel');
+    I.waitForDetached('.modal-dialog');
 });
 

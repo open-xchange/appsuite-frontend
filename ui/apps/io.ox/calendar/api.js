@@ -1261,6 +1261,17 @@ define('io.ox/calendar/api', [
         return result;
     };
 
+    api.getRecurrence = function (obj) {
+        return http.GET({
+            module: 'chronos',
+            params: {
+                action: 'getRecurrence',
+                id: obj.id,
+                recurrenceId: obj.recurrenceId,
+                folder: obj.folder
+            }
+        });
+    };
 
     _.extend(api, Backbone.Events);
 

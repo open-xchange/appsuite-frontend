@@ -448,68 +448,68 @@ define('io.ox/calendar/actions', [
             def = baton.noFolderCheck ? $.when() : folderAPI.get(appointment.folder);
 
         def.always(function (folder) {
+            util.hasSeriesPropagation(data).then(function (hasSeriesPropagation) {
+                appointment.attendee = {
+                    // act as folder owner in shared folder
+                    entity: !folder.error && !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                    partStat: accept ? 'ACCEPTED' : 'DECLINED'
+                };
 
-            appointment.attendee = {
-                // act as folder owner in shared folder
-                entity: !folder.error && !baton.noFolderCheck && folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
-                partStat: accept ? 'ACCEPTED' : 'DECLINED'
-            };
-
-            if (!appointment.attendee.entity && folder.created_from) {
-                var prev = _(data.attendees).find(function (attendee) {
-                    return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === folder.created_from.identifier;
-                });
-                if (prev) {
-                    delete appointment.attendee.entity;
-                    appointment.attendee.email = prev.email;
-                    appointment.attendee.uri = prev.uri;
-                }
-            }
-
-            if (accept) {
-                // default reminder
-                appointment.alarms = util.getDefaultAlarms(data);
-            }
-
-            // check if only one appointment or the whole series should be accepted
-            // treat exceptions as part of the series and offer to accept the series as a whole
-            if (data.seriesId && appointment.recurrenceId) {
-                new ModalDialog({
-                    title: gt('Change appointment status'),
-                    width: 600
-                })
-                .build(function () {
-                    this.$body.append(accept
-                        ? gt('This appointment is part of a series. Do you want to confirm the whole series or just one appointment within the series?')
-                        : gt('This appointment is part of a series. Do you want to decline the whole series or just one appointment within the series?')
-                    );
-                })
-                .addCancelButton({ left: true })
-                .addButton({ label: accept ? gt('Accept appointment') : gt('Decline appointment'), action: 'appointment', className: 'btn-default' })
-                //#. Use singular in this context
-                .addButton({ label: accept ? gt('Accept series') : gt('Decline series'), action: 'series' })
-                .on('action', function (action) {
-                    if (action === 'cancel') return;
-                    if (action === 'series') {
-                        delete appointment.recurrenceId;
-                        // use series id to make it work for exceptions
-                        if (appointment.id !== data.seriesId) {
-                            appointment.id = data.seriesId;
-                        }
-                    }
-                    $(baton.e.target).addClass('disabled');
-                    util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (e) {
-                        if (e) yell(e);
-                        $(baton.e.target).removeClass('disabled');
+                if (!appointment.attendee.entity && folder.created_from) {
+                    var prev = _(data.attendees).find(function (attendee) {
+                        return attendee.extendedParameters && attendee.extendedParameters['X-OX-IDENTIFIER'] === folder.created_from.identifier;
                     });
-                })
-                .open();
-                return;
-            }
-            $(baton.e.target).addClass('disabled');
-            util.confirmWithConflictCheck(appointment, { checkConflicts: true }).fail(function (e) {
-                if (e) yell(e);
-                $(baton.e.target).removeClass('disabled');
+                    if (prev) {
+                        delete appointment.attendee.entity;
+                        appointment.attendee.email = prev.email;
+                        appointment.attendee.uri = prev.uri;
+                    }
+                }
+
+                if (accept) {
+                    // default reminder
+                    appointment.alarms = util.getDefaultAlarms(data);
+                }
+
+                // check if only one appointment or the whole series should be accepted
+                // treat exceptions as part of the series and offer to accept the series as a whole
+                if (hasSeriesPropagation && data.seriesId && appointment.recurrenceId && data.category !== 'invitation') {
+                    new ModalDialog({
+                        title: gt('Change appointment confirmation'),
+                        width: 600
+                    })
+                    .build(function () {
+                        this.$body.append(
+                            gt('This appointment is part of a series. Do you want to change the whole series or just one appointment within the series?')
+                        );
+                    })
+                    .addCancelButton({ left: true })
+                    .addButton({ label: gt('Change appointment'), action: 'appointment', className: 'btn-default' })
+                    //#. Use singular in this context
+                    .addButton({ label: gt('Change series'), action: 'series' })
+                    .on('action', function (action) {
+                        if (action === 'cancel') return;
+                        if (action === 'series') {
+                            delete appointment.recurrenceId;
+                            // use series id to make it work for exceptions
+                            if (appointment.id !== data.seriesId) {
+                                appointment.id = data.seriesId;
+                            }
+                        }
+                        util.confirmWithConflictCheck(appointment, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true })).fail(function (err) {
+                            if (err.message) {
+                                yell('error', err.message);
+                            }
+                        });
+                    })
+                    .open();
+                    return;
+                }
+                $(baton.e.target).addClass('disabled');
+                util.confirmWithConflictCheck(appointment, { checkConflicts: true }).fail(function (e) {
+                    if (e) yell(e);
+                    $(baton.e.target).removeClass('disabled');
+                });
             });
         });
     }
