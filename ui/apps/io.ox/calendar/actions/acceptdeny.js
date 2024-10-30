@@ -201,9 +201,13 @@ define('io.ox/calendar/actions/acceptdeny', [
             });
             return def;
         }
+        // not a series or a task
+        if (options.taskmode || !o.recurrenceId || !o.seriesId) return cont();
+        // series
+        util.hasSeriesPropagation(o).then(function (hasSeriesPropagation) {
+            // no propagation? Only change appointment status
+            if (!hasSeriesPropagation) return cont(false);
 
-        // series?
-        if (!options.taskmode && o.recurrenceId && o.seriesId) {
             return new ModalDialog({ title: gt('Change appointment status'), width: 600 })
                 .build(function () {
                     this.$body.append(gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?'));
@@ -216,7 +220,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                 .on('series', function () { _.defer(cont, true); })
                 .on('appointment', function () { _.defer(cont, false); })
                 .open();
-        }
-        return cont();
+        });
     };
 });
