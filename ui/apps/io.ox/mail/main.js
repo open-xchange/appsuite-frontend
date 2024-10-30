@@ -697,7 +697,7 @@ define('io.ox/mail/main', [
                 // do not accidentally overwrite other attributes on folderchange
                 if (!app.changingFolders) {
                     // set proper order first
-                    model.set('order', (/^(610|661|608|102|660|651)$/).test(value) ? 'desc' : 'asc', { silent: true });
+                    model.set('order', (/^(610|661|608|102|660)$/).test(value) ? 'desc' : 'asc', { silent: true });
                     app.props.set('order', model.get('order'));
                 }
                 // now change sort columns
