@@ -36,7 +36,7 @@ After(async ({ users }) => {
 
 Scenario('[C85624] Configure postal addresses map service', async ({ I, contacts }) => {
 
-    const verifyMapType = async function (mapName, link, value, isContactsFolder = false) {
+    const verifyMapType = async function (mapName, link, value) {
         // Go back to settings and switch to other display style
         I.openApp('Settings', { folder: 'virtual/settings/io.ox/contacts' });
         I.waitForText('Link postal addresses with map service');
@@ -46,7 +46,7 @@ Scenario('[C85624] Configure postal addresses map service', async ({ I, contacts
 
         // Verify the displayed style
         I.openApp('Address Book');
-        contacts.waitForApp(isContactsFolder);
+        contacts.waitForApp();
         contacts.selectContact('Bar, Foo');
 
         if (mapName !== 'No link') {
@@ -75,7 +75,7 @@ Scenario('[C85624] Configure postal addresses map service', async ({ I, contacts
     I.say('Google Maps');
     verifyMapType('Google Maps', 'google.com', 'google');
     I.say('Open Street Map');
-    verifyMapType('Open Street Map', 'openstreetmap.org', 'osm', true);
+    verifyMapType('Open Street Map', 'openstreetmap.org', 'osm');
     I.say('No link');
-    await verifyMapType('No link', '', 'none', true);
+    await verifyMapType('No link', '', 'none');
 });

@@ -55,9 +55,8 @@ Scenario('[C7341] Use first run mandatory wizard', async function ({ I, users, c
     I.fillField('last_name', last_name);
     I.pressKey('Enter');
     I.click('Next');
-    let listenerID = I.registerNodeRemovalListener('.wizard-container');
     I.click('Finish');
-    I.waitForNodeRemoval(listenerID);
+    I.waitForDetached('.wizard-container');
     I.waitForInvisible('#background-loader.busy', 30);
     // mail is the default app, so wait for it to load to make sure the UI is ready
     mail.waitForApp();
