@@ -23,16 +23,14 @@
 const { I, dialogs } = inject();
 
 module.exports = {
-    waitForApp(isContactsFolder = false) {
+    waitForApp() {
         I.waitForElement('.io-ox-contacts-window');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
         I.waitForVisible('.io-ox-contacts-window .tree-container');
-        var listenerID;
         // TODO make this work without stupid parameter (didn't want to make this async)
         // there is no redraw when current folder is already 'Contacts' so no need to wait for it
-        if (!isContactsFolder) listenerID = I.registerNodeRemovalListener('.io-ox-contacts-window .classic-toolbar');
         I.selectFolder('Contacts');
-        if (!isContactsFolder) I.waitForNodeRemoval(listenerID);
+        I.waitForInvisible('.io-ox-contacts-window .classic-toolbar .dropdown-toggle.disabled');
         I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
     },
     selectContact(text) {

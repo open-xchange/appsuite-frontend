@@ -163,10 +163,8 @@ Scenario('User can upload/remove picture (standalone version)', async function (
     dialogs.waitForVisible();
     I.attachFile('.contact-photo-upload form input[type="file"][name="file"]', 'media/placeholder/800x600-limegreen.png');
     I.waitForInvisible('.edit-picture.empty', 3);
-    let listenerID = I.registerNodeRemovalListener(NODES.TOPBAR);
     dialogs.clickButton('Apply');
-    I.waitForNodeRemoval(listenerID);
-    I.wait(0.5);
+    I.wait(2);
 
     I.waitForElement(`${NODES.TOPBAR}[style]`);
     I.waitForElement(`${NODES.DROPDOWN}[style]`);

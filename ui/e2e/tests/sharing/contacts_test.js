@@ -99,7 +99,10 @@ Scenario('[C104306] contact folders using “Permisions” dialog and sharing li
     // Eve uses external link to shared folder
     session('Eve', () => {
         I.amOnPage(url);
-        contacts.waitForApp();
+        I.waitForElement('.io-ox-contacts-window');
+        I.waitForVisible('.io-ox-contacts-window .classic-toolbar');
+        I.waitForVisible('.io-ox-contacts-window .tree-container');
+        I.selectFolder('Contacts');
         I.waitForText(`${users[0].get('sur_name')}, ${users[0].get('given_name')}: Contacts`, 5, '.folder-tree');
         // I.seeNumberOfElements(locate('.contact.vgrid-cell').inside('.io-ox-contacts-window'), 4);
         I.waitForText('Builder', 5, '.vgrid');
