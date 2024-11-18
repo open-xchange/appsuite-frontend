@@ -192,17 +192,19 @@ define('io.ox/core/main/appcontrol', [
     var api = {
         quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
-            var n = settings.get('apps/quickLaunchCount', 3);
-            if (!_.isNumber(n)) return 0;
-            return Math.min(this.quickLaunchLimit, ox.ui.apps.forLauncher().length, n);
+            var quickLaunchCount = settings.get('apps/quickLaunchCount', 3);
+            if (!_.isNumber(quickLaunchCount)) return 0;
+            return Math.min(this.quickLaunchLimit, Math.max(ox.ui.apps.forLauncher().length, this.getQuickLauncherList().length, quickLaunchCount));
         },
         getQuickLauncherDefaults: function () {
             return 'io.ox/mail/main,io.ox/calendar/main,io.ox/files/main';
-
+        },
+        getQuickLauncherList: function () {
+            return String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/);
         },
         getQuickLauncherItems: function () {
             var count = this.getQuickLauncherCount(),
-                list = String(settings.get('apps/quickLaunch', this.getQuickLauncherDefaults())).trim().split(/,\s*/),
+                list = this.getQuickLauncherList(),
                 str = _.chain(list).filter(function (o) {
                     if (o.indexOf('customQuickLaunchers') !== -1) return o;
                     return ox.ui.apps.get(o.replace(/\/main$/, ''));
