@@ -23,8 +23,10 @@
 define('io.ox/core/boot/login/openid', [
     'io.ox/core/boot/util',
     'io.ox/core/session',
-    'io.ox/core/extensions'
-], function (util, session, ext) {
+    'io.ox/core/extensions',
+    'io.ox/core/boot/config'
+], function (util, session, ext, config) {
+
     'use strict';
 
     ext.point('io.ox/core/logout').extend({
@@ -105,48 +107,58 @@ define('io.ox/core/boot/login/openid', [
         });
     }
 
-    if (ox.serverConfig.oidcLogin === true) {
-        ext.point('io.ox/core/relogin').extend({
-            id: 'openid_connect_retry',
-            after: 'default',
-            render: function () {
-                var dialog = this;
-                function retry() {
-                    silentRelogin().then(function () {
-                        if (!dialog || dialog.disposed) return;
-                        dialog.trigger('relogin:success');
-                        dialog.close();
-                    }, function (result) {
-                        // bind retry to lifetime of dialog, e.g. 'abortWithSuccess' does close the dialog
-                        if (!dialog || dialog.disposed) return;
-                        if (result.reason === 'timeout') retry();
-                    });
-                }
-
-                // retry forever when running into timeout
-                retry();
-            }
-        });
-        ext.point('io.ox/core/boot/login').extend({
-            id: 'openid_connect',
-            after: 'autologin',
-            login: function () {
-                return openIdConnectLogin({ flow: 'login' });
-            },
-            relogin: function (baton) {
-                util.debug('Open ID Relogin ...');
-                return silentRelogin().then(function () {
-                    baton.stopPropagation();
-                    baton.preventDefault();
-                    baton.data.reloginState = 'success';
-                    return { reason: 'relogin:success' };
-                }, function () {
-                    // let some other extension handle this
-                    return $.when({ reason: 'relogin:continue' });
+    ext.point('io.ox/core/relogin').extend({
+        id: 'openid_connect_retry',
+        after: 'default',
+        render: /*async*/ function () {
+            var dialog = this;
+            function retry() {
+                silentRelogin().then(function () {
+                    if (!dialog || dialog.disposed) return;
+                    dialog.trigger('relogin:success');
+                    dialog.close();
+                }, function (result) {
+                    // bind retry to lifetime of dialog, e.g. 'abortWithSuccess' does close the dialog
+                    if (!dialog || dialog.disposed) return;
+                    if (result.reason === 'timeout') retry();
                 });
             }
-        });
-    }
+
+            if (ox.serverConfig.oidcLogin !== true) return;
+            // retry forever when running into timeout
+            retry();
+        }
+    });
+
+    ext.point('io.ox/core/boot/login').extend({
+        id: 'openid_connect',
+        after: 'autologin',
+        login: /*async*/ function () {
+            // make sure at least the server config has been loaded
+            //   await config.server()
+            //   if (ox.serverConfig.oidcLogin !== true) return
+            //   return openIdConnectLogin({ flow: 'login' })
+            return config.server().then(function () {
+                if (ox.serverConfig.oidcLogin !== true) return;
+                return openIdConnectLogin({ flow: 'login' });
+            });
+
+        },
+        relogin: function (baton) {
+            if (ox.serverConfig.oidcLogin !== true) return;
+            util.debug('Open ID Relogin ...');
+            return silentRelogin().then(function () {
+                baton.stopPropagation();
+                baton.preventDefault();
+                baton.data.reloginState = 'success';
+                return { reason: 'relogin:success' };
+            }, function () {
+                // let some other extension handle this
+                return $.when({ reason: 'relogin:continue' });
+            });
+        }
+    });
+
 
     function openIdConnectLogin(options) {
         util.debug('Open ID Login ...');

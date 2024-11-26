@@ -188,7 +188,9 @@ define('io.ox/contacts/edit/view', [
             if (!this.isRemovable(name)) return $();
             return $('<div class="col-xs-2">').append(
                 $('<button type="button" class="btn btn-link remove">')
-                    .attr('title', gt('Remove field'))
+                    // #. Used to indicate which optional field will be removed from a contact.
+                    // #. %1$s - The field to be removed, e.g. "Nickname"
+                    .attr('title', gt('Remove %1$s', View.i18n[name]))
                     .attr('data-remove', name)
                     .append(this.renderRemoveIcon())
             );
@@ -200,7 +202,11 @@ define('io.ox/contacts/edit/view', [
 
         renderTextField: function (name) {
             return this.renderField(name, function (guid) {
-                return new common.InputView({ name: name, model: this.model, id: guid, validate: false }).render().$el;
+                // Certain file exchange formats allow line breaks, which would be stripped by InputView
+                var containsLinebreak = (this.model.get(name) || '').indexOf('\n') > -1;
+                return containsLinebreak
+                    ? new common.TextView({ name: name, model: this.model, id: guid, validate: false }).render().$el
+                    : new common.InputView({ name: name, model: this.model, id: guid, validate: false }).render().$el;
             });
         },
 

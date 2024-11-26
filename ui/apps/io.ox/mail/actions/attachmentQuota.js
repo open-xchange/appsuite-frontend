@@ -30,15 +30,21 @@ define('io.ox/mail/actions/attachmentQuota', [
     'use strict';
 
     function accumulate(attachmentCollection, type) {
-        return attachmentCollection.map(function (m) {
-            var file = (m.get('origin') || {}).file;
-            if (file) return file.size;
-            if (m.get('contentDisposition') !== type) return 0;
-            if (m.get('size') >= 0) return m.get('size');
-            if (m.get('origin')) return (m.get('origin').file || {}).size || 0;
-            return 0;
+        // TODO: #647, #648
+        return attachmentCollection
+        .map(function (model) {
+            // exit early (fallback for regular attachments during upload)
+            var contentDisposition = model.get('contentDisposition') || 'ATTACHMENT';
+            if (contentDisposition !== type) return 0;
+
+            // check local file
+            var localFileReference = (model.get('origin') || {}).file;
+            if (localFileReference) return localFileReference.size || 0;
+
+            // use calculated size of middleware (-1 might )
+            return (model.get('size') >= 0) ? model.get('size') : 0;
         })
-        .reduce(function (m, n) { return m + n; }, 0);
+        .reduce(function (accumulator, currentValue) { return accumulator + currentValue; }, 0);
     }
 
     function checkQuota(model, file, inlineImageSize) {
