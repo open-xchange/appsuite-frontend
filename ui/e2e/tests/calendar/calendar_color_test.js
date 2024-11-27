@@ -279,7 +279,7 @@ Scenario('Check appointment colors of public calendar appointments the user got 
 
 Scenario('[OXUIB-2166] Check appointment colors when participant makes a change', async function ({ I, users, calendar }) {
     const greyColor = 'rgb(197, 197, 197)';
-    const greenColor = 'rgb(157, 213, 138)';
+    const greenColor = 'rgb(175, 221, 160)';
 
     await session('Alice', async () => {
         I.login('app=io.ox/calendar&perspective="week:workweek"');
@@ -315,8 +315,8 @@ Scenario('[OXUIB-2166] Check appointment colors when participant makes a change'
     });
 
     await session('Alice', async () => {
-        I.click('~Test Appointment');
-        const color = await I.grabCssPropertyFrom('~Test Appointment', 'background-color');
+        I.waitForText('Test Appointment');
+        const color = await I.grabCssPropertyFrom({ css: '.appointment' }, 'background-color');
         expect(color).be.equal(greenColor);
     });
 });
