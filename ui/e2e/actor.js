@@ -21,7 +21,6 @@
  */
 
 const actor = require('@open-xchange/codecept-helper').actor;
-const _ = require('underscore');
 
 module.exports = actor({
     //remove previously created appointments by appointment title
@@ -91,29 +90,6 @@ module.exports = actor({
     waitForNetworkTraffic() {
         this.waitForDetached('#io-ox-refresh-icon .fa-spin');
         this.waitForVisible({ css: '#io-ox-refresh-icon a.apptitle[aria-label="Refresh"]' });
-    },
-
-    // Use the next two helpers together. Example that checks for old toolbar to be removed/redrawn after folder change:
-
-    // let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
-    // I.selectFolder('test address book');
-    // I.waitForNodeRemoval(listenerID);
-
-    // usually a save way to check for updates after some action is done (toolbar redraw, contact picture changes etc)
-    registerNodeRemovalListener(selector) {
-        var guid  = _.uniqueId('e2eNodeRemovalListener');
-        this.executeScript(function (selector, guid) {
-            $(selector + ':visible').parent().one('DOMNodeRemoved', function (e) {
-                if ($(e.target).filter(selector)) ox[guid] = true;
-            });
-        }, selector, guid);
-        return guid;
-    },
-
-    // use guid from registerNodeRemovalListener
-    waitForNodeRemoval(guid, time = 5) {
-        this.waitForFunction(function (guid) { return ox[guid]; }, [guid], time);
-        this.executeScript(function (guid) { delete ox[guid]; }, guid);
     },
 
     triggerRefresh() {

@@ -929,6 +929,27 @@ define('io.ox/calendar/util', [
             return ret;
         },
 
+        hasSeriesPropagation: function (appointment) {
+            appointment = appointment || {};
+            // no data -> no propagation
+            if (!appointment.id || !appointment.folder || !appointment.recurrenceId) return $.Deferred().resolve(false);
+            return require(['io.ox/calendar/api']).then(function (calendarAPI) {
+                return calendarAPI.getRecurrence(appointment).then(function (recurrenceData) {
+                    // rescheduled -> no propagation
+                    if (recurrenceData.rescheduled) return false;
+                    // not overridden -> propagation
+                    if (!recurrenceData.overridden) return true;
+                    // this is an orphaned series, see MW-1134. Series is just used to keep track by MW (usually caused if user is invited to an series exception from an external calendar via mail)
+                    if (!recurrenceData.masterEvent) return false;
+                    // not rescheduled but overridden -> if participation status matches there is series propagation
+                    return that.getConfirmationStatus(recurrenceData.masterEvent, 'none') === that.getConfirmationStatus(recurrenceData.recurrenceEvent, 'none');
+                }).catch(function () {
+                    // error when requesting recurrence information. Be robust but don't offer series propagation
+                    return false;
+                });
+            });
+        },
+
         getWeekScaffold: function (timestamp) {
             var day = moment(timestamp).startOf('week'),
                 obj,

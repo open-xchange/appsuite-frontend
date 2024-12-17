@@ -44,10 +44,9 @@ Scenario('Add an existing distribution list', async function ({ I, contacts, dia
     contacts.newAddressbook('test address book');
 
     // create distribution list
-    let listenerID = I.registerNodeRemovalListener('.classic-toolbar');
     I.selectFolder('test address book');
-    I.waitForNodeRemoval(listenerID);
 
+    I.waitForText('test address book', 5, '.folder-name');
     I.waitForText('Empty'); // Empty in list view
     contacts.newDistributionlist();
 

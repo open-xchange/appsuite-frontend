@@ -1078,17 +1078,16 @@ define('io.ox/calendar/api', [
         },
 
         getByFolder: function (folder) {
-            var regex = new RegExp('(folders=[^&]*' + folder + '|folder=' + folder + '&)'),
-                allpublic = new RegExp('(folders=[^&]*cal://0/allPublic|folder=cal://0/allPublic&)'),
-                folderData = folderApi.pool.getModel(folder),
-                isPublic = folderData && folderData.is('public');
-            return _(this.getCollections())
-                .chain()
-                .filter(function (entry, id) {
-                    return regex.test(id) || (isPublic && allpublic.test(id));
+            var regexContainsFolder = new RegExp('(folders=[^&]*' + folder + '|folder=' + folder + '&)');
+            var collectionsHash = this.getCollections();
+
+            return Object.keys(collectionsHash)
+                .filter(function (id) {
+                    return regexContainsFolder.test(id);
                 })
-                .pluck('collection')
-                .value();
+                .map(function (id) {
+                    return collectionsHash[id].collection;
+                });
         },
 
         getCollectionsByCID: function (cid) {
@@ -1127,7 +1126,7 @@ define('io.ox/calendar/api', [
                 var model = data instanceof Backbone.Model ? data : new models.Model(data),
                     collections = this.getByFolder(model.get('folder')).filter(filter.bind(model)),
                     folder = folderApi.pool.getModel(model.get('folder'));
-                if (folder && folder.is('public') && model.hasFlag('attendee')) {
+                if (folder && folder.is('public') && (model.hasFlag('attendee') || model.hasFlag('organizer'))) {
                     collections.push.apply(
                         collections,
                         this.getByFolder('cal://0/allPublic').filter(filter.bind(model))
@@ -1262,6 +1261,17 @@ define('io.ox/calendar/api', [
         return result;
     };
 
+    api.getRecurrence = function (obj) {
+        return http.GET({
+            module: 'chronos',
+            params: {
+                action: 'getRecurrence',
+                id: obj.id,
+                recurrenceId: obj.recurrenceId,
+                folder: obj.folder
+            }
+        });
+    };
 
     _.extend(api, Backbone.Events);
 
