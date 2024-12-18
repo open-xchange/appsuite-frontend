@@ -1,3 +1,11 @@
+## [7.10.6-49]
+
+### Fixed
+
+- Appointments wrongly added to all my public appointments calendar ([`OXUIB-2392`](https://jira.open-xchange.com/browse/OXUIB-2392)) [`82092a5`](https://gitlab.open-xchange.com/frontend/core/commit/82092a57e01a608ae63c4c1d994fcee638515395)
+- Implement improved appointment exception check ([`OXUIB-1090`](https://jira.open-xchange.com/browse/OXUIB-1090)) [`a2f90004`](https://gitlab.open-xchange.com/frontend/core/commit/a2f9000492b5f46a0be2b55241f2f8fbbdb7b8b1)
+- Quick launchers max count respects specifies custom quick launchers (appsuite/web-apps/ui#643) [`c8034558`](https://gitlab.open-xchange.com/frontend/core/commit/c80345588c7bab6063cda1415ec80b3e77cfa0e1)
+
 ## [7.10.6-48]
 
 ### Changed

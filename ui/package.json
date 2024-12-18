@@ -14,7 +14,13 @@
     "build:clean": "grunt clean default",
     "test": "grunt copy:specs karma:continuous",
     "postinstall": "patch-package && uglifyjs -o node_modules/tinymce/themes/modern/theme.min.js node_modules/tinymce/themes/modern/theme.js",
-    "version": "auto-changelog -p -l 100 -b 100 --starting-version 7.10.6-0 --template keepachangelog-ox && git add CHANGELOG.md"
+    "generate-changelog": "auto-changelog"
+  },
+  "auto-changelog": {
+    "template": "keepachangelog-ox",
+    "unreleased": false,
+    "commitLimit": false,
+    "startingVersion": "7.10.6-0"
   },
   "engines": {
     "node": ">=10.0.0"
