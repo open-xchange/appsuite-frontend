@@ -90,7 +90,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             );
 
             new Editor(container, {
-                toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
+                toolbar1: 'bold italic underline | alignleft aligncenter alignright | link image',
                 advanced: 'fontselect fontsizeselect forecolor | code',
                 css: {
                     //overwrite min-height of editor
