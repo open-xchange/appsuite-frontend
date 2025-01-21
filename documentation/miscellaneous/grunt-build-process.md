@@ -8,11 +8,11 @@ Building the UI is pretty simple.
 # Installation
 
 On a fresh checkout, the module dependencies need to be installed.
-Run `npm install` to install them.
+Switch to directory `ui/` and run `yarn install` to install them.
 
 # Build the software
 
-The default grunt task will build project once.
+The default grunt task will build the project once.
 
 ```bash
 grunt
@@ -52,9 +52,9 @@ of the shared grunt configuration.
 - delete ui/build directory
 - delete ui/node_modules
 - delete ui/bower_components
-- runt `grunt build` again
+- run `grunt build` again
 
-## The ui starts but the top bar does not contain any apps/modules
+## The UI starts but the top bar does not contain any apps/modules
 
 Please check the manifests file returned by your (local/remote) server.
 
@@ -62,7 +62,7 @@ Please check the manifests file returned by your (local/remote) server.
 
 ## I get a 'local grunt not found' error message when running grunt
 
-The local dependencies are not installed, run `npm install` to install them. After that, the error message should be gone. Note: `npm install -g grunt` is not enough.
+The local dependencies are not installed, run `yarn install` inside `ui/` to install them. After that, the error message should be gone. Note: `yarn global add grunt` is not enough.
 
 ## Some of my files aren't copied. How can I extend a copy sub-task?
 
@@ -87,13 +87,12 @@ module.exports = function (grunt) {
 ```
 
 Put this in a file inside the `grunt/tasks` directory and you are done. From now on, all files ending with .in and all manifest.json files are put into the `build/` directory using the same structure as in the `apps/` directory.
-For more detailed information see [the grunt documentation on files].
 
 # FAQ: UI plugins: development proxy server
 
 ## Which version of appserver am I using?
 
-npm can be used to find out about the versions. `npm ls appserver` will list the version of appserver that is used.
+Yarn can be used to find out about the versions. `yarn list appserver` will list the version of appserver that is used.
 
 ## I get an error message 'Port 8337 already in use by another process', what can I do?
 
@@ -101,7 +100,7 @@ Only one instance of appserver is allowed at a time (this might be subject to ch
 
 1.  Close all other running instances of appserver and run it exclusively in one project
 
-Yes, that was the easy one. However, you might want to serve multiple projects at once. This case would need a little more configuration:
+However, you might want to serve multiple projects at once. This case would need a little more configuration:
 
 1.  Choose one base UI project
 2.  Edit `grunt/local.conf.json`
