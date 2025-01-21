@@ -101,7 +101,7 @@
     "swiper": "^6.8.4",
     "tinymce": "4.9.10",
     "typeahead.js": "0.10.5",
-    "underscore": "^1.13.6",
+    "underscore": "^1.13.7",
     "unorm": "1.4.1",
     "velocity-animate": "1.5.2"
   },
