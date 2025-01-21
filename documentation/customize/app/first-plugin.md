@@ -18,7 +18,7 @@ TL;DR version:
 npm install -g grunt-cli yo generator-ox-ui-module
 ```
 
-Or if needed, there is a complete article about setting up an environment for [grunt]({{ site.baseurl }}/ui/00-getting-started/04-build-process.html).
+Or if needed, there is a complete article about setting up an environment for [grunt]({{ site.baseurl }}/ui/miscellaneous/grunt-build-process.html).
 
 # Create a Workspace
 
