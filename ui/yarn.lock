@@ -2902,10 +2902,10 @@ get-value@^2.0.3, get-value@^2.0.6:
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
 
-getobject@^1.0.2, getobject@~1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/getobject/-/getobject-1.0.2.tgz#25ec87a50370f6dcc3c6ba7ef43c4c16215c4c89"
-  integrity sha512-2zblDBaFcb3rB4rF77XVnuINOE2h2k/OnqXAiy0IrTxUfV1iFp3la33oAQVY9pCpWU268WFYVt2t71hlMuLsOg==
+getobject@^1.1.1, getobject@~1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/getobject/-/getobject-1.1.1.tgz#29f7858609fee7ef1c58d062f1b2335e425bdb45"
+  integrity sha512-Rftr+NsUMxFcCmFopFmyCCfsJPaqUmf7TW61CtKMu0aE93ir62I6VjXt2koiCQgcunGgVog/U6g24tBPq67rlg==
 
 getpass@^0.1.1:
   version "0.1.7"
