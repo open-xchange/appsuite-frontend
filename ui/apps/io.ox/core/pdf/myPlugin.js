@@ -61,7 +61,7 @@ define([], function () {
             var loadPath = ox.abs + ox.root + '/' + modulePath;
             console.log(ox.abs + ox.root + '/' + modulePath);
             // eslint-disable-next-line
-            var dynamicImport = new Function('return import(' + loadPath + ');');
+            var dynamicImport = new Function('return import("' + loadPath + '");');
             dynamicImport(ox.abs + ox.root + '/' + modulePath)
                 .then(function (module) {
                     return onload(module.default || module);
