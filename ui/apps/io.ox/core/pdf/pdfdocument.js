@@ -25,12 +25,29 @@
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'pdfjs-dist/build/pdf',
-    'settings!io.ox/core'
-], function (PDFView, Util, PDFJSLib, Settings) {
-
+    'settings!io.ox/core',
+    // -> 'io.ox/core/pdf/myPlugin!io.ox/core/pdf/exp',
+    // 'io.ox/core/pdf/myPlugin!' + ox.abs + ox.root + '/api/apps/load/7.10.6-48-1-g2c3785d.20241126.110455,pdfjs-dist/build/pdf.js',
+    'io.ox/core/pdf/myPlugin!pdfjs-dist/build/pdf'
+    //'io.ox/core/pdf/myPlugin!example'
+    // 'io.ox/core/pdf/myPlugin'
+], function (PDFView, Util, Settings, PDFJSLib) {
+// ], function (PDFView, Util, Settings, areaOfCircle, PDFJSLib) {
     'use strict';
 
+    console.log('LIB: ', PDFJSLib);
+    // main.js
+    // require.config({
+    //     paths: {
+    //         myPlugin: 'io.ox/core/pdf/myPlugin.js'
+    //     }
+    // });
+    // debugger
+
+    // console.log('!!!!!!!!esmodule plugin loaded???????');
+    // require(['io.ox/core/pdf/myPlugin!example'], function(result) {
+    //     console.log(result); // Outputs: Loaded: example
+    // });
     // class PDFDocument =======================================================
 
     /**
@@ -94,7 +111,7 @@ define('io.ox/core/pdf/pdfdocument', [
         };
 
         // detecting the worker automatically nor longer works, specify the workerSrc property manually
-        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.js';
+        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.mjs';
 
         // ---------------------------------------------------------------------
 

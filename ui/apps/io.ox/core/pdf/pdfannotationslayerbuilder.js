@@ -18,8 +18,8 @@
 define('io.ox/core/pdf/pdfannotationslayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfsimplelinkservice',
-    'pdfjs-dist/build/pdf',
-    'pdfjs-dist/build/pdf.worker'
+    'io.ox/core/pdf/myPlugin!pdfjs-dist/build/pdf'
+    // 'pdfjs-dist/build/pdf.worker'
 ], function (Polyfill, SimpleLinkService, PDFJSLib) {
 
     'use strict';
