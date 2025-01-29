@@ -193,7 +193,7 @@ define('io.ox/core/main/appcontrol', [
         quickLaunchLimit: 5,
         getQuickLauncherCount: function () {
             var quickLaunchCount = settings.get('apps/quickLaunchCount', 3);
-            if (!_.isNumber(quickLaunchCount)) return 0;
+            if (!_.isNumber(quickLaunchCount) || quickLaunchCount < 1) return 0;
             return Math.min(this.quickLaunchLimit, Math.max(ox.ui.apps.forLauncher().length, this.getQuickLauncherList().length, quickLaunchCount));
         },
         getQuickLauncherDefaults: function () {
