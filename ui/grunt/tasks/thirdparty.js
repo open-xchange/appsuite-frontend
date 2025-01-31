@@ -143,6 +143,16 @@ module.exports = function (grunt) {
                         dest: 'build/apps/pdfjs-dist/'
                     },
                     {
+                        // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
+                        // but take the cmaps and the icons from the common version
+                        expand: true,
+                        src: [
+                            'web/pdf_viewer.mjs'
+                        ],
+                        cwd: 'node_modules/pdfjs-dist',
+                        dest: 'build/apps/pdfjs-dist/'
+                    },
+                    {
                         expand: true,
                         flatten: true,
                         src: ['requirejs/require.js'],

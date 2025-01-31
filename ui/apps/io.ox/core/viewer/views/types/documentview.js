@@ -27,11 +27,12 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/tk/doc-utils/pageloader',
-    'io.ox/core/pdf/pdfviewerlinkservice',
+    // 'io.ox/core/pdf/myPlugin!pdfjs-dist/web/pdf_viewer',
+    // 'io.ox/core/pdf/pdfviewerlinkservice',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
     'less!io.ox/core/pdf/pdfstyle'
-], function (BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, PDFViewerLinkService, Util, gt) {
+], function (BaseView, ThumbnailView, PDFDocument, PDFView, DocConverterUtils, PageLoader, /*PDFViewerLinkService,*/ Util, gt) {
 
     'use strict';
 
@@ -642,56 +643,63 @@ define('io.ox/core/viewer/views/types/documentview', [
 
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
-                // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
-                var pdfLinkService = new PDFViewerLinkService({
-                    externalLinkTarget: 2, // Open external links in a new window
-                    pdfDocument: this.pdfDocument.getPDFJSDocument(),
-                    eventHub: this.viewerEvents
-                });
 
-                // store number of pages
-                this.numberOfPages = pageCount;
-                // create the PDF view after successful loading
-                this.pdfView = new PDFView(this.pdfDocument, {
-                    textOverlay: true,
-                    annotationsOverlay: true,
-                    linkService: pdfLinkService
-                });
-                // the PDF page rendering queue
-                this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
-                // set zoom factor to stored value or default zoom
-                this.currentZoomFactor = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
+                return require(['io.ox/core/pdf/myPlugin!pdfjs-dist/web/pdf_viewer']).then(function (PDFViewer) {
 
-                // draw page nodes and apply css sizes
-                _.times(pageCount, function (index) {
-                    var documentPage = $('<div class="document-page">').attr('data-page', index + 1),
-                        pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
+                    // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
+                    var pdfLinkService = new PDFViewer.PDFLinkService({
+                        externalLinkTarget: 2, // Open external links in a new window
+                        pdfDocument: this.pdfDocument.getPDFJSDocument(),
+                        eventHub: this.viewerEvents
+                    });
 
-                    this.documentContainer.append(documentPage.attr(pageSize).css(pageSize));
-                }, this);
+                    // store number of pages
+                    this.numberOfPages = pageCount;
+                    // create the PDF view after successful loading
+                    this.pdfView = new PDFView(this.pdfDocument, {
+                        textOverlay: true,
+                        annotationsOverlay: true,
+                        linkService: pdfLinkService
+                    });
 
-                // save values to the view instance, for performance
-                this.pages = this.$el.find('.document-page');
+                    console.log('*** PDFView', this.pdfView, PDFViewer);
+                    // the PDF page rendering queue
+                    this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
+                    // set zoom factor to stored value or default zoom
+                    this.currentZoomFactor = this.getInitialZoomLevel(this.model.get('id')) || this.getDefaultZoomFactor();
 
-                // render visible PDF pages
-                this.loadVisiblePages();
+                    // draw page nodes and apply css sizes
+                    _.times(pageCount, function (index) {
+                        var documentPage = $('<div class="document-page">').attr('data-page', index + 1),
+                            pageSize = this.pdfView.getRealPageSize(index + 1, this.currentZoomFactor / 100);
 
-                // disable slide swiping per default on documents
-                this.$el.addClass('swiper-no-swiping');
-                // register scroll handler
-                this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 50));
-                // set scroll position
-                this.$el.scrollTop(lastScrollPosition);
-                // update stored index of the dominant page
-                this.currentDominantPageIndex = this.getDominantPage() || 1;
+                        this.documentContainer.append(documentPage.attr(pageSize).css(pageSize));
+                    }, this);
 
-                // select/highlight the corresponding thumbnail according to displayed document page
-                this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
-                    .trigger('viewer:document:loaded')
-                    .trigger('viewer:document:pagechange', this.currentDominantPageIndex, pageCount);
-                this.$el.idle();
-                // resolve the document load Deferred: thsi document view is fully loaded.
-                this.documentLoad.resolve();
+                    // save values to the view instance, for performance
+                    this.pages = this.$el.find('.document-page');
+
+                    // render visible PDF pages
+                    this.loadVisiblePages();
+
+                    // disable slide swiping per default on documents
+                    this.$el.addClass('swiper-no-swiping');
+                    // register scroll handler
+                    this.$el.on('scroll', _.debounce(this.onScrollHandler.bind(this), 50));
+                    // set scroll position
+                    this.$el.scrollTop(lastScrollPosition);
+                    // update stored index of the dominant page
+                    this.currentDominantPageIndex = this.getDominantPage() || 1;
+
+                    // select/highlight the corresponding thumbnail according to displayed document page
+                    this.viewerEvents.trigger('viewer:document:selectthumbnail', this.currentDominantPageIndex)
+                            .trigger('viewer:document:loaded')
+                            .trigger('viewer:document:pagechange', this.currentDominantPageIndex, pageCount);
+                    this.$el.idle();
+                    // resolve the document load Deferred: thsi document view is fully loaded.
+                    this.documentLoad.resolve();
+
+                }.bind(this));
             }
 
             /**
