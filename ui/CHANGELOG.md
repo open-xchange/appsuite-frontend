@@ -1,3 +1,18 @@
+## [7.10.6-50]
+
+### Changed
+
+-  Upgraded the dompurify library to version 2.5.8 (#785) [`c810bc33`](https://gitlab.open-xchange.com/frontend/core/commit/c810bc33bf28c00cebddb93dc7a33f1ad4ec364f), [`23a4bb44`](https://gitlab.open-xchange.com/frontend/core/commit/23a4bb44bf054e423b75e1fa65a84d5b65f89b55),
+, [`6965c014`](https://gitlab.open-xchange.com/frontend/core/commit/6965c0140cbb554ac51d715e4ae1c6f2f05e4d53)
+
+### Fixed
+
+-  Add `underline` action to the mail signature editor toolbar (#787) [`1add3db0`](https://gitlab.open-xchange.com/frontend/core/commit/1add3db0a195ad61e5982ccd8d15bc30da592620)
+
+### Removed
+
+- **Breaking change:** Remove usage of jquery-ui and add content of `scroll-parent.js` to `boot.js`/`boot-stripped.js` (#765) [`f63e3e7d`](https://gitlab.open-xchange.com/frontend/core/commit/f63e3e7dafc688726487795d0b4fe52a6632ff43)
+
 ## [7.10.6-49]
 
 ### Fixed
