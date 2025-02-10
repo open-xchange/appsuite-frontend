@@ -18,7 +18,7 @@
 define('io.ox/core/pdf/pdfannotationslayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfsimplelinkservice',
-    'io.ox/core/pdf/myPlugin!pdfjs-dist/build/pdf'
+    'io.ox/core/pdf/esmloader!pdfjs-dist/build/pdf'
     // 'pdfjs-dist/build/pdf.worker'
 ], function (Polyfill, SimpleLinkService, PDFJSLib) {
 

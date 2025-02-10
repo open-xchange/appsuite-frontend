@@ -27,7 +27,7 @@ define('io.ox/core/viewer/views/types/documentview', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/tk/doc-converter-utils',
     'io.ox/core/tk/doc-utils/pageloader',
-    // 'io.ox/core/pdf/myPlugin!pdfjs-dist/web/pdf_viewer',
+    // 'io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer',
     // 'io.ox/core/pdf/pdfviewerlinkservice',
     'io.ox/core/viewer/util',
     'gettext!io.ox/core',
@@ -644,7 +644,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
 
-                return require(['io.ox/core/pdf/myPlugin!pdfjs-dist/web/pdf_viewer']).then(function (PDFViewer) {
+                return require(['io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer']).then(function (PDFViewer) {
 
                     // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
                     var pdfLinkService = new PDFViewer.PDFLinkService({
