@@ -25,12 +25,29 @@
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'pdfjs-dist/build/pdf',
-    'settings!io.ox/core'
-], function (PDFView, Util, PDFJSLib, Settings) {
-
+    'settings!io.ox/core',
+    // -> 'io.ox/core/pdf/esmloader!io.ox/core/pdf/exp',
+    // 'io.ox/core/pdf/esmloader!' + ox.abs + ox.root + '/api/apps/load/7.10.6-48-1-g2c3785d.20241126.110455,pdfjs-dist/build/pdf.js',
+    'io.ox/core/pdf/esmloader!pdfjs-dist/build/pdf'
+    //'io.ox/core/pdf/esmloader!example'
+    // 'io.ox/core/pdf/esmloader'
+], function (PDFView, Util, Settings, PDFJSLib) {
+// ], function (PDFView, Util, Settings, areaOfCircle, PDFJSLib) {
     'use strict';
 
+    console.log('LIB: ', PDFJSLib);
+    // main.js
+    // require.config({
+    //     paths: {
+    //         myPlugin: 'io.ox/core/pdf/esmloader.js'
+    //     }
+    // });
+    // debugger
+
+    // console.log('!!!!!!!!esmodule plugin loaded???????');
+    // require(['io.ox/core/pdf/esmloader!example'], function(result) {
+    //     console.log(result); // Outputs: Loaded: example
+    // });
     // class PDFDocument =======================================================
 
     /**
