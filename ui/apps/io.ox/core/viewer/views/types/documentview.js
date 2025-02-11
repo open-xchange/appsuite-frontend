@@ -644,10 +644,10 @@ define('io.ox/core/viewer/views/types/documentview', [
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
 
-                return require(['io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer']).then(function (PDFViewer) {
+                return require(['io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer']).then(function (pdfjsViewer) {
 
                     // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
-                    var pdfLinkService = new PDFViewer.PDFLinkService({
+                    var pdfLinkService = new pdfjsViewer.PDFLinkService({
                         externalLinkTarget: 2, // Open external links in a new window
                         pdfDocument: this.pdfDocument.getPDFJSDocument(),
                         eventHub: this.viewerEvents
@@ -662,7 +662,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                         linkService: pdfLinkService
                     });
 
-                    console.log('*** PDFView', this.pdfView, PDFViewer);
+                    console.log('*** PDFView', this.pdfView, pdfjsViewer);
                     // the PDF page rendering queue
                     this.pageLoader = new PageLoader(this.pdfDocument, this.pdfView);
                     // set zoom factor to stored value or default zoom

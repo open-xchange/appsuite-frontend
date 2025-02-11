@@ -22,49 +22,23 @@
 
 console.error('!!!!!!!! esmodule plugin loaded');
 
-// myPlugin.js
-// define([], function() {
-//     return {
-//         load: function(name, req, onload, config) {
-//             console.error('!!!!!!!!esmodule IN LOAD', name, req, onload, config);
-//             // Simulate an asynchronous operation
-//             setTimeout(function() {
-//                 // Here you can load resources or perform operations
-//                 onload("Loaded: " + name);
-//             }, 1000);
-//         }
-//     };
-// });
-
-
-// define([], function() {
-//     return {
-//         load: function(name, req, onload, config) {
-//             var modulePath = req.toUrl(name + '.js');
-//             console.log(ox.abs + ox.root + '/' + modulePath)
-//             import(ox.abs + ox.root + '/' + modulePath)
-//                 .then(function(module) {
-//                     return onload(module.default || module);
-//                 })
-//                 .catch(function(err) {
-//                     onload.error(err);
-//                 });
-//         }
-//     };
-// });
-
+// var loadpath = '999'
+// window.loadpath = '222'
 define([], function () {
     return {
         load: function (name, req, onload) {
-        // load: function(name, req, onload, config) {
             var modulePath = req.toUrl(name + '.mjs');
             var loadPath = ox.abs + ox.root + '/' + modulePath;
-            console.log(ox.abs + ox.root + '/' + modulePath);
+            console.log(loadPath);
+            // using parameters with 'new Function' has a different scope behavior, let's keep it as simple as possible here
             // eslint-disable-next-line
             var dynamicImport = new Function('return import("' + loadPath + '");');
-            dynamicImport(ox.abs + ox.root + '/' + modulePath)
+            dynamicImport()
                 .then(function (module) {
-                    return onload(module.default || module);
+                    console.log('loaded module', module);
+                    // so far not needed, feel free to extend this loader for default exports as well
+                    if (module.default) throw new Error('The ESM loader has found an unexpected default export within the module.');
+                    return onload(module);
                 })
                 .catch(function (err) {
                     onload.error(err);
@@ -72,51 +46,3 @@ define([], function () {
         }
     };
 });
-
-// define([], function() {
-// //define('io.ox/core/esmwrapper', [], function () {
-//     'use strict';
-
-//     return {
-//         load: function (name, req, onload, config) {
-//             console.error('!!!!!!!!esmodule IN LOAD', name, req, onload, config);
-//             var script = document.createElement('script');
-//             // script.type = 'module';
-//             script.src = name;  // path to the ES module
-
-//             script.onload = function () {
-//                 // onload();
-//                 // console.error('!!!!!!!!esmodule onload', name);
-//                 // return 'jo';
-
-//                 // Once the script is loaded, we can access the module's exports
-//                 // Note: You need to ensure that the module exposes its exports globally
-//                 var moduleName = name.split('/').pop().replace('.js', ''); // Get the module name
-//                 var moduleExports = window[moduleName]; // Access the module's exports from the global scope
-//                 onload(moduleExports); // Call onload with the module's exports
-//             };
-//             script.onerror = function (err) {
-//                 onload.error(err);
-//             };
-//             document.head.appendChild(script);
-
-//             //
-//             // import(name).then(module => {
-//             //   onload(module);
-//             // }).catch(err => {
-//             //   onload.error(err);
-//             // });
-//         }
-//     };
-// });
-
-// define corresponding plugin now (not earlier)
-// (function () {
-//     'use strict';
-//     // just to fool build system.
-//     window[0 || 'define']('esmwrapper', ['io.ox/core/esmwrapper'], _.identity);
-// }());
-
-// require(['esmwrapper!pdfjs-dist/build/pdf'], function (myModule) {
-//     return myModule;
-// });
