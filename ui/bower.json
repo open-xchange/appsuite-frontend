@@ -32,7 +32,7 @@
     "typeahead.js": "0.10.5",
     "marked": "~0.3.3",
     "blankshield": "^0.6.0",
-    "dompurify": "^1.0.0"
+    "dompurify": "^2.5.8"
   },
   "resolutions": {
     "jquery": "2.1.1",
