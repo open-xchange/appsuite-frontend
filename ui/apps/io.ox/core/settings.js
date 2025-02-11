@@ -20,7 +20,7 @@
  *
  */
 
-define('io.ox/core/settings', [ //
+define('io.ox/core/settings', [
     'io.ox/core/http'
 ], function (http) {
 
