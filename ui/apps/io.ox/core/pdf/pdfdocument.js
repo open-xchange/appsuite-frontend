@@ -35,7 +35,7 @@ define('io.ox/core/pdf/pdfdocument', [
 // ], function (PDFView, Util, Settings, areaOfCircle, PDFJSLib) {
     'use strict';
 
-    console.log('LIB: ', PDFJSLib);
+    console.log('LIB2: ', PDFJSLib);
     // main.js
     // require.config({
     //     paths: {
