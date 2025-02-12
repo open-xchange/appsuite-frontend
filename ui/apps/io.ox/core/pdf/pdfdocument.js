@@ -111,7 +111,7 @@ define('io.ox/core/pdf/pdfdocument', [
         };
 
         // detecting the worker automatically nor longer works, specify the workerSrc property manually
-        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.js';
+        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.mjs';
 
         // ---------------------------------------------------------------------
 
