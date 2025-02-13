@@ -20,7 +20,7 @@
  *
  */
 
-console.error('!!!!!!!! esmodule plugin loaded');
+console.warn('++++ esmodule plugin loaded');
 
 // var loadpath = '999'
 // window.loadpath = '222'
