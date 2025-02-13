@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite-help",
-  "version": "7.6.3-57",
+  "version": "7.6.3-56",
   "dependencies": {},
   "optionalDependencies": {
     "bower": "^1.8.4",
