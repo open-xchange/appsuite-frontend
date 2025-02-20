@@ -19,12 +19,12 @@ define('io.ox/mail/detail/content',
      'io.ox/core/util',
      'io.ox/core/emoji/util',
      'io.ox/core/extensions',
-     'io.ox/core/capabilities',
      'io.ox/mail/sanitizer',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/mail/detail/links'
-    ], function (api, coreUtil, emoji, ext, capabilities, sanitizer, settings, gt) {
+    ], function (api, coreUtil, emoji, ext, sanitizer, capabilities, settings, gt) {
 
     'use strict';
 
@@ -488,10 +488,12 @@ define('io.ox/mail/detail/content',
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
 
                 if (baton.isHTML) {
+                    // sanitize away
                     baton.source = sanitizer.sanitize({
-                        content_type: 'text/html',
-                        content: baton.source
+                        content: baton.source,
+                        content_type: 'text/html'
                     }).content;
+
                     // robust constructor for large HTML -- no jQuery here to avoid its caches
                     content = document.createElement('DIV');
                     content.className = 'content noI18n';

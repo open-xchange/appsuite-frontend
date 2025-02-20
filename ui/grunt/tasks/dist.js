@@ -58,6 +58,16 @@ module.exports = function (grunt) {
                         dest: 'dist/sbin/'
                     }
                 ]
+            },
+            dist_rootfolder: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['static/**/purify.min.js'],
+                        cwd: 'build/',
+                        dest: 'dist/appsuite/'
+                    }
+                ]
             }
         }
     });
@@ -66,7 +76,7 @@ module.exports = function (grunt) {
         uglify: {
             dist_rootfolder: {
                 files: [{
-                    src: ['*.js', 'static/**/*.js'],
+                    src: ['*.js', 'static/**/*.js', '!static/**/purify.min.js'],
                     cwd: 'build/',
                     dest: 'dist/appsuite/',
                     filter: function (f) {
