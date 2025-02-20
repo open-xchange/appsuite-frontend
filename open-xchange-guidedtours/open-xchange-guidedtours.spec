@@ -3,7 +3,7 @@ BuildArch:      noarch
 BuildRequires:  ant
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
-BuildRequires:  nodejs >= 0.10.0
+BuildRequires:  nodejs >= 6
 Version:        @OXVERSION@
 %define         ox_release 57
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>

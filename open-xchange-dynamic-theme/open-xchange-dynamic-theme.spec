@@ -12,7 +12,7 @@ BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
-BuildRequires:  nodejs >= 0.10.0
+BuildRequires:  nodejs >= 6
 
 Requires(post): open-xchange-appsuite-manifest
 Requires:       nodejs >= 0.10
