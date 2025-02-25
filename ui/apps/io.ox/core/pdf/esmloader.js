@@ -22,14 +22,12 @@
 
 console.warn('++++ esmodule plugin loaded');
 
-// var loadpath = '999'
-// window.loadpath = '222'
-define([], function () {
+define('io.ox/core/pdf/esmloader', [], function () {
     return {
         load: function (name, req, onload) {
             var modulePath = req.toUrl(name + '.mjs');
             var loadPath = ox.abs + ox.root + '/' + modulePath;
-            console.log(loadPath);
+            console.log('esmloader path' + loadPath);
             // using parameters with 'new Function' has a different scope behavior, let's keep it as simple as possible here
             // eslint-disable-next-line
             var dynamicImport = new Function('return import("' + loadPath + '");');
