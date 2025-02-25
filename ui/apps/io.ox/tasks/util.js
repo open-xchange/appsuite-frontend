@@ -193,17 +193,17 @@ define('io.ox/tasks/util', [
                 // past?
                 if (m.isBefore(startOfDay)) {
                     if (m.isAfter(startOfDay.subtract(1, 'day'))) {
-                        return gt('Yesterday') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                        return gt('Yesterday') + ', ' + m.format(data.full_time ? 'L' : 'L, LT');
                     }
-                    return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                    return m.format('ddd, ' + m.format(data.full_time ? 'L' : 'L, LT'));
                 }
                 // future
                 if (m.isBefore(startOfDay.add(1, 'days'))) {
-                    return gt('Today') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    return gt('Today') + ', ' + m.format(data.full_time ? 'L' : 'L, LT');
                 } else if (m.isBefore(startOfDay.add(1, 'day'))) {
-                    return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'l' : 'l, LT');
+                    return gt('Tomorrow') + ', ' + m.format(data.full_time ? 'L' : 'L, LT');
                 }
-                return m.format('ddd, ' + m.format(data.full_time ? 'l' : 'l, LT'));
+                return m.format('ddd, ' + m.format(data.full_time ? 'L' : 'L, LT'));
             },
 
             // looks in the task note for 'mail:' + _.ecid(maildata), removes that from the note and returns the mail link as a button that opens the mailapp

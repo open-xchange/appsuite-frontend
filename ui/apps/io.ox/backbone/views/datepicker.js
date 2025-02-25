@@ -589,7 +589,8 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onTargetInput: function () {
-            var val = this.$target.val(), date = moment(val, 'l');
+            var val = this.$target.val();
+            var date =  moment(val, ['l', 'L', 'D.M.YYYY', 'D.M.YY', 'M/D/YYYY', 'M/D/YY', 'YYYY-M-D'], true);
             this.setDate(date);
         },
 
