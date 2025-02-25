@@ -257,7 +257,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 if (this.isFullTime()) return val.format('YYYY-MM-DD');
                 return val.format('YYYY-MM-DDTHH:mm');
             }
-            return val.format('l');
+            return val.format('L');
         },
 
         getTimestamp: function () {
