@@ -205,7 +205,10 @@
 
         .sender {
             .name { color: #333; }
-            .address { color: @link-color; }
+            .address {
+                color: @link-color;
+                white-space: nowrap;
+            }
         }
 
         // toggle sender-realname/sender-onbehalfof hint
@@ -481,4 +484,27 @@
             top: 0.25em;
         }
     }
+}
+
+.sender-dropdown > li > a {
+    display: flex;
+    align-items: center;
+    max-width: 560px;
+    gap: 8px;
+}
+
+.sender-dropdown > li .name {
+    min-width: 0;
+    max-width: 50%; // Cap at 50% of the container width
+    flex: 0 1 auto; // Can shrink but won't grow beyond its content
+    overflow: hidden;
+    white-space: wrap;
+}
+
+.sender-dropdown > li .address {
+    min-width: 0;
+    flex: 1 1 auto; // Takes all remaining space
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

@@ -187,6 +187,7 @@ define('io.ox/mail/compose/extensions', [
             var from = this.model.get('from') ? this.model.get('from')[1] : undefined;
             // reset
             this.dropdown.$ul.empty().css('width', 'auto');
+            this.dropdown.$ul.addClass('sender-dropdown');
             // render
             this.setDropdownOptions();
             this.dropdown.$toggle.find('.dropdown-label').empty().append(this.getItemNode());
@@ -234,6 +235,7 @@ define('io.ox/mail/compose/extensions', [
             item = this.getItem(item || this.model.get('from'));
             if (!item) return;
             var name = item[0], address = item[1];
+
             return [
                 $('<span class="name">').text(name ? name + ' ' : ''),
                 $('<span class="address">').text(name ? '<' + address + '>' : address)
