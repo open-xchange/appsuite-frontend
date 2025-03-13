@@ -117,10 +117,10 @@
     async "^2.4.1"
     proxy-agent "^6.2.1"
 
-"@open-xchange/tinymce@6.0.9":
-  version "6.0.9"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-6.0.9.tgz#2c205e83d356ce748137a66ddaad3be7f5db4cb0"
-  integrity sha512-RwZ9F9pYg4gQm00H4Ak5zAbs49IUsnFTPbLwhAhYanh/fCxgSdHiwqRwwV+6V15MWiuk62MzvaRQYOZWszp4YA==
+"@open-xchange/tinymce@6.0.10":
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-6.0.10.tgz#d97c2d4a5ae13811fd357cbfe64ead5ec8e60ed3"
+  integrity sha512-irhY5OKiHQtpNApuXCnAEhCOJ6l3B451YFvs+ZBADuXxk/WbbXaDZuerx0nlKBfyGP/0wjdQfc7VQnCWtOJnGQ==
   dependencies:
     tinymce "^4.8.0"
 
