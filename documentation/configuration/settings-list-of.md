@@ -624,6 +624,11 @@ External map service to locate addresses. One of `google` (Google Maps, default)
 <config>io.ox/contacts//toolbar/limits/fetch=`<number>`</config>
 Fetch limit when selecting multiple contacts. A number of selected contacts beyond this limit might led to unavailable toolbar actions. Default `100`
 
+## Search
+
+<config>io.ox/contacts//search/fields=`<string>`</config>
+Specify the [fields](https://documentation.open-xchange.com/components/middleware/http/7.10.6/index.html#detailed-contact-data) that are searched when the addressbook API endpoint action [advancedSearch](https://documentation.open-xchange.com/components/middleware/http/7.10.6/#!Addressbooks/searchAddressBooksAdvanced) is called. This mostly affects the Enterprise Picker. Comma-separated string of column names. Example: `display_name,first_name,last_name,email1,telephone_business1`. When unset, the core UI programmatically determines the list of fields.
+
 ## Addressbook picker
 
 <config>io.ox/contacts//picker/limits/departments=`<number>`</config>

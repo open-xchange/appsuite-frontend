@@ -35,6 +35,9 @@ define('io.ox/contacts/api', [
 
     'use strict';
 
+    var customizedDefaultFields = (settings.get('search/fields', '')).split(',').filter(Boolean);
+
+
     var convertResponseToGregorian = function (response) {
             if (response.id) {
                 // single contact: convert birthdays with year 1 or earlier from julian to gregorian calendar
@@ -211,6 +214,8 @@ define('io.ox/contacts/api', [
                         data,
                         defaultBehaviour = true;
 
+                    if (customizedDefaultFields.length) queryFields.customized = customizedDefaultFields;
+
                     opt = opt || {};
                     // add wildcards to front and back if none is specified
                     if ((query.indexOf('*') + query.indexOf('?')) < -1) {
@@ -222,7 +227,8 @@ define('io.ox/contacts/api', [
                             _(queryFields[key]).each(function (name) {
                                 filter.push(['=', { 'field': name }, query]);
                             });
-                            defaultBehaviour = false;
+                            // in case we just have the initial `or`
+                            defaultBehaviour = filter.length === 1;
                         }
                     });
 
@@ -1238,6 +1244,8 @@ define('io.ox/contacts/api', [
     api.on('maybeNewContact', function () {
         api.autocomplete.cache = {};
     });
+
+    api.customizedDefaultFields = customizedDefaultFields;
 
     return api;
 });

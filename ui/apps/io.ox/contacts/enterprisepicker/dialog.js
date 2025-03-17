@@ -75,6 +75,16 @@ define('io.ox/contacts/enterprisepicker/dialog', [
         'shared':  gt('Shared address lists')
     };
 
+    function getInputPlaceholder(options) {
+        options = options || {};
+        if (options.onlyResources) {
+            return gt('Search for resources');
+        }
+        return api.customizedDefaultFields.length
+            ? gt('Search for contacts')
+            : gt('Search for name, department, position');
+    }
+
     var detailViewDialog,
         pickerDialog;
 
@@ -548,7 +558,12 @@ define('io.ox/contacts/enterprisepicker/dialog', [
 
                 }, performSearch = function (selectedList) {
                     var query =  model.get('searchQuery'),
-                        params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns, names: 'on', phones: 'on', job: 'on' };
+                        fieldSets = api.customizedDefaultFields.length
+                            ? { customized: 'on' }
+                            : { names: 'on', phones: 'on', job: 'on' },
+                        params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns };
+
+                    _.extend(params, fieldSets);
 
                     if (selectedList === 'all' || options.useGABOnly) delete params.folders;
                     if (options.useGABOnly) params.onlyUsers = true;
@@ -601,16 +616,17 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             contentNode.idle();
             bodyNode.show();
 
+            var placeholder = getInputPlaceholder(options);
             headerNode.append(
                 $('<div class="top-bar">').append(
                     $('<label>').text(gt('Search')).append(
                         $('<div class="input-group">').append(
                             new Mini.InputView({ name: 'searchQuery', model: model, autocomplete: false }).render().$el
-                                .attr('placeholder', gt('Search for name, department, position'))
+                                .attr('placeholder', placeholder)
                                 .on('keyup', _.debounce(function () {
                                     model.set('searchQuery', this.value);
                                 }, 300)),
-                            $('<span class="input-group-addon">').append($.icon('fa-search', gt('Search for name, department, position')))
+                            $('<span class="input-group-addon">').append($.icon('fa-search', placeholder))
                         )
                     ),
                     options.useGABOnly ? '' : [
