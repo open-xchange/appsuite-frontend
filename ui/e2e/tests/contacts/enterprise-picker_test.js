@@ -106,3 +106,41 @@ Scenario('opens in modal dialog, has selection and can add a mail address to mai
     I.waitForInvisible('.modal.enterprise-picker');
     I.seeElement('.io-ox-mail-compose-window .tokenfield.to .token');
 });
+
+Scenario('Searched fields can be overwritten', async ({ I }) => {
+    const defaultFolder = await I.grabDefaultFolder('contacts');
+
+    await Promise.all([
+        I.haveSetting('io.ox/contacts//search/fields', 'first_name,last_name,email1'),
+        I.haveContact({ first_name: 'Angus', last_name: 'Young', email1: 'angus@acdc.com', folder_id: defaultFolder })
+    ]);
+    await I.login('app=io.ox/contacts');
+
+    // first_name,last_name,email1
+    I.waitForElement('#io-ox-enterprise-picker-icon');
+    I.click('#io-ox-enterprise-picker-icon');
+    I.waitForElement('input[placeholder="Search for contacts"]');
+    I.fillField('Search for contacts', 'acdc.com');
+    I.waitForText('Angus', undefined, '.contact-list-view');
+    I.logout();
+
+    // first_name,last_name
+    await I.haveSetting('io.ox/contacts//search/fields', 'first_name,last_name');
+    await I.login('app=io.ox/contacts');
+    I.waitForElement('#io-ox-enterprise-picker-icon');
+    I.click('#io-ox-enterprise-picker-icon');
+    I.waitForElement('input[placeholder="Search for contacts"]');
+    I.fillField('Search for contacts', 'acdc.com');
+    I.waitForText('No contacts found.', undefined, '.contact-list-view');
+    I.logout();
+
+    // default
+    await I.haveSetting('io.ox/contacts//search/fields', '');
+    await I.login('app=io.ox/contacts');
+    I.waitForElement('#io-ox-enterprise-picker-icon');
+    I.click('#io-ox-enterprise-picker-icon');
+    I.waitForElement('input[placeholder="Search for name, department, position"]');
+    I.fillField('Search for name, department, position', 'acdc.com');
+    I.waitForText('Angus', undefined, '.contact-list-view');
+    I.logout();
+});
