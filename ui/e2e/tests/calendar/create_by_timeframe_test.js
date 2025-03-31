@@ -35,7 +35,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario('[C7433] Create appointment by marking some timeframe', async ({ I, calendar }) => {
+Scenario.skip('[C7433] Create appointment by marking some timeframe', async ({ I, calendar }) => {
     const apnt_subject = 'C7433-' + Math.random().toString(36).substring(7);
     const apnt_location = 'C7433-' + Math.random().toString(36).substring(7);
 

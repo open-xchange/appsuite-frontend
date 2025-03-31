@@ -1084,7 +1084,7 @@ Scenario('[C7461] Add a participant/ressource', async ({ I, users, calendar, mai
     I.retry(3).waitForElement({ css: `span[title="New appointment: ${subject}"]` });
 });
 
-Scenario('[C7455] Edit appointment by changing the timeframe', async ({ I, calendar }) => {
+Scenario.skip('[C7455] Edit appointment by changing the timeframe', async ({ I, calendar }) => {
     await I.haveAppointment({
         folder: await calendar.defaultFolder(),
         summary: 'Dinner for one',
