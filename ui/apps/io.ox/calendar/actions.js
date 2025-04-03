@@ -475,12 +475,12 @@ define('io.ox/calendar/actions', [
                 // treat exceptions as part of the series and offer to accept the series as a whole
                 if (hasSeriesPropagation && data.seriesId && appointment.recurrenceId && data.category !== 'invitation') {
                     new ModalDialog({
-                        title: gt('Change appointment confirmation'),
+                        title: gt('Change appointment status'),
                         width: 600
                     })
                     .build(function () {
                         this.$body.append(
-                            gt('This appointment is part of a series. Do you want to change the whole series or just one appointment within the series?')
+                            gt('This appointment is part of a series. Do you want to change your confirmation for the whole series or just for this appointment within the series?')
                         );
                     })
                     .addCancelButton({ left: true })
