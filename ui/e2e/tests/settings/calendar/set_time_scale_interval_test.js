@@ -32,7 +32,7 @@ After(async ({ users }) => {
     await users.removeAll();
 });
 
-Scenario.skip('[C7864] Set time scale interval', async ({ I, calendar }) => {
+Scenario('[C7864] Set time scale interval', async ({ I, calendar }) => {
     function checkAppointment(start, end) {
         I.waitForVisible(calendar.locators.edit);
         I.waitForFocus('.io-ox-calendar-edit-window input[type="text"][name="summary"]');
