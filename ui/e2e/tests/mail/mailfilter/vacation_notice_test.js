@@ -194,7 +194,7 @@ Scenario('[C110281] Vacation notice is time zone capable', async function ({ I, 
 
 });
 
-Scenario.skip('[OXUIB-2065] Vacation notice button with vacationDomains setting', async ({ I, mail, users }) => {
+Scenario('[OXUIB-2065] Vacation notice button with vacationDomains setting', async ({ I, mail, users }) => {
     const mxDomain = () => users[0].get('primaryEmail').split('@')[1];
     await users[0].hasConfig('com.openexchange.mail.filter.vacationDomains', `${mxDomain()},example.org`);
 
