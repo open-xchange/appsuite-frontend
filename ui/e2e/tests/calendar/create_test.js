@@ -954,7 +954,7 @@ Scenario('[C256455] Create all-day appointment via date label', async ({ I, cale
         I.retry(5).fillField('Subject', 'Grillen');
         I.fillField('Location', 'Olpe');
         I.seeCheckboxIsChecked({ css: '[name="allDay"]' });
-        I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, startDate.format('MM/DD/YYYY'));
+        I.seeInField({ css: '[data-attribute="startDate"] .datepicker-day-field' }, startDate.format('M/D/YYYY'));
         I.click('Create');
 
         I.waitForVisible('.appointment');
@@ -1035,7 +1035,7 @@ Scenario('[C7440] Start/End date autoadjustment', async function ({ I, calendar 
         //check if the fields are updated to the expected values
         startString = await calendar.getDate('startDate');
         endString = await calendar.getDate('endDate');
-        expect(moment(startString, 'MM/DD/YYYY').add(diff, 'days').format('MM/DD/YYYY')).to.equal(endString);
+        expect(moment(startString, 'M/D/YYYY').add(diff, 'days').format('M/D/YYYY')).to.equal(endString);
     }
 
     // end date next is special, startDate must stay the same endDate must be updated
