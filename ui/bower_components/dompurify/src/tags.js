@@ -1,8 +1,4 @@
-const freeze =
-  Object.freeze ||
-  function(x) {
-    return x;
-  };
+import { freeze } from './utils.js';
 
 export const html = freeze([
   'a',
@@ -37,6 +33,7 @@ export const html = freeze([
   'del',
   'details',
   'dfn',
+  'dialog',
   'dir',
   'div',
   'dl',
@@ -82,6 +79,7 @@ export const html = freeze([
   'option',
   'output',
   'p',
+  'picture',
   'pre',
   'progress',
   'q',
@@ -132,8 +130,6 @@ export const svg = freeze([
   'animatecolor',
   'animatemotion',
   'animatetransform',
-  'audio',
-  'canvas',
   'circle',
   'clippath',
   'defs',
@@ -167,7 +163,6 @@ export const svg = freeze([
   'title',
   'tref',
   'tspan',
-  'video',
   'view',
   'vkern',
 ]);
@@ -187,6 +182,7 @@ export const svgFilters = freeze([
   'feFuncG',
   'feFuncR',
   'feGaussianBlur',
+  'feImage',
   'feMerge',
   'feMergeNode',
   'feMorphology',
@@ -196,6 +192,36 @@ export const svgFilters = freeze([
   'feSpotLight',
   'feTile',
   'feTurbulence',
+]);
+
+// List of SVG elements that are disallowed by default.
+// We still need to know them so that we can do namespace
+// checks properly in case one wants to add them to
+// allow-list.
+export const svgDisallowed = freeze([
+  'animate',
+  'color-profile',
+  'cursor',
+  'discard',
+  'fedropshadow',
+  'font-face',
+  'font-face-format',
+  'font-face-name',
+  'font-face-src',
+  'font-face-uri',
+  'foreignobject',
+  'hatch',
+  'hatchpath',
+  'mesh',
+  'meshgradient',
+  'meshpatch',
+  'meshrow',
+  'missing-glyph',
+  'script',
+  'set',
+  'solidcolor',
+  'unknown',
+  'use',
 ]);
 
 export const mathMl = freeze([
@@ -228,6 +254,26 @@ export const mathMl = freeze([
   'mtr',
   'munder',
   'munderover',
+]);
+
+// Similarly to SVG, we want to know all MathML elements,
+// even those that we disallow by default.
+export const mathMlDisallowed = freeze([
+  'maction',
+  'maligngroup',
+  'malignmark',
+  'mlongdiv',
+  'mscarries',
+  'mscarry',
+  'msgroup',
+  'mstack',
+  'msline',
+  'msrow',
+  'semantics',
+  'annotation',
+  'annotation-xml',
+  'mprescripts',
+  'none',
 ]);
 
 export const text = freeze(['#text']);

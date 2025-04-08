@@ -3,9 +3,9 @@ BuildArch:      noarch
 BuildRequires:  ant
 BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
-BuildRequires:  nodejs >= 0.10.0
+BuildRequires:  nodejs >= 6
 Version:        @OXVERSION@
-%define         ox_release 56
+%define         ox_release 57
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -224,6 +224,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Thu Feb 20 2025 Marcus Klein <marcus.klein@open-xchange.com>
+Build for patch 2025-02-04 (6306)
 * Thu May 02 2024 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2024-05-14 (6279)
 * Tue Feb 27 2024 Marcus Klein <marcus.klein@open-xchange.com>
