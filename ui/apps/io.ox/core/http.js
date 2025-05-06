@@ -403,7 +403,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
     var isLoss = function (status) {
         // 400 is Bad Request which usually is a missing parameter
         if (status === 400) return false;
-        return (/^(0|4\d\d|5\d\d)$/).test(status);
+        return (/^(0|4\d\d|5\d\d)$/).test(status) || (_.device('safari') && status === undefined);
     };
 
     var isUnreachable = function (xhr) {
