@@ -891,8 +891,7 @@ define('io.ox/calendar/week/view', [
 
             timeLabel.append(
                 _(_.range(24)).map(function (i) {
-                    var number = moment(self.model.get('startDate')).startOf('day').hours(i).tz(timezone).format('LT');
-
+                    var number = i === 0 ? '' : moment(self.model.get('startDate')).startOf('week').day(1).hours(i).tz(timezone).format('LT');
                     return $('<div class="time">')
                         .addClass((i >= self.model.get('workStart') && i < self.model.get('workEnd')) ? 'in' : '')
                         .addClass((i + 1 === self.model.get('workStart') || i + 1 === self.model.get('workEnd')) ? 'working-time-border' : '')
