@@ -6,6 +6,7 @@
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
+  "packageManager": "pnpm@10.10.0",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "grunt default connect test watch",
@@ -127,6 +128,5 @@
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
-  },
-  "packageManager": "yarn@1.22.22"
+  }
 }

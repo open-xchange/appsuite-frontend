@@ -7,6 +7,7 @@
     "e2e": "codeceptjs run",
     "e2e-rerun": "node customRerun.js"
   },
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
     "@codeceptjs/allure-legacy": "^1.0.2",
     "@codeceptjs/mock-request": "^0.3.1",
