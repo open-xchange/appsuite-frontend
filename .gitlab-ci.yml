@@ -29,9 +29,9 @@ variables:
 .default_cache:
   cache:
     # use one cache
-    key: "yarn"
+    key: "pnpm"
     paths:
-      - ".yarn-cache"
+      - ".pnpm-store"
 
 .build ui plugin:
   extends: .default_cache
@@ -43,7 +43,7 @@ variables:
     KUBERNETES_MEMORY_LIMIT: 1G
   script:
     - cd ${PROJECT_PATH}
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache
+    - pnpm install --frozen-lockfile
     - echo ${build_script}
     - eval "${build_script}"
     - "[ -z \"$PACKAGE_NAME\" ] && export PACKAGE_NAME=${PROJECT_PATH}"
@@ -102,8 +102,7 @@ build update-themes:
     PACKAGE_NAME: open-xchange-appsuite-manifest
   before_script:
     - cd ${PROJECT_PATH}
-    # add production dependencies to different modules folder, so those can be picked up by grunt copy tasks
-    - yarn --non-interactive --no-progress -s --cache-folder ../.yarn-cache --production --modules-folder=deps
+    - pnpm install --prod
     - cd ..
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^master/'
@@ -125,7 +124,7 @@ test ui:
     BROWSERS: DockerHeadless
   script:
     - cd ui
-    - yarn test
+    - pnpm test
   stage: test
   dependencies:
     - build ui
