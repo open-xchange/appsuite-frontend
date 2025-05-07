@@ -35,7 +35,7 @@ variables:
 
 .build ui plugin:
   extends: .default_cache
-  image: registry.gitlab.open-xchange.com/frontend/dev_env:latest
+  image: registry.gitlab.open-xchange.com/appsuite/web-foundation/base-images/node_builder:latest
   variables:
     build_tasks: dist:build
     build_script: grunt ${build_tasks}
