@@ -40,7 +40,6 @@ define('io.ox/core/boot/util', [], function () {
 
     }
     var feedbackNode = null;
-    // var feedbackType = null;
 
     ox.on('language', displayFeedback);
 
