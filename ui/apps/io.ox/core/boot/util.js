@@ -40,7 +40,6 @@ define('io.ox/core/boot/util', [], function () {
 
     }
     var feedbackNode = null;
-    // var feedbackType = null;
 
     ox.on('language', displayFeedback);
 
@@ -76,12 +75,10 @@ define('io.ox/core/boot/util', [], function () {
 
         setPageTitle: function (title) {
             ox.trigger('change:document:title', title);
-            // document.title = title || '';
             $('[name="apple-mobile-web-app-title"]').attr('content', title);
         },
 
         feedback: function (type, node) {
-            // feedbackType = type;
             feedbackNode = node;
             displayFeedback();
         },
@@ -193,7 +190,6 @@ define('io.ox/core/boot/util', [], function () {
                 .css('opacity', 0.5)
                 .find('input').prop('disabled', true);
             $('#io-ox-login-blocker').show();
-            //$('#io-ox-login-feedback').busy().empty();
         },
 
         // note: this function can be overwritten at runtime when the tab api is disabled
