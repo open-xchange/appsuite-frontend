@@ -285,7 +285,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var $ul = this.$ul;
             if (!this.model) return;
             _(this.model.changed).each(function (value, name) {
-                var li = $ul.find('[data-name="' + name + '"]');
+                var li = $ul.find('[data-name="' + name + '"]').each(function () {
+                    var $el = $(this);
+                    $el.attr('aria-checked', _.isEqual($el.data('value'), value));
+                });
                 // clear check marks
                 li.children('i').each(function (index, node) {
                     var $node = $(node),
