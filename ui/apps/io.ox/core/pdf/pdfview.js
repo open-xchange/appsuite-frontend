@@ -698,6 +698,8 @@ define('io.ox/core/pdf/pdfview', [
             return def.promise();
         };
 
+        // this.scrollPageIntoView = function (o) { console.log(o); this.onScrollToPage(o?.pageNumber) }
+
     } // class PDFView
 
     // ---------------------------------------------------------------------
