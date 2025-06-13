@@ -641,13 +641,13 @@ define('io.ox/core/viewer/views/types/documentview', [
 
                 // the stored scroll position
                 var lastScrollPosition = this.getInitialScrollPosition(this.model.get('id')) || 0;
-
-                return require(['io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer']).then(function (pdfjsViewer) {
+                return require(['io.ox/core/pdf/pdfviewerlinkservice']).then(function (PDFLinkService) {
                     var eventHub = this.viewerEvents;
                     // the PDF link service. connects the Viewer with named actions and annotation links of the PDF
-                    var pdfLinkService = new pdfjsViewer.PDFLinkService({
+                    var pdfLinkService = new PDFLinkService({
                         externalLinkTarget: 2 // Open external links in a new window
                     });
+                    console.warn('LINKSERVICE NEW');
                     pdfLinkService.setDocument(this.pdfDocument.getPDFJSDocument());
 
                     // store number of pages

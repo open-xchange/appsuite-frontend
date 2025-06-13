@@ -1,0 +1,49 @@
+/* eslint-disable license-header/header */
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* Copyright 2012 Mozilla Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+define('io.ox/core/pdf/pdfviewerlinkservice', [
+    'io.ox/core/pdf/esmloader!pdfjs-dist/web/pdf_viewer'
+], function (pdfjsViewer) {
+
+    'use strict';
+    console.warn('LINKSERVICE LOAD');
+    return pdfjsViewer.PDFLinkService;
+
+    // /**
+    //  * Performs navigation functions inside PDF, such as opening specified page,
+    //  * or destination.
+    //  * @class
+    //  * @implements {IPDFLinkService}
+    //  */
+    // var PDFViewerLinkService = (function () {
+    //     /**
+    //      * @constructs PDFViewerLinkService
+    //      */
+
+    //     }
+
+    //     return PDFViewerLinkService;
+    // })();
+
+    // function PDFViewerLinkService() {
+    //     var pdfLinkService = new pdfjsViewer.PDFLinkService({
+    //         externalLinkTarget: 2 // Open external links in a new window
+    //     });
+    // }
+
+    // return PDFViewerLinkService;
+});
