@@ -126,14 +126,14 @@ module.exports = function (grunt) {
                         // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
                         expand: true,
                         src: [
-                            'build/pdf.mjs',
-                            'build/pdf.worker.mjs'
+                            'build/pdf.js',
+                            'build/pdf.worker.js'
                         ],
                         cwd: 'node_modules/pdfjs-dist/legacy',
-                        dest: 'build/apps/pdfjs-dist/'
-                        // rename: function (dest, src) {
-                        //     return dest + src.replace(/\.mjs$/, '.mjs');
-                        // }
+                        dest: 'build/apps/pdfjs-dist/',
+                        rename: function (dest, src) {
+                            return dest + src.replace(/\.min.js$/, '.js');
+                        }
                     },
                     {
                         // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
@@ -142,16 +142,6 @@ module.exports = function (grunt) {
                         src: [
                             'web/images/*',
                             'cmaps/*'
-                        ],
-                        cwd: 'node_modules/pdfjs-dist',
-                        dest: 'build/apps/pdfjs-dist/'
-                    },
-                    {
-                        // as long as we support older browsers, we need the legacy version (ES5 support dropped with 2.7)
-                        // but take the cmaps and the icons from the common version
-                        expand: true,
-                        src: [
-                            'web/pdf_viewer.mjs'
                         ],
                         cwd: 'node_modules/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/'
