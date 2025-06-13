@@ -18,8 +18,7 @@
 define('io.ox/core/pdf/pdfannotationslayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfsimplelinkservice',
-    'pdfjs-dist/build/pdf',
-    'pdfjs-dist/build/pdf.worker'
+    'io.ox/core/pdf/esmloader!pdfjs-dist/build/pdf'
 ], function (Polyfill, SimpleLinkService, PDFJSLib) {
 
     'use strict';
@@ -62,21 +61,12 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                 };
 
                 this.pdfPage.getAnnotations(parameters).then(function (annotations) {
-                    viewport = viewport.clone({ dontFlip: true });
-                    parameters = {
-                        viewport: viewport,
-                        div: self.div,
-                        annotations: annotations,
-                        page: self.pdfPage,
-                        linkService: self.linkService,
-                        // Path for image resources, mainly for annotation icons. Include trailing slash.
-                        imageResourcesPath: ox.abs + ox.root + '/apps/pdfjs-dist/web/images/'
-                    };
-
+                    var annotationLayer;
+                    // Note: This case seems to never be used, but it's difficult to prove. Let's keep it for safety reasons.
                     if (self.div) {
                         // If an annotationLayer already exists, refresh its children's
                         // transformation matrices.
-                        PDFJSLib.AnnotationLayer.update(parameters);
+                        annotationLayer.update(parameters);
                     } else {
                         // Create an annotation layer div and render the annotations
                         // if there is at least one annotation.
@@ -84,12 +74,28 @@ define('io.ox/core/pdf/pdfannotationslayerbuilder', [
                             return;
                         }
 
+                        viewport = viewport.clone({ dontFlip: true });
                         self.div = document.createElement('div');
                         self.div.className = 'annotationLayer';
                         self.pageDiv.appendChild(self.div);
                         parameters.div = self.div;
 
-                        PDFJSLib.AnnotationLayer.render(parameters);
+                        parameters = {
+                            viewport: viewport,
+                            div: self.div,
+                            annotations: annotations,
+                            page: self.pdfPage,
+                            linkService: self.linkService,
+                            // Path for image resources, mainly for annotation icons. Include trailing slash.
+                            imageResourcesPath: ox.abs + ox.root + '/apps/pdfjs-dist/web/images/'
+                        };
+                        annotationLayer = new PDFJSLib.AnnotationLayer({
+                            div: self.div,
+                            page: self.pdfPage,
+                            viewport: viewport
+                        });
+
+                        annotationLayer.render(parameters);
                         if (typeof mozL10n !== 'undefined') {
                             mozL10n.translate(self.div);
                         }

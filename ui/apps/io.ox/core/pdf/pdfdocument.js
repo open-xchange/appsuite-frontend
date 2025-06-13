@@ -25,10 +25,9 @@
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     'io.ox/core/viewer/util',
-    'pdfjs-dist/build/pdf',
-    'settings!io.ox/core'
-], function (PDFView, Util, PDFJSLib, Settings) {
-
+    'settings!io.ox/core',
+    'io.ox/core/pdf/esmloader!pdfjs-dist/build/pdf'
+], function (PDFView, Util, Settings, PDFJSLib) {
     'use strict';
 
     // class PDFDocument =======================================================
@@ -94,7 +93,7 @@ define('io.ox/core/pdf/pdfdocument', [
         };
 
         // detecting the worker automatically nor longer works, specify the workerSrc property manually
-        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.js';
+        PDFJSLib.GlobalWorkerOptions.workerSrc = ox.abs + ox.root + '/apps/pdfjs-dist/build/pdf.worker.mjs';
 
         // ---------------------------------------------------------------------
 
