@@ -67,6 +67,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
         collection.sort();
     }
 
+    function getProcessToggleButton(title, isProcessingNext) {
+        return listUtils.controlProcessSub({
+            faClass: isProcessingNext
+                ? 'fa-arrow-down'
+                : 'fa-ban',
+            title: isProcessingNext
+            // #. Tooltip text for mailfilter button 'Process subsequent rules'
+            // #. %1$s: mailfilter rule name
+                ? gt('Process subsequent rules of %1$s', title)
+            // #. Tooltip text for mailfilter button 'Process subsequent rules'
+            // #. %1$s: mailfilter rule name
+                : gt('Don\'t process subsequent rules of %1$s', title)
+        });
+    }
+
     function renderDetailView(evt, data, config) {
         var myView,
             header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
@@ -202,7 +217,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 applytoggle = gt('Apply'),
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable'),
                 actioncmds = model.get('actioncmds'),
-                faClass = containsStop(actioncmds) ? 'fa-ban' : 'fa-arrow-down',
+                isProcessingNext = !containsStop(actioncmds),
                 actionValue,
                 applyToggle = flag === 'vacation' || flag === 'autoforward' || !defaults.applyMailFilterSupport ? [] : listUtils.applyToggle(applytoggle);
 
@@ -221,10 +236,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     'data-action': actionValue
                 }),
                 listUtils.controlsToggle(texttoggle),
-                listUtils.controlProcessSub({
-                    faClass: faClass,
-                    title: gt('Process subsequent rules of %1$s', title)
-                }),
+                getProcessToggleButton(title, isProcessingNext),
                 listUtils.controlsDelete({ title: gt('Remove %1$s', title) })
             );
         }
@@ -261,6 +273,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 .invoke('draw', this, model);
         }
     });
+
+    function updateProcessNextIcon(htmlTarget, isProcessingNext) {
+        var $button = $(htmlTarget).closest('a[data-action="toggle-process-subsequent"]');
+        var ruleName = $button.closest('.settings-list-item').find('.list-item-title').text();
+        $button.replaceWith(
+            getProcessToggleButton(ruleName, isProcessingNext)
+        );
+    }
 
     return {
         editMailfilter: function ($node, baton) {
@@ -391,13 +411,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         });
 
                         self.model.on('ChangeProcessSub', function (status) {
-                            var target = self.$el.find('[data-action="toggle-process-subsequent"] i');
-                            if (status) {
-                                target.removeClass('fa-ban').addClass('fa-arrow-down');
-                            } else {
-                                target.removeClass('fa-arrow-down').addClass('fa-ban');
-                            }
-
+                            var target = self.$el.find('[data-action="toggle-process-subsequent"]');
+                            updateProcessNextIcon(target[0], status);
                         });
                         return self;
                     },
@@ -502,12 +517,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         //yell on reject
                         settingsUtil.yellOnReject(
                             api.update(self.model).done(function () {
-                                var target = $(e.target).closest('.list-item-controls').find('[data-action="toggle-process-subsequent"] i');
-                                if (containsStop(actioncmds)) {
-                                    target.removeClass('fa-arrow-down').addClass('fa-ban');
-                                } else {
-                                    target.removeClass('fa-ban').addClass('fa-arrow-down');
-                                }
+                                updateProcessNextIcon(e.target, !containsStop(actioncmds));
                             })
                         );
                     },
@@ -566,8 +576,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
+                        var target = e.target.parentElement.querySelector('[data-action="toggle-process-subsequent"]');
                         require(['io.ox/mail/mailfilter/autoforward/view'], function (view) {
-                            view.open();
+                            view.open().then(function (modal) {
+                                modal.on('save', function () {
+                                    var status = this.model.get('processSub');
+                                    updateProcessNextIcon(target, status);
+                                });
+                            });
                         });
                     }
                 });
