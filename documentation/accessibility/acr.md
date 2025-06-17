@@ -7,11 +7,11 @@ description: based on Voluntary Product Accessibility Template (VPAT™) Interna
 
 # Product Information #
 
-**Name of Product/Version**: Open-Xchange App Suite UI (Core) 7.10.1
+**Name of Product/Version**: Open-Xchange App Suite UI (Core) 7.10.6
 
 **Product Description:** An easy-to-use email, communication, and collaboration platform, OX App Suite provides access to a wide range of white-labeled applications.
 
-**Date:** Febuary 2018
+**Date:** June 2025
 
 **Contact information:** <info@open-xchange.com>
 
@@ -1358,7 +1358,7 @@ Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are
 ## Chapter 3: Functional Performance Criteria (FPC) ##
 
 Criteria                                                       | Conformance Level             | Remarks and Explanations
----------------------------------------------------------------|-------------------------------|---------------------------------
+---------------------------------------------------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 302.1 Without Vision                                           | Web: Supports with Exceptions | Web: Users without vision rely on information being communicated in text or programmatically in ways that can be accessed by assistive technology. As noted in 1.3.1 The product provides programmatic labels to indicate the purpose of form input fields, but in very rare cases, such as the search field, the input fields do not provide both visual and programmatic labels and rely on placeholder values for form field labels.; in 2.4.1 Bypass Blocks, we have no skip links and as in 2.1.1 Keyboard we have some drag and drop functionality that is not supported.
 302.2 With Limited Vision                                      | Web: Supports with Exceptions | Web: Text can be resized up to 200% on the published websites, but difficulties were noted in resizing text in the product, as described in 1.4.4 Resize text.<br><br>As noted in 1.4.1 Use of Color, color is sometimes solely used to communicate state, selection and errors in the product.
 302.3 Without Perception of Color                              | Web: Supports with Exceptions | Web: Color alone is sometimes solely used to communicate state, selection and errors, causing difficulties for users without perception of color to use the product, as noted in 1.4.1 Use of Color.
@@ -1381,7 +1381,7 @@ Notes: Not Applicable
 Notes:
 
 Criteria                                                         | Conformance Level                        | Remarks and Explanations
------------------------------------------------------------------|------------------------------------------|---------------------------------
+-----------------------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------
 **601.1 Scope**                                                  |                                          |
 **602 Support Documentation**                                    |                                          |
 602.2 Accessibility and Compatibility Features                   | TBD                                      |
@@ -1396,25 +1396,25 @@ Criteria                                                         | Conformance L
 
 ## Chapter 4: [4.2 Functional Performance Statements](http://www.etsi.org/deliver/etsi_en/301500_301599/301549/01.01.02_60/en_301549v010102p.pdf#page=22) (FPS) ##
 
-Criteria                                                        | Conformance Level             | Remarks and Explanations
-----------------------------------------------------------------|-------------------------------|---------------------------------
-4.2.1 Usage without vision                                      |                               |
-4.2.2 Usage with limited vision Web:                            | Web: Supports with Exceptions | Web: The product and published website content can be resized up to 200% without any loss of information of functionality.<br>However this does not apply to mobile devices such as smartphones as the user.
-4.2.3 Usage without perception of colour                        | Web: Supports with Exceptions | Web: Most functions of the product are functional without perception of color. As previously stated in 1.4.1 Use of Color, color alone is used to indicate selection, distinguish inline links from paragraph text, and provide visible indication of focus on some controls.
-4.2.4 Usage without hearing                                     | Web: Supports                 | Web: The product does not produce sound or speech, so it is usable by people without hearing.
-4.2.5 Usage with limited hearing                                | Web: Supports                 | Web: The product does not produce sound or speech, so it is usable by people with limited hearing.
-4.2.6 Usage without vocal capability                            | Web: Supports                 | Web: The product does not require vocal input.
-4.2.7 Usage with limited manipulation or strength               | Web: Supports with Exceptions | Web: Most functions are functional for users with limited manipulation who rely on keyboard access, as previously stated in 2.1.1 Keyboard. Some elements do not provide a good visible indication of keyboard focus, as previously stated in 2.4.7 Focus Visible.
-4.2.8 Usage with limited reach                                  | Web: Supports                 | Web: The product is functional with limited reach.
-4.2.9 Minimize photosensitive seizure triggers                  | Web: Supports                 | Web: The product does not contain elements which flash or other features likely to trigger photosensitive seizures.
-4.2.10 Usage with limited cognition                             | Web: Supports                 | Web: Users with cognitive disabilities have varying needs for features that allow them to adapt content and work with assistive technology or accessibility features of the platform. The product provides a text description in simple language if only an icon is provided.
-4.2.11 Privacy                                                  | Web: Supports                 | Web: The product itself does not ask for legal, financial, or personal data. However, it has email sending capabilities and the editor relies on platform software to provide e.g. masking of user input.
+Criteria                                          | Conformance Level             | Remarks and Explanations
+--------------------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.2.1 Usage without vision                        |                               |
+4.2.2 Usage with limited vision Web:              | Web: Supports with Exceptions | Web: The product and published website content can be resized up to 200% without any loss of information of functionality.<br>However this does not apply to mobile devices such as smartphones as the user.
+4.2.3 Usage without perception of colour          | Web: Supports with Exceptions | Web: Most functions of the product are functional without perception of color. As previously stated in 1.4.1 Use of Color, color alone is used to indicate selection, distinguish inline links from paragraph text, and provide visible indication of focus on some controls.
+4.2.4 Usage without hearing                       | Web: Supports                 | Web: The product does not produce sound or speech, so it is usable by people without hearing.
+4.2.5 Usage with limited hearing                  | Web: Supports                 | Web: The product does not produce sound or speech, so it is usable by people with limited hearing.
+4.2.6 Usage without vocal capability              | Web: Supports                 | Web: The product does not require vocal input.
+4.2.7 Usage with limited manipulation or strength | Web: Supports with Exceptions | Web: Most functions are functional for users with limited manipulation who rely on keyboard access, as previously stated in 2.1.1 Keyboard. Some elements do not provide a good visible indication of keyboard focus, as previously stated in 2.4.7 Focus Visible.
+4.2.8 Usage with limited reach                    | Web: Supports                 | Web: The product is functional with limited reach.
+4.2.9 Minimize photosensitive seizure triggers    | Web: Supports                 | Web: The product does not contain elements which flash or other features likely to trigger photosensitive seizures.
+4.2.10 Usage with limited cognition               | Web: Supports                 | Web: Users with cognitive disabilities have varying needs for features that allow them to adapt content and work with assistive technology or accessibility features of the platform. The product provides a text description in simple language if only an icon is provided.
+4.2.11 Privacy                                    | Web: Supports                 | Web: The product itself does not ask for legal, financial, or personal data. However, it has email sending capabilities and the editor relies on platform software to provide e.g. masking of user input.
 
 
 ## Chapter [5: Generic Requirements](http://www.etsi.org/deliver/etsi_en/301500_301599/301549/01.01.02_60/en_301549v010102p.pdf#page=23) ##
 
 Criteria                                                        | Conformance Level | Remarks and Explanations
-----------------------------------------------------------------|-------------------|---------------------------------
+----------------------------------------------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------
 5.1 Closed functionality                                        | Not Applicable    | 5.1.2.2-5.1.6.2 are not applicable for this product.
 5.2 Activation of accessibility features                        | Not Applicable    | The product does not provide any accessibility features to be activated.
 5.3 Biometrics                                                  | Not Applicable    | The product does not rely on biological characteristics.
@@ -1452,7 +1452,7 @@ Notes:
 
 
 Criteria                                                       | Conformance Level                        | Remarks and Explanations
----------------------------------------------------------------|------------------------------------------|---------------------------------
+---------------------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------
 **12.1 Product documentation**                                 |                                          |
 12.1.1 Accessibility and compatibility features                | TBD                                      | TBD
 12.1.2 Accessible documentation                                | See [WCAG 2.x](#wcag-2-0-report) section | See information in WCAG section
