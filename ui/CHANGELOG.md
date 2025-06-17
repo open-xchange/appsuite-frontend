@@ -1,3 +1,34 @@
+## [7.10.6-54]
+
+### Fixed
+
+- Some PDF forms look broken [`983a6bb`](https://gitlab.open-xchange.com/frontend/core/commit/983a6bba7f8ad53b581dab07fd4cea66470e8c67)
+- Use the existing wording for changing the confirmation status in an appointment series [`297960c`](https://gitlab.open-xchange.com/frontend/core/commit/297960caef316fd5e97905b56713e44633acc281)
+- Time display issue during daylight saving transition. [`d03d133`](https://gitlab.open-xchange.com/frontend/core/commit/d03d133554e00b62a32775c7d38eacdd2a5d8616)
+- Add retry for Safari requests that randomly exit without status or response [`e892da7`](https://gitlab.open-xchange.com/frontend/core/commit/e892da7ec95e83441ae8ef5946d3731ed27da813)
+
+## [7.10.6-53]
+
+### Added
+
+- Setting `io.ox/contacts//search/fields` [`dd38f8b`](https://gitlab.open-xchange.com/frontend/core/commit/dd38f8b48d88ea3cfec734f403d9eb82dc9d4b44)
+
+### Fixed
+
+- Ensure proper date format is used [`f2477f0`](https://gitlab.open-xchange.com/frontend/core/commit/f2477f09b1e106d63ddc39666630a2b50507d05f)
+
+## [7.10.6-52]
+
+### Fixed
+
+- Mail compose: text/table pasting from MS word/onenote added as image... [`2201dad`](https://gitlab.open-xchange.com/frontend/core/commit/2201dade0064f8edec9fedee36467c48b3441b2a)
+
+## [7.10.6-51]
+
+### Fixed
+
+- Quicklaunchers can be disabled by using 0 or negative value for `io.ox/core//apps/quickLaunchCount` [`5420592`](https://gitlab.open-xchange.com/frontend/core/commit/5420592451a2f8d0c16d4a5777ce0a9e7424c9e2)
+
 ## [7.10.6-50]
 
 ### Changed
