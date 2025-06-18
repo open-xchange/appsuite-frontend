@@ -5,6 +5,7 @@ AddOutputFilterByType DEFLATE text/html text/plain text/javascript application/j
 AddType text/cache-manifest .appcache
 AddType application/x-font-ttf .ttf
 AddType application/font-woff .woff
+AddType application/javascript .mjs
 
 # Define pre-compressed files
 AddType text/javascript .jsz
