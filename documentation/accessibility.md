@@ -19,6 +19,7 @@ Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE
 
 | Date   | Version | Activity                                                                                                                      |
 |--------|---------|-------------------------------------------------------------------------------------------------------------------------------|
+| Jun 27 | 7.10.6  | Improved aria labels for calendar appointments and refactored accessibility logic                                             |
 | Jun 25 | 7.10.6  | Aria-checked attribute updates in dropdown menus (e.g. sort dropdown)                                                         |
 | May 25 | 7.10.6  | Password change link text updated to primary color                                                                            |
 | May 25 | 7.10.6  | Add field name to title attribute of “remove” button in contact edit                                                          |
