@@ -53,7 +53,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
                 picker = settings.get('features/enterprisePicker/enabled', false) ? 'io.ox/contacts/enterprisepicker/dialog' : 'io.ox/contacts/addressbook/popup';
 
             require([picker], function (popup) {
-                self.opt.useGABOnly = self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'));
+                self.opt.useGABOnly = (self.opt.useGABOnly || (self.opt.isPermission && !capabilities.has('invite_guests'))) && capabilities.has('gab');
                 popup.open(function (result) {
                     _.each(result, function (singleData) {
                         if (self.opt.processRaw) return self.opt.process(e, singleData);
