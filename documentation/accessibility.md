@@ -19,6 +19,7 @@ Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE
 
 Date   | Version | Activity
 -------| --------| -----------------------------------------------------------------------
+July 1 | 7.10.6  | Improved accessibility announcement for invitation notifications
 June 27| 7.10.6  | Improved aria labels for calendar appointments and refactored accessibility logic
 May 21 | 7.10.6  | Fixed various issues in Chat, Calendar and updated documentation
 May 21 | 7.10.6  | Improved accessibility of Enterprise Picker
