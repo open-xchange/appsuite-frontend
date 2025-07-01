@@ -109,13 +109,17 @@ define('plugins/notifications/calendar/register', [
 
             var cid = _.cid(model.attributes),
                 strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings', zone: moment().tz() }),
-                recurrenceString = util.getRecurrenceString(model.attributes);
+                recurrenceString = util.getRecurrenceString(model.attributes),
+                // Build comprehensive aria-label with appointment details
+                title = model.get('summary') || model.get('title') || gt('Untitled appointment'),
+                dateTime = util.getDateIntervalA11y(model.attributes, moment().tz()) + ', ' + util.getTimeIntervalA11y(model.attributes, moment().tz()),
+                location = model.get('location') ? ', ' + gt('location %1$s', model.get('location')) : '',
+                organizer = model.get('organizer') && model.get('organizer').cn ? ', ' + gt('organized by %1$s', model.get('organizer').cn) : '',
+                ariaLabel = gt('Invitation for %1$s', title) + ', ' + dateTime + location + organizer;
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
-                //#. %1$s Appointment title
-                //#, c-format
-                'aria-label': gt('Invitation for %1$s.', model.get('title'))
+                'aria-label': ariaLabel
             }).append(
                 $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes, moment().tz())),
