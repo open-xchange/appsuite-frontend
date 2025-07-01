@@ -278,14 +278,14 @@ define('plugins/notifications/tasks/register', [
                     });
                 };
 
-            var task = util.interpretTask(baton.model.toJSON());
+            var task = util.interpretTask(baton.model.toJSON()),
+                ariaLabel = gt('Invitation for %1$s', task.title || gt('Untitled task'));
+            if (task.end_time) ariaLabel += ', ' + task.end_time;
             node.attr({
                 role: 'listitem',
                 'data-cid': _.cid(baton.model.attributes),
                 'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                //#. %1$s task title
-                //#, c-format
-                'aria-label': gt('Invitation for %1$s.', task.title),
+                'aria-label': ariaLabel,
                 tabindex: 0
             })
             .append(
