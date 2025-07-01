@@ -19,6 +19,7 @@ Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE
 
 | Date   | Version | Activity                                                                                                                      |
 |--------|---------|-------------------------------------------------------------------------------------------------------------------------------|
+| July 1 | 7.10.6  | Improved accessibility for conflicts in calendar                                                                              |
 | July 1 | 7.10.6  | Improved accessibility announcement for invitation notifications                                                              |
 | Jun 27 | 7.10.6  | Improved aria labels for calendar appointments and refactored accessibility logic                                             |
 | Jun 25 | 7.10.6  | Aria-checked attribute updates in dropdown menus (e.g. sort dropdown)                                                         |

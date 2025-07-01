@@ -41,7 +41,11 @@ define('io.ox/calendar/conflicts/conflictList', [
     function openDetails(e) {
         e.preventDefault();
         e.data.icon.toggleClass('fa-angle-right fa-angle-down');
-        e.data.content.toggle(!e.data.icon.hasClass('fa-angle-right'));
+        var isExpanded = !e.data.icon.hasClass('fa-angle-right');
+        e.data.content.toggle(isExpanded);
+
+        // Update aria-expanded attribute for accessibility
+        e.data.toggle.attr('aria-expanded', isExpanded);
 
         var baton = e.data.baton;
         if (!!e.data.content.children().length) return;
@@ -182,9 +186,14 @@ define('io.ox/calendar/conflicts/conflictList', [
         return _(conflicts).sortBy(function (conflict) { return conflict.event.startDate; }).map(function (conflict) {
             var baton = ext.Baton.ensure(conflict),
                 summary = $('<div class="conflict-summary">'),
-                details = $('<div class="conflict-details">').hide(),
+                detailsId = 'conflict-details-' + _.uniqueId(),
+                details = $('<div class="conflict-details">').attr('id', detailsId).hide(),
                 icon = $('<i class="fa fa-angle-right" aria-hidden="true">'),
-                toggle = $('<a href="#" role="button" class="detail-toggle">').attr('summary', gt('Show appointment details')).append(icon),
+                toggle = $('<a href="#" role="button" class="detail-toggle">').attr({
+                    'aria-label': gt('Show appointment details'),
+                    'aria-expanded': 'false',
+                    'aria-controls': detailsId
+                }).append(icon),
                 li = $('<li>').append(toggle, summary, details),
                 entity = (conflict.event.createdBy || {}).entity;
 
@@ -194,7 +203,7 @@ define('io.ox/calendar/conflicts/conflictList', [
                 details.remove();
             } else {
                 summary.addClass('pointer');
-                li.on('click', '.conflict-summary, .detail-toggle', { icon: icon, baton: baton, content: details }, openDetails);
+                li.on('click', '.conflict-summary, .detail-toggle', { icon: icon, baton: baton, content: details, toggle: toggle }, openDetails);
             }
 
             ext.point('io.ox/calendar/conflicts').invoke('draw', summary, baton);
