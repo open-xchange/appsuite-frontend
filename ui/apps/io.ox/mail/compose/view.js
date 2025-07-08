@@ -449,7 +449,10 @@ define('io.ox/mail/compose/view', [
                 config: baton.config,
                 view: baton.view,
                 model:  baton.model,
-                oxContext: { view: baton.view }
+                oxContext: {
+                    view: baton.view,
+                    type: 'email'
+                }
             };
         }
     }, {
