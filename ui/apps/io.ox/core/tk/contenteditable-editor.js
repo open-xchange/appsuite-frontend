@@ -389,6 +389,22 @@ define('io.ox/core/tk/contenteditable-editor', [
         return (tinymce_lang > -1) ? tinymce_langpacks[tinymce_lang] : 'en';
     }
 
+    var I18N = {
+        // #. Used as aria label for editor
+        // #. Prefix for 'Rich Text Area. Press ALT+F10 to access the toolbar.'
+        email: gt('Email body.'),
+        // #. Used as aria label for editor
+        // #. Prefix for 'Rich Text Area. Press ALT+F10 to access the toolbar.'
+        signature: gt('Signature body.')
+    };
+
+    function getAriaLabel(type) {
+        var base = gt('Rich Text Area. Press ALT+F10 to access the toolbar.');
+        return I18N[type]
+            ? I18N[type] + ' ' + base
+            : base;
+    }
+
     function Editor(el, opt) {
 
         var $el, initialized = $.Deferred(), ed, self = this;
@@ -400,7 +416,7 @@ define('io.ox/core/tk/contenteditable-editor', [
         el.append(
             $el = $('<div class="contenteditable-editor">').attr('data-editor-id', editorId).on('keydown', function (e) { if (e.which === 27) e.preventDefault(); }).append(
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
-                    .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
+                    .attr('aria-label', getAriaLabel(opt && opt.oxContext && opt.oxContext.type))
                     //.css('margin-bottom', '32px')
                     .toggleClass('simple-linebreaks', mailSettings.get('compose/simpleLineBreaks', false))
             )
