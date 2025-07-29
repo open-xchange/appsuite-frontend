@@ -43,6 +43,10 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
         var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
         for (; i < $i; i++) {
+            if (/^(__proto__|constructor)$/.test(parts[i])) {
+                console.error('config.set: Attempt to modify a reserved property: ' + parts[i]);
+                return;
+            }
             if (tmp[parts[i]]) {
                 tmp = tmp[parts[i]];
                 if (typeof tmp !== 'object') {
