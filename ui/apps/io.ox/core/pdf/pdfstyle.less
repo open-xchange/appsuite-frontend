@@ -127,6 +127,18 @@
         position: absolute;
     }
 
+    .annotationTextContent{
+        position:absolute;
+        width:100%;
+        height:100%;
+        opacity:0;
+        color:transparent;
+        -webkit-user-select:none;
+           -moz-user-select:none;
+                user-select:none;
+        pointer-events:none;
+    }
+
     .linkAnnotation > a {
         position: absolute;
         font-size: 1em;
@@ -147,6 +159,11 @@
     .textAnnotation img {
         position: absolute;
         cursor: pointer;
+
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
 
     .popupWrapper {
@@ -165,6 +182,7 @@
         margin-left: 5px;
         cursor: pointer;
         word-wrap: break-word;
+        // width: max-content;
 
         h1 {
             font-size: 1em;
@@ -177,6 +195,12 @@
         }
     }
 
+    .popupAnnotation{
+        width: 100%;
+    }
+
+
+    .freeTextAnnotation,
     .highlightAnnotation,
     .underlineAnnotation,
     .squigglyAnnotation,
@@ -184,9 +208,18 @@
         cursor: pointer;
     }
 
-    .textWidgetAnnotation :is(input, textarea) {
+    .annotationTextContent {
+        opacity: 0;
+    }
+
+    // DOCS-5050: hide interactive annotations in the viewer,
+    // just show the content in the canvas layer
+    .textWidgetAnnotation :is(input, textarea),
+    .choiceWidgetAnnotation select,
+    .buttonWidgetAnnotation:is(.checkBox, .radioButton) input {
         display: none;
     }
+
 }
 
 } /* end of .io-ox-core-pdf */
