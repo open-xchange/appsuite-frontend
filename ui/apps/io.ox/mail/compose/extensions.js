@@ -437,17 +437,18 @@ define('io.ox/mail/compose/extensions', [
                     .append(
                         usePicker ?
                             // with picker
-                            $('<div class="maillabel">').append(
-                                $('<a href="#" role="button">')
+                            $('<label class="maillabel" role="button" tabindex="0">')
                                 .text(tokenfieldTranslations[attr])
                                 .attr({
-                                    // add aria label since tooltip takes away the title attribute
-                                    'aria-label': title,
-                                    'title': title
+                                    'for': guid,
+                                    'title': title,
+                                    'aria-label': title
                                 })
-                                .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
+                                .css('cursor', 'pointer')
                                 .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
-                            ) :
+                                .on('click keydown', function (e) {
+                                    if (e.type === 'click' || (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '))) openAddressBookPicker({ data: { attr: attr, model: baton.model } });
+                                }) :
                             // without picker
                             $('<label class="maillabel">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )

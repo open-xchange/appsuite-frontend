@@ -19,6 +19,7 @@ Annual accessibility audits are conducted by [the Paciello Group][TPG] or [DEQUE
 
 | Date   | Version | Activity                                                                                                                      |
 |--------|---------|-------------------------------------------------------------------------------------------------------------------------------|
+| Jul 22 | 7.10.6   | Mail compose: Labels now properly linked to inputs, not used as links.                                                            |
 | July 8 | 7.10.6  | Fix: Add context to aria-label of editor                                                                                      |
 | July 1 | 7.10.6  | Improved accessibility for conflicts in calendar                                                                              |
 | July 1 | 7.10.6  | Improved accessibility announcement for invitation notifications                                                              |
