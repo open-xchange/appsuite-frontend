@@ -979,11 +979,28 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
+        // traverse folders upwards and check if root folder is Public Files
+        isPublic: function (model) {
+            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
+
+            function checkFolder(id) {
+                if (id === '15') { return true; }
+                if (['9', '1', '0', undefined].includes(id)) return false;
+
+                var model = folderAPI.pool.getModel(id);
+                var parentId = model && model.get('folder_id');
+
+                return checkFolder(parentId);
+            }
+
+            return checkFolder(id);
+        },
+
         show: function (objModel, options) {
 
             // folder tree: nested (whitelist) vs. flat, consider the inbox folder as flat since it is drawn detached from it's subfolders (confuses users if suddenly all folders are shared instead of just the inbox)
             var nested = folderAPI.isNested(objModel.get('module')) && objModel.get('id') !== mailSettings.get('folder/inbox'),
-                notificationDefault = false,
+                notificationDefault = !this.isPublic(objModel),
                 title,
                 guid;
 
