@@ -41,6 +41,7 @@ Scenario('[C7493] Order widgets', async function ({ I, portal }) {
     I.waitForText('Inbox', 5, '.widgets .widget:nth-child(1) h2');
     I.see('Appointments', '.widgets .widget:nth-child(2) h2');
 
+    I.wait(0.5);
     // second widget before first widget
     I.dragAndDrop('.widgets .widget:nth-child(2) h2', '.widgets .widget:nth-child(1) h2');
 
