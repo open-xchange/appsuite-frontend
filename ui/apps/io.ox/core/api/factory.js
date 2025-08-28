@@ -551,6 +551,7 @@ define('io.ox/core/api/factory', [
                 delete opt.getData;
                 delete opt.folderTypes;
                 delete opt.onlyUsers;
+                delete opt.splitWords;
 
                 // go!
                 return http.PUT({
