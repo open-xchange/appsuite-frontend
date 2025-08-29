@@ -81,13 +81,29 @@ define('io.ox/calendar/extensions', [
                     incomplete = !folder.permissions,
                     // in week view all day appointments are 20px high, no space to show the location too, so it can be dismissed
                     skipLocation = !model.get('location') || (baton.view && baton.view.mode && baton.view.mode.indexOf('week') === 0 && util.isAllday(model)),
-                    contentNode = $('<div class="appointment-content" aria-hidden="true">').attr('title', getTitle(model));
+                    appointmentTitle = getTitle(model),
+                    contentNode = $('<div class="appointment-content">')
+                        .attr({
+                            title: appointmentTitle,
+                            'aria-describedby': _.uniqueId('appointment-desc-'),
+                            'data-detail-popup': 'appointment'
+                        });
 
                 // cleanup classes to redraw correctly
                 this.removeClass('free modify private disabled needs-action accepted declined tentative');
 
                 // Call this before addColor is invoked
-                this.attr('aria-label', getTitle(model));
+                this.attr({ 'aria-label': getTitle(model),
+                    'aria-haspopup': 'dialog',
+                    'aria-expanded': 'false',
+                    tabindex: '0'
+                }).on('keydown', function (e) {
+                    // Handle Enter and Space key activation
+                    if (e.which === 13 || e.which === 32) {
+                        e.preventDefault();
+                        $(this).click();
+                    }
+                });
 
                 if (String(folder.id) === String(folderId)) addColors(this, model);
                 else if (folderId !== undefined) folderAPI.get(folderId).done(addColors.bind(this, this, model));

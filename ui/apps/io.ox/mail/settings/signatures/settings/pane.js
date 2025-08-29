@@ -102,7 +102,10 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 plugins: 'autolink oximage oxpaste oxdrop link paste textcolor emoji lists code',
                 class: 'io-ox-signature-edit',
                 keepalive: mailAPI.keepalive,
-                oxContext: { signature: true },
+                oxContext: {
+                    snippet: true,
+                    type: 'signature'
+                },
                 imageLoader: {
                     upload: function (file) {
                         return inline.api.inlineImage({ file: file, editor: baton.view.editor.tinymce() });
