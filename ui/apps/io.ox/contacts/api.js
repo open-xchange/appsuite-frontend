@@ -217,22 +217,22 @@ define('io.ox/contacts/api', [
                     if (customizedDefaultFields.length) queryFields.customized = customizedDefaultFields;
 
                     opt = opt || {};
-                    var words = opt.splitWords ? query.split(/\s+/) : [query];
+                    var words = opt.splitWords ? query.trim().split(/\s+/) : [query];
 
-                    _(words).each(function (query) {
-                        if (!query) return;
+                    _(words).each(function (word) {
+                        if (!word) return;
 
                         var termFilter = ['or'];
 
                         // add wildcards to front and back if none is specified
-                        if ((query.indexOf('*') + query.indexOf('?')) < -1) {
-                            query = '*' + query + '*';
+                        if (!word.includes('*') && !word.includes('?')) {
+                            word = '*' + word + '*';
                         }
 
                         _(opt).each(function (value, key) {
-                            if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
+                            if (_.has(queryFields, key) && value === 'on') {
                                 _(queryFields[key]).each(function (name) {
-                                    termFilter.push(['=', { 'field': name }, query]);
+                                    termFilter.push(['=', { 'field': name }, word]);
                                 });
                                 // in case we just have the initial `or`
                                 defaultBehaviour = termFilter.length === 1;
@@ -241,7 +241,7 @@ define('io.ox/contacts/api', [
 
                         if (defaultBehaviour) {
                             _(queryFields.names).each(function (name) {
-                                termFilter.push(['=', { 'field': name }, query]);
+                                termFilter.push(['=', { 'field': name }, word]);
                             });
                         }
 
