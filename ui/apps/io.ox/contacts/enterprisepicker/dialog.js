@@ -561,7 +561,17 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                         fieldSets = api.customizedDefaultFields.length
                             ? { customized: 'on' }
                             : { names: 'on', phones: 'on', job: 'on' },
-                        params = { right_hand_limit: limit, omitFolder: true, folders: selectedList, folderTypes: { includeUnsubscribed: true, pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true) }, columns: columns };
+                        params = {
+                            right_hand_limit: limit,
+                            omitFolder: true,
+                            splitWords: true,
+                            folders: selectedList,
+                            folderTypes: {
+                                includeUnsubscribed: true,
+                                pickerOnly: settings.get('enterprisePicker/useUsedInPickerFlag', true)
+                            },
+                            columns: columns
+                        };
 
                     _.extend(params, fieldSets);
 
