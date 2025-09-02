@@ -217,6 +217,10 @@ define('io.ox/contacts/api', [
                     if (customizedDefaultFields.length) queryFields.customized = customizedDefaultFields;
 
                     opt = opt || {};
+                    if (opt.onlyUsers) {
+                        filter.push(['>', { 'field': 'user_id' }, 0]);
+                    }
+
                     var words = opt.splitWords ? query.trim().split(/\s+/) : [query];
 
                     _(words).each(function (word) {
@@ -247,10 +251,6 @@ define('io.ox/contacts/api', [
 
                         filter.push(termFilter);
                     });
-
-                    if (opt.onlyUsers) {
-                        filter.push(['>', { 'field': 'user_id' }, 0]);
-                    }
 
                     // drop top-level 'and' or the entire query if redundant
                     if (filter.length < 2) data = {};
