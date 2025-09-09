@@ -111,7 +111,7 @@ define('io.ox/mail/actions/create', [
                         contact.user_id = contact.internal_userid;
                     } else {
                         contact.type = 5;
-                        contact.mail = contact.email1;
+                        contact.mail = contact.email1 || contact.email2 || contact.email3 || contact.mail || contact.mailaddress;
                     }
 
                     participants.push(calendarUtil.createAttendee(contact));
