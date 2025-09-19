@@ -501,12 +501,6 @@ define('io.ox/core/main/appcontrol', [
                             popup.open($.noop, { selection: { behavior: 'none' } });
                         });
                     }, 300, true))
-                    .on('keydown', _.debounce(function (e) {
-                        if (e.key !== 'Enter') return;
-                        require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                            popup.open($.noop, { selection: { behavior: 'none' } });
-                        });
-                    }, 300, true))
                 );
             }
         });
