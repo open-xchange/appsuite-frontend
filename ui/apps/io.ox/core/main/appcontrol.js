@@ -499,6 +499,11 @@ define('io.ox/core/main/appcontrol', [
                             });
                         }, 300, true))
                     )
+                    .on('click', _.debounce(function () {
+                        require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                            popup.open($.noop, { selection: { behavior: 'none' } });
+                        });
+                    }, 300, true))
                 );
             }
         });
