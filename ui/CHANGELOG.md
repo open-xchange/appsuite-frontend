@@ -1,3 +1,20 @@
+## [7.10.6-56]
+
+### Fixed
+
+- translations updated for all maintained languages [`ff328e5`](https://gitlab.open-xchange.com/frontend/core/commit/ff328e5f75c6842b687f89aa9dc551f05021ff24)
+- Improved accessibility announcement for invitation notifications [`544b372`](https://gitlab.open-xchange.com/frontend/core/commit/544b372fdaf1aab08f9022a33a648335568c45a8)
+- Appointments are accessible with keyboard [`122c46e`](https://gitlab.open-xchange.com/frontend/core/commit/122c46eac6297ff7ba2066a37134a5a4fedcba5f)
+- Add context to aria-label of editor [`b195838`](https://gitlab.open-xchange.com/frontend/core/commit/b195838e9ed1eb1c2801bd5890098090b49fdf22)
+- Improved accessibility for conflicts in calendar [`159730b`](https://gitlab.open-xchange.com/frontend/core/commit/159730bbd0a684114a4eecfc8482f8edf1fbba10)
+
+## [7.10.6-55]
+
+### Fixed
+
+- Settings: Use correct title for mail filter button handling rule processing [`2750027`](https://gitlab.open-xchange.com/frontend/core/commit/2750027217fe496ffcd6eb1c4b176ad5459f48d7)
+- Disable useGABOnly when GAB is not available [`9f74e64`](https://gitlab.open-xchange.com/frontend/core/commit/9f74e641a7de7b8bbc9b90f0d46ba363c8ee557e)
+
 ## [7.10.6-54]
 
 ### Fixed

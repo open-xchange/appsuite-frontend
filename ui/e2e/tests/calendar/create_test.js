@@ -1472,7 +1472,7 @@ Scenario('[C265153] Create appointment with a link in the description', async ({
         folder: await calendar.defaultFolder(),
         summary: testrailID,
         location: testrailID,
-        description: 'https://www.google.de',
+        description: 'https://www.google.com',
         startDate: { tzid: 'Europe/Berlin', value: moment().add(2, 'hours').format('YYYYMMDD[T]HHmm00') },
         endDate:   { tzid: 'Europe/Berlin', value: moment().add(4, 'hours').format('YYYYMMDD[T]HHmm00') }
     });
@@ -1483,10 +1483,10 @@ Scenario('[C265153] Create appointment with a link in the description', async ({
     I.clickToolbar('Today');
     I.waitForElement('.appointment-container [title="C265153, C265153"]');
     I.click('.appointment-container [title="C265153, C265153"]');
-    I.waitForElement('.calendar-detail [href="https://www.google.de"]');
-    I.click('.calendar-detail [href="https://www.google.de"]');
+    I.waitForElement('.calendar-detail [href="https://www.google.com"]');
+    I.click('.calendar-detail [href="https://www.google.com"]');
     I.retry(5).switchToNextTab();
-    I.waitInUrl('https://www.google.de/', 5);
+    I.waitInUrl('https://www.google.com/', 5);
 });
 
 Scenario('Prevent XSS in folder dropdown', async ({ I, calendar, contacts }) => {

@@ -210,42 +210,52 @@ define('io.ox/contacts/api', [
                             'telephone_ip telephone_assistant').split(' '),
                             job: ('employee_type department position room_number profession').split(' ')
                         },
-                        filter = ['or'],
+                        filter = ['and'],
                         data,
                         defaultBehaviour = true;
 
                     if (customizedDefaultFields.length) queryFields.customized = customizedDefaultFields;
 
                     opt = opt || {};
-                    // add wildcards to front and back if none is specified
-                    if ((query.indexOf('*') + query.indexOf('?')) < -1) {
-                        query = '*' + query + '*';
+                    if (opt.onlyUsers) {
+                        filter.push(['>', { 'field': 'user_id' }, 0]);
                     }
 
-                    _(opt).each(function (value, key) {
-                        if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
-                            _(queryFields[key]).each(function (name) {
-                                filter.push(['=', { 'field': name }, query]);
-                            });
-                            // in case we just have the initial `or`
-                            defaultBehaviour = filter.length === 1;
+                    var words = opt.splitWords ? query.trim().split(/\s+/) : [query];
+
+                    _(words).each(function (word) {
+                        if (!word) return;
+
+                        var termFilter = ['or'];
+
+                        // add wildcards to front and back if none is specified
+                        if (!word.includes('*') && !word.includes('?')) {
+                            word = '*' + word + '*';
                         }
+
+                        _(opt).each(function (value, key) {
+                            if (_.has(queryFields, key) && value === 'on') {
+                                _(queryFields[key]).each(function (name) {
+                                    termFilter.push(['=', { 'field': name }, word]);
+                                });
+                                // in case we just have the initial `or`
+                                defaultBehaviour = termFilter.length === 1;
+                            }
+                        });
+
+                        if (defaultBehaviour) {
+                            _(queryFields.names).each(function (name) {
+                                termFilter.push(['=', { 'field': name }, word]);
+                            });
+                        }
+
+                        filter.push(termFilter);
                     });
 
-                    if (defaultBehaviour) {
-                        _(queryFields.names).each(function (name) {
-                            filter.push(['=', { 'field': name }, query]);
-                        });
-                    }
-
-                    if (opt.onlyUsers) {
-                        filter = ['and',
-                            ['>', { 'field': 'user_id' }, 0],
-                            filter
-                        ];
-                    }
-
-                    data = { 'filter': filter };
+                    // drop top-level 'and' or the entire query if redundant
+                    if (filter.length < 2) data = {};
+                    else if (filter.length < 3) data = { filter: filter[1] };
+                    else data = { filter: filter };
 
                     if (opt.folders) {
                         // make sure this is an array

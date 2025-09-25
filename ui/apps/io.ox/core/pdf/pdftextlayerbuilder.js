@@ -18,8 +18,7 @@
 define('io.ox/core/pdf/pdftextlayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfcustomstyle',
-    'pdfjs-dist/build/pdf',
-    'pdfjs-dist/build/pdf.worker'
+    'io.ox/core/pdf/esmloader!pdfjs-dist/build/pdf'
 ], function (Polyfill, CustomStyle, PDFJSLib) {
 
     'use strict';

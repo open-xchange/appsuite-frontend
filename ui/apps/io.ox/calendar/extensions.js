@@ -85,8 +85,7 @@ define('io.ox/calendar/extensions', [
                     contentNode = $('<div class="appointment-content">')
                         .attr({
                             title: appointmentTitle,
-                            'aria-describedby': _.uniqueId('appointment-desc-'),
-                            'data-detail-popup': 'appointment'
+                            'aria-describedby': _.uniqueId('appointment-desc-')
                         });
 
                 // cleanup classes to redraw correctly
