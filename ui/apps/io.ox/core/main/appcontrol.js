@@ -493,12 +493,14 @@ define('io.ox/core/main/appcontrol', [
                         $('<div class="lcell">').append(
                             $('<div class="icon">').append($.icon('fa-address-card-o')),
                             $('<div class="title">').text(gt('Address directory'))
-                        ).on('click', _.debounce(function () {
-                            require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
-                                popup.open($.noop, { selection: { behavior: 'none' } });
-                            });
-                        }, 300, true))
+                        )
+
                     )
+                    .on('click', _.debounce(function () {
+                        require(['io.ox/contacts/enterprisepicker/dialog'], function (popup) {
+                            popup.open($.noop, { selection: { behavior: 'none' } });
+                        });
+                    }, 300, true))
                 );
             }
         });
