@@ -389,8 +389,8 @@ msgstr "在開始時發出 %1$s。"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens"
-msgstr "%1$s 個自動完成 token 欄位，使用左右方向鍵切換不同 token"
+msgid "Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients"
+msgstr "自動完成輸入欄位：%1$s。使用左右方向鍵切換收件者"
 
 #. %1$s: name of a chat participant
 #. %2$s: the new description
