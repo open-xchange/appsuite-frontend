@@ -390,8 +390,8 @@ msgstr "%1$s tapaamisen alkaessa."
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens"
-msgstr "%1$s täydennyslipukekenttä. Käytä vasenta ja oikeaa nuolinäppäintä liikkuaksesi lipukkeiden välillä"
+msgid "Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients"
+msgstr "Automaattisesti täydennettävä kenttä: %1$s . Käytä vasenta ja oikeaa nuolinäppäintä siirtyäksesi vastaanottajien välillä"
 
 #. %1$s: name of a chat participant
 #. %2$s: the new description

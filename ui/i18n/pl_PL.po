@@ -415,8 +415,8 @@ msgstr "%1$s przy rozpoczęciu."
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens"
-msgstr "Pole tokenu autouzupełniania %1$s. Do poruszania się między tokenami służą klawisze strzałki w lewo i strzałki w prawo."
+msgid "Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients"
+msgstr "Pole z automatycznym uzupełnianiem wprowadzanych danych: %1$s. Do poruszania się między odbiorcami służą klawisze strzałki w lewo i strzałki w prawo."
 
 #. %1$s: name of a chat participant
 #. %2$s: the new description
