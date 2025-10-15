@@ -430,26 +430,10 @@ define('io.ox/mail/compose/extensions', [
 
                 var usePicker = !_.device('smartphone') && capabilities.has('contacts') && contactSettings.get('picker/enabled', true);
 
-                var title = gt('Select contacts');
-
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls).addClass('recipient line-focus')
                     .append(
-                        usePicker ?
-                            // with picker
-                            $('<div class="maillabel">').append(
-                                $('<a href="#" role="button">')
-                                .text(tokenfieldTranslations[attr])
-                                .attr({
-                                    // add aria label since tooltip takes away the title attribute
-                                    'aria-label': title,
-                                    'title': title
-                                })
-                                .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
-                                .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
-                            ) :
-                            // without picker
-                            $('<label class="maillabel">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
+                        $('<label class="maillabel">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
                     .append(node)
                     .append(actions)
