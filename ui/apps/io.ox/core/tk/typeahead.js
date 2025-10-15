@@ -72,6 +72,8 @@ define('io.ox/core/tk/typeahead', [
         initialize: function (o) {
             var self = this;
 
+            if (o.id) this.$el.attr('id', o.id);
+
             // model to unify/repair listening for different event based states
             this.model = new Backbone.Model({
                 // [idle|requesting|processing|finished]
