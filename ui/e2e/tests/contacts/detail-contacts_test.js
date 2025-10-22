@@ -98,3 +98,28 @@ Scenario.skip('[C273805] - Download infected file', async function ({ I }) {
     I.waitForElement(locate('.modal-open button').withText('Download infected file'));
     I.waitForElement(locate('.modal-open button').withText('Cancel'));
 });
+
+Scenario("Malformed URIs don't prevent drawing of other fields", async ({ I, contacts }) => {
+    // alwaysVisible and optional fields
+    const first = 'Phil';
+    const last = 'Dunphy';
+    const displayName = `${last}, ${first}`;
+    await I.haveContact({
+        display_name: displayName,
+        folder_id: await I.grabDefaultFolder('contacts'),
+        first_name: first,
+        last_name: last,
+        street_home: 'STREET_HOME',
+        nickname: 'prof dr dr',
+        url: 'http://example.com/abc%ichbinkeinezahl'
+    });
+
+    await I.login('app=io.ox/contacts');
+    contacts.waitForApp();
+
+    // initial value
+    I.waitForElement(`~${displayName}`);
+    I.click(`~${displayName}`);
+    I.waitForText('prof dr dr', 10, '.contact-detail');
+    I.waitForText('http://example.com/abc%ichbinkeinezahl', 10, '.contact-detail');
+});
