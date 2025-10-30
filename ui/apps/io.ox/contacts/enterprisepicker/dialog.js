@@ -525,7 +525,14 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 });
             }
 
-            var updateContactsAfterSearch = function (contacts) {
+            // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
+            var noLongerValid = function (query, selectedList) {
+                return query !== model.get('searchQuery') || selectedList !== model.get('selectedList');
+            };
+
+            var updateContactsAfterSearch = function (contacts, query, selectedList) {
+                if (noLongerValid(query, selectedList)) return;
+
                 contentNode.idle();
                 bodyNode.show();
 
@@ -548,7 +555,9 @@ define('io.ox/contacts/enterprisepicker/dialog', [
             };
 
             // show generic error message
-            var showError = function () {
+            var showError = function (query, selectedList) {
+                    if (noLongerValid(query, selectedList)) return;
+
                     // show error message
                     contentNode.idle();
                     bodyNode.show();
@@ -578,16 +587,11 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                     if (selectedList === 'all' || options.useGABOnly) delete params.folders;
                     if (options.useGABOnly) params.onlyUsers = true;
 
-                    api.advancedsearch(query, params)
-                        .then(function (result) {
-                            // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
-                            if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
-                            updateContactsAfterSearch(result);
-                        }, function (result) {
-                            // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
-                            if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
-                            showError(result);
-                        });
+                    api.advancedsearch(query, params).then(function (result) {
+                        updateContactsAfterSearch(result, query, selectedList);
+                    }, function () {
+                        showError(query, selectedList);
+                    });
                 };
 
             model.on('change:selectedList', function (model, selectedList) {
@@ -599,15 +603,15 @@ define('io.ox/contacts/enterprisepicker/dialog', [
                 if (isSearch) return performSearch(selectedList);
 
                 apiRequest(options.useGABOnly ? false : [selectedList]).then(function (contacts) {
+                    if (noLongerValid(query, selectedList)) return;
+
                     contentNode.idle();
                     bodyNode.show();
 
                     contacts = (contacts || []).filter(contactsFilter);
                     model.get('contacts').reset(contacts);
-                }, function (result) {
-                    // this request was so slow the query or selected list changed in the meantime -> don't overwrite newer results
-                    if (query !== model.get('searchQuery') || selectedList !== model.get('selectedList')) return;
-                    showError(result);
+                }, function () {
+                    showError(query, selectedList);
                 });
             });
 
