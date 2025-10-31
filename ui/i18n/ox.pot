@@ -13255,7 +13255,7 @@ msgstr ""
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-msgid "%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens"
+msgid "Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients"
 msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)

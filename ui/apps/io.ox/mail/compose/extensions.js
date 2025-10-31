@@ -53,16 +53,18 @@ define('io.ox/mail/compose/extensions', [
         to: gt('To'),
         pickerto: gt('Select contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariato: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('To')),
+        ariato: gt('Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients', gt('To')),
         cc: gt('CC'),
         pickercc: gt('Select CC contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariacc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('CC')),
+        ariacc: gt('Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients', gt('CC')),
         bcc: gt('BCC'),
         pickerbcc: gt('Select BCC contacts'),
         //#. %1$s is the name of the inputfield (To, CC, BCC)
-        ariabcc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('BCC')),
-        reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
+        ariabcc: gt('Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients', gt('BCC')),
+        reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to'),
+        // #. %1$s is the name of the inputfield (To, CC, BCC)
+        ariareply_to: gt('Autocomplete input field: %1$s. Use left and right arrow keys to navigate between the recipients', gt('Reply To'))
     };
 
     // helper function used by upload local file and drag and drop
@@ -437,17 +439,17 @@ define('io.ox/mail/compose/extensions', [
                     .append(
                         usePicker ?
                             // with picker
-                            $('<div class="maillabel">').append(
-                                $('<a href="#" role="button">')
-                                .text(tokenfieldTranslations[attr])
-                                .attr({
-                                    // add aria label since tooltip takes away the title attribute
-                                    'aria-label': title,
-                                    'title': title
-                                })
-                                .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
-                                .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
-                            ) :
+                            $('<label class="maillabel" role="button" tabindex="0">')
+                            .attr({
+                                // add aria label since tooltip takes away the title attribute
+                                'aria-label': title,
+                                'title': title,
+                                'for': guid
+                            })
+                            .text(tokenfieldTranslations[attr])
+                            .css('cursor', 'pointer')
+                            .tooltip({ animation: false, delay: 0, placement: 'right', trigger: 'hover' })
+                            .on('click', { attr: attr, model: baton.model }, openAddressBookPicker) :
                             // without picker
                             $('<label class="maillabel">').text(tokenfieldTranslations[attr]).attr({ 'for': guid })
                     )
