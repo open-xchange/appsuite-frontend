@@ -7,6 +7,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. %1$s is the name of the configuration panel
-#: apps/com.spamexperts/register.js:21 module:com.spamexperts/translations
+#: apps/com.spamexperts/register.js module:com.spamexperts/translations
 msgid "%1$s access"
 msgstr "Zugriff auf %1$s"
+
+#: apps/com.spamexperts/settings/register.js
+#: module:com.spamexperts/translations
+msgid "If panel does not appear below, click here to open it in a new window"
+msgstr "Falls das Panel nicht angezeigt wird, hier klicken, um es in einem neuen Fenster zu öffnen."

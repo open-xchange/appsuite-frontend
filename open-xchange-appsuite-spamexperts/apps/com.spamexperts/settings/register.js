@@ -23,8 +23,9 @@
 define('com.spamexperts/settings/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
+    'gettext!com.spamexperts/translations',
     'settings!com.spamexperts'
-], function (ext, http, settings) {
+], function (ext, http, gt, settings) {
     'use strict';
 
     ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
@@ -38,6 +39,7 @@ define('com.spamexperts/settings/register', [
     ext.point('com.spamexperts/settings/detail').extend({
         draw: function () {
             var self = this;
+
             http.GET({
                 module: 'spamexperts/panel',
                 params: {
@@ -51,9 +53,19 @@ define('com.spamexperts/settings/register', [
                 }).css({
                     position: 'absolute',
                     width: '100%',
-                    minHeight: '100%'
+                    minHeight: '100%',
+                    top: '50px'
                 }).appendTo(self);
+
+                $('<a>', {
+                    href: data.panel_web_ui_url + data.panel_session,
+                    target: '_blank'
+                }).css({
+                }).text(gt('If panel does not appear below, click here to open it in a new window'))
+                .appendTo(self);
             });
+
+
         }
     });
 });
