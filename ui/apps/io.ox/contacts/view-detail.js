@@ -754,7 +754,13 @@ define('io.ox/contacts/view-detail', [
                             var url = $.trim(baton.data.url);
                             if (!url) return;
                             if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
-                            var node = $('<a target="_blank" rel="noopener">').attr('href', encodeURI(decodeURI(url))).text(url);
+                            var node = $('<a target="_blank" rel="noopener">').text(url);
+                            // url can be malformed, ignore errors and proceed regardless
+                            try {
+                                node.attr('href', encodeURI(decodeURI(url)));
+                            } catch (e) {
+                                console.error(e);
+                            }
                             return DOMPurify.sanitize(node.get(0), { ALLOW_TAGS: ['a'], ADD_ATTR: ['target'], ALLOW_DATA_ATTR: false, RETURN_DOM_FRAGMENT: true });
                         }),
                         simple(data, 'spouse_name')
