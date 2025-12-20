@@ -48,20 +48,15 @@ define('io.ox/multifactor/settings/views/addDevice', [
 
     function openModalDialog(provider, backup) {
 
-        var extension;
-        // Set extension point
-        switch (provider) {
-            case constants.SMS:
-                extension = POINT + 'SMS';
-                break;
-            default:
-                startRegistration(provider, '', backup);
-                return;
+        // Most providers don't have a dialog
+        if (!ext.point(POINT + provider).count()) {
+            startRegistration(provider, '', backup);
+            return;
         }
 
         return new ModalView({
             async: true,
-            point: extension,
+            point: POINT + provider,
             title: gt('Add Multifactor Device'),
             enter: 'OK',
             model: new Backbone.Model({ provider: provider, backup: backup })
@@ -140,11 +135,13 @@ define('io.ox/multifactor/settings/views/addDevice', [
         {
             index: INDEX += 100,
             id: 'numberInput',
-            render: function () {
-                var input = $('<input type="text" id="deviceNumber" class="form-control mfInput">')
-                .on('keyup', inputChanged);
-                var selection = $('<div class="deviceNumber">')
-                .append(input);
+            render: function (baton) {
+                var input = new mini.InputView({
+                    name: 'number',
+                    model: baton.model,
+                    id: 'deviceNumber'
+                }).render().$el.on('keyup', inputChanged);
+                var selection = $('<div class="deviceNumber">').append(input);
                 this.$body.append(selection);
             }
         }
@@ -206,20 +203,29 @@ define('io.ox/multifactor/settings/views/addDevice', [
         return true;
     }
 
-    function startRegistration(provider, name, backup, model) {
-        var additParams = {};
-        switch (provider) {
-            case constants.SMS:
-                // strip of language code (needs to be added in the selectbox to distinguish countries whith the same number)
-                additParams.phoneNumber = model.get('code').replace(/[^\d+]+/g, '') + $('#deviceNumber').val();
-                if (!validate(additParams.phoneNumber)) {
-                    dialog.idle();
-                    return false;
-                }
-                break;
-            default:
+    ext.point(POINT + 'params/SMS').extend({
+        id: 'default',
+        index: 100,
+        process: function (baton) {
+            // strip off language code (needs to be added in the selectbox to distinguish countries whith the same number)
+            baton.data.phoneNumber = baton.model.get('code').replace(/[^\d+]+/g, '')
+                + baton.model.get('number');
+            if (!validate(baton.data.phoneNumber)) {
+                dialog.idle();
+                return false;
+            }
         }
-        api.beginRegistration(provider, name, backup, additParams).then(function (resp) {
+    });
+
+    function startRegistration(provider, name, backup, model) {
+        var baton = new ext.Baton({
+            provider: provider,
+            name: name,
+            backup: backup,
+            model: model
+        });
+        ext.point(POINT + 'params/' + provider).invoke('process', this, baton);
+        api.beginRegistration(provider, name, backup, baton.data).then(function (resp) {
             openView(provider, resp);
             dialog.close();
             return true;

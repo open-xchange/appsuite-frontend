@@ -64,11 +64,12 @@ define('io.ox/multifactor/deviceAuthenticator', [
         }
     }
 
+    ext.point('io.ox/multifactor/device/SMS').extend({ retries: 3 });
+
     // Determine if a new code should be sent.
     function checkNew(authInfo) {
-        if (authInfo.providerName !== constants.SMS) {  // At this time, only applies to SMS
-            return true;
-        }
+        var retries = ext.point('io.ox/multifactor/device/' + authInfo.providerName).prop('retries');
+        if (!retries) return true;
         if (!authInfo.error) {
             lastDev = authInfo.device;
             count = 0;
@@ -76,7 +77,7 @@ define('io.ox/multifactor/deviceAuthenticator', [
         }
         if (authInfo.device.id === lastDev.id) {
             count++;
-            if (count < 3) return false;  // Give them a couple attempts, then start anew
+            if (count < retries) return false;  // Give them a couple attempts, then start anew
         }
         lastDev = authInfo.device;
         count = 0;
