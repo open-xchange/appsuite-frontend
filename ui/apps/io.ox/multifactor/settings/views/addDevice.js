@@ -89,7 +89,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         $(e.target).toggleClass('mfInputError', e.target.value.match(sms_regex)[0] !== e.target.value);
     }
 
-    ext.point(POINT + 'SMS').extend(
+    ext.point('multifactor/settings/addDevice/SMS').extend(
         {
             index: INDEX += 100,
             id: 'header',
@@ -136,13 +136,12 @@ define('io.ox/multifactor/settings/views/addDevice', [
             index: INDEX += 100,
             id: 'numberInput',
             render: function (baton) {
-                var input = new mini.InputView({
-                    name: 'number',
-                    model: baton.model,
-                    id: 'deviceNumber'
-                }).render().$el.on('keyup', inputChanged);
-                var selection = $('<div class="deviceNumber">').append(input);
-                this.$body.append(selection);
+                this.$body.append(
+                    $('<div class="deviceNumber">').append(
+                        new mini.InputView({ name: 'number', model: baton.model, id: 'deviceNumber' })
+                            .render().$el.on('keyup', inputChanged)
+                    )
+                );
             }
         }
     );
@@ -203,7 +202,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         return true;
     }
 
-    ext.point(POINT + 'params/SMS').extend({
+    ext.point('multifactor/settings/addDevice/params/SMS').extend({
         id: 'default',
         index: 100,
         process: function (baton) {
@@ -224,7 +223,11 @@ define('io.ox/multifactor/settings/views/addDevice', [
             backup: backup,
             model: model
         });
-        ext.point(POINT + 'params/' + provider).invoke('process', this, baton);
+        var isSuccess = ext.point('multifactor/settings/addDevice/params/' + provider).invoke('process', this, baton)
+                .all(function (v) {
+                    return v !== false;
+                }).value();
+        if (!isSuccess) return;
         api.beginRegistration(provider, name, backup, baton.data).then(function (resp) {
             openView(provider, resp);
             dialog.close();
