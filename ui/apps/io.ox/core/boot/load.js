@@ -100,6 +100,7 @@ define('io.ox/core/boot/load', [
             if (baton.sessionData && baton.sessionData.requires_multifactor) {
                 return loadUserTheme().then(doMultifactor);
             }
+            ox.trigger('login:multifactor');
         }
     }, {
         id: 'compositionSpaces',
@@ -209,6 +210,7 @@ define('io.ox/core/boot/load', [
         require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
             loginScreen.create();
             auth.doAuthentication().then(function () {
+                ox.trigger('login:multifactor');
                 loginScreen.destroy();
                 session.rampup().then(function () {
                     def.resolve();
