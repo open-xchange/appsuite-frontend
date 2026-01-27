@@ -37,24 +37,30 @@ define('io.ox/dynamic-theme/register', [
         }
     });
 
-    ox.once('login:multifactor', function () {
-        require(['settings!io.ox/dynamic-theme'], function (settings) {
-            var vars = settings.get();
-            logoURL = vars.logoURL;
-            delete vars.logoURL;
-
-            // Legacy values from previous versions override new defaults
-            var legacy = {
-                topbarBackground: 'frameColor',
-                listSelectedFocus: 'selectionColor',
-                folderSelectedFocus: 'selectionColor'
-            };
-            for (var i in legacy) if (vars[legacy[i]]) vars[i] = vars[legacy[i]];
-
-            if (typeof vars.logoHeight === 'number') vars.logoHeight += 'px';
-            if (typeof vars.logoWidth === 'number') vars.logoWidth += 'px';
-            less.setVars(vars);
-            less.enable('themes/style', theme);
-        });
+    ext.point('io.ox/core/boot/load/multifactor').extend({
+        id: 'dynamic-theme',
+        index: 100,
+        perform: function () {
+            return require(['settings!io.ox/dynamic-theme'], applyTheme);
+        }
     });
+
+    function applyTheme(settings) {
+        var vars = settings.get();
+        logoURL = vars.logoURL;
+        delete vars.logoURL;
+
+        // Legacy values from previous versions override new defaults
+        var legacy = {
+            topbarBackground: 'frameColor',
+            listSelectedFocus: 'selectionColor',
+            folderSelectedFocus: 'selectionColor'
+        };
+        for (var i in legacy) if (vars[legacy[i]]) vars[i] = vars[legacy[i]];
+
+        if (typeof vars.logoHeight === 'number') vars.logoHeight += 'px';
+        if (typeof vars.logoWidth === 'number') vars.logoWidth += 'px';
+        less.setVars(vars);
+        less.enable('themes/style', theme);
+    }
 });
