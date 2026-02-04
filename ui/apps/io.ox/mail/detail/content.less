@@ -20,6 +20,11 @@
 *
 */
 
+html {
+  // needed in case the mail exceeds the maximum allowed height
+  overflow-y: auto;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -27,7 +32,9 @@ body {
     // changing this can lead to a lot of side effects
     // note: apps with the 'simple' flag (portal) will overwrite this to allow scrolling on mobile
     overflow-x: auto !important;
-    overflow-y: hidden !important;
+    // some mails have broken css (height over 100%) allow scrolling in that case (not pretty but the mail is readable)
+    &:not(.infinite-growth) { overflow-y: hidden !important; }
+    &.infinite-growth { overflow-y: auto; }
 }
 
 .mail-detail-content {

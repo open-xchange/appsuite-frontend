@@ -481,6 +481,8 @@ define('io.ox/mail/detail/view', [
                         }
                     });
 
+                    applyMailerSpecificStyles($content);
+
                     $(this.contentWindow)
                         .on('complete toggle-blockquote', { iframe: $(this) }, onImmediateResize)
                         .on('resize', { iframe: $(this) }, onWindowResize)
@@ -494,18 +496,61 @@ define('io.ox/mail/detail/view', [
                 }.bind(this));
             });
 
+
+            function applyMailerSpecificStyles($content) {
+                if ($content && $content.html() && $content.html().includes('[data-outlook-cycle')) $content.attr('data-outlook-cycle', true);
+            }
+
             // simple helper to enable resizing on
             // browser resize events
             function onBrowserResize() {
                 resizing = 0;
             }
 
+            // calc scrollbar width once
+            var scrollbarWidth = (function () {
+                var outer = document.createElement('div');
+                var inner = document.createElement('div');
+                outer.appendChild(inner);
+                document.body.appendChild(outer);
+
+                outer.style.visibility = 'hidden';
+                outer.style.width = '100px';
+
+                var widthNoScroll = outer.offsetWidth;
+
+                outer.style.overflow = 'scroll';
+                inner.style.width = '100%';
+
+                var widthWithScroll = inner.offsetWidth;
+
+                outer.parentNode.removeChild(outer);
+                return widthNoScroll - widthWithScroll;
+            })();
+
             function onImmediateResize(e) {
-                // scrollHeight consdiers paddings, border, and margins
+                var body = this.document.body;
+                if (!body) return; // prevent js errors on too early calls
+                // mail has broken css that causes infinite growth
+                if ($(body).hasClass('infinite-growth')) {
+                    // sometimes height get's lost during redraws, apply the previously calculated height
+                    return e.data.iframe.parent().addBack().height(e.data.iframe.attr('fixed-height'));
+                }
+
+                // scrollHeight considers paddings, border, and margins, but not scrollbars
+                // if scrollbars are present (eg. content overflows), add scrollbarWidth
+                var scrollbar = body.scrollWidth > body.clientWidth ? scrollbarWidth : 0;
+                var scrollHeightBefore = body.scrollHeight;
+
                 // set height for iframe and its parent
-                // prevent js errors on too early calls
-                if (!this.document.body) return;
-                e.data.iframe.parent().addBack().height(this.document.body.scrollHeight);
+                e.data.iframe.parent().addBack().height(body.scrollHeight + scrollbar);
+                // do a double check, if the new scrollheight doesn't match the old one, somethings fishy (bad infinite growing css)
+                // ignore differences 1 px and below, this is due to rounding errors and half pixels in some mails.
+                if (Math.abs(body.scrollHeight - scrollHeightBefore) > 1) {
+                    // fixate the current height
+                    e.data.iframe.attr('fixed-height', scrollHeightBefore + scrollbar);
+                    $(body).addClass('infinite-growth');
+                }
             }
 
             function onWindowResize(e) {
@@ -521,10 +566,13 @@ define('io.ox/mail/detail/view', [
                 this.requestAnimationFrame(function () { resizing--; });
             }
 
-            // track images since they can change dimensions
-            $content.find('img').on('load error', function () {
+            // some newsletters are just full of images, so throttling makes sense
+            var onImageload = _.throttle(function () {
                 $(this).off().trigger('complete');
-            });
+            }, 200);
+
+            // track images since they can change dimensions
+            $content.find('img').on('load error', onImageload);
 
             // react on browser resize
             $(window).on('resize', onBrowserResize);

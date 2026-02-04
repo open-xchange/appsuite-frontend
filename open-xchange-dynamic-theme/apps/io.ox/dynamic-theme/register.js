@@ -24,13 +24,10 @@ define('io.ox/dynamic-theme/register', [
     'io.ox/core/extensions',
     'io.ox/dynamic-theme/less',
     'text!io.ox/dynamic-theme/apps/themes/style.less.dyn',
-    'settings!io.ox/dynamic-theme'
-], function (ext, less, theme, settings) {
+], function (ext, less, theme) {
     'use strict';
 
-    var vars = settings.get(), logoURL = vars.logoURL;
-    delete vars.logoURL;
-
+    var logoURL;
     ext.point('io.ox/core/appcontrol').extend({
         id: 'dynamic-logo',
         after: 'logo',
@@ -40,16 +37,30 @@ define('io.ox/dynamic-theme/register', [
         }
     });
 
-    // Legacy values from previous versions override new defaults
-    var legacy = {
-        topbarBackground: 'frameColor',
-        listSelectedFocus: 'selectionColor',
-        folderSelectedFocus: 'selectionColor'
-    };
-    for (var i in legacy) if (vars[legacy[i]]) vars[i] = vars[legacy[i]];
+    ext.point('io.ox/core/boot/load/multifactor').extend({
+        id: 'dynamic-theme',
+        index: 100,
+        perform: function () {
+            return require(['settings!io.ox/dynamic-theme'], applyTheme);
+        }
+    });
 
-    if (typeof vars.logoHeight === 'number') vars.logoHeight += 'px';
-    if (typeof vars.logoWidth === 'number') vars.logoWidth += 'px';
-    less.setVars(vars);
-    less.enable('themes/style', theme);
+    function applyTheme(settings) {
+        var vars = settings.get();
+        logoURL = vars.logoURL;
+        delete vars.logoURL;
+
+        // Legacy values from previous versions override new defaults
+        var legacy = {
+            topbarBackground: 'frameColor',
+            listSelectedFocus: 'selectionColor',
+            folderSelectedFocus: 'selectionColor'
+        };
+        for (var i in legacy) if (vars[legacy[i]]) vars[i] = vars[legacy[i]];
+
+        if (typeof vars.logoHeight === 'number') vars.logoHeight += 'px';
+        if (typeof vars.logoWidth === 'number') vars.logoWidth += 'px';
+        less.setVars(vars);
+        less.enable('themes/style', theme);
+    }
 });

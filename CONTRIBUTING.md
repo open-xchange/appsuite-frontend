@@ -98,3 +98,16 @@ Git repository: wd/frontend/web
 Git branch: develop
 Package name: open-xchange-appsuite
 ```
+
+
+# CI Pipeline
+
+## Building Snapshot Packages
+
+To trigger a 7.10.6 snapshot package build manually:
+
+1. Go to https://gitlab.open-xchange.com/frontend/core/-/pipelines/new
+2. Set the variable `FORCE_PACKAGE_UPLOAD=true`
+3. Run the pipeline
+
+This will build and upload snapshot packages from the current branch.

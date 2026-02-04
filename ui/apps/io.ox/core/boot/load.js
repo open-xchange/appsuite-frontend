@@ -98,8 +98,9 @@ define('io.ox/core/boot/load', [
         id: 'multifactor',
         run: function (baton) {
             if (baton.sessionData && baton.sessionData.requires_multifactor) {
-                return loadUserTheme().then(doMultifactor);
+                return loadUserTheme().then(doMultifactor.bind(null, baton));
             }
+            return ext.point('io.ox/core/boot/load/multifactor').cascade(null, baton);
         }
     }, {
         id: 'compositionSpaces',
@@ -204,13 +205,16 @@ define('io.ox/core/boot/load', [
     }
 
     // Do multifactor authentication.  If successful, load full rampup data
-    function doMultifactor() {
+    function doMultifactor(baton) {
         var def = $.Deferred();
         require(['io.ox/multifactor/auth', 'io.ox/multifactor/login/loginScreen'], function (auth, loginScreen) {  // Couldn't be loaded until themes loaded
             loginScreen.create();
             auth.doAuthentication().then(function () {
                 loginScreen.destroy();
-                session.rampup().then(function () {
+                $.when(
+                    session.rampup(),
+                    ext.point('io.ox/core/boot/load/multifactor').cascade(null, baton)
+                ).then(function () {
                     def.resolve();
                 });
             }, function (e) {

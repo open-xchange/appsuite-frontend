@@ -31,6 +31,12 @@ define('io.ox/tours/main', [
 
     'use strict';
 
+    // future use migration
+    if (tourSettings.get('user/alreadySeenVersion') === 1) {
+        // use the current App Suite major version as a semantic value instead of just 1
+        tourSettings.set('user/alreadySeenVersion', 7).save();
+    }
+
     /* New stage: Starts a tour upon login (unless it was already seen in that particular version) */
     new Stage('io.ox/core/stages', {
         id: 'tours',
@@ -48,8 +54,8 @@ define('io.ox/tours/main', [
                 tourVersionSeen = tourSettings.get('user/alreadySeenVersion', -1);
 
             if (!disableTour && startOnFirstLogin && tourVersionSeen === -1) {
-                tourSettings.set('user/alreadySeenVersion', 1).save();
-
+                // stores the App Suites major version to enable better differentiation in v8
+                tourSettings.set('user/alreadySeenVersion', 7).save();
                 baton.data.popups.push({ name: 'tour:io.ox/intro' });
                 return require(['io.ox/core/tk/wizard', 'io.ox/tours/intro']).then(function (Tour) {
                     return Tour.registry.run('default/io.ox/intro');
