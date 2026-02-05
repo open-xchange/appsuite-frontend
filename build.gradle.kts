@@ -24,7 +24,7 @@ licensing {
     }
 }
 
-val backendBranch = "OXPORT-124"
+val backendBranch = "master"
 
 buildservice {
     url = "https://buildapi.open-xchange.com"
