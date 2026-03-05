@@ -110,6 +110,9 @@ define('io.ox/multifactor/auth', [
                 def.reject();
             }
         }, function (data) {
+            // in the failure branch: not authenticating anymore
+            authenticating = false;
+
             if (data && data.error) {
                 notifyFailure(data.error);
                 window.setTimeout(function () {
