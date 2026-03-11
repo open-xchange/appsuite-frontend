@@ -829,7 +829,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
                 if (error.code && errorBlacklist.indexOf(error.code) >= 0) return;
                 error = _.extend({ status: status, took: took }, error);
-                log.add(error, r.o);
+                if (r) log.add(error, r.o);
             });
 
             // TODO: remove backend fix
@@ -1347,7 +1347,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             disconnectedQueue = [];
         },
         // Wipe the disconnect queue and resume
-        resetDisconnect: function (resp) {
+        resetDisconnectAll: function (resp) {
             var pending = disconnectedQueue.slice().map(function (req) {
                 req.deferred.reject(resp);
                 return req.deferred;
@@ -1356,6 +1356,35 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             disconnectedQueue = [];
             $.when.apply(null, pending).always(that.reconnect);
         },
+
+        // Enhanced version of resetDisconnectAll that allows filtering the disconnect queue before resuming
+        resetDisconnect: function (resp, options) {
+
+            if (!options) {
+                return that.resetDisconnectAll(resp);
+            }
+
+            options = options || {};
+            var filter = options.filter;
+            var silent = options.silent;
+
+            var filterFn = typeof filter === 'function' ? filter : function () {
+                return true;
+            };
+
+            var pending = disconnectedQueue.filter(filterFn).map(function (req) {
+                if (silent) return req;
+                req.deferred.reject(resp);
+                return req.deferred;
+            });
+
+            disconnectedQueue = disconnectedQueue.filter(function (req) {
+                return !filterFn(req);
+            });
+
+            $.when.apply(null, pending).always(that.reconnect);
+        },
+
 
         /**
          * Resume HTTP API. Send all queued requests as one multiple
