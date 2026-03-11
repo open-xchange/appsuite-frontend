@@ -27,6 +27,13 @@ define('io.ox/multifactor/api', [
     'use strict';
 
     function checkError(data) {
+
+        // do not show 'generic' auth errors
+        if (data && data.code && (/(MFA-0001|MFA-0015)/i).test(data.code)) {
+            console.error(data.error ? data.error : data.code);
+            return data;
+        }
+
         if (data && data.error) {
             require(['io.ox/core/notifications'], function (notifications) {
                 notifications.yell('error', data.error);
@@ -127,7 +134,14 @@ define('io.ox/multifactor/api', [
                     def.reject(checkError(data));
                 }
                 def.resolve(data);
-            }, def.reject);
+            },
+            function (fail) {
+                checkError(fail);
+                // resolve anyway or dialog will reappear
+                def.resolve(fail);
+            }
+
+            );
             return def;
         },
         editDevice: function (provider, deviceId, newName) {

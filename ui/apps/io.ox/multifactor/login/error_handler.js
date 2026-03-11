@@ -40,9 +40,12 @@ define('io.ox/multifactor/login/error_handler', [
                     http.resetDisconnect(response);
                     ox.trigger('relogin:required');
                 } else {
-                    http.reconnect();
+                    // let's filter out multifactor requests & reconnect
+                    http.resetDisconnect(response, { filter: function (res) { return res.options.module.startsWith('multifactor'); }, silent: false });
                 }
             });
         });
     });
 });
+
+

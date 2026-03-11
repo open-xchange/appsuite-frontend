@@ -230,7 +230,7 @@ define('io.ox/multifactor/settings/views/addDevice', [
         if (!isSuccess) return;
         api.beginRegistration(provider, name, backup, baton.data).then(function (resp) {
             openView(provider, resp);
-            dialog.close();
+            if (dialog) dialog.close();
             return true;
         }, function (error) {
             console.log(error);
