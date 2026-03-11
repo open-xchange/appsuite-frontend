@@ -1347,7 +1347,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             disconnectedQueue = [];
         },
         // Wipe the disconnect queue and resume
-        resetDisconnect_all: function (resp) {
+        resetDisconnectAll: function (resp) {
             var pending = disconnectedQueue.slice().map(function (req) {
                 req.deferred.reject(resp);
                 return req.deferred;
@@ -1357,11 +1357,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             $.when.apply(null, pending).always(that.reconnect);
         },
 
-        // Enhanced version of resetDisconnect_all that allows filtering the disconnect queue before resuming
+        // Enhanced version of resetDisconnectAll that allows filtering the disconnect queue before resuming
         resetDisconnect: function (resp, options) {
 
             if (!options) {
-                return that.resetDisconnect_all(resp);
+                return that.resetDisconnectAll(resp);
             }
 
             options = options || {};

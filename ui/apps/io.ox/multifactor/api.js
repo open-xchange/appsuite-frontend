@@ -29,7 +29,10 @@ define('io.ox/multifactor/api', [
     function checkError(data) {
 
         // do not show 'generic' auth errors
-        if (data && data.code && (/(MFA-0001|MFA-0015)/i).test(data.code)) return data;
+        if (data && data.code && (/(MFA-0001|MFA-0015)/i).test(data.code)) {
+            console.error(data.error ? data.error : data.code);
+            return data;
+        }
 
         if (data && data.error) {
             require(['io.ox/core/notifications'], function (notifications) {
