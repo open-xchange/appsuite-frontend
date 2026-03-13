@@ -286,6 +286,15 @@ define('io.ox/core/main/logout', [
 
     var logout = function (opt) {
 
+        // if we are in 2FA flow then .stepwiseInvoke is not there yet and we are not fully auhenticated
+        // so it would fail. Just logout from session and reload (as for the cancel button in 2FA dialog)
+        if (!_.stepwiseInvoke) {
+            console.error('Logout while waiting for 2FA authentication. Reloading');
+            session.logout().always(function () {
+                window.location.reload(true);  // Hard fail here.  Reload
+            });
+        }
+
         opt = _.extend({
             autologout: false
         }, opt || {});
