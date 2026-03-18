@@ -28,8 +28,8 @@
     overflow: auto;
     /* default iframe height is 150px. we start height calculation with 0 */
     height: 0px;
-    // some newsletters may get really long, adjust as needed. max-height is needed to prevent infinite growing mails that have broken css
-    max-height: 6000px;
+    // some newsletters may get really long, adjust as needed. max-height is needed to prevent infinite growing mails that have broken css. Use a super high number that should never be reached
+    max-height: 1000000px;
 }
 
 .mail-detail-content {

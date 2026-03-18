@@ -115,4 +115,38 @@ define(['io.ox/contacts/util'], function (util) {
             );
         });
     });
+
+    describe('getInitials', () => {
+        it('should return initials for Latin names', () => {
+            expect(util.getInitials({ first_name: 'John', last_name: 'Doe' })).to.equal('JD');
+        });
+
+        it('should keep diacritics from Latin extended initials', () => {
+            expect(util.getInitials({ first_name: 'Émilie', last_name: 'Müller' })).to.equal('ÉM');
+        });
+
+        it('should return initials from display_name when first/last are missing', () => {
+            expect(util.getInitials({ display_name: 'John Doe' })).to.equal('JD');
+        });
+
+        it('should fall back to email', () => {
+            expect(util.getInitials({ email1: 'john@example.com' })).to.equal('J');
+        });
+
+        it('should return empty string for empty input', () => {
+            expect(util.getInitials({})).to.equal('');
+        });
+
+        it('should return initials for Cyrillic names', () => {
+            expect(util.getInitials({ first_name: 'Иван', last_name: 'Петров' })).to.equal('ИП');
+        });
+
+        it('should return initials for Japanese names', () => {
+            expect(util.getInitials({ first_name: '太郎', last_name: '山田' })).to.equal('太山');
+        });
+
+        it('should return initials for uppercase Greek names', () => {
+            expect(util.getInitials({ first_name: 'Αλέξανδρος', last_name: 'Παπαδόπουλος' })).to.equal('ΑΠ');
+        });
+    });
 });

@@ -57,6 +57,10 @@ define('io.ox/core/tk/contenteditable-editor', [
                 if ((e.which === 13 && !e.shiftKey) || e.which === 40) setTimeout(throttledScrollOnEnter, 0, ed);
                 if (e.which === 38 || e.which === 8) setTimeout(throttledScrollOnCursorUp, 0, ed);
             });
+
+            if (_.device('smartphone')) return;
+            // we need for forward mousedown to activate floating windows
+            ed.on('mousedown', function (e) { $(ed.container).trigger('iframe-mousedown', e); });
         }
     });
 

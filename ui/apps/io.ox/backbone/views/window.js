@@ -161,6 +161,9 @@ define('io.ox/backbone/views/window', [
 
             $(window).on('resize', this.keepInWindow, this.onResize);
             this.listenTo(this, 'dispose', function () { $(window).off('resize', this.keepInWindow); });
+
+            var self = this;
+            this.$el.on('iframe-mousedown', function (e) { self.activate(e); });
         },
 
         renderControls: function () {

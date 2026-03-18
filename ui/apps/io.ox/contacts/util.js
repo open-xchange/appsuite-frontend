@@ -395,9 +395,14 @@ define('io.ox/contacts/util', [
         },
 
         getInitials: (function () {
+            // \p{L} cannot be used because unicode flag is not supported in 7.10.6
 
-            var regFirst = /^.*?([a-z0-9\xC0-\xFF])/i,
-                regLast = /\s.*?([a-z0-9\xC0-\xFF])\S*$/i;
+            // 一-龯 matches all kanji,ぁ-ん matches all hiragana, ァ-ン matches all katakana
+            // we ignore the half width kana for now as it would make this needlessly complex (old character set that would require us to check 2 characters at once to catch the dakuten and handakuten)
+            // \u0400-\u04FF matches all cyrillic characters from multiple countries
+            // α-ω matches greek characters
+            var regFirst = /^.*?([a-z0-9\xC0-\xFF一-龯ぁ-んァ-ン\u0400-\u04FFα-ω])/i;
+            var regLast = /\s.*?([a-z0-9\xC0-\xFF一-龯ぁ-んァ-ン\u0400-\u04FFα-ω])\S*$/i;
 
             function first(str) {
                 var match = regFirst.exec(str);
