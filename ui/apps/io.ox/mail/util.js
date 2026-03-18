@@ -79,7 +79,7 @@ define('io.ox/mail/util', [
                     return d.format('LT');
                 },
                 datestr = function () {
-                    return d.format('l') + (opt.fulldate ? ' ' + timestr() : '');
+                    return d.format('L') + (opt.fulldate ? ' ' + timestr() : '');
                 },
                 isSameDay = function () {
                     return moment().isSame(d, 'day');
@@ -402,7 +402,7 @@ define('io.ox/mail/util', [
 
         getFullDate: function (timestamp) {
             if (!_.isNumber(timestamp)) return gt('unknown');
-            return moment(timestamp).format('l LT');
+            return moment(timestamp).format('L LT');
         },
 
         getSmartTime: function (timestamp) {

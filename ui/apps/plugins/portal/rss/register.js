@@ -123,7 +123,7 @@ define('plugins/portal/rss/register', [
                         $('<h4>').text(item.subject),
                         $body,
                         $('<div class="rss-url">').append(
-                            $('<a target="_blank" rel="noopener">').attr('href', item.url).text((item.feedTitle ? item.feedTitle + ' - ' : '') + moment(item.date).format('l'))
+                            $('<a target="_blank" rel="noopener">').attr('href', item.url).text((item.feedTitle ? item.feedTitle + ' - ' : '') + moment(item.date).format('L'))
                         )
                     )
                 );

@@ -71,7 +71,7 @@ define('plugins/portal/mail/register', [
         render: function (baton) {
             var self = this,
                 subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
-                received = moment(this.model.get('date')).format('l');
+                received = moment(this.model.get('date')).format('L');
 
             this.$el.empty()
                 .data('item', this.model.attributes)
@@ -350,7 +350,7 @@ define('plugins/portal/mail/register', [
 
         preview: function (baton) {
             var data = baton.data,
-                received = moment(data.date).format('l'),
+                received = moment(data.date).format('L'),
                 content = _(data.attachments).reduce(function (memo, a) {
                     return memo + (a.content_type === 'text/plain' ? a.content : '');
                 }, '');

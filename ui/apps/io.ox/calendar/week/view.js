@@ -90,7 +90,7 @@ define('io.ox/calendar/week/view', [
                     this.monthText.text(gt('%1$s %2$s - %3$s %4$s', fromMonth, fromYear, toMonth, toYear));
                 }
             } else {
-                this.monthText.text(startDate.format('ddd, l'));
+                this.monthText.text(startDate.format('ddd, L'));
             }
             this.cw.text(
                 //#. %1$d = Calendar week
@@ -102,7 +102,7 @@ define('io.ox/calendar/week/view', [
                 app.pages.getNavbar('week:day').setTitle(
                     this.model.get('numColumns') > 1
                         ? startDate.formatInterval(moment(startDate).add(this.model.get('numColumns'), 'days'))
-                        : startDate.format('ddd, l')
+                        : startDate.format('ddd, L')
                 );
             }
         },

@@ -220,7 +220,7 @@ define('io.ox/backbone/views/datepicker', [
             // today button
             if (this.options.showTodayButton !== false) {
                 this.$el.append(
-                    $('<button type="button" class="btn-today">').text(gt('Today: %1$s', moment().format('l')))
+                    $('<button type="button" class="btn-today">').text(gt('Today: %1$s', moment().format('L')))
                 );
             }
         },
@@ -589,7 +589,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onTargetInput: function () {
-            var val = this.$target.val(), date = moment(val, 'l');
+            var val = this.$target.val(), date = moment(val, 'L');
             this.setDate(date);
         },
 
@@ -598,7 +598,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         getFormattedDate: function () {
-            return this.getDate().format('l');
+            return this.getDate().format('L');
         },
 
         setDate: function (date, forceRender) {

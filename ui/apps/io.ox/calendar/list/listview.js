@@ -367,7 +367,7 @@ define('io.ox/calendar/list/listview', [
             this.$el.append(
                 this.tail = $('<li class="tail" role="presentation">').append(
                     $('<a href="#">')
-                        .text(gt('Load appointments until %1$s', m.format('l')))
+                        .text(gt('Load appointments until %1$s', m.format('L')))
                         .on('click', this.onLoadMore.bind(this))
                 )
             );

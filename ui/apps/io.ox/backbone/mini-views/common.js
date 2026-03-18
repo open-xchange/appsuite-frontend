@@ -418,7 +418,7 @@ define('io.ox/backbone/mini-views/common', [
             el: '<input type="date" class="form-control">'
         }) :
         InputView.extend({
-            format: 'l',
+            format: 'L',
             onChange: function () {
                 var t = +moment(this.$el.val(), this.format);
                 this.model.set(this.name, t);

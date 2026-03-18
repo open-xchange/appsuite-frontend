@@ -161,7 +161,7 @@ define('io.ox/calendar/util', [
         },
 
         getDate: function (timestamp) {
-            return moment(timestamp ? timestamp : undefined).format('ddd, l');
+            return moment(timestamp ? timestamp : undefined).format('ddd, L');
         },
 
         getSmartDate: function (model) {
@@ -175,18 +175,18 @@ define('io.ox/calendar/util', [
             // past?
             if (m.isBefore(startOfDay)) {
                 if (m.isAfter(startOfDay.subtract(1, 'day'))) {
-                    return gt('Yesterday') + ', ' + m.format('l');
+                    return gt('Yesterday') + ', ' + m.format('L');
                 }
-                return m.format('ddd, l');
+                return m.format('ddd, L');
             }
             // future
             if (m.isBefore(startOfDay.add(1, 'days'))) {
                 return gt('Today') + ', ' + m.format('l');
             }
             if (m.isBefore(startOfDay.add(1, 'day'))) {
-                return gt('Tomorrow') + ', ' + m.format('l');
+                return gt('Tomorrow') + ', ' + m.format('L');
             }
-            return m.format('ddd, l');
+            return m.format('ddd, L');
         },
 
         // function that returns markup for date and time + timzonelabel
@@ -205,7 +205,7 @@ define('io.ox/calendar/util', [
                     dateStr,
                     timeStr,
                     timeZoneStr = that.getMoment(data.startDate).zoneAbbr(),
-                    fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
+                    fmtstr = options.a11y ? 'dddd, L' : 'ddd, L';
 
                 if (that.isAllday(data)) {
                     startDate = moment.utc(data.startDate.value).local(true);
@@ -253,7 +253,7 @@ define('io.ox/calendar/util', [
         getDateInterval: function (data, zone, a11y) {
             if (data && data.startDate && data.endDate) {
                 var startDate, endDate,
-                    fmtstr = a11y ? 'dddd, l' : 'ddd, l';
+                    fmtstr = a11y ? 'dddd, L' : 'ddd, L';
 
                 a11y = a11y || false;
 
@@ -762,7 +762,7 @@ define('io.ox/calendar/util', [
                     lastOccurence = moment.tz(data.until, tzid).startOf('day').add(diffToStartOfDay, 'ms').tz(moment().tz());
                 }
 
-                str = gt('The series ends on %1$s.', lastOccurence.format('l'));
+                str = gt('The series ends on %1$s.', lastOccurence.format('L'));
             } else if (data.occurrences) {
                 var n = data.occurrences;
                 str = gt.ngettext('The series ends after %1$d occurrence.', 'The series ends after %1$d occurrences.', n, n);

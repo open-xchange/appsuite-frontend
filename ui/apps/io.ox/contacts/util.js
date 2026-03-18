@@ -353,7 +353,7 @@ define('io.ox/contacts/util', [
             // Year 1 and year 1604 are  special for birthdays without year
             // therefore, return full date if year is not 1
             if (birthday.year() > 1 && birthday.year() !== 1604) {
-                return birthday.format('l') +
+                return birthday.format('L') +
                     //#. %1$d is age in years (number)
                     (withAge ? ' (' + gt('Age: %1$d', moment().diff(birthday, 'years')) + ')' : '');
             }
