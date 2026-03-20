@@ -24,6 +24,18 @@
 
 module.exports = function (grunt) {
 
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+
+    grunt.config.merge({
+        uglify: {
+            build_dompurify: {
+                files: {
+                    'build/static/3rd.party/purify.min.js': ['node_modules/dompurify/dist/purify.js']
+                }
+            }
+        }
+    });
+
     grunt.config.merge({
         copy: {
             build_thirdparty: {
@@ -93,7 +105,6 @@ module.exports = function (grunt) {
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/swiper-bundle.min.js',
                             'typeahead.js/dist/typeahead.jquery.js',
-                            'dompurify/dist/purify.min.js',
                             'jwt-decode/build/jwt-decode.js',
                             'mark.js/dist/jquery.mark.min.js'
                         ],

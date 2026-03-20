@@ -1,0 +1,22 @@
+diff --git a/node_modules/dompurify/dist/purify.js b/node_modules/dompurify/dist/purify.js
+index 70d7892..d912299 100644
+--- a/node_modules/dompurify/dist/purify.js
++++ b/node_modules/dompurify/dist/purify.js
+@@ -223,7 +223,7 @@
+   // eslint-disable-next-line unicorn/better-regex
+   var MUSTACHE_EXPR = seal(/\{\{[\w\W]*|[\w\W]*\}\}/gm); // Specify template detection regex for SAFE_FOR_TEMPLATES mode
+   var ERB_EXPR = seal(/<%[\w\W]*|[\w\W]*%>/gm);
+-  var TMPLIT_EXPR = seal(/\${[\w\W]*}/gm);
++  var TMPLIT_EXPR = seal(/\$\{[\w\W]*/gm); // eslint-disable-line unicorn/better-regex
+   var DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]+$/); // eslint-disable-line no-useless-escape
+   var ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
+   var IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // eslint-disable-line no-useless-escape
+@@ -294,7 +294,7 @@
+      * Empty if nothing was removed.
+      */
+     DOMPurify.removed = [];
+-    if (!window || !window.document || window.document.nodeType !== 9) {
++    if (!window || !window.document || window.document.nodeType !== 9  || !window.Element) {
+       // Not running in a browser, provide a factory function
+       // so that you can pass your own Window
+       DOMPurify.isSupported = false;
